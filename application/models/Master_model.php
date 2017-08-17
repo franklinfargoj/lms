@@ -215,11 +215,19 @@ class Master_model extends CI_Model{
 		return $response;
 	}
 
+	/* Private Functions*/
+	private function insert($table,$data){
+		$this->db->insert($table,$data);
+		return $this->db->insert_id();
+>>>>>>> origin/gourav_lms
+	}
+
 	private function update($where,$table,$data){
 		$this->db->where($where);
 		$this->db->update($table,$data);
 		return $this->db->affected_rows();
 	}
+<<<<<<< HEAD
 
 	private function view($select,$where,$table,$join = array(),$order_by = array()){
 
