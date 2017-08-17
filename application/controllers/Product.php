@@ -1,0 +1,151 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Product extends CI_Controller {
+
+    /*
+     * construct
+     * constructor method
+     * @author Ashok Jadhav
+	* @access private
+     * @param none
+     * @return void
+     * 
+     */
+	function __construct()
+	{
+		parent::__construct(); // Initialization of class
+          is_logged_in();     //check login
+          $this->load->model('Master_model','master');
+	}
+
+    /*
+     * index
+     * Index Page for this controller.
+     * @author Ashok Jadhav
+	* @access public
+     * @param none
+     * @return void
+     */
+	public function index()
+	{
+          /*Create Breadcumb*/
+          $this->make_bread->add('Products', '', 0);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+          /*Create Breadcumb*/
+
+          $arrData['productlist'] = $this->master->view_product();
+          return load_view("Products/Product/view",$arrData);
+	}
+
+     /*
+     * add
+     * Add product name under category.
+     * @author Ashok Jadhav
+     * @access public
+     * @param none
+     * @return void
+     */
+     public function add()
+     {
+          /*Create Breadcumb*/
+          $this->make_bread->add('Product', 'product', 0);
+          $this->make_bread->add('Add', '', 1);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+          /*Create Breadcumb*/
+          
+          $arrData['categorylist'] = $this->getCategoryList();
+          if($this->input->post()){
+               $this->form_validation->set_rules('title','Product name', 'required');
+               $this->form_validation->set_rules('category_id','Product Category', 'required');
+               if ($this->form_validation->run() == FALSE)
+               {    $arrData['has_error'] = 'has-error';
+                    return load_view("Products/Product/add",$arrData);
+               }else{
+                    $insert = array(
+                         'title' => $this->input->post('title'),
+                         'category_id' => $this->input->post('category_id'),
+                         'created_by' => loginUserId()
+                    );
+                    $this->master->add_product($insert);
+                    $this->session->set_flashdata('success','Product category added successfully.');
+                    redirect('product');
+               }
+          }else{
+               return load_view("Products/Product/add",$arrData);
+          }
+     }
+
+     /*
+     * edit
+     * Edit Product name and change Category.
+     * @author Ashok Jadhav
+     * @access public
+     * @param $id
+     * @return void
+     */
+     public function edit($id)
+     {    
+          /*Create Breadcumb*/
+          $this->make_bread->add('Product', 'product', 0);
+          $this->make_bread->add('Edit', '', 1);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+          /*Create Breadcumb*/
+
+          $arrData['categorylist'] = $this->getCategoryList();
+          $arrData['productDetail'] = $this->master->view_product($id);
+          if($this->input->post()){
+               $this->form_validation->set_rules('title','Product name', 'required');
+               $this->form_validation->set_rules('category_id','Product Category', 'required');
+               if ($this->form_validation->run() == FALSE){    
+                    $arrData['has_error'] = 'has-error';
+                    return load_view("Products/Product/edit",$arrData);
+               }else{
+                    $update = array(
+                         'title' => $this->input->post('title'),
+                         'category_id' => $this->input->post('category_id'),
+                         'modified_by' => loginUserId()
+                    );
+                    $this->master->edit_product($id,$update);
+                    $this->session->set_flashdata('success','Product updated successfully.');
+                    redirect('product');
+               }
+          }else{
+               return load_view("Products/Product/edit",$arrData);
+          }
+     }
+
+     /*
+     * delete
+     * Delete product (Soft Delete)
+     * @author Ashok Jadhav
+     * @access public
+     * @param $id
+     * @return void
+     */
+     public function delete($id){
+          $soft_deleted = $this->master->delete_product($id);
+          if($soft_deleted > 0){
+               $this->session->set_flashdata('success','Product deleted successfully.');
+               redirect('product');
+          }
+     }
+
+     /*
+     * getCategoryList
+     * Get Category List
+     * @author Ashok Jadhav
+     * @access public
+     * @param none
+     * @return void
+     */
+     private function getCategoryList(){
+          $list = $this->master->view_product_category($id = null);
+          asort($list);
+          $categorylist[''] = "Select";
+          foreach ($list as $key => $value) {
+               $categorylist[$value['id']] = $value['title'];
+          }
+          return $categorylist;
+     }
+}
