@@ -78,6 +78,22 @@ class Api extends REST_Controller
             'id' => '13',
             'full_name' => 'anup',
         );
+        $data['branch_list'][]= array(
+            'id' => '12',
+            'full_name' => 'branch1',
+        );
+        $data['branch_list'][]= array(
+            'id' => '13',
+            'full_name' => 'branch2',
+        );
+        $data['zone_list'][]= array(
+            'id' => '12',
+            'full_name' => 'zone1',
+        );
+        $data['zone_list'][]= array(
+            'id' => '13',
+            'full_name' => 'zone2',
+        );
         returnJson($data);
 
 //        if(isset($result['status']) && $result['status'] == 'success'){
