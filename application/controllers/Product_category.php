@@ -55,7 +55,7 @@ class Product_category extends CI_Controller {
           /*Create Breadcumb*/
 
           if($this->input->post()){
-               $this->form_validation->set_rules('title','Product category name','required|callback_alphaNumeric');
+               $this->form_validation->set_rules('title','Product category name','required|callback_alphaNumeric|is_unique['.Tbl_Category.'.title]');
                if ($this->form_validation->run() == FALSE)
                {    $arrData['has_error'] = 'has-error';
                     return load_view("Products/Category/add",$arrData);
@@ -94,13 +94,17 @@ class Product_category extends CI_Controller {
                //$admin_id =  $this->session->userdata('admin_id');
                $admin_id =  1;
                $this->form_validation->set_rules('title','Product category name','required|callback_alphaNumeric');
+               if($this->input->post('title') != $arrData['categoryDetail'][0]['title']){
+                    $this->form_validation->set_rules('title','Product category name','is_unique['.Tbl_Category.'.title]');
+               }
                if ($this->form_validation->run() == FALSE){    
                     $arrData['has_error'] = 'has-error';
                     return load_view("Products/Category/edit",$arrData);
                }else{
                     $update = array(
                          'title' => $this->input->post('title'),
-                         'modified_by' => loginUserId()
+                         'modified_by' => loginUserId(),
+                         'modified_on' => date('y-m-d H:i:s')
                     );
                     $this->master->edit_product_category($id,$update);
                     $this->session->set_flashdata('success','Product category updated successfully.');

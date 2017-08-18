@@ -56,7 +56,7 @@ class Product extends CI_Controller {
           
           $arrData['categorylist'] = $this->getCategoryList();
           if($this->input->post()){
-               $this->form_validation->set_rules('title','Product name', 'required');
+               $this->form_validation->set_rules('title','Product name', 'required|callback_alphaNumeric|is_unique['.Tbl_Products.'.title]');
                $this->form_validation->set_rules('category_id','Product Category', 'required');
                if ($this->form_validation->run() == FALSE)
                {    $arrData['has_error'] = 'has-error';
@@ -65,10 +65,11 @@ class Product extends CI_Controller {
                     $insert = array(
                          'title' => $this->input->post('title'),
                          'category_id' => $this->input->post('category_id'),
+                         'default_assign' => $this->input->post('default_assign'),
                          'created_by' => loginUserId()
                     );
                     $this->master->add_product($insert);
-                    $this->session->set_flashdata('success','Product category added successfully.');
+                    $this->session->set_flashdata('success','Product added successfully.');
                     redirect('product');
                }
           }else{
@@ -95,16 +96,22 @@ class Product extends CI_Controller {
           $arrData['categorylist'] = $this->getCategoryList();
           $arrData['productDetail'] = $this->master->view_product($id);
           if($this->input->post()){
-               $this->form_validation->set_rules('title','Product name', 'required');
+               $this->form_validation->set_rules('title','Product name', 'required|callback_alphaNumeric');
                $this->form_validation->set_rules('category_id','Product Category', 'required');
+               if($this->input->post('title') != $arrData['productDetail'][0]['title']){
+                    $this->form_validation->set_rules('title','Product Name', 'is_unique['.Tbl_Products.'.title]');
+               }
                if ($this->form_validation->run() == FALSE){    
                     $arrData['has_error'] = 'has-error';
                     return load_view("Products/Product/edit",$arrData);
                }else{
                     $update = array(
-                         'title' => $this->input->post('title'),
                          'category_id' => $this->input->post('category_id'),
-                         'modified_by' => loginUserId()
+                         'title' => $this->input->post('title'),
+                         'default_assign' => $this->input->post('default_assign'),
+                         'modified_by' => loginUserId(),
+                         'modified_on' => date('y-m-d H:i:s')
+                         
                     );
                     $this->master->edit_product($id,$update);
                     $this->session->set_flashdata('success','Product updated successfully.');
@@ -128,6 +135,27 @@ class Product extends CI_Controller {
           if($soft_deleted > 0){
                $this->session->set_flashdata('success','Product deleted successfully.');
                redirect('product');
+          }
+     }
+
+     ##################################
+     /*Private Functions*/
+     ##################################
+     /*
+     * Validation for alphabetical letters
+     * @param array $pwd,$dataArray
+     * @return String
+     */
+     public function alphaNumeric($str)
+     {
+          if ( !preg_match('/^[a-zA-Z0-9\s]+$/i',$str) )
+          {
+               $this->form_validation->set_message('alphaNumeric', 'Please enter only alpha numeric characters.');
+               return FALSE;
+          }
+          else
+          {
+               return TRUE;
           }
      }
 

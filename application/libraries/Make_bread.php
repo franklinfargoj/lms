@@ -23,7 +23,7 @@ class Make_bread
         $this->_crumb_close = $CI->config->item('crumb_close', 'make_bread');
         if(isset($this->_include_home) && (strlen($this->_include_home)>0))
         {
-            $this->_breadcrumb[] = array('title'=>$this->_include_home, 'href'=>rtrim(base_url(),'/'));
+            $this->_breadcrumb[] = array('title'=>$this->_include_home, 'href'=>rtrim(base_url().'dashboard','/'));
         }
     }
 
