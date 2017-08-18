@@ -299,12 +299,11 @@ $remark_extra = 'style="height:50%"';
                 }
             });
             $('#product_category').change(function () {
-                var base_url = "<?php echo base_url();?>";
+                var base_url = '<?php echo base_url(); ?>';
                 var category_id = $('#product_category').val();
                 var csrf = $("input[name=csrf_dena_bank]").val();
                 $.ajax({
                     method: "POST",
-                    url: base_url + "Leads/Productlist",
                     url: base_url + "leads/productlist",
                     data: {
                         '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
