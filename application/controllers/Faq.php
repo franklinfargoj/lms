@@ -105,7 +105,8 @@ class Faq extends CI_Controller {
                     $update = array(
                          'question' => $this->input->post('question'),
                          'answer' => $this->input->post('answer'),
-                         'modified_by' => loginUserId()
+                         'modified_by' => loginUserId(),
+                         'modified_on' => date('y-m-d H:i:s')
                     );
                     $this->master->edit_record($id,$update);
                     $this->session->set_flashdata('success','Faq updated successfully.');

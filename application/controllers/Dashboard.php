@@ -16,6 +16,7 @@ class Dashboard extends CI_Controller {
 	{
 		// Initialization of class
 		parent::__construct();
+          is_logged_in();     //check login
 	}
 
 	/**

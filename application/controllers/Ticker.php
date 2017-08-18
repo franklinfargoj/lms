@@ -102,7 +102,8 @@ class Ticker extends CI_Controller {
                     $update = array(
                          'title' => $this->input->post('title'),
                          'description_text' => $this->input->post('description_text'),
-                         'modified_by' => loginUserId()
+                         'modified_by' => loginUserId(),
+                         'modified_on' => date('y-m-d H:i:s')
                     );
                     $this->master->edit_record($id,$update);
                     $this->session->set_flashdata('success','Ticker information updated successfully.');

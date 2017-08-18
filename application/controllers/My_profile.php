@@ -16,7 +16,7 @@ class My_profile extends CI_Controller {
 	{
 		// Initialization of class
 		parent::__construct();
-          global $admin_id;
+          is_logged_in();     //check login
           $this->load->model('Login_model','master');
 	}
 
@@ -46,39 +46,40 @@ class My_profile extends CI_Controller {
      * @param none
      * @return void
      */
-     public function change_password()
+     public function reset_password()
      {
           if($this->input->post()){
+               /*Create Breadcumb*/
+               $this->make_bread->add('My Profile', '', 0);
+               $arrData['breadcrumb'] = $this->make_bread->output();
+               /*Create Breadcumb*/
+
                $where = array('id' => loginUserId());
-               $getAdminData = $this->master->getAdminData($where);
+               $get_admin_details = $this->master->get_admin_details($where);
                $this->form_validation->set_rules('current_pwd','Current Password', 'trim|required');
                $this->form_validation->set_rules('new_pwd','New Password', 'trim|required|matches[re_pwd]');
                $this->form_validation->set_rules('re_pwd','Re-type New Password', 'trim|required');
-               if($this->input->post('current_pwd') != '' && md5($this->input->post('current_pwd')) != $getAdminData[0]['password']){
+               if($this->input->post('current_pwd') != '' && md5($this->input->post('current_pwd')) != $get_admin_details[0]['password']){
                     $this->session->set_flashdata('error', 'Current password entered is wrong');
                     redirect('my_profile');
                }
                if ($this->form_validation->run() == FALSE)
-               {    $arrData['has_error'] = 'has-error';
-                    return $this->load->view("login",$arrData);
+               {    
+                    $arrData['has_error'] = 'has-error';
+                    return load_view("my_profile",$arrData);
                }else{
                     $checkInput = array(
-                         'username' => $this->input->post('username'),
-                         'password' => md5($this->input->post('password')),
-                         'password' => md5($this->input->post('password'))
+                         'password'      => md5($this->input->post('new_pwd'))
                     );
-                    $loginData = $this->master->check_login($checkInput);
-                    if($loginData){
-                         $this->set_session($loginData[0]);
-                         $this->session->set_flashdata('success','Login success');
-                         redirect('dashboard');
+                    $updateFlag = $this->master->reset_password($where,$checkInput);
+                    if($updateFlag){
+                         $this->session->set_flashdata('success','Password reset successfully');
+                         redirect('my_profile');
                     }else{
-                         $this->session->set_flashdata('error','Incorrect login details');
-                         redirect('login');
+                         $this->session->set_flashdata('error','Failed to reset password');
+                         redirect('my_profile');
                     }
                }
-          }else{
-               return $this->load->view("login",$arrData = array());
           }
      }
      
