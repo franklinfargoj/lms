@@ -37,10 +37,15 @@ class Leads extends CI_Controller
      */
     public function add()
     {
+        /*Create Breadcumb*/
+          $this->make_bread->add('Add Leads', '', 0);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<label class = "error">', '</label>');
             $this->form_validation->set_rules('customer_type', 'Customer', 'required');
-//            $this->form_validation->set_rules('lead_name', 'Lead Name', 'required');
+          //$this->form_validation->set_rules('lead_name', 'Lead Name', 'required');
             $this->form_validation->set_rules('customer_name', 'Customer Name', 'required');
             $this->form_validation->set_rules('phone_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
             $this->form_validation->set_rules('product_category', 'Product Category', 'required');
@@ -144,6 +149,11 @@ class Leads extends CI_Controller
 
     public function upload()
     {
+        /*Create Breadcumb*/
+          $this->make_bread->add('Leads Upload', '', 0);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+
         if($this->input->post('Submit')) {
             $lead_source = $this->input->post('lead_source');
             $this->form_validation->set_rules('lead_source','Lead Source', 'required');
@@ -203,7 +213,7 @@ class Leads extends CI_Controller
             redirect('Leads/upload');
         }
         $middle = "upload";
-        load_view($middle);
+        load_view($middle,$arrData);
     }
 
     /*
@@ -271,6 +281,11 @@ class Leads extends CI_Controller
 
 
     public function unassigned_leads(){
+        /*Create Breadcumb*/
+          $this->make_bread->add('Unassign Leads', '', 0);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+
         $arrData['unassigned_leads'] = $this->Lead->unassigned_leads();
         $middle = "unassigned_list";
         load_view($middle,$arrData);

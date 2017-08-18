@@ -268,6 +268,15 @@
 					<li>
 						<a href="<?php echo site_url('ticker')?>">Tickers</a>
 					</li>
+					<li>
+						<a href="<?php echo site_url('leads/upload')?>">Lead Upload</a>
+					</li>
+					<li>
+						<a href="<?php echo site_url('leads/add')?>">Add Leads</a>
+					</li>
+					<li>
+						<a href="<?php echo site_url('leads/unassigned_leads')?>">Unassign Leads</a>
+					</li>
 					<!-- <li>
 						<a href="<?php echo site_url('state')?>">States</a>
 					</li> -->
