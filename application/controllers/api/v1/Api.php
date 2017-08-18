@@ -45,7 +45,7 @@ class Api extends REST_Controller
 
         $user_id = $params['user_id'];
         $password = $params['password'];
-        $device_token = $params['device_token'];
+        //$device_token = $params['device_token'];
 
 //        $curl_handle = curl_init();
 //        curl_setopt($curl_handle, CURLOPT_URL, 'http://10.0.11.33/payo_app/users/update_synapse_info');
