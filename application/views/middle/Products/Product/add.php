@@ -63,8 +63,9 @@
 					?>
 				</div>
 				<div class="form-group">
-					<?php ?>
+					<label>Default Assign</label>
 					<div class="radio-list">
+						
 						<label class="radio-inline">
 							<input type="radio" id= "self" name="default_assign" value="self" <?php echo  set_radio('default_assign', 'self', TRUE); ?> />
 							Self
