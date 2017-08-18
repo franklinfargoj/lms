@@ -230,7 +230,7 @@ if (!function_exists('fetch_range_excel_data'))
 
 if (!function_exists('create_excel_error_file'))
 {
-    function create_excel_error_file($validation_errors,$target_file_path)
+    function create_excel_error_file($validation_errors,$target_file_path,$target_file)
     {
         $CI = & get_instance();
         $CI->load->library('excel');
@@ -253,5 +253,8 @@ if (!function_exists('create_excel_error_file'))
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcelWriter, 'Excel5');
         $objWriter->save($target_file_path);
+
+        $target_file_path = base_url().'uploads/errorlog/'.$target_file;
+        $CI->session->set_userdata('error_file_path',$target_file_path);
     }
 }

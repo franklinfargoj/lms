@@ -55,7 +55,7 @@ class State extends CI_Controller {
           /*Create Breadcumb*/
 
           if($this->input->post()){
-               $this->form_validation->set_rules('title','State name','required|callback_alphaNumeric');
+               $this->form_validation->set_rules('title','State name','trim|required|callback_alphaNumeric');
                if ($this->form_validation->run() == FALSE)
                {    $arrData['has_error'] = 'has-error';
                     return load_view("State/add",$arrData);
@@ -91,7 +91,7 @@ class State extends CI_Controller {
 
           $arrData['stateDetail'] = $this->master->view_record($id);
           if($this->input->post()){
-               $this->form_validation->set_rules('title','State name','required|callback_alphaNumeric');
+               $this->form_validation->set_rules('title','State name','trim|required|callback_alphaNumeric');
                if ($this->form_validation->run() == FALSE){    
                     $arrData['has_error'] = 'has-error';
                     return load_view("State/edit",$arrData);
