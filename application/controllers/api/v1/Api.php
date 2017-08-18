@@ -54,7 +54,7 @@ class Api extends REST_Controller
 //        curl_close($curl_handle);
 //
 //        $result = json_decode($buffer);
-          $array= array(
+          $data['basic_info']= array(
               'hrms_id' => '1234',
               'dept_id' => '12',
               'dept_type_id' => '123',
@@ -70,7 +70,15 @@ class Api extends REST_Controller
               'mobile' => '9975772432',
               'email_id' => 'mukesh.kurmi@wwindia.com',
           );
-        returnJson($array);
+        $data['employee_list'][]= array(
+            'id' => '12',
+            'full_name' => 'mukesh kurmi',
+        );
+        $data['employee_list'][]= array(
+            'id' => '13',
+            'full_name' => 'anup',
+        );
+        returnJson($data);
 
 //        if(isset($result['status']) && $result['status'] == 'success'){
 //
