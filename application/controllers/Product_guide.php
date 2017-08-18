@@ -65,8 +65,8 @@ class Product_guide extends CI_Controller {
 
           if($this->input->post()){
                $product_id = $this->input->post('product_id');
-               $this->form_validation->set_rules('title','Title', 'required');
-               $this->form_validation->set_rules('description_text','Description', 'required');
+               $this->form_validation->set_rules('title','Title', 'trim|required');
+               $this->form_validation->set_rules('description_text','Description', 'trim|required');
                if ($this->form_validation->run() == FALSE){    
                     $arrData['has_error'] = 'has-error';
                     return load_view("Products/Product_guide/add",$arrData);
@@ -77,9 +77,13 @@ class Product_guide extends CI_Controller {
                          'description_text' => $this->input->post('description_text'),
                          'created_by' => loginUserId()
                     );
-                    $status = $this->master->add_product_guide($insert);
-                    if($status['status'] == 'error'){
-                         $this->session->set_flashdata('error',$this->input->post('title').' details already added for this product.');
+                    $response = $this->master->add_product_guide($insert);
+                    if($response['status'] == 'error'){
+                         if($response['code'] == 1062){
+                              $this->session->set_flashdata('error',$this->input->post('title').' details already added for this product.');
+                         }else{
+                              $this->session->set_flashdata('error','Failed to add product details');
+                         }
                          redirect('product_guide/add/'.$productId);
                     }else{
                          $this->session->set_flashdata('success','Product Details added successfully.');
@@ -108,7 +112,7 @@ class Product_guide extends CI_Controller {
                $productId = $this->input->post('product_id');
                $arrData['product'] = $this->master->view_product($productId);
                //$this->form_validation->set_rules('title','Title', 'required');
-               $this->form_validation->set_rules('description_text','Description', 'required');
+               $this->form_validation->set_rules('description_text','Description', 'trim|required');
                if ($this->form_validation->run() == FALSE){
 
                     /*Create Breadcumb*/
@@ -128,8 +132,12 @@ class Product_guide extends CI_Controller {
                          'modified_by' => loginUserId(),
                          'modified_on' => date('y-m-d H:i:s')
                     );
-                    $this->master->edit_product_guide($id,$update);
-                    $this->session->set_flashdata('success','Product Details updated successfully.');
+                    $response = $this->master->edit_product_guide($id,$update);
+                    if($response['status'] == 'error'){
+                         $this->session->set_flashdata('error','Failed to add product details');
+                    }else{
+                         $this->session->set_flashdata('success','Product details updated successfully.');
+                    }
                     redirect('product_guide/index/'.$productId);
                }
           }else{

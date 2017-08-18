@@ -206,8 +206,9 @@ class Master_model extends CI_Model{
 		$this->db->db_debug = FALSE; //enable debugging for queries
 		$this->db->insert($table,$data);
 		$errors = $this->db->error();
-		if($errors['code'] == 1062){
+		if($errors['code']){
 			$response['status'] = 'error';
+			$response['code'] = $errors['code'];
 		}else{
 			$response['status'] = 'success';
 			$response['insert_id'] = $this->db->insert_id();
@@ -218,7 +219,15 @@ class Master_model extends CI_Model{
 	private function update($where,$table,$data){
 		$this->db->where($where);
 		$this->db->update($table,$data);
-		return $this->db->affected_rows();
+		$errors = $this->db->error();
+		if($errors['code']){
+			$response['status'] = 'error';
+			$response['code'] = $errors['code'];
+		}else{
+			$response['status'] = 'success';
+			$response['affected_rows'] = $this->db->affected_rows();
+		}
+		return $response;
 	}
 
 

@@ -213,7 +213,7 @@
 jQuery(document).ready(function() {     
   	Login.init();
   	// init background slide images
-   	$.backstretch([
+   	/*$.backstretch([
 	        "<?php echo base_url();?>assets/admin/pages/media/bg/1.jpg",
 	        "<?php echo base_url();?>assets/admin/pages/media/bg/2.jpg",
 	        "<?php echo base_url();?>assets/admin/pages/media/bg/3.jpg",
@@ -222,7 +222,7 @@ jQuery(document).ready(function() {
 			fade: 1000,
 			duration: 8000
 		}
-	);
+	);*/
 });
 </script>
 <!-- END JAVASCRIPTS -->

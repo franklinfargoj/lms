@@ -7,3 +7,7 @@ Rounded Portlets
 .form-group label.error{
 	color: #a94442;
 }
+
+.portlet > .portlet-title > .tools > a{
+	height:26px;
+}

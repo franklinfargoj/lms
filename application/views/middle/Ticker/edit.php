@@ -12,7 +12,7 @@
             <span class="caption-subject font-green-sharp bold">Edit Ticker</span>
         </div>
         <div class="tools">
-            <a href="<?php echo site_url('ticker');?>" class="">List
+            <a href="<?php echo site_url('ticker');?>" class="btn btn-sm blue"></i>Back
             </a>
         </div>
     </div>
