@@ -162,6 +162,7 @@ class Leads extends CI_Controller
             if (isset($_FILES['filename']) && !empty($_FILES['filename']['tmp_name'])) {
                 make_upload_directory('./uploads');
                 $file = upload_excel('./uploads', 'filename');
+                echo $file;die;
                 if (!is_array($file)) {
                     $msg = notify($file, $type = "danger");
                     $this->session->set_flashdata('message', $msg);
