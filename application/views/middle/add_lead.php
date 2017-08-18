@@ -110,7 +110,7 @@ $remark_extra = 'style="height:50%"';
                         <strong>Success!</strong> Lead added successfully.
                     </div>
                 <?php }
-                $url = base_url('Leads/add');
+                $url = base_url('leads/add');
                 echo form_open($url, $form_attributes);
                 ?>
                 <div class="form-body">
@@ -191,6 +191,7 @@ $remark_extra = 'style="height:50%"';
 
                     <div class="form-group">
                         <div class="radio-list">
+                            <label>Own Branch / Other Branch</label>
                             <label class="radio-inline">
                                 <input type="radio" id="is_own_branch" name="is_own_branch"
                                        value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
@@ -245,17 +246,17 @@ $remark_extra = 'style="height:50%"';
                         <?php echo form_dropdown('lead_identification', $lead_id_options, '', $extra) ?>
                         <?php echo form_error('lead_identification'); ?>
                     </div>
-                    <div class="form-group">
-                        <label>Account No</label>
-                        <div class="input-group">
-            <span class="input-group-addon">
-                <i class="fa fa-mobile"></i>
-            </span>
-                            <?php echo form_input($data_account);
-                            ?>
-                        </div>
-                        <?php echo form_error('account_no'); ?>
-                    </div>
+<!--                    <div class="form-group">-->
+<!--                        <label>Account No</label>-->
+<!--                        <div class="input-group">-->
+<!--            <span class="input-group-addon">-->
+<!--                <i class="fa fa-mobile"></i>-->
+<!--            </span>-->
+<!--                            --><?php //echo form_input($data_account);
+//                            ?>
+<!--                        </div>-->
+<!--                        --><?php //echo form_error('account_no'); ?>
+<!--                    </div>-->
                     <div class="form-group">
                         <label>Remarks</label>
                         <?php echo form_textarea($data_remark, '', $remark_extra);
@@ -298,12 +299,12 @@ $remark_extra = 'style="height:50%"';
                 }
             });
             $('#product_category').change(function () {
-                var base_url = "http://10.0.11.33/lms";
+                var base_url = '<?php echo base_url(); ?>';
                 var category_id = $('#product_category').val();
                 var csrf = $("input[name=csrf_dena_bank]").val();
                 $.ajax({
                     method: "POST",
-                    url: base_url + "/Leads/Productlist",
+                    url: base_url + "Leads/Productlist",
                     data: {
                         '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
                         category_id: category_id
