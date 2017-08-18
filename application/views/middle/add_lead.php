@@ -298,7 +298,7 @@ $remark_extra = 'style="height:50%"';
                 }
             });
             $('#product_category').change(function () {
-                var base_url = "http://10.0.11.33/lms";
+                var base_url = "<?php echo base_url();?>";
                 var category_id = $('#product_category').val();
                 var csrf = $("input[name=csrf_dena_bank]").val();
                 $.ajax({
