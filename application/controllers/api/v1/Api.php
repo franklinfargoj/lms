@@ -41,36 +41,53 @@ class Api extends REST_Controller
         $password = $params['password'];
         $device_token = $params['device_token'];
 
-        $curl_handle = curl_init();
-        curl_setopt($curl_handle, CURLOPT_URL, 'http://10.0.11.33/payo_app/users/update_synapse_info');
-        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl_handle, CURLOPT_POST, 1);
-        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
-            'user_id' => $user_id,
-            'password' => $password
-        ));
+//        $curl_handle = curl_init();
+//        curl_setopt($curl_handle, CURLOPT_URL, 'http://10.0.11.33/payo_app/users/update_synapse_info');
+//        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+//        curl_setopt($curl_handle, CURLOPT_POST, 1);
+//        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
+//            'user_id' => $user_id,
+//            'password' => $password
+//        ));
+//
+//        $buffer = curl_exec($curl_handle);
+//        curl_close($curl_handle);
+//
+//        $result = json_decode($buffer);
+          $array= array(
+              'hrms_id' => '1234',
+              'dept_id' => '12',
+              'dept_type_id' => '123',
+              'dept_type_name' => 'BR',
+              'branch_id' => '1234',
+              'district_id' => '1234',
+              'state_id' => '1234',
+              'zone_id' => '1234',
+              'full_name' => 'mukesh kurmi',
+              'supervisor_id' => '009',
+              'designation_id' => '4',
+              'designation_name' => 'BM',
+              'mobile' => '9975772432',
+              'email_id' => 'mukesh.kurmi@wwindia.com',
+          );
+        returnJson($array);
 
-        $buffer = curl_exec($curl_handle);
-        curl_close($curl_handle);
-
-        $result = json_decode($buffer);
-
-        if(isset($result['status']) && $result['status'] == 'success'){
-
-            $table = "db_app_login_logs";
-            $data = array('device_token'=> $device_token,
-                'employee_id'=>$result
-            );
-            $this->app->insert_login_log($table,$data);
-        }
-
-        else{
-            $error = array(
-                "result" => false,
-                "data" => "Invalid username or password."
-            );
-            returnJson($error);
-        }
+//        if(isset($result['status']) && $result['status'] == 'success'){
+//
+//            $table = "db_app_login_logs";
+//            $data = array('device_token'=> $device_token,
+//                'employee_id'=>$result
+//            );
+//            $this->app->insert_login_log($table,$data);
+//        }
+//
+//        else{
+//            $error = array(
+//                "result" => false,
+//                "data" => "Invalid username or password."
+//            );
+//            returnJson($error);
+//        }
     }
 
 }
