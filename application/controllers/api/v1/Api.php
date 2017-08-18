@@ -120,4 +120,64 @@ class Api extends REST_Controller
 //        }
     }
 
+    public function master_get(){
+
+        $data['zone_list'][]= array(
+            'id' => '12',
+            'name' => 'zone1',
+        );
+        $data['zone_list'][]= array(
+            'id' => '13',
+            'name' => 'zone2',
+        );
+        $data['state_list'][]= array(
+            'id' => '12',
+            'zone_id' => '1',
+            'name' => 'maharashtra',
+        );
+        $data['state_list'][]= array(
+            'id' => '13',
+            'zone_id' => '1',
+            'name' => 'UP',
+        );
+        $data['district_list'][]= array(
+            'id' => '12',
+            'state_id' => '12',
+            'name' => 'mumbai',
+        );
+        $data['district_list'][]= array(
+            'id' => '13',
+            'state_id' => '13',
+            'name' => 'Deoria',
+        );
+        $data['branch_list'][]= array(
+            'id' => '12',
+            'district_id' => '13',
+            'name' => 'BKC',
+        );
+        $data['branch_list'][]= array(
+            'id' => '13',
+            'district_id' => '12',
+            'name' => 'salempur branch',
+        );
+        returnJson($data);
+
+//        if(isset($result['status']) && $result['status'] == 'success'){
+//
+//            $table = "db_app_login_logs";
+//            $data = array('device_token'=> $device_token,
+//                'employee_id'=>$result
+//            );
+//            $this->app->insert_login_log($table,$data);
+//        }
+//
+//        else{
+//            $error = array(
+//                "result" => false,
+//                "data" => "Invalid username or password."
+//            );
+//            returnJson($error);
+//        }
+    }
+
 }
