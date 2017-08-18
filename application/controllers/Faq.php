@@ -57,7 +57,7 @@ class Faq extends CI_Controller {
           if($this->input->post()){
                //$admin_id =  $this->session->userdata('admin_id');
                $admin_id =  1;
-               $this->form_validation->set_rules('question','Question', 'trim|required|is_unique['.Tbl_Faq.'.title]');
+               $this->form_validation->set_rules('question','Question', 'trim|required|is_unique['.Tbl_Faq.'.question]');
                $this->form_validation->set_rules('answer','Answer', 'trim|required');
                $this->form_validation->set_message('is_unique', '%s is already taken');
                if ($this->form_validation->run() == FALSE)
@@ -100,8 +100,8 @@ class Faq extends CI_Controller {
 
           $arrData['faqDetail'] = $this->master->view_record($id);
           if($this->input->post()){
-               if($this->input->post('title') != $arrData['tickerDetail'][0]['title']){
-                    $is_unique = '|is_unique['.Tbl_Ticker.'.title]';
+               if($this->input->post('question') != $arrData['faqDetail'][0]['question']){
+                    $is_unique = '|is_unique['.Tbl_Faq.'.question]';
                     $this->form_validation->set_message('is_unique', '%s is already taken');
                }else{
                     $is_unique = '';
