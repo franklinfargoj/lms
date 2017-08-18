@@ -303,7 +303,7 @@ $remark_extra = 'style="height:50%"';
                 var csrf = $("input[name=csrf_dena_bank]").val();
                 $.ajax({
                     method: "POST",
-                    url: base_url + "/Leads/Productlist",
+                    url: base_url + "leads/productlist",
                     data: {
                         '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
                         category_id: category_id
