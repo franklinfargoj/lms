@@ -5,7 +5,7 @@
 		<div class="container">
 			<!-- BEGIN LOGO -->
 			<div class="page-logo">
-				<a href="<?php echo base_url();?>"><img src="<?php echo base_url();?>assets/admin/layout3/img/dena-bank.jpg" width="100" height="40" alt="logo" class="logo-default"></a>
+				<a href="<?php echo site_url('dashboard');?>"><img src="<?php echo base_url();?>assets/admin/layout3/img/dena-bank.jpg" width="100" height="40" alt="logo" class="logo-default"></a>
 			</div>
 			<!-- END LOGO -->
 			<!-- BEGIN RESPONSIVE MENU TOGGLER -->

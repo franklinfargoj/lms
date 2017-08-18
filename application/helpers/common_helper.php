@@ -5,19 +5,19 @@
  * Date: 21/2/17
  * Time: 5:14 PM
  */
-    /**
-     * Load view
-     *
-     * @param unknown_type $arrDatam
-     * @param unknown_type $middle
-     * @param unknown_type $template
-     */
-    function load_view($middle = "home",$arrData = array(), $template = "main"){
-        if(!$middle)$middle = "login";
-        $CI =& get_instance();
-        $arrData['middle'] = "middle/".$middle;
-        $CI->load->view("layout/".$template,$arrData);
-    }
+/**
+ * Load view
+ *
+ * @param unknown_type $arrDatam
+ * @param unknown_type $middle
+ * @param unknown_type $template
+ */
+function load_view($middle = "home",$arrData = array(), $template = "main"){
+    if(!$middle)$middle = "login";
+    $CI =& get_instance();
+    $arrData['middle'] = "middle/".$middle;
+    $CI->load->view("layout/".$template,$arrData);
+}
 
 
 
@@ -47,7 +47,7 @@ function sendmail($to, $message, $subject,$company_name,$company_email) {
         $smtp_arr[] = $row->setting_value;
     }
 
-     $config = Array(
+    $config = Array(
         'protocol' => $smtp_arr[0],
         'smtp_host' => $smtp_arr[1],
         'smtp_port' => $smtp_arr[2],
@@ -71,7 +71,7 @@ function sendmail($to, $message, $subject,$company_name,$company_email) {
         return false;
     }
 
-    
+
 }
 /*Added by Ashok Jadhav on 17 August 2017*/
 
