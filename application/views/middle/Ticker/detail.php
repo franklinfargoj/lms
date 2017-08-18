@@ -15,7 +15,7 @@
                             </a>
                             <a href="javascript:;" class="reload">
                             </a> -->
-                            <a href="<?php echo base_url('ticker')?>" class="">Back
+                            <a href="<?php echo base_url('ticker')?>" class="btn btn-sm blue"></i>Back
                             </a>
                         </div>
                     </div>

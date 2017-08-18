@@ -44,8 +44,8 @@ class Login extends CI_Controller {
      public function check_login()
      {
           if($this->input->post()){
-               $this->form_validation->set_rules('username','Username', 'required');
-               $this->form_validation->set_rules('password','Password', 'required');
+               $this->form_validation->set_rules('username','Username', 'trim|required');
+               $this->form_validation->set_rules('password','Password', 'trim|required');
                if ($this->form_validation->run() == FALSE)
                {    $arrData['has_error'] = 'has-error';
                     return $this->load->view("login",$arrData);

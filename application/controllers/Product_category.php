@@ -55,7 +55,8 @@ class Product_category extends CI_Controller {
           /*Create Breadcumb*/
 
           if($this->input->post()){
-               $this->form_validation->set_rules('title','Product category name','required|callback_alphaNumeric|is_unique['.Tbl_Category.'.title]');
+               $this->form_validation->set_rules('title','Product category name','trim|required|callback_alphaNumeric|is_unique['.Tbl_Category.'.title]');
+               $this->form_validation->set_message('is_unique', '%s is already taken');
                if ($this->form_validation->run() == FALSE)
                {    $arrData['has_error'] = 'has-error';
                     return load_view("Products/Category/add",$arrData);
@@ -64,9 +65,14 @@ class Product_category extends CI_Controller {
                          'title' => $this->input->post('title'),
                          'created_by' => loginUserId()
                     );
-                    $this->master->add_product_category($insert);
-                    $this->session->set_flashdata('success','Product category added successfully.');
-                    redirect('product_category');
+                    $response = $this->master->add_product_category($insert);
+                    if($response['status'] == 'error'){
+                         $this->session->set_flashdata('error','Failed to add product category');
+                         redirect('product_category/add');
+                    }else{
+                         $this->session->set_flashdata('success','Product category added successfully.');
+                         redirect('product_category');
+                    }
                }
           }else{
                return load_view("Products/Category/add",$arrData);
@@ -91,12 +97,13 @@ class Product_category extends CI_Controller {
 
           $arrData['categoryDetail'] = $this->master->view_product_category($id);
           if($this->input->post()){
-               //$admin_id =  $this->session->userdata('admin_id');
-               $admin_id =  1;
-               $this->form_validation->set_rules('title','Product category name','required|callback_alphaNumeric');
                if($this->input->post('title') != $arrData['categoryDetail'][0]['title']){
-                    $this->form_validation->set_rules('title','Product category name','is_unique['.Tbl_Category.'.title]');
+                    $is_unique = '|is_unique['.Tbl_Category.'.title]';
+                    $this->form_validation->set_message('is_unique', '%s is already taken');
+               }else{
+                    $is_unique = '';
                }
+               $this->form_validation->set_rules('title','Product category name','trim|required|callback_alphaNumeric'.$is_unique);
                if ($this->form_validation->run() == FALSE){    
                     $arrData['has_error'] = 'has-error';
                     return load_view("Products/Category/edit",$arrData);
@@ -106,9 +113,15 @@ class Product_category extends CI_Controller {
                          'modified_by' => loginUserId(),
                          'modified_on' => date('y-m-d H:i:s')
                     );
-                    $this->master->edit_product_category($id,$update);
-                    $this->session->set_flashdata('success','Product category updated successfully.');
-                    redirect('product_category');
+                    $response = $this->master->edit_product_category($id,$update);
+                    if($response['status'] == 'error'){
+                         $this->session->set_flashdata('error','Failed to edit product category');
+                         redirect('product_category/edit/'.$id);
+                    }else{
+                         $this->session->set_flashdata('success','Product category updated successfully.');
+                         redirect('product_category');
+                    }
+                    
                }
           }else{
                return load_view("Products/Category/edit",$arrData);

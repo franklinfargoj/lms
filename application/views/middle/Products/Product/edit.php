@@ -6,7 +6,7 @@
 			<span class="caption-subject font-green-sharp bold">Edit Product</span>
 		</div>
 		<div class="tools">
-			<a href="<?php echo base_url('product');?>" class="">List
+			<a href="<?php echo base_url('product');?>" class="btn btn-sm blue"></i>Back
 			</a>
 		</div>
 	</div>
@@ -82,7 +82,7 @@
 				</div>
 			</div>
 			<div class="form-actions right">
-				<button type="reset" class="btn default">Cancel</button>
+				<button type="reset" class="btn default">Reset</button>
 				<button type="submit" class="btn green">Submit</button>
 			</div>
 		<?php echo form_close();?>

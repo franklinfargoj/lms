@@ -13,7 +13,7 @@
             <span class="caption-subject font-green-sharp bold">FAQs</span>
         </div>
         <div class="tools">
-            <a href="<?php echo base_url('faq/add')?>" class="">Add
+            <a href="<?php echo base_url('faq/add')?>" class="btn btn-sm green"><i class="fa fa-plus"></i>Add
             </a>
         </div>
     </div>
@@ -49,17 +49,17 @@
                          <?php echo $value['question'];?>
                     </td>
                     <td>
-                        <a class="view" href="<?php echo site_url('faq/view/'. $value['id'])?>">
-                            View 
+                        <a class="btn btn-sm grey-cascade" href="<?php echo site_url('faq/view/'. $value['id'])?>">
+                            <i class="fa fa-link"></i> View 
                         </a> 
                     </td>
                     <td>
-                        <a class="edit" href="<?php echo site_url('faq/edit/'. $value['id'])?>">
-                            Edit 
+                        <a class="btn btn-sm red" href="<?php echo site_url('faq/edit/'. $value['id'])?>">
+                            <i class="fa fa-edit"></i> Edit 
                         </a> 
-                        <span> / </span>
-                        <a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('faq/delete/'. $value['id'])?>">
-                            Delete
+                        
+                        <a class="btn btn-sm purple delete" href="javascript:void(0);" data-url="<?php echo site_url('faq/delete/'. $value['id'])?>">
+                            <i class="fa fa-times"></i> Delete 
                         </a> 
                     </td>
                     

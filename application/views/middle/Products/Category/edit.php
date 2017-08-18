@@ -3,10 +3,10 @@
 	<div class="portlet-title">
 		<div class="caption">
 			<!-- <i class="fa fa-cogs font-green-sharp"></i> -->
-			<span class="caption-subject font-green-sharp bold">Add Product Category</span>
+			<span class="caption-subject font-green-sharp bold">Edit Product Category</span>
 		</div>
 		<div class="tools">
-			<a href="<?php echo base_url('product_category');?>" class="">List
+			<a href="<?php echo base_url('product_category');?>" class="btn btn-sm blue"></i>Back
 			</a>
 		</div>
 	</div>
@@ -49,7 +49,7 @@
 				</div>
 			</div>
 			<div class="form-actions right">
-				<button type="button" class="btn default">Cancel</button>
+				<button type="reset" class="btn default">Reset</button>
 				<button type="submit" class="btn green">Submit</button>
 			</div>
 		<!-- </form> -->

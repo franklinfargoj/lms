@@ -12,7 +12,7 @@
             <span class="caption-subject font-green-sharp bold">Add Ticker</span>
         </div>
         <div class="tools">
-            <a href="<?php echo site_url('ticker');?>" class="">List
+            <a href="<?php echo site_url('ticker');?>" class="btn btn-sm blue"></i>Back
             </a>
         </div>
     </div>
@@ -33,7 +33,7 @@
 					        'class' => '',
 					        'style' => ''
 						);
-						echo form_label('Question', 'title', $attributes);
+						echo form_label('Title', 'title', $attributes);
 
 						$data = array(
 					        'type'  => 'text',

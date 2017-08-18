@@ -19,7 +19,7 @@
 			</a>
 			<a href="javascript:;" class="reload">
 			</a> -->
-			<a href="<?php echo base_url('product_category/add')?>" class="">Add
+			<a href="<?php echo base_url('product_category/add')?>" class="btn btn-sm green"><i class="fa fa-plus"></i>Add
 			</a>
 		</div>
 	</div>
@@ -51,12 +51,12 @@
 						 <?php echo $value['title'];?>
 					</td>
 					<td>
-						<a class="edit" href="<?php echo site_url('product_category/edit/'. $value['id'])?>">
-							Edit 
+						<a class="btn btn-sm red" href="<?php echo site_url('product_category/edit/'. $value['id'])?>">
+							<i class="fa fa-edit"></i> Edit
 						</a> 
-						<span> / </span>
-						<a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('product_category/delete/'. $value['id'])?>">
-							Delete
+						
+						<a class="btn btn-sm purple delete" href="javascript:void(0);" data-url="<?php echo site_url('product_category/delete/'. $value['id'])?>">
+							<i class="fa fa-times"></i> Delete
 						</a> 
 					</td>
 				</tr>	
