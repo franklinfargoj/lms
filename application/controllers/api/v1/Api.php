@@ -31,7 +31,13 @@ class Api extends REST_Controller
     public function authentication_post(){
         $params = $this->input->post();
 
-        if(!isset($params['user_id']) || !isset($params['device_token']) || !isset($params['password']) || ($params['user_id'] == NULL) || ($params['device_token'] == NULL) || ($params['password'] == NULL)){
+//        if(!isset($params['user_id']) || !isset($params['device_token']) || !isset($params['password']) || ($params['user_id'] == NULL) || ($params['device_token'] == NULL) || ($params['password'] == NULL)){
+//            $err['result'] = false;
+//            $err['data'] = "Invalid Request";
+//            returnJson($err);
+//        }
+
+        if(!isset($params['user_id']) || !isset($params['password']) || ($params['user_id'] == NULL) ||  ($params['password'] == NULL)){
             $err['result'] = false;
             $err['data'] = "Invalid Request";
             returnJson($err);
