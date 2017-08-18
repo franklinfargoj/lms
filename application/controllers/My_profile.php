@@ -16,7 +16,7 @@ class My_profile extends CI_Controller {
 	{
 		// Initialization of class
 		parent::__construct();
-          global $admin_id;
+          is_logged_in();     //check login
           $this->load->model('Login_model','master');
 	}
 

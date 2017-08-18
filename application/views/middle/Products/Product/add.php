@@ -62,6 +62,20 @@
 						echo form_error('title', '<span class="help-block">', '</span>');
 					?>
 				</div>
+				<div class="form-group">
+					<?php ?>
+					<div class="radio-list">
+						<label class="radio-inline">
+							<input type="radio" id= "self" name="default_assign" value="self" <?php echo  set_radio('default_assign', 'self', TRUE); ?> />
+							Self
+						</label>
+						<label class="radio-inline">
+							<input type="radio" id="branch" name="default_assign" value="branch" <?php echo  set_radio('default_assign', 'branch'); ?> />
+							Branch
+						</label>
+					</div>
+					<?php echo form_error('default_assign'); ?>
+				</div>
 			</div>
 			<div class="form-actions right">
 				<button type="reset" class="btn default">Reset</button>

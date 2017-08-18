@@ -62,6 +62,23 @@
 						echo form_error('title', '<span class="help-block">', '</span>');
 					?>
 				</div>
+				<div class="form-group">
+					<div class="radio-list">
+						<label class="radio-inline">
+							<input type="radio" id= "self" name="default_assign" value="self" <?php 
+							    echo set_value('default_assign', $productDetail[0]['default_assign']) == 'self' ? "checked" : ""; 
+							?> />
+							Self
+						</label>
+						<label class="radio-inline">
+							<input type="radio" id="branch" name="default_assign" value="branch" <?php 
+							    echo set_value('default_assign', $productDetail[0]['default_assign']) == 'branch' ? "checked" : ""; 
+							?> />
+							Branch
+						</label>
+					</div>
+					<?php echo form_error('default_assign'); ?>
+				</div>
 			</div>
 			<div class="form-actions right">
 				<button type="reset" class="btn default">Cancel</button>
