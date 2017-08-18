@@ -47,6 +47,9 @@ $data_submit = array(
 						</span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <span>*Please Upload a file with extension xls or xlsx</span>
+                    </div>
                 </div>
                 <div class="form-actions">
                     <?php echo form_button($data_submit) ?>

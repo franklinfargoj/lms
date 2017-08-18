@@ -41,7 +41,6 @@ class Leads extends CI_Controller
           $this->make_bread->add('Add Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
-
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<label class = "error">', '</label>');
             $this->form_validation->set_rules('customer_type', 'Customer', 'required');
@@ -86,8 +85,6 @@ class Leads extends CI_Controller
             $lead_data['product_id'] = $this->input->post('product');
             $lead_data['lead_name'] = $this->input->post('customer_name');
             $lead_data['lead_identification'] = $this->input->post('lead_identification');
-            $lead_data['pan_no'] = $this->input->post('lead_name');
-            $lead_data['aadhar_no'] = $this->input->post('aadhar_no');
             $lead_data['is_own_branch'] = $this->input->post('is_own_branch');
             $lead_data['account_id'] = $this->input->post('account_no');
             $lead_data['remark'] = $this->input->post('remark');
@@ -166,8 +163,9 @@ class Leads extends CI_Controller
                 make_upload_directory('./uploads');
                 $file = upload_excel('./uploads', 'filename');
                 if (!is_array($file)) {
-                    $msg = notify(strip_tags($file), $type = "danger");
+                    $msg = notify($file, $type = "danger");
                     $this->session->set_flashdata('message', $msg);
+                    redirect('Leads/upload');
                 } else {
                     set_time_limit(0);
                     ini_set('memory_limit', '-1');
@@ -231,27 +229,30 @@ class Leads extends CI_Controller
 
         foreach ($excelData as $key => $value){
 
-
-            $error[$key] = 'Product name and product category name does not match.';
-
             $whereArray = array('title'=>$value['product_category_id']);
             $prod_category_id = $this->Lead->fetch_product_category_id($whereArray);
             if($prod_category_id == false){
                 $error[$key] = 'Category does not exist.';
 
             }else{
-                $all_product = $this->Lead->all_products_under_category($prod_category_id);
-                if(in_array($value['product_id'],$all_product)){
+                if($value['branch_id'] == ''){
+                    $error[$key] = 'Branch id missing.';
 
-                    $whereArray = array('title'=>$value['product_id']);
-                    $prod_id = $this->Lead->fetch_product_id($whereArray);
-                    $value['product_category_id']=$prod_category_id;
-                    $value['product_id']=$prod_id['product_id'];
-                    $value['lead_name']=$value['customer_name'];
-                    $value['lead_source']=$lead_source;
-                    $error = array();
-                    $insert_array[] = $value;
-                    $total_inserted++;
+                }else{
+                    $all_product = $this->Lead->all_products_under_category($prod_category_id);
+                    if(in_array($value['product_id'],$all_product)){
+
+                        $whereArray = array('title'=>$value['product_id']);
+                        $prod_id = $this->Lead->fetch_product_id($whereArray);
+                        $value['product_category_id']=$prod_category_id;
+                        $value['product_id']=$prod_id['product_id'];
+                        $value['lead_name']=$value['customer_name'];
+                        $value['lead_source']=$lead_source;
+                        $insert_array[] = $value;
+                        $total_inserted++;
+                    }else{
+                        $error[$key] = 'Product name and product category name does not match.';
+                    }
                 }
 
             }
@@ -279,7 +280,14 @@ class Leads extends CI_Controller
         $objWriter->save('php://output');
     }
 
-
+    /*
+     * unassigned_leads
+     * Loads the listing page for unassigned leads.
+     * @author Gourav Thatoi
+     * @access public
+     * @param none
+     * @return none
+     */
     public function unassigned_leads(){
         /*Create Breadcumb*/
           $this->make_bread->add('Unassign Leads', '', 0);
