@@ -91,6 +91,10 @@ class Ticker extends CI_Controller {
      */
      public function edit($id)
      {    
+          if(!$id){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('ticker');
+          }
           $id = decode_id($id);
           /*Create Breadcumb*/
           $this->make_bread->add('Tickers', 'ticker', 0);
@@ -99,6 +103,10 @@ class Ticker extends CI_Controller {
           /*Create Breadcumb*/
 
           $arrData['tickerDetail'] = $this->master->view_record($id);
+          if(count($arrData['tickerDetail']) > 1){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('ticker');
+          }
           if($this->input->post()){
                if($this->input->post('title') != $arrData['tickerDetail'][0]['title']){
                     $is_unique = '|is_unique['.Tbl_Ticker.'.title]';
@@ -141,6 +149,10 @@ class Ticker extends CI_Controller {
      * @return void
      */
      public function delete($id){
+          if(!$id){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('ticker');
+          }
           $id = decode_id($id);
           $soft_deleted = $this->master->delete_record($id);
           if($soft_deleted > 0){
@@ -160,9 +172,16 @@ class Ticker extends CI_Controller {
      * @return void
      */
      public function view($id){
+          if(!$id){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('ticker');
+          }
           $id = decode_id($id);
           $arrData['tickerDetail'] = $this->master->view_record($id);
-
+          if(count($arrData['tickerDetail']) > 1){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('ticker');
+          }
           /*Create Breadcumb*/
           $this->make_bread->add('Tickers', 'ticker', 0);
           $this->make_bread->add($arrData['tickerDetail'][0]['title'], '', 1);
