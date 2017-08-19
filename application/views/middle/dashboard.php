@@ -1,6 +1,6 @@
 <div class="row margin-top-10">
 	<div class="col-md-6 col-sm-12">
-		<div class="row list-separated">
+		<!-- <div class="row list-separated">
 			<div class="col-md-3 col-sm-3 col-xs-6">
 				<div class="font-grey-mint font-sm">
 					 Total Sales
@@ -33,7 +33,7 @@
 					 9,760 <span class="font-lg font-grey-mint">$</span>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 	
 </div>

@@ -29,8 +29,16 @@ class Product_guide extends CI_Controller {
      */
 	public function index($productId)
 	{
+          if(!$productId){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product');
+          }
           $productId = decode_id($productId);
           $arrData['product'] = $this->master->view_product($productId);
+          if(count($arrData['product']) > 1){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product');
+          }
 
           /*Create Breadcumb*/
           $this->make_bread->add('Product', 'product', 0);
@@ -53,9 +61,17 @@ class Product_guide extends CI_Controller {
      * @return void
      */
      public function add($productId)
-     {
+     {    
+          if(!$productId){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product');
+          }
           $productId = decode_id($productId);
           $arrData['product'] = $this->master->view_product($productId);
+          if(count($arrData['product']) > 1){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product');
+          }
           $arrData['titleList'] = $this->master->get_enum_values(Tbl_ProductDetails,'title');
 
           /*Create Breadcumb*/
@@ -111,6 +127,10 @@ class Product_guide extends CI_Controller {
                $id = decode_id($this->input->post('id'));
                $productId = decode_id($this->input->post('product_id'));
                $arrData['product'] = $this->master->view_product($productId);
+               if(count($arrData['product']) > 1){
+                    $this->session->set_flashdata('error','Invalid access');
+                    redirect('product');
+               }
                //$this->form_validation->set_rules('title','Title', 'required');
                $this->form_validation->set_rules('description_text','Description', 'trim|required');
                if ($this->form_validation->run() == FALSE){
