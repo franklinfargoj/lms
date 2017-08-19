@@ -91,6 +91,7 @@ class Ticker extends CI_Controller {
      */
      public function edit($id)
      {    
+          $id = decode_id($id);
           /*Create Breadcumb*/
           $this->make_bread->add('Tickers', 'ticker', 0);
           $this->make_bread->add('Edit', '', 1);
@@ -120,7 +121,7 @@ class Ticker extends CI_Controller {
                     $response = $this->master->edit_record($id,$update);
                     if($response['status'] == 'error'){
                          $this->session->set_flashdata('error','Failed to edit ticker information');
-                         redirect('ticker/edit/'.$id);
+                         redirect('ticker/edit/'.encode_id($id));
                     }else{
                          $this->session->set_flashdata('success','Ticker information updated successfully.');
                          redirect('ticker');
@@ -140,11 +141,14 @@ class Ticker extends CI_Controller {
      * @return void
      */
      public function delete($id){
+          $id = decode_id($id);
           $soft_deleted = $this->master->delete_record($id);
           if($soft_deleted > 0){
                $this->session->set_flashdata('success','Ticker information deleted successfully.');
-               redirect('ticker');
+          }else{
+               $this->session->set_flashdata('eroor','Failed to delete ticker information');
           }
+          redirect('ticker');
      }
 
      /*
@@ -156,6 +160,7 @@ class Ticker extends CI_Controller {
      * @return void
      */
      public function view($id){
+          $id = decode_id($id);
           $arrData['tickerDetail'] = $this->master->view_record($id);
 
           /*Create Breadcumb*/

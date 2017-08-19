@@ -12,7 +12,7 @@
             <span class="caption-subject font-green-sharp bold">Add <?php echo $product[0]['title'];?> Description</span>
         </div>
         <div class="tools">
-            <a href="<?php echo base_url("product_guide/index/".$product[0]['id']);?>" class="btn btn-sm blue"></i>Back
+            <a href="<?php echo base_url("product_guide/index/".encode_id($product[0]['id']));?>" class="btn btn-sm blue"></i>Back
             </a>
         </div>
     </div>
@@ -23,7 +23,7 @@
 				'id' => 'add_form',
 				'autocomplete' => 'off'
 				);
-			echo form_open(base_url().'/product_guide/add/'.$product[0]['id'], $attributes);
+			echo form_open(base_url().'/product_guide/add/'.encode_id($product[0]['id']), $attributes);
 		?>
 		<!-- <form role="form"> -->
 			<div class="form-body">

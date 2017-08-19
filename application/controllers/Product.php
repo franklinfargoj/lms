@@ -93,6 +93,7 @@ class Product extends CI_Controller {
      */
      public function edit($id)
      {    
+          $id = decode_id($id);
           /*Create Breadcumb*/
           $this->make_bread->add('Product', 'product', 0);
           $this->make_bread->add('Edit', '', 1);
@@ -101,6 +102,9 @@ class Product extends CI_Controller {
 
           $arrData['categorylist'] = $this->getCategoryList();
           $arrData['productDetail'] = $this->master->view_product($id);
+          if(count($arrData['productDetail']) > 1){
+               redirect('error');
+          }
           if($this->input->post()){
                $this->form_validation->set_rules('category_id','Product Category', 'trim|required');
                if(ucfirst($this->input->post('title')) != $arrData['productDetail'][0]['title']){
@@ -125,7 +129,7 @@ class Product extends CI_Controller {
                     $response = $this->master->edit_product($id,$update);
                     if($response['status'] == 'error'){
                          $this->session->set_flashdata('success','Product updated successfully.');
-                         redirect('product/edit/'.$id);
+                         redirect('product/edit/'.encode_id($id));
                     }else{
                          $this->session->set_flashdata('success','Product updated successfully.');
                          redirect('product');
@@ -145,11 +149,14 @@ class Product extends CI_Controller {
      * @return void
      */
      public function delete($id){
+          $id = decode_id($id);
           $soft_deleted = $this->master->delete_product($id);
           if($soft_deleted > 0){
                $this->session->set_flashdata('success','Product deleted successfully.');
-               redirect('product');
+          }else{
+               $this->session->set_flashdata('error','Failed to delete product');
           }
+          redirect('product');
      }
 
      ##################################

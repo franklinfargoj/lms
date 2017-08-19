@@ -60,16 +60,16 @@
 						 <?php echo $value['category'];?>
 					</td>
                     <td>
-                        <a class="btn btn-sm grey-cascade" href="<?php echo site_url('product_guide/index/'. $value['id'])?>">
+                        <a class="btn btn-sm grey-cascade" href="<?php echo site_url('product_guide/index/'. encode_id($value['id']))?>">
                             <i class="fa fa-link"></i> View
                         </a> 
                     </td>
 					<td>
-                        <a class="btn btn-sm red" href="<?php echo site_url('product/edit/'. $value['id'])?>">
+                        <a class="btn btn-sm red" href="<?php echo site_url('product/edit/'.encode_id($value['id']))?>">
 							<i class="fa fa-edit"></i> Edit
 						</a> 
 						
-						<a class="btn btn-sm purple delete" href="javascript:void(0);" data-url="<?php echo site_url('product/delete/'. $value['id'])?>">
+						<a class="btn btn-sm purple delete" href="javascript:void(0);" data-url="<?php echo site_url('product/delete/'. encode_id($value['id']))?>">
 							<i class="fa fa-times"></i> Delete
 						</a> 
 					</td>

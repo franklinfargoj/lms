@@ -29,6 +29,7 @@ class Product_guide extends CI_Controller {
      */
 	public function index($productId)
 	{
+          $productId = decode_id($productId);
           $arrData['product'] = $this->master->view_product($productId);
 
           /*Create Breadcumb*/
@@ -53,12 +54,13 @@ class Product_guide extends CI_Controller {
      */
      public function add($productId)
      {
+          $productId = decode_id($productId);
           $arrData['product'] = $this->master->view_product($productId);
           $arrData['titleList'] = $this->master->get_enum_values(Tbl_ProductDetails,'title');
 
           /*Create Breadcumb*/
           $this->make_bread->add('Product', 'product', 0);
-          $this->make_bread->add($arrData['product'][0]['title'], 'product_guide/index/'.$productId, 0);
+          $this->make_bread->add($arrData['product'][0]['title'], 'product_guide/index/'.encode_id($productId), 0);
           $this->make_bread->add('Add Description', '', 1);
           $arrData['breadcrumb'] = $this->make_bread->output();
           /*Create Breadcumb*/
@@ -84,10 +86,10 @@ class Product_guide extends CI_Controller {
                          }else{
                               $this->session->set_flashdata('error','Failed to add product details');
                          }
-                         redirect('product_guide/add/'.$productId);
+                         redirect('product_guide/add/'.encode_id($productId));
                     }else{
                          $this->session->set_flashdata('success','Product Details added successfully.');
-                         redirect('product_guide/index/'.$productId);
+                         redirect('product_guide/index/'.encode_id($productId));
                     }
                }
           }else{
@@ -106,10 +108,8 @@ class Product_guide extends CI_Controller {
      public function edit()
      {    
           if($this->input->post()){
-               //$admin_id =  $this->session->userdata('admin_id');
-               $admin_id =  1;
-               $id = $this->input->post('id');
-               $productId = $this->input->post('product_id');
+               $id = decode_id($this->input->post('id'));
+               $productId = decode_id($this->input->post('product_id'));
                $arrData['product'] = $this->master->view_product($productId);
                //$this->form_validation->set_rules('title','Title', 'required');
                $this->form_validation->set_rules('description_text','Description', 'trim|required');
@@ -138,7 +138,7 @@ class Product_guide extends CI_Controller {
                     }else{
                          $this->session->set_flashdata('success','Product details updated successfully.');
                     }
-                    redirect('product_guide/index/'.$productId);
+                    redirect('product_guide/index/'.encode_id($productId));
                }
           }else{
                redirect('product');

@@ -49,16 +49,16 @@
                          <?php echo $value['title'];?>
                     </td>
                     <td>
-                        <a class="btn btn-sm grey-cascade" href="<?php echo site_url('ticker/view/'. $value['id'])?>">
+                        <a class="btn btn-sm grey-cascade" href="<?php echo site_url('ticker/view/'.encode_id($value['id']))?>">
                             <i class="fa fa-link"></i> View 
                         </a> 
                     </td>
                     <td>
-                        <a class="btn btn-sm red" href="<?php echo site_url('ticker/edit/'. $value['id'])?>">
+                        <a class="btn btn-sm red" href="<?php echo site_url('ticker/edit/'. encode_id($value['id']))?>">
                             <i class="fa fa-edit"></i> Edit
                         </a> 
                         
-                        <a class="btn btn-sm purple delete" href="javascript:void(0);" data-url="<?php echo site_url('ticker/delete/'. $value['id'])?>">
+                        <a class="btn btn-sm purple delete" href="javascript:void(0);" data-url="<?php echo site_url('ticker/delete/'. encode_id($value['id']))?>">
                             <i class="fa fa-times"></i> Delete
                         </a> 
                     </td>

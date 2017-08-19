@@ -12,7 +12,7 @@
             <span class="caption-subject font-green-sharp bold">View <?php echo $product[0]['title'];?> Description</span>
         </div>
         <div class="tools">
-            <a href="<?php echo base_url('product_guide/add/'. $product[0]['id']);?>" class="btn btn-sm green"><i class="fa fa-plus"></i>Add
+            <a href="<?php echo base_url('product_guide/add/'. encode_id($product[0]['id']));?>" class="btn btn-sm green"><i class="fa fa-plus"></i>Add
             </a>
         </div>
     </div>
@@ -57,8 +57,8 @@
                                         <!-- <div class="col-md-12"> -->
                                             <?php
                                                 $data = array(
-                                                    'product_id'  => $value['product_id'],
-                                                    'id' => $value['id']
+                                                    'product_id'  => encode_id($value['product_id']),
+                                                    'id' => encode_id($value['id'])
                                                 );
                                                 echo form_hidden($data);
 

@@ -90,3 +90,25 @@ function loginUserId(){
     $admin_id = $CI->session->userdata('admin_id');
     return $admin_id ? $admin_id : 0;
 }
+
+function encode_id($id){
+    // Get current CodeIgniter instance
+    $CI =& get_instance();
+    $enc_id = $CI->encrypt->encode($id);
+    $enc_id = str_replace(array('+', '/', '='), array('-', '_', '~'), $enc_id);
+    return $enc_id = !empty($enc_id) ? $enc_id : 0;
+
+}
+
+
+function decode_id($id){
+    // Get current CodeIgniter instance
+    $CI =& get_instance();
+    $dec_id = str_replace(array('-', '_', '~'), array('+', '/', '='), $id);
+    return $dec_id = !empty($CI->encrypt->decode($dec_id)) ? $CI->encrypt->decode($dec_id) : 0;
+}
+
+/*function get_session(){
+    $CI =& get_instance();
+    return $CI->session->userdata();
+}*/
