@@ -88,7 +88,10 @@ class Product_category extends CI_Controller {
      * @return void
      */
      public function edit($id)
-     {    
+     {    if(!$id){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product_category');
+          }
           $id = decode_id($id);
           /*Create Breadcumb*/
           $this->make_bread->add('Product Category', 'product_category', 0);
@@ -98,7 +101,8 @@ class Product_category extends CI_Controller {
 
           $arrData['categoryDetail'] = $this->master->view_product_category($id);
           if(count($arrData['categoryDetail']) > 1){
-               redirect('error');
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product_category');
           }
           if($this->input->post()){
                if(ucfirst($this->input->post('title')) != $arrData['categoryDetail'][0]['title']){
@@ -141,6 +145,10 @@ class Product_category extends CI_Controller {
      * @return void
      */
      public function delete($id){
+          if(!$id){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product_category');
+          }
           $id = decode_id($id);
           $soft_deleted = $this->master->delete_product_category($id);
           if($soft_deleted > 0){
