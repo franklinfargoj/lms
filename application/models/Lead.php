@@ -114,15 +114,31 @@ class Lead  extends CI_Model
      * @param $where_month_Array,$where_year_Array
      * @return array
      */
-    public function get_generated_lead($where_month_Array = array(), $where_year_Array = array())
+    public function get_generated_lead($where_month_Array = array(), $where_year_Array = array(),$type)
     {
         $result = array();
         if (!empty($where_month_Array)) {
-            $generated_lead_month = $this->db->where($where_month_Array)->count_all_results(Tbl_Leads);
+            if($type =='get_count'){
+                $generated_lead_month = $this->db->where($where_month_Array)->count_all_results(Tbl_Leads);
+            }else{  
+                $generated_lead_month = $this->db->select('*')
+                                                 ->from(Tbl_Leads)
+                                                 ->where($where_month_Array)
+                                                 ->get()
+                                                 ->result_array();
+            }
             $result['generated_mtd'] = $generated_lead_month;
         }
         if (!empty($where_year_Array)) {
-            $generated_lead_year = $this->db->where($where_year_Array)->count_all_results(Tbl_Leads);
+            if($type =='get_count'){
+                $generated_lead_year = $this->db->where($where_year_Array)->count_all_results(Tbl_Leads);
+            }else{
+                $generated_lead_year = $this->db->select('*')
+                                                 ->from(Tbl_Leads)
+                                                 ->where($where_year_Array)
+                                                 ->get()
+                                                 ->result_array();
+            }
             $result['generated_ytd'] = $generated_lead_year;
         }
         return $result;
@@ -136,15 +152,31 @@ class Lead  extends CI_Model
      * @param $where_month_Array,$where_year_Array
      * @return array
      */
-    public function get_converted_lead($where_month_Array = array(), $where_year_Array = array())
+    public function get_converted_lead($where_month_Array = array(), $where_year_Array = array(),$type)
     {
         $result = array();
         if (!empty($where_month_Array)) {
-            $converted_lead_month = $this->db->where($where_month_Array)->count_all_results(Tbl_LeadAssign);
+            if($type == 'get_count'){
+                $converted_lead_month = $this->db->where($where_month_Array)->count_all_results(Tbl_LeadAssign);
+            }else{
+                $converted_lead_month = $this->db->select('*')
+                                                 ->from(Tbl_LeadAssign)
+                                                 ->where($where_month_Array)
+                                                 ->get()
+                                                 ->result_array();
+            }
             $result['converted_mtd'] = $converted_lead_month;
         }
         if (!empty($where_year_Array)) {
-            $converted_lead_year = $this->db->where($where_year_Array)->count_all_results(Tbl_LeadAssign);
+            if($type == 'get_count'){
+                $converted_lead_year = $this->db->where($where_year_Array)->count_all_results(Tbl_LeadAssign);
+            }else{
+                $converted_lead_year = $this->db->select('*')
+                                                 ->from(Tbl_LeadAssign)
+                                                 ->where($where_year_Array)
+                                                 ->get()
+                                                 ->result_array();
+            }
             $result['converted_ytd'] = $converted_lead_year;
         }
         return $result;
@@ -158,11 +190,19 @@ class Lead  extends CI_Model
      * @param $where_assigned_Array
      * @return array
      */
-    public function get_assigned_leads($where_assigned_Array = array()){
+    public function get_assigned_leads($where_assigned_Array = array(),$type){
         $result = array();
         if (!empty($where_assigned_Array)) {
-                $assigned_leads = $this->db->where($where_assigned_Array)->count_all_results(Tbl_LeadAssign);
-                $result['assigned_leads']= $assigned_leads;
+            if($type == 'get_count'){
+                $assigned_leads = $this->db->where($where_assigned_Array)->count_all_results(Tbl_LeadAssign);   
+            }else{
+                $assigned_leads = $this->db->select('*')
+                                           ->from(Tbl_LeadAssign)
+                                           ->where($where_assigned_Array)
+                                           ->get()
+                                           ->result_array();
+            }
+            $result['assigned_leads']= $assigned_leads;
             
         }
         return $result;

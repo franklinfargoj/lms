@@ -1,0 +1,45 @@
+
+@media only screen and (min-width:1023px) and (max-width:1200px){
+	.header .logo{
+		width: 25%;
+	}
+	.header .top-navigation{
+		width: 56%;
+	}
+	.header .right-nav{
+		width: 18%;
+	}
+	.main-content .lead-section{
+		padding: 0 80px;
+	}
+}
+
+@media only screen and (min-width:768px) and (max-width:1023px) {
+    .login-wrapper .login-form{
+    	padding: 180px 30px;
+    }
+    .header .right-nav{
+    	position: absolute;
+	    width: 25%;
+	    right: 15px;
+	    top: 15px;
+    }
+    .logged-in .name{
+    	display: inline-block;
+    }
+    .header .right-nav .notification{
+    	width: 20%;
+    }
+    .header .right-nav .logged-in{
+    	width:78%;
+    }
+    .header .top-navigation{
+    	width: 68%;
+    }
+    .header{
+    	padding: 25px 0;
+    }
+    .main-content .lead-section{
+    	padding: 0 20px;
+    }
+}
