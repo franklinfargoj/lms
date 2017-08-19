@@ -18,6 +18,7 @@ class Leads extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
+        is_logged_in();
         $this->load->model('Lead');
     }
 
@@ -51,6 +52,11 @@ class Leads extends CI_Controller
             $this->form_validation->set_rules('remark', 'Remark', 'required');
             $this->form_validation->set_rules('is_own_branch', 'Branch', 'required');
             $this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
+
+            $lead_data['state_id'] = $lead_data['created_by_state_id'] = $this->session->userdata('state_id');
+            $lead_data['branch_id'] = $lead_data['created_by_branch_id'] = $this->session->userdata('branch_id');
+            $lead_data['district_id'] = $lead_data['created_by_district_id'] = $this->session->userdata('district_id');
+
             if ($this->input->post('is_own_branch') == '0') {
                 $this->form_validation->set_rules('state_id', 'State', 'required');
                 $this->form_validation->set_rules('branch_id', 'Branch', 'required');
@@ -59,7 +65,9 @@ class Leads extends CI_Controller
                 $lead_data['state_id'] = $this->input->post('state_id');
                 $lead_data['branch_id'] = $this->input->post('branch_id');
                 $lead_data['district_id'] = $this->input->post('district');
+
             }
+
             if ($this->form_validation->run() === FALSE) {
                 $middle = 'add_lead';
                 $arrData['products'] = '';

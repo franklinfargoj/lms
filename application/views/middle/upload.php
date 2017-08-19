@@ -12,7 +12,6 @@ $source_options[''] = 'Select Lead Source';
 $source_options['Third Party'] = 'Third Party';
 $source_options['Bank Website'] = 'Bank Website';
 $source_options['Analytics'] = 'Analytics';
-$source_options['Walking'] = 'Walking';
 $class = 'class="form-control"';
 $data_submit = array(
     'name' => 'Submit',

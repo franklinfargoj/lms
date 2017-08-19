@@ -105,6 +105,106 @@ class Lead  extends CI_Model
         } 
         return false;
     }
-	
+
+
+    /**
+     * get_generated_lead
+     * Gives generated lead of month and year
+     * @author Gourav Thatoi
+     * @access public
+     * @param $where_month_Array,$where_year_Array
+     * @return array
+     */
+    public function get_generated_lead($where_month_Array = array(), $where_year_Array = array())
+    {
+        $result = array();
+        if (!empty($where_month_Array)) {
+            $generated_lead_month = $this->db->where($where_month_Array)->count_all_results(Tbl_Leads);
+            $result['generated_mtd'] = $generated_lead_month;
+        }
+        if (!empty($where_year_Array)) {
+            $generated_lead_year = $this->db->where($where_year_Array)->count_all_results(Tbl_Leads);
+            $result['generated_ytd'] = $generated_lead_year;
+        }
+        return $result;
+    }
+
+    /**
+     * get_converted_lead
+     * Gives converted lead of month and year
+     * @author Gourav Thatoi
+     * @access public
+     * @param $where_month_Array,$where_year_Array
+     * @return array
+     */
+    public function get_converted_lead($where_month_Array = array(), $where_year_Array = array())
+    {
+        $result = array();
+        if (!empty($where_month_Array)) {
+            $converted_lead_month = $this->db->where($where_month_Array)->count_all_results(Tbl_LeadAssign);
+            $result['converted_mtd'] = $converted_lead_month;
+        }
+        if (!empty($where_year_Array)) {
+            $converted_lead_year = $this->db->where($where_year_Array)->count_all_results(Tbl_LeadAssign);
+            $result['converted_ytd'] = $converted_lead_year;
+        }
+        return $result;
+    }
+
+    /**
+     * get_assigned_leads
+     * Gives assigned leads of year
+     * @author Gourav Thatoi
+     * @access public
+     * @param $where_assigned_Array
+     * @return array
+     */
+    public function get_assigned_leads($where_assigned_Array = array()){
+        $result = array();
+        if (!empty($where_assigned_Array)) {
+            $assigned_leads = $this->db->where($where_assigned_Array)->count_all_results(Tbl_LeadAssign);
+            $result['assigned_leads']= $assigned_leads;
+
+        }
+        return $result;
+    }
+
+    public function get_generated_lead_bm_zm($where_generated_Array){
+        $result = array();
+        if(!empty($where_generated_Array)){
+            if(array_key_exists('branch_id',$where_generated_Array)){
+                $this->db->select('created_by, COUNT(created_by) as total');
+                $this->db->group_by('created_by');
+                $this->db->order_by('total','desc');
+                $result = $this->db->get_where(Tbl_Leads,$where_generated_Array)->result_array();
+                return $result;
+            }
+            $this->db->select('branch_id, COUNT(branch_id) as total');
+            $this->db->group_by('branch_id');
+            $this->db->order_by('total','desc');
+            $result = $this->db->get_where(Tbl_Leads,$where_generated_Array)->result_array();
+        }
+        return $result;
+
+    }
+    public function get_converted_lead_bm_zm($where_converted_Array){
+        $result = array();
+        if(!empty($where_converted_Array)){
+            if(array_key_exists('branch_id',$where_converted_Array)){
+                $this->db->select('created_by, COUNT(created_by) as total');
+                $this->db->group_by('created_by');
+                $this->db->order_by('total','desc');
+                $result = $this->db->get_where(Tbl_LeadAssign,$where_converted_Array)->result_array();
+                return $result;
+            }
+            $this->db->select('branch_id, COUNT(branch_id) as total');
+            $this->db->group_by('branch_id');
+            $this->db->order_by('total','desc');
+            $result = $this->db->get_where(Tbl_LeadAssign,$where_converted_Array)->result_array();
+        }
+        return $result;
+
+    }
+
 
 }
