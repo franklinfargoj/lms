@@ -30,7 +30,7 @@ $data_submit = array(
         <div class="portlet light">
             <div class="portlet-body form">
                 <?php
-                $url = base_url('Leads/upload');
+                $url = base_url('leads/upload');
                 echo form_open_multipart($url, $form_attributes);
                 ?>
                 <?php echo $this->session->flashdata('message'); ?>
@@ -46,6 +46,10 @@ $data_submit = array(
                             <?php echo form_input($data_input);?>
 						</span>
                         </div>
+                        <label id="file-error" class="error" style="color: #A94442" for="file"></label>
+                    </div>
+                    <div class="form-group">
+                        <span>*Please Upload a file with extension xls or xlsx</span>
                     </div>
                 </div>
                 <div class="form-actions">
@@ -56,3 +60,24 @@ $data_submit = array(
         </div>
     </div>
 </div>
+
+<script>
+    $('#upload_lead').validate({
+
+        rules:{
+            lead_source:{
+                required:true
+            },
+            filename:{
+                required:true
+            }
+        },messages:{
+            lead_source:{
+                required:'Please select lead source.'
+            },
+            filename:{
+                required:'Please upload a file.'
+            }
+        }
+    });
+</script>
