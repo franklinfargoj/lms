@@ -9,10 +9,10 @@
     <div class="portlet-title">
         <div class="caption">
             <!-- <i class="fa fa-cogs font-green-sharp"></i> -->
-            <span class="caption-subject font-green-sharp bold">Edit Faq</span>
+            <span class="caption-subject font-green-sharp bold">Edit FAQ</span>
         </div>
         <div class="tools">
-            <a href="<?php echo site_url('faq');?>" class="">List
+            <a href="<?php echo site_url('faq');?>" class="btn btn-sm blue"></i>Back
             </a>
         </div>
     </div>

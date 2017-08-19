@@ -13,7 +13,7 @@
             <span class="caption-subject font-green-sharp bold">Tickers</span>
         </div>
         <div class="tools">
-            <a href="<?php echo base_url('ticker/add')?>" class="">Add
+            <a href="<?php echo base_url('ticker/add')?>" class="btn btn-sm green"><i class="fa fa-plus"></i>Add
             </a>
         </div>
     </div>
@@ -49,17 +49,17 @@
                          <?php echo $value['title'];?>
                     </td>
                     <td>
-                        <a class="view" href="<?php echo site_url('ticker/view/'. $value['id'])?>">
-                            View 
+                        <a class="btn btn-sm grey-cascade" href="<?php echo site_url('ticker/view/'. $value['id'])?>">
+                            <i class="fa fa-link"></i> View 
                         </a> 
                     </td>
                     <td>
-                        <a class="edit" href="<?php echo site_url('ticker/edit/'. $value['id'])?>">
-                            Edit 
+                        <a class="btn btn-sm red" href="<?php echo site_url('ticker/edit/'. $value['id'])?>">
+                            <i class="fa fa-edit"></i> Edit
                         </a> 
-                        <span> / </span>
-                        <a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('ticker/delete/'. $value['id'])?>">
-                            Delete
+                        
+                        <a class="btn btn-sm purple delete" href="javascript:void(0);" data-url="<?php echo site_url('ticker/delete/'. $value['id'])?>">
+                            <i class="fa fa-times"></i> Delete
                         </a> 
                     </td>
                     

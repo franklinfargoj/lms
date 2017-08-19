@@ -15,7 +15,7 @@
 						</a>
 						<a href="javascript:;" class="reload">
 						</a> -->
-						<a href="<?php echo base_url('product_category');?>" class="">List
+						<a href="<?php echo base_url('product_category');?>" class="btn btn-sm blue"></i>Back
 						</a>
 					</div>
 				</div>
@@ -57,7 +57,7 @@
 							</div>
 						</div>
 						<div class="form-actions right">
-							<button type="reset" class="btn default">Cancel</button>
+							<button type="reset" class="btn default">Reset</button>
 							<button type="submit" class="btn green">Submit</button>
 						</div>
 					<!-- </form> -->

@@ -57,8 +57,9 @@ class Faq extends CI_Controller {
           if($this->input->post()){
                //$admin_id =  $this->session->userdata('admin_id');
                $admin_id =  1;
-               $this->form_validation->set_rules('question','Question', 'required');
-               $this->form_validation->set_rules('answer','Answer', 'required');
+               $this->form_validation->set_rules('question','Question', 'trim|required|is_unique['.Tbl_Faq.'.question]');
+               $this->form_validation->set_rules('answer','Answer', 'trim|required');
+               $this->form_validation->set_message('is_unique', '%s is already taken');
                if ($this->form_validation->run() == FALSE)
                {    $arrData['has_error'] = 'has-error';
                     return load_view("Faq/add",$arrData);
@@ -68,9 +69,14 @@ class Faq extends CI_Controller {
                          'answer' => $this->input->post('answer'),
                          'created_by' => loginUserId()
                     );
-                    $this->master->add_record($insert);
-                    $this->session->set_flashdata('success','Questions added successfully.');
-                    redirect('faq');
+                    $response = $this->master->add_record($insert);
+                    if($response['status'] == 'error'){
+                         $this->session->set_flashdata('error','Failed to add faq');
+                         redirect('faq/add');
+                    }else{
+                         $this->session->set_flashdata('success','Faq added successfully.');
+                         redirect('faq');
+                    }
                }
           }else{
                return load_view("Faq/add",$arrData);
@@ -94,10 +100,14 @@ class Faq extends CI_Controller {
 
           $arrData['faqDetail'] = $this->master->view_record($id);
           if($this->input->post()){
-               //$admin_id =  $this->session->userdata('admin_id');
-               $admin_id =  1;
-               $this->form_validation->set_rules('question','Question', 'required');
-               $this->form_validation->set_rules('answer','Answer', 'required');
+               if($this->input->post('question') != $arrData['faqDetail'][0]['question']){
+                    $is_unique = '|is_unique['.Tbl_Faq.'.question]';
+                    $this->form_validation->set_message('is_unique', '%s is already taken');
+               }else{
+                    $is_unique = '';
+               }
+               $this->form_validation->set_rules('question','Question', 'trim|required'.$is_unique);
+               $this->form_validation->set_rules('answer','Answer', 'trim|required');
                if ($this->form_validation->run() == FALSE){    
                     $arrData['has_error'] = 'has-error';
                     return load_view("Faq/edit",$arrData);
@@ -109,8 +119,13 @@ class Faq extends CI_Controller {
                          'modified_on' => date('y-m-d H:i:s')
                     );
                     $this->master->edit_record($id,$update);
-                    $this->session->set_flashdata('success','Faq updated successfully.');
-                    redirect('Faq');
+                    if($response['status'] == 'error'){
+                         $this->session->set_flashdata('error','Failed to update faq');
+                         redirect('Faq');
+                    }else{
+                         $this->session->set_flashdata('success','Faq updated successfully.');
+                         redirect('Faq');
+                    }
                }
           }else{
                return load_view("Faq/edit",$arrData);

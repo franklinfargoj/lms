@@ -12,7 +12,7 @@
             <span class="caption-subject font-green-sharp bold">Add <?php echo $product[0]['title'];?> Description</span>
         </div>
         <div class="tools">
-            <a href="<?php echo base_url("product_guide/index/".$product[0]['id']);?>" class="">View Description
+            <a href="<?php echo base_url("product_guide/index/".$product[0]['id']);?>" class="btn btn-sm blue"></i>Back
             </a>
         </div>
     </div>

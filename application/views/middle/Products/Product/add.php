@@ -6,7 +6,7 @@
 			<span class="caption-subject font-green-sharp bold">Add Product</span>
 		</div>
 		<div class="tools">
-			<a href="<?php echo base_url('product');?>" class="">List
+			<a href="<?php echo base_url('product');?>" class="btn btn-sm blue"></i>Back
 			</a>
 		</div>
 	</div>
