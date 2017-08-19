@@ -105,6 +105,14 @@ class Lead  extends CI_Model
         } 
         return false;
     }
+
+    public function leads_generated($where){
+		return $this->db->where($where)->count_all_results(Tbl_Leads);
+	}
+
+	public function leads_converted($where){
+		return $this->db->where($where)->count_all_results(Tbl_Lead_assign);
+	}
 	
 
 }
