@@ -104,11 +104,10 @@ class Api extends REST_Controller
 
 //        if(isset($result['status']) && $result['status'] == 'success'){
 //
-//            $table = "db_app_login_logs";
 //            $data = array('device_token'=> $device_token,
 //                'employee_id'=>$result
 //            );
-//            $this->app->insert_login_log($table,$data);
+//            $this->App->insert_login_log($data);
 //        }
 //
 //        else{
@@ -178,6 +177,44 @@ class Api extends REST_Controller
 //            );
 //            returnJson($error);
 //        }
+    }
+
+    public function lead_generated_converted_get(){
+        $id = $this->input->get();
+
+        if((isset($id['hrms_id']) && $id['hrms_id'] == '') || (isset($id['branch_id']) && $id['branch_id'] == '')){
+            $err['result'] = false;
+            $err['data'] = "Invalid Request";
+            returnJson($err);
+        }
+        if(isset($id['hrms_id']) && $id['hrms_id'] != ''){
+            $created_id = $id['hrms_id'];
+            $where_month_Array = array('created_by'=>$created_id,
+                'MONTH(created_on)'=>date('m'));
+            $where_year_Array = array('created_by'=>$created_id,
+                'YEAR(created_on)'=>date('Y'));
+
+            $result_generated = $this->App->get_generated_lead($where_month_Array,$where_year_Array);
+            $where_month_Array = array('employee_id'=>$created_id,
+                'MONTH(created_on)'=>date('m'));
+            $where_year_Array = array('employee_id'=>$created_id,
+                'YEAR(created_on)'=>date('Y'));
+        }
+        if(isset($id['branch_id']) && $id['branch_id'] != ''){
+            $branch_id = $id['branch_id'];
+            $where_month_Array = array('branch_id'=>$branch_id,
+                'MONTH(created_on)'=>date('m'));
+            $where_year_Array = array('branch_id'=>$branch_id,
+                'YEAR(created_on)'=>date('Y'));
+
+            $result_generated = $this->App->get_generated_lead($where_month_Array,$where_year_Array);
+
+        }
+
+        $result_converted = $this->App->get_converted_lead($where_month_Array,$where_year_Array);
+        echo json_encode($result_generated);
+        echo json_encode($result_converted);
+
     }
 
 }

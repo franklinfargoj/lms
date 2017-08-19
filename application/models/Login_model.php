@@ -74,4 +74,21 @@ class Login_model extends CI_Model{
 		return $this->db->affected_rows();
 
 	}
+
+	/**
+	 * insert_login_log
+	 * Inserts login log to the database
+	 * @author Gourav Thatoi
+	 * @access public
+	 * @param $data
+	 * @return boolean
+	 */
+	public function insert_login_log($data = array())
+	{
+		if (!empty($data)) {
+			$this->db->insert(Tbl_LoginLog, $data);
+			return true;
+		}
+		return false;
+	}
 }

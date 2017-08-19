@@ -93,3 +93,6 @@ define('Tbl_State', 'db_master_state');
 define('Tbl_Faq', 'db_faq');
 define('Tbl_Ticker', 'db_ticker');
 define('Tbl_Admin', 'db_admin');
+define('Tbl_Leads', 'db_leads');
+define('Tbl_LeadAssign', 'db_lead_assign');
+define('Tbl_LoginLog', 'db_app_login_logs');
