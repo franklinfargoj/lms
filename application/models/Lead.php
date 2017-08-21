@@ -107,105 +107,99 @@ class Lead  extends CI_Model
     }
 
     /**
-     * get_generated_lead
-     * Gives generated lead of month and year
-     * @author Gourav Thatoi
+     * Get Leads count and list based on inputs
+     * @author Ashok Jadhav
      * @access public
-     * @param $where_month_Array,$where_year_Array
+     * @param $action,$table,$select,$where,$join,$order_by
+     * @param $action - It can be count or list (fetch count or records)
      * @return array
      */
-    public function get_generated_lead($where_month_Array = array(), $where_year_Array = array(),$type)
+    public function get_leads($action,$table,$select,$where,$join,$group_by,$order_by)
     {
-        $result = array();
-        if (!empty($where_month_Array)) {
-            if($type =='get_count'){
-                $generated_lead_month = $this->db->where($where_month_Array)->count_all_results(Tbl_Leads);
-            }else{  
-                $generated_lead_month = $this->db->select('*')
-                                                 ->from(Tbl_Leads)
-                                                 ->where($where_month_Array)
-                                                 ->get()
-                                                 ->result_array();
-            }
-            $result['generated_mtd'] = $generated_lead_month;
+        if($action == 'count'){
+            return $this->db->where($where)->count_all_results($table);
+        }elseif($action == 'list'){
+            return $this->lists($table,$select,$where,$join,$group_by,$order_by = array());
         }
-        if (!empty($where_year_Array)) {
-            if($type =='get_count'){
-                $generated_lead_year = $this->db->where($where_year_Array)->count_all_results(Tbl_Leads);
-            }else{
-                $generated_lead_year = $this->db->select('*')
-                                                 ->from(Tbl_Leads)
-                                                 ->where($where_year_Array)
-                                                 ->get()
-                                                 ->result_array();
-            }
-            $result['generated_ytd'] = $generated_lead_year;
-        }
-        return $result;
     }
 
     /**
-     * get_converted_lead
-     * Gives converted lead of month and year
-     * @author Gourav Thatoi
+     * Get all possible lead status available
+     * @author Ashok Jadhav
      * @access public
-     * @param $where_month_Array,$where_year_Array
+     * @param $table,$field
      * @return array
      */
-    public function get_converted_lead($where_month_Array = array(), $where_year_Array = array(),$type)
-    {
-        $result = array();
-        if (!empty($where_month_Array)) {
-            if($type == 'get_count'){
-                $converted_lead_month = $this->db->where($where_month_Array)->count_all_results(Tbl_LeadAssign);
-            }else{
-                $converted_lead_month = $this->db->select('*')
-                                                 ->from(Tbl_LeadAssign)
-                                                 ->where($where_month_Array)
-                                                 ->get()
-                                                 ->result_array();
-            }
-            $result['converted_mtd'] = $converted_lead_month;
+    public function lead_status($table,$field){
+        $type = $this->db->query( "SHOW COLUMNS FROM {$table} WHERE Field = '{$field}'" )->row( 0 )->Type;
+        preg_match("/^enum\(\'(.*)\'\)$/", $type, $matches);
+        $enum = explode("','", $matches[1]);
+        $enums = array();
+        foreach ($enum as $key => $value) {
+            $enums[$value] = $value;
         }
-        if (!empty($where_year_Array)) {
-            if($type == 'get_count'){
-                $converted_lead_year = $this->db->where($where_year_Array)->count_all_results(Tbl_LeadAssign);
-            }else{
-                $converted_lead_year = $this->db->select('*')
-                                                 ->from(Tbl_LeadAssign)
-                                                 ->where($where_year_Array)
-                                                 ->get()
-                                                 ->result_array();
-            }
-            $result['converted_ytd'] = $converted_lead_year;
-        }
-        return $result;
+        return $enums;
     }
 
     /**
-     * get_assigned_leads
-     * Gives assigned leads of year
-     * @author Gourav Thatoi
+     * Get all possible lead status available
+     * @author Ashok Jadhav
      * @access public
-     * @param $where_assigned_Array
+     * @param $table,$field
      * @return array
      */
-    public function get_assigned_leads($where_assigned_Array = array(),$type){
-        $result = array();
-        if (!empty($where_assigned_Array)) {
-            if($type == 'get_count'){
-                $assigned_leads = $this->db->where($where_assigned_Array)->count_all_results(Tbl_LeadAssign);   
-            }else{
-                $assigned_leads = $this->db->select('*')
-                                           ->from(Tbl_LeadAssign)
-                                           ->where($where_assigned_Array)
-                                           ->get()
-                                           ->result_array();
+    public function update_lead_status($where,$data){
+        return $this->update($where,Tbl_LeadAssign,$data);
+    }
+
+    
+
+    /*Private Function*/
+
+    /**
+     * Dynamic List Function
+     * @author Ashok Jadhav
+     * @access public
+     * @param $table,$select,$where,$join,$order_by
+     * @return array
+     */
+    private function lists($table,$select,$where,$join,$group_by,$order_by){
+
+        $this->db->select($select,TRUE);
+        $this->db->from($table);
+        if(!empty($join)){
+            foreach ($join as $key => $value) {
+                $this->db->join($value['table'],$value['on_condition'],$value['type']);
             }
-            $result['assigned_leads']= $assigned_leads;
-            
         }
-        return $result;
+        if(!empty($where)){
+            $this->db->where($where);
+        }
+        if(!empty($group_by)){
+            $this->db->group_by($group_by);
+        }
+        if(!empty($order_by)){
+            $this->db->order_by($order_by);
+        }else{
+            $this->db->order_by($table.'.id','DESC');
+        }
+        $query = $this->db->get();
+        //pe($this->db->last_query())
+        return $query->result_array();
+    }
+
+    private function update($where,$table,$data){
+        $this->db->where($where);
+        $this->db->update($table,$data);
+        $errors = $this->db->error();
+        if($errors['code']){
+            $response['status'] = 'error';
+            $response['code'] = $errors['code'];
+        }else{
+            $response['status'] = 'success';
+            $response['affected_rows'] = $this->db->affected_rows();
+        }
+        return $response;
     }
 	
 
