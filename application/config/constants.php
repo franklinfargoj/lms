@@ -98,3 +98,5 @@ define('Tbl_Ticker', 'db_ticker');
 define('Tbl_Admin', 'db_admin');
 define('Tbl_Leads', 'db_leads');
 define('Tbl_LeadAssign', 'db_lead_assign');
+define('Tbl_Reminder', 'db_reminder_scheduler');
+
