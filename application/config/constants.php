@@ -85,6 +85,9 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 
+define('ASSETS', 'assets1');
+
+
 /*Tables Name*/
 define('Tbl_Category', 'db_master_product_category');
 define('Tbl_Products', 'db_master_products');

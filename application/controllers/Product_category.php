@@ -88,7 +88,11 @@ class Product_category extends CI_Controller {
      * @return void
      */
      public function edit($id)
-     {    
+     {    if(!$id){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product_category');
+          }
+          $id = decode_id($id);
           /*Create Breadcumb*/
           $this->make_bread->add('Product Category', 'product_category', 0);
           $this->make_bread->add('Edit', '', 1);
@@ -96,6 +100,10 @@ class Product_category extends CI_Controller {
           /*Create Breadcumb*/
 
           $arrData['categoryDetail'] = $this->master->view_product_category($id);
+          if(count($arrData['categoryDetail']) > 1){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product_category');
+          }
           if($this->input->post()){
                if(ucfirst($this->input->post('title')) != $arrData['categoryDetail'][0]['title']){
                     $is_unique = '|is_unique['.Tbl_Category.'.title]';
@@ -116,7 +124,7 @@ class Product_category extends CI_Controller {
                     $response = $this->master->edit_product_category($id,$update);
                     if($response['status'] == 'error'){
                          $this->session->set_flashdata('error','Failed to edit product category');
-                         redirect('product_category/edit/'.$id);
+                         redirect('product_category/edit/'.encode_id($id));
                     }else{
                          $this->session->set_flashdata('success','Product category updated successfully.');
                          redirect('product_category');
@@ -137,11 +145,18 @@ class Product_category extends CI_Controller {
      * @return void
      */
      public function delete($id){
+          if(!$id){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product_category');
+          }
+          $id = decode_id($id);
           $soft_deleted = $this->master->delete_product_category($id);
           if($soft_deleted > 0){
                $this->session->set_flashdata('success','Product category deleted successfully.');
-               redirect('product_category');
+          }else{
+               $this->session->set_flashdata('error','Failed to delete product category');
           }
+          redirect('product_category');
      }
 
      ##################################

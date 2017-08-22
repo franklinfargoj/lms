@@ -106,23 +106,105 @@ class Lead  extends CI_Model
         return false;
     }
 
-    
     /**
-     * get_assigned_leads
-     * Gives assigned leads of year
-     * @author Gourav Thatoi
+     * Get Leads count and list based on inputs
+     * @author Ashok Jadhav
      * @access public
-     * @param $where_assigned_Array
+     * @param $action,$table,$select,$where,$join,$order_by
+     * @param $action - It can be count or list (fetch count or records)
      * @return array
      */
-    public function get_assigned_leads($where_assigned_Array = array()){
+    public function get_leads($action,$table,$select,$where,$join,$group_by,$order_by)
+    {
+        if($action == 'count'){
+            return $this->db->where($where)->count_all_results($table);
+        }elseif($action == 'list'){
+            return $this->lists($table,$select,$where,$join,$group_by,$order_by = array());
+        }
+    }
+
+    /**
+     * Get all possible lead status available
+     * @author Ashok Jadhav
+     * @access public
+     * @param $table,$field
+     * @return array
+     */
+    public function lead_status($table,$field){
+        $type = $this->db->query( "SHOW COLUMNS FROM {$table} WHERE Field = '{$field}'" )->row( 0 )->Type;
+        preg_match("/^enum\(\'(.*)\'\)$/", $type, $matches);
+        $enum = explode("','", $matches[1]);
+        $enums = array();
+        foreach ($enum as $key => $value) {
+            $enums[$value] = $value;
+        }
+        return $enums;
+    }
+
+    /**
+     * Get all possible lead status available
+     * @author Ashok Jadhav
+     * @access public
+     * @param $table,$field
+     * @return array
+     */
+    public function get_assigned_leads($where_assigned_Array = array())
+    {
         $result = array();
         if (!empty($where_assigned_Array)) {
             $assigned_leads = $this->db->where($where_assigned_Array)->count_all_results(Tbl_LeadAssign);
-            $result= $assigned_leads;
-
+            $result = $assigned_leads;
         }
-        return $result;
+    }
+
+    
+
+    /*Private Function*/
+
+    /**
+     * Dynamic List Function
+     * @author Ashok Jadhav
+     * @access public
+     * @param $table,$select,$where,$join,$order_by
+     * @return array
+     */
+    private function lists($table,$select,$where,$join,$group_by,$order_by){
+
+        $this->db->select($select,TRUE);
+        $this->db->from($table);
+        if(!empty($join)){
+            foreach ($join as $key => $value) {
+                $this->db->join($value['table'],$value['on_condition'],$value['type']);
+            }
+        }
+        if(!empty($where)){
+            $this->db->where($where);
+        }
+        if(!empty($group_by)){
+            $this->db->group_by($group_by);
+        }
+        if(!empty($order_by)){
+            $this->db->order_by($order_by);
+        }else{
+            $this->db->order_by($table.'.id','DESC');
+        }
+        $query = $this->db->get();
+        //pe($this->db->last_query())
+        return $query->result_array();
+    }
+
+    private function update($where,$table,$data){
+        $this->db->where($where);
+        $this->db->update($table,$data);
+        $errors = $this->db->error();
+        if($errors['code']){
+            $response['status'] = 'error';
+            $response['code'] = $errors['code'];
+        }else{
+            $response['status'] = 'success';
+            $response['affected_rows'] = $this->db->affected_rows();
+        }
+        return $response;
     }
 
     public function get_generated_lead_bm_zm($where_generated_Array){
@@ -164,58 +246,6 @@ class Lead  extends CI_Model
 
     }
 
-    /**
-     * Get Leads count and list based on inputs
-     * @author Ashok Jadhav
-     * @access public
-     * @param $action,$table,$select,$where,$join,$order_by
-     * @param $action - It can be count or list (fetch count or records)
-     * @return array
-     */
-    public function get_leads($action,$table,$select,$where,$join,$group_by,$order_by)
-    {
-        if($action == 'count'){
-//            return $this->db->where($where)->count_all_results($table);
-            return $this->counts($table,$select,$where,$join);
-        }elseif($action == 'list'){
-            return $this->lists($table,$select,$where,$join,$group_by,$order_by = array());
-        }
-    }
-
-    public function lead_status($table,$field){
-        $type = $this->db->query( "SHOW COLUMNS FROM {$table} WHERE Field = '{$field}'" )->row( 0 )->Type;
-        preg_match("/^enum\(\'(.*)\'\)$/", $type, $matches);
-        $enum = explode("','", $matches[1]);
-        $enums = array();
-        $enums[''] = 'Select';
-        foreach ($enum as $key => $value) {
-            $enums[$value] = $value;
-        }
-        return $enums;
-    }
-
-
-    private function lists($table,$select,$where,$join,$group_by,$order_by){
-
-        $this->db->select($select,TRUE);
-        $this->db->from($table);
-        if(!empty($join)){
-            foreach ($join as $key => $value) {
-                $this->db->join($value['table'],$value['on_condition'],$value['type']);
-            }
-        }
-        if(!empty($where)){
-            $this->db->where($where);
-        }
-        if(!empty($order_by)){
-            $this->db->order_by($order_by);
-        }else{
-            $this->db->order_by($table.'.id','DESC');
-        }
-        $query = $this->db->get();
-        //pe($this->db->last_query())
-        return $query->result_array();
-    }
     private function counts($table,$select,$where,$join){
 
         $this->db->select($select,TRUE);

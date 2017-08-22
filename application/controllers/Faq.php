@@ -92,13 +92,23 @@ class Faq extends CI_Controller {
      * @return void
      */
      public function edit($id)
-     {    /*Create Breadcumb*/
+     {
+          if(!$id){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('faq');
+          }
+          $id = decode_id($id);
+         /*Create Breadcumb*/
           $this->make_bread->add('FAQs', 'faq', 0);
           $this->make_bread->add('Edit', '', 1);
           $arrData['breadcrumb'] = $this->make_bread->output();
           /*Create Breadcumb*/
 
           $arrData['faqDetail'] = $this->master->view_record($id);
+          if(count($arrData['faqDetail']) > 1){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('faq');
+          }
           if($this->input->post()){
                if($this->input->post('question') != $arrData['faqDetail'][0]['question']){
                     $is_unique = '|is_unique['.Tbl_Faq.'.question]';
@@ -121,10 +131,10 @@ class Faq extends CI_Controller {
                     $this->master->edit_record($id,$update);
                     if($response['status'] == 'error'){
                          $this->session->set_flashdata('error','Failed to update faq');
-                         redirect('Faq');
+                         redirect('faq/edit/'.encode_id($id));
                     }else{
                          $this->session->set_flashdata('success','Faq updated successfully.');
-                         redirect('Faq');
+                         redirect('faq');
                     }
                }
           }else{
@@ -141,11 +151,18 @@ class Faq extends CI_Controller {
      * @return void
      */
      public function delete($id){
-          $soft_deleted = $this->master->delete_record($id);
-          if($soft_deleted > 0){
-               $this->session->set_flashdata('success','Faq deleted successfully.');
+          if(!$id){
+               $this->session->set_flashdata('error','Invalid access');
                redirect('faq');
           }
+          $id = decode_id($id);
+          $soft_deleted = $this->master->delete_record($id);
+          if($soft_deleted > 0){
+               $this->session->set_flashdata('success','FAQ deleted successfully.');
+          }else{
+               $this->session->set_flashdata('eroor','Failed to delete FAQ');
+          }
+          redirect('faq');
      }
 
      /*
@@ -157,8 +174,16 @@ class Faq extends CI_Controller {
      * @return void
      */
      public function view($id){
+          if(!$id){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('faq');
+          }
+          $id = decode_id($id);
           $arrData['faqDetail'] = $this->master->view_record($id);
-
+          if(count($arrData['faqDetail']) > 1){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('faq');
+          }
           /*Create Breadcumb*/
           $this->make_bread->add('FAQs', 'faq', 0);
           $this->make_bread->add($arrData['faqDetail'][0]['question'], '', 1);

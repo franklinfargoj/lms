@@ -258,3 +258,64 @@ if (!function_exists('create_excel_error_file'))
         $CI->session->set_userdata('error_file_path',$target_file_path);
     }
 }
+function encode_id($id){
+    // Get current CodeIgniter instance
+    $CI =& get_instance();
+    $enc_id = $CI->encrypt->encode($id);
+    $enc_id = str_replace(array('+', '/', '='), array('-', '_', '~'), $enc_id);
+    return $enc_id = !empty($enc_id) ? $enc_id : 0;
+
+}
+
+
+function decode_id($id){
+    // Get current CodeIgniter instance
+    $CI =& get_instance();
+    $dec_id = str_replace(array('-', '_', '~'), array('+', '/', '='), $id);
+    return $dec_id = !empty($CI->encrypt->decode($dec_id)) ? $CI->encrypt->decode($dec_id) : 0;
+}
+
+function get_session(){
+    /*$CI =& get_instance();
+    return $CI->session->userdata();*/
+
+    $input = array(
+        'hrms_id' => '312',
+        'dept_id' => '12',
+        'dept_type_id' => '123',
+        'dept_type_name' => 'BR',
+        'branch_id' => '1234',
+        'district_id' => '1234',
+        'state_id' => '1234',
+        'zone_id' => '1234',
+        'full_name' => 'mukesh kurmi',
+        'supervisor_id' => '009',
+        'designation_id' => '4',
+        'designation_name' => 'EM',
+        'mobile' => '9975772432',
+        'email_id' => 'mukesh.kurmi@wwindia.com'
+    );
+    return $input;
+}
+
+
+function get_lead_title($type,$till){
+    switch ($type) {
+        case 'generated':
+                $title = 'Leads Generated';
+            break;
+        case 'converted':
+                $title = 'Leads Convered';
+            break;
+        case 'assigned':
+                $title = 'Leads Assigned';
+            break;
+    }
+    if($till == 'mtd'){
+        $title .= ' MTD';
+    }
+    if($till == 'ytd'){
+        $title .= ' YTD';
+    }
+    return $title;
+}

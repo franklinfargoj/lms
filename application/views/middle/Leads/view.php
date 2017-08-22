@@ -7,85 +7,100 @@
 
 <!-- BEGIN PRODUCT -->
 <div class="portlet light">
-    <div class="portlet-title">
-        <div class="caption">
-            <!-- <i class="fa fa-cogs font-green-sharp"></i> -->
-            <span class="caption-subject font-green-sharp bold">FAQs</span>
-        </div>
-        <div class="tools">
-            <a href="<?php echo base_url('faq/add')?>" class="btn btn-sm green"><i class="fa fa-plus"></i>Add
-            </a>
-        </div>
-    </div>
-    <div class="portlet-body">
-        <table class="table table-striped table-bordered table-hover" id="sample_3">
-        <thead>
-        <tr>
+	<div class="portlet-title">
+		<div class="caption">
+			<span class="caption-subject font-green-sharp bold"><?php echo $title;?></span>
+		</div>
+		<div class="tools">
+			<a href="<?php echo site_url('dashboard');?>" class="btn btn-sm green"><i class="fa fa-plus"></i>Back
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<table class="table table-striped table-bordered table-hover" id="sample_3">
+		<thead>
+		<tr>
+			<th>
+				Sr. No.
+			</th>
+			<th>
+				Customer Name
+			</th>
+			<th>
+				Product Name
+			</th>
             <th>
-                 Sr. No.
+                Lead as (H/W/C)
             </th>
             <th>
-                 Question
+                Lead Source
             </th>
             <th>
-                 Answer
+                Elapsed Days
             </th>
-            <th>
-                 Action
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-            <?php 
-            if($faqlist){
-                $i = 0;
-                foreach ($faqlist as $key => $value) {
-            ?>  
-                <tr>
+			<th>
+				Details
+			</th>
+		</tr>
+		</thead>
+		<tbody>
+			<?php if($leads){
+				$i = 0;
+				foreach ($leads as $key => $value) {
+			?>	
+				<tr>
+					<td>
+						 <?php echo ++$i;?>
+					</td>
+					<td>
+						 <?php echo $value['customer_name'];?>
+					</td>
+					<td>
+						 <?php echo $value['title'];?>
+					</td>
                     <td>
-                         <?php echo ++$i;?>
+                         <?php echo $value['lead_identification'];?>
                     </td>
                     <td>
-                         <?php echo $value['question'];?>
+                         <?php echo $value['lead_source'];?>
                     </td>
                     <td>
-                        <a class="btn btn-sm grey-cascade" href="<?php echo site_url('faq/view/'.encode_id($value['id']))?>">
-                            <i class="fa fa-link"></i> View 
+                         <?php 
+                            $created_date = explode(' ',$value['created_on']);
+                            $now = date_create(date('Y-m-d')); // or your date as well
+                            $generated_date = date_create($created_date[0]);
+                            $datediff = date_diff($now,$generated_date);
+                            echo $datediff->format("%a days");
+                        ?>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm grey-cascade" href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']))?>">
+                            <i class="fa fa-link"></i> View
                         </a> 
                     </td>
-                    <td>
-                        <a class="btn btn-sm red" href="<?php echo site_url('faq/edit/'. encode_id($value['id']))?>">
-                            <i class="fa fa-edit"></i> Edit 
-                        </a> 
-                        
-                        <a class="btn btn-sm purple delete" href="javascript:void(0);" data-url="<?php echo site_url('faq/delete/'. encode_id($value['id']))?>">
-                            <i class="fa fa-times"></i> Delete 
-                        </a> 
-                    </td>
-                    
-                </tr>   
-            <?php   
-                }
-            }?>
-        </tbody>
-        </table>
-    </div>
+				</tr>	
+			<?php	
+				}
+			}?>
+		</tbody>
+		</table>
+	</div>
 </div>
 <!-- END PRODUCT CATEGOEY-->
 
 <script src="<?php echo base_url();?>assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/select2/select2.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+	<script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/select2/select2.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <script type="text/javascript">
-    var initTable3 = function () {
+	var initTable3 = function () {
         var table = $('#sample_3');
 
         /* Formatting function for row details */
@@ -140,7 +155,7 @@
 
             "columnDefs": [{
                 "orderable": false,
-                "targets": [2,3]
+                "targets": [3,4]
             }],
             "order": [
                 [0, 'asc']
@@ -152,8 +167,6 @@
             // set the initial value
             "pageLength": 10,
         });
-        /*$('.row-details').parent('td').remove();*/
-
         var tableWrapper = $('#sample_3_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
 
         tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
@@ -177,16 +190,16 @@
     }
 </script>
 <script>
-    jQuery(document).ready(function() { 
-        initTable3();
+	jQuery(document).ready(function() { 
+		initTable3();
 
-       $('.delete').click(function(){
-            var url = $(this).data('url');
-            bootbox.confirm("Are you sure want to delete?", function(result) {
+	   $('.delete').click(function(){
+	   		var url = $(this).data('url');
+	   		bootbox.confirm("Are you sure want to delete?", function(result) {
                if(result == true){
-                window.location.href = url;
+               	window.location.href = url;
                }
             }); 
         });
-    });
+	});
 </script>
