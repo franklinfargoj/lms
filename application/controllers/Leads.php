@@ -184,7 +184,6 @@ class Leads extends CI_Controller
                     $excelData = fetch_range_excel_data($file['full_path'], 'A2:L', $keys);
                     $validation = $this->validate_leads_data($excelData,$lead_source);
 
-
                     if (!empty($validation['insert_array'])) {
                         $insert_count = $this->Lead->insert_uploaded_data('db_leads', $validation['insert_array']);
 
@@ -239,7 +238,8 @@ class Leads extends CI_Controller
 
         foreach ($excelData as $key => $value){
 
-            $whereArray = array('title'=>strtolower(trim($value['product_category_id'])));
+            $prod_cat_title = preg_replace('!\s+!', ' ', $value['product_category_id']);
+            $whereArray = array('title'=>strtolower(trim($prod_cat_title)));
             $prod_category_id = $this->Lead->fetch_product_category_id($whereArray);
             if($prod_category_id == false){
                 $error[$key] = 'Category does not exist.';
@@ -250,9 +250,10 @@ class Leads extends CI_Controller
 
                 }else{
                     $all_product = $this->Lead->all_products_under_category($prod_category_id);
-                    if(in_array(strtolower(trim($value['product_id'])),$all_product)){
+                    $prod_title = preg_replace('!\s+!', ' ', $value['product_id']);
+                    if(in_array(strtolower(trim($prod_title)),$all_product)){
 
-                        $whereArray = array('title'=>strtolower(trim($value['product_id'])));
+                        $whereArray = array('title'=>strtolower(trim($prod_title)));
 
                         $is_own_branch = '1';
                         $is_existing_customer = '0';
