@@ -49,6 +49,8 @@ class Leads extends CI_Controller
             $this->form_validation->set_rules('phone_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
             $this->form_validation->set_rules('product_category', 'Product Category', 'required');
             $this->form_validation->set_rules('product', 'Product', 'required');
+            $this->form_validation->set_rules('department_id', 'Department Id', 'required');
+            $this->form_validation->set_rules('department_name', 'Department Name', 'required');
             $this->form_validation->set_rules('remark', 'Remark', 'required');
             $this->form_validation->set_rules('is_own_branch', 'Branch', 'required');
             $this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
@@ -90,6 +92,8 @@ class Leads extends CI_Controller
             $lead_data['contact_no'] = $this->input->post('contact_no');
             $lead_data['product_category_id'] = $this->input->post('product_category_id');
             $lead_data['product_id'] = $this->input->post('product_id');
+            $lead_data['department_id'] = $this->input->post('department_id');
+            $lead_data['department_name'] = $this->input->post('department_name');
             $lead_data['lead_name'] = $this->input->post('customer_name');
             $lead_data['lead_identification'] = $this->input->post('lead_identification');
             $lead_data['is_own_branch'] = $this->input->post('is_own_branch');
@@ -175,10 +179,10 @@ class Leads extends CI_Controller
                 } else {
                     set_time_limit(0);
                     ini_set('memory_limit', '-1');
-                    $keys = ['customer_name', 'contact_no', 'is_existing_customer', 'account_id', 'is_own_branch', 'branch_id', 'zone_id', 'state_id', 'district_id', 'product_category_id', 'product_id', 'remark', 'lead_identification', 'created_by', 'created_by_name', 'created_by_branch_id', 'created_by_zone_id', 'created_by_state_id', 'created_by_district_id'];
+                    $keys = ['customer_name', 'contact_no', 'is_existing_customer', 'is_own_branch', 'branch_id', 'zone_id', 'state_id', 'district_id', 'product_category_id', 'product_id', 'remark', 'lead_identification'];
 
-                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:S', $keys);
-
+                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:L', $keys);
+                    pe($excelData);
                     $validation = $this->validate_leads_data($excelData,$lead_source);
 
 

@@ -295,7 +295,7 @@ class Api extends REST_Controller
 
             //Third Party
             $where = array(Tbl_Leads . '.created_by' => $created_by, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Third Party');
-            $lead_generated_thirdparty = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $result['lead_generated_thirdparty'] = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
             $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Third Party',
                 Tbl_LeadAssign . '.status' => 'Converted');
             $result['lead_converted_thirdparty'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
@@ -337,7 +337,7 @@ class Api extends REST_Controller
 
             //Third Party
             $where = array(Tbl_Leads . '.branch_id' => $branch_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Third Party');
-            $lead_generated_thirdparty = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $result['lead_generated_thirdparty'] = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
             $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Third Party',
                 Tbl_LeadAssign . '.status' => 'Converted');
             $result['lead_converted_thirdparty'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
@@ -374,7 +374,8 @@ class Api extends REST_Controller
             'product_category_id'=>'Product Category',
             'product_id'=>'Product','is_own_branch'=>'Own Branch / Other Branch','created_by'=>'Created By','created_by_name'=>'Created By Name',
             'state_id'=>'State','district_id'=>'District',
-            'zone_id' => 'Zone','branch_id'=>'Branch','created_by_state_id'=>'Created By State',
+            'zone_id' => 'Zone','branch_id'=>'Branch','department_name'=>'Department Name',
+            'department_id'=>'Department Id','created_by_state_id'=>'Created By State',
             'created_by_district_id'=>'Created By District',
             'created_by_zone_id'=>'Created By Zone','created_by_branch_id'=>'Created By Branch',
             'lead_identification'=>'Lead Identification','remark'=>'Remark');
@@ -389,7 +390,7 @@ class Api extends REST_Controller
                 if($k == 'customer_name'){
                     $cust_name_extra = '|alpha_numeric';
                 }
-                $this->form_validation->set_rules($k,'gt','required'.$phone_extra.$cust_name_extra);
+                $this->form_validation->set_rules($k,'','required'.$phone_extra.$cust_name_extra);
                 if ($this->form_validation->run() === FALSE) {
                     $error[] = form_error($k);
                 }else{

@@ -50,6 +50,16 @@ $data_district = array('class' => 'form-control ',
     'id' => 'district_id',
     'value' => set_value('district_id', '')
 );
+$data_department_name = array('class' => 'form-control ',
+    'name' => 'department_name',
+    'id' => 'department_name',
+    'value' => set_value('department_name', '')
+);
+$data_department_id = array('class' => 'form-control ',
+    'name' => 'department_id',
+    'id' => 'department_id',
+    'value' => set_value('department_id', '')
+);
 $data_remark = array('class' => 'form-control ',
     'name' => 'remark',
     'id' => 'remark_id',
@@ -241,6 +251,30 @@ $remark_extra = 'style="height:50%"';
                         <label id="branch_id-error" class="error" for="branch_id"></label>
                         <?php echo form_error('branch_id'); ?>
                     </div>
+                    <div id="department_id" class="form-group hide">
+                        <label>Department Id</label>
+                        <div class="input-group">
+					<span class="input-group-addon">
+						<i class="fa fa-branch"></i>
+					</span>
+                            <?php echo form_input($data_department_id);
+                            ?>
+                        </div>
+                        <label id="department_id-error" class="error" for="department_id"></label>
+                        <?php echo form_error('department_id'); ?>
+                    </div>
+                    <div id="department_name" class="form-group hide">
+                        <label>District Name</label>
+                        <div class="input-group">
+					<span class="input-group-addon">
+						<i class="fa fa-branch"></i>
+					</span>
+                            <?php echo form_input($data_department_name);
+                            ?>
+                        </div>
+                        <label id="department_name-error" class="error" for="department_name"></label>
+                        <?php echo form_error('department_name'); ?>
+                    </div>
                     <div class="form-group">
                         <label>Lead Identification</label>
                         <?php echo form_dropdown('lead_identification', $lead_id_options, '', $extra) ?>
@@ -359,6 +393,12 @@ $remark_extra = 'style="height:50%"';
                     branch_id: {
                         required: true
                     },
+                    department_id:{
+                        required: true
+                    },
+                    department_name: {
+                        required: true
+                    },
                     remark: {
                         required: true
                     }
@@ -393,6 +433,12 @@ $remark_extra = 'style="height:50%"';
                     },
                     state_id: {
                         required: "Please select state"
+                    },
+                    department_name: {
+                        required: "Please enter department name"
+                    },
+                    department_id: {
+                        required: "Please enter department id"
                     },
                     branch_id: {
                         required: "Please select branch"

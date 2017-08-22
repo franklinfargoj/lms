@@ -5,4 +5,3 @@
 		</div>
 	</div>
 </div>
-<script src="<?php echo base_url().ASSETS;?>/js/jquery.validate.min.js" type="text/javascript"></script>
