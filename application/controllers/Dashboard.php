@@ -31,73 +31,61 @@ class Dashboard extends CI_Controller {
      */
 	public function index()
 	{
+        //Get session data
+        $input = get_session();
 
-          $input = array(
-              'hrms_id' => '100020',
-              'dept_id' => '12',
-              'dept_type_id' => '123',
-              'dept_type_name' => 'BR',
-              'branch_id' => '1234',
-              'district_id' => '1234',
-              'state_id' => '1234',
-              'zone_id' => '1234',
-              'full_name' => 'mukesh kurmi',
-              'supervisor_id' => '009',
-              'designation_id' => '4',
-              'designation_name' => 'EM',
-              'mobile' => '9975772432',
-              'email_id' => 'mukesh.kurmi@wwindia.com',
-          );
+        //Create Breadcumb
+        /*$arrData['breadcrumb'] = $this->make_bread->output();*/
+        $arrData['breadcrumb'] = '';
+          
 
-          /*Create Breadcumb*/
-          /*$arrData['breadcrumb'] = $this->make_bread->output();*/
-          $arrData['breadcrumb'] = '';
-          /*Create Breadcumb*/
+        //Get session data
+        $input = get_session();
+        $leads = array();
 
-          if(isset($input['designation_name']) && !empty($input['designation_name'])){
-               switch ($input['designation_name']) {
-                    case 'EM':
-                         
-                              $month_generated_where = array('created_by' => $input['hrms_id'],'MONTH(created_on)' => date('m'));
-                              $year_generated_where  = array('created_by' => $input['hrms_id'],'YEAR(created_on)' => date('Y'));
+        if(isset($input['designation_name']) && !empty($input['designation_name'])){
+            switch ($input['designation_name']){
+                case 'EM':
+                    //Parameters buiding for sending to get_leads function.
+                    $action = 'count';
+                    $select = array();
+                    $join = array();
+                    
+                    //For Generated Leads Count    
+                    $table = Tbl_Leads;
 
-                              $month_converted_where = array('employee_id' => $input['hrms_id'],'MONTH(created_on)' => date('m'));
-                              $year_converted_where  = array('employee_id' => $input['hrms_id'],'YEAR(created_on)' => date('Y'));
+                        //Month till date
+                        $where = array(Tbl_Leads.'.created_by' => $input['hrms_id'],'MONTH('.Tbl_Leads.'.created_on)' => date('m'));
+                        $leads['generated_mtd'] = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
 
-                              $month_assigned_where  = array('employee_id' => $input['hrms_id'],'YEAR(created_on)' => date('Y'));
-                         
-                         break;
-                    /*case 'BM':
-                         
-                              $month_generated_where = array('branch_id' => $input['branch_id'],'MONTH(created_on)' => date('m'));
-                              $year_generated_where  = array('branch_id' => $input['branch_id'],'YEAR(created_on)' => date('Y'));
+                        //Year till date
+                        $where  = array(Tbl_Leads.'.created_by' => $input['hrms_id'],'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
+                        $leads['generated_ytd'] = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+                        
+                    //For converted leads Count
+                    $table = Tbl_LeadAssign;
 
-                              $month_converted_where = array('branch_id' => $input['branch_id'],'MONTH(created_on)' => date('m'));
-                              $year_converted_where  = array('branch_id' => $input['branch_id'],'YEAR(created_on)' => date('Y'));
+                        //Month till date
+                        $where = array(Tbl_LeadAssign.'.employee_id' => $input['hrms_id'],Tbl_LeadAssign.'.status' => 'Converted',Tbl_LeadAssign.'.is_deleted' => 0,'MONTH('.Tbl_LeadAssign.'.created_on)' => date('m'));
+                        $leads['converted_mtd'] = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+                        
+                        
+                        //Year till date
+                        $where  = array(Tbl_LeadAssign.'.employee_id' => $input['hrms_id'],Tbl_LeadAssign.'.status' => 'Converted',Tbl_LeadAssign.'.is_deleted' => 0,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
+                        $leads['converted_ytd'] = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+                        
+                    //For assigned leads Count
+                    $table = Tbl_LeadAssign;
+                        
+                        //Year till date
+                        $where  = array(Tbl_LeadAssign.'.employee_id' => $input['hrms_id'],Tbl_LeadAssign.'.is_deleted' => 0,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
+                        $leads['assigned_leads'] = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
 
-                              $month_assigned_where  = array('branch_id' => $input['branch_id'],'YEAR(created_on)' => date('Y'));
-                         
-                         break;
-                    case 'ZM':
-                         
-                              $month_generated_where = array('zone_id' => $input['zone_id'],'MONTH(created_on)' => date('m'));
-                              $year_generated_where  = array('zone_id' => $input['zone_id'],'YEAR(created_on)' => date('Y'));
+                    break;
+            }
+            $arrData['leads'] = $leads;
+        }
 
-                              $month_converted_where = array('zone_id' => $input['zone_id'],'MONTH(created_on)' => date('m'));
-                              $year_converted_where  = array('zone_id' => $input['zone_id'],'YEAR(created_on)' => date('Y'));
-
-                              $month_assigned_where  = array('zone_id' => $input['zone_id'],'YEAR(created_on)' => date('Y'));   
-                         
-                         break;*/
-               }
-               $result1 = $this->master->get_generated_lead($month_generated_where,$year_generated_where,'get_count');
-               $result2 = $this->master->get_converted_lead($month_converted_where,$year_converted_where,'get_count');
-               $result3 = $this->master->get_assigned_leads($month_assigned_where,'get_count');
-               $arrData['leads'] = array_merge($result1,$result2,$result3);
-               /*pe($response);
-               exit;*/
-          }
-
-          return load_view($middle = "dashboard",$arrData);
+        return load_view($middle = "dashboard",$arrData);
 	}
 }

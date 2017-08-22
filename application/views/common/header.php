@@ -40,7 +40,13 @@
 						<img src="<?php echo base_url().ASSETS;?>/images/right-nav.png">
 					</a>
 				</li>
-				
+				<li>
+					<a href="<?php echo site_url('leads/add')?>">
+						<img src="<?php echo base_url().ASSETS;?>/images/left-nav.png">
+						<span>Add Lead</span>
+						<img src="<?php echo base_url().ASSETS;?>/images/right-nav.png">
+					</a>
+				</li>
 				<li>
 					<a href="<?php echo site_url('leads/upload')?>">
 						<img src="<?php echo base_url().ASSETS;?>/images/left-nav.png">
@@ -48,10 +54,11 @@
 						<img src="<?php echo base_url().ASSETS;?>/images/right-nav.png">
 					</a>
 				</li>
+				
 				<li>
-					<a href="<?php echo site_url('leads/add')?>">
+					<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
 						<img src="<?php echo base_url().ASSETS;?>/images/left-nav.png">
-						<span>Add Lead</span>
+						<span> Assigned Leads</span>
 						<img src="<?php echo base_url().ASSETS;?>/images/right-nav.png">
 					</a>
 				</li>
