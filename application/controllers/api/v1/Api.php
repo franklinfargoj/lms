@@ -278,9 +278,9 @@ class Api extends REST_Controller
     public function leads_filtered_by_lead_source_post()
     {
         $params = $this->input->post();
-        if (isset($params['created_by']) && $params['created_by'] != '') {
+        if (isset($params['employee_id']) && $params['employee_id'] != '') {
             $join = array();
-            $created_by = $params['created_by'];
+            $created_by = $params['employee_id'];
             $action = 'count';
             $table = Tbl_Leads;
             $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
