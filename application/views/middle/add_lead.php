@@ -16,7 +16,7 @@ $data_lead = array('class' => 'form-control ',
     'value' => set_value('lead_name', '')
 );
 $data_phone = array('class' => 'form-control ',
-    'name' => 'phone_no',
+    'name' => 'contact_no',
     'id' => 'phone_no',
     'value' => set_value('phone_no', '')
 );
@@ -46,9 +46,9 @@ $data_branch = array('class' => 'form-control ',
     'value' => set_value('branch_id', '')
 );
 $data_district = array('class' => 'form-control ',
-    'name' => 'district',
+    'name' => 'district_id',
     'id' => 'district_id',
-    'value' => set_value('district', '')
+    'value' => set_value('district_id', '')
 );
 $data_remark = array('class' => 'form-control ',
     'name' => 'remark',
@@ -95,8 +95,8 @@ $lead_id_options['HOT'] = 'HOT';
 $lead_id_options['WARM'] = 'WARM';
 $lead_id_options['COLD'] = 'COLD';
 
-$category_extra = 'class="form-control" id="product_category"';
-$product_extra = 'class="form-control" id="product"';
+$category_extra = 'class="form-control" id="product_category_id"';
+$product_extra = 'class="form-control" id="product_id"';
 $extra = 'class="form-control"';
 $remark_extra = 'style="height:50%"';
 ?>
@@ -116,8 +116,8 @@ $remark_extra = 'style="height:50%"';
                 <div class="form-body">
                     <div class="form-group">
                         <label>Customer Type</label>
-                        <?php echo form_dropdown('customer_type', $customer_options, '', $extra) ?>
-                        <?php echo form_error('customer_type'); ?>
+                        <?php echo form_dropdown('is_existing_customer', $customer_options, '', $extra) ?>
+                        <?php echo form_error('is_existing_customer'); ?>
                     </div>
                     <div class="form-group">
                         <label>Customer Name</label>
@@ -180,13 +180,13 @@ $remark_extra = 'style="height:50%"';
                     <?php echo form_error('pan_no'); ?>
                     <div class="form-group">
                         <label>Product Category</label>
-                        <?php echo form_dropdown('product_category', $options, $category_selected, $category_extra) ?>
-                        <?php echo form_error('product_category'); ?>
+                        <?php echo form_dropdown('product_category_id', $options, $category_selected, $category_extra) ?>
+                        <?php echo form_error('product_category_id'); ?>
                     </div>
                     <div class="form-group " id="product_select">
                         <label>Product</label>
-                        <?php echo form_dropdown('product', $product_options, $product_selected, $product_extra) ?>
-                        <?php echo form_error('product'); ?>
+                        <?php echo form_dropdown('product_id', $product_options, $product_selected, $product_extra) ?>
+                        <?php echo form_error('product_id'); ?>
                     </div>
 
                     <div class="form-group">
@@ -324,7 +324,7 @@ $remark_extra = 'style="height:50%"';
             $("#addlead").validate({
 
                 rules: {
-                    customer_type: {
+                    is_existing_customer: {
                         required: true
                     },
                     customer_name: {
@@ -341,10 +341,10 @@ $remark_extra = 'style="height:50%"';
                         maxlength: 10,
                         minlength: 10
                     },
-                    product_category: {
+                    product_category_id: {
                         required: true
                     },
-                    product: {
+                    product_id: {
                         required: true
                     },
                     lead_identification: {
@@ -353,7 +353,7 @@ $remark_extra = 'style="height:50%"';
                     state_id: {
                         required: true
                     },
-                    district: {
+                    district_id: {
                         required: true
                     },
                     branch_id: {
@@ -364,7 +364,7 @@ $remark_extra = 'style="height:50%"';
                     }
                 },
                 messages: {
-                    customer_type: {
+                    is_existing_customer: {
                         required: "Please select customer"
                     },
                     customer_name: {
@@ -382,13 +382,13 @@ $remark_extra = 'style="height:50%"';
 
 
                     },
-                    product_category: {
+                    product_category_id: {
                         required: "Please select product category"
                     },
-                    product: {
+                    product_id: {
                         required: "Please select product"
                     },
-                    district: {
+                    district_id: {
                         required: "Please select district"
                     },
                     state_id: {

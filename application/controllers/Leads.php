@@ -45,7 +45,7 @@ class Leads extends CI_Controller
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<label class = "error">', '</label>');
             $this->form_validation->set_rules('customer_type', 'Customer', 'required');
-            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required');
+            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|alpha_numeric');
             $this->form_validation->set_rules('phone_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
             $this->form_validation->set_rules('product_category', 'Product Category', 'required');
             $this->form_validation->set_rules('product', 'Product', 'required');
@@ -60,11 +60,11 @@ class Leads extends CI_Controller
             if ($this->input->post('is_own_branch') == '0') {
                 $this->form_validation->set_rules('state_id', 'State', 'required');
                 $this->form_validation->set_rules('branch_id', 'Branch', 'required');
-                $this->form_validation->set_rules('district', 'District', 'required');
+                $this->form_validation->set_rules('district_id', 'District', 'required');
 
                 $lead_data['state_id'] = $this->input->post('state_id');
                 $lead_data['branch_id'] = $this->input->post('branch_id');
-                $lead_data['district_id'] = $this->input->post('district');
+                $lead_data['district_id'] = $this->input->post('district_id');
 
             }
 
@@ -85,11 +85,11 @@ class Leads extends CI_Controller
                 return load_view($middle, $arrData);
             }
 
-            $lead_data['is_existing_customer'] = $this->input->post('customer_type');
+            $lead_data['is_existing_customer'] = $this->input->post('is_existing_customer');
             $lead_data['customer_name'] = $this->input->post('customer_name');
-            $lead_data['contact_no'] = $this->input->post('phone_no');
-            $lead_data['product_category_id'] = $this->input->post('product_category');
-            $lead_data['product_id'] = $this->input->post('product');
+            $lead_data['contact_no'] = $this->input->post('contact_no');
+            $lead_data['product_category_id'] = $this->input->post('product_category_id');
+            $lead_data['product_id'] = $this->input->post('product_id');
             $lead_data['lead_name'] = $this->input->post('customer_name');
             $lead_data['lead_identification'] = $this->input->post('lead_identification');
             $lead_data['is_own_branch'] = $this->input->post('is_own_branch');

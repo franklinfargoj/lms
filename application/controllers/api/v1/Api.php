@@ -25,165 +25,187 @@ class Api extends REST_Controller
         parent::__construct();
         $this->load->model('Lead');
         $this->load->model('Login_model');
+        $this->load->model('Ticker_model', 'ticker');
+        $this->load->model('Faq_model', 'faq');
 
     }
 
 
     public function authentication_post(){
         $params = $this->input->post();
+//
+//        if(!isset($params['user_id']) || !isset($params['device_token']) || !isset($params['password']) || ($params['user_id'] == NULL) || ($params['device_token'] == NULL) || ($params['password'] == NULL)){
+//            $err['result'] = false;
+//            $err['data'] = "Invalid Request";
+//            returnJson($err);
+//        }
+//
+//        if(!isset($params['user_id']) || !isset($params['password']) || ($params['user_id'] == NULL) ||  ($params['password'] == NULL)){
+//            $err['result'] = false;
+//            $err['data'] = "Invalid Request";
+//            returnJson($err);
+//        }
+//
+//        $user_id = $params['user_id'];
+//        $password = $params['password'];
+//        $device_token = $params['device_token'];
+//
+//        $curl_handle = curl_init();
+//        curl_setopt($curl_handle, CURLOPT_URL, '');
+//        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+//        curl_setopt($curl_handle, CURLOPT_POST, 1);
+//        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
+//            'user_id' => $user_id,
+//            'password' => $password
+//        ));
+//
+//        $buffer = curl_exec($curl_handle);
+//        curl_close($curl_handle);
+//
+//        $result = json_decode($buffer);
 
-        if(!isset($params['user_id']) || !isset($params['device_token']) || !isset($params['password']) || ($params['user_id'] == NULL) || ($params['device_token'] == NULL) || ($params['password'] == NULL)){
-            $err['result'] = false;
-            $err['data'] = "Invalid Request";
-            returnJson($err);
-        }
-
-        if(!isset($params['user_id']) || !isset($params['password']) || ($params['user_id'] == NULL) ||  ($params['password'] == NULL)){
-            $err['result'] = false;
-            $err['data'] = "Invalid Request";
-            returnJson($err);
-        }
-
-        $user_id = $params['user_id'];
-        $password = $params['password'];
-        $device_token = $params['device_token'];
-
-        $curl_handle = curl_init();
-        curl_setopt($curl_handle, CURLOPT_URL, '');
-        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl_handle, CURLOPT_POST, 1);
-        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
-            'user_id' => $user_id,
-            'password' => $password
-        ));
-
-        $buffer = curl_exec($curl_handle);
-        curl_close($curl_handle);
-
-        $result = json_decode($buffer);
-
-//          $data['basic_info']= array(
-//              'hrms_id' => '1234',
-//              'dept_id' => '12',
-//              'dept_type_id' => '123',
-//              'dept_type_name' => 'BR',
-//              'branch_id' => '1234',
-//              'district_id' => '1234',
-//              'state_id' => '1234',
-//              'zone_id' => '1234',
-//              'full_name' => 'mukesh kurmi',
-//              'supervisor_id' => '009',
-//              'designation_id' => '4',
-//              'designation_name' => 'BM',
-//              'mobile' => '9975772432',
-//              'email_id' => 'mukesh.kurmi@wwindia.com',
-//          );
-//        $data['employee_list'][]= array(
-//            'id' => '12',
-//            'full_name' => 'mukesh kurmi',
-//        );
-//        $data['employee_list'][]= array(
-//            'id' => '13',
-//            'full_name' => 'anup',
-//        );
-//        $data['branch_list'][]= array(
-//            'id' => '12',
-//            'full_name' => 'branch1',
-//        );
-//        $data['branch_list'][]= array(
-//            'id' => '13',
-//            'full_name' => 'branch2',
-//        );
-//        $data['zone_list'][]= array(
-//            'id' => '12',
-//            'full_name' => 'zone1',
-//        );
-//        $data['zone_list'][]= array(
-//            'id' => '13',
-//            'full_name' => 'zone2',
-//        );
+        $result['basic_info']= array(
+              'hrms_id' => '12',
+              'dept_id' => '12',
+              'dept_type_id' => '123',
+              'dept_type_name' => 'BR',
+              'branch_id' => '12',
+              'district_id' => '1234',
+              'state_id' => '1234',
+              'zone_id' => '1234',
+              'full_name' => 'mukesh kurmi',
+              'supervisor_id' => '009',
+              'designation_id' => '4',
+              'designation_name' => $params['designation_name'],
+              'mobile' => '9975772432',
+              'email_id' => 'mukesh.kurmi@wwindia.com',
+          );
+        $result['employee_list'][]= array(
+            'id' => '12',
+            'full_name' => 'mukesh kurmi',
+        );
+        $result['employee_list'][]= array(
+            'id' => '13',
+            'full_name' => 'anup',
+        );
+        $result['employee_list'][]= array(
+            'id' => '15',
+            'full_name' => 'anup',
+        );
+        $result['branch_list'][]= array(
+            'id' => '12',
+            'full_name' => 'branch1',
+        );
+        $result['branch_list'][]= array(
+            'id' => '13',
+            'full_name' => 'branch2',
+        );
+        $result['zone_list'][]= array(
+            'id' => '12',
+            'full_name' => 'zone1',
+        );
+        $result['zone_list'][]= array(
+            'id' => '13',
+            'full_name' => 'zone2',
+        );
 //        returnJson($data);
 
-        if(isset($result['status']) && $result['status'] == 'success') {
-
-            $where_year_Array = array();
-            $data = array('device_token' => $device_token,
-                'employee_id' => $result
-            );
-            $return = $this->Login_model->insert_login_log($data);
+//        if(isset($result['status']) && $result['status'] == 'success') {
+//
+//            $where_year_Array = array();
+//            $data = array('device_token' => $device_token,
+//                'employee_id' => $result
+//            );
+//            $return = $this->Login_model->insert_login_log($data);
 
             if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'BM') {
                 if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
                     $branch_id = $result['basic_info']['branch_id'];
-
                     //for generated lead
                     $where_month_Array = array('branch_id' => $branch_id,
-                        'created_by' != 0,
+                        'created_by !=' => 0,
                         'MONTH(created_on)' => date('m'));
-
-                    $generated_result = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
+                    $leads['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
                     $generated_key_value = array();
-                    foreach ($generated_result as $k => $v){
+                    foreach ($leads['generated_leads'] as $k => $v){
                         $generated_key_value[$v['created_by']] = $v['total'];
                     }
-
                     foreach ($result['employee_list'] as $key => $val){
                         if(!array_key_exists($val['id'],$generated_key_value)){
-                            $push_generated = array($val['created_by']=>$val['id'],
-                                          $val['total']=>0);
-                            array_push($generated_result,$push_generated);
+                            $push_generated = array('created_by'=>$val['id'],
+                                          'created_by_name'=>$val['full_name'],
+                                          'total'=>0);
+                            array_push($leads['generated_leads'],$push_generated);
                         }
                     }
                     //for converted lead
                     $where_month_Array = array('branch_id' => $branch_id,
                         'MONTH(created_on)' => date('m'),
-                        'created_by' != 0,
+                        'created_by !=' => 0,
                         'status' => 'converted');
 
-                    $converted_result = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
+                    $leads['converted_leads'] = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     $converted_key_value = array();
-                    foreach ($converted_result as $k => $v){
+                    foreach ($leads['converted_leads'] as $k => $v){
                         $converted_key_value[$v['created_by']] = $v['total'];
                     }
 
                     foreach ($result['employee_list'] as $key => $val){
                         if(!array_key_exists($val['id'],$converted_key_value)){
-                            $push_converted = array($val['created_by']=>$val['id'],
-                                'created_by' != 0,
-                                $val['total']=>0);
-                            array_push($converted_result,$push_converted);
+                            $push_converted = array('created_by'=>$val['id'],
+                                'created_by_name'=>$result['employee_list'][$key]['full_name'],
+                                'total'=>0);
+                            array_push($leads['converted_leads'],$push_converted);
                         }
                     }
                     //for assigned lead
                     $where_assigned_Array = array('branch_id' => $branch_id,
+                        'created_by !=' => 0,
                         'YEAR(created_on)' => date('Y'));
                 }
+                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array,'get_count');
             }
             if(isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'EM'){
                 if (isset($result['basic_info']['hrms_id']) && $result['basic_info']['hrms_id'] != '') {
                     $created_id = $result['basic_info']['hrms_id'];
 
-                    //for generated lead
-                    $where_month_Array = array('created_by' => $created_id,
-                        'MONTH(created_on)' => date('m'));
-                    $where_year_Array = array('created_by' => $created_id,
-                        'YEAR(created_on)' => date('Y'));
+                    //Parameters buiding for sending to list function.
+                    $action = 'count';
+                    $select = array();
+                    $join = array();
+                    $group_by = array();
 
-                    $generated_result = $this->Lead->get_generated_lead($where_month_Array, $where_year_Array);
+                    //For Generated Leads Count
+                    $table = Tbl_Leads;
 
-                    //for converted lead
-                    $where_month_Array = array('employee_id' => $created_id,
-                        'MONTH(created_on)' => date('m'),
-                        'status' => 'converted');
-                    $where_year_Array = array('employee_id' => $created_id,
-                        'YEAR(created_on)' => date('Y'),
-                        'status' => 'converted');
-                    $converted_result = $this->Lead->get_converted_lead($where_month_Array,$where_year_Array);
-                    //for assigned lead
-                    $where_assigned_Array = array('employee_id' => $created_id,
-                        'created_by' != 0,
-                        'YEAR(created_on)' => date('Y'));
+                    //Month till date
+                    $where = array(Tbl_Leads.'.created_by' => $created_id,'MONTH('.Tbl_Leads.'.created_on)' => date('m'));
+                    $leads['generated_mtd'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
+
+                    //Year till date
+                    $where  = array(Tbl_Leads.'.created_by' => $created_id,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
+                    $leads['generated_ytd'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
+
+                    //For converted leads Count
+                    $table = Tbl_LeadAssign;
+
+                    //Month till date
+                    $where = array(Tbl_LeadAssign.'.employee_id' => $created_id,Tbl_LeadAssign.'.status' => 'Converted',Tbl_LeadAssign.'.is_deleted' => 0,'MONTH('.Tbl_LeadAssign.'.created_on)' => date('m'));
+                    $leads['converted_mtd'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
+
+
+                    //Year till date
+                    $where  = array(Tbl_LeadAssign.'.employee_id' => $created_id,Tbl_LeadAssign.'.status' => 'Converted',Tbl_LeadAssign.'.is_deleted' => 0,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
+                    $leads['converted_ytd'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
+
+                    //For assigned leads Count
+                    $table = Tbl_LeadAssign;
+
+                    //Year till date
+                    $where  = array(Tbl_LeadAssign.'.employee_id' => $created_id,Tbl_LeadAssign.'.is_deleted' => 0,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
+                    $leads['assigned_leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
                 }
+
             }
             if(isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'ZM'){
                 if(isset($result['basic_info']['zone_id']) && $result['basic_info']['zone_id'] != ''){
@@ -191,66 +213,180 @@ class Api extends REST_Controller
 
                     //for generated lead
                     $where_month_Array = array('zone_id'=>$zone_id,
-                        'created_by' != 0,
+                        'created_by !=' => 0,
                         'MONTH(created_on)'=>date('m'));
 
-                    $generated_result = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
+                    $leads['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
                     $generated_key_value = array();
-                    foreach ($generated_result as $k => $v){
+                    foreach ($leads['generated_leads'] as $k => $v){
                         $generated_key_value[$v['branch_id']] = $v['total'];
                     }
 
                     foreach ($result['branch_list'] as $key => $val){
                         if(!array_key_exists($val['id'],$generated_key_value)){
-                            $push_generated = array($val['branch_id']=>$val['id'],
-                                $val['total']=>0);
-                            array_push($generated_result,$push_generated);
+                            $push_generated = array('branch_id'=>$val['id'],
+
+                                'total'=>0);
+                            array_push($leads['generated_leads'],$push_generated);
                         }
                     }
                     //for converted lead
                     $where_month_Array = array('zone_id'=>$zone_id,
                         'MONTH(created_on)'=>date('m'),
-                        'created_by' != 0,
+                        'created_by !=' => 0,
                         'status'=>'converted');
 
-                    $converted_result = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
+                    $leads['converted_leads'] = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     $converted_key_value = array();
-                    foreach ($converted_result as $k => $v){
+                    foreach ($leads['converted_leads'] as $k => $v){
                         $converted_key_value[$v['branch_id']] = $v['total'];
                     }
 
                     foreach ($result['branch_list'] as $key => $val){
                         if(!array_key_exists($val['id'],$converted_key_value)){
-                            $push_converted = array($val['branch_id']=>$val['id'],
-                                $val['total']=>0);
-                            array_push($converted_result,$push_converted);
+                            $push_converted = array('branch_id'=>$val['id'],
+                                'total'=>0);
+                            array_push($leads['converted_leads'],$push_converted);
                         }
                     }
 
                     //for assigned lead
                     $where_assigned_Array = array('zone_id'=>$zone_id,
+                        'created_by !=' => 0,
                         'YEAR(created_on)'=>date('Y'));
                 }
+                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array,'get_count');
             }
 
-            $assigned_result = $this->Lead->get_assigned_leads($where_assigned_Array);
 
-            $result = array(
-                "result" => True,
-                "data" => array_merge($generated_result,$converted_result,$assigned_result)
+        $result = array(
+                "result" => 'True',
+                "data" => $leads
             );
-            returnJson($result);
-        }
-
-        else{
-            $error = array(
-                "result" => false,
-                "data" => "Invalid username or password."
-            );
-            returnJson($error);
-        }
+          returnJson($result);
+//        }
+//
+//        else{
+//            $error = array(
+//                "result" => false,
+//                "data" => "Invalid username or password."
+//            );
+//            returnJson($error);
+//        }
     }
 
+    public function leads_filtered_by_lead_source_post()
+    {
+        $params = $this->input->post();
+        if (isset($params['created_by']) && $params['created_by'] != '') {
+            $join = array();
+            $created_by = $params['created_by'];
+            $action = 'count';
+            $table = Tbl_Leads;
+            $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
+            $select = array();
+
+            //Walk-in
+            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Walk-in');
+            $result['lead_assigned_walkin'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Walk-in',
+                Tbl_LeadAssign . '.status' => 'Converted');
+            $result['lead_converted_walkin'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+
+            //Third Party
+            $where = array(Tbl_Leads . '.created_by' => $created_by, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Third Party');
+            $lead_generated_thirdparty = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Third Party',
+                Tbl_LeadAssign . '.status' => 'Converted');
+            $result['lead_converted_thirdparty'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+
+            //Bank Website
+            $where = array(Tbl_Leads . '.created_by' => $created_by, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Bank Website');
+            $result['lead_generated_bank_website'] = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Bank Website',
+                Tbl_LeadAssign . '.status' => 'Converted');
+            $result['lead_converted_bank_website'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+
+            //Analytics
+            $where = array(Tbl_Leads . '.created_by' => $created_by, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Analytics');
+            $result['lead_generated_analytics'] = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Analytics',
+                Tbl_LeadAssign . '.status' => 'Converted');
+            $result['lead_converted_analytics'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+
+
+            $data = array('result' => 'true',
+                'data' => $result);
+            returnJson($data);
+
+        }
+        $data = array('result' => 'false',
+            'data' => 'parameter missing');
+        returnJson($data);
+    }
+
+    public function add_lead_post(){
+        $params = $this->input->post();
+        $error = array();
+        $validations = array('is_existing_customer'=>'Customer exists or not','customer_name'=>'Customer Name','contact_no'=>'Phone No',
+            'product_category_id'=>'Product Category',
+            'product_id'=>'Product','is_own_branch'=>'Own Branch / Other Branch','created_by'=>'Created By','created_by_name'=>'Created By Name',
+            'state_id'=>'State','district_id'=>'District',
+            'zone_id' => 'Zone','branch_id'=>'Branch','created_by_state_id'=>'Created By State',
+            'created_by_district_id'=>'Created By District',
+            'created_by_zone_id'=>'Created By Zone','created_by_branch_id'=>'Created By Branch',
+            'lead_identification'=>'Lead Identification','remark'=>'Remark');
+        $phone_extra = '';
+        $cust_name_extra = '';
+        foreach ($params as $k => $value){
+            if(array_key_exists($k,$validations)){
+
+                if($k == 'phone_no'){
+                    $phone_extra = '|max_length[10]|min_length[10]|numeric';
+                }
+                if($k == 'customer_name'){
+                    $cust_name_extra = '|alpha_numeric';
+                }
+                $this->form_validation->set_rules($k,'gt','required'.$phone_extra.$cust_name_extra);
+                if ($this->form_validation->run() === FALSE) {
+                    $error[] = form_error($k);
+                }else{
+                    $lead_data[$k] = $value;
+                }
+                unset($validations[$k]);
+            }
+        }
+        if(!empty($validations)){
+            foreach ($validations as $k => $v){
+                $error[]=$v.' field is required.';
+            }
+        }
+        if(!empty($error)){
+            $result = array('result'=>'false',
+                'data'=>$error);
+            returnJson($result);
+        }
+        $lead_data['lead_name'] = $this->input->post('customer_name');
+        $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
+
+        $lead_id = $this->Lead->insert($lead_data);
+        if($assign_to == 'self'){
+            $lead_assign['lead_id'] = $lead_id;
+            $lead_assign['employee_id']=$params['created_by'];
+            $lead_assign['employee_name']=$params['created_by_name'];
+            $lead_assign['branch_id']=$params['branch_id'];
+            $lead_assign['district_id']=$params['district_id'];
+            $lead_assign['state_id']=$params['state_id'];
+            $lead_assign['zone_id']=$params['zone_id'];
+            $lead_assign['created_by']=$params['created_by'];
+            $lead_assign['created_by_name']=$params['created_by_name'];
+            $this->Lead->insert_assign($lead_assign);
+        }
+        $result = array('result'=>'true',
+            'data'=>'Lead added Successfully.');
+        returnJson($result);
+
+    }
     public function test_get(){
         $res = $this->input->get();
         $zone_id = $res['branch_id'];
@@ -258,10 +394,48 @@ class Api extends REST_Controller
         //for generated lead
         $where_month_Array = array('branch_id'=>$zone_id,
             'MONTH(created_on)'=>date('m'));
-        $result1 = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
+        $result1['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
 
         pe($result1);
 
+    }
+
+    public function tickers_get(){
+
+        $where = array('is_deleted'=>0);
+        $tickers = $this->ticker->view('title,description_text',$where,Tbl_Ticker,'','',2);
+        if(!empty($tickers)){
+            $result = array('result'=>'True',
+                            'data'=>$tickers);
+            returnJson($result);
+        }
+        $result = array('result'=>'False',
+                            'data'=>'No data found');
+        returnJson($result);
+    }
+    public function faq_get(){
+
+        $where = array('is_deleted'=>0);
+        $faqs = $this->faq->view('question,answer',$where,Tbl_Faq);
+        if(!empty($faqs)){
+            $result = array('result'=>'True',
+                            'data'=>$faqs);
+            returnJson($result);
+        }
+        $result = array('result'=>'False',
+                        'data'=>'No data found');
+        returnJson($result);
+    }
+
+    public function view_lead_details_post(){
+        $action = 'list';
+        $table = Tbl_Leads;
+        $select = '';
+    }
+    public function lead_list_post(){
+        $action = 'list';
+        $table = Tbl_Leads;
+        $select = '';
     }
     public function master_get(){
 
@@ -322,5 +496,7 @@ class Api extends REST_Controller
             returnJson($error);
         }
     }
+
+
 
 }
