@@ -94,7 +94,7 @@ class Leads extends CI_Controller
             $lead_data['lead_identification'] = $this->input->post('lead_identification');
             $lead_data['is_own_branch'] = $this->input->post('is_own_branch');
             $lead_data['remark'] = $this->input->post('remark');
-            $this->Lead->insert($lead_data);
+            $this->Lead->add_leads($lead_data);
             $this->session->set_flashdata('success_message', "Lead Added Successfully");
             redirect(base_url('Leads/add'), 'refresh');
         } else {

@@ -320,6 +320,48 @@ class Api extends REST_Controller
             returnJson($data);
 
         }
+        if (isset($params['branch_id']) && $params['branch_id'] != '') {
+            $join = array();
+            $branch_id = $params['branch_id'];
+            $action = 'count';
+            $table = Tbl_Leads;
+            $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
+            $select = array();
+
+            //Walk-in
+            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Walk-in');
+            $result['lead_assigned_walkin'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Walk-in',
+                Tbl_LeadAssign . '.status' => 'Converted');
+            $result['lead_converted_walkin'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+
+            //Third Party
+            $where = array(Tbl_Leads . '.branch_id' => $branch_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Third Party');
+            $lead_generated_thirdparty = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Third Party',
+                Tbl_LeadAssign . '.status' => 'Converted');
+            $result['lead_converted_thirdparty'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+
+            //Bank Website
+            $where = array(Tbl_Leads . '.branch_id' => $branch_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Bank Website');
+            $result['lead_generated_bank_website'] = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Bank Website',
+                Tbl_LeadAssign . '.status' => 'Converted');
+            $result['lead_converted_bank_website'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+
+            //Analytics
+            $where = array(Tbl_Leads . '.branch_id' => $branch_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Analytics');
+            $result['lead_generated_analytics'] = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Analytics',
+                Tbl_LeadAssign . '.status' => 'Converted');
+            $result['lead_converted_analytics'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+
+
+            $data = array('result' => 'true',
+                'data' => $result);
+            returnJson($data);
+
+        }
         $data = array('result' => 'false',
             'data' => 'parameter missing');
         returnJson($data);
@@ -369,7 +411,7 @@ class Api extends REST_Controller
         $lead_data['lead_name'] = $this->input->post('customer_name');
         $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
 
-        $lead_id = $this->Lead->insert($lead_data);
+        $lead_id = $this->Lead->add_leads($lead_data);
         if($assign_to == 'self'){
             $lead_assign['lead_id'] = $lead_id;
             $lead_assign['employee_id']=$params['created_by'];

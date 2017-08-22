@@ -18,7 +18,7 @@ class Lead  extends CI_Model
 
 	}
 
-	public function insert($lead_data = array())
+	public function add_leads($lead_data = array())
 	{
 		if (!empty($lead_data)) {
             $this->db->insert($this->_tbl_db_leads, $lead_data);
@@ -117,7 +117,8 @@ class Lead  extends CI_Model
     public function get_leads($action,$table,$select,$where,$join,$group_by,$order_by)
     {
         if($action == 'count'){
-            return $this->db->where($where)->count_all_results($table);
+//            return $this->db->where($where)->count_all_results($table);
+            return $this->counts($table,$select,$where,$join);
         }elseif($action == 'list'){
             return $this->lists($table,$select,$where,$join,$group_by,$order_by = array());
         }
