@@ -107,6 +107,7 @@ class Lead  extends CI_Model
     }
 
     /**
+     * get_leads  
      * Get Leads count and list based on inputs
      * @author Ashok Jadhav
      * @access public
@@ -125,6 +126,7 @@ class Lead  extends CI_Model
     }
 
     /**
+     * lead_status  
      * Get all possible lead status available
      * @author Ashok Jadhav
      * @access public
@@ -143,10 +145,11 @@ class Lead  extends CI_Model
     }
 
     /**
-     * Get all possible lead status available
+     * update_lead_status
+     * Update Lead Status
      * @author Ashok Jadhav
      * @access public
-     * @param $table,$field
+     * @param $where,$data
      * @return array
      */
     public function get_assigned_leads($where_assigned_Array = array())
@@ -156,6 +159,34 @@ class Lead  extends CI_Model
             $assigned_leads = $this->db->where($where_assigned_Array)->count_all_results(Tbl_LeadAssign);
             $result = $assigned_leads;
         }
+    }
+
+    /**
+     * update_lead_status
+     * Update Lead Status
+     * @author Ashok Jadhav
+     * @access public
+     * @param $where,$data
+     * @return array
+     */
+    public function update_lead_status($where,$data){
+        return $this->update($where,Tbl_LeadAssign,$data);
+    }
+
+    /**
+     * add_reminder
+     * Add Reminder scheduler data.
+     * @author Ashok Jadhav
+     * @access public
+     * @param $data
+     * @return int
+     */
+    public function add_reminder($data){
+        $where = array('lead_id' => $data['lead_id'],'remind_to' => $data['remind_to'],'is_cancelled'=> 'No');
+        $this->update($where,Tbl_Reminder,array('is_cancelled'=> 'Yes'));
+        /*echo $this->db->last_query();
+        exit;*/
+        return $this->insert(Tbl_Reminder,$data);
     }
 
     
@@ -204,6 +235,21 @@ class Lead  extends CI_Model
         }else{
             $response['status'] = 'success';
             $response['affected_rows'] = $this->db->affected_rows();
+        }
+        return $response;
+    }
+
+    private function insert($table,$data){
+        $response = array();
+        $this->db->db_debug = FALSE; //enable debugging for queries
+        $this->db->insert($table,$data);
+        $errors = $this->db->error();
+        if($errors['code']){
+            $response['status'] = 'error';
+            $response['code'] = $errors['code'];
+        }else{
+            $response['status'] = 'success';
+            $response['insert_id'] = $this->db->insert_id();
         }
         return $response;
     }

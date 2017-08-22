@@ -368,6 +368,9 @@ class Leads extends CI_Controller
         $lead_id = decode_id($lead_id);
         $title = get_lead_title($type,$till);
         $arrData['title'] = $title;
+        $arrData['type'] = $type;
+        $arrData['till'] = $till;
+
         /*Create Breadcumb*/
           $this->make_bread->add($title, 'leads/leads_list/'.$type.'/'.$till, 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
@@ -393,38 +396,22 @@ class Leads extends CI_Controller
                         $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => '');
                     }
                     if($type == 'assigned'){
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Products.'.title',Tbl_LeadAssign.'.status');
+                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.remark',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Products.'.title',Tbl_LeadAssign.'.status',Tbl_LeadAssign.'.employee_id',Tbl_Reminder.'.remind_on',Tbl_Reminder.'.reminder_text');
                         $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => '');
-                    }
+                        $join[] = array('table' => Tbl_Reminder,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Reminder.'.lead_id AND '.Tbl_Reminder.'.is_cancelled = "No"','type' => 'left');
 
+                        //Only for assign leads show lead status dropdown as he can update status of only assigned leads
+                        $arrData['lead_status'] = $this->Lead->lead_status(Tbl_LeadAssign,'status');
+                    }
                     $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
-                    $arrData['lead_status'] = $this->Lead->lead_status(Tbl_LeadAssign,'status');
                     break;
 
                 case 'BM':
                     //Parameters buiding for sending to list function.
-                    $action = 'list';
-                    $table = Tbl_Leads;
-                    $where  = array(Tbl_Leads.'.id' => $lead_id);
-                    $join = array();
-                    $join[] = array('table' => Tbl_Products,'on_condition' => Tbl_Leads.'.product_id = '.Tbl_Products.'.id','type' => '');
-                    if($type == 'generated'){
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Products.'.title',Tbl_LeadAssign.'.status');
-                        $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => 'left');
-                    }
-                    if($type == 'converted'){
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Products.'.title',Tbl_LeadAssign.'.status');
-                        $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => '');
-                    }
-                    if($type == 'assigned'){
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Products.'.title',Tbl_LeadAssign.'.status');
-                        $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => '');
-                    }
-
-                    $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
-                    $arrData['lead_status'] = $this->Lead->lead_status(Tbl_LeadAssign,'status');
-                    break;
+                    
             }
+            /*pe($arrData['leads']);
+            exit;*/
         }
         return load_view($middle = "Leads/detail",$arrData);
     }
@@ -433,37 +420,28 @@ class Leads extends CI_Controller
         if($this->input->post()){
             $lead_id = decode_id($this->input->post('lead_id'));
             $lead_status = $this->input->post('lead_status');
-
+            
             $where = array('lead_id' => $lead_id);
             $data = array('status' => $lead_status);
+
             $response = $this->Lead->update_lead_status($where,$data);
             if($response['status'] == 'error'){
                  $this->session->set_flashdata('error','Failed to update lead status');
                  redirect('dashboard');
             }else{
-                 $this->session->set_flashdata('success','Lead status updated successfully');
-                 redirect('dashboard');
+                if($lead_status == 'Interested/Follow up'){
+                    $remindData = array(
+                        'lead_id' => $lead_id,
+                        'remind_on' => date('y-m-d-H-i-s',strtotime($this->input->post('remind_on'))),
+                        'remind_to' => $this->input->post('remind_to'),
+                        'reminder_text' => $this->input->post('reminder_text') 
+                    );
+                    //This will add entry into reminder scheduler for status (Interested/Follow up)
+                    $response = $this->Lead->add_reminder($remindData);
+                }
+                $this->session->set_flashdata('success','Lead status updated successfully');
+                redirect('dashboard');
             }
         }
     }
-
-
-    public function assign_to(){
-        if($this->input->post()){
-            $lead_id = decode_id($this->input->post('lead_id'));
-            $lead_status = $this->input->post('lead_status');
-
-            $where = array('lead_id' => $lead_id);
-            $data = array('status' => $lead_status);
-            $response = $this->Lead->update_lead_status($where,$data);
-            if($response['status'] == 'error'){
-                 $this->session->set_flashdata('error','Failed to update lead status');
-                 redirect('dashboard');
-            }else{
-                 $this->session->set_flashdata('success','Lead status updated successfully');
-                 redirect('dashboard');
-            }
-        }
-    }
-
 }
