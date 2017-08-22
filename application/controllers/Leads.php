@@ -44,20 +44,22 @@ class Leads extends CI_Controller
         /*Create Breadcumb*/
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<label class = "error">', '</label>');
-            $this->form_validation->set_rules('customer_type', 'Customer', 'required');
-            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|alpha_numeric');
-            $this->form_validation->set_rules('phone_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
-            $this->form_validation->set_rules('product_category', 'Product Category', 'required');
-            $this->form_validation->set_rules('product', 'Product', 'required');
+            $this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
+            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alphaNumeric');
+            $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
+            $this->form_validation->set_rules('product_category_id', 'Product Category', 'required');
+            $this->form_validation->set_rules('product_id', 'Product','required');
             $this->form_validation->set_rules('department_id', 'Department Id', 'required');
             $this->form_validation->set_rules('department_name', 'Department Name', 'required');
             $this->form_validation->set_rules('remark', 'Remark', 'required');
             $this->form_validation->set_rules('is_own_branch', 'Branch', 'required');
             $this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
 
-            $lead_data['state_id'] = $lead_data['created_by_state_id'] = $this->session->userdata('state_id');
-            $lead_data['branch_id'] = $lead_data['created_by_branch_id'] = $this->session->userdata('branch_id');
-            $lead_data['district_id'] = $lead_data['created_by_district_id'] = $this->session->userdata('district_id');
+            $input = get_session();
+
+            $lead_data['state_id'] = $lead_data['created_by_state_id'] = $input['state_id'];
+            $lead_data['branch_id'] = $lead_data['created_by_branch_id'] = $input['branch_id'];
+            $lead_data['district_id'] = $lead_data['created_by_district_id'] = $input['district_id'];
 
             if ($this->input->post('is_own_branch') == '0') {
                 $this->form_validation->set_rules('state_id', 'State', 'required');
@@ -71,35 +73,44 @@ class Leads extends CI_Controller
             }
 
             if ($this->form_validation->run() === FALSE) {
+
                 $middle = 'Leads/add_lead';
                 $arrData['products'] = '';
                 $arrData['category_selected'] = '';
-                if ($this->input->post('product_category') != '') {
-                    $arrData['category_selected'] = $this->input->post('product_category');
+                if ($this->input->post('product_category_id') != '') {
+                    $arrData['category_selected'] = $this->input->post('product_category_id');
                     $whereArray = array("category_id" => $arrData['category_selected']);
                     $arrData['products'] = $this->Lead->get_all_products($whereArray);
-                }
-                $arrData['product_selected'] = '';
-                if ($this->input->post('product') != '') {
-                    $arrData['product_selected'] = $this->input->post('product');
                 }
                 $arrData['category'] = $this->Lead->get_all_category();
                 return load_view($middle, $arrData);
             }
 
-            $lead_data['is_existing_customer'] = $this->input->post('is_existing_customer');
-            $lead_data['customer_name'] = $this->input->post('customer_name');
-            $lead_data['contact_no'] = $this->input->post('contact_no');
-            $lead_data['product_category_id'] = $this->input->post('product_category_id');
-            $lead_data['product_id'] = $this->input->post('product_id');
-            $lead_data['department_id'] = $this->input->post('department_id');
-            $lead_data['department_name'] = $this->input->post('department_name');
+            
+            $keys = array('is_existing_customer','customer_name','contact_no','product_category_id','product_id','department_id',
+                'department_name','lead_identification','is_own_branch','remark','amount');
+            foreach ($keys as $k => $value){
+                $lead_data[$value] = $this->input->post($value);
+                
+            }
             $lead_data['lead_name'] = $this->input->post('customer_name');
-            $lead_data['lead_identification'] = $this->input->post('lead_identification');
-            $lead_data['is_own_branch'] = $this->input->post('is_own_branch');
-            $lead_data['remark'] = $this->input->post('remark');
-            $this->Lead->add_leads($lead_data);
-            $this->session->set_flashdata('success_message', "Lead Added Successfully");
+            $lead_id = $this->Lead->add_leads($lead_data);
+            
+
+            $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
+            if($assign_to == 'self'){
+                $lead_assign['lead_id'] = $lead_id;
+                $lead_assign['employee_id']=$input['hrms_id'];
+                $lead_assign['employee_name']=$input['full_name'];
+                $lead_assign['branch_id']=$input['branch_id'];
+                $lead_assign['district_id']=$input['district_id'];
+                $lead_assign['state_id']=$input['state_id'];
+                $lead_assign['zone_id']=$input['zone_id'];
+                $lead_assign['created_by']=$input['hrms_id'];
+                $lead_assign['created_by_name']=$input['full_name'];
+                $this->Lead->insert_assign($lead_assign);
+            }
+            $this->session->set_flashdata('success', "Lead Added Successfully");
             redirect(base_url('Leads/add'), 'refresh');
         } else {
             $middle = 'Leads/add_lead';
@@ -110,6 +121,27 @@ class Leads extends CI_Controller
             return load_view($middle, $arrData);
         }
 
+    }
+
+    ##################################
+    /*Private Functions*/
+    ##################################
+    /*
+    * Validation for alphabetical letters
+    * @param array $pwd,$dataArray
+    * @return String
+    */
+    public function alphaNumeric($str)
+    {
+        if ( !preg_match('/^[a-zA-Z0-9\s]+$/i',$str) )
+        {
+            $this->form_validation->set_message('alphaNumeric', 'Please enter only alpha numeric characters.');
+            return FALSE;
+        }
+        else
+        {
+            return TRUE;
+        }
     }
 
     /*
@@ -124,7 +156,7 @@ class Leads extends CI_Controller
     {
         if ($this->input->post()) {
             $category_id = $this->input->post("category_id");
-            $whereArray = array('id' => $category_id);
+            $whereArray = array('category_id' => $category_id,'is_deleted' => 0);
             $products = $this->Lead->get_all_products($whereArray);
             $product_extra = 'class="form-control" id="product"';
             if (!empty($products)) {
@@ -133,15 +165,13 @@ class Leads extends CI_Controller
                     $options[$value['id']] = $value['title'];
                 }
                 $html = '<label>Product</label>';
-                $html .= form_dropdown('product', $options, '', $product_extra);
+                $html .= form_dropdown('product_id', $options, '', $product_extra);
             } else {
                 $options[''] = 'Select Product';
                 $html = '<label>Product</label>';
-                $html .= form_dropdown('product', $options, '', $product_extra);
+                $html .= form_dropdown('product_id', $options, '', $product_extra);
             }
-
-
-            echo json_encode($html);
+            echo $html;
         }
     }
 

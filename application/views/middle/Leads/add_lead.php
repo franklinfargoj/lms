@@ -2,6 +2,9 @@
     .error {
         color: red
     }
+    .hide{
+        display: none;
+    }
 </style>
 <?php
 $form_attributes = array('class' => '', 'method' => 'post', 'accept-charset' => '', 'id' => 'addlead');
@@ -18,7 +21,7 @@ $data_lead = array('class' => 'form-control ',
 $data_phone = array('class' => 'form-control ',
     'name' => 'contact_no',
     'id' => 'phone_no',
-    'value' => set_value('phone_no', '')
+    'value' => set_value('contact_no', '')
 );
 $data_aadhar = array('class' => 'form-control ',
     'name' => 'aadhar_no',
@@ -35,29 +38,29 @@ $data_account = array('class' => 'form-control ',
     'id' => 'account_no',
     'value' => set_value('account_no', '')
 );
-$data_state = array('class' => 'form-control ',
+$data_state = array('class' => 'form-control',
     'name' => 'state_id',
     'id' => 'state_id',
     'value' => set_value('state_id', '')
 );
-$data_branch = array('class' => 'form-control ',
+$data_branch = array('class' => 'form-control',
     'name' => 'branch_id',
     'id' => 'branch_id',
     'value' => set_value('branch_id', '')
 );
-$data_district = array('class' => 'form-control ',
+$data_district = array('class' => 'form-control',
     'name' => 'district_id',
     'id' => 'district_id',
     'value' => set_value('district_id', '')
 );
 $data_department_name = array('class' => 'form-control ',
     'name' => 'department_name',
-    'id' => 'department_name',
+    'id' => 'department',
     'value' => set_value('department_name', '')
 );
 $data_department_id = array('class' => 'form-control ',
     'name' => 'department_id',
-    'id' => 'department_id',
+    'id' => 'department',
     'value' => set_value('department_id', '')
 );
 $data_remark = array('class' => 'form-control ',
@@ -74,12 +77,12 @@ $data_submit = array(
     'class' => 'btn green',
     'value' => 'Submit'
 );
-$data_cancel = array(
-    'name' => 'Cancel',
-    'id' => 'Cancel',
-    'value' => 'Cancel',
+$data_reset = array(
+    'name' => 'reset',
+    'id' => 'reset',
+    'value' => 'Reset',
     'type' => 'Button',
-    'content' => 'Cancel',
+    'content' => 'Reset',
     'class' => 'btn default'
 );
 
@@ -105,8 +108,8 @@ $lead_id_options['HOT'] = 'HOT';
 $lead_id_options['WARM'] = 'WARM';
 $lead_id_options['COLD'] = 'COLD';
 
-$category_extra = 'class="form-control" id="product_category_id"';
-$product_extra = 'class="form-control" id="product_id"';
+$category_extra = 'class="form-control" id="product_category"';
+$product_extra = 'class="form-control" id="product"';
 $extra = 'class="form-control"';
 $remark_extra = 'style="height:50%"';
 ?>
@@ -115,18 +118,15 @@ $remark_extra = 'style="height:50%"';
         <!-- BEGIN SAMPLE FORM PORTLET-->
         <div class="portlet light">
             <div class="portlet-body form">
-                <?php if ($this->session->userdata("success_message")) { ?>
-                    <div class="alert alert-success">
-                        <strong>Success!</strong> Lead added successfully.
-                    </div>
-                <?php }
+
+                <?php
                 $url = base_url('leads/add');
                 echo form_open($url, $form_attributes);
                 ?>
                 <div class="form-body">
                     <div class="form-group">
                         <label>Customer Type</label>
-                        <?php echo form_dropdown('is_existing_customer', $customer_options, '', $extra) ?>
+                        <?php echo form_dropdown('is_existing_customer', $customer_options, set_value('is_existing_customer'), $extra) ?>
                         <?php echo form_error('is_existing_customer'); ?>
                     </div>
                     <div class="form-group">
@@ -162,7 +162,7 @@ $remark_extra = 'style="height:50%"';
                             <?php echo form_input($data_phone);
                             ?>
                         </div>
-                        <?php echo form_error('phone_no'); ?>
+                        <?php echo form_error('contact_no'); ?>
                         <label id="phone_no-error" class="error" for="phone_no"></label>
                     </div>
 
@@ -190,12 +190,12 @@ $remark_extra = 'style="height:50%"';
                     <?php echo form_error('pan_no'); ?>
                     <div class="form-group">
                         <label>Product Category</label>
-                        <?php echo form_dropdown('product_category_id', $options, $category_selected, $category_extra) ?>
+                        <?php echo form_dropdown('product_category_id', $options,set_value('product_category_id'), $category_extra) ?>
                         <?php echo form_error('product_category_id'); ?>
                     </div>
                     <div class="form-group " id="product_select">
                         <label>Product</label>
-                        <?php echo form_dropdown('product_id', $product_options, $product_selected, $product_extra) ?>
+                        <?php echo form_dropdown('product_id', $product_options, set_value('product_id'), $product_extra) ?>
                         <?php echo form_error('product_id'); ?>
                     </div>
 
@@ -251,7 +251,7 @@ $remark_extra = 'style="height:50%"';
                         <label id="branch_id-error" class="error" for="branch_id"></label>
                         <?php echo form_error('branch_id'); ?>
                     </div>
-                    <div id="department_id" class="form-group hide">
+                    <div id="department_id" class="form-group">
                         <label>Department Id</label>
                         <div class="input-group">
 					<span class="input-group-addon">
@@ -263,8 +263,8 @@ $remark_extra = 'style="height:50%"';
                         <label id="department_id-error" class="error" for="department_id"></label>
                         <?php echo form_error('department_id'); ?>
                     </div>
-                    <div id="department_name" class="form-group hide">
-                        <label>District Name</label>
+                    <div id="department_name" class="form-group">
+                        <label>Department Name</label>
                         <div class="input-group">
 					<span class="input-group-addon">
 						<i class="fa fa-branch"></i>
@@ -277,7 +277,7 @@ $remark_extra = 'style="height:50%"';
                     </div>
                     <div class="form-group">
                         <label>Lead Identification</label>
-                        <?php echo form_dropdown('lead_identification', $lead_id_options, '', $extra) ?>
+                        <?php echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) ?>
                         <?php echo form_error('lead_identification'); ?>
                     </div>
 <!--                    <div class="form-group">-->
@@ -300,8 +300,8 @@ $remark_extra = 'style="height:50%"';
                         <label id="remark_id-error" class="error" for="remark"></label>
                     </div>
                     <div class="form-actions">
+                        <?php echo form_button($data_reset) ?>
                         <?php echo form_button($data_submit) ?>
-                        <?php echo form_button($data_cancel) ?>
                     </div>
 
                     <?php echo form_close(); ?>
@@ -346,7 +346,7 @@ $remark_extra = 'style="height:50%"';
                     }
                 }).success(function (resp) {
                     if (resp) {
-                        $("#product_select").html(JSON.parse(resp));
+                        $("#product_select").html(resp);
                     }
                 });
             });
@@ -369,7 +369,7 @@ $remark_extra = 'style="height:50%"';
                         required: true,
                         regx: /^[a-zA-Z0-9\-\s]+$/
                     },
-                    phone_no: {
+                    contact_no: {
                         required: true,
                         number: true,
                         maxlength: 10,
@@ -415,7 +415,7 @@ $remark_extra = 'style="height:50%"';
                         required: "Please enter lead name",
                         regx: "Special characters are not allowed"
                     },
-                    phone_no: {
+                    contact_no: {
                         required: "Please enter phone number",
                         maxlength: 'Please enter no more than 10 digits',
                         minlength: 'Please enter no less than 10 digits'

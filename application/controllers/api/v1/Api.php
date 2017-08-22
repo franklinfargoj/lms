@@ -372,7 +372,7 @@ class Api extends REST_Controller
         $error = array();
         $validations = array('is_existing_customer'=>'Customer exists or not','customer_name'=>'Customer Name','contact_no'=>'Phone No',
             'product_category_id'=>'Product Category',
-            'product_id'=>'Product','is_own_branch'=>'Own Branch / Other Branch','created_by'=>'Created By','created_by_name'=>'Created By Name',
+            'product_id'=>'Product','amount'=>'Amount','is_own_branch'=>'Own Branch / Other Branch','created_by'=>'Created By','created_by_name'=>'Created By Name',
             'state_id'=>'State','district_id'=>'District',
             'zone_id' => 'Zone','branch_id'=>'Branch','department_name'=>'Department Name',
             'department_id'=>'Department Id','created_by_state_id'=>'Created By State',
@@ -388,7 +388,7 @@ class Api extends REST_Controller
                     $phone_extra = '|max_length[10]|min_length[10]|numeric';
                 }
                 if($k == 'customer_name'){
-                    $cust_name_extra = '|alpha_numeric';
+                    $cust_name_extra = '|callback_alphaNumeric';
                 }
                 $this->form_validation->set_rules($k,'','required'.$phone_extra.$cust_name_extra);
                 if ($this->form_validation->run() === FALSE) {
@@ -430,6 +430,30 @@ class Api extends REST_Controller
         returnJson($result);
 
     }
+
+    ##################################
+    /*Private Functions*/
+    ##################################
+    /*
+    * Validation for alphabetical letters
+    * @param array $pwd,$dataArray
+    * @return String
+    */
+    public function alphaNumeric($str)
+    {
+        if ( !preg_match('/^[a-zA-Z0-9\s]+$/i',$str) )
+        {
+            $this->form_validation->set_message('alphaNumeric', 'Please enter only alpha numeric characters.');
+            return FALSE;
+        }
+        else
+        {
+            return TRUE;
+        }
+    }
+
+    
+    
     public function test_get(){
         $res = $this->input->get();
         $zone_id = $res['branch_id'];
