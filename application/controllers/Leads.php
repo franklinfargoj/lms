@@ -182,7 +182,6 @@ class Leads extends CI_Controller
                     $keys = ['customer_name', 'contact_no', 'is_existing_customer', 'is_own_branch', 'branch_id', 'zone_id', 'state_id', 'district_id', 'product_category_id', 'product_id', 'remark', 'lead_identification'];
 
                     $excelData = fetch_range_excel_data($file['full_path'], 'A2:L', $keys);
-                    pe($excelData);
                     $validation = $this->validate_leads_data($excelData,$lead_source);
 
 
@@ -240,7 +239,7 @@ class Leads extends CI_Controller
 
         foreach ($excelData as $key => $value){
 
-            $whereArray = array('title'=>$value['product_category_id']);
+            $whereArray = array('title'=>strtolower(trim($value['product_category_id'])));
             $prod_category_id = $this->Lead->fetch_product_category_id($whereArray);
             if($prod_category_id == false){
                 $error[$key] = 'Category does not exist.';
@@ -251,9 +250,20 @@ class Leads extends CI_Controller
 
                 }else{
                     $all_product = $this->Lead->all_products_under_category($prod_category_id);
-                    if(in_array($value['product_id'],$all_product)){
+                    if(in_array(strtolower(trim($value['product_id'])),$all_product)){
 
-                        $whereArray = array('title'=>$value['product_id']);
+                        $whereArray = array('title'=>strtolower(trim($value['product_id'])));
+
+                        $is_own_branch = '1';
+                        $is_existing_customer = '0';
+                        if($value['is_existing_customer'] == 'y'){
+                            $is_existing_customer = '1';
+                        }
+                        if($value['is_own_branch'] == 'n'){
+                            $is_own_branch = '0';
+                        }
+                        $value['is_own_branch'] = $is_own_branch;
+                        $value['is_existing_customer'] = $is_existing_customer;
                         $prod_id = $this->Lead->fetch_product_id($whereArray);
                         $value['product_category_id']=$prod_category_id;
                         $value['product_id']=$prod_id['product_id'];
