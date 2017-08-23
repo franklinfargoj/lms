@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="<?php echo base_url().ASSETS;?>images/favicon.png" type="image/x-icon">
 	<title>Dena Bank</title>
-	<link href="<?php echo base_url().ASSETS;?>/css/font.css" rel="stylesheet">
+	<link href="<?php echo base_url().ASSETS;?>css/Lato.css" rel="stylesheet">
+	<link href="<?php echo base_url().ASSETS;?>css/Montserrat.css" rel="stylesheet"> 
 	<link href="<?php echo base_url().ASSETS;?>/css/style.css" rel="stylesheet">
 	<link href="<?php echo base_url().ASSETS;?>/css/responsive.css" rel="stylesheet">
 	<link rel="stylesheet" href="<?php echo base_url().ASSETS;?>/css/jquery-ui.css">
@@ -20,7 +21,7 @@
 		<div class="container clearfix">
 			<?php echo $this->load->view('common/breadcumb',array(),TRUE);?>
 
-			<?php echo $this->load->view('common/message',array(),TRUE);?>
+			<?php //echo $this->load->view('common/message',array(),TRUE);?>
 
 			<?php echo $this->load->view($middle,array(),TRUE);?>
 		</div>
