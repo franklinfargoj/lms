@@ -345,7 +345,6 @@ class Leads extends CI_Controller
      * @param $type,$till
      * @return array
      */
-
     public function leads_list($type,$till){
         //Call to helper function to fetch Page title as we are using same list view for all lead list
         $title = get_lead_title($type,$till);
@@ -404,7 +403,14 @@ class Leads extends CI_Controller
         return load_view($middle = "Leads/view",$arrData);
     }
 
-
+    /**
+     * details
+     * Get Leads details based on type of lead (Generated,Converted,Assigned)
+     * @author Ashok Jadhav
+     * @access public
+     * @param $type,$till,$lead_id
+     * @return array
+     */
     public function details($type,$till,$lead_id){
         $lead_id = decode_id($lead_id);
         $title = get_lead_title($type,$till);
@@ -428,22 +434,33 @@ class Leads extends CI_Controller
                     $where  = array(Tbl_Leads.'.id' => $lead_id);
                     $join = array();
                     $join[] = array('table' => Tbl_Products,'on_condition' => Tbl_Leads.'.product_id = '.Tbl_Products.'.id','type' => '');
+                    $join[] = array('table' => Tbl_Category,'on_condition' => Tbl_Leads.'.product_category_id = '.Tbl_Category.'.id','type' => '');
+
                     if($type == 'generated'){
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Products.'.title',Tbl_LeadAssign.'.status');
+                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Leads.'.product_id',Tbl_Products.'.title AS product_title',Tbl_Category.'.title AS category_title',Tbl_Leads.'.product_category_id',Tbl_LeadAssign.'.status');
                         $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => 'left');
                     }
+
                     if($type == 'converted'){
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Products.'.title',Tbl_LeadAssign.'.status');
+                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Leads.'.product_id',Tbl_Products.'.title AS product_title',Tbl_Category.'.title AS category_title',Tbl_Leads.'.product_category_id',Tbl_LeadAssign.'.status');
                         $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => '');
                     }
+
                     if($type == 'assigned'){
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.remark',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Products.'.title',Tbl_LeadAssign.'.status',Tbl_LeadAssign.'.employee_id',Tbl_Reminder.'.remind_on',Tbl_Reminder.'.reminder_text');
+                        //SELECT COLUMNS
+                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.remark',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Leads.'.product_id',Tbl_Products.'.title AS product_title',Tbl_Category.'.title AS category_title',Tbl_Leads.'.product_category_id',Tbl_LeadAssign.'.status',Tbl_LeadAssign.'.employee_id',Tbl_Reminder.'.remind_on',Tbl_Reminder.'.reminder_text');
+
+                        //JOIN CONDITIONS
                         $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => '');
                         $join[] = array('table' => Tbl_Reminder,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Reminder.'.lead_id AND '.Tbl_Reminder.'.is_cancelled = "No"','type' => 'left');
 
+
                         //Only for assign leads show lead status dropdown as he can update status of only assigned leads
                         $arrData['lead_status'] = $this->Lead->lead_status(Tbl_LeadAssign,'status');
+                        $category_list = $this->Lead->get_all_category(array('is_deleted' => 0));
+                        $arrData['category_list'] = $this->dropdown($category_list,true);
                     }
+
                     $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
                     break;
 
@@ -457,11 +474,28 @@ class Leads extends CI_Controller
         return load_view($middle = "Leads/detail",$arrData);
     }
 
+    /**
+     * update_lead_status
+     * Only for assigned lead list able to change lead status / Add Follow Up details
+     * @author Ashok Jadhav
+     * @access public
+     * @param empty
+     * @return array
+     */
     public function update_lead_status(){
         if($this->input->post()){
+
             $lead_id = decode_id($this->input->post('lead_id'));
             $lead_status = $this->input->post('lead_status');
             
+            $interested = $this->input->post('interested');
+            if($interested == 1){
+                $product_category_id = $this->input->post('product_category_id');
+                $product_id = $this->input->post('product_id');
+                //Function call for add new leads in selected product category hierarchy
+                $this->add_leads_other_product($lead_id,$product_category_id,$product_id);
+
+            }
             $where = array('lead_id' => $lead_id);
             $data = array('status' => $lead_status);
 
@@ -484,5 +518,44 @@ class Leads extends CI_Controller
                 redirect('dashboard');
             }
         }
+    }
+
+     /**
+     * add_leads_other_product
+     * Add leads for other product 
+     * @author Ashok Jadhav
+     * @access public
+     * @param $lead_id,$product_category_id,$product_id
+     * @return boolean
+     */
+    public function add_leads_other_product($lead_id,$product_category_id,$product_id){
+        //Building input parameters for function to get_leads
+        $action = 'list';
+        $table = Tbl_Leads;
+        $select = array(Tbl_Leads.'.*');
+        $where  = array(Tbl_Leads.'.id' => $lead_id);
+
+        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join = array(),$group_by = array(),$order_by = array());
+        $leads_data = $leads[0];
+        $leads_data['product_category_id'] = $product_category_id;
+        $leads_data['product_id'] = $product_id;
+        $keys_to_remove = array('id','created_on','modified_by','modified_by_name','modified_on');
+        foreach ($keys_to_remove as $key => $value) {
+            unset($leads_data[$value]);
+        }
+        return $this->Lead->add_leads($leads_data);
+    }
+
+    /*Private Functions*/
+
+    private function dropdown($data,$select_option){
+        $result = array();
+        if($select_option == true){
+            $result[''] = 'Select';
+        }
+        foreach ($data as $key => $value) {
+            $result[$value['id']] =  $value['title'];  
+        }
+        return $result;
     }
 }
