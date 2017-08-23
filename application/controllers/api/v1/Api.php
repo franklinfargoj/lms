@@ -163,7 +163,13 @@ class Api extends REST_Controller
                         'created_by !=' => 0,
                         'YEAR(created_on)' => date('Y'));
                 }
-                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array,'get_count');
+                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
+                $action = 'count';
+                $select= array();
+                $table  = Tbl_Leads;
+                $where = array(Tbl_LeadAssign.'lead_id',NULL);
+                $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => '');
+                $leads['un_assigned_leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
             }
             if(isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'EM'){
                 if (isset($result['basic_info']['hrms_id']) && $result['basic_info']['hrms_id'] != '') {
@@ -255,7 +261,7 @@ class Api extends REST_Controller
                         'created_by !=' => 0,
                         'YEAR(created_on)'=>date('Y'));
                 }
-                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array,'get_count');
+//                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
             }
 
 
@@ -568,7 +574,7 @@ class Api extends REST_Controller
     public function category_products_get(){
         $join = array();
         $where = array();
-        $table = Tbl_Category;
+        $table = Tbl_Products;
         $join[] = array('table' => Tbl_Category, 'on_condition' => Tbl_Products . '.category_id = ' . Tbl_Category . '.id', 'type' => '');
         $select = array(Tbl_Products.'.title as prod_title',Tbl_Products.'.id as prod_id',Tbl_Category.'.title as cat_title',Tbl_Category.'.id as cat_id');
         $result = $this->Lead->lists($table,$select,$where,$join,array(),array());
