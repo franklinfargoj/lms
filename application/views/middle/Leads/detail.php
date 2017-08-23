@@ -12,20 +12,21 @@
                             <span class="caption-subject font-green-sharp bold"><?php echo $title;?></span>
                         </div>
                         <div class="tools">
-                            <a href="<?php echo site_url('leads/leads_list/'.$type.'/'.$till);?>" class="btn btn-sm green"><i class="fa fa-plus"></i>Back
-                            </a>
+                            <!-- <a href="<?php echo site_url('leads/leads_list/'.$type.'/'.$till);?>" class="btn btn-sm green"><i class="fa fa-plus"></i>Back
+                            </a> -->
                         </div>
                     </div>
                     <div class="portlet-body">
                        <div class="row">
                             <div class="col-md-12">
                                 <?php 
-                                $attributes = array(
-                                    'role' => 'form',
-                                    'id' => 'add_form',
-                                    'autocomplete' => 'off'
-                                    );
-                                echo form_open(site_url().'leads/update_lead_status', $attributes);
+                                    //Form
+                                    $attributes = array(
+                                        'role' => 'form',
+                                        'id' => 'add_form',
+                                        'autocomplete' => 'off'
+                                        );
+                                    echo form_open(site_url().'leads/update_lead_status', $attributes);
                                 ?>
                                 <div class="portlet yellow-crusta box">
                                     <div class="portlet-title">
@@ -40,12 +41,6 @@
                                                      Customer Name
                                                 </div>
                                                 <div class="col-md-7 value">
-                                                    <?php
-                                                        $data = array(
-                                                            'lead_id' => encode_id($leads[0]['id'])
-                                                        );
-                                                        echo form_hidden($data);
-                                                    ?>
                                                     <?php echo $leads[0]['customer_name'];?>
                                                 </div>
                                             </div>
@@ -55,14 +50,6 @@
                                                 </div>
                                                 <div class="col-md-7 value">
                                                      <?php echo $leads[0]['contact_no'];?>
-                                                </div>
-                                            </div>
-                                            <div class="row static-info">
-                                                <div class="col-md-5 name">
-                                                     Product Name
-                                                </div>
-                                                <div class="col-md-7 value">
-                                                     <?php echo $leads[0]['title'];?>
                                                 </div>
                                             </div>
                                             <div class="row static-info">
@@ -81,6 +68,39 @@
                                                      <?php echo $leads[0]['lead_source'];?>
                                                 </div>
                                             </div>
+                                             <div class="row static-info">
+                                                <?php 
+                                                $data = array(
+                                                    'name'          => 'interested',
+                                                    'id'            => 'interested',
+                                                    'value'         => '1',
+                                                    'checked'       => FALSE,
+                                                    'style'         => 'margin:10px'
+                                                );
+                                                echo form_checkbox($data);
+                                                // Would produce: <input type="checkbox" name="newsletter" id="newsletter" value="1" style="margin:10px" />
+                                                ?>
+                                                If Interested in other product
+                                            </div>
+                                            <div class="row static-info interested-info" style="display:none;">
+                                                <div class="col-md-5 name">
+                                                     Select Category
+                                                </div>
+                                                <div class="col-md-7 value categorylist">
+                                                    <?php 
+                                                        if(isset($category_list)){
+                                                            $options = $category_list;
+                                                            $js = array(
+                                                                    'id'       => 'product_category_id',
+                                                                    'class'    => 'form-control'
+                                                            );
+                                                            echo form_dropdown('product_category_id', $options , '',$js);    
+                                                        }else{
+                                                            echo $leads[0]['category_title'];
+                                                        }
+                                                    ?>
+                                                </div>
+                                            </div>
                                             <?php if($type == 'assigned'){?>
                                                 <div class="row static-info">
                                                     <div class="col-md-5 name">
@@ -88,10 +108,12 @@
                                                     </div>
                                                     <div class="col-md-7 value">
                                                         <?php
-                                                        $data = array(
-                                                            'remind_to'  => $leads[0]['employee_id']
-                                                        );
-                                                        echo form_hidden($data);
+                                                            $data = array(
+                                                                'lead_id' => encode_id($leads[0]['id']),
+                                                                'remind_to'  => $leads[0]['employee_id']
+                                                            );
+                                                            echo form_hidden($data);
+
                                                             $options = $lead_status;
                                                             $js = array(
                                                                     'id'       => 'lead_status',
@@ -99,10 +121,8 @@
                                                             );
                                                             echo form_dropdown('lead_status', $options , $leads[0]['status'],$js);
                                                         ?>
-
                                                     </div>
                                                 </div>
-                                                
                                                 <div class="row static-info followUp" style="display:none">
                                                     <div class="col-md-5 name">Remind On</div>
                                                     <div class="col-md-7 value">
@@ -130,7 +150,6 @@
                                                         <textarea name="reminder_text" rows="4" cols="50"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
                                                     </div>
                                                 </div>
-
                                                 <div class="row static-info">
                                                     <div class="col-md-5 name">Remark</div>
                                                     <div class="col-md-7 value">
@@ -150,7 +169,8 @@
                                         </div>
                                         <?php if($type == 'assigned'){?>
                                             <div class="form-actions right">
-                                                <button type="reset" class="btn default">Reset</button>
+                                                <a href="<?php echo site_url('leads/leads_list/'.$type.'/'.$till);?>" class="btn btn-sm green"><i class="fa fa-plus"></i>Cancel
+                                                </a>
                                                 <button type="submit" class="btn green">Submit</button>
                                             </div>
                                         <?php }?>
@@ -167,29 +187,95 @@
         </div>
     </div>
     <!-- END PAGE CONTENT INNER -->
-<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        var lead_status = "<?php echo $leads[0]['status']?>";
+        var lead_status = "<?php echo $leads[0]['status']?>";  //Current Lead status
+
         if(lead_status == 'Interested/Follow up'){
-            $('.followUp').show();
+            $('.followUp').show();              //Display follow up fields 
         }
+
         $('#lead_status').change(function(){
-            var option = $(this).val();
+            var option = $(this).val();         
             action(option);
         });
 
         $('body').on('focus',".datepicker_recurring_start", function(){
             $(this).datepicker();
         });
+        /*$("button[type='reset']").on("click", function(event){
+            //On Reset of form should display original values.
+            action(lead_status);
+            event.preventDefault();
+            $(this).closest('form').get(0).reset();
+        });*/
+
+        $('#product_category_id').change(function () {
+            var base_url = "<?php echo base_url()?>";
+            var csrf = $("input[name=csrf_dena_bank]").val();
+            var category_id = $(this).val();
+            $.ajax({
+                method: "POST",
+                url: base_url + "/leads/productlist",
+                data: {
+                    '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                    category_id: category_id
+                }
+            }).success(function (resp) {
+                if (resp) {
+                    $('.productlist').remove();
+                    var html = '<div class="row static-info productlist">'+resp+'</div>';
+                    $( html ).insertAfter( ".categorylist" );
+                }
+            });
+        });
+
+        $('#interested').change(function () {
+            var selected = $(this).val();
+            if($(this).prop('checked') == true){
+                $('.interested-info').show();
+            }else{
+                $('.interested-info').hide();
+            }
+        });
 
         var action = function(option){
-        if(option == 'Interested/Follow up'){
-           $('.followUp').show();
-        }else{
-            $('.followUp').hide();
+            if(option == 'Interested/Follow up'){
+               $('.followUp').show();
+            }else{
+                $('.followUp').hide();
+            }
         }
-    }
+
+        $.validator.addMethod("regx", function(value, element, regexpr) {
+            return regexpr.test(value);
+        });
+
+        $("#add_form").validate({
+
+                rules: {
+                    product_category_id: {
+                        required: true
+                    },
+                    product_id: {
+                        required: true
+                    },
+                    remind_on: {
+                        required: true
+                    }
+                },
+                messages: {
+                    product_category_id: {
+                        required: "Please select product category"
+                    },
+                    product_id: {
+                        required: "Please select product"
+                    },
+                    remind_on: {
+                        required: "Please select follow up date"
+                    }
+                }
+            });
     });
 </script>
 

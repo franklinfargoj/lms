@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="<?php echo base_url().ASSETS;?>images/favicon.png" type="image/x-icon">
 	<title>Dena Bank</title>
-	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<link href="<?php echo base_url().ASSETS;?>/css/font.css" rel="stylesheet">
 	<link href="<?php echo base_url().ASSETS;?>/css/style.css" rel="stylesheet">
 	<link href="<?php echo base_url().ASSETS;?>/css/responsive.css" rel="stylesheet">
 	<script src="<?php echo base_url().ASSETS;?>/js/jquery.min.js" type="text/javascript"></script>

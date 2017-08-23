@@ -5,4 +5,4 @@
 		</div>
 	</div>
 </div>
-<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src = "<?php echo base_url().ASSETS;?>/js/jquery-ui.js"></script>
