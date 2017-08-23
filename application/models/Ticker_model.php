@@ -78,24 +78,24 @@ class Ticker_model extends CI_Model{
 			$where['id'] = $id;
 		}
 		$join = array();
-		return $this->view($select,$where,Tbl_Ticker,$join,$order_by);
+		return $this->view($select,$where,Tbl_Ticker,$join,$order_by,$limit = 0);
 	}
 
 	#####################################
 	/* Private Function*/
 	#####################################
-	private function insert($table,$data){
+	public function insert($table,$data){
 		$this->db->insert($table,$data);
 		return $this->db->insert_id();
 	}
 
-	private function update($where,$table,$data){
+	public function update($where,$table,$data){
 		$this->db->where($where);
 		$this->db->update($table,$data);
 		return $this->db->affected_rows();
 	}
 
-	private function view($select,$where,$table,$join = array(),$order_by = array()){
+	public function view($select,$where,$table,$join = array(),$order_by = array(),$limit = 0){
 
 		$this->db->select($select,TRUE);
 		$this->db->from($table);
@@ -112,12 +112,15 @@ class Ticker_model extends CI_Model{
 		}else{
 			$this->db->order_by($table.'.id','DESC');
 		}
+		if($limit){
+			$this->db->limit($limit);	
+		}
 		$query = $this->db->get();
 		//pe($this->db->last_query())
 		return $query->result_array();
 	}
 
-	private function soft_delete($where,$table,$data){
+	public function soft_delete($where,$table,$data){
 		$this->db->where_in('id',$where);
 		$this->db->update($table,$data);
 		return $this->db->affected_rows();

@@ -16,7 +16,6 @@ class Login extends CI_Controller {
 	{
 		// Initialization of class
 		parent::__construct();
-          global $admin_id;
           $this->load->model('Login_model','master');
 	}
 
@@ -30,7 +29,12 @@ class Login extends CI_Controller {
      */
 	public function index()
 	{
-          return $this->load->view("login",$arrData = array());
+          //Get tickers title
+          $this->load->model('Ticker_model','ticker');
+          $select = array('id','title');
+          $where['is_deleted'] = 0;
+          $arrData['tickers'] = $this->ticker->view($select,$where,Tbl_Ticker,array(),array(),$limit = 2);
+          return $this->load->view("login",$arrData);
 	}
 
      /*
@@ -72,6 +76,27 @@ class Login extends CI_Controller {
           $login_user = array("admin_name" => null,"site_user"=>null,"admin_id"=>null,"isLoggedIn" => FALSE);
           $this->session->set_userdata($login_user);
           redirect('login');
+     }
+
+     public function view_tickers($id)
+     {
+          $id = decode_id($id);
+          //Get tickers title
+          $this->load->model('Ticker_model','ticker');
+          $select = array('id','title','description_text');
+          $where = array('is_deleted' => 0,'id' => $id);
+          $arrData['tickerDetails'] = $this->ticker->view($select,$where,Tbl_Ticker,array(),array(),$limit = 0);
+          return $this->load->view("view_tickers",$arrData);
+     }
+
+     public function view_faqs()
+     {
+          //Get FAQ details
+          $this->load->model('Faq_model','Faq');
+          $select = array('id','question','answer');
+          $where = array('is_deleted' => 0);
+          $arrData['faqs'] = $this->Faq->view($select,$where,Tbl_Faq,array(),array(),$limit = 0);
+          return $this->load->view("view_faqs",$arrData);
      }
 
 

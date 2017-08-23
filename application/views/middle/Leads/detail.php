@@ -1,5 +1,5 @@
 <!-- BEGIN PAGE LEVEL STYLES -->
-    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+    <link href = "<?php echo base_url().ASSETS;?>css/jquery-ui.css" rel = "stylesheet">
 <!-- END PAGE LEVEL STYLES -->
 <!-- BEGIN PAGE CONTENT INNER -->
     <div class="row">
@@ -41,7 +41,7 @@
                                                      Customer Name
                                                 </div>
                                                 <div class="col-md-7 value">
-                                                    <?php echo $leads[0]['customer_name'];?>
+                                                    <?php echo ucwords($leads[0]['customer_name']);?>
                                                 </div>
                                             </div>
                                             <div class="row static-info">
@@ -57,7 +57,7 @@
                                                      Lead As
                                                 </div>
                                                 <div class="col-md-7 value">
-                                                    <?php echo $leads[0]['lead_identification'];?>
+                                                    <?php echo ucwords($leads[0]['lead_identification']);?>
                                                 </div>
                                             </div>
                                             <div class="row static-info">
@@ -65,7 +65,7 @@
                                                      Lead Source
                                                 </div>
                                                 <div class="col-md-7 value">
-                                                     <?php echo $leads[0]['lead_source'];?>
+                                                     <?php echo ucwords($leads[0]['lead_source']);?>
                                                 </div>
                                             </div>
                                             <?php if($type == 'assigned'){?>
@@ -126,7 +126,7 @@
                                                     <div class="col-md-7 value">
                                                         <?php 
                                                         if(!empty($leads[0]['remind_on'])){
-                                                            $value = date('m/d/y',strtotime($leads[0]['remind_on']));
+                                                            $value = date('d-m-Y',strtotime($leads[0]['remind_on']));
                                                         }else{
                                                             $value = set_value('remind_on');
                                                         }
@@ -154,7 +154,7 @@
                                                         Category
                                                     </div>
                                                     <div class="col-md-7 value">
-                                                        <?php echo $leads[0]['category_title'];?>
+                                                        <?php echo ucwords($leads[0]['category_title']);?>
                                                     </div>
                                                 </div>
                                                 <div class="row static-info">
@@ -208,7 +208,8 @@
         });
 
         $('body').on('focus',".datepicker_recurring_start", function(){
-            $(this).datepicker();
+            $(this).datepicker({dateFormat: 'dd-mm-yy'});
+
         });
         /*$("button[type='reset']").on("click", function(event){
             //On Reset of form should display original values.
