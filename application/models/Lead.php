@@ -218,7 +218,6 @@ class Lead  extends CI_Model
             $this->db->order_by($order_by);
         }
         $query = $this->db->get();
-        //pe($this->db->last_query())
         return $query->result_array();
     }
 
