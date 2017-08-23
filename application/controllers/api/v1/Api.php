@@ -261,7 +261,7 @@ class Api extends REST_Controller
 
         $result = array(
                 "result" => 'True',
-                "data" => $leads
+                "data" => ['count'=>$leads,'basic_info'=>$result['basic_info']]
             );
           returnJson($result);
 //        }
@@ -372,7 +372,7 @@ class Api extends REST_Controller
         $error = array();
         $validations = array('is_existing_customer'=>'Customer exists or not','customer_name'=>'Customer Name','contact_no'=>'Phone No',
             'product_category_id'=>'Product Category',
-            'product_id'=>'Product','amount'=>'Amount','is_own_branch'=>'Own Branch / Other Branch','created_by'=>'Created By','created_by_name'=>'Created By Name',
+            'product_id'=>'Product','lead_ticket_range'=>'Range','is_own_branch'=>'Own Branch / Other Branch','created_by'=>'Created By','created_by_name'=>'Created By Name',
             'state_id'=>'State','district_id'=>'District',
             'zone_id' => 'Zone','branch_id'=>'Branch','department_name'=>'Department Name',
             'department_id'=>'Department Id','created_by_state_id'=>'Created By State',
@@ -562,6 +562,17 @@ class Api extends REST_Controller
             );
             returnJson($error);
         }
+    }
+
+
+    public function category_products_get(){
+        $join = array();
+        $where = array();
+        $table = Tbl_Category;
+        $join[] = array('table' => Tbl_Category, 'on_condition' => Tbl_Products . '.category_id = ' . Tbl_Category . '.id', 'type' => '');
+        $select = array(Tbl_Products.'.title as prod_title',Tbl_Products.'.id as prod_id',Tbl_Category.'.title as cat_title',Tbl_Category.'.id as cat_id');
+        $result = $this->Lead->lists($table,$select,$where,$join,array(),array());
+        pe($result);
     }
 
 

@@ -199,7 +199,7 @@ class Lead  extends CI_Model
      * @param $table,$select,$where,$join,$order_by
      * @return array
      */
-    private function lists($table,$select,$where,$join,$group_by,$order_by){
+    public function lists($table,$select,$where,$join,$group_by,$order_by){
 
         $this->db->select($select,TRUE);
         $this->db->from($table);
@@ -322,6 +322,10 @@ class Lead  extends CI_Model
             return true;
         }
         return false;
+    }
+
+    public function get_uploaded_leads_logs($whereArray = array()){
+        return $result = $this->db->get_where(Tbl_Log,$whereArray)->result_array();
     }
 
 

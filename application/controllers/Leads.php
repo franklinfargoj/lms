@@ -87,8 +87,8 @@ class Leads extends CI_Controller
             }
 
             
-            $keys = array('is_existing_customer','customer_name','contact_no','product_category_id','product_id','department_id',
-                'department_name','lead_identification','is_own_branch','remark','amount');
+            $keys = array('is_existing_customer','lead_ticket_range','customer_name','contact_no','product_category_id','product_id','department_id',
+                'department_name','lead_identification','is_own_branch','remark','lead_ticket_range');
             foreach ($keys as $k => $value){
                 $lead_data[$value] = $this->input->post($value);
                 
@@ -158,7 +158,7 @@ class Leads extends CI_Controller
             $category_id = $this->input->post("category_id");
             $whereArray = array('category_id' => $category_id,'is_deleted' => 0);
             $products = $this->Lead->get_all_products($whereArray);
-            $product_extra = 'class="form-control" id="product"';
+            $product_extra = 'class="form-control" id="product_id"';
             if (!empty($products)) {
                 $options[''] = 'Select Product';
                 foreach ($products as $key => $value) {
@@ -223,7 +223,6 @@ class Leads extends CI_Controller
                         $target_path = './uploads/errorlog/';
                         $target_file = $file['raw_name'] . '_error_log_' . date('Y-m-d-H-i-s') . $file['file_ext'];
                         create_excel_error_file($validation['data'], $target_path.$target_file,$target_file);
-                        unlink($file['full_path']);
                         $data = array(
                             'file_name' => $target_file,
                             'status' => 'failed'
@@ -238,6 +237,7 @@ class Leads extends CI_Controller
                         'file_name' => $file['file_name'],
                         'status' => 'success'
                     );
+//                    unlink($file['full_path']);
                     $this->Lead->uploaded_log('uploaded_leads_log', $data);
                     $msg = notify('File Uploaded Successfully.' . $validation['total_inserted'] . ' rows inserted. ', 'success');
                     $this->session->set_flashdata('message', $msg);
@@ -249,6 +249,7 @@ class Leads extends CI_Controller
             $this->session->set_flashdata('message', $msg);
             redirect('leads/upload');
         }
+        $arrData['uploaded_logs'] = $this->Lead->get_uploaded_leads_logs();
         $middle = "Leads/upload";
         load_view($middle,$arrData);
     }

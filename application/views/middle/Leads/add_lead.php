@@ -2,10 +2,12 @@
     .error {
         color: red
     }
-    .hide{
+
+    .hide {
         display: none;
     }
 </style>
+
 <?php
 $form_attributes = array('class' => '', 'method' => 'post', 'accept-charset' => '', 'id' => 'addlead');
 $data_customer = array('class' => 'form-control ',
@@ -103,6 +105,7 @@ if ($products != '') {
     }
 }
 
+$data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'text','value'=>'');
 $lead_id_options[''] = 'Select Lead Identification';
 $lead_id_options['HOT'] = 'HOT';
 $lead_id_options['WARM'] = 'WARM';
@@ -190,7 +193,7 @@ $remark_extra = 'style="height:50%"';
                     <?php echo form_error('pan_no'); ?>
                     <div class="form-group">
                         <label>Product Category</label>
-                        <?php echo form_dropdown('product_category_id', $options,set_value('product_category_id'), $category_extra) ?>
+                        <?php echo form_dropdown('product_category_id', $options, set_value('product_category_id'), $category_extra) ?>
                         <?php echo form_error('product_category_id'); ?>
                     </div>
                     <div class="form-group " id="product_select">
@@ -198,7 +201,9 @@ $remark_extra = 'style="height:50%"';
                         <?php echo form_dropdown('product_id', $product_options, set_value('product_id'), $product_extra) ?>
                         <?php echo form_error('product_id'); ?>
                     </div>
-
+                        <label>Ticket range</label>
+                        <div id="slider"></div>
+                        <?php echo form_input($data_ticket_range)?>
                     <div class="form-group">
                         <div class="radio-list">
                             <label>Own Branch / Other Branch</label>
@@ -280,17 +285,17 @@ $remark_extra = 'style="height:50%"';
                         <?php echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) ?>
                         <?php echo form_error('lead_identification'); ?>
                     </div>
-<!--                    <div class="form-group">-->
-<!--                        <label>Account No</label>-->
-<!--                        <div class="input-group">-->
-<!--            <span class="input-group-addon">-->
-<!--                <i class="fa fa-mobile"></i>-->
-<!--            </span>-->
-<!--                            --><?php //echo form_input($data_account);
-//                            ?>
-<!--                        </div>-->
-<!--                        --><?php //echo form_error('account_no'); ?>
-<!--                    </div>-->
+                    <!--                    <div class="form-group">-->
+                    <!--                        <label>Account No</label>-->
+                    <!--                        <div class="input-group">-->
+                    <!--            <span class="input-group-addon">-->
+                    <!--                <i class="fa fa-mobile"></i>-->
+                    <!--            </span>-->
+                    <!--                            --><?php //echo form_input($data_account);
+                    //                            ?>
+                    <!--                        </div>-->
+                    <!--                        --><?php //echo form_error('account_no'); ?>
+                    <!--                    </div>-->
                     <div class="form-group">
                         <label>Remarks</label>
                         <?php echo form_textarea($data_remark, '', $remark_extra);
@@ -310,146 +315,163 @@ $remark_extra = 'style="height:50%"';
         </div>
     </div>
 </div>
-    <script type="text/javascript">
-        $(document).ready(function () {
+<script type="text/javascript">
+    $(document).ready(function () {
+        var range = $('#ticket_range');
+        var sliderElement = $( "#slider" );
+        sliderElement.slider({
+            range:false,
+            max:50000000,
+            min:5000,
+            values:[5000],
+            slide:function (event,ui) {
+                range.val(ui.values[0]);
+            }
+        });
+        var value = sliderElement.slider('values',0);
+        range.val(value);
+
+        range.change(function () {
+            sliderElement.slider('values',0,range.val());
+        });
+
+        if ($('#is_other_branch').is(':checked')) {
+            $('#state').removeClass('hide');
+            $('#branch').removeClass('hide');
+            $('#district').removeClass('hide');
+        }
+
+        $('#is_other_branch').click(function () {
             if ($('#is_other_branch').is(':checked')) {
                 $('#state').removeClass('hide');
                 $('#branch').removeClass('hide');
                 $('#district').removeClass('hide');
             }
-
-            $('#is_other_branch').click(function () {
-                if ($('#is_other_branch').is(':checked')) {
-                    $('#state').removeClass('hide');
-                    $('#branch').removeClass('hide');
-                    $('#district').removeClass('hide');
+        });
+        $('#is_own_branch').click(function () {
+            if ($('#is_own_branch').is(':checked')) {
+                $('#state').addClass('hide');
+                $('#branch').addClass('hide');
+                $('#district').addClass('hide');
+            }
+        });
+        $('#product_category').change(function () {
+            var base_url = "<?php echo base_url();?>";
+            var category_id = $('#product_category').val();
+            var csrf = $("input[name=csrf_dena_bank]").val();
+            $.ajax({
+                method: "POST",
+                url: base_url + "leads/productlist",
+                data: {
+                    '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                    category_id: category_id
                 }
-            });
-            $('#is_own_branch').click(function () {
-                if ($('#is_own_branch').is(':checked')) {
-                    $('#state').addClass('hide');
-                    $('#branch').addClass('hide');
-                    $('#district').addClass('hide');
-                }
-            });
-            $('#product_category').change(function () {
-                var base_url = "<?php echo base_url();?>";
-                var category_id = $('#product_category').val();
-                var csrf = $("input[name=csrf_dena_bank]").val();
-                $.ajax({
-                    method: "POST",
-                    url: base_url + "Leads/Productlist",
-                    url: base_url + "leads/productlist",
-                    data: {
-                        '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
-                        category_id: category_id
-                    }
-                }).success(function (resp) {
-                    if (resp) {
-                        $("#product_select").html(resp);
-                    }
-                });
-            });
-
-            $.validator.addMethod("regx", function (value, element, regexpr) {
-                return regexpr.test(value);
-            });
-
-            $("#addlead").validate({
-
-                rules: {
-                    is_existing_customer: {
-                        required: true
-                    },
-                    customer_name: {
-                        required: true,
-                        regx: /^[a-zA-Z0-9\-\s]+$/
-                    },
-                    lead_name: {
-                        required: true,
-                        regx: /^[a-zA-Z0-9\-\s]+$/
-                    },
-                    contact_no: {
-                        required: true,
-                        number: true,
-                        maxlength: 10,
-                        minlength: 10
-                    },
-                    product_category_id: {
-                        required: true
-                    },
-                    product_id: {
-                        required: true
-                    },
-                    lead_identification: {
-                        required: true
-                    },
-                    state_id: {
-                        required: true
-                    },
-                    district_id: {
-                        required: true
-                    },
-                    branch_id: {
-                        required: true
-                    },
-                    department_id:{
-                        required: true
-                    },
-                    department_name: {
-                        required: true
-                    },
-                    remark: {
-                        required: true
-                    }
-                },
-                messages: {
-                    is_existing_customer: {
-                        required: "Please select customer"
-                    },
-                    customer_name: {
-                        required: "Please enter customer name",
-                        regx: "Special characters are not allowed"
-                    },
-                    lead_name: {
-                        required: "Please enter lead name",
-                        regx: "Special characters are not allowed"
-                    },
-                    contact_no: {
-                        required: "Please enter phone number",
-                        maxlength: 'Please enter no more than 10 digits',
-                        minlength: 'Please enter no less than 10 digits'
-
-
-                    },
-                    product_category_id: {
-                        required: "Please select product category"
-                    },
-                    product_id: {
-                        required: "Please select product"
-                    },
-                    district_id: {
-                        required: "Please select district"
-                    },
-                    state_id: {
-                        required: "Please select state"
-                    },
-                    department_name: {
-                        required: "Please enter department name"
-                    },
-                    department_id: {
-                        required: "Please enter department id"
-                    },
-                    branch_id: {
-                        required: "Please select branch"
-                    },
-                    lead_identification: {
-                        required: "Please select lead identification"
-                    },
-                    remark: {
-                        required: "Please enter remark"
-                    }
+            }).success(function (resp) {
+                if (resp) {
+                    $("#product_select").html(resp);
                 }
             });
         });
-    </script>
+
+        $.validator.addMethod("regx", function (value, element, regexpr) {
+            return regexpr.test(value);
+        });
+
+        $("#addlead").validate({
+
+            rules: {
+                is_existing_customer: {
+                    required: true
+                },
+                customer_name: {
+                    required: true,
+                    regx: /^[a-zA-Z0-9\-\s]+$/
+                },
+                lead_name: {
+                    required: true,
+                    regx: /^[a-zA-Z0-9\-\s]+$/
+                },
+                contact_no: {
+                    required: true,
+                    number: true,
+                    maxlength: 10,
+                    minlength: 10
+                },
+                product_category_id: {
+                    required: true
+                },
+                product_id: {
+                    required: true
+                },
+                lead_identification: {
+                    required: true
+                },
+                state_id: {
+                    required: true
+                },
+                district_id: {
+                    required: true
+                },
+                branch_id: {
+                    required: true
+                },
+                department_id: {
+                    required: true
+                },
+                department_name: {
+                    required: true
+                },
+                remark: {
+                    required: true
+                }
+            },
+            messages: {
+                is_existing_customer: {
+                    required: "Please select customer"
+                },
+                customer_name: {
+                    required: "Please enter customer name",
+                    regx: "Special characters are not allowed"
+                },
+                lead_name: {
+                    required: "Please enter lead name",
+                    regx: "Special characters are not allowed"
+                },
+                contact_no: {
+                    required: "Please enter phone number",
+                    maxlength: 'Please enter no more than 10 digits',
+                    minlength: 'Please enter no less than 10 digits'
+
+
+                },
+                product_category_id: {
+                    required: "Please select product category"
+                },
+                product_id: {
+                    required: "Please select product"
+                },
+                district_id: {
+                    required: "Please select district"
+                },
+                state_id: {
+                    required: "Please select state"
+                },
+                department_name: {
+                    required: "Please enter department name"
+                },
+                department_id: {
+                    required: "Please enter department id"
+                },
+                branch_id: {
+                    required: "Please select branch"
+                },
+                lead_identification: {
+                    required: "Please select lead identification"
+                },
+                remark: {
+                    required: "Please enter remark"
+                }
+            }
+        });
+    });
+</script>
