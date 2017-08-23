@@ -235,6 +235,5 @@ class Lead  extends CI_Model
         }
         return $response;
     }
-	
 
 }

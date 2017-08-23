@@ -64,7 +64,7 @@ class Product extends CI_Controller {
                     return load_view("Products/Product/add",$arrData);
                }else{
                     $insert = array(
-                         'title' => ucfirst($this->input->post('title')),
+                         'title' => strtolower($this->input->post('title')),
                          'category_id' => $this->input->post('category_id'),
                          'default_assign' => $this->input->post('default_assign'),
                          'created_by' => loginUserId()
@@ -112,7 +112,7 @@ class Product extends CI_Controller {
           }
           if($this->input->post()){
                $this->form_validation->set_rules('category_id','Product Category', 'trim|required');
-               if(ucfirst($this->input->post('title')) != $arrData['productDetail'][0]['title']){
+               if(strtolower($this->input->post('title')) != $arrData['productDetail'][0]['title']){
                     $is_unique = '|is_unique['.Tbl_Products.'.title]';
                }else{
                     $is_unique = '';
@@ -125,7 +125,7 @@ class Product extends CI_Controller {
                }else{
                     $update = array(
                          'category_id' => $this->input->post('category_id'),
-                         'title' => ucfirst($this->input->post('title')),
+                         'title' => strtolower($this->input->post('title')),
                          'default_assign' => $this->input->post('default_assign'),
                          'modified_by' => loginUserId(),
                          'modified_on' => date('y-m-d H:i:s')
