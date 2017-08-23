@@ -326,5 +326,16 @@ class Lead  extends CI_Model
         return $result = $this->db->get_where(Tbl_Log,$whereArray)->result_array();
     }
 
+    public function check_mapping($whereArray = array()){
+            if(!empty($whereArray)){
+                $this->db->select('other_processing_center_id');
+                $result = $this->db->get_where(Tbl_processing_center,$whereArray)->result_array();
+                if(count($result) == 1){
+                    return $result[0]['other_processing_center_id'];
+                }
+            }
+        return array();
+    }
+
 
 }

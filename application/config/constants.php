@@ -100,5 +100,6 @@ define('Tbl_Leads', 'db_leads');
 define('Tbl_LeadAssign', 'db_lead_assign');
 define('Tbl_Reminder', 'db_reminder_scheduler');
 define('Tbl_Log', 'uploaded_leads_log');
+define('Tbl_processing_center', 'processing_center_mapping');
 
 define('Tbl_LoginLog', 'db_app_login_logs');

@@ -60,6 +60,7 @@ class Leads extends CI_Controller
             $lead_data['state_id'] = $lead_data['created_by_state_id'] = $input['state_id'];
             $lead_data['branch_id'] = $lead_data['created_by_branch_id'] = $input['branch_id'];
             $lead_data['district_id'] = $lead_data['created_by_district_id'] = $input['district_id'];
+            $branch_id = $input['branch_id'];
 
             if ($this->input->post('is_own_branch') == '0') {
                 $this->form_validation->set_rules('state_id', 'State', 'required');
@@ -69,7 +70,7 @@ class Leads extends CI_Controller
                 $lead_data['state_id'] = $this->input->post('state_id');
                 $lead_data['branch_id'] = $this->input->post('branch_id');
                 $lead_data['district_id'] = $this->input->post('district_id');
-
+                $branch_id = $this->input->post('branch_id');
             }
 
             if ($this->form_validation->run() === FALSE) {
@@ -86,13 +87,20 @@ class Leads extends CI_Controller
                 return load_view($middle, $arrData);
             }
 
-            
+
             $keys = array('is_existing_customer','lead_ticket_range','customer_name','contact_no','product_category_id','product_id','department_id',
                 'department_name','lead_identification','is_own_branch','remark','lead_ticket_range');
             foreach ($keys as $k => $value){
                 $lead_data[$value] = $this->input->post($value);
-                
+
             }
+            $whereArray = array('product_id'=>$lead_data['product_id'],'branch_id'=>$lead_data['branch_id']);
+            $routed_id = $this->Lead->check_mapping($whereArray);
+            if(!is_array($routed_id)){
+                $lead_data['reroute_from_branch_id'] = $branch_id;
+                $lead_data['branch_id'] = $routed_id;
+            }
+
             $lead_data['lead_name'] = $this->input->post('customer_name');
             $lead_id = $this->Lead->add_leads($lead_data);
             
@@ -282,9 +290,17 @@ class Leads extends CI_Controller
                 }else{
                     $all_product = $this->Lead->all_products_under_category($prod_category_id);
                     $prod_title = preg_replace('!\s+!', ' ', $value['product_id']);
+
                     if(in_array(strtolower(trim($prod_title)),$all_product)){
 
                         $whereArray = array('title'=>strtolower(trim($prod_title)));
+                        $prod_id = $this->Lead->fetch_product_id($whereArray);
+                        $mapping_whereArray = array('product_id'=>$prod_id['product_id'],'branch_id'=>$value['branch_id']);
+                        $routed_id = $this->Lead->check_mapping($mapping_whereArray);
+                        if(!is_array($routed_id)){
+                            $value['reroute_from_branch_id'] = $value['branch_id'];
+                            $value['branch_id'] = $routed_id;
+                        }
 
                         $is_own_branch = '1';
                         $is_existing_customer = '0';
@@ -296,7 +312,6 @@ class Leads extends CI_Controller
                         }
                         $value['is_own_branch'] = $is_own_branch;
                         $value['is_existing_customer'] = $is_existing_customer;
-                        $prod_id = $this->Lead->fetch_product_id($whereArray);
                         $value['product_category_id']=$prod_category_id;
                         $value['product_id']=$prod_id['product_id'];
                         $value['lead_name']=$value['customer_name'];

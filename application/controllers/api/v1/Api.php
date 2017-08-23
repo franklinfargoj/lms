@@ -417,7 +417,12 @@ class Api extends REST_Controller
         }
         $lead_data['lead_name'] = $this->input->post('customer_name');
         $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
-
+        $whereArray = array('product_id'=>$lead_data['product_id'],'branch_id'=>$lead_data['branch_id']);
+        $routed_id = $this->Lead->check_mapping($whereArray);
+        if(!is_array($routed_id)){
+            $lead_data['reroute_from_branch_id'] = $lead_data['branch_id'];
+            $lead_data['branch_id'] = $routed_id;
+        }
         $lead_id = $this->Lead->add_leads($lead_data);
         if($assign_to == 'self'){
             $lead_assign['lead_id'] = $lead_id;
