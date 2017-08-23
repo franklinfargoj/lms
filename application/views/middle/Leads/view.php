@@ -35,10 +35,15 @@
             <th>
                 Lead Source
             </th>
-            <th>
+             <th>
                 Elapsed Days
             </th>
-			<th>
+            <?php if($type == 'assigned'){?>
+            <th>
+                Interested in product
+            </th>
+            <?php }?>
+           <th>
 				Details
 			</th>
 		</tr>
@@ -73,6 +78,11 @@
                             echo $datediff->format("%a days");
                         ?>
                     </td>
+                    <?php if($type == 'assigned'){?>
+                    <td>
+                         <?php echo isset($value['interested_product_title']) ? $value['interested_product_title'] : 'NA';?>
+                    </td>
+                    <?php }?>
                     <td>
                         <a class="btn btn-sm grey-cascade" href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']))?>">
                             <i class="fa fa-link"></i> View

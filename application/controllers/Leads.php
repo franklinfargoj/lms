@@ -357,48 +357,47 @@ class Leads extends CI_Controller
         $arrData['breadcrumb'] = $this->make_bread->output();
 
         //Get session data
-        $input = get_session();
+        $login_user = get_session();
 
-        if(isset($input['designation_name']) && !empty($input['designation_name'])){
-            switch ($input['designation_name']){
+        if(isset($login_user['designation_name']) && !empty($login_user['designation_name'])){
+            switch ($login_user['designation_name']){
                 case 'EM':
                     //Parameters buiding for sending to list function.
                     $action = 'list';
-                    $table = Tbl_Leads;
+                    $table = Tbl_Leads.' as l';
                     $join = array();
-                    $join[] = array('table' => Tbl_Products,'on_condition' => Tbl_Leads.'.product_id = '.Tbl_Products.'.id','type' => '');
+                    $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id','type' => '');
                     if($type == 'generated'){
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.created_on',Tbl_Leads.'.lead_source',Tbl_Products.'.title',Tbl_LeadAssign.'.status');
+                        $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status');
                         if($till == 'mtd'){
-                            $where = array(Tbl_Leads.'.created_by' => $input['hrms_id'],'MONTH('.Tbl_Leads.'.created_on)' => date('m'));
+                            $where = array('l.created_by' => $login_user['hrms_id'],'MONTH(l.created_on)' => date('m'));
                         }
                         if($till == 'ytd'){
-                            $where  = array(Tbl_Leads.'.created_by' => $input['hrms_id'],'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
+                            $where  = array('l.created_by' => $login_user['hrms_id'],'YEAR(l.created_on)' => date('Y'));
                         }
-                        $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => 'left');
+                        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
                     }
                     if($type == 'converted'){
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.created_on',Tbl_Leads.'.lead_source',Tbl_Products.'.title',Tbl_LeadAssign.'.status');
+                        $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status');
                         if($till == 'mtd'){
-                            $where = array(Tbl_LeadAssign.'.employee_id' => $input['hrms_id'],Tbl_LeadAssign.'.status' => 'converted',Tbl_LeadAssign.'.is_deleted' => 0,'MONTH('.Tbl_LeadAssign.'.created_on)' => date('m'));
+                            $where = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'MONTH(la.created_on)' => date('m'));
                         }
                         if($till == 'ytd'){
-                            $where  = array(Tbl_LeadAssign.'.employee_id' => $input['hrms_id'],Tbl_LeadAssign.'.status' => 'converted',Tbl_LeadAssign.'.is_deleted' => 0,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
+                            $where  = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'YEAR(la.created_on)' => date('Y'));
                         }
-                        $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => '');
+                        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
                     }
                     if($type == 'assigned'){
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.created_on',Tbl_Leads.'.lead_source',Tbl_Products.'.title',Tbl_LeadAssign.'.status');
+                        $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','p1.title as interested_product_title');
                         if($till == 'ytd'){
-                            $where  = array(Tbl_LeadAssign.'.employee_id' => $input['hrms_id'],Tbl_LeadAssign.'.is_deleted' => 0,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
+                            $where  = array('la.employee_id' => $login_user['hrms_id'],'la.is_deleted' => 0,'YEAR(la.created_on)' => date('Y'));
                         }
-                        $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => '');
+                        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+                        $join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');
                     }
-
                     $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
                     break;
             }
-            
         }
         return load_view($middle = "Leads/view",$arrData);
     }
@@ -423,10 +422,10 @@ class Leads extends CI_Controller
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
 
-        $input = get_session();
+        $login_user = get_session();
 
-        if(isset($input['designation_name']) && !empty($input['designation_name'])){
-            switch ($input['designation_name']){
+        if(isset($login_user['designation_name']) && !empty($login_user['designation_name'])){
+            switch ($login_user['designation_name']){
                 case 'EM':
                     //Parameters buiding for sending to list function.
                     $action = 'list';
@@ -448,7 +447,7 @@ class Leads extends CI_Controller
 
                     if($type == 'assigned'){
                         //SELECT COLUMNS
-                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.remark',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Leads.'.product_id',Tbl_Products.'.title AS product_title',Tbl_Category.'.title AS category_title',Tbl_Leads.'.product_category_id',Tbl_LeadAssign.'.status',Tbl_LeadAssign.'.employee_id',Tbl_Reminder.'.remind_on',Tbl_Reminder.'.reminder_text');
+                        $select = array(Tbl_Leads.'.id',Tbl_Leads.'.remark',Tbl_Leads.'.customer_name',Tbl_Leads.'.lead_identification',Tbl_Leads.'.lead_source',Tbl_Leads.'.contact_no',Tbl_Leads.'.product_id',Tbl_Products.'.title AS product_title'/*,Tbl_Leads.'.interested_product_id',Tbl_Products.'.title AS interested_product_title'*/,Tbl_Category.'.title AS category_title',Tbl_Leads.'.product_category_id',Tbl_LeadAssign.'.status',Tbl_LeadAssign.'.employee_id',Tbl_Reminder.'.remind_on',Tbl_Reminder.'.reminder_text');
 
                         //JOIN CONDITIONS
                         $join[] = array('table' => Tbl_LeadAssign,'on_condition' => Tbl_LeadAssign.'.lead_id = '.Tbl_Leads.'.id','type' => '');
@@ -460,14 +459,13 @@ class Leads extends CI_Controller
                         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0));
                         $arrData['category_list'] = $this->dropdown($category_list,true);
                     }
-
                     $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
                     break;
-
                 case 'BM':
                     //Parameters buiding for sending to list function.
                     
             }
+
             /*pe($arrData['leads']);
             exit;*/
         }
@@ -490,6 +488,14 @@ class Leads extends CI_Controller
             
             $interested = $this->input->post('interested');
             if($interested == 1){
+                $this->form_validation->set_rules('product_category_id','Product Category', 'required');
+                $this->form_validation->set_rules('product_id','Product', 'required');
+                if ($this->form_validation->run() == FALSE)
+                {    
+                    /*$arrData['has_error'] = 'has-error';
+                    return load_view("Products/Product/add",$arrData);*/
+                    redirect('leads/leads_list/assigned/ytd');
+                }
                 $product_category_id = $this->input->post('product_category_id');
                 $product_id = $this->input->post('product_id');
                 //Function call for add new leads in selected product category hierarchy
@@ -529,6 +535,8 @@ class Leads extends CI_Controller
      * @return boolean
      */
     public function add_leads_other_product($lead_id,$product_category_id,$product_id){
+        $login_user = get_session();
+
         //Building input parameters for function to get_leads
         $action = 'list';
         $table = Tbl_Leads;
@@ -537,13 +545,28 @@ class Leads extends CI_Controller
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join = array(),$group_by = array(),$order_by = array());
         $leads_data = $leads[0];
-        $leads_data['product_category_id'] = $product_category_id;
-        $leads_data['product_id'] = $product_id;
+
+        $leads_data['product_category_id']  = $product_category_id;
+        $leads_data['product_id']   = $product_id;
+        $leads_data['created_by']   = $login_user['hrms_id'];
+        $leads_data['created_by_name']  = $login_user['full_name'];
+        $leads_data['created_by_branch_id']     = $login_user['branch_id'];
+        $leads_data['created_by_district_id']   = $login_user['district_id'];
+        $leads_data['created_by_state_id']  = $login_user['state_id'];
+        $leads_data['created_by_zone_id']   = $login_user['zone_id'];
         $keys_to_remove = array('id','created_on','modified_by','modified_by_name','modified_on');
         foreach ($keys_to_remove as $key => $value) {
             unset($leads_data[$value]);
         }
-        return $this->Lead->add_leads($leads_data);
+        if($this->Lead->add_leads($leads_data)){
+            //link interested product id with current lead.
+            $data = array('interested_product_id' => $product_id);
+            $this->Lead->update($where,$table,$data);
+            return true;
+        }else{
+            return false;
+        }
+        
     }
 
     /*Private Functions*/
