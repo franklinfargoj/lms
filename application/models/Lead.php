@@ -157,8 +157,8 @@ class Lead  extends CI_Model
         $result = array();
         if (!empty($where_assigned_Array)) {
             $assigned_leads = $this->db->where($where_assigned_Array)->count_all_results(Tbl_LeadAssign);
-            $result = $assigned_leads;
-        }
+            return $assigned_leads;
+        } return $result;
     }
 
     /**
@@ -294,7 +294,6 @@ class Lead  extends CI_Model
     }
 
     private function counts($table,$select,$where,$join){
-
         $this->db->select($select,TRUE);
         $this->db->from($table);
         if(!empty($join)){
