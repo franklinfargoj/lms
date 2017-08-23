@@ -68,40 +68,38 @@
                                                      <?php echo $leads[0]['lead_source'];?>
                                                 </div>
                                             </div>
-                                             <div class="row static-info">
-                                                <?php 
-                                                $data = array(
-                                                    'name'          => 'interested',
-                                                    'id'            => 'interested',
-                                                    'value'         => '1',
-                                                    'checked'       => FALSE,
-                                                    'style'         => 'margin:10px'
-                                                );
-                                                echo form_checkbox($data);
-                                                // Would produce: <input type="checkbox" name="newsletter" id="newsletter" value="1" style="margin:10px" />
-                                                ?>
-                                                If Interested in other product
-                                            </div>
-                                            <div class="row static-info interested-info" style="display:none;">
-                                                <div class="col-md-5 name">
-                                                     Select Category
-                                                </div>
-                                                <div class="col-md-7 value categorylist">
-                                                    <?php 
-                                                        if(isset($category_list)){
-                                                            $options = $category_list;
-                                                            $js = array(
-                                                                    'id'       => 'product_category_id',
-                                                                    'class'    => 'form-control'
-                                                            );
-                                                            echo form_dropdown('product_category_id', $options , '',$js);    
-                                                        }else{
-                                                            echo $leads[0]['category_title'];
-                                                        }
-                                                    ?>
-                                                </div>
-                                            </div>
                                             <?php if($type == 'assigned'){?>
+                                                <div class="row static-info">
+                                                    <?php 
+                                                        $data = array(
+                                                            'name'          => 'interested',
+                                                            'id'            => 'interested',
+                                                            'value'         => '1',
+                                                            'checked'       => FALSE,
+                                                            'style'         => 'margin:10px'
+                                                        );
+                                                        echo form_checkbox($data);
+                                                        // Would produce: <input type="checkbox" name="newsletter" id="newsletter" value="1" style="margin:10px" />
+                                                    ?>
+                                                    If Interested in other product
+                                                </div>
+                                                <div class="row static-info interested-info" style="display:none;">
+                                                    <div class="col-md-5 name">
+                                                         Select Category
+                                                    </div>
+                                                    <div class="col-md-7 value categorylist">
+                                                        <?php 
+                                                            if(isset($category_list)){
+                                                                $options = $category_list;
+                                                                $js = array(
+                                                                        'id'       => 'product_category_id',
+                                                                        'class'    => 'form-control'
+                                                                );
+                                                                echo form_dropdown('product_category_id', $options , '',$js);    
+                                                            }
+                                                        ?>
+                                                    </div>
+                                                </div>
                                                 <div class="row static-info">
                                                     <div class="col-md-5 name">
                                                         Lead Status
@@ -150,22 +148,31 @@
                                                         <textarea name="reminder_text" rows="4" cols="50"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
                                                     </div>
                                                 </div>
+                                            <?php }else{?>
                                                 <div class="row static-info">
-                                                    <div class="col-md-5 name">Remark</div>
+                                                    <div class="col-md-5 name">
+                                                        Category
+                                                    </div>
                                                     <div class="col-md-7 value">
-                                                    <?php if(!empty($leads[0]['remark'])) echo $leads[0]['remark'];?>
+                                                        <?php echo $leads[0]['category_title'];?>
                                                     </div>
                                                 </div>
-                                            <?php }else{?>
                                                 <div class="row static-info">
                                                     <div class="col-md-5 name">
                                                         Lead Status
                                                     </div>
                                                     <div class="col-md-7 value">
-                                                        <?php echo $leads[0]['status'];?>
+                                                        <?php echo isset($leads[0]['status']) ? $leads[0]['status'] : 'NA';?>
                                                     </div>
                                                 </div>
+
                                             <?php }?>
+                                            <div class="row static-info">
+                                                <div class="col-md-5 name">Remark</div>
+                                                <div class="col-md-7 value">
+                                                <?php echo isset($leads[0]['remark']) ? $leads[0]['remark'] : 'NA';?>
+                                                </div>
+                                            </div>
                                         </div>
                                         <?php if($type == 'assigned'){?>
                                             <div class="form-actions right">
