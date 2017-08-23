@@ -155,6 +155,7 @@ class Lead  extends CI_Model
         return $this->update($where,Tbl_LeadAssign,$data);
     }
 
+    
     /**
      * add_reminder
      * Add Reminder scheduler data.
@@ -166,8 +167,6 @@ class Lead  extends CI_Model
     public function add_reminder($data){
         $where = array('lead_id' => $data['lead_id'],'remind_to' => $data['remind_to'],'is_cancelled'=> 'No');
         $this->update($where,Tbl_Reminder,array('is_cancelled'=> 'Yes'));
-        /*echo $this->db->last_query();
-        exit;*/
         return $this->insert(Tbl_Reminder,$data);
     }
 
@@ -199,15 +198,13 @@ class Lead  extends CI_Model
         }
         if(!empty($order_by)){
             $this->db->order_by($order_by);
-        }else{
-            $this->db->order_by($table.'.id','DESC');
         }
         $query = $this->db->get();
         //pe($this->db->last_query())
         return $query->result_array();
     }
 
-    private function update($where,$table,$data){
+    public function update($where,$table,$data){
         $this->db->where($where);
         $this->db->update($table,$data);
         $errors = $this->db->error();
