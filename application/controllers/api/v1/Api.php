@@ -572,13 +572,37 @@ class Api extends REST_Controller
 
 
     public function category_products_get(){
+        $final = array();
+        $table = Tbl_Category;
         $join = array();
-        $where = array();
-        $table = Tbl_Products;
-        $join[] = array('table' => Tbl_Category, 'on_condition' => Tbl_Products . '.category_id = ' . Tbl_Category . '.id', 'type' => '');
-        $select = array(Tbl_Products.'.title as prod_title',Tbl_Products.'.id as prod_id',Tbl_Category.'.title as cat_title',Tbl_Category.'.id as cat_id');
-        $result = $this->Lead->lists($table,$select,$where,$join,array(),array());
-        pe($result);
+        $select = array(Tbl_Category.'.title',Tbl_Category.'.id');
+        $result = $this->Lead->lists($table,$select,array(),$join,array(),array());
+        $products = array();
+        if(!empty($result)){
+            foreach ($result as $key => $value){
+                $table = Tbl_Products;
+                $join = array();
+                $where = array(Tbl_Products.'.category_id'=>$value['id']);
+                $select = array(Tbl_Products.'.title',Tbl_Products.'.id');
+                $products = $this->Lead->lists($table,$select,$where,$join,array(),array());
+                $data['category_id'] = $value['id'];
+                $data['category_title'] = $value['title'];
+                $data['product'] = $products;
+                if(!empty($products)){
+                    $final[] = $data;
+                }
+            }
+            $res = array('result'=>'True',
+                         'data'=>$final);
+            returnJson($res);
+        }
+        $error = array(
+            "result" => false,
+            "data" => "No data found."
+        );
+        returnJson($error);
+
+
     }
 
 
