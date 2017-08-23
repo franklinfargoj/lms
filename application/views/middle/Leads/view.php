@@ -58,16 +58,16 @@
 						 <?php echo ++$i;?>
 					</td>
 					<td>
-						 <?php echo $value['customer_name'];?>
+						 <?php echo ucwords($value['customer_name']);?>
 					</td>
 					<td>
-						 <?php echo $value['title'];?>
+						 <?php echo ucwords($value['title']);?>
 					</td>
                     <td>
-                         <?php echo $value['lead_identification'];?>
+                         <?php echo ucwords($value['lead_identification']);?>
                     </td>
                     <td>
-                         <?php echo $value['lead_source'];?>
+                         <?php echo ucwords($value['lead_source']);?>
                     </td>
                     <td>
                          <?php 
@@ -80,7 +80,7 @@
                     </td>
                     <?php if($type == 'assigned'){?>
                     <td>
-                         <?php echo isset($value['interested_product_title']) ? $value['interested_product_title'] : 'NA';?>
+                         <?php echo isset($value['interested_product_title']) ? ucwords($value['interested_product_title']) : 'NA';?>
                     </td>
                     <?php }?>
                     <td>
