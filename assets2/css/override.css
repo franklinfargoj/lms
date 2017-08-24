@@ -28,8 +28,17 @@
     /* border-radius: 24px; */
 }
 
-.error {
-   color: red
+#addlead label.error {
+    float: left;
+    border: none;
+    width: 100%;
+    color: red;
+}
+#upload_lead label.error {
+    float: left;
+    border: none;
+    width: 100%;
+    color: red;
 }
 
 .hide {

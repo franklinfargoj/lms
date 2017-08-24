@@ -1,3 +1,8 @@
+<style>
+    .ui-widget-header {
+        background-color: #ed4c4c;
+    }
+</style>
 <?php
 $form_attributes = array('class' => '', 'method' => 'post', 'accept-charset' => '', 'id' => 'addlead');
 $data_customer = array('name' => 'customer_name',
@@ -123,32 +128,31 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <?php echo form_input($data_customer);?>
                 </div>
                 <?php echo form_error('customer_name'); ?>
-                <label id="customer_name-error" class="error" for="customer_name"></label>
                 <div class="form-control">
                     <label>Customer Number:</label>
                     <?php echo form_input($data_phone); ?>
                 </div>
                 <?php echo form_error('contact_no'); ?>
-                <label id="phone_no-error" class="error" for="phone_no"></label>
                 <div class="form-control">
                     <label>Product Category:</label>
                     <?php echo form_dropdown('product_category_id', $options, set_value('product_category_id'), $category_extra) ?>
                 </div>
                 <?php echo form_error('product_category_id'); ?>
-                <label id="product_category-error" class="error" for="product_category"></label>
                 <div class="form-control" id="product_select">
                     <label>Product</label>
                     <?php echo form_dropdown('product_id', $product_options, set_value('product_id'), $product_extra) ?>
                 </div>
                 <?php echo form_error('product_id'); ?>
-                <label id="product-error" class="error" for="product"></label>
                 <div class="form-control range-slider">
                     <label>Ticket Size</label>
-                    <div id="slider" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"><div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
+                    <div id="slider" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
+                        <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
+                        <span id="span_range" tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
+                        <div id="div_range" class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div>
                     </div>
                     <div class="step">
                         <span>5000</span>
-                        <span>5 crore</span>
+                        <span style="float: right">5 crore</span>
                     </div>
 
                     <?php echo form_input($data_ticket_range)?>
@@ -178,7 +182,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     </select>
                 </div>
                 <?php echo form_error('state_id'); ?>
-                <label id="state_id-error" class="error" for="state_id"></label>
                 <div id="district" class="form-control hide">
                     <label>District:</label>
                     <?php echo form_dropdown('district_id', $data_district, set_value('district_id')) ?>
@@ -192,25 +195,21 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     </select>
                 </div>
                 <?php echo form_error('branch_id'); ?>
-                <label id="branch_id-error" class="error" for="branch_id"></label>
                 <div class="form-control">
                     <label>Department Name:</label>
                     <?php echo form_input($data_department_name);?>
                 </div>
-                <label id="department_name-error" class="error" for="department_name"></label>
                 <?php echo form_error('department_name'); ?>
                 <div class="form-control">
                     <label>Department Id:</label>
                     <?php echo form_input($data_department_id);?>
                 </div>
-                <label id="department_id-error" class="error" for="department_id"></label>
                 <?php echo form_error('department_id'); ?>
 
                 <div id="identification" class="form-control">
                     <label>Lead Identification:</label>
                     <?php echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) ?>
                 </div>
-                <label id="lead_identification-error" class="error" for="lead_identification"></label>
                 <?php echo form_error('lead_identification'); ?>
 
                 <div class="form-control">
@@ -218,7 +217,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <?php echo form_textarea($data_remark, '', $remark_extra);?>
                 </div>
                 <?php echo form_error('remark'); ?>
-                <label id="remark_id-error" class="error" for="remark_id"></label>
             </div>
             <div class="form-control form-submit clearfix">
                 <a href="javascript:void(0);" class="float-right">
@@ -226,9 +224,15 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <span><input type="submit" style="border: none" name="Submit" value="Submit"></span>
                     <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                 </a>
-                <a href="javascript:void(0);" class="reset float-right">
-                    <img src="<?php echo base_url().ASSETS;?>images/reset-btn.png">
+                <a href="javascript:void(0);" class="float-right">
+                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                    <span><input type="reset" style="border: none;color: white" name="Submit" value="Reset"></span>
+                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                 </a>
+<!--                <a href="javascript:void(0);" class="reset float-right">-->
+<!--                    <img src="--><?php //echo base_url().ASSETS;?><!--images/reset-btn.png">-->
+<!--                    <span><input type="submit" style="border: none" name="Submit" value="Submit"></span>-->
+<!--                </a>-->
 
             </div>
             <?php echo form_close(); ?>
@@ -236,37 +240,22 @@ $remark_extra = 'style="rows:4 ; cols:80"';
     </div>
 </div>
 <script>
-    $( function() {
-        // setup master volume
-        $( "#master" ).slider({
-            value: 10,
-            orientation: "horizontal",
-            range: "min",
-            animate: true
-        });
-        // setup graphic EQ
-        $( "#eq > span" ).each(function() {
-            // read initial values from markup and remove that
-            var value = parseInt( $( this ).text(), 10 );
-            $( this ).empty().slider({
-                value: value,
-                range: "min",
-                animate: true,
-                orientation: "vertical"
-            });
-        });
-    } );
-
     $(document).ready(function(){
         var range = $('#ticket_range');
         var sliderElement = $( "#slider" );
+        var span = $( "#span_range" );
+        var div = $('#div_range');
         sliderElement.slider({
-            range:false,
+            range:"min",
+            orientation: "horizontal",
             max:50000000,
             min:5000,
+            animate: true,
             values:[5000],
             slide:function (event,ui) {
                 range.val(ui.values[0]);
+                var match_width = span.css('left');
+                div.css('width',match_width);
             }
         });
         var value = sliderElement.slider('values',0);
@@ -274,6 +263,13 @@ $remark_extra = 'style="rows:4 ; cols:80"';
 
         range.change(function () {
             sliderElement.slider('values',0,range.val());
+            var match_width = span.css('left');
+            console.log(match_width);
+//            var width1 = match_width.split('px');
+//
+//            var final_width = (width1[0] * 2.96) + 'px';
+//            console.log(width1[0]);
+//            div.css('width',final_width);
         });
 
         if ($('#is_other_branch').is(':checked')) {
@@ -348,6 +344,10 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 lead_identification: {
                     required: true
                 },
+                lead_ticket_range: {
+                    required: true,
+                    number:true
+                },
                 state_id: {
                     required: true
                 },
@@ -378,6 +378,10 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 lead_name: {
                     required: "Please enter lead name",
                     regx: "Special characters are not allowed"
+                },
+                lead_ticket_range: {
+                    required: "Please enter range",
+                    number: "Only numbers allowed"
                 },
                 contact_no: {
                     required: "Please enter phone number",

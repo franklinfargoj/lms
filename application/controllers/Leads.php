@@ -47,6 +47,7 @@ class Leads extends CI_Controller
             $this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
             $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alphaNumeric');
             $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
+            $this->form_validation->set_rules('lead_ticket_range', 'Range.', 'required|numeric');
             $this->form_validation->set_rules('product_category_id', 'Product Category', 'required');
             $this->form_validation->set_rules('product_id', 'Product','required');
             $this->form_validation->set_rules('department_id', 'Department Id', 'required');
