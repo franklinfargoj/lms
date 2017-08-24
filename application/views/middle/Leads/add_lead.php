@@ -1,6 +1,6 @@
 <style>
-    .ui-widget-header {
-        background-color: #ed4c4c;
+    #master .ui-slider-range{
+        background: red;
     }
 </style>
 <?php
@@ -145,16 +145,18 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 <?php echo form_error('product_id'); ?>
                 <div class="form-control range-slider">
                     <label>Ticket Size</label>
-                    <div id="slider" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
+<!--                    <div id="slider" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">-->
+<!--                        <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>-->
+<!--                        <span id="span_range" tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>-->
+<!--                        <div id="div_range" class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div>-->
+<!--                    </div>-->
+                    <div id="master">
                         <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
-                        <span id="span_range" tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
-                        <div id="div_range" class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div>
                     </div>
                     <div class="step">
                         <span>5000</span>
                         <span style="float: right">5 crore</span>
                     </div>
-
                     <?php echo form_input($data_ticket_range)?>
                 </div>
 
@@ -241,36 +243,35 @@ $remark_extra = 'style="rows:4 ; cols:80"';
 </div>
 <script>
     $(document).ready(function(){
-        var range = $('#ticket_range');
-        var sliderElement = $( "#slider" );
-        var span = $( "#span_range" );
-        var div = $('#div_range');
-        sliderElement.slider({
-            range:"min",
-            orientation: "horizontal",
-            max:50000000,
-            min:5000,
-            animate: true,
-            values:[5000],
-            slide:function (event,ui) {
-                range.val(ui.values[0]);
-                var match_width = span.css('left');
-                div.css('width',match_width);
-            }
-        });
-        var value = sliderElement.slider('values',0);
-        range.val(value);
+            var sliderElement = $("#master");
+            var range = $('#ticket_range');
+            var div = $('.ui-slider-range');
+            // setup master volume
+            sliderElement.slider({
+                range: "min",
+                orientation: "horizontal",
+                max: 50000000,
+                min: 5000,
+                animate: true,
+                values: [5000],
+                slide: function (event, ui) {
+                    range.val(ui.values[0]);
+                    var width = (ui.values[0]/50000000) * 100 + '%';
+                    div.width(width);
+                }
+            });
+            var value = sliderElement.slider('values', 0);
+            range.val(value);
 
-        range.change(function () {
-            sliderElement.slider('values',0,range.val());
-            var match_width = span.css('left');
-            console.log(match_width);
-//            var width1 = match_width.split('px');
-//
-//            var final_width = (width1[0] * 2.96) + 'px';
-//            console.log(width1[0]);
-//            div.css('width',final_width);
-        });
+            range.keyup(function () {
+                if($.isNumeric(range.val())) {
+                    sliderElement.slider('values', 0, range.val());
+                    var width = '100%';
+                    if (range.val() <= 50000000)
+                        width = (range.val() / 50000000) * 100 + '%';
+                    div.width(width);
+                }
+            });
 
         if ($('#is_other_branch').is(':checked')) {
             $('#state').removeClass('hide');
