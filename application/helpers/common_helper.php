@@ -13,7 +13,7 @@
  * @param unknown_type $template
  */
 function load_view($middle = "home",$arrData = array(), $template = "main"){
-    if(!$middle)$middle = "login";
+    if(!$middle)$middle = "blank";
     $CI =& get_instance();
     $arrData['middle'] = "middle/".$middle;
     $CI->load->view("layout/".$template,$arrData);
@@ -276,8 +276,8 @@ function decode_id($id){
 }
 
 function get_session(){
-    /*$CI =& get_instance();
-    return $CI->session->userdata();*/
+    $CI =& get_instance();
+    //return $CI->session->userdata();
 
     $input = array(
         'hrms_id' => '312',
@@ -288,10 +288,10 @@ function get_session(){
         'district_id' => '1234',
         'state_id' => '1234',
         'zone_id' => '1234',
-        'full_name' => 'mukesh kurmi',
+        'full_name' => $CI->session->userdata('name'),
         'supervisor_id' => '009',
         'designation_id' => '4',
-        'designation_name' => 'EM',
+        'designation_name' => $CI->session->userdata('admin_type'),
         'mobile' => '9975772432',
         'email_id' => 'mukesh.kurmi@wwindia.com'
     );

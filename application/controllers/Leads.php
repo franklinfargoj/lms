@@ -311,49 +311,23 @@ class Leads extends CI_Controller
 
         //Get session data
         $login_user = get_session();
+        $middle = '';
 
         if(isset($login_user['designation_name']) && !empty($login_user['designation_name'])){
             switch ($login_user['designation_name']){
                 case 'EM':
-                    //Parameters buiding for sending to list function.
-                    $action = 'list';
-                    $table = Tbl_Leads.' as l';
-                    $join = array();
-                    $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
-                    if($type == 'generated'){
-                        $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status');
-                        if($till == 'mtd'){
-                            $where = array('l.created_by' => $login_user['hrms_id'],'MONTH(l.created_on)' => date('m'));
-                        }
-                        if($till == 'ytd'){
-                            $where  = array('l.created_by' => $login_user['hrms_id'],'YEAR(l.created_on)' => date('Y'));
-                        }
-                        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
-                    }
-                    if($type == 'converted'){
-                        $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status');
-                        if($till == 'mtd'){
-                            $where = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'MONTH(la.created_on)' => date('m'));
-                        }
-                        if($till == 'ytd'){
-                            $where  = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'YEAR(la.created_on)' => date('Y'));
-                        }
-                        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
-                    }
-                    if($type == 'assigned'){
-                        $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','p1.title as interested_product_title');
-                        if($till == 'ytd'){
-                            $where  = array('la.employee_id' => $login_user['hrms_id'],'la.is_deleted' => 0,'YEAR(la.created_on)' => date('Y'));
-                        }
-                        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
-                        $join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');
-                    }
-                    $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
-                    //echo $this->db->last_query();
+                    $arrData = $this->em_view($login_user,$arrData);
+                    $middle = "Leads/view/em_view";
+                    break;
+                case 'BM':
+                    //$arrData = $this->bm_view($login_user,$arrData);
+                    $middle = "Leads/view/bm_view";
                     break;
             }
         }
-        return load_view($middle = "Leads/view",$arrData);
+        /*pe($arrData);
+        exit;*/
+        return load_view($middle,$arrData);
     }
 
     /**
@@ -534,5 +508,47 @@ class Leads extends CI_Controller
             $result[$value['id']] =  $value['title'];  
         }
         return $result;
+    }
+
+    private function em_view($login_user,$arrData){
+
+        $type = $arrData['type']; 
+        $till = $arrData['till'];
+        //Parameters buiding for sending to list function.
+        $action = 'list';
+        $table = Tbl_Leads.' as l';
+        $join = array();
+        $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
+        if($type == 'generated'){
+            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status');
+            if($till == 'mtd'){
+                $where = array('l.created_by' => $login_user['hrms_id'],'MONTH(l.created_on)' => date('m'));
+            }
+            if($till == 'ytd'){
+                $where  = array('l.created_by' => $login_user['hrms_id'],'YEAR(l.created_on)' => date('Y'));
+            }
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
+        }
+        if($type == 'converted'){
+            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status');
+            if($till == 'mtd'){
+                $where = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'MONTH(la.created_on)' => date('m'));
+            }
+            if($till == 'ytd'){
+                $where  = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'YEAR(la.created_on)' => date('Y'));
+            }
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+        }
+        if($type == 'assigned'){
+            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','p1.title as interested_product_title');
+            if($till == 'ytd'){
+                $where  = array('la.employee_id' => $login_user['hrms_id'],'la.is_deleted' => 0,'YEAR(la.created_on)' => date('Y'));
+            }
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+            $join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');
+        }
+        $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+        
+        return $arrData;
     }
 }
