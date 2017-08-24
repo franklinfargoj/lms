@@ -18,13 +18,11 @@
 	<?php echo $this->load->view('common/header',array(),TRUE);?>
 
 	<div class="main-content">
-		<div class="container clearfix">
-			<?php echo $this->load->view('common/breadcumb',array(),TRUE);?>
+		<?php echo $this->load->view('common/breadcumb',array(),TRUE);?>
 
-			<?php //echo $this->load->view('common/message',array(),TRUE);?>
+		<?php //echo $this->load->view('common/message',array(),TRUE);?>
 
-			<?php echo $this->load->view($middle,array(),TRUE);?>
-		</div>
+		<?php echo $this->load->view($middle,array(),TRUE);?>
 	</div>
 	<?php echo $this->load->view('common/footer',array(),TRUE);?>
 </body>
