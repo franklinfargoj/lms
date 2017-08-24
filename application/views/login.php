@@ -103,6 +103,7 @@
 					    </label>
 					</div>
 				</div>
+				<?php echo form_close();?>
 			<!-- </form> -->
 		</div>
 		<div class="bank-logo">
@@ -160,10 +161,10 @@
 
 	            messages: {
 	                username: {
-	                    required: "Username is required."
+	                    required: "Please enter username"
 	                },
 	                password: {
-	                    required: "Password is required."
+	                    required: "Please enter password"
 	                }
 	            },
 	            highlight: function (element) { // hightlight error inputs
