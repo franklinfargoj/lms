@@ -27,3 +27,11 @@
     font-weight: bold;
     /* border-radius: 24px; */
 }
+
+.error {
+   color: red
+}
+
+.hide {
+   display: none;
+}

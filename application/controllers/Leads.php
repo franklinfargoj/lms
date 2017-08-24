@@ -74,7 +74,6 @@ class Leads extends CI_Controller
             }
 
             if ($this->form_validation->run() === FALSE) {
-
                 $middle = 'Leads/add_lead';
                 $arrData['products'] = '';
                 $arrData['category_selected'] = '';

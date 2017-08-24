@@ -1,72 +1,47 @@
-<style type="text/css">
-    .error {
-        color: red
-    }
-
-    .hide {
-        display: none;
-    }
-</style>
-
 <?php
 $form_attributes = array('class' => '', 'method' => 'post', 'accept-charset' => '', 'id' => 'addlead');
-$data_customer = array('class' => 'form-control ',
-    'name' => 'customer_name',
+$data_customer = array('name' => 'customer_name',
     'id' => 'customer_name',
     'value' => set_value('customer_name', '')
 );
-$data_lead = array('class' => 'form-control ',
-    'name' => 'lead_name',
+$data_lead = array('name' => 'lead_name',
     'id' => 'lead_name',
     'value' => set_value('lead_name', '')
 );
-$data_phone = array('class' => 'form-control ',
-    'name' => 'contact_no',
+$data_phone = array('name' => 'contact_no',
     'id' => 'phone_no',
     'value' => set_value('contact_no', '')
 );
-$data_aadhar = array('class' => 'form-control ',
-    'name' => 'aadhar_no',
+$data_aadhar = array('name' => 'aadhar_no',
     'id' => 'aadhar_no',
     'value' => set_value('aadhar_no', '')
 );
-$data_pan = array('class' => 'form-control ',
-    'name' => 'pan_no',
+$data_pan = array('name' => 'pan_no',
     'id' => 'pan_no',
     'value' => set_value('pan_no', '')
 );
-$data_account = array('class' => 'form-control ',
-    'name' => 'account_no',
+$data_account = array('name' => 'account_no',
     'id' => 'account_no',
     'value' => set_value('account_no', '')
 );
-$data_state = array('class' => 'form-control',
-    'name' => 'state_id',
-    'id' => 'state_id',
-    'value' => set_value('state_id', '')
-);
-$data_branch = array('class' => 'form-control',
-    'name' => 'branch_id',
-    'id' => 'branch_id',
-    'value' => set_value('branch_id', '')
-);
-$data_district = array('class' => 'form-control',
-    'name' => 'district_id',
-    'id' => 'district_id',
-    'value' => set_value('district_id', '')
-);
-$data_department_name = array('class' => 'form-control ',
-    'name' => 'department_name',
-    'id' => 'department',
+$data_state[''] = 'Select State';
+$data_state['1'] = 'Odisha';
+
+$data_branch[''] = 'Select Branch';
+$data_branch['1'] = 'Odisha';
+
+$data_district[''] = 'Select District';
+$data_district['1'] = 'Odisha';
+
+$data_department_name = array('name' => 'department_name',
+    'id' => 'department_name',
     'value' => set_value('department_name', '')
 );
-$data_department_id = array('class' => 'form-control ',
-    'name' => 'department_id',
-    'id' => 'department',
+$data_department_id = array('name' => 'department_id',
+    'id' => 'department_id',
     'value' => set_value('department_id', '')
 );
-$data_remark = array('class' => 'form-control ',
-    'name' => 'remark',
+$data_remark = array('name' => 'remark',
     'id' => 'remark_id',
     'value' => set_value('remark', '')
 );
@@ -74,18 +49,14 @@ $data_remark = array('class' => 'form-control ',
 $data_submit = array(
     'name' => 'Submit',
     'id' => 'Submit',
-    'type' => 'Submit',
-    'content' => 'Submit',
-    'class' => 'btn green',
+    'type' => 'button',
     'value' => 'Submit'
 );
 $data_reset = array(
     'name' => 'reset',
     'id' => 'reset',
     'value' => 'Reset',
-    'type' => 'Button',
-    'content' => 'Reset',
-    'class' => 'btn default'
+    'type' => 'button',
 );
 
 $customer_options[''] = 'Select Customer';
@@ -111,212 +82,182 @@ $lead_id_options['HOT'] = 'HOT';
 $lead_id_options['WARM'] = 'WARM';
 $lead_id_options['COLD'] = 'COLD';
 
-$category_extra = 'class="form-control" id="product_category"';
-$product_extra = 'class="form-control" id="product"';
-$extra = 'class="form-control"';
-$remark_extra = 'style="height:50%"';
+$branch_options['1'] = 'Own Branch';
+$branch_options['0'] = 'Other Branch';
+
+
+$category_extra = 'id="product_category"';
+$product_extra = 'id="product"';
+$extra = '';
+$remark_extra = 'style="rows:4 ; cols:80"';
 ?>
-<div class="row">
-    <div class="col-md-6 ">
-        <!-- BEGIN SAMPLE FORM PORTLET-->
-        <div class="portlet light">
-            <div class="portlet-body form">
-
-                <?php
-                $url = base_url('leads/add');
-                echo form_open($url, $form_attributes);
-                ?>
-                <div class="form-body">
-                    <div class="form-group">
-                        <label>Customer Type</label>
-                        <?php echo form_dropdown('is_existing_customer', $customer_options, set_value('is_existing_customer'), $extra) ?>
-                        <?php echo form_error('is_existing_customer'); ?>
+<div class="page-title">
+    <div class="container clearfix">
+        <h3 class="text-center">Add Lead</h3>
+    </div>
+</div>
+<div class="page-content">
+    <div class="container">
+        <div class="lead-form">
+            <?php
+            $url = base_url('leads/add');
+            echo form_open($url, $form_attributes);
+            ?>
+            <div class="lead-form-left">
+                <div class="form-control">
+                    <label>Customer Type</label>
+                    <div class="radio-control">
+                        <input type="radio" name="is_existing_customer"
+                               value="1" <?php echo set_radio('is_existing_customer', '1', TRUE); ?> />
+                        <label>New</label>
                     </div>
-                    <div class="form-group">
-                        <label>Customer Name</label>
-                        <div class="input-group">
-						<span class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</span>
-                            <?php echo form_input($data_customer);
-                            ?>
-                        </div>
-                        <?php echo form_error('customer_name'); ?>
-                        <label id="customer_name-error" class="error" for="customer_name"></label>
+                    <div class="radio-control">
+                        <input type="radio" name="is_existing_customer"
+                               value="0" <?php echo set_radio('is_existing_customer', '0'); ?> />
+                        <label>Existing</label>
                     </div>
-                    <!--			<div class="form-group">-->
-                    <!--				<label>Lead Name</label>-->
-                    <!--				<div class="input-group">-->
-                    <!--					<span class="input-group-addon">-->
-                    <!--						<i class="fa fa-user"></i>-->
-                    <!--					</span>-->
-                    <!--					--><?php //echo form_input($data_lead);
-                    //					?>
-                    <!--				</div>-->
-                    <!--				--><?php //echo form_error('lead_name'); ?>
-                    <!--                <label id="lead_name-error" class="error" for="lead_name"></label>-->
-                    <!--			</div>-->
-                    <div class="form-group">
-                        <label>Mobile No.</label>
-                        <div class="input-group">
-					<span class="input-group-addon">
-						<i class="fa fa-mobile"></i>
-					</span>
-                            <?php echo form_input($data_phone);
-                            ?>
-                        </div>
-                        <?php echo form_error('contact_no'); ?>
-                        <label id="phone_no-error" class="error" for="phone_no"></label>
-                    </div>
-
-                    <!--			<div class="form-group">-->
-                    <!--					<label>Aadhar No.</label>-->
-                    <!--				<div class="input-group">-->
-                    <!--					<span class="input-group-addon">-->
-                    <!--						<i class="fa fa-mobile"></i>-->
-                    <!--					</span>-->
-                    <!--					--><?php //echo form_input($data_aadhar);
-                    //					?>
-                    <!--				</div>-->
-                    <!--			--><?php //echo form_error('aadhar_no'); ?>
-                    <!--			</div>-->
-                    <!--			<div class="form-group">-->
-                    <!--					<label>Pan No.</label>-->
-                    <!--				<div class="input-group">-->
-                    <!--					<span class="input-group-addon">-->
-                    <!--						<i class="fa fa-mobile"></i>-->
-                    <!--					</span>-->
-                    <!--					--><?php //echo form_input($data_pan);
-                    //					?>
-                    <!--				</div>-->
-                    <!--			</div>-->
-                    <?php echo form_error('pan_no'); ?>
-                    <div class="form-group">
-                        <label>Product Category</label>
-                        <?php echo form_dropdown('product_category_id', $options, set_value('product_category_id'), $category_extra) ?>
-                        <?php echo form_error('product_category_id'); ?>
-                    </div>
-                    <div class="form-group " id="product_select">
-                        <label>Product</label>
-                        <?php echo form_dropdown('product_id', $product_options, set_value('product_id'), $product_extra) ?>
-                        <?php echo form_error('product_id'); ?>
-                    </div>
-                        <label>Ticket range</label>
-                        <div id="slider"></div>
-                        <?php echo form_input($data_ticket_range)?>
-                    <div class="form-group">
-                        <div class="radio-list">
-                            <label>Own Branch / Other Branch</label>
-                            <label class="radio-inline">
-                                <input type="radio" id="is_own_branch" name="is_own_branch"
-                                       value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
-                                Own Branch
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" id="is_other_branch" name="is_own_branch"
-                                       value="0" <?php echo set_radio('is_own_branch', '0'); ?> />
-                                Other Branch
-                            </label>
-                        </div>
-                        <?php echo form_error('is_own_branch'); ?>
-                    </div>
-                    <div id="state" class="form-group hide">
-                        <label>State</label>
-                        <div class="input-group">
-					<span class="input-group-addon">
-						<i class="fa fa-state"></i>
-					</span>
-                            <?php echo form_input($data_state);
-                            ?>
-                        </div>
-                        <label id="state_id-error" class="error" for="state_id"></label>
-                        <?php echo form_error('state_id'); ?>
-                    </div>
-                    <div id="district" class="form-group hide">
-                        <label>District</label>
-                        <div class="input-group">
-                <span class="input-group-addon">
-                    <i class="fa fa-branch"></i>
-                </span>
-                            <?php echo form_input($data_district);
-                            ?>
-                        </div>
-                        <label id="district_id-error" class="error" for="district_id"></label>
-                        <?php echo form_error('district'); ?>
-                    </div>
-                    <div id="branch" class="form-group hide">
-                        <label>Branch</label>
-                        <div class="input-group">
-					<span class="input-group-addon">
-						<i class="fa fa-branch"></i>
-					</span>
-                            <?php echo form_input($data_branch);
-                            ?>
-                        </div>
-                        <label id="branch_id-error" class="error" for="branch_id"></label>
-                        <?php echo form_error('branch_id'); ?>
-                    </div>
-                    <div id="department_id" class="form-group">
-                        <label>Department Id</label>
-                        <div class="input-group">
-					<span class="input-group-addon">
-						<i class="fa fa-branch"></i>
-					</span>
-                            <?php echo form_input($data_department_id);
-                            ?>
-                        </div>
-                        <label id="department_id-error" class="error" for="department_id"></label>
-                        <?php echo form_error('department_id'); ?>
-                    </div>
-                    <div id="department_name" class="form-group">
-                        <label>Department Name</label>
-                        <div class="input-group">
-					<span class="input-group-addon">
-						<i class="fa fa-branch"></i>
-					</span>
-                            <?php echo form_input($data_department_name);
-                            ?>
-                        </div>
-                        <label id="department_name-error" class="error" for="department_name"></label>
-                        <?php echo form_error('department_name'); ?>
-                    </div>
-                    <div class="form-group">
-                        <label>Lead Identification</label>
-                        <?php echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) ?>
-                        <?php echo form_error('lead_identification'); ?>
-                    </div>
-                    <!--                    <div class="form-group">-->
-                    <!--                        <label>Account No</label>-->
-                    <!--                        <div class="input-group">-->
-                    <!--            <span class="input-group-addon">-->
-                    <!--                <i class="fa fa-mobile"></i>-->
-                    <!--            </span>-->
-                    <!--                            --><?php //echo form_input($data_account);
-                    //                            ?>
-                    <!--                        </div>-->
-                    <!--                        --><?php //echo form_error('account_no'); ?>
-                    <!--                    </div>-->
-                    <div class="form-group">
-                        <label>Remarks</label>
-                        <?php echo form_textarea($data_remark, '', $remark_extra);
-                        ?>
-
-                        <?php echo form_error('remark'); ?>
-                        <label id="remark_id-error" class="error" for="remark"></label>
-                    </div>
-                    <div class="form-actions">
-                        <?php echo form_button($data_reset) ?>
-                        <?php echo form_button($data_submit) ?>
-                    </div>
-
-                    <?php echo form_close(); ?>
                 </div>
+                <?php echo form_error('is_existing_customer'); ?>
+                <div class="form-control">
+                    <label>Customer Name:</label>
+                    <?php echo form_input($data_customer);?>
+                </div>
+                <?php echo form_error('customer_name'); ?>
+                <label id="customer_name-error" class="error" for="customer_name"></label>
+                <div class="form-control">
+                    <label>Customer Number:</label>
+                    <?php echo form_input($data_phone); ?>
+                </div>
+                <?php echo form_error('contact_no'); ?>
+                <label id="phone_no-error" class="error" for="phone_no"></label>
+                <div class="form-control">
+                    <label>Product Category:</label>
+                    <?php echo form_dropdown('product_category_id', $options, set_value('product_category_id'), $category_extra) ?>
+                </div>
+                <?php echo form_error('product_category_id'); ?>
+                <label id="product_category-error" class="error" for="product_category"></label>
+                <div class="form-control" id="product_select">
+                    <label>Product</label>
+                    <?php echo form_dropdown('product_id', $product_options, set_value('product_id'), $product_extra) ?>
+                </div>
+                <?php echo form_error('product_id'); ?>
+                <label id="product-error" class="error" for="product"></label>
+                <div class="form-control range-slider">
+                    <label>Ticket Size</label>
+                    <div id="slider" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"><div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
+                    </div>
+                    <div class="step">
+                        <span>5000</span>
+                        <span>5 crore</span>
+                    </div>
+
+                    <?php echo form_input($data_ticket_range)?>
+                </div>
+
             </div>
+
+
+            <div class="lead-form-right">
+                <div class="form-control">
+                    <label>Branch Type:</label>
+                    <div class="radio-control">
+                        <input type="radio" id="is_own_branch" name="is_own_branch"
+                               value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
+                        <label>Own Branch</label>
+                    </div>
+                    <div class="radio-control">
+                        <input type="radio" name="is_own_branch" id="is_other_branch"
+                               value="0" <?php echo set_radio('is_own_branch', '0'); ?> />
+                        <label>Other Branch</label>
+                    </div>
+                </div>
+                <?php echo form_error('is_own_branch'); ?>
+                <div id="state" class="form-control hide">
+                    <label>State:</label>
+                    <?php echo form_dropdown('state_id', $data_state, set_value('state_id')) ?>
+                    </select>
+                </div>
+                <?php echo form_error('state_id'); ?>
+                <label id="state_id-error" class="error" for="state_id"></label>
+                <div id="district" class="form-control hide">
+                    <label>District:</label>
+                    <?php echo form_dropdown('district_id', $data_district, set_value('district_id')) ?>
+                    </select>
+                </div>
+                <?php echo form_error('district_id'); ?>
+                <label id="district_id-error" class="error" for="district_id"></label>
+                <div id="branch" class="form-control hide">
+                    <label>Branch:</label>
+                    <?php echo form_dropdown('branch_id', $data_branch, set_value('branch_id')) ?>
+                    </select>
+                </div>
+                <?php echo form_error('branch_id'); ?>
+                <label id="branch_id-error" class="error" for="branch_id"></label>
+                <div class="form-control">
+                    <label>Department Name:</label>
+                    <?php echo form_input($data_department_name);?>
+                </div>
+                <label id="department_name-error" class="error" for="department_name"></label>
+                <?php echo form_error('department_name'); ?>
+                <div class="form-control">
+                    <label>Department Id:</label>
+                    <?php echo form_input($data_department_id);?>
+                </div>
+                <label id="department_id-error" class="error" for="department_id"></label>
+                <?php echo form_error('department_id'); ?>
+
+                <div id="identification" class="form-control">
+                    <label>Lead Identification:</label>
+                    <?php echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) ?>
+                </div>
+                <label id="lead_identification-error" class="error" for="lead_identification"></label>
+                <?php echo form_error('lead_identification'); ?>
+
+                <div class="form-control">
+                    <label>Remark/Notes</label>
+                    <?php echo form_textarea($data_remark, '', $remark_extra);?>
+                </div>
+                <?php echo form_error('remark'); ?>
+                <label id="remark_id-error" class="error" for="remark_id"></label>
+            </div>
+            <div class="form-control form-submit clearfix">
+                <a href="javascript:void(0);" class="float-right">
+                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                    <span><input type="submit" style="border: none" name="Submit" value="Submit"></span>
+                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                </a>
+                <a href="javascript:void(0);" class="reset float-right">
+                    <img src="<?php echo base_url().ASSETS;?>images/reset-btn.png">
+                </a>
+
+            </div>
+            <?php echo form_close(); ?>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(document).ready(function () {
+<script>
+    $( function() {
+        // setup master volume
+        $( "#master" ).slider({
+            value: 10,
+            orientation: "horizontal",
+            range: "min",
+            animate: true
+        });
+        // setup graphic EQ
+        $( "#eq > span" ).each(function() {
+            // read initial values from markup and remove that
+            var value = parseInt( $( this ).text(), 10 );
+            $( this ).empty().slider({
+                value: value,
+                range: "min",
+                animate: true,
+                orientation: "vertical"
+            });
+        });
+    } );
+
+    $(document).ready(function(){
         var range = $('#ticket_range');
         var sliderElement = $( "#slider" );
         sliderElement.slider({
@@ -355,6 +296,7 @@ $remark_extra = 'style="height:50%"';
                 $('#district').addClass('hide');
             }
         });
+
         $('#product_category').change(function () {
             var base_url = "<?php echo base_url();?>";
             var category_id = $('#product_category').val();
@@ -473,5 +415,5 @@ $remark_extra = 'style="height:50%"';
                 }
             }
         });
-    });
+    })
 </script>
