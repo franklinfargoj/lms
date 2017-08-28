@@ -6,7 +6,7 @@
  * Time: 6:32 PM
  */
 $form_attributes = array('id' => 'upload_lead', 'method' => 'POST');
-$data_input = array('id' => 'file', 'name'=>'filename', 'method' => 'POST' ,'type' => 'file');
+$data_input = array('id' => 'file', 'name'=>'filename','type' => 'file');
 
 $source_options[''] = 'Select Lead Source';
 $source_options['Tie Ups'] = 'Tie Ups';
@@ -49,16 +49,16 @@ $data_submit = array(
                     <span>
                     </span>
                     <a href="javascript:void(0);" class="active">
-                        <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                        <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
                         <!-- <span>LOGIN</span> -->
                         <span><input type="submit" name="Submit" value="Submit"></span>
-                        <img alt = "Submit button" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                        <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                     </a>
                 <?php echo form_close();?>
             </div>
             <div class="upload-xl">
-                <a href="">
-                    <img alt="Download Sample File" src="<?php echo base_url().ASSETS;?>images/excel-img.png" alt="excel">
+                <a href="<?php echo base_url('uploads/sample_lead.xlsx')?>">
+                    <img src="<?php echo base_url().ASSETS;?>images/excel-img.png" alt="excel">
                     <span>Download Sample File</span>
                 </a>
             </div>
@@ -66,6 +66,13 @@ $data_submit = array(
 
         <table class="upload-table" id="sample_3">
             <thead>
+            <tr class="top-header">
+                <th></th>
+                <th><input type="text" name="customername" placeholder="Search File"></th>
+                <th></th>
+                <th><input type="text" name="customername" placeholder="Search Status"></th>
+                <th></th>
+            </tr>
             <tr>
                 <th>Sr. No</th>
                 <th>File</th>

@@ -1,8 +1,4 @@
-<style>
-    #master .ui-slider-range{
-        background: red;
-    }
-</style>
+
 <?php
 $form_attributes = array('class' => '', 'method' => 'post', 'accept-charset' => '', 'id' => 'addlead');
 $data_customer = array('name' => 'customer_name',
@@ -181,33 +177,19 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 <div id="state" class="form-control hide">
                     <label>State:</label>
                     <?php echo form_dropdown('state_id', $data_state, set_value('state_id')) ?>
-                    </select>
                 </div>
                 <?php echo form_error('state_id'); ?>
                 <div id="district" class="form-control hide">
                     <label>District:</label>
                     <?php echo form_dropdown('district_id', $data_district, set_value('district_id')) ?>
-                    </select>
                 </div>
                 <?php echo form_error('district_id'); ?>
-                <label id="district_id-error" class="error" for="district_id"></label>
                 <div id="branch" class="form-control hide">
                     <label>Branch:</label>
                     <?php echo form_dropdown('branch_id', $data_branch, set_value('branch_id')) ?>
-                    </select>
                 </div>
                 <?php echo form_error('branch_id'); ?>
-                <div class="form-control">
-                    <label>Department Name:</label>
-                    <?php echo form_input($data_department_name);?>
-                </div>
-                <?php echo form_error('department_name'); ?>
-                <div class="form-control">
-                    <label>Department Id:</label>
-                    <?php echo form_input($data_department_id);?>
-                </div>
-                <?php echo form_error('department_id'); ?>
-
+                
                 <div id="identification" class="form-control">
                     <label>Lead Identification:</label>
                     <?php echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) ?>
@@ -222,14 +204,14 @@ $remark_extra = 'style="rows:4 ; cols:80"';
             </div>
             <div class="form-control form-submit clearfix">
                 <a href="javascript:void(0);" class="float-right">
-                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                    <img alt="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
                     <span><input type="submit" style="border: none" name="Submit" value="Submit"></span>
-                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                    <img alt="right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                 </a>
                 <a href="javascript:void(0);" class="float-right">
-                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                    <img alt="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
                     <span><input type="reset" style="border: none;color: white" name="Submit" value="Reset"></span>
-                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                    <img alt="right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                 </a>
 <!--                <a href="javascript:void(0);" class="reset float-right">-->
 <!--                    <img src="--><?php //echo base_url().ASSETS;?><!--images/reset-btn.png">-->
@@ -358,12 +340,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 branch_id: {
                     required: true
                 },
-                department_id: {
-                    required: true
-                },
-                department_name: {
-                    required: true
-                },
                 remark: {
                     required: true
                 }
@@ -402,12 +378,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 },
                 state_id: {
                     required: "Please select state"
-                },
-                department_name: {
-                    required: "Please enter department name"
-                },
-                department_id: {
-                    required: "Please enter department id"
                 },
                 branch_id: {
                     required: "Please select branch"

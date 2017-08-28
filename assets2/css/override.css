@@ -1,7 +1,9 @@
 .help-block{
 	color:red;
 }
-
+#master .ui-slider-range{
+    background: red;
+}
  .form-submit span input[type=submit] {
     background-color: #01559d;
     color: #fff;
