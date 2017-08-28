@@ -228,7 +228,7 @@ class Leads extends CI_Controller
                     if ($validation['type'] == 'error') {
                         make_upload_directory('./uploads/errorlog');
                         $target_path = './uploads/errorlog/';
-                        $target_file = $file['raw_name'] . '_error_log_' . date('Y-m-d-H-i-s') . $file['file_ext'];
+                        $target_file = $file['file_name'];
                         create_excel_error_file($validation['data'], $target_path.$target_file,$target_file);
                         $data = array(
                             'file_name' => $target_file,

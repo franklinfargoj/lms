@@ -29,10 +29,10 @@ $data_state[''] = 'Select State';
 $data_state['1'] = 'Odisha';
 
 $data_branch[''] = 'Select Branch';
-$data_branch['1'] = 'Odisha';
+$data_branch['1'] = 'Laxmisagar';
 
 $data_district[''] = 'Select District';
-$data_district['1'] = 'Odisha';
+$data_district['1'] = 'Khordha';
 
 $data_department_name = array('name' => 'department_name',
     'id' => 'department_name',
@@ -76,7 +76,7 @@ if ($products != '') {
         $product_options[$value['id']] = $value['title'];
     }
 }
-
+$input = get_session();
 $data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'text','value'=>'');
 $lead_id_options[''] = 'Select Lead Identification';
 $lead_id_options['HOT'] = 'HOT';
@@ -141,11 +141,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 <?php echo form_error('product_id'); ?>
                 <div class="form-control range-slider">
                     <label>Ticket Size</label>
-<!--                    <div id="slider" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">-->
-<!--                        <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>-->
-<!--                        <span id="span_range" tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>-->
-<!--                        <div id="div_range" class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div>-->
-<!--                    </div>-->
                     <div id="master">
                         <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
                     </div>
@@ -174,19 +169,19 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     </div>
                 </div>
                 <?php echo form_error('is_own_branch'); ?>
-                <div id="state" class="form-control hide">
-                    <label>State:</label>
-                    <?php echo form_dropdown('state_id', $data_state, set_value('state_id')) ?>
+                <div id="state" class="form-control">
+                    <label>State:<?php echo $this->session->userdata('state_id');?></label>
+                    <?php echo form_dropdown('state_id', $data_state,$input['state_id'],'disabled') ?>
                 </div>
                 <?php echo form_error('state_id'); ?>
-                <div id="district" class="form-control hide">
+                <div id="district" class="form-control">
                     <label>District:</label>
-                    <?php echo form_dropdown('district_id', $data_district, set_value('district_id')) ?>
+                    <?php echo form_dropdown('district_id', $data_district, $input['district_id'],'disabled') ?>
                 </div>
                 <?php echo form_error('district_id'); ?>
-                <div id="branch" class="form-control hide">
+                <div id="branch" class="form-control">
                     <label>Branch:</label>
-                    <?php echo form_dropdown('branch_id', $data_branch, set_value('branch_id')) ?>
+                    <?php echo form_dropdown('branch_id', $data_branch, $input['branch_id'],'disabled') ?>
                 </div>
                 <?php echo form_error('branch_id'); ?>
                 
@@ -213,11 +208,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <span><input type="reset" style="border: none;color: white" name="Submit" value="Reset"></span>
                     <img alt="right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                 </a>
-<!--                <a href="javascript:void(0);" class="reset float-right">-->
-<!--                    <img src="--><?php //echo base_url().ASSETS;?><!--images/reset-btn.png">-->
-<!--                    <span><input type="submit" style="border: none" name="Submit" value="Submit"></span>-->
-<!--                </a>-->
-
             </div>
             <?php echo form_close(); ?>
         </div>
@@ -256,23 +246,34 @@ $remark_extra = 'style="rows:4 ; cols:80"';
             });
 
         if ($('#is_other_branch').is(':checked')) {
-            $('#state').removeClass('hide');
-            $('#branch').removeClass('hide');
-            $('#district').removeClass('hide');
+            $('select[name="state_id"]').prop('disabled',false);
+            $('select[name="branch_id"]').prop('disabled',false);
+            $('select[name="district_id"]').prop('disabled',false);
+            $('select[name="state_id"]').val('');
+            $('select[name="branch_id"]').val('');
+            $('select[name="district_id"]').val('');
         }
 
         $('#is_other_branch').click(function () {
-            if ($('#is_other_branch').is(':checked')) {
-                $('#state').removeClass('hide');
-                $('#branch').removeClass('hide');
-                $('#district').removeClass('hide');
-            }
+            $('select[name="state_id"]').prop('disabled',false);
+            $('select[name="branch_id"]').prop('disabled',false);
+            $('select[name="district_id"]').prop('disabled',false);
+            $('select[name="state_id"]').val('');
+            $('select[name="branch_id"]').val('');
+            $('select[name="district_id"]').val('');
         });
         $('#is_own_branch').click(function () {
             if ($('#is_own_branch').is(':checked')) {
-                $('#state').addClass('hide');
-                $('#branch').addClass('hide');
-                $('#district').addClass('hide');
+                var state = "<?php echo $input['state_id'];?>";
+                var branch = "<?php echo $input['branch_id'];?>";
+                var district = "<?php echo $input['district_id'];?>";
+                $('select[name="state_id"]').val(state);
+                $('select[name="branch_id"]').val(branch);
+                $('select[name="district_id"]').val(district);
+
+                $('select[name="state_id"]').prop('disabled',true);
+                $('select[name="branch_id"]').prop('disabled',true);
+                $('select[name="district_id"]').prop('disabled',true);
             }
         });
 

@@ -443,7 +443,7 @@ class Api extends REST_Controller
     }
 
     ##################################
-    /*Private Functions*/
+    /*public Functions*/
     ##################################
     /*
     * Validation for alphabetical letters

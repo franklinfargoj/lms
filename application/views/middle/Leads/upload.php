@@ -48,12 +48,13 @@ $data_submit = array(
                     </div>
                     <span>
                     </span>
+                <div class="form-control form-submit clearfix">
                     <a href="javascript:void(0);" class="active">
                         <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                        <!-- <span>LOGIN</span> -->
                         <span><input type="submit" name="Submit" value="Submit"></span>
                         <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                     </a>
+                </div>
                 <?php echo form_close();?>
             </div>
             <div class="upload-xl">
@@ -94,17 +95,16 @@ $data_submit = array(
                         <?php echo $value['file_name'];?>
                     </td>
                     <td>
-                        <?php echo date('d-m-Y',strtotime($value['created_time']));?>
+                        <?php echo date('d-m-Y H:i:s',strtotime($value['created_time']));?>
                     </td>
                     <td>
                         <?php echo $value['status'];?>
                     </td>
                     <td>
-                        <?php if($value['status'] == 'failed'){ ?>
-                        <a href="<?php echo base_url('uploads/errorlog/'.$value['file_name']); ?>">Error log</a>
-                        <?php }else{?>
-                        <a href="<?php echo base_url('uploads/'.$value['file_name']); ?>">Uploaded File</a>
-                    <?php }?>
+                <a href="<?php echo base_url('uploads/'.$value['file_name']); ?>">Uploaded File </a>
+                <?php if($value['status'] == 'failed'){?>
+                        <a href="<?php echo base_url('uploads/errorlog/'.$value['file_name']); ?>">/ Error log </a>
+                    <?php } ?>
                     </td>
                 </tr>
                 <?php
@@ -115,16 +115,53 @@ $data_submit = array(
 </div>
 </div>
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
-<script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>
+<!--<script src="--><?php //echo base_url().ASSETS;?><!--js/config.datatable.js"></script>-->
 <script type="text/javascript">
-    jQuery(document).ready(function() {
+
+    var table = $('#sample_3');
+    var columns = [4];
+
+    var initTable = function (table,columns) {
+        /*
+         * Initialize DataTables, with no sorting on the 'details' column
+         */
+
+
+        var oTable = table.DataTable({
+            "columnDefs": [{
+                "orderable": false,
+                "targets": columns
+            }],
+            "order": [
+                [2, 'desc']
+            ],
+            "lengthMenu": [
+                [5, 15, 20, -1],
+                [5, 15, 20, "All"] // change per page values here
+            ],
+            // set the initial value
+            "pageLength": 10,
+        });
+
+        // Apply the search
+        oTable.columns().every(function (index) {
+            table.find('thead tr:eq(0) th:eq(' + index + ') input').on('keyup change', function () {
+                oTable.column($(this).parent().index() + ':visible').search(this.value).draw();
+            });
+            table.find('thead tr:eq(0) th:eq(' + index + ') select').on('change', function () {
+                oTable.column($(this).parent().index() + ':visible').search(this.value).draw();
+            });
+        });
+    }
+    initTable(table,columns);
+    /*jQuery(document).ready(function() {
         var table = $('#sample_3');
         var columns = [4];
 
         //Initialize datatable configuration
         initTable(table,columns);
 
-    });
+    });*/
     $('#upload_lead').validate({
 
         rules:{

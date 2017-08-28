@@ -168,11 +168,11 @@ if(!function_exists('make_upload_directory')){
 if(!function_exists('upload_excel')){
 
     function upload_excel($upload_path,$file_name){
-
         $CI = & get_instance();
 
         $config['allowed_types'] = "xls|xlsx";
         $config['upload_path'] = $upload_path;
+        $config['file_name'] = time().$_FILES['filename']['name'];
 
         $CI->upload->initialize($config);
 
@@ -284,9 +284,9 @@ function get_session(){
         'dept_id' => '12',
         'dept_type_id' => '123',
         'dept_type_name' => 'BR',
-        'branch_id' => '1234',
-        'district_id' => '1234',
-        'state_id' => '1234',
+        'branch_id' => '1',
+        'district_id' => '1',
+        'state_id' => '1',
         'zone_id' => '1234',
         'full_name' => 'mukesh kurmi',
         'supervisor_id' => '009',
