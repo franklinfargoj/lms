@@ -11,11 +11,11 @@
 <div class="lead-top">
     <div class="container clearfix">
         <div class="float-left">
-            <span class="total-lead">Total FAQs</span>
+            <span class="total-lead">Total Faqs</span>
             <span class="lead-num"> : <?php echo count($faqlist);?></span>
         </div>
         <div class="float-right">
-            <a href="<?php echo base_url('ticker/add')?>">
+            <a href="<?php echo base_url('faq/add')?>">
                 Add
             </a>
         </div>
@@ -23,7 +23,7 @@
 </div>
 <div class="page-content">
     <div class="container">
-        <table id="sample_3" class="display lead-table" cellspacing="0">
+        <table id="sample_3" class="display lead-table">
             <thead>
                 <tr class="top-header">
                     <th></th>

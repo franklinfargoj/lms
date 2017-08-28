@@ -86,6 +86,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 define('ASSETS', 'assets2/');
+define('PLUGINS', 'assets2/plugins/');
 
 
 /*Tables Name*/

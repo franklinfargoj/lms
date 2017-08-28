@@ -23,7 +23,7 @@
 </div>
 <div class="page-content">
     <div class="container">
-        <table id="sample_3" class="display lead-table" cellspacing="0">
+        <table id="sample_3" class="display lead-table">
             <thead>
                 <tr class="top-header">
                     <th></th>
