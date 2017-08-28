@@ -38,3 +38,27 @@
     width: 175px;
 }
 /* Header css */
+
+.form label.error {
+    float: left;
+    border: none;
+    width: 100%;
+    color: red;
+}
+
+
+input.custom_button {
+    border: none !important;
+    line-height: 0px !important;
+}
+
+.lead-top .float-right a{
+    font-family: "Montserrat";
+    font-size: 16px;
+    color: #1a1a1a;
+    padding-top: 15px;
+}
+
+.float-right{
+    float: right;
+}

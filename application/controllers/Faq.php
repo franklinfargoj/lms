@@ -67,6 +67,7 @@ class Faq extends CI_Controller {
                     $insert = array(
                          'question' => $this->input->post('question'),
                          'answer' => $this->input->post('answer'),
+                         'status' => strtolower($this->input->post('status')),
                          'created_by' => loginUserId()
                     );
                     $response = $this->master->add_record($insert);
@@ -125,6 +126,7 @@ class Faq extends CI_Controller {
                     $update = array(
                          'question' => $this->input->post('question'),
                          'answer' => $this->input->post('answer'),
+                         'status' => strtolower($this->input->post('status')),
                          'modified_by' => loginUserId(),
                          'modified_on' => date('y-m-d H:i:s')
                     );

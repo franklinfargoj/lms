@@ -68,6 +68,7 @@ class Product extends CI_Controller {
                          'title' => strtolower($this->input->post('title')),
                          'category_id' => $this->input->post('category_id'),
                          'default_assign' => $this->input->post('default_assign'),
+                         'status' => strtolower($this->input->post('status')),
                          'created_by' => loginUserId()
                     );
                     $response = $this->master->add_product($insert);
@@ -128,6 +129,7 @@ class Product extends CI_Controller {
                          'category_id' => $this->input->post('category_id'),
                          'title' => strtolower($this->input->post('title')),
                          'default_assign' => $this->input->post('default_assign'),
+                         'status' => strtolower($this->input->post('status')),
                          'modified_by' => loginUserId(),
                          'modified_on' => date('y-m-d H:i:s')
                          
@@ -168,6 +170,8 @@ class Product extends CI_Controller {
           }
           redirect('product');
      }
+
+     
 
      ##################################
      /*Private Functions*/

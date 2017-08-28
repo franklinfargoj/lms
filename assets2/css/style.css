@@ -71,6 +71,7 @@ body{
 	font-family: 'Lato', "Montserrat" !important;
 	font-size: 16px;
 	padding-bottom: 80px;
+	position: relative;
 }
 ::-webkit-input-placeholder {
   color: #ffffff;
@@ -310,7 +311,7 @@ body{
     vertical-align: middle;
     display: table-cell;
     text-align: center;
-    width: 110px;
+    width: 96px;
     font-family: "Montserrat";
     font-size: 16.56px;
     font-weight: bold;
@@ -474,6 +475,7 @@ body{
     width: 100%;
     bottom: 0;
     background-color: #383838;
+    position: absolute;
 }
 .copyright{
 	border-top: 1px solid #757575;
@@ -569,6 +571,8 @@ strong{
 	width: 100%;
 	height: 27px;
     border: 1px solid #d3d3d3;
+    outline: none;
+    color: #8c8c8c;
 }
 
 .lead-form .form-control label{width: 155px; color: #333333; font-size: 15px;}
@@ -588,8 +592,24 @@ strong{
 .ui-slider-horizontal{width: 65%; display: inline-block;}
 .range-slider input{width: 25%; display: inline-block; float: right; margin-top: -20px;}
 .ui-widget-header{background-color: #ed4c4c;}
-.reset{margin-right: 20px;}
-.reset img{width: auto;}
+.reset{
+	margin-right: 20px;
+	/*background-color: transparent;
+    background-image: url("../images/reset-btn.png");
+    background-repeat: no-repeat;
+    width: 120px;
+    height: 45px;
+    border: 0 none;*/
+    cursor: pointer;
+    outline: 0 none;
+    color: #767676;
+    font-weight: 600;
+    font-size: 18px;
+    text-decoration: underline;
+    vertical-align: middle;
+    margin-top: 10px;
+}
+/*.reset img{width: auto;}*/
 .lead-form .form-submit .reset{
 	margin-right: 20px;
 }
@@ -667,12 +687,14 @@ table.dataTable.no-footer{border-bottom: 0 none;}
 table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
     border-top: 1px solid #e9ecf0;
 }
+.page-content .container{ background-color: #fff; zoom: 1; filter: progid:DXImageTransform.Microsoft.Shadow(color='#aaaaaa', Direction=135, Strength=6); }
+
 /*.page-content .container{
-	background-image: url(../images/bg1.png);
-     background-size: 100% 100%;
-    padding: 45px 40px;
+	background-image: url("../images/bg.png");
+    background-position: center top;
     background-repeat: no-repeat;
-    border: 1px solid red;
+    background-size: 100% auto;
+    padding: 45px 40px 75px;
 }*/
 /*lead*/
 /*upload lead*/
@@ -810,8 +832,90 @@ margin-top: 10px;
     background-position: 99% center;
 }
 
-
 /*faq*/
+
+/*add category*/
+.product-category{
+	width: 615px;
+	margin: 0 auto;
+}
+.product-category .form-control{
+	border-bottom: 0 none;
+	margin-bottom: 30px;
+}
+.product-category .form-control input {
+    border: 1px solid #d3d3d3;
+    height: 27px;
+}
+.product-category .form-control label{
+	font-size: 15px;
+	font-family: "Montserrat";
+	color: #333333;
+	width: 145px;
+}
+.product-category .form-control .reset{float: left;}
+.product-category .radio-control label{font-size: 13px;}
+.product-category .form-submit{
+	margin: 0 0 0 145px;
+}
+.product-category .form-submit span{
+	font-size: 16px;
+    font-weight: 500;
+    width: 100px;
+}
+
+.product-category .btn-submit{
+	background-color: transparent;
+    background-image: url("../images/submit-btn.png");
+    background-repeat: no-repeat;
+    width: 120px;
+    height: 45px;
+    border: 0 none;
+    cursor: pointer;
+    outline: 0 none;
+}
+
+.product-category .form-submit img{
+	height: 40px;
+    width: 15px;
+}
+.product-category .form-submit span{
+	width: 96px;
+}
+.product-category .form-submit a{height: 40px;}
+
+
+/*add category*/
+
+/*add-product*/
+.product-category select{
+    width: 100%;
+    height: 33px;
+    border: 1px solid #d3d3d3;
+ }
+
+.product-category.add-product{
+	width: 630px;
+}
+/*add product*/
+
+
+.form-control .detail-label{
+	width: auto !important;
+    font-size: 13px !important;
+}
+
+.remark-notes{
+	min-height: 84px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 13px;
+    line-height: 19px;
+    color: #8c8c8c;
+}
+.detail-label.red{
+	color: #ee4b4c;
+}
 
 /*Bread Crumbs*/
 .breadcrumbs{
@@ -825,13 +929,17 @@ margin-top: 10px;
 	display: inline-block;
 	vertical-align: middle;
 	color: #5e5e5e;
-	font-size: 16px;
+	font-size: 13px;
 	font-family: "Montserrat";
 }
 .breadcrumbs ul li a{
 	 color: #014986;
     font-family: "Montserrat";
-    font-size: 16px;
+    font-size: 13px;
+}
+.breadcrumbs ul li span{
+	color: #014986;
+    margin: 0 10px;
 }
 .breadcrumbs ul li a:hover{
 	color: #01559d;

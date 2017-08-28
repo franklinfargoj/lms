@@ -6,12 +6,6 @@
 			<span class="caption-subject font-green-sharp bold uppercase">Add Product Category</span>
 		</div>
 		<div class="tools">
-			<!-- <a href="javascript:;" class="collapse">
-			</a>
-			<a href="#portlet-config" data-toggle="modal" class="config">
-			</a>
-			<a href="javascript:;" class="reload">
-			</a> -->
 			<a href="<?php echo base_url('product_category');?>" class="">List
 			</a>
 		</div>
@@ -52,40 +46,6 @@
 						echo form_error('title', '<span class="help-block">', '</span>');
 					?>
 				</div>
-				<!-- <div class="form-group">
-					<label>Small Input</label>
-					<input type="text" class="form-control input-sm" placeholder="input-sm">
-				</div>
-				<div class="form-group">
-					<label>Large Select</label>
-					<select class="form-control input-lg">
-						<option>Option 1</option>
-						<option>Option 2</option>
-						<option>Option 3</option>
-						<option>Option 4</option>
-						<option>Option 5</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label>Default Select</label>
-					<select class="form-control">
-						<option>Option 1</option>
-						<option>Option 2</option>
-						<option>Option 3</option>
-						<option>Option 4</option>
-						<option>Option 5</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label>Small Select</label>
-					<select class="form-control input-sm">
-						<option>Option 1</option>
-						<option>Option 2</option>
-						<option>Option 3</option>
-						<option>Option 4</option>
-						<option>Option 5</option>
-					</select>
-				</div> -->
 			</div>
 			<div class="form-actions right">
 				<button type="button" class="btn default">Cancel</button>

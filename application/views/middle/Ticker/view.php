@@ -28,12 +28,20 @@
                 <tr class="top-header">
                     <th></th>
                     <th><input type="text" name="customername" placeholder="Search Title"></th>
+                    <th>
+                        <select name="status">
+                            <option value="">Select status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </th>
                     <th></th>
                     <th></th>
                 </tr>
                 <tr>
                     <th>Sr. No.</th>
                     <th>Title</th>
+                    <th>Status</th>
                     <th>Description</th>
                     <th>Action</th>
                 </tr>
@@ -51,17 +59,24 @@
                              <?php echo $value['title'];?>
                         </td>
                         <td>
+                            <?php echo $value['status'];?>
+                            <!-- <label class="switch switch-flat">
+                                <input class="switch-input" id="<?php echo $value['id'];?>" type="checkbox" />
+                                <span class="switch-label" data-on="Active" data-off="Inactive"></span> <span class="switch-handle"></span>
+                            </label> -->
+                        </td>
+                        <td>
                             <a class="" href="<?php echo site_url('ticker/view/'.encode_id($value['id']))?>">
                                  View
                             </a> 
                         </td>
                         <td>
                             <a class="" href="<?php echo site_url('ticker/edit/'. encode_id($value['id']));?>">
-                                <img src="<?php echo base_url().ASSETS;?>images/pencil.png" alt="btn">
+                                Edit
                             </a> 
-                            
+                            <span>/</span> 
                             <a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('ticker/delete/'. encode_id($value['id']))?>">
-                                <img src="<?php echo base_url().ASSETS;?>images/delete.png" alt="btn">
+                                Delete
                             </a> 
                         </td>
                     </tr>   
@@ -78,7 +93,7 @@
 <script type="text/javascript">
     jQuery(document).ready(function() { 
         var table = $('#sample_3');
-        var columns = [2,3];
+        var columns = [3,4];
 
         //Initialize datatable configuration
         initTable(table,columns);
