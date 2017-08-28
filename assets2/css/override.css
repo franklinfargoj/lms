@@ -1,10 +1,8 @@
 .help-block{
-	color:red;
+    color:red;
 }
-#master .ui-slider-range{
-    background: red;
-}
- .form-submit span input[type=submit] {
+/* Login form css */
+.form-submit span input[type=submit] {
     background-color: #01559d;
     color: #fff;
     vertical-align: middle;
@@ -15,7 +13,7 @@
     font-size: 16.56px;
     font-weight: bold;
     cursor: pointer;
-} 
+}
 
 .form-submit span {
     background-color: #01559d;
@@ -41,19 +39,26 @@
 }
 /* Header css */
 
-#addlead label.error {
-    float: left;
-    border: none;
-    width: 100%;
-    color: red;
-}
-#upload_lead label.error {
+.form label.error {
     float: left;
     border: none;
     width: 100%;
     color: red;
 }
 
-.hide {
-   display: none;
+
+input.custom_button {
+    border: none !important;
+    line-height: 0px !important;
+}
+
+.lead-top .float-right a{
+    font-family: "Montserrat";
+    font-size: 16px;
+    color: #1a1a1a;
+    padding-top: 15px;
+}
+
+.float-right{
+    float: right;
 }
