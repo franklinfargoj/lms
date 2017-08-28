@@ -284,7 +284,7 @@ function get_session(){
         'dept_id' => '12',
         'dept_type_id' => '123',
         'dept_type_name' => 'BR',
-        'branch_id' => '1',
+        'branch_id' => '12',
         'district_id' => '1',
         'state_id' => '1',
         'zone_id' => '1234',
