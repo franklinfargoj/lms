@@ -14,6 +14,9 @@
 	<link rel="stylesheet" href="<?php echo base_url().ASSETS;?>css/jquery-ui.css">
 	<script src="<?php echo base_url().ASSETS;?>js/jquery.min.js" type="text/javascript"></script>
 	<script src="<?php echo base_url().ASSETS;?>js/jquery.validate.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var baseUrl = "<?php echo base_url()?>";
+	</script>
 </head>
 <body>
 	<?php echo $this->load->view('common/header',array(),TRUE);?>

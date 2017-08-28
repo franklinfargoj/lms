@@ -65,6 +65,7 @@ class Ticker extends CI_Controller {
                     $insert = array(
                          'title' => $this->input->post('title'),
                          'description_text' => $this->input->post('description_text'),
+                         'status' => strtolower($this->input->post('status')),
                          'created_by' => loginUserId()
                     );
                     $response = $this->master->add_record($insert);
@@ -123,6 +124,7 @@ class Ticker extends CI_Controller {
                     $update = array(
                          'title' => $this->input->post('title'),
                          'description_text' => $this->input->post('description_text'),
+                         'status' => strtolower($this->input->post('status')),
                          'modified_by' => loginUserId(),
                          'modified_on' => date('y-m-d H:i:s')
                     );

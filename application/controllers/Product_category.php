@@ -63,6 +63,7 @@ class Product_category extends CI_Controller {
                }else{
                     $insert = array(
                          'title' => strtolower($this->input->post('title')),
+                         'status' => strtolower($this->input->post('status')),
                          'created_by' => loginUserId()
                     );
                     $response = $this->master->add_product_category($insert);
@@ -118,6 +119,7 @@ class Product_category extends CI_Controller {
                }else{
                     $update = array(
                          'title' => strtolower($this->input->post('title')),
+                         'status' => strtolower($this->input->post('status')),
                          'modified_by' => loginUserId(),
                          'modified_on' => date('y-m-d H:i:s')
                     );
@@ -158,6 +160,32 @@ class Product_category extends CI_Controller {
           }
           redirect('product_category');
      }
+
+     /*public function activate(){
+          if($this->input->post('id')){
+               $id = $this->input->post('id');
+               //$updateData = array('status' => )
+               $this->db->where('id', $id);
+               if($this->db->update(Tbl_Category,$updateData)){
+                    return true;
+               }else{
+                    return false;
+               }
+          }
+     }
+
+     public function deactivate(){
+          if($this->input->post('id')){
+               $id = $this->input->post('id');
+               $this->db->where('id', $id);
+               if($this->db->update(Tbl_Category,$updateData)){
+                    return true;
+               }else{
+                    return false;
+               }
+          }
+     }*/
+     
 
      ##################################
      /*Private Functions*/

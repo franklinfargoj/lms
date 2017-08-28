@@ -1,77 +1,94 @@
-<!-- BEGIN PAGE LEVEL STYLES -->
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css"/>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/global/plugins/bootstrap-wysihtml5/wysiwyg-color.css"/>
-
-<!-- END PAGE LEVEL STYLES -->
-<!-- BEGIN PRODUCT DESCRIPTION-->
-<div class="portlet light">
-    <div class="portlet-title">
-        <div class="caption">
-            <!-- <i class="fa fa-cogs font-green-sharp"></i> -->
-            <span class="caption-subject font-green-sharp bold">Edit FAQ</span>
-        </div>
-        <div class="tools">
-            <a href="<?php echo site_url('faq');?>" class="btn btn-sm blue"></i>Back
-            </a>
+<div class="page-title">
+    <div class="container clearfix">
+        <h3 class="text-center">Edit FAQ</h3>
+        <div class="float-right">
+            <span class="lead-num"><a href="<?php echo site_url('faq');?>">Back</a></span>
         </div>
     </div>
-    <div class="portlet-body form">
-		<?php
-			$attributes = array(
-				'role' => 'form',
-				'id' => 'edit_form',
-				'autocomplete' => 'off'
-				);
-			echo form_open(base_url().'/faq/edit/'.$this->uri->segment(3,0), $attributes);
-		?>
-		<!-- <form role="form"> -->
-			<div class="form-body">
-				<div class="form-group <?php if(isset($has_error)){ echo $has_error;}?>">
-					<?php 
-						$attributes = array(
-					        'class' => '',
-					        'style' => ''
-						);
-						echo form_label('Question', 'question', $attributes);
-
-						$data = array(
-					        'type'  => 'text',
-					        'name'  => 'question',
-					        'id'    => 'question',
-					        'class' => 'form-control',
-					        'placeholder' => '',
-					        'value' => $faqDetail[0]['question']
-						);
-						echo form_input($data);
-						
-						// Assuming that the 'title' field value was incorrect:
-						echo form_error('question', '<span class="help-block">', '</span>');
-					?>
-				</div>
-				<div class="form-group <?php if(isset($has_error)){ echo $has_error;}?>">
-					<?php 
-                        $attributes = array(
-                            'class' => '',
-                            'style' => ''
-                        );
-                        echo form_label('Answer', 'answer', $attributes);
-                    ?>
-                        <textarea name = "answer" rows="7" cols="80" style="width: 810px; height: 200px">
-                    			<?php echo $faqDetail[0]['answer'];?>
-                        </textarea>
-                    <?php echo form_error('answer', '<span class="help-block">', '</span>');?>
-				</div>
-			</div>
-			<div class="form-actions right">
-				<button type="reset" class="btn default">Reset</button>
-				<button type="submit" class="btn green">Submit</button>
-			</div>
-		<!-- </form> -->
-		<?php echo form_close();?>
-	</div>
 </div>
-<!-- END PRODUCT DESCRIPTION-->
+<div class="page-content">
+    <div class="container">
+        <span></span>
+            <div class="inner-content">
+                <div class="product-category">
+                    <!-- <form> -->
+                    <?php
+                        $attributes = array(
+                            'role' => 'form',
+                            'id' => 'edit_form',
+                            'class' => 'form',
+                            'autocomplete' => 'off'
+                            );
+                        echo form_open(base_url().'/faq/edit/'.$this->uri->segment(3,0), $attributes);
+                    ?>
+                        <div class="form-control">
+                            <?php 
+                                $attributes = array(
+                                    'class' => '',
+                                    'style' => ''
+                                );
+                                echo form_label('Question', 'question', $attributes);
+
+                                $data = array(
+                                    'type'  => 'text',
+                                    'name'  => 'question',
+                                    'id'    => 'question',
+                                    'class' => 'form-control',
+                                    'placeholder' => '',
+                                    'value' => $faqDetail[0]['question']
+                                );
+                                echo form_input($data);
+                                
+                                // Assuming that the 'title' field value was incorrect:
+                                echo form_error('question', '<span class="help-block">', '</span>');
+                            ?>
+                        </div>
+                        <div class="form-control">
+                            <?php 
+                                $attributes = array(
+                                    'class' => '',
+                                    'style' => ''
+                                );
+                                echo form_label('Answer', 'answer', $attributes);
+                            ?>
+                        
+                            <textarea name="answer" rows="7" cols="80" style="width: 810px; height: 200px">
+                                <?php echo $faqDetail[0]['answer'];?>
+                            </textarea>
+                            <?php echo form_error('answer', '<span class="help-block">', '</span>');?>
+                        </div>
+                        <div class="form-control">
+                            <label>Status</label>
+                            <div class="radio-control">
+                                <input type="radio" id= "active" name="status" value="active" <?php 
+                                    echo set_value('status', $faqDetail[0]['status']) == 'active' ? "checked" : ""; 
+                                ?> />
+                                <label>Active</label>
+                            </div>
+                            <div class="radio-control">
+                                <input type="radio" id= "inactive" name="status" value="inactive" <?php 
+                                    echo set_value('status', $faqDetail[0]['status']) == 'inactive' ? "checked" : ""; 
+                                ?> />
+                                <label>Inactive</label>
+                            </div>
+                        </div>
+                        <div class="form-control form-submit clearfix">
+                            <a href="#" class="reset">
+                                Reset
+                            </a>
+                            <a href="javascript:void(0);" class="active">
+                                <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                <span><input type="submit" name="Submit" value="Submit"></span>
+                                <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                            </a>
+                        </div>
+                    <!-- </form> -->
+                    <?php echo form_close();?>
+                </div>
+            </div>
+        <span></span>
+    </div>
+</div>
 
 <script src="<?php echo base_url().PLUGINS;?>ckeditor/ckeditor.js"></script>
 <script type="text/javascript">

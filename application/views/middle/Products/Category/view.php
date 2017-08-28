@@ -1,4 +1,5 @@
 <!-- BEGIN PAGE LEVEL STYLES -->
+    <link href="<?php echo base_url().ASSETS;?>css/toggle.css" rel="stylesheet">
     <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- END PAGE LEVEL STYLES -->
 
@@ -15,9 +16,7 @@
             <span class="lead-num"> : <?php echo count($categorylist);?></span>
         </div>
         <div class="float-right">
-            <a href="<?php echo site_url('product_category/add');?>">
-                Add
-            </a>
+            <span class="lead-num"><a href="<?php echo site_url('product_category/add');?>">Add</a></span>
         </div>
     </div>
 </div>
@@ -28,11 +27,19 @@
                 <tr class="top-header">
                     <th></th>
                     <th><input type="text" name="customername" placeholder="Search Title"></th>
+                    <th>
+                        <select name="status">
+                            <option value="">Select status</option>
+                            <option value="active">active</option>
+                            <option value="inactive">inactive</option>
+                        </select>
+                    </th>
                     <th></th>
                 </tr>
                 <tr>
                     <th>Sr. No.</th>
                     <th>Title</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -49,12 +56,19 @@
                              <?php echo $value['title'];?>
                         </td>
                         <td>
+                            <?php echo $value['status'];?>
+                            <!-- <label class="switch switch-flat">
+                                <input class="switch-input" id="<?php echo $value['id'];?>" type="checkbox" />
+                                <span class="switch-label" data-on="Active" data-off="Inactive"></span> <span class="switch-handle"></span>
+                            </label> -->
+                        </td>
+                        <td>
                             <a class="" href="<?php echo site_url('product_category/edit/'. encode_id($value['id']));?>">
-                                <img src="<?php echo base_url().ASSETS;?>images/pencil.png" alt="btn">
-                            </a> 
-                            
+                                Edit
+                            </a>
+                            <span>/</span> 
                             <a class="" href="javascript:void(0);" data-url="<?php echo site_url('product_category/delete/'. encode_id($value['id']))?>">
-                                <img src="<?php echo base_url().ASSETS;?>images/delete.png" alt="btn">
+                                Delete
                             </a> 
                         </td>
                     </tr>   
@@ -71,7 +85,7 @@
 <script type="text/javascript">
     jQuery(document).ready(function() { 
         var table = $('#sample_3');
-        var columns = [2];
+        var columns = [3];
 
         //Initialize datatable configuration
         initTable(table,columns);

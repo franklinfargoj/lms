@@ -66,7 +66,20 @@
 					</a>
 				</li>
 				<?php }?>
-
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
+				<li>
+					<a href="">
+						Product Guide
+					</a>
+				</li>
+				<?php }?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
+				<li>
+					<a href="">
+						Calculator
+					</a>
+				</li>
+				<?php }?>
 			</ul>
 		</div>
 		<div class="right-nav">
