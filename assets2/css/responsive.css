@@ -12,6 +12,11 @@
 	.main-content .lead-section{
 		padding: 0 45px;
 	}
+
+    .lead-form .lead-form-right{
+        width: 47%;
+    }
+    
 }
 
 @media only screen and (min-width:768px) and (max-width:1023px) {
@@ -59,6 +64,14 @@
 
     .header .right-nav .logged-in{
         width: auto;
+    }
+
+      .lead-form .lead-form-left{
+        width: 48%;
+    }
+    .lead-form .lead-form-right{
+        padding-left: 20px;
+        width: 48%;
     }
 
 }

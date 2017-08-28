@@ -47,10 +47,9 @@ class Leads extends CI_Controller
             $this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
             $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alphaNumeric');
             $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
+            $this->form_validation->set_rules('lead_ticket_range', 'Range.', 'required|numeric');
             $this->form_validation->set_rules('product_category_id', 'Product Category', 'required');
             $this->form_validation->set_rules('product_id', 'Product','required');
-            $this->form_validation->set_rules('department_id', 'Department Id', 'required');
-            $this->form_validation->set_rules('department_name', 'Department Name', 'required');
             $this->form_validation->set_rules('remark', 'Remark', 'required');
             $this->form_validation->set_rules('is_own_branch', 'Branch', 'required');
             $this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
@@ -87,12 +86,13 @@ class Leads extends CI_Controller
             }
 
 
-            $keys = array('is_existing_customer','lead_ticket_range','customer_name','contact_no','product_category_id','product_id','department_id',
-                'department_name','lead_identification','is_own_branch','remark','lead_ticket_range');
+            $keys = array('is_existing_customer','lead_ticket_range','customer_name','contact_no','product_category_id','product_id','lead_identification','is_own_branch','remark','lead_ticket_range');
             foreach ($keys as $k => $value){
                 $lead_data[$value] = $this->input->post($value);
 
             }
+            $lead_data['department_name'] = $this->session->userdata('department_name');
+            $lead_data['department_id'] = $this->session->userdata('department_id');
             $whereArray = array('product_id'=>$lead_data['product_id'],'branch_id'=>$lead_data['branch_id']);
             $routed_id = $this->Lead->check_mapping($whereArray);
             if(!is_array($routed_id)){

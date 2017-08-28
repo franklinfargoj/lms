@@ -1,8 +1,10 @@
 .help-block{
 	color:red;
 }
-/* Login form css */
-.form-submit span input[type=submit] {
+#master .ui-slider-range{
+    background: red;
+}
+ .form-submit span input[type=submit] {
     background-color: #01559d;
     color: #fff;
     vertical-align: middle;
@@ -39,8 +41,17 @@
 }
 /* Header css */}
 
-.error {
-   color: red
+#addlead label.error {
+    float: left;
+    border: none;
+    width: 100%;
+    color: red;
+}
+#upload_lead label.error {
+    float: left;
+    border: none;
+    width: 100%;
+    color: red;
 }
 
 .hide {
