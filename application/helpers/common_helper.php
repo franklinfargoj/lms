@@ -305,17 +305,12 @@ function get_lead_title($type,$till){
                 $title = 'Leads Generated';
             break;
         case 'converted':
-                $title = 'Leads Convered';
+                $title = 'Leads Converted';
             break;
         case 'assigned':
                 $title = 'Leads Assigned';
             break;
     }
-    if($till == 'mtd'){
-        $title .= ' MTD';
-    }
-    if($till == 'ytd'){
-        $title .= ' YTD';
-    }
+    
     return $title;
 }
