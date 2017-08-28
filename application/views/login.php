@@ -119,7 +119,7 @@
 				<?php 
 					foreach ($tickers as $key => $value) {
 				?>
-					&bull;<a href="<?php echo site_url('login/view_tickers/'.encode_id($value['id']));?>"><?php echo $value['title'];?></a>
+					<img src="<?php echo base_url().ASSETS;?>images/small-circle.png"><a href="<?php echo site_url('login/view_tickers/'.encode_id($value['id']));?>"><?php echo $value['title'];?></a>
 				<?php 		
 					}
 				?>

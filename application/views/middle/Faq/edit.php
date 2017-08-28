@@ -57,7 +57,7 @@
                         );
                         echo form_label('Answer', 'answer', $attributes);
                     ?>
-                        <textarea name = "answer" class="textarea" placeholder="Enter text ..." style="width: 810px; height: 200px">
+                        <textarea name = "answer" rows="7" cols="80" style="width: 810px; height: 200px">
                     			<?php echo $faqDetail[0]['answer'];?>
                         </textarea>
                     <?php echo form_error('answer', '<span class="help-block">', '</span>');?>
@@ -73,24 +73,21 @@
 </div>
 <!-- END PRODUCT DESCRIPTION-->
 
-<script src="<?php echo base_url();?>assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
-
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo base_url();?>assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js" type="text/javascript"></script>
-<script src="<?php echo base_url();?>assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
+<script src="<?php echo base_url().PLUGINS;?>ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
-    $('.textarea').wysihtml5();
-</script>
-
-<script type="text/javascript">
+	$(function () {
+        // Replace the <textarea id="answer"> with a CKEditor
+        // instance, using default configuration.
+        //CKEDITOR.replace('answer');
+        CKEDITOR.replace( 'answer', {
+            uiColor: '#01559d'
+        });  
+    }); 
  	$.validator.addMethod("regx", function(value, element, regexpr) {
         return regexpr.test(value);
     });
-
-    $("#edit_form").validate({
-
-        rules: {
+	$("#edit_form").validate({
+		rules: {
             question: {
                 required: true
             },
@@ -107,7 +104,6 @@
             }
         }
     });
-
 </script>
 
 

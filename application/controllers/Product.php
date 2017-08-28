@@ -34,6 +34,7 @@ class Product extends CI_Controller {
           $arrData['breadcrumb'] = $this->make_bread->output();
           /*Create Breadcumb*/
 
+          $arrData['categorylist'] = $this->getCategoryList('TITLE');
           $arrData['productlist'] = $this->master->view_product();
           return load_view("Products/Product/view",$arrData);
 	}
@@ -197,12 +198,17 @@ class Product extends CI_Controller {
      * @param none
      * @return void
      */
-     private function getCategoryList(){
+     private function getCategoryList($option = 'ID'){
           $list = $this->master->view_product_category($id = null);
           asort($list);
-          $categorylist[''] = "Select";
+          $categorylist[''] = "Select Category";
           foreach ($list as $key => $value) {
-               $categorylist[$value['id']] = $value['title'];
+               if($option == 'ID'){
+                    $categorylist[$value['id']] = $value['title'];
+               }
+               if($option == 'TITLE'){
+                    $categorylist[$value['title']] = $value['title'];
+               }
           }
           return $categorylist;
      }
