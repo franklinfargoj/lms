@@ -17,18 +17,29 @@
     cursor: pointer;
 } 
 
- .form-submit span {
+.form-submit span {
     background-color: #01559d;
     color: #fff;
     vertical-align: middle;
     display: table-cell;
     text-align: center;
-    width: 157px;
+    /* width: 157px; */
     font-family: "Montserrat";
     font-size: 16.56px;
     font-weight: bold;
     /* border-radius: 24px; */
 }
+/* Login form css */
+
+/* Header css */
+.header .top-navigation {
+    width: 60%;
+}
+
+.header .right-nav .logged-in {
+    width: 175px;
+}
+/* Header css */
 
 #addlead label.error {
     float: left;

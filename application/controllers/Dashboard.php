@@ -33,7 +33,7 @@ class Dashboard extends CI_Controller {
 	{
         //Get session data
         $input = get_session();
-
+        $middle = '';
         //Create Breadcumb
         /*$arrData['breadcrumb'] = $this->make_bread->output();*/
         $arrData['breadcrumb'] = '';
@@ -81,11 +81,15 @@ class Dashboard extends CI_Controller {
                         $where  = array(Tbl_LeadAssign.'.employee_id' => $input['hrms_id'],Tbl_LeadAssign.'.is_deleted' => 0,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
                         $leads['assigned_leads'] = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
 
+                    $arrData['leads'] = $leads;
+
+                    //Middle view
+                    $middle = "dashboard";
                     break;
             }
-            $arrData['leads'] = $leads;
+           
         }
 
-        return load_view($middle = "dashboard",$arrData);
+        return load_view($middle,$arrData);
 	}
 }

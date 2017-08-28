@@ -57,7 +57,7 @@
                         );
                         echo form_label('Description', 'description_text', $attributes);
                     ?>
-                        <textarea name = "description_text" class="textarea" placeholder="Enter text ..." style="width: 810px; height: 200px">
+                        <textarea name = "description_text" rows="7" cols="80" style="width: 810px; height: 200px">
                     			<?php echo $tickerDetail[0]['description_text'];?>
                         </textarea>
                     <?php echo form_error('description_text', '<span class="help-block">', '</span>');?>
@@ -73,16 +73,16 @@
 </div>
 <!-- END PRODUCT DESCRIPTION-->
 
-<script src="<?php echo base_url();?>assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
-
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo base_url();?>assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js" type="text/javascript"></script>
-<script src="<?php echo base_url();?>assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
+<script src="<?php echo base_url().PLUGINS;?>ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
-    $('.textarea').wysihtml5();
-</script>
-<script type="text/javascript">
+	$(function () {
+        // Replace the <textarea id="answer"> with a CKEditor
+        // instance, using default configuration.
+        //CKEDITOR.replace('answer');
+        CKEDITOR.replace( 'description_text', {
+            uiColor: '#01559d'
+        });  
+    });
  	$.validator.addMethod("regx", function(value, element, regexpr) {
         return regexpr.test(value);
     });
