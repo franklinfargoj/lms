@@ -72,7 +72,7 @@ class Ticker_model extends CI_Model{
 	 * @return array
 	 */
 	public function view_record($id = null,$order_by = array()){
-		$select = array('id','title','description_text','created_by');
+		$select = array('id','title','description_text','created_by','status');
 		$where['is_deleted'] = 0;
 		if(!empty($id)){
 			$where['id'] = $id;

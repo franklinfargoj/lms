@@ -29,10 +29,17 @@
                     <th></th>
                     <th><input type="text" name="customername" placeholder="Search Title"></th>
                     <th>
-                    <?php 
-                        $options = $categorylist;
-                        echo form_dropdown('category_id', $options ,'',array());
-                    ?>
+                        <?php 
+                            $options = $categorylist;
+                            echo form_dropdown('category_id', $options ,'',array());
+                        ?>
+                    </th>
+                    <th>
+                        <select name="status">
+                            <option value="">Select status</option>
+                            <option value="active">active</option>
+                            <option value="inactive">inactive</option>
+                        </select>
                     </th>
                     <th></th>
                     <th></th>
@@ -41,6 +48,7 @@
                     <th>Sr. No.</th>
                     <th>Title</th>
                     <th>Category</th>
+                    <th>Status</th>
                     <th>Description</th>
                     <th>Action</th>
                 </tr>
@@ -61,17 +69,24 @@
                              <?php echo $value['category'];?>
                         </td>
                         <td>
+                            <?php echo $value['status'];?>
+                            <!-- <label class="switch switch-flat">
+                                <input class="switch-input" id="<?php echo $value['id'];?>" type="checkbox" />
+                                <span class="switch-label" data-on="Active" data-off="Inactive"></span> <span class="switch-handle"></span>
+                            </label> -->
+                        </td>
+                        <td>
                             <a class="" href="<?php echo site_url('product_guide/index/'. encode_id($value['id']))?>">
                                  View
                             </a> 
                         </td>
                         <td>
                             <a class="" href="<?php echo site_url('product/edit/'. encode_id($value['id']));?>">
-                                <img src="<?php echo base_url().ASSETS;?>images/pencil.png" alt="btn">
+                                Edit
                             </a> 
-                            
+                            <span>/</span> 
                             <a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('product/delete/'. encode_id($value['id']))?>">
-                                <img src="<?php echo base_url().ASSETS;?>images/delete.png" alt="btn">
+                                Delete
                             </a> 
                         </td>
                     </tr>   

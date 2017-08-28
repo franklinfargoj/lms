@@ -1,92 +1,106 @@
-<!-- BEGIN  ADD PRODUCT CATEGORY-->
-<div class="portlet light">
-	<div class="portlet-title">
-		<div class="caption">
-			<!-- <i class="fa fa-cogs font-green-sharp"></i> -->
-			<span class="caption-subject font-green-sharp bold">Add Product</span>
-		</div>
-		<div class="tools">
-			<a href="<?php echo base_url('product');?>" class="btn btn-sm blue"></i>Back
-			</a>
-		</div>
-	</div>
-	<div class="portlet-body form">
-		<?php
-			$attributes = array(
-				'role' => 'form',
-				'id' => 'add_form',
-				'autocomplete' => 'off'
-				);
-			echo form_open(base_url().'/product/add', $attributes);
-		?>
-		<!-- <form role="form"> -->
-			<div class="form-body">
-				<div class="form-group <?php if(isset($has_error)){ echo $has_error;}?>">
-					<?php
-						$attributes = array(
-					        'class' => '',
-					        'style' => ''
-						);
-						echo form_label('Product category', 'category_id', $attributes);
-
-						$options = $categorylist;
-						$js = array(
-						        'id'       => 'category_id',
-						        'class'	   => 'form-control'	
-						        /*'onChange' => 'some_function();'*/
-						);
-						echo form_dropdown('category_id', $options , set_select('category_id'),$js);
-
-						// Assuming that the 'category' field value was incorrect:
-						echo form_error('category_id', '<span class="help-block">', '</span>');
-					?>
-				</div>
-				<div class="form-group <?php if(isset($has_error)){ echo $has_error;}?>">
-					<?php 
-						$attributes = array(
-					        'class' => '',
-					        'style' => ''
-						);
-						echo form_label('Product Name', 'title', $attributes);
-
-						$data = array(
-					        'type'  => 'text',
-					        'name'  => 'title',
-					        'id'    => 'title',
-					        'class' => 'form-control',
-					        'value' => set_value('title')
-						);
-						echo form_input($data);
-						
-						// Assuming that the 'title' field value was incorrect:
-						echo form_error('title', '<span class="help-block">', '</span>');
-					?>
-				</div>
-				<div class="form-group">
-					<label>Default Assign</label>
-					<div class="radio-list">
-						
-						<label class="radio-inline">
-							<input type="radio" id= "self" name="default_assign" value="self" <?php echo  set_radio('default_assign', 'self', TRUE); ?> />
-							Self
-						</label>
-						<label class="radio-inline">
-							<input type="radio" id="branch" name="default_assign" value="branch" <?php echo  set_radio('default_assign', 'branch'); ?> />
-							Branch
-						</label>
-					</div>
-					<?php echo form_error('default_assign'); ?>
-				</div>
-			</div>
-			<div class="form-actions right">
-				<button type="reset" class="btn default">Reset</button>
-				<button type="submit" class="btn green">Submit</button>
-			</div>
-		<!-- </form> -->
-		<?php echo form_close();?>
+<div class="page-title">
+	<div class="container clearfix">
+		<h3 class="text-center">Add Product</h3>
+		<div class="float-right">
+            <span class="lead-num"><a href="<?php echo site_url('product');?>">Back</a></span>
+        </div>
 	</div>
 </div>
-<!-- END ADD PRODUCT CATEGORY-->
+<div class="page-content">
+	<div class="container">
+		<span></span>
+			<div class="inner-content">
+				<div class="product-category add-product">
+					<!-- <form> -->
+					<?php
+						$attributes = array(
+							'role' => 'form',
+							'id' => 'add_form',
+							'class' => 'form',
+							'autocomplete' => 'off'
+							);
+						echo form_open(base_url().'/product/add', $attributes);
+					?>
+						<div class="form-control">
+							<?php
+								$attributes = array(
+							        'class' => '',
+							        'style' => ''
+								);
+								echo form_label('Product Category:', 'category_id', $attributes);
+
+								$options = $categorylist;
+								$js = array(
+								        'id'       => 'category_id',
+								        'class'	   => ''	
+								        /*'onChange' => 'some_function();'*/
+								);
+								echo form_dropdown('category_id', $options , set_select('category_id'),$js);
+
+								// Assuming that the 'category' field value was incorrect:
+								echo form_error('category_id', '<span class="help-block">', '</span>');
+							?>
+						</div>
+						<div class="form-control">
+							<?php 
+								$attributes = array(
+							        'class' => '',
+							        'style' => ''
+								);
+								echo form_label('Product Name:', 'title', $attributes);
+
+								$data = array(
+							        'type'  => 'text',
+							        'name'  => 'title',
+							        'id'    => 'title',
+							        'class' => '',
+							        'value' => set_value('title')
+								);
+								echo form_input($data);
+								
+								// Assuming that the 'title' field value was incorrect:
+								echo form_error('title', '<span class="help-block">', '</span>');
+							?>
+						</div>
+						<div class="form-control">
+							<label>Default Assign</label>
+							<div class="radio-control">
+								<input type="radio" id= "self" name="default_assign" value="self" <?php echo  set_radio('default_assign', 'self', TRUE); ?> />
+								<label>Self</label>
+							</div>
+							<div class="radio-control">
+								<input type="radio" id= "branch" name="default_assign" value="branch" <?php echo  set_radio('default_assign', 'branch'); ?> />
+								<label>Branch</label>
+							</div>
+						</div>
+						<div class="form-control">
+							<label>Status</label>
+							<div class="radio-control">
+								<input type="radio" id= "active" name="status" value="active" <?php echo  set_radio('status', 'active', TRUE); ?> />
+								<label>Active</label>
+							</div>
+							<div class="radio-control">
+								<input type="radio" id= "inactive" name="status" value="inactive" <?php echo  set_radio('status', 'inactive'); ?> />
+								<label>Inactive</label>
+							</div>
+						</div>
+						<div class="form-control form-submit clearfix">
+							<a href="#" class="reset">
+								Reset
+							</a>
+							<a href="#">
+								<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
+								<span><input type="submit" name="Submit" value="Submit"></span>
+								<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
+							</a>
+						</div>
+					<!-- </form> -->
+					<?php echo form_close();?>
+				</div>
+			</div>
+		<span></span>
+	</div>
+</div>
 
 <script type="text/javascript">
  	$.validator.addMethod("regx", function(value, element, regexpr) {

@@ -72,7 +72,7 @@ class Faq_model extends CI_Model{
 	 * @return array
 	 */
 	public function view_record($id = null,$order_by = array()){
-		$select = array('id','question','answer','created_by');
+		$select = array('id','question','answer','created_by','status');
 		$where['is_deleted'] = 0;
 		if(!empty($id)){
 			$where['id'] = $id;
