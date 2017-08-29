@@ -24,7 +24,7 @@
 	<div class="main-content">
 		<?php echo $this->load->view('common/breadcumb',array(),TRUE);?>
 
-		<?php //echo $this->load->view('common/message',array(),TRUE);?>
+		<?php echo $this->load->view('common/message',array(),TRUE);?>
 
 		<?php echo $this->load->view($middle,array(),TRUE);?>
 	</div>

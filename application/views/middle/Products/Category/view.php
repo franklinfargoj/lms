@@ -53,10 +53,10 @@
                              <?php echo ++$i;?>
                         </td>
                         <td>
-                             <?php echo $value['title'];?>
+                             <?php echo ucwords($value['title']);?>
                         </td>
                         <td>
-                            <?php echo $value['status'];?>
+                            <?php echo ucwords($value['status']);?>
                             <!-- <label class="switch switch-flat">
                                 <input class="switch-input" id="<?php echo $value['id'];?>" type="checkbox" />
                                 <span class="switch-label" data-on="Active" data-off="Inactive"></span> <span class="switch-handle"></span>
@@ -67,7 +67,7 @@
                                 Edit
                             </a>
                             <span>/</span> 
-                            <a class="" href="javascript:void(0);" data-url="<?php echo site_url('product_category/delete/'. encode_id($value['id']))?>">
+                            <a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('product_category/delete/'. encode_id($value['id']))?>">
                                 Delete
                             </a> 
                         </td>
@@ -90,13 +90,12 @@
         //Initialize datatable configuration
         initTable(table,columns);
 
-       $('.delete').click(function(){
+        $('.delete').click(function(){
             var url = $(this).data('url');
-            bootbox.confirm("Are you sure want to delete?", function(result) {
-               if(result == true){
+            var result = confirm("Are you sure want to delete?"); 
+            if(result == true){
                 window.location.href = url;
-               }
-            }); 
+            }
         });
     });
 </script>

@@ -58,12 +58,12 @@
 							</div>
 						</div>
 						<div class="form-control form-submit clearfix">
-							<a href="#" class="reset">
+							<a href="javascript:void(0);" class="reset">
 								Reset
 							</a>
 		                    <a href="javascript:void(0);" class="active">
 		                        <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-		                        <span><input type="submit" name="Submit" value="Submit"></span>
+		                        <span><input class="custom_button" type="submit" name="Submit" value="Submit"></span>
 		                        <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
 		                    </a>
 		                </div>
@@ -74,6 +74,7 @@
 		<span></span>
 	</div>
 </div>
+<!-- END ADD PRODUCT CATEGORY-->
 
 <script type="text/javascript">
  	$.validator.addMethod("regx", function(value, element, regexpr) {

@@ -1,96 +1,92 @@
-<!-- BEGIN PAGE LEVEL STYLES -->
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css"/>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
-<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/global/plugins/bootstrap-wysihtml5/wysiwyg-color.css"/>
-
-<!-- END PAGE LEVEL STYLES -->
-<!-- BEGIN PRODUCT DESCRIPTION-->
-<div class="portlet light">
-    <div class="portlet-title">
-        <div class="caption">
-            <!-- <i class="fa fa-cogs font-green-sharp"></i> -->
-            <span class="caption-subject font-green-sharp bold">Add <?php echo $product[0]['title'];?> Description</span>
-        </div>
-        <div class="tools">
-            <a href="<?php echo base_url("product_guide/index/".encode_id($product[0]['id']));?>" class="btn btn-sm blue"></i>Back
-            </a>
+<div class="page-title">
+    <div class="container clearfix">
+        <h3 class="text-center">Add <?php echo ucwords($product[0]['title']);?> Description</h3>
+        <div class="float-right">
+            <span class="lead-num"><a href="<?php echo base_url("product_guide/index/".encode_id($product[0]['id']));?>">Back</a></span>
         </div>
     </div>
-    <div class="portlet-body form">
-		<?php
-			$attributes = array(
-				'role' => 'form',
-				'id' => 'add_form',
-				'autocomplete' => 'off'
-				);
-			echo form_open(base_url().'/product_guide/add/'.encode_id($product[0]['id']), $attributes);
-		?>
-		<!-- <form role="form"> -->
-			<div class="form-body">
-				<div class="form-group <?php if(isset($has_error)){ echo $has_error;}?>">
-					<?php 
-						$attributes = array(
-					        'class' => '',
-					        'style' => ''
-						);
-						echo form_label('Title', 'title', $attributes);
-
-						$options = $titleList;
-                        $js = array(
-                                'id'       => 'title',
-                                'class'    => 'form-control'    
-                                /*'onChange' => 'some_function();'*/
-                        );
-                        echo form_dropdown('title', $options , set_select('title'),$js);
-						
-						// Assuming that the 'title' field value was incorrect:
-						echo form_error('title', '<span class="help-block">', '</span>');
-					?>
-				</div>
-				<!-- <div class="form-group">
-					<label>Small Input</label>
-					<input type="text" class="form-control input-sm" placeholder="input-sm">
-				</div> -->
-				<div class="form-group <?php if(isset($has_error)){ echo $has_error;}?>">
-					<?php 
-                        $data = array(
-                                'product_id'  => $product[0]['id']
-                        );
-                        echo form_hidden($data);
-
-                        $attributes = array(
-                            'class' => '',
-                            'style' => ''
-                        );
-                        echo form_label('Description', 'description_text', $attributes);
-                    ?>
-                        <textarea id="description_text" name = "description_text" class="textarea" placeholder="Enter text ..." style="width: 810px; height: 200px">
-                        	<?php echo set_value('description_text')?>
-                        </textarea>
-                    <?php echo form_error('description_text', '<span class="help-block">', '</span>');?>
-				</div>
-			</div>
-			<div class="form-actions right">
-				<button type="reset" class="btn default">Reset</button>
-				<button type="submit" class="btn green">Submit</button>
-			</div>
-		<!-- </form> -->
-		<?php echo form_close();?>
-	</div>
 </div>
-<!-- END PRODUCT DESCRIPTION-->
+<div class="page-content">
+    <div class="container">
+        <span></span>
+            <div class="inner-content">
+                <div class="product-category">
+                    <!-- <form> -->
+                    <?php
+                        $attributes = array(
+                            'role' => 'form',
+                            'id' => 'add_form',
+                            'class' => 'form',
+                            'autocomplete' => 'off'
+                            );
+                        echo form_open(base_url().'/product_guide/add/'.encode_id($product[0]['id']), $attributes);
+                    ?>
+                        <div class="form-control">
+                            <?php 
+                                $attributes = array(
+                                    'class' => '',
+                                    'style' => ''
+                                );
+                                echo form_label('Title', 'title', $attributes);
 
-<script src="<?php echo base_url();?>assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
+                                $options = $titleList;
+                                $js = array(
+                                        'id'       => 'title',
+                                        'class'    => 'form-control'    
+                                        /*'onChange' => 'some_function();'*/
+                                );
+                                echo form_dropdown('title', $options , set_select('title'),$js);
+                                
+                                // Assuming that the 'title' field value was incorrect:
+                                echo form_error('title', '<span class="help-block">', '</span>');
+                            ?>
+                        </div>
+                        <div class="form-control">
+                            <?php 
+                                $data = array(
+                                        'product_id'  => $product[0]['id']
+                                );
+                                echo form_hidden($data);
 
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="<?php echo base_url();?>assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js" type="text/javascript"></script>
-<script src="<?php echo base_url();?>assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
+                                $attributes = array(
+                                    'class' => '',
+                                    'style' => ''
+                                );
+                                echo form_label('Description', 'description_text', $attributes);
+                            ?>
+                            <textarea id="description_text" name = "description_text" class="textarea" placeholder="Enter text ..." style="width: 810px; height: 200px">
+                                <?php echo set_value('description_text')?>
+                            </textarea>
+                            <?php echo form_error('description_text', '<span class="help-block">', '</span>');?>
+                        </div>
+                        <div class="form-control form-submit clearfix">
+                            <a href="javascript:void(0);" class="reset">
+                                Reset
+                            </a>
+                            <a href="#" class="active">
+                                <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
+                                <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                            </a>
+                        </div>
+                    <!-- </form> -->
+                    <?php echo form_close();?>
+                </div>
+            </div>
+        <span></span>
+    </div>
+</div>
+<script src="<?php echo base_url().PLUGINS;?>ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
-    $('.textarea').wysihtml5();
-</script>
+    $(function () {
+        // Replace the <textarea id="answer"> with a CKEditor
+        // instance, using default configuration.
+        //CKEDITOR.replace('answer');
+        CKEDITOR.replace( 'description_text', {
+            uiColor: '#01559d'
+        });  
+    });
 
-<script type="text/javascript">
  	$.validator.addMethod("regx", function(value, element, regexpr) {
         return regexpr.test(value);
     });

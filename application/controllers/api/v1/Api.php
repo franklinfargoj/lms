@@ -34,11 +34,26 @@ class Api extends REST_Controller
     public function authentication_post(){
         $params = $this->input->post();
 //
+
+//
 //        if(!isset($params['user_id']) || !isset($params['device_token']) || !isset($params['password']) || ($params['user_id'] == NULL) || ($params['device_token'] == NULL) || ($params['password'] == NULL)){
 //            $err['result'] = false;
 //            $err['data'] = "Invalid Request";
 //            returnJson($err);
 //        }
+//
+//        if(!isset($params['user_id']) || !isset($params['password']) || ($params['user_id'] == NULL) ||  ($params['password'] == NULL)){
+//            $err['result'] = false;
+//            $err['data'] = "Invalid Request";
+//            returnJson($err);
+//        }
+//
+//        $user_id = $params['user_id'];
+//        $password = $params['password'];
+//        $device_token = $params['device_token'];
+//
+//        $curl_handle = curl_init();
+//        curl_setopt($curl_handle, CURLOPT_URL, 'http://10.0.11.33/payo_app/users/update_synapse_info');
 //
 //        if(!isset($params['user_id']) || !isset($params['password']) || ($params['user_id'] == NULL) ||  ($params['password'] == NULL)){
 //            $err['result'] = false;

@@ -333,14 +333,21 @@ class Leads extends CI_Controller
         return ['type' => 'success','total_inserted'=>$total_inserted, 'insert_array' => $insert_array, 'update_array' => $update_array];
     }
 
-    /*
-     * unassigned_leads
-     * Loads the listing page for unassigned leads.
-     * @author Gourav Thatoi
-     * @access public
-     * @param none
-     * @return none
-     */
+    public function download_error_log(){
+        $this->load->library('excel');
+        $objPHPExcelWriter = new PHPExcel();
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcelWriter, 'Excel5');
+        // $objWriter->save($target_file_path);
+
+        $file_name = time().'Error_log.xls';
+        header('Content-Type: application/vnd.ms-excel'); //mime type
+        header('Content-Disposition: attachment;filename="'.$file_name.'"');
+        //tell browser what's the file name
+        header('Cache-Control: max-age=0'); //no cache
+        $objWriter->save('php://output');
+    }
+
+
     public function unassigned_leads(){
         /*Create Breadcumb*/
           $this->make_bread->add('Unassign Leads', '', 0);
