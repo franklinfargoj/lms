@@ -16,6 +16,7 @@
 						$attributes = array(
 							'role' => 'form',
 							'id' => 'edit_form',
+							'class' => 'form',
 							'autocomplete' => 'off'
 							);
 						echo form_open(base_url().'/product/edit/'.$this->uri->segment(3,0), $attributes);
@@ -101,16 +102,16 @@
 
 								$options = array(
 									'' =>	'select',
-									'10' =>	'10',
-									'20' =>	'20',
-									'30' =>	'30',
-									'40' =>	'40',
-									'50' =>	'50',
-									'60' =>	'60',
-									'70' =>	'70',
-									'80' =>	'80',
-									'90' =>	'90',
-									'100' =>'100'
+									'1' =>	'1',
+									'2' =>	'2',
+									'3' =>	'3',
+									'4' =>	'4',
+									'5' =>	'5',
+									'6' =>	'6',
+									'7' =>	'7',
+									'8' =>	'8',
+									'9' =>	'9',
+									'10' =>'10'
 								);
 								$js = array(
 								        'id'       => 'turn_around_time',

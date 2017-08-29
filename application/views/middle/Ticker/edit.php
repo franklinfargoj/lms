@@ -16,6 +16,7 @@
                         $attributes = array(
                             'role' => 'form',
                             'id' => 'edit_form',
+                            'class' => 'form',
                             'autocomplete' => 'off'
                             );
                         echo form_open(base_url().'/ticker/edit/'.$this->uri->segment(3,0), $attributes);
