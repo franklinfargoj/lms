@@ -11,6 +11,7 @@
 	<link href="<?php echo base_url().ASSETS;?>css/style.css" rel="stylesheet">
 	<link href="<?php echo base_url().ASSETS;?>css/responsive.css" rel="stylesheet">
 	<link href="<?php echo base_url().ASSETS;?>css/override.css" rel="stylesheet">
+	<link rel="stylesheet" href="<?php echo base_url().ASSETS;?>css/jquery-ui.css">
 	<script src="<?php echo base_url().ASSETS;?>js/jquery.min.js" type="text/javascript"></script>
 	<script src="<?php echo base_url().ASSETS;?>js/jquery.validate.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
@@ -23,7 +24,7 @@
 	<div class="main-content">
 		<?php echo $this->load->view('common/breadcumb',array(),TRUE);?>
 
-		<?php //echo $this->load->view('common/message',array(),TRUE);?>
+		<?php echo $this->load->view('common/message',array(),TRUE);?>
 
 		<?php echo $this->load->view($middle,array(),TRUE);?>
 	</div>

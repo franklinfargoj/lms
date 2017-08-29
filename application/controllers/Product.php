@@ -60,6 +60,7 @@ class Product extends CI_Controller {
                $this->form_validation->set_rules('title','Product name', 'trim|required|callback_alphaNumeric|is_unique['.Tbl_Products.'.title]');
                $this->form_validation->set_rules('category_id','Product Category', 'required');
                $this->form_validation->set_message('is_unique', '%s is already taken');
+               $this->form_validation->set_rules('turn_around_time','Turn around time', 'trim|required');
                if ($this->form_validation->run() == FALSE)
                {    $arrData['has_error'] = 'has-error';
                     return load_view("Products/Product/add",$arrData);
@@ -69,6 +70,7 @@ class Product extends CI_Controller {
                          'category_id' => $this->input->post('category_id'),
                          'default_assign' => $this->input->post('default_assign'),
                          'status' => strtolower($this->input->post('status')),
+                         'turn_around_time' => strtolower($this->input->post('turn_around_time')),
                          'created_by' => loginUserId()
                     );
                     $response = $this->master->add_product($insert);
@@ -130,6 +132,7 @@ class Product extends CI_Controller {
                          'title' => strtolower($this->input->post('title')),
                          'default_assign' => $this->input->post('default_assign'),
                          'status' => strtolower($this->input->post('status')),
+                         'turn_around_time' => strtolower($this->input->post('turn_around_time')),
                          'modified_by' => loginUserId(),
                          'modified_on' => date('y-m-d H:i:s')
                          

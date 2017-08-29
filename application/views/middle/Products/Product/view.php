@@ -63,13 +63,13 @@
                              <?php echo ++$i;?>
                         </td>
                         <td>
-                             <?php echo $value['title'];?>
+                             <?php echo ucwords($value['title']);?>
                         </td>
                         <td>
-                             <?php echo $value['category'];?>
+                             <?php echo ucwords($value['category']);?>
                         </td>
                         <td>
-                            <?php echo $value['status'];?>
+                            <?php echo ucwords($value['status']);?>
                             <!-- <label class="switch switch-flat">
                                 <input class="switch-input" id="<?php echo $value['id'];?>" type="checkbox" />
                                 <span class="switch-label" data-on="Active" data-off="Inactive"></span> <span class="switch-handle"></span>
@@ -108,13 +108,12 @@
         //Initialize datatable configuration
         initTable(table,columns);
 
-       $('.delete').click(function(){
+        $('.delete').click(function(){
             var url = $(this).data('url');
-            confirm("Are you sure want to delete?", function(result) {
-                if(result == true){
-                    window.location.href = url;
-                }
-            }); 
+            var result = confirm("Are you sure want to delete?"); 
+            if(result == true){
+                window.location.href = url;
+            }
         });
     });
 </script>

@@ -18,7 +18,7 @@ class Leads extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-        is_logged_in();     //check login
+        is_logged_in();
         $this->load->model('Lead');
     }
 
@@ -44,51 +44,80 @@ class Leads extends CI_Controller
         /*Create Breadcumb*/
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<label class = "error">', '</label>');
-            $this->form_validation->set_rules('customer_type', 'Customer', 'required');
-            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required');
-            $this->form_validation->set_rules('phone_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
-            $this->form_validation->set_rules('product_category', 'Product Category', 'required');
-            $this->form_validation->set_rules('product', 'Product', 'required');
+            $this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
+            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alphaNumeric');
+            $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
+            $this->form_validation->set_rules('lead_ticket_range', 'Range.', 'required|numeric');
+            $this->form_validation->set_rules('product_category_id', 'Product Category', 'required');
+            $this->form_validation->set_rules('product_id', 'Product','required');
             $this->form_validation->set_rules('remark', 'Remark', 'required');
             $this->form_validation->set_rules('is_own_branch', 'Branch', 'required');
             $this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
+
+            $input = get_session();
+
+            $lead_data['state_id'] = $lead_data['created_by_state_id'] = $input['state_id'];
+            $lead_data['branch_id'] = $lead_data['created_by_branch_id'] = $input['branch_id'];
+            $lead_data['district_id'] = $lead_data['created_by_district_id'] = $input['district_id'];
+            $branch_id = $input['branch_id'];
+
             if ($this->input->post('is_own_branch') == '0') {
                 $this->form_validation->set_rules('state_id', 'State', 'required');
                 $this->form_validation->set_rules('branch_id', 'Branch', 'required');
-                $this->form_validation->set_rules('district', 'District', 'required');
+                $this->form_validation->set_rules('district_id', 'District', 'required');
 
                 $lead_data['state_id'] = $this->input->post('state_id');
                 $lead_data['branch_id'] = $this->input->post('branch_id');
-                $lead_data['district_id'] = $this->input->post('district');
+                $lead_data['district_id'] = $this->input->post('district_id');
+                $branch_id = $this->input->post('branch_id');
             }
+
             if ($this->form_validation->run() === FALSE) {
                 $middle = 'Leads/add_lead';
                 $arrData['products'] = '';
                 $arrData['category_selected'] = '';
-                if ($this->input->post('product_category') != '') {
-                    $arrData['category_selected'] = $this->input->post('product_category');
+                if ($this->input->post('product_category_id') != '') {
+                    $arrData['category_selected'] = $this->input->post('product_category_id');
                     $whereArray = array("category_id" => $arrData['category_selected']);
                     $arrData['products'] = $this->Lead->get_all_products($whereArray);
-                }
-                $arrData['product_selected'] = '';
-                if ($this->input->post('product') != '') {
-                    $arrData['product_selected'] = $this->input->post('product');
                 }
                 $arrData['category'] = $this->Lead->get_all_category();
                 return load_view($middle, $arrData);
             }
 
-            $lead_data['is_existing_customer'] = $this->input->post('customer_type');
-            $lead_data['customer_name'] = $this->input->post('customer_name');
-            $lead_data['contact_no'] = $this->input->post('phone_no');
-            $lead_data['product_category_id'] = $this->input->post('product_category');
-            $lead_data['product_id'] = $this->input->post('product');
+
+            $keys = array('is_existing_customer','lead_ticket_range','customer_name','contact_no','product_category_id','product_id','lead_identification','is_own_branch','remark','lead_ticket_range');
+            foreach ($keys as $k => $value){
+                $lead_data[$value] = $this->input->post($value);
+
+            }
+            $lead_data['department_name'] = $this->session->userdata('department_name');
+            $lead_data['department_id'] = $this->session->userdata('department_id');
+            $whereArray = array('product_id'=>$lead_data['product_id'],'branch_id'=>$lead_data['branch_id']);
+            $routed_id = $this->Lead->check_mapping($whereArray);
+            if(!is_array($routed_id)){
+                $lead_data['reroute_from_branch_id'] = $branch_id;
+                $lead_data['branch_id'] = $routed_id;
+            }
+
             $lead_data['lead_name'] = $this->input->post('customer_name');
-            $lead_data['lead_identification'] = $this->input->post('lead_identification');
-            $lead_data['is_own_branch'] = $this->input->post('is_own_branch');
-            $lead_data['remark'] = $this->input->post('remark');
-            $this->Lead->insert($lead_data);
-            $this->session->set_flashdata('success_message', "Lead Added Successfully");
+            $lead_id = $this->Lead->add_leads($lead_data);
+            
+
+            $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
+            if($assign_to == 'self'){
+                $lead_assign['lead_id'] = $lead_id;
+                $lead_assign['employee_id']=$input['hrms_id'];
+                $lead_assign['employee_name']=$input['full_name'];
+                $lead_assign['branch_id']=$input['branch_id'];
+                $lead_assign['district_id']=$input['district_id'];
+                $lead_assign['state_id']=$input['state_id'];
+                $lead_assign['zone_id']=$input['zone_id'];
+                $lead_assign['created_by']=$input['hrms_id'];
+                $lead_assign['created_by_name']=$input['full_name'];
+                $this->Lead->insert_assign($lead_assign);
+            }
+            $this->session->set_flashdata('success', "Lead Added Successfully");
             redirect(base_url('Leads/add'), 'refresh');
         } else {
             $middle = 'Leads/add_lead';
@@ -99,6 +128,27 @@ class Leads extends CI_Controller
             return load_view($middle, $arrData);
         }
 
+    }
+
+    ##################################
+    /*Private Functions*/
+    ##################################
+    /*
+    * Validation for alphabetical letters
+    * @param array $pwd,$dataArray
+    * @return String
+    */
+    public function alphaNumeric($str)
+    {
+        if ( !preg_match('/^[a-zA-Z0-9\s]+$/i',$str) )
+        {
+            $this->form_validation->set_message('alphaNumeric', 'Please enter only alpha numeric characters.');
+            return FALSE;
+        }
+        else
+        {
+            return TRUE;
+        }
     }
 
     /*
@@ -115,17 +165,17 @@ class Leads extends CI_Controller
             $category_id = $this->input->post("category_id");
             $whereArray = array('category_id' => $category_id,'is_deleted' => 0);
             $products = $this->Lead->get_all_products($whereArray);
-            $product_extra = 'class="form-control" id="product"';
+            $product_extra = 'class="form-control" id="product_id"';
             if (!empty($products)) {
                 $options[''] = 'Select Product';
                 foreach ($products as $key => $value) {
                     $options[$value['id']] = $value['title'];
                 }
-                $html = '<label>Select Product</label>';
+                $html = '<label>Product</label>';
                 $html .= form_dropdown('product_id', $options, '', $product_extra);
             } else {
-                $options[''] = 'Select';
-                $html = '<label>Select Product</label>';
+                $options[''] = 'Select Product';
+                $html = '<label>Product</label>';
                 $html .= form_dropdown('product_id', $options, '', $product_extra);
             }
             echo $html;
@@ -166,12 +216,10 @@ class Leads extends CI_Controller
                 } else {
                     set_time_limit(0);
                     ini_set('memory_limit', '-1');
-                    $keys = ['customer_name', 'contact_no', 'is_existing_customer', 'account_id', 'is_own_branch', 'branch_id', 'zone_id', 'state_id', 'district_id', 'product_category_id', 'product_id', 'remark', 'lead_identification', 'created_by', 'created_by_name', 'created_by_branch_id', 'created_by_zone_id', 'created_by_state_id', 'created_by_district_id'];
+                    $keys = ['customer_name', 'contact_no', 'is_existing_customer', 'is_own_branch', 'branch_id', 'zone_id', 'state_id', 'district_id', 'product_category_id', 'product_id', 'remark', 'lead_identification'];
 
-                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:S', $keys);
-
+                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:L', $keys);
                     $validation = $this->validate_leads_data($excelData,$lead_source);
-
 
                     if (!empty($validation['insert_array'])) {
                         $insert_count = $this->Lead->insert_uploaded_data('db_leads', $validation['insert_array']);
@@ -180,9 +228,8 @@ class Leads extends CI_Controller
                     if ($validation['type'] == 'error') {
                         make_upload_directory('./uploads/errorlog');
                         $target_path = './uploads/errorlog/';
-                        $target_file = $file['raw_name'] . '_error_log_' . date('Y-m-d-H-i-s') . $file['file_ext'];
+                        $target_file = $file['file_name'];
                         create_excel_error_file($validation['data'], $target_path.$target_file,$target_file);
-                        unlink($file['full_path']);
                         $data = array(
                             'file_name' => $target_file,
                             'status' => 'failed'
@@ -197,6 +244,7 @@ class Leads extends CI_Controller
                         'file_name' => $file['file_name'],
                         'status' => 'success'
                     );
+//                    unlink($file['full_path']);
                     $this->Lead->uploaded_log('uploaded_leads_log', $data);
                     $msg = notify('File Uploaded Successfully.' . $validation['total_inserted'] . ' rows inserted. ', 'success');
                     $this->session->set_flashdata('message', $msg);
@@ -208,6 +256,7 @@ class Leads extends CI_Controller
             $this->session->set_flashdata('message', $msg);
             redirect('leads/upload');
         }
+        $arrData['uploaded_logs'] = $this->Lead->get_uploaded_leads_logs();
         $middle = "Leads/upload";
         load_view($middle,$arrData);
     }
@@ -227,7 +276,8 @@ class Leads extends CI_Controller
 
         foreach ($excelData as $key => $value){
 
-            $whereArray = array('title'=>$value['product_category_id']);
+            $prod_cat_title = preg_replace('!\s+!', ' ', $value['product_category_id']);
+            $whereArray = array('title'=>strtolower(trim($prod_cat_title)));
             $prod_category_id = $this->Lead->fetch_product_category_id($whereArray);
             if($prod_category_id == false){
                 $error[$key] = 'Category does not exist.';
@@ -238,10 +288,29 @@ class Leads extends CI_Controller
 
                 }else{
                     $all_product = $this->Lead->all_products_under_category($prod_category_id);
-                    if(in_array($value['product_id'],$all_product)){
+                    $prod_title = preg_replace('!\s+!', ' ', $value['product_id']);
 
-                        $whereArray = array('title'=>$value['product_id']);
+                    if(in_array(strtolower(trim($prod_title)),$all_product)){
+
+                        $whereArray = array('title'=>strtolower(trim($prod_title)));
                         $prod_id = $this->Lead->fetch_product_id($whereArray);
+                        $mapping_whereArray = array('product_id'=>$prod_id['product_id'],'branch_id'=>$value['branch_id']);
+                        $routed_id = $this->Lead->check_mapping($mapping_whereArray);
+                        if(!is_array($routed_id)){
+                            $value['reroute_from_branch_id'] = $value['branch_id'];
+                            $value['branch_id'] = $routed_id;
+                        }
+
+                        $is_own_branch = '1';
+                        $is_existing_customer = '0';
+                        if($value['is_existing_customer'] == 'y'){
+                            $is_existing_customer = '1';
+                        }
+                        if($value['is_own_branch'] == 'n'){
+                            $is_own_branch = '0';
+                        }
+                        $value['is_own_branch'] = $is_own_branch;
+                        $value['is_existing_customer'] = $is_existing_customer;
                         $value['product_category_id']=$prod_category_id;
                         $value['product_id']=$prod_id['product_id'];
                         $value['lead_name']=$value['customer_name'];
@@ -264,14 +333,21 @@ class Leads extends CI_Controller
         return ['type' => 'success','total_inserted'=>$total_inserted, 'insert_array' => $insert_array, 'update_array' => $update_array];
     }
 
-    /*
-     * unassigned_leads
-     * Loads the listing page for unassigned leads.
-     * @author Gourav Thatoi
-     * @access public
-     * @param none
-     * @return none
-     */
+    public function download_error_log(){
+        $this->load->library('excel');
+        $objPHPExcelWriter = new PHPExcel();
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcelWriter, 'Excel5');
+        // $objWriter->save($target_file_path);
+
+        $file_name = time().'Error_log.xls';
+        header('Content-Type: application/vnd.ms-excel'); //mime type
+        header('Content-Disposition: attachment;filename="'.$file_name.'"');
+        //tell browser what's the file name
+        header('Cache-Control: max-age=0'); //no cache
+        $objWriter->save('php://output');
+    }
+
+
     public function unassigned_leads(){
         /*Create Breadcumb*/
           $this->make_bread->add('Unassign Leads', '', 0);
@@ -546,4 +622,5 @@ class Leads extends CI_Controller
         
         return $arrData;
     }
+    
 }

@@ -21,8 +21,8 @@ class Lead  extends CI_Model
 	public function add_leads($lead_data = array())
 	{
 		if (!empty($lead_data)) {
-			$this->db->insert($this->_tbl_db_leads, $lead_data);
-			return true;
+            $this->db->insert($this->_tbl_db_leads, $lead_data);
+            return $this->db->insert_id();
 		}
 		return false;
 	}
@@ -118,7 +118,8 @@ class Lead  extends CI_Model
     public function get_leads($action,$table,$select,$where,$join,$group_by,$order_by)
     {
         if($action == 'count'){
-            return $this->db->where($where)->count_all_results($table);
+//            return $this->db->where($where)->count_all_results($table);
+            return $this->counts($table,$select,$where,$join);
         }elseif($action == 'list'){
             return $this->lists($table,$select,$where,$join,$group_by,$order_by = array());
         }
@@ -141,6 +142,23 @@ class Lead  extends CI_Model
             $enums[$value] = $value;
         }
         return $enums;
+    }
+
+    /**
+     * update_lead_status
+     * Update Lead Status
+     * @author Ashok Jadhav
+     * @access public
+     * @param $where,$data
+     * @return array
+     */
+    public function get_assigned_leads($where_assigned_Array = array())
+    {
+        $result = array();
+        if (!empty($where_assigned_Array)) {
+            $assigned_leads = $this->db->where($where_assigned_Array)->count_all_results(Tbl_LeadAssign);
+            return $assigned_leads;
+        } return $result;
     }
 
     /**
@@ -181,7 +199,7 @@ class Lead  extends CI_Model
      * @param $table,$select,$where,$join,$order_by
      * @return array
      */
-    private function lists($table,$select,$where,$join,$group_by,$order_by){
+    public function lists($table,$select,$where,$join,$group_by,$order_by){
 
         $this->db->select($select,TRUE);
         $this->db->from($table);
@@ -200,7 +218,6 @@ class Lead  extends CI_Model
             $this->db->order_by($order_by);
         }
         $query = $this->db->get();
-        //pe($this->db->last_query())
         return $query->result_array();
     }
 
@@ -231,6 +248,93 @@ class Lead  extends CI_Model
             $response['insert_id'] = $this->db->insert_id();
         }
         return $response;
+    }
+
+    public function get_generated_lead_bm_zm($where_generated_Array){
+        $result = array();
+        if(!empty($where_generated_Array)){
+            //for branch manager
+            if(array_key_exists('branch_id',$where_generated_Array)){
+                $this->db->select('created_by, COUNT(created_by) as total , created_by_name');
+                $this->db->group_by('created_by');
+                $this->db->order_by('total','desc');
+                $result = $this->db->get_where(Tbl_Leads,$where_generated_Array)->result_array();
+                return $result;
+            }
+            //for zonal manager
+            $this->db->select('branch_id, COUNT(branch_id) as total');
+            $this->db->group_by('branch_id');
+            $this->db->order_by('total','desc');
+            $result = $this->db->get_where(Tbl_Leads,$where_generated_Array)->result_array();
+        }
+        return $result;
+
+    }
+    public function get_converted_lead_bm_zm($where_converted_Array){
+        $result = array();
+        if(!empty($where_converted_Array)){
+            if(array_key_exists('branch_id',$where_converted_Array)){
+                $this->db->select('created_by, COUNT(created_by) as total', 'created_by_name');
+                $this->db->group_by('created_by');
+                $this->db->order_by('total','desc');
+                $result = $this->db->get_where(Tbl_LeadAssign,$where_converted_Array)->result_array();
+                return $result;
+            }
+            $this->db->select('branch_id, COUNT(branch_id) as total');
+            $this->db->group_by('branch_id');
+            $this->db->order_by('total','desc');
+            $result = $this->db->get_where(Tbl_LeadAssign,$where_converted_Array)->result_array();
+        }
+        return $result;
+
+    }
+
+    private function counts($table,$select,$where,$join){
+        $this->db->select($select,TRUE);
+        $this->db->from($table);
+        if(!empty($join)){
+            foreach ($join as $key => $value) {
+                $this->db->join($value['table'],$value['on_condition'],$value['type']);
+            }
+        }
+        if(!empty($where)){
+            $this->db->where($where);
+        }
+        return $this->db->count_all_results();
+
+
+    }
+    public function get_product_assign_to($prod_id){
+        if($prod_id != ''){
+            $this->db->select('default_assign');
+            $this->db->from(Tbl_Products);
+            $this->db->where('id',$prod_id);
+            $result =  $this->db->get()->result();
+            return $result[0]->default_assign;
+        }
+        return false;
+    }
+    public function insert_assign($data=array()){
+        if(!empty($data)){
+            $this->db->insert(Tbl_LeadAssign,$data);
+            return true;
+        }
+        return false;
+    }
+
+    public function get_uploaded_leads_logs($whereArray = array()){
+        return $result = $this->db->get_where(Tbl_Log,$whereArray)->result_array();
+    }
+
+    public function check_mapping($whereArray = array()){
+            if(!empty($whereArray)){
+                $this->db->select('other_processing_center_id');
+                $result = $this->db->get_where(Tbl_processing_center,$whereArray)->result_array();
+                if(count($result) == 1){
+                    return $result[0]['other_processing_center_id'];
+                }
+            }
+        return array();
     }
 
 }

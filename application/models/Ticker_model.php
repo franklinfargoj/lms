@@ -95,7 +95,7 @@ class Ticker_model extends CI_Model{
 		return $this->db->affected_rows();
 	}
 
-	public function view($select,$where,$table,$join = array(),$order_by = array(),$limit = 0){
+	public function view($select,$where,$table,$join = array(),$order_by = array(),$limit=''){
 
 		$this->db->select($select,TRUE);
 		$this->db->from($table);
@@ -112,8 +112,8 @@ class Ticker_model extends CI_Model{
 		}else{
 			$this->db->order_by($table.'.id','DESC');
 		}
-		if($limit){
-			$this->db->limit($limit);	
+		if(!empty($limit)){
+			$this->db->limit($limit);
 		}
 		$query = $this->db->get();
 		//pe($this->db->last_query())
