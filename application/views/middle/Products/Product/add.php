@@ -84,13 +84,45 @@
 								<label>Inactive</label>
 							</div>
 						</div>
+						<div class="form-control">
+							<?php
+								$attributes = array(
+							        'class' => '',
+							        'style' => ''
+								);
+								echo form_label('Turn Around Time:', 'turn_around_time', $attributes);
+
+								$options = array(
+									'' =>	'select',
+									'10' =>	'10',
+									'20' =>	'20',
+									'30' =>	'30',
+									'40' =>	'40',
+									'50' =>	'50',
+									'60' =>	'60',
+									'70' =>	'70',
+									'80' =>	'80',
+									'90' =>	'90',
+									'100' =>'100'
+								);
+								$js = array(
+								        'id'       => 'turn_around_time',
+								        'class'	   => ''	
+								        /*'onChange' => 'some_function();'*/
+								);
+								echo form_dropdown('turn_around_time', $options , set_select('turn_around_time'),$js);
+
+								// Assuming that the 'category' field value was incorrect:
+								echo form_error('turn_around_time', '<span class="help-block">', '</span>');
+							?>
+						</div>
 						<div class="form-control form-submit clearfix">
-							<a href="#" class="reset">
+							<a href="javascript:void(0);" class="reset">
 								Reset
 							</a>
 							<a href="#">
 								<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
-								<span><input type="submit" name="Submit" value="Submit"></span>
+								<span><input class="custom_button" type="submit" name="Submit" value="Submit"></span>
 								<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
 							</a>
 						</div>
@@ -103,7 +135,8 @@
 </div>
 
 <script type="text/javascript">
- 	$.validator.addMethod("regx", function(value, element, regexpr) {
+
+	$.validator.addMethod("regx", function(value, element, regexpr) {
         return regexpr.test(value);
     });
 
@@ -115,6 +148,9 @@
             },
             category_id: {
                 required: true
+            },
+            turn_around_time: {
+                required: true
             }
         },
         messages: {
@@ -123,6 +159,9 @@
             },
             category_id: {
                 required: "Please select product category"
+            },
+            turn_around_time: {
+                required: "Please select turn around time"
             }
         }
     });

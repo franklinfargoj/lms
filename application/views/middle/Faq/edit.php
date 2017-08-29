@@ -78,7 +78,7 @@
                             </a>
                             <a href="javascript:void(0);" class="active">
                                 <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                                <span><input type="submit" name="Submit" value="Submit"></span>
+                                <span><input class="custom_button" type="submit" name="Submit" value="Submit"></span>
                                 <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                             </a>
                         </div>

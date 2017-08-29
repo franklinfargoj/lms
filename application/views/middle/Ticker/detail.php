@@ -1,6 +1,9 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">Tickers</h3>
+        <div class="float-right">
+            <span class="lead-num"><a href="<?php echo site_url('ticker');?>">Back</a></span>
+        </div>
     </div>
 </div>
 <div class="page-content">
@@ -10,7 +13,7 @@
                 if($tickerDetail){
                     
             ?>
-                    <h3><span>.</span><?php echo $tickerDetail[0]['title'];?></h3>  
+                    <h3><span>.</span><?php echo ucwords($tickerDetail[0]['title']);?></h3>  
                     <div>
                         <p><?php echo $tickerDetail[0]['description_text'];?></p>  
                     </div>
@@ -18,11 +21,6 @@
                     
                 }
             ?>
-        </div>
-        <div class="form-control form-submit clearfix">
-            <a href="<?php echo site_url('ticker');?>" class="reset float-right">
-               Back
-            </a>
         </div>
     </div>
 </div>

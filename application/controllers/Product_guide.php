@@ -42,7 +42,7 @@ class Product_guide extends CI_Controller {
 
           /*Create Breadcumb*/
           $this->make_bread->add('Product', 'product', 0);
-          $this->make_bread->add($arrData['product'][0]['title'], '', 0);
+          $this->make_bread->add(ucwords($arrData['product'][0]['title']), '', 0);
           $this->make_bread->add('Description', '', 1);
           $arrData['breadcrumb'] = $this->make_bread->output();
           /*Create Breadcumb*/
@@ -76,7 +76,7 @@ class Product_guide extends CI_Controller {
 
           /*Create Breadcumb*/
           $this->make_bread->add('Product', 'product', 0);
-          $this->make_bread->add($arrData['product'][0]['title'], 'product_guide/index/'.encode_id($productId), 0);
+          $this->make_bread->add(ucwords($arrData['product'][0]['title']), 'product_guide/index/'.encode_id($productId), 0);
           $this->make_bread->add('Add Description', '', 1);
           $arrData['breadcrumb'] = $this->make_bread->output();
           /*Create Breadcumb*/
@@ -132,12 +132,12 @@ class Product_guide extends CI_Controller {
                     redirect('product');
                }
                //$this->form_validation->set_rules('title','Title', 'required');
-               $this->form_validation->set_rules('description_text','Description', 'trim|required');
+               $this->form_validation->set_rules('description_text_'.$id,'Description', 'trim|required');
                if ($this->form_validation->run() == FALSE){
 
                     /*Create Breadcumb*/
                     $this->make_bread->add('Product', 'product', 0);
-                    $this->make_bread->add($arrData['product'][0]['title'], '', 0);
+                    $this->make_bread->add(ucwords($arrData['product'][0]['title']), '', 0);
                     $this->make_bread->add('Description', '', 1);
                     $arrData['breadcrumb'] = $this->make_bread->output();
                     /*Create Breadcumb*/
@@ -148,7 +148,7 @@ class Product_guide extends CI_Controller {
                }else{
                     $update = array(
                          //'title' => $this->input->post('title'),
-                         'description_text' => $this->input->post('description_text'),
+                         'description_text' => $this->input->post('description_text_'.$id),
                          'modified_by' => loginUserId(),
                          'modified_on' => date('y-m-d H:i:s')
                     );

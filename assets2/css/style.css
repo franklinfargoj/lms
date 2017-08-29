@@ -864,7 +864,7 @@ margin-top: 10px;
     width: 100px;
 }
 
-.product-category .btn-submit{
+.upload-content .btn-submit{
 	background-color: transparent;
     background-image: url("../images/submit-btn.png");
     background-repeat: no-repeat;
@@ -916,6 +916,45 @@ margin-top: 10px;
 .detail-label.red{
 	color: #ee4b4c;
 }
+
+/*product guide*/
+.product-guide-tab .ui-widget-header{
+	background-color: transparent;
+	border: 0 none;
+}
+
+.product-guide-tab .ui-tabs .ui-tabs-nav li{
+	border: 0 none;
+}
+.ui-tabs .ui-tabs-panel{
+	border: 1px solid #a4cef3;
+}
+.ui-state-default{
+	border: 0 none !important;
+	background-color: transparent !important;
+	padding: 15px 25px !important;
+	font-family: "Montserrat";
+	font-weight: 500;
+}
+.ui-widget.ui-widget-content{border: 0 none;}
+.ui-state-default.ui-state-active{
+	background-color: #01559d !important;
+	color: #ffffff;
+	outline: none;
+}
+.ui-state-default.ui-state-active a{
+	color: #ffffff !important;
+	border: 0 none;
+	outline: none;
+}
+.ui-tabs .ui-tabs-nav{padding: 0;}
+.product-guide-tab .tab-content p{
+	margin-bottom: 20px;
+	font-family: "Montserrat";
+	font-size: 15px;
+	line-height: 20px;
+}
+/*product guide*/
 
 /*Bread Crumbs*/
 .breadcrumbs{
