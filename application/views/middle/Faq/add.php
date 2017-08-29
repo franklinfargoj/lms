@@ -84,6 +84,8 @@
         <span></span>
     </div>
 </div>
+<!-- END PRODUCT DESCRIPTION-->
+
 <script src="<?php echo base_url().PLUGINS;?>ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
     $(function () {

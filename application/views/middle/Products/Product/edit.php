@@ -140,6 +140,7 @@
 		<span></span>
 	</div>
 </div>
+<!-- END  EDIT PRODUCT -->
 
 <script type="text/javascript">
  	$.validator.addMethod("regx", function(value, element, regexpr) {

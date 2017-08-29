@@ -74,6 +74,7 @@
 		<span></span>
 	</div>
 </div>
+<!-- END ADD PRODUCT CATEGORY-->
 
 <script type="text/javascript">
  	$.validator.addMethod("regx", function(value, element, regexpr) {
