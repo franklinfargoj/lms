@@ -1,6 +1,6 @@
 
 <?php
-$form_attributes = array('class' => '', 'method' => 'post', 'accept-charset' => '', 'id' => 'addlead');
+$form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset' => '', 'id' => 'addlead');
 $data_customer = array('name' => 'customer_name',
     'id' => 'customer_name',
     'value' => set_value('customer_name', '')
@@ -105,20 +105,20 @@ $remark_extra = 'style="rows:4 ; cols:80"';
             echo form_open($url, $form_attributes);
             ?>
             <div class="lead-form-left">
-                <div class="form-control">
+                <!--<div class="form-control">
                     <label>Customer Type</label>
                     <div class="radio-control">
                         <input type="radio" name="is_existing_customer"
-                               value="1" <?php echo set_radio('is_existing_customer', '1', TRUE); ?> />
+                               value="1" <?php /*echo set_radio('is_existing_customer', '1', TRUE); */?> />
                         <label>New</label>
                     </div>
                     <div class="radio-control">
                         <input type="radio" name="is_existing_customer"
-                               value="0" <?php echo set_radio('is_existing_customer', '0'); ?> />
+                               value="0" <?php /*echo set_radio('is_existing_customer', '0'); */?> />
                         <label>Existing</label>
                     </div>
-                </div>
-                <?php echo form_error('is_existing_customer'); ?>
+                </div>-->
+<!--                --><?php //echo form_error('is_existing_customer'); ?>
                 <div class="form-control">
                     <label>Customer Name:</label>
                     <?php echo form_input($data_customer);?>
@@ -185,11 +185,11 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 </div>
                 <?php echo form_error('branch_id'); ?>
                 
-                <div id="identification" class="form-control">
+                <!--<div id="identification" class="form-control">
                     <label>Lead Identification:</label>
-                    <?php echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) ?>
+                    <?php /*echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) */?>
                 </div>
-                <?php echo form_error('lead_identification'); ?>
+                --><?php /*echo form_error('lead_identification'); */?>
 
                 <div class="form-control">
                     <label>Remark/Notes</label>
@@ -200,12 +200,12 @@ $remark_extra = 'style="rows:4 ; cols:80"';
             <div class="form-control form-submit clearfix">
                 <a href="javascript:void(0);" class="float-right">
                     <img alt="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                    <span><input type="submit" style="border: none" name="Submit" value="Submit"></span>
+                    <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
                     <img alt="right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                 </a>
                 <a href="javascript:void(0);" class="float-right">
                     <img alt="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                    <span><input type="reset" style="border: none;color: white" name="Submit" value="Reset"></span>
+                    <span><input type="reset" class="custom_button" color: white" name="Submit" value="Reset"></span>
                     <img alt="right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                 </a>
             </div>
@@ -302,9 +302,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         $("#addlead").validate({
 
             rules: {
-                is_existing_customer: {
+                /*is_existing_customer: {
                     required: true
-                },
+                },*/
                 customer_name: {
                     required: true,
                     regx: /^[a-zA-Z0-9\-\s]+$/
@@ -325,9 +325,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 product_id: {
                     required: true
                 },
-                lead_identification: {
+                /*lead_identification: {
                     required: true
-                },
+                },*/
                 lead_ticket_range: {
                     required: true,
                     number:true
@@ -346,9 +346,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 }
             },
             messages: {
-                is_existing_customer: {
+                /*is_existing_customer: {
                     required: "Please select customer"
-                },
+                },*/
                 customer_name: {
                     required: "Please enter customer name",
                     regx: "Special characters are not allowed"
@@ -383,9 +383,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 branch_id: {
                     required: "Please select branch"
                 },
-                lead_identification: {
+                /*lead_identification: {
                     required: "Please select lead identification"
-                },
+                },*/
                 remark: {
                     required: "Please enter remark"
                 }
