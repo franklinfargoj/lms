@@ -127,7 +127,6 @@ class Dashboard extends CI_Controller {
      * @author Gourav Thatoi
      */
     public function leads_performance($id){
-        $input = get_session();
         $branch_id = decode_id($id);
         $created_by = decode_id($id);
         $action = 'count';
@@ -139,7 +138,7 @@ class Dashboard extends CI_Controller {
         $this->make_bread->add('lead performance', '', 0);
         $result['breadcrumb'] = $this->make_bread->output();
 
-        if (isset($input['designation_name']) && $input['designation_name'] == 'ZM') {
+        if ($this->session->userdata('admin_type') == 'ZM') {
             //Walk-in
             $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Walk-in');
             $result['lead_assigned_walkin'] = $this->master->get_leads($action, $table, $select, $where, '', '', '');
@@ -200,7 +199,7 @@ class Dashboard extends CI_Controller {
                 Tbl_LeadAssign . '.status' => 'Converted');
             $result['month_lead_converted_analytics'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
-        }if(isset($input['designation_name']) && $input['designation_name'] =='BM'){
+        }if($this->session->userdata('admin_type') =='BM'){
             //Walk-in
             $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),
                 Tbl_Leads . '.lead_source' => 'Walk-in');
@@ -267,7 +266,7 @@ class Dashboard extends CI_Controller {
 
     }
 
-   public function leads_filter_status(){
+   public function leads_status(){
         $result = array();
         $session_vals = get_session();
         $designation_type = $session_vals['designation_name'];
