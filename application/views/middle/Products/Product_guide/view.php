@@ -90,11 +90,6 @@
     $.validator.addMethod("regx", function(value, element, regexpr) {
         return regexpr.test(value);
     });
-
-    $( function() {
-        $("#tabs").tabs();
-    });
-
     $("#add_form").validate({
         rules: {
             description_text: {
