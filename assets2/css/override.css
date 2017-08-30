@@ -62,3 +62,16 @@ input.custom_button {
 .float-right{
     float: right;
 }
+.performance-form-control {
+    margin-bottom: 15px;
+    display: table;
+    width: 100%;
+    text-align: center;
+}
+.performance-radio-control {
+    display: inline;
+}
+
+.page-content .performance-form-control label {
+    display: inline;
+}
