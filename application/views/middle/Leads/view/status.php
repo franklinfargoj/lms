@@ -28,7 +28,20 @@
             <thead>
             <tr class="top-header">
                 <th></th>
-                <th><input type="text" name="customername" placeholder="Search Status"></th>
+                <th>
+                    <?php
+                    $options['']='Select Status';
+                    $options['Not Contacted']='Not Contacted';
+                    $options['Interested/Follow up']='Interested/Follow up';
+                    $options['Documets Collected']='Documets Collected';
+                    $options['Account opened']='Account opened';
+                    $options['Converted']='Converted';
+                    $options['Drop/Not Interested']='Drop/Not Interested';
+                    $options['Cannot be contacted']='Cannot be contacted';
+                    $options['Closed']='Closed';
+                    echo form_dropdown('status', $options ,'',array());
+                    ?>
+                </th>
                 <th><input type="text" name="customername" placeholder="Search MTD"></th>
                 <th><input type="text" name="customername" placeholder="Search YTD"></th>
             </tr>
@@ -55,10 +68,9 @@
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>
 <script type="text/javascript">
-
     jQuery(document).ready(function() {
         var table = $('#sample_3');
-        var columns = [''];
+        var columns = '';
 
         //Initialize datatable configuration
         initTable(table,columns);
