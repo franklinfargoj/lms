@@ -216,9 +216,9 @@
         });
 
         var action = function(option){
-            if(option == 'Interested/Follow up'){
+            if(option == 'FU'){
                $('.followUp').show();
-            }else if(option == 'Account opened'){
+            }else if(option == 'AO'){
                $('.accountOpen').show();
             }else{
                 $('.accountOpen').hide();
@@ -231,30 +231,29 @@
         });
 
         $("#detail_form").validate({
-
-                rules: {
-                    product_category_id: {
-                        required: true
-                    },
-                    product_id: {
-                        required: true
-                    },
-                    remind_on: {
-                        required: true
-                    }
+            rules: {
+                product_category_id: {
+                    required: true
                 },
-                messages: {
-                    product_category_id: {
-                        required: "Please select product category"
-                    },
-                    product_id: {
-                        required: "Please select product"
-                    },
-                    remind_on: {
-                        required: "Please select follow up date"
-                    }
+                product_id: {
+                    required: true
+                },
+                remind_on: {
+                    required: true
                 }
-            });
+            },
+            messages: {
+                product_category_id: {
+                    required: "Please select product category"
+                },
+                product_id: {
+                    required: "Please select product"
+                },
+                remind_on: {
+                    required: "Please select follow up date"
+                }
+            }
+        });
     });
 </script>
 
