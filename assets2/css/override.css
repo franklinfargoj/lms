@@ -86,3 +86,13 @@ input.custom_button {
     padding: 10px;
     text-align: center;
 }
+
+
+span.no_result {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin: 5px 0;
+    text-align: center;
+    font-family: "Montserrat";
+}

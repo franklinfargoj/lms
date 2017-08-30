@@ -447,7 +447,7 @@ class Leads extends CI_Controller
                         //Only for assign leads show lead status dropdown as he can update status of only assigned leads
                         $arrData['lead_status'] = $this->Lead->lead_status(Tbl_LeadAssign,'status');
                         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0));
-                        $arrData['category_list'] = $this->dropdown($category_list,true);
+                        $arrData['category_list'] = dropdown($category_list,true);
                     }
                     $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
                     break;
@@ -560,18 +560,6 @@ class Leads extends CI_Controller
     }
 
     /*Private Functions*/
-
-    private function dropdown($data,$select_option){
-        $result = array();
-        if($select_option == true){
-            $result[''] = 'Select';
-        }
-        foreach ($data as $key => $value) {
-            $result[$value['id']] =  $value['title'];  
-        }
-        return $result;
-    }
-
     private function em_view($login_user,$arrData){
 
         $type = $arrData['type']; 
