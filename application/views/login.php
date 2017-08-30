@@ -176,6 +176,11 @@
 				}
 			});
 
+			setTimeout(function(){        
+			        $(".success_message").fadeOut('slow');
+			        $(".error_message").fadeOut('slow');
+		    }, 10000);
+
 			$('#username')
 				  .on('focus', function(){
 				      var $this = $(this);
