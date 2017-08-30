@@ -199,7 +199,7 @@ class Dashboard extends CI_Controller {
                 Tbl_LeadAssign . '.status' => 'Converted');
             $result['month_lead_converted_analytics'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
-        }if($this->session->userdata('admin_type') =='BM'){
+        }if($this->session->userdata('admin_type') =='BM' || $this->session->userdata('admin_type') =='EM'){
             //Walk-in
             $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),
                 Tbl_Leads . '.lead_source' => 'Walk-in');
@@ -266,67 +266,111 @@ class Dashboard extends CI_Controller {
 
     }
 
-   public function leads_status(){
-        $result = array();
-        $session_vals = get_session();
-        $designation_type = $session_vals['designation_name'];
-        if(!empty($designation_type) && $designation_type == 'BM'){
-            $table = Tbl_LeadAssign;
-            $branch_id = $session_vals['designation_name'];
-            $action = 'count';
-            $whereArray = array('branch_id' => $branch_id, 'status' => 'Not Contacted');
+   public function leads_status($id='',$name=''){
+       $result = array();
+       $designation_type = $this->session->userdata('admin_type');
+       $this->make_bread->add('lead status', '', 0);
+       $result['breadcrumb'] = $this->make_bread->output();
+       if(!empty($designation_type) && $designation_type == 'ZM'){
+           $table = Tbl_LeadAssign;
+           $action = 'count';
+           $id=$this->uri->segment(3);
+           $branch_id = decode_id($id);
+
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Not Contacted', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['not_contacted'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Not Contacted', 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_not_contacted'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
 
-            $whereArray = array('branch_id' => $branch_id, 'status' => 'Interested/Follow up');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Interested/Follow up', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['follow_up'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Interested/Follow up', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+            $result['month_follow_up'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
 
-            $whereArray = array('branch_id' => $branch_id, 'status' => 'Converted');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Converted', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['converted'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Converted', 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_converted'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
 
-            $whereArray = array('branch_id' => $branch_id, 'status' => 'Account Opened');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Account Opened', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['account_opened'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Account Opened', 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_account_opened'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
 
-            $whereArray = array('branch_id' => $branch_id, 'status' => 'Documents Collected');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Documents Collected', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['documents_collected'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Documents Collected', 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_documents_collected'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
 
-            $whereArray = array('branch_id' => $branch_id, 'status' => 'Drop/Not Interested');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Drop/Not Interested', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['drop_not_interested'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Drop/Not Interested', 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_drop_not_interested'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
 
-            $whereArray = array('branch_id' => $branch_id, 'status' => 'Cannot be contacted');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Cannot be contacted', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['can_not_be_contacted'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Cannot be contacted', 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_can_not_be_contacted'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
 
-            $whereArray = array('branch_id' => $branch_id, 'status' => 'Closed');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Closed', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['closed'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
+            $whereArray = array('branch_id' => $branch_id, 'status' => 'Closed', 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_closed'] = $this->master->get_leads($action, $table, '', $whereArray, '', '', '');
         }
-        if(!empty($designation_type) && $designation_type == 'EM'){
+        if(!empty($designation_type) && ($designation_type == 'BM' || $designation_type == 'EM')){
             $table = Tbl_LeadAssign;
             $action = 'count';
-            $employee_id = $session_vals['hrms_id'];
-            $whereArray = array('employee_id'=>$employee_id,'status'=>'Not Contacted');
+
+            $employee_id = $this->session->userdata('admin_id');
+            if($id !=''){
+                $id=$this->uri->segment(3);
+                $name=$this->uri->segment(4);
+                $employee_id = decode_id($id);
+                $result['employee_id'] = $employee_id;
+                $result['employee_name'] = $name;
+            }
+
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Not Contacted', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['not_contacted'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Not Contacted', 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_not_contacted'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
 
-            $whereArray = array('employee_id'=>$employee_id,'status'=>'Interested/Follow up');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Interested/Follow up','YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['follow_up'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Interested/Follow up','MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_follow_up'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
 
-            $whereArray = array('employee_id'=>$employee_id,'status'=>'Converted');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Converted','YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['converted'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Converted','MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_converted'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
 
-            $whereArray = array('employee_id'=>$employee_id,'status'=>'Account Opened');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Account Opened','YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['account_opened'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Account Opened','MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_account_opened'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
 
-            $whereArray = array('employee_id'=>$employee_id,'status'=>'Documents Collected');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Documents Collected','YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['documents_collected'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Documents Collected','MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_documents_collected'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
 
-            $whereArray = array('employee_id'=>$employee_id,'status'=>'Drop/Not Interested');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Drop/Not Interested','YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['drop_not_interested'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Drop/Not Interested','MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_drop_not_interested'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
 
-            $whereArray = array('employee_id'=>$employee_id,'status'=>'Cannot be contacted');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Cannot be contacted','YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['can_not_be_contacted'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Cannot be contacted','YEAR(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_can_not_be_contacted'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
 
-            $whereArray = array('employee_id'=>$employee_id,'status'=>'Closed');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Closed','YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['closed'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
+            $whereArray = array('employee_id'=>$employee_id,'status'=>'Closed','YEAR(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+            $result['month_closed'] = $this->master->get_leads($action,$table,'',$whereArray,'','','');
         }
-       $middle = "Leads/view/bm_performance";
+       $middle = "Leads/view/status";
        load_view($middle,$result);
 
    }
