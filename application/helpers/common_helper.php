@@ -314,3 +314,14 @@ function get_lead_title($type,$till){
     
     return $title;
 }
+
+function dropdown($data,$select_option){
+    $result = array();
+    if($select_option == true){
+        $result[''] = 'Select';
+    }
+    foreach ($data as $key => $value) {
+        $result[$value['id']] =  ucwords($value['title']);  
+    }
+    return $result;
+}

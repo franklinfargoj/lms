@@ -178,7 +178,7 @@ class Ticker extends CI_Controller {
                $this->session->set_flashdata('error','Invalid access');
                redirect('ticker');
           }
-          
+
           $id = decode_id($id);
           $arrData['tickerDetail'] = $this->master->view_record($id);
           if(count($arrData['tickerDetail']) > 1){
@@ -192,6 +192,5 @@ class Ticker extends CI_Controller {
           /*Create Breadcumb*/
 
           return load_view("Ticker/detail",$arrData);
-          
      }
 }

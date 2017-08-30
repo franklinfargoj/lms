@@ -12,69 +12,69 @@
 <div class="page-content">
     <div class="container">
         <?php if($productguidelist){?>
-        <div id="tabs" class="product-guide-tab">
-            <ul>
+            <div id="tabs" class="product-guide-tab">
+                <ul>
+                    <?php 
+                        $i = 0;
+                        foreach ($productguidelist as $key => $value) { 
+                        $i++;
+                    ?>
+                        <li>
+                            <a class="tab" href="#tabs-<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
+                        </li>
+                    <?php 
+                        }
+                    ?>
+                </ul>
                 <?php 
                     $i = 0;
                     foreach ($productguidelist as $key => $value) { 
                     $i++;
                 ?>
-                    <li>
-                        <a class="tab" href="#tabs-<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
-                    </li>
+                    <div id="tabs-<?php echo $value['id'];?>" class="tab-content">
+                        <?php
+                            $attributes = array(
+                                    'role' => 'form',
+                                    'id' => 'add_form',
+                                    'class' => 'form',
+                                    'autocomplete' => 'off'
+                            );
+                            echo form_open(base_url().'/product_guide/edit', $attributes);
+                        ?>
+                            <div class="form-control">
+                                <?php
+                                    $data = array(
+                                        'product_id'  => encode_id($value['product_id']),
+                                        'id' => encode_id($value['id'])
+                                    );
+                                    echo form_hidden($data);
+                                ?>
+                                <textarea class="description_text" name="description_text_<?php echo $value['id'];?>" rows="7" cols="80" style="width: 810px; height: 200px">
+                                    <?php echo $value['description_text'];?>
+                                </textarea>
+
+                                <?php echo form_error('description_text', '<span class="help-block">', '</span>');?>
+                            </div>
+                            <div class="form-control form-submit clearfix">
+                                <a href="javascript:void(0);" class="active">
+                                    <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                    <span><input type="submit" name="Submit" value="Submit"></span>
+                                    <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                                </a>
+                            </div>
+                        <?php echo form_close();?>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            CKEDITOR.replace( "description_text_<?php echo $value['id'];?>", {
+                                uiColor: '#01559d'
+                            });  
+                        });
+                    </script>
                 <?php 
                     }
                 ?>
-            </ul>
-            <?php 
-                $i = 0;
-                foreach ($productguidelist as $key => $value) { 
-                $i++;
-            ?>
-                <div id="tabs-<?php echo $value['id'];?>" class="tab-content">
-                    <?php
-                        $attributes = array(
-                                'role' => 'form',
-                                'id' => 'add_form',
-                                'class' => 'form',
-                                'autocomplete' => 'off'
-                        );
-                        echo form_open(base_url().'/product_guide/edit', $attributes);
-                    ?>
-                        <div class="form-control">
-                            <?php
-                                $data = array(
-                                    'product_id'  => encode_id($value['product_id']),
-                                    'id' => encode_id($value['id'])
-                                );
-                                echo form_hidden($data);
-                            ?>
-                            <textarea class="description_text" name="description_text_<?php echo $value['id'];?>" rows="7" cols="80" style="width: 810px; height: 200px">
-                                <?php echo $value['description_text'];?>
-                            </textarea>
-
-                            <?php echo form_error('description_text', '<span class="help-block">', '</span>');?>
-                        </div>
-                        <div class="form-control form-submit clearfix">
-                            <a href="javascript:void(0);" class="active">
-                                <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                                <span><input type="submit" name="Submit" value="Submit"></span>
-                                <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
-                            </a>
-                        </div>
-                    <?php echo form_close();?>
-                </div>
-                <script type="text/javascript">
-                    $(function () {
-                        CKEDITOR.replace( "description_text_<?php echo $value['id'];?>", {
-                            uiColor: '#01559d'
-                        });  
-                    });
-                </script>
-            <?php 
-                }
-            ?>
-        </div>
+            </div>
         <?php }else{?>
             <span class="help-block">No data found. Please add description for product</span>
         <?php }?>
