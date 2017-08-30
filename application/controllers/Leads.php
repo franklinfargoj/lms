@@ -44,7 +44,7 @@ class Leads extends CI_Controller
         /*Create Breadcumb*/
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<label class = "error">', '</label>');
-            $this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
+//            $this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
             $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alphaNumeric');
             $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
             $this->form_validation->set_rules('lead_ticket_range', 'Range.', 'required|numeric');
@@ -52,7 +52,7 @@ class Leads extends CI_Controller
             $this->form_validation->set_rules('product_id', 'Product','required');
             $this->form_validation->set_rules('remark', 'Remark', 'required');
             $this->form_validation->set_rules('is_own_branch', 'Branch', 'required');
-            $this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
+//            $this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
 
             $input = get_session();
 
@@ -86,7 +86,7 @@ class Leads extends CI_Controller
             }
 
 
-            $keys = array('is_existing_customer','lead_ticket_range','customer_name','contact_no','product_category_id','product_id','lead_identification','is_own_branch','remark','lead_ticket_range');
+            $keys = array('lead_ticket_range','customer_name','contact_no','product_category_id','product_id','is_own_branch','remark','lead_ticket_range');
             foreach ($keys as $k => $value){
                 $lead_data[$value] = $this->input->post($value);
 
@@ -99,7 +99,6 @@ class Leads extends CI_Controller
                 $lead_data['reroute_from_branch_id'] = $branch_id;
                 $lead_data['branch_id'] = $routed_id;
             }
-
             $lead_data['lead_name'] = $this->input->post('customer_name');
             $lead_id = $this->Lead->add_leads($lead_data);
             
