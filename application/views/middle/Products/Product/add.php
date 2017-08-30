@@ -65,11 +65,11 @@
 						<div class="form-control">
 							<label>Default Assign</label>
 							<div class="radio-control">
-								<input type="radio" id= "self" name="default_assign" value="self" <?php echo  set_radio('default_assign', 'self', TRUE); ?> />
+								<input type="radio" id= "self" name="default_assign" value="self" <?php echo  set_radio('default_assign', 'self'); ?> />
 								<label>Self</label>
 							</div>
 							<div class="radio-control">
-								<input type="radio" id= "branch" name="default_assign" value="branch" <?php echo  set_radio('default_assign', 'branch'); ?> />
+								<input type="radio" id= "branch" name="default_assign" value="branch" <?php echo  set_radio('default_assign', 'branch', TRUE); ?> />
 								<label>Branch</label>
 							</div>
 						</div>
