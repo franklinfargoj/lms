@@ -22,11 +22,6 @@
                 }
             ?>
         </div>
-        <div class="form-control form-submit clearfix">
-            <a href="<?php echo site_url('faq');?>" class="reset float-right">
-               Back
-            </a>
-        </div>
     </div>
 </div>
 

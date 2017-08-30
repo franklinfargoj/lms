@@ -26,15 +26,15 @@
 					);
 					echo form_open(site_url().'login/check_login', $attributes);
 				?>
-				<?php echo $this->load->view('common/message',array(),TRUE);?>
 				<h3>LOGIN</h3>
+				<?php echo $this->load->view('common/message',array(),TRUE);?>
 				<div class="form-control user-details">
 					<?php 
 							$attributes = array(
 						        'class' => '',
 						        'style' => ''
 							);
-							echo form_label('Username', 'username', $attributes);
+						//	echo form_label('Username', 'username', $attributes);
 						?>
 					<div class="input-control">
 						<?php 
@@ -43,7 +43,7 @@
 							        'name'  => 'username',
 							        'id'    => 'username',
 							        'class' => '',
-							        'placeholder' => '',
+							        'value'  => 'Username',
 							        'autocomplete' => 'off'
 							        
 								);
@@ -61,7 +61,7 @@
 						        'class' => '',
 						        'style' => ''
 							);
-							echo form_label('Password', 'password', $attributes);
+							//echo form_label('Password', 'password', $attributes);
 						?>
 					<div class="input-control">
 						<?php 
@@ -70,7 +70,7 @@
 							        'name'  => 'password',
 							        'id'    => 'password',
 							        'class' => '',
-							        'placeholder'  => '',
+							        'value'  => 'Password',
 							        'autocomplete' => 'off'
 							    );
 								echo form_input($data);
@@ -115,7 +115,7 @@
 				if($tickers){
 			?>
 			<div class="footer-login">
-				<marquee>
+				<marquee onmouseover="this.stop();" onmouseout="this.start();">
 				<?php 
 					foreach ($tickers as $key => $value) {
 				?>
@@ -175,6 +175,34 @@
 				    error.insertAfter(element.closest('.form-control'));
 				}
 			});
+
+			$('#username')
+				  .on('focus', function(){
+				      var $this = $(this);
+				      if($this.val() == 'Username'){
+				          $this.val('');
+				      }
+				  })
+				  .on('blur', function(){
+				      var $this = $(this);
+				      if($this.val() == ''){
+				          $this.val('Username');
+				      }
+				  });
+
+		  	$('#password')
+				  .on('focus', function(){
+				      var $this = $(this);
+				      if($this.val() == 'Password'){
+				          $this.val('');
+				      }
+				  })
+				  .on('blur', function(){
+				      var $this = $(this);
+				      if($this.val() == ''){
+				          $this.val('Password');
+				      }
+				  });
 		})
 	</script>
 
