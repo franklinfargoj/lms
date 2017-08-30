@@ -70,7 +70,7 @@
 <script type="text/javascript">
     jQuery(document).ready(function() {
         var table = $('#sample_3');
-        var columns = '';
+        var columns = [];
 
         //Initialize datatable configuration
         initTable(table,columns);
