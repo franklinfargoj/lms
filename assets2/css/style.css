@@ -971,7 +971,7 @@ margin-top: 10px;
 	border: 0 none;
 }
 .ui-tabs .ui-tabs-panel{
-	border: 1px solid #a4cef3;
+	border: 1px solid #a4cef3 !important;
 }
 .ui-state-default{
 	border: 0 none !important;
@@ -980,7 +980,7 @@ margin-top: 10px;
 	font-family: "Montserrat";
 	font-weight: 500;
 }
-.ui-widget.ui-widget-content{border: 0 none;}
+.ui-widget.ui-widget-content{border: 0 none !important; }
 .ui-state-default.ui-state-active{
 	background-color: #01559d !important;
 	color: #ffffff;

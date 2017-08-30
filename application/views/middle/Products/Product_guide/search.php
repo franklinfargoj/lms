@@ -89,7 +89,8 @@
 		<!-- Tab contents start here -->
 		<?php if(isset($searchResult)){?>
 			<?php if(!empty($searchResult)){?>
-	            <div id="tabs" class="product-guide-tab">
+                <img class="loader" src="http://10.0.11.34/lms/assets2/images/35.gif">
+	            <div id="tabs" class="product-guide-tab" style="display:none;">
 	                <ul>
 	                    <?php 
 	                        $i = 0;
@@ -163,5 +164,10 @@
             }
         });
     });
+
+    setTimeout(function(){        
+        $('.loader').hide();
+        $('#tabs').show();
+    }, 2000);
 
 </script>

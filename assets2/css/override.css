@@ -109,3 +109,7 @@ span.no_result {
     text-align: center;
     font-family: "Montserrat";
 }
+
+img.loader {
+    margin-left: 50%;
+}
