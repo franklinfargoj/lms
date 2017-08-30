@@ -226,7 +226,7 @@ body{
 	margin-bottom: 15px;
 	display: table;
 	width: 100%;
-	border-bottom: 1px solid #CCCCCC;
+    text-align: center;
 }
 .form-control label{
 	color: #8a8b8e;
@@ -576,7 +576,7 @@ strong{
 }
 
 .lead-form .form-control label{width: 155px; color: #333333; font-size: 15px;}
-.radio-control{float: left;}
+.radio-control{display: inline;}
 .radio-control input{
 	width: auto;
     color: #333333;
@@ -999,7 +999,134 @@ margin-top: 10px;
 	line-height: 20px;
 }
 /*product guide*/
+/*EMI calculator*/
+.range-slider .ui-slider-handle{
+	border: 1px solid #ed4c4c !important;
+    background-color: #ed4c4c !important;
+    width: 32px;
+    height: 26px;
+    padding: 0 !important;
+    margin-top: -2px;
+    background-image: url("../images/ui-bg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.range-slider .ui-slider{
+	border: 1px solid #acacac;
+}
 
+.emi-content .range-slider label{
+	width: 160px;
+	color: #484848;
+	vertical-align: middle;
+}
+.emi-content .range-slider input{
+    border: 1px solid #d3d3d3;
+    height: 25px;
+    width: auto;
+    padding: 10px;
+  }
+
+.emi-content .range-slider{
+	border-bottom:  none;
+	margin-bottom: 70px;
+}
+
+.emi-content .range-slider .ui-slider-horizontal{
+	width: 75%;
+}
+.emi-content .range-slider .step{
+	position: relative;
+	top: -19px;
+}
+.tick{
+	position: absolute;
+}
+.emi-content .range-slider input{
+	width: 115px;
+	height: 25px;
+	left: -40px;
+	position: relative; 
+}
+.emi-content .form-submit{ 
+	width: auto;
+	margin: auto;
+	text-align: center;
+}
+.emi-content .form-submit .float-right {
+    float: none;
+    margin: 0 auto 15px;
+}
+.emi-content .form-submit .input-box{
+	border: 1px solid #ccc;
+    font-weight: 500;
+    font-size: 32.21px;
+    margin-bottom: 15px;
+    width: 140px;
+    padding: 12px;
+    height: 25px;
+    background-color: transparent;
+    display: block;
+}
+.emi-content .form-submit div{
+	display: inline-block;
+    text-align: center;
+    width: 100%;
+    font-family: "Montserrat";
+    font-size: 16px;
+    margin-bottom: 20px;
+ }
+ .tick{
+    color: #8b8b8b;
+    font-size: 14px;
+}
+
+.emi-content{
+	width: 1245px;
+    margin: 0 auto;
+}
+.emi-content .value{
+	width: 50px !important;
+}
+/*EMI calculator*/
+
+/*notification*/
+h3#ui-id-1,h3#ui-id-9 {
+    background-color: #ee4b4c!important;
+    color: #fff;
+    margin-bottom: 20px;
+}
+h3#ui-id-3,h3#ui-id-5 {
+    background-color: #127bd5!important;
+    color: #fff;
+    margin-bottom: 20px;
+}
+h3#ui-id-7,h3#ui-id-11{
+    background-color: #2dcc70!important;
+    color: #fff;
+    margin-bottom: 20px;
+}
+.high .h-bg{
+    background: #fff;
+    color: #ee4b4c;
+    padding: 2px 8px;
+    margin: 0 16px 0 16px;
+}
+.high .l-bg{
+    background: #fff;
+    color: #127bd5;
+    padding: 2px 8px;
+    margin: 0 16px 0 16px;
+}
+.high .n-bg{
+    background: #fff;
+    color: #2dcc70;
+    padding: 2px 8px;
+    margin: 0 16px 0 16px;
+}
+.high img{
+    margin-bottom: -7px;
+}
 /*Bread Crumbs*/
 .breadcrumbs{
 	background-color: #f4f4f4;

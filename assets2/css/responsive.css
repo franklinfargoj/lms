@@ -16,6 +16,7 @@
     .lead-form .lead-form-right{
         width: 47%;
     }
+    .emi-content{width: 100%;}
     
 }
 
@@ -73,5 +74,8 @@
         padding-left: 20px;
         width: 48%;
     }
+     .emi-content{width: 100%;}
+     .emi-content .range-slider input{width: 70px;}
+
 
 }

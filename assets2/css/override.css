@@ -99,3 +99,13 @@ input.custom_button {
 .page-content .performance-form-control label {
     display: inline;
 }
+
+
+span.no_result {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin: 5px 0;
+    text-align: center;
+    font-family: "Montserrat";
+}
