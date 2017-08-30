@@ -58,7 +58,7 @@
                         </td>
                         <td>
                             <a href="<?php echo base_url('leads/view');?>">View</a>
-                            <a href="<?php echo base_url('leads/performance');?>">Performance</a>
+                            <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by']));?>">Performance</a>
                         </td>
                     </tr>
                     <?php

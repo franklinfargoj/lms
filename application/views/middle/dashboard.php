@@ -27,7 +27,8 @@
 				<span class="small">YTD</span>	
 			</div>
 			<div class="view-content">
-				<a href="<?php echo site_url('leads/leads_list/converted/ytd')?>">VIEW</a>
+<!--				<a href="--><?php //echo site_url('leads/leads_list/converted/ytd')?><!--">VIEW</a>-->
+				<a href="<?php echo site_url('dashboard/leads_performance/'.$this->session->userdata('admin_id'))?>">VIEW</a>
 			</div>
 		</div>
 	</div>
