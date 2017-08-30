@@ -210,14 +210,15 @@ class Product_guide extends CI_Controller {
                     $arrData['has_error'] = 'has-error';
                     return load_view("Products/Product_guide/view",$arrData);    
                }
-               $arrData['product_category_id'] = $this->input->post('product_category_id');
+               $product_category_id = $this->input->post('product_category_id');
+               $arrData['product_category_id'] = $product_category_id;
                $product_id = $this->input->post('product_id');
                $arrData['product_id'] = $product_id;
 
                $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
                $arrData['category_list'] = dropdown($category_list,true);
 
-               $product_list = $this->Lead->get_all_products(array('id' => $product_id,'is_deleted' => 0,'status' => 'active'));
+               $product_list = $this->Lead->get_all_products(array('category_id' => $product_category_id,'is_deleted' => 0,'status' => 'active'));
                $arrData['product_list'] = dropdown($product_list,true);
 
                //Search for product description

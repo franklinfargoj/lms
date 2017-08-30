@@ -167,7 +167,7 @@
     $(document).ready(function(){
         var lead_status = "<?php echo $leads[0]['status']?>";  //Current Lead status
 
-        if(lead_status == 'Interested/Follow up'){
+        if(lead_status == 'FU'){
             $('.followUp').show();              //Display follow up fields 
         }
 
@@ -218,8 +218,10 @@
         var action = function(option){
             if(option == 'FU'){
                $('.followUp').show();
+               $('.accountOpen').hide();
             }else if(option == 'AO'){
                $('.accountOpen').show();
+               $('.followUp').hide();
             }else{
                 $('.accountOpen').hide();
                 $('.followUp').hide();
