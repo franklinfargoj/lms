@@ -11,7 +11,8 @@
 				<span class="small">YTD</span>
 			</div>
 			<div class="view-content">
-				<a href="<?php echo site_url('leads/leads_list/generated/ytd')?>">VIEW</a>
+				<a href="<?php echo site_url('dashboard/leads_status/'.encode_id($this->session->userdata('admin_id')).'/'.$this->session->userdata('admin_name'))?>">VIEW</a>
+<!--				<a href="--><?php //echo site_url('leads/leads_list/generated/ytd')?><!--">VIEW</a>-->
 			</div>
 		</div>
 	</div>
