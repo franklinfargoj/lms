@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].':8844/DENABANK/lms';
+$config['base_url'] = 'http://localhost/lms';
 
 /*
 |--------------------------------------------------------------------------
@@ -455,7 +455,7 @@ $config['csrf_token_name'] = 'csrf_dena_bank';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = FALSE;
-$config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add_lead','api/v1/api/leads_performance','api/v1/api/category_products');
+$config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add_lead','api/v1/api/leads_performance','api/v1/api/category_products','api/v1/api/leads_status');
 
 /*
 |--------------------------------------------------------------------------
