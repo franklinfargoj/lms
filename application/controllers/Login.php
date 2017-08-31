@@ -102,11 +102,8 @@ class Login extends CI_Controller {
 
 
      private function set_session($data){
-         //pe($data);
-          $login_user = array("admin_name" => $data['name'],"admin_type"=>$data['admin_type'],"hrms_id"=>$data['id'],"isLoggedIn"=>TRUE);
-         pe($data);
+          $login_user = array("admin_name" => $data['name'],"admin_type"=>$data['admin_type'],"admin_id"=>$data['id'],"isLoggedIn"=>TRUE);
           $this->session->set_userdata($login_user);
-         pe($this->session->userdata());
      }
 
 
