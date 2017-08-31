@@ -288,7 +288,7 @@ function get_session(){
         'district_id' => '1',
         'state_id' => '1',
         'zone_id' => '1234',
-        'full_name' => $CI->session->userdata('name'),
+        'full_name' => $CI->session->userdata('admin_name'),
         'supervisor_id' => '009',
         'designation_id' => '4',
         'designation_name' => $CI->session->userdata('admin_type'),

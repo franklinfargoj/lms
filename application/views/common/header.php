@@ -74,7 +74,7 @@
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
 				<li class="<?php echo ($controller == 'product') ? 'active' : ''?>">
-					<a href="">
+					<a href="<?php echo site_url('dashboard/emi_calculator')?>">
 						Calculator
 					</a>
 				</li>
