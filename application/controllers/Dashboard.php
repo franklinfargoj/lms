@@ -411,5 +411,11 @@ class Dashboard extends CI_Controller {
        load_view($middle,$result);
 
    }
+    public function emi_calculator(){
+        $this->make_bread->add('emi-calculator', '', 0);
+        $result['breadcrumb'] = $this->make_bread->output();
+        $middle = '/emi_calculator';
+        load_view($middle,$result);
+    }
     
 }
