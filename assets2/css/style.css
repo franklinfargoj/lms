@@ -49,8 +49,12 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+html{
+	height: 100%;
+}
 body {
 	line-height: 1;
+	height: 100%;
 }
 ol, ul {
 	list-style: none;
@@ -226,7 +230,8 @@ body{
 	margin-bottom: 15px;
 	display: table;
 	width: 100%;
-    text-align: center;
+	border-bottom: 1px solid #CCCCCC;
+	text-align: left;
 }
 .form-control label{
 	color: #8a8b8e;
@@ -576,7 +581,7 @@ strong{
 }
 
 .lead-form .form-control label{width: 155px; color: #333333; font-size: 15px;}
-.radio-control{display: inline;}
+.radio-control{float: left;}
 .radio-control input{
 	width: auto;
     color: #333333;
@@ -585,50 +590,6 @@ strong{
     text-align: left;
     height: auto !important;
     border: 0 none !important;
-}
-/*--------------*/
-.box-content{
-  width: 582px;
-    margin: 0 auto;     
-}
-.page-content .form-control label{
-    display: inline;
-}
-.box{
-    width: 265px;
-    display: inline-block;
-    text-align: center;
-    border: 1px solid #d7d7d7;
-    margin-bottom: 45px;
-}
-.box-m {margin-right: 44px;}
-.box img{
-    margin: 15px auto;
-}
-.box p{
-    color: #333333;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-.box ul{
-    width: 100%;
-    background: #f5f8fd;
-    display: inline-flex;
-    padding: 15px 0;
-}
-.box li{
-    width: 50%;
-    display: inline-block;
-    font-size: 13px;
-    color: #333333;
-    letter-spacing: 0.5px;
-        line-height: 20px;
-}
-.box span{
-    font-size: 18px;
-    color: #333333;
-    font-weight: bold;
 }
 .radio-control label{display: inline-block;}
 .lead-form .form-control textarea{ border: 1px solid #d3d3d3; width: 99%;}
@@ -731,10 +692,18 @@ table.dataTable.no-footer{border-bottom: 0 none;}
 table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
     border-top: 1px solid #e9ecf0;
 }
-.page-content .container{ background-color: #fff; zoom: 1; filter: progid:DXImageTransform.Microsoft.Shadow(color='#aaaaaa', Direction=135, Strength=6); }
+/*.page-content .container{
+    background-image: url("../images/bg.png");
+    background-position: center top;
+    display: block;
+    background-size: 100% auto;
+    padding: 0px 40px;
+    box-sizing: border-box;
+    max-width: 1379px;
+}*/
 
 /*.page-content .container{
-	background-image: url("../images/bg.png");
+	background-image: url("../images/bg3.png");
     background-position: center top;
     background-repeat: no-repeat;
     background-size: 100% auto;
@@ -843,12 +812,12 @@ margin-top: 10px;
 }
 
 .faq-accordion h3{
-	background-color: #ebf4fb;
+	background-color: #ebf4fb !important;
 	padding: 10px 10px 20px;
 	margin-bottom: 5px;
 	font-family: "Montserrat";
     font-size: 16px;
-    color: #484848;
+    color: #484848 !important;
     outline: none;
 }
 
@@ -980,8 +949,8 @@ margin-top: 10px;
 	font-family: "Montserrat";
 	font-weight: 500;
 }
-.ui-widget.ui-widget-content{border: 0 none !important; }
-.ui-state-default.ui-state-active{
+.ui-widget.ui-widget-content{border: 0 none !important;}
+.product-guide-tab .ui-state-default.ui-state-active{
 	background-color: #01559d !important;
 	color: #ffffff;
 	outline: none;
@@ -1091,18 +1060,73 @@ margin-top: 10px;
 /*EMI calculator*/
 
 /*notification*/
-h3#ui-id-1,h3#ui-id-9 {
-    background-color: #ee4b4c!important;
+.high{
+	background-color: #ee4b4c;
+}
+/*notification*/
+/*lead performance*/
+.box-content{
+  width: 582px;
+    margin: 0 auto;     
+}
+.box-content .form-control{
+	border-bottom: 0 none;
+    width: 320px;
+    margin: 0 auto 20px;
+}
+.box-content .form-control .radio-control{
+	margin-right: 15px;
+}
+.box{
+    width: 265px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid #d7d7d7;
+    margin-bottom: 45px;
+}
+.box-m {margin-right: 44px;}
+.box img{
+    margin: 15px auto;
+}
+.box p{
+    color: #333333;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+.box ul{
+    width: 100%;
+    background: #f5f8fd;
+    display: block;
+    padding: 15px 0;
+}
+.box li{
+    width: 49%;
+    display: inline-block;
+    font-size: 13px;
+    color: #333333;
+    letter-spacing: 0.5px;
+        line-height: 20px;
+}
+.box span{
+    font-size: 18px;
+    color: #333333;
+    font-weight: bold;
+}
+/*lead performance*/
+/*notification*/
+.notifi-accordion .high.h-clr{
+    background-color: #ee4b4c !important;
     color: #fff;
     margin-bottom: 20px;
 }
-h3#ui-id-3,h3#ui-id-5 {
-    background-color: #127bd5!important;
+.notifi-accordion .high.l-clr{
+    background-color: #127bd5 !important;
     color: #fff;
-    margin-bottom: 20px;
+    margin-bottom: 20px;	
 }
-h3#ui-id-7,h3#ui-id-11{
-    background-color: #2dcc70!important;
+.notifi-accordion .high.n-clr{
+    background-color: #2dcc70 !important;
     color: #fff;
     margin-bottom: 20px;
 }
@@ -1111,22 +1135,100 @@ h3#ui-id-7,h3#ui-id-11{
     color: #ee4b4c;
     padding: 2px 8px;
     margin: 0 16px 0 16px;
+    font-size: 12px;
+    width: 33px;
+    height: 14px;
+    text-align: center;
+    font-family: "Montserrat";
+    font-weight: normal;
+    vertical-align: middle;
+    display: inline-block;
 }
 .high .l-bg{
     background: #fff;
     color: #127bd5;
     padding: 2px 8px;
     margin: 0 16px 0 16px;
+    font-size: 12px;
+    height: 14px;
+    text-align: center;
+    font-family: "Montserrat";
+    font-weight: normal;
+    vertical-align: middle;
+    display: inline-block;
+    width: 33px;
 }
 .high .n-bg{
     background: #fff;
     color: #2dcc70;
-    padding: 2px 8px;
+    padding: 2px 1px;
     margin: 0 16px 0 16px;
+    font-size: 12px;
+    width: 47px;
+    height: 14px;
+    text-align: center;
+    font-family: "Montserrat";
+    font-weight: normal;
+    vertical-align: middle;
+    display: inline-block;
 }
 .high img{
     margin-bottom: -7px;
 }
+.notifi-accordion .ui-state-active{
+	background-image: url("../images/notifi-min.png");
+    background-repeat: no-repeat;
+    background-position: 99% center;
+}
+
+.notifi-accordion .ui-accordion-header-collapsed{
+	background-image: url("../images/notifi-plus.png");
+    background-repeat: no-repeat;
+    background-position: 99% center;
+}
+.notifi-accordion p{
+	margin-bottom: 10px;
+}
+.notifi-accordion a{
+	color: #484848;
+    font-size: 16px;
+    text-decoration: underline;
+    font-family: "Montserrat";
+    font-weight: 500;
+}
+
+.bg-top{
+	background-image: url(../images/bg-top.png);
+    background-position: center top;
+    display: block;
+    background-size: 100% 100%;
+    height: 50px;
+    max-width: 1440px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+.bg-bottom{
+	background-image: url(../images/bg-bottom.png);
+    background-position: center bottom;
+    display: block;
+    background-size: 100% 100%;
+    height: 50px;
+    max-width: 1440px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+.inner-content{
+	background-image: url("../images/bg1.png");
+	background-position: center bottom;
+	display: block;
+	background-size: 100% 100%;
+	max-width: 1432px;
+	margin: 0 auto;
+	box-sizing: border-box;
+	background-repeat: repeat-y;
+
+}
+/*notification*/
 /*Bread Crumbs*/
 .breadcrumbs{
 	background-color: #f4f4f4;

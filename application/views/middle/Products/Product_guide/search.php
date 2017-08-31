@@ -76,7 +76,7 @@
 					</div>
 				</div>
 				<div class="form-control form-submit clearfix">
-					<a href="#" class="float-right">
+					<a href="javascript:void(0);" class="float-right">
 						<img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
 						<span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
 						<img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
@@ -86,36 +86,39 @@
 			<?php echo form_close();?>
 		</div>
 
-		<!-- Tab contents start here -->
-		<?php if(isset($searchResult)){?>
-			<?php if(!empty($searchResult)){?>
-                <img class="loader" src="http://10.0.11.34/lms/assets2/images/35.gif">
-	            <div id="tabs" class="product-guide-tab" style="display:none;">
-	                <ul>
-	                    <?php 
-	                        $i = 0;
-	                        foreach ($searchResult as $key => $value) { 
-	                        $i++;
-	                    ?>
-	                        <li>
-	                            <a class="tab" href="#tabs-<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
-	                        </li>
-	                    <?php 
-	                        }
-	                    ?>
-	                </ul>
-	                <?php 
-	                    $i = 0;
-	                    foreach ($searchResult as $key => $value) { 
-	                    $i++;
-	                ?>
-	                    <div id="tabs-<?php echo $value['id'];?>" class="tab-content">
-	                    	<?php echo $value['description_text'];?>
-	                    </div>
-	                <?php 
-	                    }
-	                ?>
-	            </div>
+        <img class="loader" src="http://10.0.11.34/lms/assets2/images/35.gif" style="display:none;">
+        <!-- Tab contents start here -->
+        <?php if(isset($searchResult)){?>
+            <?php if(!empty($searchResult)){?>
+            <div id="tabs" class="product-guide-tab" style="display:none;">
+                <ul>
+                    <?php 
+                        $i = 0;
+                        foreach ($searchResult as $key => $value) { 
+                        $i++;
+                    ?>
+                        <li>
+                            <a class="tab" href="#tabs-<?php echo $value['id'];?>"><?php echo $value['title'];?></a>
+                        </li>
+                    <?php 
+                        }
+                    ?>
+                </ul>
+                <?php 
+                    $i = 0;
+                    foreach ($searchResult as $key => $value) { 
+                    $i++;
+                ?>
+                    <div id="tabs-<?php echo $value['id'];?>" class="tab-content">
+                    	<?php echo $value['description_text'];?>
+                    </div>
+                <?php 
+                    }
+                ?>
+            </div>
+            <script type="text/javascript">
+            $('.loader').show();
+            </script>
 	        <?php }else{?>
 	            <span class="no_result">No search result found</span>
 	        <?php }?>
@@ -128,7 +131,7 @@
 <script type="text/javascript">
 
 	/*Validation*/
-	$("#search_form").validate({
+	var validate = $("#search_form").validate({
         rules: {
             product_category_id: {
                 required: true
@@ -144,6 +147,16 @@
             product_id: {
                 required: "Please select product"
             }
+        },
+        submitHandler: function(form) {
+            $('.custom_button').attr('disabled','disabled');
+            $( ".float-right" ).addClass( "disabled" );
+            $('#tabs').hide();
+            $('.no_result').hide();
+            $('.loader').show();
+            setTimeout(function(){        
+                form.submit();
+            }, 2000);
         }
     });
 
