@@ -306,7 +306,7 @@ class Dashboard extends CI_Controller {
    public function leads_status($id='',$name=''){
        $result = array();
        $designation_type = $this->session->userdata('admin_type');
-       $this->make_bread->add('lead status', '', 0);
+       $this->make_bread->add('My Generated Leads', '', 0);
        $join[] = array('table' => Tbl_Leads, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
        $result['breadcrumb'] = $this->make_bread->output();
        if(!empty($designation_type) && $designation_type == 'ZM'){
@@ -360,13 +360,11 @@ class Dashboard extends CI_Controller {
             $action = 'count';
 
             $employee_id = $this->session->userdata('admin_id');
-            if($id !=''){
-                $id=$this->uri->segment(3);
-                $name=$this->uri->segment(4);
-                $employee_id = decode_id($id);
+            $employee_id = 0;
                 $result['employee_id'] = $employee_id;
-                $result['employee_name'] = $name;
-            }
+                $result['employee_name'] = $this->session->userdata('admin_name');;
+            
+            
 
             $whereArray = array(Tbl_Leads.'.created_by'=>$employee_id,'status'=>'NC', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['not_contacted'] = $this->master->get_leads($action,$table,'',$whereArray,$join,'','');
@@ -411,12 +409,6 @@ class Dashboard extends CI_Controller {
        $middle = "Leads/view/status";
        load_view($middle,$result);
 
-   }
-   public function emi_calculator(){
-       $this->make_bread->add('emi-calculator', '', 0);
-       $result['breadcrumb'] = $this->make_bread->output();
-       $middle = '/emi_calculator';
-       load_view($middle,$result);
    }
     
 }

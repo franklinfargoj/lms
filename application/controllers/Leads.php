@@ -366,15 +366,23 @@ class Leads extends CI_Controller
      * @param $type,$till
      * @return array
      */
-    public function leads_list($type,$till){
+    public function leads_list($type,$till,$status = null,$lead_source = null){
         //Call to helper function to fetch Page title as we are using same list view for all lead list
-        $title = get_lead_title($type,$till);
+        $title = get_lead_title($type);
+
         $arrData['title'] = $title;
         $arrData['type'] = $type;
         $arrData['till'] = $till;
-
+        
+        if($lead_source != 'all'){
+            $arrData['lead_source'] = $lead_source;
+        }
+        
         //Create Breadcumb
         $this->make_bread->add($title, '', 0);
+        if($status != 'all'){
+            $arrData['status'] = $status;   
+        }
         $arrData['breadcrumb'] = $this->make_bread->output();
 
         //Get session data
@@ -406,15 +414,20 @@ class Leads extends CI_Controller
      * @param $type,$till,$lead_id
      * @return array
      */
-    public function details($type,$till,$lead_id){
+    public function details($type,$till,$lead_id,$status = null){
         $lead_id = decode_id($lead_id);
         $title = get_lead_title($type,$till);
         $arrData['title'] = $title;
         $arrData['type'] = $type;
         $arrData['till'] = $till;
+        $breadUrl = 'leads/leads_list/'.$type.'/'.$till;
+        if(!empty($status)){
+            $breadUrl = 'leads/leads_list/'.$type.'/'.$till.'/'.$status;
+            $arrData['status'] = $status;
+        }
 
         /*Create Breadcumb*/
-          $this->make_bread->add($title, 'leads/leads_list/'.$type.'/'.$till, 0);
+          $this->make_bread->add($title,$breadUrl, 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
 
@@ -570,6 +583,7 @@ class Leads extends CI_Controller
 
         $type = $arrData['type']; 
         $till = $arrData['till'];
+
         //Parameters buiding for sending to list function.
         $action = 'list';
         $table = Tbl_Leads.' as l';
@@ -582,6 +596,9 @@ class Leads extends CI_Controller
             }
             if($till == 'ytd'){
                 $where  = array('l.created_by' => $login_user['hrms_id'],'YEAR(l.created_on)' => date('Y'));
+            }
+            if(!empty($arrData['status'])){
+                $where['la.status'] = $arrData['status'];
             }
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
         }
@@ -596,18 +613,19 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         }
         if($type == 'assigned'){
-            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','p1.title as interested_product_title','r.remind_on');
+            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on');
             if($till == 'ytd'){
                 $where  = array('la.employee_id' => $login_user['hrms_id'],'la.is_deleted' => 0,'YEAR(la.created_on)' => date('Y'));
             }
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
-            $join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');
+            /*$join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');*/
         }
         $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
         $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
         
-        
+        /*pe($arrData);
+        exit;*/
         return $arrData;
     }
-    
+
 }
