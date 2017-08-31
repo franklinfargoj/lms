@@ -1,6 +1,7 @@
 <?php 
 	$controller =  $this->router->fetch_class();
 	$method =  $this->router->fetch_method();
+	$param = $this->uri->segment(3,0);
 ?>
 
 <div class="header">
@@ -15,6 +16,13 @@
 						Home
 					</a>
 				</li>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
+				<li class="<?php echo ($controller == 'leads' && $method == 'add') ? 'active' : ''?>">
+					<a href="<?php echo site_url('leads/add')?>">
+						Add Lead 
+					</a>
+				</li>
+				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
 				<li class="<?php echo ($controller == 'product_category') ? 'active' : ''?>">
 					<a href="<?php echo site_url('product_category')?>">
@@ -58,16 +66,9 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM'))) {?>
-				<li class="<?php echo ($controller == 'leads' && $method == 'leads_list') ? 'active' : ''?>">
+				<li class="<?php echo ($controller == 'leads' && $method == 'leads_list' && $param == 'assigned') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
 						Assigned Leads
-					</a>
-				</li>
-				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
-				<li class="<?php echo ($controller == 'leads' && $method == 'add') ? 'active' : ''?>">
-					<a href="<?php echo site_url('leads/add')?>">
-						Add Lead 
 					</a>
 				</li>
 				<?php }?>

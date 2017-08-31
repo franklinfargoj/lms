@@ -380,6 +380,7 @@ body{
 	display: table;
 	color: #b1bac4;
 	font-family: "Montserrat";
+	font-size: 15px;
 }
 .top-navigation{
 	text-align: center;
@@ -396,7 +397,7 @@ body{
 }
 .top-navigation li{
 	display: inline-block;
-    margin-right: 15px;
+    margin-right: 10px;
     padding: 0;
     text-align: center;
     vertical-align: middle;
@@ -404,7 +405,7 @@ body{
 
 .top-navigation ul li.active a{
 	background-color: #014986;
-    padding: 45px 33px;
+    padding: 45px 18px;
     color: #ffffff;
 }
 .top-navigation li + li{
