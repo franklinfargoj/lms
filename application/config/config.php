@@ -523,3 +523,17 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+
+$config['lead_status'] = array(
+	'NC' => 'Not Contacted',
+	'DC' => 'Documets Collected',
+	'AO' => 'Account opened',
+	'NI' => 'Drop/Not Interested',
+	'CBC' => 'Cannot be contacted',
+	'FU' => 'Interested/Follow up' ,
+	'Converted' => 'Converted',
+	'Closed' => 'Closed'
+	);
+
+
