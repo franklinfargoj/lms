@@ -156,7 +156,7 @@ class Dashboard extends CI_Controller {
      * loads the performance of employee
      * @author Gourav Thatoi
      */
-    public function leads_performance($id){
+    public function leads_performance($id=''){
         $input = get_session();;
         $branch_id = decode_id($id);
         $created_by = decode_id($id);

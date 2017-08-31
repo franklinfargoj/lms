@@ -4,7 +4,9 @@
  * User: webwerk
  * Date: 31/8/17
  * Time: 2:04 PM
- */?>
+ */
+$form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset' => '', 'id' => 'emi');
+?>
 <div class="page-title">
 			<div class="container clearfix">
 				<h3 class="text-center">EMI Calculator</h3>
@@ -13,10 +15,13 @@
 		<div class="page-content">
 			<div class="container">
 				<div class="emi-content">
-					<form>
+                    <?php
+                    echo form_open('', $form_attributes);
+                    ?>
 							<div class="form-control range-slider">
 									<label>Loan Amount</label>
-									<div id="master slider1" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"><div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
+									<div id="slider1" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
+                                        <div id="slider1div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
 									</div>
 								<div class="step">
 									<span class="tick" style="left: 0%;">|<br><span class="marker">0</span></span>
@@ -29,12 +34,14 @@
 									<span class="tick" style="left:87.5%;">|<br><span class="marker">175L</span></span>
 									<span class="tick" style="left:100%;">|<br><span class="marker">200L</span></span>
 								</div>
-								<input type="text" id="amount" name="">
+								<input type="text" id="amount" name="amount">
 								<label class="value">&#x20B9;</label>
 							</div>
 							<div class="form-control range-slider">
 									<label>Loan Tenure</label>
-									<div id="master" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"><div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
+									<div id="slider2" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
+                                        <div id="slider2div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
+                                        <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
 									</div>
 								<div class="step">
 									<span class="tick" style="left: 0%;">|<br><span class="marker">0</span></span>
@@ -46,35 +53,188 @@
 									<span class="tick" style="left: 100%;">|<br><span class="marker">30</span></span>
 								</div>
 
-								<input id ="years"type="text" name="">
+								<input id ="years"type="text" name="years">
 								<label class="value">years</label>
 							</div>
 							<div class="form-control range-slider">
 									<label>Interest Rate</label>
-									<div id="master" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"><div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
-									</div>
-								<div class="step"><span class="tick" style="left: 0%;">|<br><span class="marker">5</span></span><span class="tick" style="left: 16.67%;">|<br><span class="marker">7.5</span></span><span class="tick" style="left: 33.34%;">|<br><span class="marker">10</span></span><span class="tick" style="left: 50%;">|<br><span class="marker">12.5</span></span><span class="tick" style="left: 66.67%;">|<br><span class="marker">15</span></span><span class="tick" style="left: 83.34%;">|<br><span class="marker">17.5</span></span><span class="tick" style="left: 100%;">|<br><span class="marker">20</span></span></div>
+									<div id="slider3" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
+                                        <div id="slider3div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
+                                        <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
+                                    </div>
+                                <div class="step">
+                                    <span class="tick" style="left: 0%;">|<br><span class="marker">5</span></span>
+                                    <span class="tick" style="left: 16.67%;">|<br><span class="marker">7.5</span></span>
+                                    <span class="tick" style="left: 33.34%;">|<br><span class="marker">10</span></span>
+                                    <span class="tick" style="left: 50%;">|<br><span class="marker">12.5</span></span>
+                                    <span class="tick" style="left: 66.67%;">|<br><span class="marker">15</span></span>
+                                    <span class="tick" style="left: 83.34%;">|<br><span class="marker">17.5</span></span>
+                                    <span class="tick" style="left: 100%;">|<br><span class="marker">20</span></span>
+                                </div>
 
-								<input id="interest" type="text" name="">
+								<input id="interest" type="text" name="interest">
 								<label class="value">%</label>
 							</div>
 
 						<div class="form-control form-submit clearfix">
 							<a href="#" class="float-right">
 									<img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-									<span>Calculate</span>
+                                <span><input type="submit" class="custom_button" name="Submit" value="Calculate"></span>
 									<img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
 							</a><br/>
 							<div>Your EMI</div>
-							<span class="input-box"></span>
+							<span style="color: black" id="your_emi" class="input-box"></span>
 							<div>per month</div>
 						</div>
-					</form>
+                    <?php echo form_close(); ?>
 				</div>
 			</div>
 		</div>
 
 <script>
+
+    $(document).ready(function(){
+        var slider1 = $("#slider1");
+        var amount = $("#amount");
+        var div = $('#slider1div');
+
+        slider1.slider({
+           range:"min",
+           orientation:"horizontal",
+            max: 20000000,
+            min: 0,
+            animate: true,
+            values: [0],
+            slide: function (event, ui) {
+                amount.val(ui.values[0]);
+                var width = (ui.values[0]/20000000) * 100 + '%';
+                div.width(width);
+            }
+        });
+        var value = slider1.slider('values', 0);
+        amount.val(value);
+
+        amount.keyup(function () {
+            if($.isNumeric(amount.val())) {
+                slider1.slider('values', 0, amount.val());
+                var width = '100%';
+                if (amount.val() <= 20000000)
+                    width = (amount.val() / 20000000) * 100 + '%';
+                div.width(width);
+            }
+        });
+
+        var slider2 = $("#slider2");
+        var year = $("#years");
+        var div2 = $('#slider2div');
+
+        slider2.slider({
+            range:"min",
+            orientation:"horizontal",
+            max: 30,
+            min: 0,
+            animate: true,
+            values: [0],
+            slide: function (event, ui) {
+                year.val(ui.values[0]);
+                var width = (ui.values[0]/30) * 100 + '%';
+                div2.width(width);
+            }
+        });
+
+        var value2 = slider2.slider('values', 0);
+        year.val(value2);
+
+        year.keyup(function () {
+            if($.isNumeric(year.val())) {
+                slider2.slider('values', 0, year.val());
+                var width = '100%';
+                if (year.val() <= 30)
+                    width = (year.val() / 30) * 100 + '%';
+                div2.width(width);
+            }
+        });
+
+        var slider3 = $("#slider3");
+        var interest = $("#interest");
+        var div3 = $('#slider3div');
+
+        slider3.slider({
+            range:"min",
+            orientation:"horizontal",
+            max: 20,
+            min: 5,
+            animate: true,
+            values: [5],
+            slide: function (event, ui) {
+                interest.val(ui.values[0]);
+                var width = (ui.values[0]/20) * 100 + '%';
+                div3.width(width);
+            }
+        });
+
+        var value3 = slider3.slider('values', 0);
+        interest.val(value3);
+
+        interest.keyup(function () {
+            if($.isNumeric(interest.val())) {
+                slider3.slider('values', 0, interest.val());
+                var width = '100%';
+                if (interest.val() <= 20)
+                    width = (interest.val() / 20) * 100 + '%';
+                div3.width(width);
+            }
+        });
+
+
+        $("#emi").validate({
+            rules:{
+                interest:{
+                    required:true,
+                    number:true
+                },
+                years:{
+                    required:true,
+                    number:true
+                },
+                amount:{
+                    required:true,
+                    number:true
+                }
+            },
+            messages:{
+                interest: {
+                    required: "Please enter interest",
+                    number: "Only numbers allowed"
+                },
+                years: {
+                    required: "Please enter year",
+                    number: "Only numbers allowed"
+                },
+                amount: {
+                    required: "Please enter amount",
+                    number: "Only numbers allowed"
+                }
+            }
+        });
+
+
+
+    });
+    $('#emi').on('submit', function(e){
+        e.preventDefault();
+        if($('#emi').valid()){
+            var P = $("#amount").val();
+            var IN = $("#interest").val();
+            var R = IN /(12 * 100);
+            var N = $("#years").val();
+            var X = Math.pow((1+R),N);
+            var Y = Math.pow((1+R),N-1);
+            var EMI = (P * R * X) / Y;
+
+            $('#your_emi').html(EMI.toFixed(2));
+        }
+    });
     $( function() {
 
         // setup master volume

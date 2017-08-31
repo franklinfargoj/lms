@@ -85,8 +85,10 @@ class Leads extends CI_Controller
                 return load_view($middle, $arrData);
             }
 
-
-            $keys = array('lead_ticket_range','customer_name','contact_no','product_category_id','product_id','is_own_branch','remark','lead_ticket_range');
+            $lead_data['created_by'] = $input['hrms_id'];
+            $lead_data['created_by_name'] = $input['full_name'];
+            $keys = array('customer_name','contact_no','product_category_id','product_id',
+                'is_own_branch','remark','lead_ticket_range');
             foreach ($keys as $k => $value){
                 $lead_data[$value] = $this->input->post($value);
 
