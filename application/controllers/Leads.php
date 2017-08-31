@@ -168,9 +168,9 @@ class Leads extends CI_Controller
             if (!empty($products)) {
                 $options[''] = 'Select Product';
                 foreach ($products as $key => $value) {
-                    $options[$value['id']] = $value['title'];
+                    $options[$value['id']] = ucwords($value['title']);
                 }
-                $html = '<label>Product</label>';
+                $html = '<label>Product:</label>';
                 $html .= form_dropdown('product_id', $options, '', $product_extra);
             } else {
                 $options[''] = 'Select Product';

@@ -113,3 +113,8 @@ span.no_result {
 img.loader {
     margin-left: 50%;
 }
+
+/* Disabled the button */
+.disabled{
+    cursor: not-allowed;
+}
