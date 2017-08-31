@@ -13,7 +13,7 @@
           $emp_id = 'Employee Id: '.$employee_id;
       }
       if($this->session->userdata('admin_type') == 'ZM'){
-          $title = 'Branch Id: '.$branchid.' GENERATED LEAD';
+          $title = 'Branch Id: '.$branch_id.' GENERATED LEAD';
       }
 ?>
 <div class="page-title">

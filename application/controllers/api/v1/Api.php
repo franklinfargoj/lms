@@ -441,16 +441,17 @@ class Api extends REST_Controller
 
     public function add_lead_post(){
         $params = $this->input->post();
+        pe(json_encode($params));
         $error = array();
-        $validations = array('is_existing_customer'=>'Customer exists or not','customer_name'=>'Customer Name','contact_no'=>'Phone No',
-            'product_category_id'=>'Product Category',
-            'product_id'=>'Product','lead_ticket_range'=>'Range','is_own_branch'=>'Own Branch / Other Branch','created_by'=>'Created By','created_by_name'=>'Created By Name',
+        $validations = array('customer_name'=>'Customer Name','contact_no'=>'Phone No',
+            'product_category_id'=>'Product Category','product_id'=>'Product','lead_ticket_range'=>'Range',
+            'is_own_branch'=>'Own Branch / Other Branch','created_by'=>'Created By','created_by_name'=>'Created By Name',
             'state_id'=>'State','district_id'=>'District',
             'zone_id' => 'Zone','branch_id'=>'Branch','department_name'=>'Department Name',
             'department_id'=>'Department Id','created_by_state_id'=>'Created By State',
             'created_by_district_id'=>'Created By District',
             'created_by_zone_id'=>'Created By Zone','created_by_branch_id'=>'Created By Branch',
-            'lead_identification'=>'Lead Identification','remark'=>'Remark');
+            'remark'=>'Remark');
         $phone_extra = '';
         $cust_name_extra = '';
         foreach ($params as $k => $value){
@@ -676,7 +677,7 @@ class Api extends REST_Controller
 
     }
 
-    public function leads_filter_status_post(){
+    public function leads_status_post(){
         $params = $this->input->post();
         if((isset($params) && !empty($params) && isset($params['type']) && !empty($params['type']))
             && ((isset($params['branch_id']) && !empty($params['branch_id'])) ||

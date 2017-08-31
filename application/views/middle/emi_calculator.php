@@ -1,0 +1,100 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: webwerk
+ * Date: 31/8/17
+ * Time: 2:04 PM
+ */?>
+<div class="page-title">
+			<div class="container clearfix">
+				<h3 class="text-center">EMI Calculator</h3>
+			</div>
+		</div>
+		<div class="page-content">
+			<div class="container">
+				<div class="emi-content">
+					<form>
+							<div class="form-control range-slider">
+									<label>Loan Amount</label>
+									<div id="master slider1" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"><div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
+									</div>
+								<div class="step">
+									<span class="tick" style="left: 0%;">|<br><span class="marker">0</span></span>
+									<span class="tick" style="left: 12.5%;">|<br><span class="marker">25L</span></span>
+									<span class="tick" style="left:25%;">|<br><span class="marker">50L</span></span>
+									<span class="tick" style="left:37.5%;">|<br><span class="marker">75L</span></span>
+									<span class="tick" style="left:50%;">|<br><span class="marker">100L</span></span>
+									<span class="tick" style="left:62.5%;">|<br><span class="marker">125L</span></span>
+									<span class="tick" style="left:75%">|<br><span class="marker">150L</span></span>
+									<span class="tick" style="left:87.5%;">|<br><span class="marker">175L</span></span>
+									<span class="tick" style="left:100%;">|<br><span class="marker">200L</span></span>
+								</div>
+								<input type="text" id="amount" name="">
+								<label class="value">&#x20B9;</label>
+							</div>
+							<div class="form-control range-slider">
+									<label>Loan Tenure</label>
+									<div id="master" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"><div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
+									</div>
+								<div class="step">
+									<span class="tick" style="left: 0%;">|<br><span class="marker">0</span></span>
+									<span class="tick" style="left: 16.67%;">|<br><span class="marker">5</span></span>
+									<span class="tick" style="left: 33.33%;">|<br><span class="marker">10</span></span>
+									<span class="tick" style="left: 50%;">|<br><span class="marker">15</span></span>
+									<span class="tick" style="left: 66.67%;">|<br><span class="marker">20</span></span>
+									<span class="tick" style="left: 83.33%;">|<br><span class="marker">25</span></span>
+									<span class="tick" style="left: 100%;">|<br><span class="marker">30</span></span>
+								</div>
+
+								<input id ="years"type="text" name="">
+								<label class="value">years</label>
+							</div>
+							<div class="form-control range-slider">
+									<label>Interest Rate</label>
+									<div id="master" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"><div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
+									</div>
+								<div class="step"><span class="tick" style="left: 0%;">|<br><span class="marker">5</span></span><span class="tick" style="left: 16.67%;">|<br><span class="marker">7.5</span></span><span class="tick" style="left: 33.34%;">|<br><span class="marker">10</span></span><span class="tick" style="left: 50%;">|<br><span class="marker">12.5</span></span><span class="tick" style="left: 66.67%;">|<br><span class="marker">15</span></span><span class="tick" style="left: 83.34%;">|<br><span class="marker">17.5</span></span><span class="tick" style="left: 100%;">|<br><span class="marker">20</span></span></div>
+
+								<input id="interest" type="text" name="">
+								<label class="value">%</label>
+							</div>
+
+						<div class="form-control form-submit clearfix">
+							<a href="#" class="float-right">
+									<img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+									<span>Calculate</span>
+									<img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+							</a><br/>
+							<div>Your EMI</div>
+							<span class="input-box"></span>
+							<div>per month</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+<script>
+    $( function() {
+
+        // setup master volume
+        $(".ui-slider").slider({
+            value: 70,
+            orientation: "horizontal",
+            range: "min",
+            animate: true
+        });
+
+        // setup graphic EQ
+        $( "#eq > span" ).each(function() {
+            // read initial values from markup and remove that
+            var value = parseInt( $( this ).text(), 20 );
+            $( this ).empty().slider({
+                value: value,
+                range: "min",
+                animate: true,
+                orientation: "vertical"
+            });
+        });
+    } );
+</script>
