@@ -52,12 +52,12 @@ input.custom_button {
     line-height: 0px !important;
 }
 
-.lead-top .float-right a{
+/* .lead-top .float-right a{
     font-family: "Montserrat";
     font-size: 16px;
     color: #1a1a1a;
     padding-top: 15px;
-}
+} */
 
 .float-right{
     float: right;
@@ -105,3 +105,19 @@ img.loader {
 .disabled{
     cursor: not-allowed;
 }
+
+.footer{
+    position: relative;
+}
+
+.lead-num > a:hover {
+    background-color: #00559d;
+    color: #fff;
+}
+.lead-num > a {
+    border: 2px solid #00559d;
+    color: #00559d;
+    font-weight: 500;
+    padding: 5px 25px;
+}
+
