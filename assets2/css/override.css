@@ -52,12 +52,12 @@ input.custom_button {
     line-height: 0px !important;
 }
 
-.lead-top .float-right a{
+/* .lead-top .float-right a{
     font-family: "Montserrat";
     font-size: 16px;
     color: #1a1a1a;
     padding-top: 15px;
-}
+} */
 
 .float-right{
     float: right;
@@ -86,6 +86,19 @@ input.custom_button {
     padding: 10px;
     text-align: center;
 }
+.performance-form-control {
+    margin-bottom: 15px;
+    display: table;
+    width: 100%;
+    text-align: center;
+}
+.performance-radio-control {
+    display: inline;
+}
+
+.page-content .performance-form-control label {
+    display: inline;
+}
 
 
 span.no_result {
@@ -93,7 +106,9 @@ span.no_result {
     font-weight: bold;
     color: #1a1a1a;
     margin: 5px 0;
+    margin-left: 40%;
     text-align: center;
+    left: 50%;
     font-family: "Montserrat";
 }
 
@@ -105,3 +120,19 @@ img.loader {
 .disabled{
     cursor: not-allowed;
 }
+
+.footer{
+    position: relative;
+}
+
+.lead-num > a:hover {
+    background-color: #00559d;
+    color: #fff;
+}
+.lead-num > a {
+    border: 2px solid #00559d;
+    color: #00559d;
+    font-weight: 500;
+    padding: 5px 25px;
+}
+

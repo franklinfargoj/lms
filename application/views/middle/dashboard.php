@@ -11,7 +11,8 @@
 				<span class="small">YTD</span>
 			</div>
 			<div class="view-content">
-				<a href="<?php echo site_url('leads/leads_list/generated/ytd')?>">VIEW</a>
+				<a href="<?php echo site_url('dashboard/leads_status')?>">VIEW</a>
+<!--				<a href="--><?php //echo site_url('leads/leads_list/generated/ytd')?><!--">VIEW</a>-->
 			</div>
 		</div>
 	</div>
@@ -27,7 +28,8 @@
 				<span class="small">YTD</span>	
 			</div>
 			<div class="view-content">
-				<a href="<?php echo site_url('leads/leads_list/converted/ytd')?>">VIEW</a>
+<!--				<a href="--><?php //echo site_url('leads/leads_list/converted/ytd')?><!--">VIEW</a>-->
+				<a href="<?php echo site_url('dashboard/leads_performance/'.encode_id($this->session->userdata('admin_id')))?>">VIEW</a>
 			</div>
 		</div>
 	</div>

@@ -64,7 +64,7 @@
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
 				<li class="<?php echo ($controller == 'leads' && $method == 'add') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/add')?>">
 						Add Lead 
@@ -82,6 +82,13 @@
 				<li class="<?php echo ($controller == 'product_guide') ? 'active' : ''?>">
 					<a href="<?php echo site_url('product_guide/view')?>">
 						Product Guide
+					</a>
+				</li>
+				<?php }?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','RM'))) {?>
+				<li class="<?php echo ($controller == '') ? 'active' : ''?>">
+					<a href="">
+						Reports
 					</a>
 				</li>
 				<?php }?>

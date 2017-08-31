@@ -2,7 +2,7 @@
 	<div class="container clearfix">
 		<h3 class="text-center">Edit Product</h3>
 		<div class="float-right">
-            <span class="lead-num"><a href="<?php echo site_url('product');?>">Back</a></span>
+            <span class="lead-num"><a href="<?php echo site_url('product');?>"><span><</span>Back</a></span>
         </div>
 	</div>
 </div>
@@ -139,8 +139,8 @@
 			</div>
 		</div>
 	</div>
+	<span class="bg-bottom"></span>
 </div>
-<span class="bg-bottom"></span>
 <!-- END  EDIT PRODUCT -->
 
 <script type="text/javascript">

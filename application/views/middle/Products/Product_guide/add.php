@@ -2,14 +2,15 @@
     <div class="container clearfix">
         <h3 class="text-center">Add <?php echo ucwords($product[0]['title']);?> Description</h3>
         <div class="float-right">
-            <span class="lead-num"><a href="<?php echo base_url("product_guide/index/".encode_id($product[0]['id']));?>">Back</a></span>
+            <span class="lead-num"><a href="<?php echo base_url("product_guide/index/".encode_id($product[0]['id']));?>"><span><</span>Back</a></span>
         </div>
     </div>
 </div>
 <div class="page-content">
     <div class="container">
-        <span></span>
-            <div class="inner-content">
+        <span class="bg-top"></span>
+        <div class="inner-content">
+            <div class="container">
                 <div class="product-category">
                     <!-- <form> -->
                     <?php
@@ -73,7 +74,8 @@
                     <?php echo form_close();?>
                 </div>
             </div>
-        <span></span>
+        </div>
+        <span class="bg-bottom"></span>
     </div>
 </div>
 <script src="<?php echo base_url().PLUGINS;?>ckeditor/ckeditor.js"></script>
