@@ -280,7 +280,7 @@ function get_session(){
     //return $CI->session->userdata();
 
     $input = array(
-        'hrms_id' => '0',
+        'hrms_id' => '2',
         'dept_id' => '12',
         'dept_type_id' => '123',
         'dept_type_name' => 'BR',
