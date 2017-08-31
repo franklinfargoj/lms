@@ -10,7 +10,7 @@
 </div>
 <div class="page-content">
     <div class="container">
-        <table class="upload-table" id="sample_3">
+        <table class="upload-table lead-table" id="sample_3">
             <thead>
             <tr class="top-header">
                 <th></th>
@@ -22,19 +22,13 @@
             <tr>
                 <th>Sr. No</th>
                 <th>Employee Name</th>
-                <th colspan="2">MTD</th>
+                <th>Genrated Leads</th>
+                <th>Converted Leads</th>
                 <th>Action</th>
             </tr>
 
             </thead>
             <tbody>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>Genrated Leads</td>
-                <td>Converted Leads</td>
-                <td></td>
-            </tr>
             <?php if(!empty($leads['generated_leads'])){
                 $i = 0;
                 foreach ($leads['generated_leads'] as $key => $value) {
@@ -63,6 +57,8 @@
                             ?>
                         </td>
                         <td>
+                            <a href="<?php echo base_url('leads/view');?>">View</a>
+                            <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by']));?>">Performance</a>
                         </td>
                     </tr>
                     <?php
