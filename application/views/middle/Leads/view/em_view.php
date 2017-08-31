@@ -5,13 +5,38 @@
 <!-- BEGIN LEADS -->
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center"><?php echo $title;?></h3>
+        <h3 class="text-center">
+            <?php echo $title;?>
+
+            <?php 
+                if(isset($status)){?>
+                (
+                    <?php     
+                        $lead_status = $this->config->item('lead_status');
+                        echo $lead_status[$status];    
+                    ?>
+                )
+            <?php 
+                }
+            ?>
+
+            <?php 
+                if(isset($lead_source)){?>
+                (
+                    <?php     
+                        echo ucwords($lead_source);           
+                    ?>
+                )
+            <?php 
+                }
+            ?>
+        </h3>
     </div>
 </div>
 <div class="lead-top">
     <div class="container clearfix">
         <div class="float-left">
-            <span class="total-lead">Total Assigned Leads</span>
+            <span class="total-lead">Total <?php echo ucwords($type);?> Leads</span>
             <span class="lead-num"> : <?php echo count($leads);?></span>
         </div>
         <div class="float-right">
@@ -32,8 +57,19 @@
                         <th><input type="text" name="customername" value=""></th>
                         <th><input type="text" name="productname" value=""></th>
                         <th><input type="text" name="finaccno" value=""></th>
+                        <?php if(!isset($status)){?>
+                         <th>
+                            <?php
+                                $lead_status = $this->config->item('lead_status');
+                                $options['']='Select Status';
+                                foreach ($lead_status as $key => $value) {
+                                    $options[$value] = $value;
+                                }
+                                echo form_dropdown('status', $options ,'',array());
+                            ?>
+                        </th>
+                        <?php }?>
                         <?php if($type == 'assigned'){?>
-                        <th><input type="text" name="conversiondate" value=""></th>
                         <th><input type="text" name="conversiondate" value=""></th>
                         <?php }?>
                         <th>
@@ -45,7 +81,7 @@
                             </select>
                         </th>
                         <?php if($type == 'assigned'){?>
-                        <th><input type="text" name="conversiondate" value=""></th>
+                        <!-- <th><input type="text" name="conversiondate" value=""></th> -->
                         <?php }?>
                         <th><input type="text" name="conversiondate" value=""></th>
                         <th></th>
@@ -63,10 +99,12 @@
                         <th>
                             Elapsed Days
                         </th>
-                        <?php if($type == 'assigned'){?>
+                        <?php if(!isset($status)){?>
                         <th>
                             Status
                         </th>
+                        <?php }?>
+                        <?php if($type == 'assigned'){?>
                         <th>
                             Followup date
                         </th>
@@ -75,9 +113,9 @@
                             Lead as (H/W/C)
                         </th>
                         <?php if($type == 'assigned'){?>
-                        <th>
+                        <!-- <th>
                             Intrested Other Product
-                        </th>
+                        </th> -->
                         <?php }?>
                          <th>
                             Lead Source
@@ -112,10 +150,12 @@
                                     echo $datediff->format("%a days");
                                 ?>
                             </td>
-                            <?php if($type == 'assigned'){?>
+                            <?php if(!isset($status)){?>
                             <td>
-                                 <?php echo ucwords($value['status']);?>
+                                 <?php echo ucwords($lead_status[$value['status']]);?>
                             </td>
+                            <?php }?>
+                            <?php if($type == 'assigned'){?>
                             <td>
                                  <?php echo isset($value['remind_on']) ? date('d-m-Y',strtotime($value['remind_on'])) : '';?>
                             </td>
@@ -124,15 +164,20 @@
                                  <?php echo ucwords($value['lead_identification']);?>
                             </td>
                             <?php if($type == 'assigned'){?>
-                            <td>
+                            <!-- <td>
                                  <?php echo isset($value['interested_product_title']) ? ucwords($value['interested_product_title']) : 'NA';?>
-                            </td>
+                            </td> -->
                             <?php }?>
                             <td>
                                  <?php echo ucwords($value['lead_source']);?>
                             </td>
                             <td>
-                                <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']))?>">View</a>
+                                <?php if(isset($status)){?>
+                                    <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']).'/'.$status)?>">View</a>
+                                <?php }else{
+                                ?>
+                                    <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']))?>">View</a>
+                                <?php }?>
                             </td>
                         </tr>   
                     <?php   

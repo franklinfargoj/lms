@@ -1,6 +1,15 @@
+<?php 
+$lead_status = $this->config->item('lead_status');
+?>
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">Lead Detail</h3>
+        <?php if(isset($status)){?>
+            <a href="<?php echo site_url('leads/leads_list/'.$type.'/'.$till.'/'.$status);?>" class="reset float-right">Back</a>
+        <?php }else{
+        ?>
+            <a href="<?php echo site_url('leads/leads_list/'.$type.'/'.$till);?>" class="reset float-right">Back</a>
+        <?php }?>
     </div>
 </div>
 <div class="page-content">
@@ -31,7 +40,7 @@
                                 <label>Product Name:</label> <span class="detail-label">Home Loan</span>
                             </div>
                             <div class="form-control">
-                                <label>Lead Status:</label> <span class="detail-label"><?php echo isset($leads[0]['status']) ? $leads[0]['status'] : 'NA';?></span>
+                                <label>Lead Status:</label> <span class="detail-label"><?php echo isset($leads[0]['status']) ? $lead_status[$leads[0]['status']] : 'NA';?></span>
                             </div>
                             <div class="form-control">
                                 <label>Reroute To:</label> <span class="detail-label">Vishal (Branch - State)</span>
@@ -75,13 +84,15 @@
                                             'remind_to'  => $leads[0]['employee_id']
                                         );
                                         echo form_hidden($data);
-
-                                        $options = $lead_status;
+                                        $options1['']='Select';
+                                        foreach ($lead_status as $key => $value) {
+                                            $options1[$key] = $value;
+                                        }
                                         $js = array(
                                                 'id'       => 'lead_status',
                                                 'class'    => 'form-control'
                                         );
-                                        echo form_dropdown('lead_status', $options , $leads[0]['status'],$js);
+                                        echo form_dropdown('lead_status', $options1 , $leads[0]['status'],$js);
                                     ?>
                                 </div>
                                 <div class="form-control followUp" style="display:none">
@@ -152,9 +163,6 @@
                                     <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                             </a>
                         <?php }?>
-                            <a href="<?php echo site_url('leads/leads_list/'.$type.'/'.$till);?>" class="reset float-right">
-                               Back
-                            </a>
                         </div>
                     <!-- </form> -->
                     <?php 
