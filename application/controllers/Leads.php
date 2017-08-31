@@ -352,9 +352,23 @@ class Leads extends CI_Controller
           $this->make_bread->add('Unassign Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
-
+        
         $arrData['unassigned_leads'] = $this->Lead->unassigned_leads();
         $middle = "Leads/unassigned_list";
+        load_view($middle,$arrData);
+    }
+
+    public function unassigned_leads_details($id){
+        /*Create Breadcumb*/
+          $this->make_bread->add('Unassign Leads', 'leads/unassigned_leads', 0);
+          $this->make_bread->add('Details', '', 0);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+        $id = decode_id($id);
+        $arrData['unassigned_leads'] = $this->Lead->unassigned_leads($id);
+        /*pe($arrData['unassigned_leads']);
+        exit;*/
+        $middle = "Leads/unassigned_details";
         load_view($middle,$arrData);
     }
 

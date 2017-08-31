@@ -2,7 +2,7 @@
 <link href="<?php echo base_url() . ASSETS; ?>css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- END PAGE LEVEL STYLES -->
 <!-- BEGIN PRODUCT CATEGOEY-->
-<table class="upload-table" id="sample_3">
+<table class="upload-table lead-table" id="sample_3">
     <thead>
     <tr class="top-header">
         <th></th>
@@ -51,7 +51,7 @@
                     ?>
                 </td>
                 <td>
-                    <a href="">View</a>
+                    <a href="<?php echo site_url('leads/unassigned_leads_details/'.encode_id($value['id']));?>">View</a>
                 </td>
             </tr>
             <?php
