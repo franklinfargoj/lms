@@ -121,9 +121,9 @@ img.loader {
     cursor: not-allowed;
 }
 
-.footer{
+/* .footer{
     position: relative;
-}
+} */
 
 .lead-num > a:hover {
     background-color: #00559d;
@@ -134,5 +134,12 @@ img.loader {
     color: #00559d;
     font-weight: 500;
     padding: 5px 25px;
+}
+body{
+    min-height: 100%;
+}
+
+.breadcrumbs ul li{
+    margin-right: 7px;
 }
 

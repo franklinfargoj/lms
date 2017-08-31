@@ -126,7 +126,7 @@ class Dashboard extends CI_Controller {
      * loads the performance of employee
      * @author Gourav Thatoi
      */
-    public function leads_performance($id){
+    public function leads_performance($id=''){
         $input = get_session();;
         $branch_id = decode_id($id);
         $created_by = decode_id($id);
@@ -328,14 +328,15 @@ class Dashboard extends CI_Controller {
         if(!empty($designation_type) && ($designation_type == 'BM' || $designation_type == 'EM')){
             $table = Tbl_LeadAssign;
             $action = 'count';
-
-            $employee_id = $this->session->userdata('admin_id');
-            $employee_id = 0;
+            $employee_id = decode_id($id);
+            $result['employee_id'] = $employee_id;
+            $result['employee_name'] = $name;
+            if($designation_type == 'EM'){
+                $input = get_session();
+                $employee_id = $input['hrms_id'];
                 $result['employee_id'] = $employee_id;
-                $result['employee_name'] = $this->session->userdata('admin_name');;
-            
-            
-
+                $result['employee_name'] = $input['full_name'];
+            }
             $whereArray = array(Tbl_Leads.'.created_by'=>$employee_id,'status'=>'NC', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
             $result['not_contacted'] = $this->master->get_leads($action,$table,'',$whereArray,$join,'','');
             $whereArray = array(Tbl_Leads.'.created_by'=>$employee_id,'status'=>'NC', 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));

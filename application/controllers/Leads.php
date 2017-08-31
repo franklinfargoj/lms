@@ -377,11 +377,16 @@ class Leads extends CI_Controller
         if($lead_source != 'all'){
             $arrData['lead_source'] = $lead_source;
         }
-        
+
         //Create Breadcumb
-        $this->make_bread->add($title, '', 0);
-        if($status != 'all'){
-            $arrData['status'] = $status;   
+        if(($status != 'all') && ($status != null)){
+            $leads_status = $this->config->item('lead_status');
+            $arrData['status'] = $status;
+            $this->make_bread->add('My Generated Leads', 'dashboard/leads_status', 0);   
+            $this->make_bread->add($leads_status[$status], '', 0);   
+            
+        }else{
+            $this->make_bread->add($title, '', 0);
         }
         $arrData['breadcrumb'] = $this->make_bread->output();
 
@@ -423,14 +428,18 @@ class Leads extends CI_Controller
         $breadUrl = 'leads/leads_list/'.$type.'/'.$till;
         if(!empty($status)){
             $breadUrl = 'leads/leads_list/'.$type.'/'.$till.'/'.$status;
+            $leads_status = $this->config->item('lead_status');
             $arrData['status'] = $status;
+            $this->make_bread->add('My Generated Leads', 'dashboard/leads_status', 0);   
+            $this->make_bread->add($leads_status[$status], $breadUrl, 0);   
+        }else{
+            $this->make_bread->add($title,$breadUrl, 0);
         }
+        $this->make_bread->add('Details','', 0);
+        $arrData['breadcrumb'] = $this->make_bread->output();
 
         /*Create Breadcumb*/
-          $this->make_bread->add($title,$breadUrl, 0);
-          $arrData['breadcrumb'] = $this->make_bread->output();
-        /*Create Breadcumb*/
-
+          
         $login_user = get_session();
 
         if(isset($login_user['designation_name']) && !empty($login_user['designation_name'])){
