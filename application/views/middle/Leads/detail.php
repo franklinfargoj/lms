@@ -167,7 +167,7 @@
     $(document).ready(function(){
         var lead_status = "<?php echo $leads[0]['status']?>";  //Current Lead status
 
-        if(lead_status == 'Interested/Follow up'){
+        if(lead_status == 'FU'){
             $('.followUp').show();              //Display follow up fields 
         }
 
@@ -216,10 +216,12 @@
         });
 
         var action = function(option){
-            if(option == 'Interested/Follow up'){
+            if(option == 'FU'){
                $('.followUp').show();
-            }else if(option == 'Account opened'){
+               $('.accountOpen').hide();
+            }else if(option == 'AO'){
                $('.accountOpen').show();
+               $('.followUp').hide();
             }else{
                 $('.accountOpen').hide();
                 $('.followUp').hide();
@@ -231,30 +233,29 @@
         });
 
         $("#detail_form").validate({
-
-                rules: {
-                    product_category_id: {
-                        required: true
-                    },
-                    product_id: {
-                        required: true
-                    },
-                    remind_on: {
-                        required: true
-                    }
+            rules: {
+                product_category_id: {
+                    required: true
                 },
-                messages: {
-                    product_category_id: {
-                        required: "Please select product category"
-                    },
-                    product_id: {
-                        required: "Please select product"
-                    },
-                    remind_on: {
-                        required: "Please select follow up date"
-                    }
+                product_id: {
+                    required: true
+                },
+                remind_on: {
+                    required: true
                 }
-            });
+            },
+            messages: {
+                product_category_id: {
+                    required: "Please select product category"
+                },
+                product_id: {
+                    required: "Please select product"
+                },
+                remind_on: {
+                    required: "Please select follow up date"
+                }
+            }
+        });
     });
 </script>
 

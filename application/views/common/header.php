@@ -1,3 +1,8 @@
+<?php 
+	$controller =  $this->router->fetch_class();
+	$method =  $this->router->fetch_method();
+?>
+
 <div class="header">
 	<div class="container">
 		<div class="logo">
@@ -5,78 +10,78 @@
 		</div>
 		<div class="top-navigation">
 			<ul>
-				<li class="active">
-					<a href="<?php echo site_url('dashboard')?>" >
+				<li class="<?php echo ($controller == 'dashboard') ? 'active' : ''?>">
+					<a href="<?php echo site_url('dashboard')?>">
 						Home
 					</a>
 				</li>
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-				<li>
+				<li class="<?php echo ($controller == 'product_category') ? 'active' : ''?>">
 					<a href="<?php echo site_url('product_category')?>">
 						Category
 					</a>
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-				<li>
+				<li class="<?php echo (($controller == 'product') || ($controller == 'product_guide' && ($method == 'index' || $method == 'add'))) ? 'active' : ''?>">
 					<a href="<?php echo site_url('product')?>">
 						Products
 					</a>
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-				<li>
+				<li class="<?php echo ($controller == 'faq') ? 'active' : ''?>">
 					<a href="<?php echo site_url('faq')?>">
 						FAQs
 					</a>
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-				<li>
+				<li class="<?php echo ($controller == 'ticker') ? 'active' : ''?>">
 					<a href="<?php echo site_url('ticker')?>">
 						Tickers
 					</a>
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-				<li>
+				<li class="<?php echo ($controller == 'leads' && $method == 'upload') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/upload')?>">
 						Leads Upload
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM'))) {?>
-				<li>
-					<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
-						Assigned Leads
-					</a>
-				</li>
-				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('BM'))) {?>
-				<li>
+				<li class="<?php echo ($controller == 'leads' && $method == 'unassigned_leads') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/unassigned_leads')?>">
 						Unassigned Leads
 					</a>
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM'))) {?>
-				<li>
+				<li class="<?php echo ($controller == 'leads' && $method == 'leads_list') ? 'active' : ''?>">
+					<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
+						Assigned Leads
+					</a>
+				</li>
+				<?php }?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM'))) {?>
+				<li class="<?php echo ($controller == 'leads' && $method == 'add') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/add')?>">
 						Add Lead 
 					</a>
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
-				<li>
+				<li class="<?php echo ($controller == 'product') ? 'active' : ''?>">
 					<a href="">
-						Product Guide
+						Calculator
 					</a>
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
-				<li>
-					<a href="">
-						Calculator
+				<li class="<?php echo ($controller == 'product_guide') ? 'active' : ''?>">
+					<a href="<?php echo site_url('product_guide/view')?>">
+						Product Guide
 					</a>
 				</li>
 				<?php }?>

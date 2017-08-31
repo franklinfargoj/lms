@@ -129,14 +129,14 @@ class Master_model extends CI_Model{
 	 * @param $id
 	 * @return array
 	 */
-	public function view_product($id = null,$order_by = array()){
-		$select = array(Tbl_Products.'.id',Tbl_Products.'.title',Tbl_Products.'.default_assign',Tbl_Products.'.created_by',Tbl_Products.'.status',Tbl_Category.'.title AS category','category_id');
+	public function view_product($id = null,$where = array(),$order_by = array()){
+		$select = array(Tbl_Products.'.id',Tbl_Products.'.title',Tbl_Products.'.default_assign',Tbl_Products.'.created_by',Tbl_Products.'.status',Tbl_Products.'.turn_around_time',Tbl_Category.'.title AS category','category_id');
 		$where[Tbl_Products.'.is_deleted'] = 0;
 		if(!empty($id)){
 			$where[Tbl_Products.'.id'] = $id;
 		}
 		$join = array('table' => Tbl_Category,'on_condition' => Tbl_Products.'.category_id = '.Tbl_Category.'.id','type' => '');
-		return $this->view($select,$where,Tbl_Products , $join,$order_by);
+		return $this->view($select,$where,Tbl_Products,$join,$order_by);
 	}
 
 	#####################################

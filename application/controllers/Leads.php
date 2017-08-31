@@ -168,9 +168,9 @@ class Leads extends CI_Controller
             if (!empty($products)) {
                 $options[''] = 'Select Product';
                 foreach ($products as $key => $value) {
-                    $options[$value['id']] = $value['title'];
+                    $options[$value['id']] = ucwords($value['title']);
                 }
-                $html = '<label>Product</label>';
+                $html = '<label>Product:</label>';
                 $html .= form_dropdown('product_id', $options, '', $product_extra);
             } else {
                 $options[''] = 'Select Product';
@@ -332,14 +332,21 @@ class Leads extends CI_Controller
         return ['type' => 'success','total_inserted'=>$total_inserted, 'insert_array' => $insert_array, 'update_array' => $update_array];
     }
 
-    /*
-     * unassigned_leads
-     * Loads the listing page for unassigned leads.
-     * @author Gourav Thatoi
-     * @access public
-     * @param none
-     * @return none
-     */
+    public function download_error_log(){
+        $this->load->library('excel');
+        $objPHPExcelWriter = new PHPExcel();
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcelWriter, 'Excel5');
+        // $objWriter->save($target_file_path);
+
+        $file_name = time().'Error_log.xls';
+        header('Content-Type: application/vnd.ms-excel'); //mime type
+        header('Content-Disposition: attachment;filename="'.$file_name.'"');
+        //tell browser what's the file name
+        header('Cache-Control: max-age=0'); //no cache
+        $objWriter->save('php://output');
+    }
+
+
     public function unassigned_leads(){
         /*Create Breadcumb*/
           $this->make_bread->add('Unassign Leads', '', 0);
@@ -446,7 +453,7 @@ class Leads extends CI_Controller
                         //Only for assign leads show lead status dropdown as he can update status of only assigned leads
                         $arrData['lead_status'] = $this->Lead->lead_status(Tbl_LeadAssign,'status');
                         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0));
-                        $arrData['category_list'] = $this->dropdown($category_list,true);
+                        $arrData['category_list'] = dropdown($category_list,true);
                     }
                     $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
                     break;
@@ -559,18 +566,6 @@ class Leads extends CI_Controller
     }
 
     /*Private Functions*/
-
-    private function dropdown($data,$select_option){
-        $result = array();
-        if($select_option == true){
-            $result[''] = 'Select';
-        }
-        foreach ($data as $key => $value) {
-            $result[$value['id']] =  $value['title'];  
-        }
-        return $result;
-    }
-
     private function em_view($login_user,$arrData){
 
         $type = $arrData['type']; 
