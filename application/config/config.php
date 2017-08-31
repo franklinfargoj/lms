@@ -455,7 +455,7 @@ $config['csrf_token_name'] = 'csrf_dena_bank';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = FALSE;
-$config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add_lead','api/v1/api/leads_performance','api/v1/api/category_products');
+$config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add_lead','api/v1/api/leads_performance','api/v1/api/category_products','api/v1/api/leads_status');
 
 /*
 |--------------------------------------------------------------------------
@@ -523,3 +523,17 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+
+$config['lead_status'] = array(
+	'NC' => 'Not Contacted',
+	'DC' => 'Documets Collected',
+	'AO' => 'Account opened',
+	'NI' => 'Drop/Not Interested',
+	'CBC' => 'Cannot be contacted',
+	'FU' => 'Interested/Follow up' ,
+	'Converted' => 'Converted',
+	'Closed' => 'Closed'
+	);
+
+
