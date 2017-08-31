@@ -392,7 +392,6 @@ class Leads extends CI_Controller
 
         //Get session data
         $login_user = get_session();
-        pe($login_user);
         $middle = '';
 
         if(isset($login_user['designation_name']) && !empty($login_user['designation_name'])){
