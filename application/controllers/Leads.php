@@ -212,7 +212,7 @@ class Leads extends CI_Controller
                 $file = upload_excel('./uploads', 'filename');
                 if (!is_array($file)) {
                     $msg = notify($file, $type = "danger");
-                    $this->session->set_flashdata('message', $msg);
+                    $this->session->set_flashdata('error', $msg);
                     redirect('leads/upload');
                 } else {
                     set_time_limit(0);
