@@ -112,11 +112,11 @@ class Lead  extends CI_Model
     }
 
     public function unassigned_status_count($where){
-        $this->db->select('db_leads.lead_source,COUNT(lead_source) as total');
+        $this->db->select('db_leads.lead_source,COUNT(db_leads.lead_source) as total');
         $this->db->from('db_leads');
         $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
-        $this->db->group_by('db_leads.lead_source');
         $this->db->where($where);
+        $this->db->group_by('db_leads.lead_source');
         $result = $this->db->get()->result_array();
         return $result;
     }
