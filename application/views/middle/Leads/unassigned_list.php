@@ -53,7 +53,7 @@
                             ?>
                         </td>
                         <td>
-                            <a href="">View</a>
+                            <a href="<?php echo site_url('leads/unassigned_leads_details/'.encode_id($value['id']));?>">View</a>
                         </td>
                     </tr>
                     <?php
