@@ -280,7 +280,8 @@ function get_session(){
     //return $CI->session->userdata();
 
     $input = array(
-        'hrms_id' => '312',
+        /*'hrms_id' => '312',*/
+        'hrms_id' => $CI->session->userdata('admin_id'),
         'dept_id' => '12',
         'dept_type_id' => '123',
         'dept_type_name' => 'BR',
@@ -299,7 +300,7 @@ function get_session(){
 }
 
 
-function get_lead_title($type,$till){
+function get_lead_title($type){
     switch ($type) {
         case 'generated':
                 $title = 'Leads Generated';
@@ -309,6 +310,9 @@ function get_lead_title($type,$till){
             break;
         case 'assigned':
                 $title = 'Leads Assigned';
+            break;
+        case 'all':
+                $title = 'Leads';
             break;
     }
     

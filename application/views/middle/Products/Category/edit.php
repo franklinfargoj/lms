@@ -2,7 +2,7 @@
 	<div class="container clearfix">
 		<h3 class="text-center">Edit Product Category</h3>
 		<div class="float-right">
-            <span class="lead-num"><a href="<?php echo site_url('product_category');?>">Back</a></span>
+            <span class="lead-num"><a href="<?php echo site_url('product_category');?>"><span><</span>Back</a></span>
         </div>
 	</div>
 </div>

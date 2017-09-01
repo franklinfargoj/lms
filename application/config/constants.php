@@ -88,15 +88,6 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 define('ASSETS', 'assets2/');
 define('PLUGINS', 'assets2/plugins/');
 
-define('NC', 'Not Contacted');
-define('FU', 'Interested/Follow up');
-define('DC', 'Documets Collected');
-define('AO', 'Account opened');
-define('Converted', 'Converted');
-define('NI', 'Drop/Not Interested');
-define('Closed', 'Closed');
-define('CBC', 'Cannot be contacted');
-
 
 /*Tables Name*/
 define('Tbl_Category', 'db_master_product_category');
