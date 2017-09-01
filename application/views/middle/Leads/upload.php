@@ -66,7 +66,7 @@ $data_submit = array(
             </div>
         </div>
 
-        <table class="upload-table" id="sample_3">
+        <table class="display lead-table" id="sample_3">
             <thead>
             <tr class="top-header">
                 <th></th>
