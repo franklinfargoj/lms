@@ -31,10 +31,13 @@ $lead_status = $this->config->item('lead_status');
                     ?>
                         <div class="lead-form-left">
                             <div class="form-control">
-                                <label>Conversion Status:</label> <span class="detail-label red"><?php echo ucwords($leads[0]['lead_identification']);?></span>
+                                <label>Lead ID:</label> <span class="detail-label"><?php echo ucwords($leads[0]['id']);?></span>
                             </div>
                             <div class="form-control">
-                                <label>Lead ID:</label> <span class="detail-label"><?php echo ucwords($leads[0]['id']);?></span>
+                                <label>Lead Identified as :</label> 
+                                <span class="detail-label red">
+                                    <?php echo !empty($leads[0]['lead_identification']) ? ucwords($leads[0]['lead_identification']) : '';?>
+                                </span>
                             </div>
                             <div class="form-control">
                                 <label>Product Name:</label> <span class="detail-label">Home Loan</span>
@@ -42,10 +45,11 @@ $lead_status = $this->config->item('lead_status');
                             <div class="form-control">
                                 <label>Lead Status:</label> <span class="detail-label"><?php echo isset($leads[0]['status']) ? $lead_status[$leads[0]['status']] : 'NA';?></span>
                             </div>
+                           
                             <div class="form-control">
-                                <label>Reroute To:</label> <span class="detail-label">Vishal (Branch - State)</span>
+                                <label>Assign To:</label> <span class="detail-label">Employee 1</span>
                             </div>
-                            <?php if($type == 'assigned'){?>
+                            <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('EM','BM')))){?>
                                 <div class="form-control">
                                     <label>Interest in other product</label>
                                     <div class="radio-control">
@@ -75,12 +79,30 @@ $lead_status = $this->config->item('lead_status');
                                         }
                                     ?>
                                 </div>
-                                
+                                <div class="form-control">
+                                    <label>Lead Identified as :</label> 
+                                    <span class="detail-label red">
+                                        <?php 
+                                            if(isset($lead_identification)){
+                                                $options2['']='Select';
+                                                foreach ($lead_identification as $key => $value) {
+                                                    $options2[$key] = $value;
+                                                }
+                                                $js = array(
+                                                        'id'       => 'lead_identification',
+                                                        'class'    => 'form-control'
+                                                );
+                                                echo form_dropdown('lead_identification', $options2 , $leads[0]['lead_identification'],$js);    
+                                            }
+                                        ?>
+                                    </span>
+                                </div>
                                 <div class="form-control">
                                     <label>Lead Status:</label>   
                                     <?php
                                         $data = array(
                                             'lead_id' => encode_id($leads[0]['id']),
+                                            'lead_type'    => 'assigned',
                                             'remind_to'  => $leads[0]['employee_id']
                                         );
                                         echo form_hidden($data);
@@ -145,14 +167,16 @@ $lead_status = $this->config->item('lead_status');
                                 <label>Remark/Notes</label>
                                 <p class="remark-notes"><?php echo isset($leads[0]['remark']) ? $leads[0]['remark'] : 'NA';?></p>
                             </div>
-                            <?php if($type == 'assigned'){?>
-                            <div class="form-control">
-                                <label>Reroute To:</label>   
-                                <select name="product">
-                                <option value="product1"></option>
-                                <option value="product1">Vishal (Branch - State)</option>
-                              </select>
-                            </div>
+                            <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')))){?>
+                                <div class="form-control">
+                                    <label>Reroute To:</label>   
+                                    <select name="product">
+                                        <option value="">Select Employee</option>
+                                        <option value="product1">Vishal</option>
+                                        <option value="product1">Ashok</option>
+                                        <option value="product1">Gourav</option>
+                                  </select>
+                                </div>
                             <?php }?>
                         </div>
                         <div class="form-control form-submit clearfix">
@@ -254,6 +278,9 @@ $lead_status = $this->config->item('lead_status');
                 },
                 remind_on: {
                     required: true
+                },
+                lead_identification : {
+                  required: true  
                 }
             },
             messages: {
@@ -265,6 +292,9 @@ $lead_status = $this->config->item('lead_status');
                 },
                 remind_on: {
                     required: "Please select follow up date"
+                },
+                lead_identification : {
+                    required: "Please select lead identification"
                 }
             }
         });

@@ -280,7 +280,8 @@ function get_session(){
     //return $CI->session->userdata();
 
     $input = array(
-        'hrms_id' => '0',
+        /*'hrms_id' => '312',*/
+        'hrms_id' => $CI->session->userdata('admin_id'),
         'dept_id' => '12',
         'dept_type_id' => '123',
         'dept_type_name' => 'BR',
