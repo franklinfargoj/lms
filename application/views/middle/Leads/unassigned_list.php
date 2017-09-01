@@ -62,8 +62,8 @@
 <script src="<?php echo base_url() . ASSETS; ?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url() . ASSETS; ?>js/config.datatable.js"></script>
 
-<script>
-    jQuery(document).ready(function () {
+<script type="text/javascript">
+    jQuery(document).ready(function() {
         var table = $('#sample_3');
         var columns = [5];
         
