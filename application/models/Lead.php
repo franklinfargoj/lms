@@ -92,13 +92,18 @@ class Lead  extends CI_Model
 		return $this->db->insert($table,$data);
 	}
 
-    public function unassigned_leads($lead_status = ''){
+    public function unassigned_leads($lead_status = '',$id = ''){
         $this->db->select('db_leads.*,db_master_products.title as product_title');
         $this->db->from('db_leads');
         $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');
         $this->db->where('db_lead_assign.lead_id',NULL);
-        $this->db->where('db_leads.lead_source',$lead_status);
+        if(!empty($lead_status)){
+            $this->db->where('db_leads.lead_source',$lead_status);
+        }
+        if(!empty($id)){
+            $this->db->where('db_leads.id',$id);
+        }
         $result = $this->db->get();
         if($result->num_rows() > 0){
             return $result->result_array();
