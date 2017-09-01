@@ -9,7 +9,7 @@
 <div class="page-content">
     <div class="container">
         <?php $status = array('Walk-in','Enquiry','Tie Ups','Analytics');
-        if(!empty($unassigned_leads_count)) foreach ($unassigned_leads_count as $key => $lead_source) ?>
+        if(isset($unassigned_leads_count) && !empty($unassigned_leads_count)){?>
         <div class="box-content">
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.$status[0])?>">
             <div class="box box-m">
@@ -17,8 +17,8 @@
                 <p>Walk-in</p>
                 <ul>
                 <?php $walkin = 0;
-                if($lead_source['lead_source'] == 'Walk-in')
-                      $walkin = $lead_source['total'];
+                if($unassigned_leads_count['Walk-in'] != 0)
+                      $walkin = $unassigned_leads_count['Walk-in'];
                     echo $walkin;
                 ?>
                 </ul>
@@ -30,8 +30,8 @@
                 <p>Enquiry</p>
                 <ul>
                     <?php $enquiry = 0;
-                    if($lead_source['lead_source'] == 'Enquiry')
-                        $enquiry = $lead_source['total'];
+                    if($unassigned_leads_count['Enquiry'] != 0)
+                        $enquiry = $unassigned_leads_count['Enquiry'];
                     echo $enquiry;
                     ?>
                 </ul>
@@ -43,8 +43,8 @@
                 <p>Tie Up's</p>
                 <ul>
                     <?php $tieups = 0;
-                    if($lead_source['lead_source'] == 'Tie Ups')
-                        $tieups = $lead_source['total'];
+                    if($unassigned_leads_count['Tie Ups'] != 0)
+                        $tieups = $unassigned_leads_count['Tie Ups'];
                     echo $tieups;
                     ?>
                 </ul>
@@ -56,13 +56,14 @@
                 <p>Analytics</p>
                 <ul>
                     <?php $analytics = 0;
-                    if($lead_source['lead_source'] == 'Analytics')
-                        $analytics = $lead_source['total'];
+                    if($unassigned_leads_count['Analytics'] != 0)
+                        $analytics = $unassigned_leads_count['Analytics'];
                     echo $analytics;
                     ?>
                 </ul>
             </div>
             </a>
         </div>
+        <?php } ?>
     </div>
 </div>

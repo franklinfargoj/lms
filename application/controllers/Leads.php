@@ -367,21 +367,15 @@ class Leads extends CI_Controller
           $this->make_bread->add('Unassign Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
-
-//        $arrData['unassigned_leads'] = $this->Lead->unassigned_leads();
-        $where = array(Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
+        $where = array(Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
         $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($where);
-        $keys=array('Walk-in','Analytics','Tie Ups','Enquiry');
-        $output_keys = array_column($arrData['unassigned_leads_count'],'lead_source');
-        foreach ($keys as $k => $v){
-            if(!in_array($v,$output_keys)){
-                $push_data = array(
-                    'lead_source' =>$v,
-                    'total' => 0
-                );
-                array_push($arrData['unassigned_leads_count'],$push_data);
-            }
+        $response = array();
+        $keys=array('Walk-in'=>0,'Analytics'=>0,'Tie Ups'=>0,'Enquiry'=>0);
+       foreach ($arrData['unassigned_leads_count'] as $k => $v){
+                $keys[$v['lead_source']] = $v['total'];
+
         }
+        $arrData['unassigned_leads_count'] = $keys;
         $middle = "Leads/view/unassigned_view";
         load_view($middle,$arrData);
     }
