@@ -481,7 +481,7 @@ body{
 	width: 100%;
 	bottom: 0;
 	background-color: #383838;
-	position: absolute;
+	/*position: absolute;*/
 }
 .copyright{
 	border-top: 1px solid #757575;
