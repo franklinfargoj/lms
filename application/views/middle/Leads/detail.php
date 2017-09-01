@@ -145,14 +145,16 @@ $lead_status = $this->config->item('lead_status');
                                 <label>Remark/Notes</label>
                                 <p class="remark-notes"><?php echo isset($leads[0]['remark']) ? $leads[0]['remark'] : 'NA';?></p>
                             </div>
+                            <?php if ($this->session->userdata('admin_type') == 'BM'){?>
                             <?php if($type == 'assigned'){?>
                             <div class="form-control">
                                 <label>Reroute To:</label>   
                                 <select name="product">
                                 <option value="product1"></option>
-                                <option value="product1">Vishal (Branch - State)</option>
+                                <option value="product1">Vishal</option>
                               </select>
                             </div>
+                            <?php }?>
                             <?php }?>
                         </div>
                         <div class="form-control form-submit clearfix">
