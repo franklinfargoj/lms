@@ -351,14 +351,38 @@ class Leads extends CI_Controller
     }
 
 
+    public function unassigned_leads_list($lead_status=''){
+        /*Create Breadcumb*/
+          $this->make_bread->add('Unassign Leads', '', 0);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+
+        $arrData['unassigned_leads'] = $this->Lead->unassigned_leads($lead_status);
+        $middle = "Leads/unassigned_list";
+        load_view($middle,$arrData);
+    }
+
     public function unassigned_leads(){
         /*Create Breadcumb*/
           $this->make_bread->add('Unassign Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
 
-        $arrData['unassigned_leads'] = $this->Lead->unassigned_leads();
-        $middle = "Leads/unassigned_list";
+//        $arrData['unassigned_leads'] = $this->Lead->unassigned_leads();
+        $where = array(Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
+        $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($where);
+        $keys=array('Walk-in','Analytics','Tie Ups','Enquiry');
+        $output_keys = array_column($arrData['unassigned_leads_count'],'lead_source');
+        foreach ($keys as $k => $v){
+            if(!in_array($v,$output_keys)){
+                $push_data = array(
+                    'lead_source' =>$v,
+                    'total' => 0
+                );
+                array_push($arrData['unassigned_leads_count'],$push_data);
+            }
+        }
+        $middle = "Leads/view/unassigned_view";
         load_view($middle,$arrData);
     }
 

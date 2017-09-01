@@ -15,7 +15,6 @@
                 <th></th>
                 <th><input type="text" name="customername" placeholder="Search Customer Name"></th>
                 <th><input type="text" name="customername" placeholder="Search Product Name"></th>
-                <th><input type="text" name="customername" placeholder="Search Lead"></th>
                 <th><input type="text" name="customername" placeholder="Search Days"></th>
                 <th></th>
             </tr>
@@ -23,7 +22,6 @@
                 <th>Sr. No</th>
                 <th>Customer Name</th>
                 <th>Product Name</th>
-                <th>Lead as (H/W/C)</th>
                 <th>Days</th>
                 <th>Details</th>
             </tr>
@@ -42,9 +40,6 @@
                         </td>
                         <td>
                             <?php echo $value['product_title']; ?>
-                        </td>
-                        <td>
-                            <?php echo $value['lead_identification']; ?>
                         </td>
                         <td>
                             <?php $created_date = explode(' ', $value['created_on']);
@@ -74,7 +69,7 @@
 <script>
     jQuery(document).ready(function () {
         var table = $('#sample_3');
-        var columns = [5];
+        var columns = [4];
 
         //Initialize datatable configuration
         initTable(table, columns);
