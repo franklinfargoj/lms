@@ -92,18 +92,28 @@ class Lead  extends CI_Model
 		return $this->db->insert($table,$data);
 	}
 
-    public function unassigned_leads(){
-        $this->db->select('db_leads.*,db_master_products.title product_title');
+    public function unassigned_leads($lead_status = ''){
+        $this->db->select('db_leads.*,db_master_products.title as product_title');
         $this->db->from('db_leads');
         $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');
         $this->db->where('db_lead_assign.lead_id',NULL);
+        $this->db->where('db_leads.lead_source',$lead_status);
         $result = $this->db->get();
-        
         if($result->num_rows() > 0){
             return $result->result_array();
-        } 
+        }
         return false;
+    }
+
+    public function unassigned_status_count($where){
+        $this->db->select('db_leads.lead_source,COUNT(lead_source) as total');
+        $this->db->from('db_leads');
+        $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
+        $this->db->group_by('db_leads.lead_source');
+        $this->db->where($where);
+        $result = $this->db->get()->result_array();
+        return $result;
     }
 
     /**
@@ -324,6 +334,7 @@ class Lead  extends CI_Model
 
     public function get_uploaded_leads_logs($whereArray = array()){
         return $result = $this->db->get_where(Tbl_Log,$whereArray)->result_array();
+
     }
 
     public function check_mapping($whereArray = array()){
