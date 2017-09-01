@@ -91,6 +91,11 @@ class Dashboard extends CI_Controller {
                     $arrData['leads'] = $this->bm_view($branch_id);
                     $middle = "Leads/view/bm_view";
                     break;
+                case 'ZM':
+                    $zone_id = $input['zone_id'];
+                    $arrData['leads'] = $this->zm_view($zone_id);
+                    $middle = "Leads/view/zm_view";
+                    break;
             }
 
         }
@@ -120,6 +125,31 @@ class Dashboard extends CI_Controller {
 
         return $leads;
     }
+
+    /**
+     * zm_view
+     * loads the zonal manager view
+     * @author Gourav Thatoi
+     */
+    public function zm_view($zone_id){
+
+        //for generated lead
+        $where_generated_Array = array('zone_id' => $zone_id,
+            'created_by !=' => 0,
+            'MONTH(created_on)' => date('m'));
+        $leads['generated_leads'] = $this->master->get_generated_lead_bm_zm($where_generated_Array);
+        //for converted lead
+        $where_converted_Array = array('zone_id' => $zone_id,
+            'MONTH(created_on)' => date('m'),
+            'created_by !=' => 0,
+            'status' => 'converted');
+        $leads['converted_leads'] = $this->master->get_converted_lead_bm_zm($where_converted_Array);
+        if(!empty($leads['converted_leads']))
+            $leads['all_converted_branch_id'] = array_column($leads['converted_leads'],'branch_id');
+
+        return $leads;
+    }
+
 
     /**
      * leads_performance
@@ -381,5 +411,11 @@ class Dashboard extends CI_Controller {
        load_view($middle,$result);
 
    }
+    public function emi_calculator(){
+        $this->make_bread->add('emi-calculator', '', 0);
+        $result['breadcrumb'] = $this->make_bread->output();
+        $middle = '/emi_calculator';
+        load_view($middle,$result);
+    }
     
 }

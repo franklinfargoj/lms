@@ -54,7 +54,7 @@ html{
 }
 body {
 	line-height: 1;
-	height: 100%;
+	/*height: 100%;*/
 }
 ol, ul {
 	list-style: none;
@@ -982,7 +982,7 @@ margin-top: 10px;
     background-repeat: no-repeat;
 }
 .range-slider .ui-slider{
-	border: 1px solid #acacac;
+	border: 1px solid #acacac !important;
 }
 
 .emi-content .range-slider label{
@@ -1003,7 +1003,7 @@ margin-top: 10px;
 }
 
 .emi-content .range-slider .ui-slider-horizontal{
-	width: 75%;
+	width: 65%;
 }
 .emi-content .range-slider .step{
 	position: relative;

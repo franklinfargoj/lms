@@ -37,9 +37,6 @@
                     <?php echo $value['product_title']; ?>
                 </td>
                 <td>
-                    <?php echo $value['lead_identification']; ?>
-                </td>
-                <td>
                     <?php $created_date = explode(' ', $value['created_on']);
 
                     $now = date_create(date('Y-m-d')); // or your date as well
@@ -51,12 +48,13 @@
                     ?>
                 </td>
                 <td>
-                    <a href="<?php echo site_url('leads/unassigned_leads_details/'.encode_id($value['id']));?>">View</a>
+                    <a href="<?php echo site_url('leads/unassigned_leads_details/' . encode_id($value['id'])); ?>">View</a>
                 </td>
             </tr>
             <?php
         }
-    } ?>
+    }
+    ?>
     </tbody>
 </table>
 <script src="<?php echo base_url() . ASSETS; ?>js/jquery.dataTables.min.js"></script>
@@ -66,7 +64,7 @@
     jQuery(document).ready(function() {
         var table = $('#sample_3');
         var columns = [5];
-        
+
 
         //Initialize datatable configuration
         initTable(table, columns);

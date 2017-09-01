@@ -65,17 +65,17 @@
 <script>
     $(document).ready(function () {
         $('#year').click(function () {
-            var walkin_assign = '<?php echo isset($lead_assigned_walkin) ? $lead_assigned_walkin:"";?>';
-            var walkin_converted = '<?php echo isset($lead_converted_walkin) ? $lead_converted_walkin:"";?>';
+            var walkin_assign = '<?php echo isset($lead_assigned_walkin) ? $lead_assigned_walkin:"0";?>';
+            var walkin_converted = '<?php echo isset($lead_converted_walkin) ? $lead_converted_walkin:"0";?>';
 
-            var enquiry_assign = '<?php echo isset($lead_assigned_enquiry) ? $lead_assigned_enquiry :"";?>';
+            var enquiry_assign = '<?php echo isset($lead_assigned_enquiry) ? $lead_assigned_enquiry :"0";?>';
             var enquiry_converted = '<?php echo isset($lead_converted_enquiry) ? $lead_converted_enquiry :"";?>';
 
-            var tieup_assign = '<?php echo isset($lead_assigned_tie_ups) ? $lead_assigned_tie_ups :"";?>';
-            var tieup_converted = '<?php echo isset($lead_converted_tie_ups) ? $lead_converted_tie_ups:"";?>';
+            var tieup_assign = '<?php echo isset($lead_assigned_tie_ups) ? $lead_assigned_tie_ups :"0";?>';
+            var tieup_converted = '<?php echo isset($lead_converted_tie_ups) ? $lead_converted_tie_ups:"0";?>';
 
-            var analytics_assign = '<?php echo isset($lead_assigned_analytics) ? $lead_assigned_analytics:"";?>';
-            var analytics_converted = '<?php echo isset($lead_converted_analytics) ? $lead_converted_analytics:"";?>';
+            var analytics_assign = '<?php echo isset($lead_assigned_analytics) ? $lead_assigned_analytics:"0";?>';
+            var analytics_converted = '<?php echo isset($lead_converted_analytics) ? $lead_converted_analytics:"0";?>';
 
             $('#walkin_assign').html(walkin_assign);
             $('#enquiry_converted').html(enquiry_converted);
@@ -91,17 +91,17 @@
         })
 
         $('#month').click(function () {
-            var walkin_assign = '<?php echo isset($month_lead_assigned_walkin) ? $month_lead_assigned_walkin:"";?>';
-            var walkin_converted = '<?php echo isset($month_lead_converted_walkin) ? $month_lead_converted_walkin:"";?>';
+            var walkin_assign = '<?php echo isset($month_lead_assigned_walkin) ? $month_lead_assigned_walkin:"0";?>';
+            var walkin_converted = '<?php echo isset($month_lead_converted_walkin) ? $month_lead_converted_walkin:"0";?>';
 
-            var enquiry_assign = '<?php echo isset($month_lead_assigned_enquiry) ? $month_lead_assigned_enquiry :"";?>';
+            var enquiry_assign = '<?php echo isset($month_lead_assigned_enquiry) ? $month_lead_assigned_enquiry :"0";?>';
             var enquiry_converted = '<?php echo isset($month_lead_converted_enquiry) ? $month_lead_converted_enquiry:'';?>';
 
-            var tieup_assign = '<?php echo isset($month_lead_assigned_tie_ups) ? $month_lead_assigned_tie_ups:"";?>';
-            var tieup_converted = '<?php echo isset($month_lead_converted_tie_ups) ? $month_lead_converted_tie_ups :"";?>';
+            var tieup_assign = '<?php echo isset($month_lead_assigned_tie_ups) ? $month_lead_assigned_tie_ups:"0";?>';
+            var tieup_converted = '<?php echo isset($month_lead_converted_tie_ups) ? $month_lead_converted_tie_ups :"0";?>';
 
-            var analytics_assign = '<?php echo isset($month_lead_assigned_analytics) ? $month_lead_assigned_analytics :"";?>';
-            var analytics_converted = '<?php echo isset($month_lead_converted_analytics) ? $month_lead_converted_analytics :"";?>';
+            var analytics_assign = '<?php echo isset($month_lead_assigned_analytics) ? $month_lead_assigned_analytics :"0";?>';
+            var analytics_converted = '<?php echo isset($month_lead_converted_analytics) ? $month_lead_converted_analytics :"0";?>';
 
             $('#walkin_assign').html(walkin_assign);
             $('#enquiry_converted').html(enquiry_converted);

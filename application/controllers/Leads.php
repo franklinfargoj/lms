@@ -85,8 +85,10 @@ class Leads extends CI_Controller
                 return load_view($middle, $arrData);
             }
 
-
-            $keys = array('lead_ticket_range','customer_name','contact_no','product_category_id','product_id','is_own_branch','remark','lead_ticket_range');
+            $lead_data['created_by'] = $input['hrms_id'];
+            $lead_data['created_by_name'] = $input['full_name'];
+            $keys = array('customer_name','contact_no','product_category_id','product_id',
+                'is_own_branch','remark','lead_ticket_range');
             foreach ($keys as $k => $value){
                 $lead_data[$value] = $this->input->post($value);
 
@@ -210,14 +212,14 @@ class Leads extends CI_Controller
                 $file = upload_excel('./uploads', 'filename');
                 if (!is_array($file)) {
                     $msg = notify($file, $type = "danger");
-                    $this->session->set_flashdata('message', $msg);
+                    $this->session->set_flashdata('error', $msg);
                     redirect('leads/upload');
                 } else {
                     set_time_limit(0);
                     ini_set('memory_limit', '-1');
-                    $keys = ['customer_name', 'contact_no', 'is_existing_customer', 'is_own_branch', 'branch_id', 'zone_id', 'state_id', 'district_id', 'product_category_id', 'product_id', 'remark', 'lead_identification'];
+                    $keys = ['customer_name', 'contact_no', 'is_own_branch', 'branch_id', 'zone_id', 'state_id', 'district_id', 'product_category_id', 'product_id', 'remark'];
 
-                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:L', $keys);
+                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:J', $keys);
                     $validation = $this->validate_leads_data($excelData,$lead_source);
 
                     if (!empty($validation['insert_array'])) {
@@ -231,7 +233,8 @@ class Leads extends CI_Controller
                         create_excel_error_file($validation['data'], $target_path.$target_file,$target_file);
                         $data = array(
                             'file_name' => $target_file,
-                            'status' => 'failed'
+                            'status' => 'failed',
+                            'lead_source'=>$lead_source
                         );
                         $this->Lead->uploaded_log('uploaded_leads_log', $data);
                         $download_url = base_url('uploads/errorlog/'.$target_file);
@@ -241,7 +244,8 @@ class Leads extends CI_Controller
                     }
                     $data = array(
                         'file_name' => $file['file_name'],
-                        'status' => 'success'
+                        'status' => 'success',
+                        'lead_source'=>$lead_source
                     );
 //                    unlink($file['full_path']);
                     $this->Lead->uploaded_log('uploaded_leads_log', $data);
@@ -347,22 +351,46 @@ class Leads extends CI_Controller
     }
 
 
+    public function unassigned_leads_list($lead_status=''){
+        /*Create Breadcumb*/
+          $this->make_bread->add('Unassign Leads', '', 0);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+
+        $arrData['unassigned_leads'] = $this->Lead->unassigned_leads($lead_status);
+        $middle = "Leads/unassigned_list";
+        load_view($middle,$arrData);
+    }
+
     public function unassigned_leads(){
         /*Create Breadcumb*/
           $this->make_bread->add('Unassign Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
-        
-        $arrData['unassigned_leads'] = $this->Lead->unassigned_leads();
-        $middle = "Leads/unassigned_list";
+
+//        $arrData['unassigned_leads'] = $this->Lead->unassigned_leads();
+        $where = array(Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
+        $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($where);
+        $keys=array('Walk-in','Analytics','Tie Ups','Enquiry');
+        $output_keys = array_column($arrData['unassigned_leads_count'],'lead_source');
+        foreach ($keys as $k => $v){
+            if(!in_array($v,$output_keys)){
+                $push_data = array(
+                    'lead_source' =>$v,
+                    'total' => 0
+                );
+                array_push($arrData['unassigned_leads_count'],$push_data);
+            }
+        }
+        $middle = "Leads/view/unassigned_view";
         load_view($middle,$arrData);
     }
 
     public function unassigned_leads_details($id){
         /*Create Breadcumb*/
-          $this->make_bread->add('Unassign Leads', 'leads/unassigned_leads', 0);
-          $this->make_bread->add('Details', '', 0);
-          $arrData['breadcrumb'] = $this->make_bread->output();
+        $this->make_bread->add('Unassign Leads', 'leads/unassigned_leads', 0);
+        $this->make_bread->add('Details', '', 0);
+        $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
         $id = decode_id($id);
         $arrData['unassigned_leads'] = $this->Lead->unassigned_leads('',$id);

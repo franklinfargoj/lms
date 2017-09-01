@@ -5,9 +5,12 @@
  * Date: 15/8/17
  * Time: 6:32 PM
  */
-$form_attributes = array('id' => 'upload_lead', 'method' => 'POST');
+$form_attributes = array('id' => 'upload_lead', 'method' => 'POST','class' =>'form');
 $data_input = array('id' => 'file', 'name'=>'filename','type' => 'file');
-
+$lead_source[''] = 'Select Lead Source';
+$lead_source['Tie Ups'] = 'Tie Ups';
+$lead_source['Enquiry'] = 'Enquiry';
+$lead_source['Analytics'] = 'Analytics';
 $source_options[''] = 'Select Lead Source';
 $source_options['Tie Ups'] = 'Tie Ups';
 $source_options['Enquiry'] = 'Enquiry';
@@ -44,34 +47,40 @@ $data_submit = array(
                     <div class="form-control">
                         <label>Select File:</label>
                         <?php echo form_input($data_input);?>
-                        <span>Only xlx | xlxs</span>
+                        <div class="valid-msg"><span>*</span>Only xlx | xlxs</div>
                     </div>
                     <span>
                     </span>
-                <div class="form-control form-submit clearfix">
+               <div class="form-control form-submit clearfix">
                     <a href="javascript:void(0);" class="active">
-                        <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                        <span><input type="submit" name="Submit" value="Submit"></span>
-                        <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+<!--                        <img alt ="left nav" src="--><?php ///*echo base_url().ASSETS;*/?><!--images/left-nav.png">-->
+                        <span><input class="custom_button" type="submit" name="Submit" value="Submit"></span>
+<!--                        <img alt = "right nav" src="--><?php ///*echo base_url().ASSETS;*/?><!--images/right-nav.png">-->
                     </a>
                 </div>
+<!--                <button class="btn-submit" type="submit"></button>-->
                 <?php echo form_close();?>
             </div>
             <div class="upload-xl">
-                <a href="<?php echo base_url('uploads/sample_lead.xlsx')?>">
+                <a href="<?php echo base_url('uploads/sample/sample_lead.xlsx')?>">
                     <img src="<?php echo base_url().ASSETS;?>images/excel-img.png" alt="excel">
                     <span>Download Sample File</span>
                 </a>
             </div>
         </div>
 
-        <table class="upload-table" id="sample_3">
+        <table class="display lead-table" id="sample_3">
             <thead>
             <tr class="top-header">
                 <th></th>
                 <th><input type="text" name="customername" placeholder="Search File"></th>
                 <th></th>
                 <th><input type="text" name="customername" placeholder="Search Status"></th>
+                <th><?php
+                        $options = $lead_source;
+                        echo form_dropdown('lead_source', $options ,'',array());
+                    ?>
+                </th>
                 <th></th>
             </tr>
             <tr>
@@ -79,6 +88,7 @@ $data_submit = array(
                 <th>File</th>
                 <th>Date and Time</th>
                 <th>Status</th>
+                <th>Lead Source</th>
                 <th>Download</th>
             </tr>
             </thead>
@@ -89,7 +99,7 @@ $data_submit = array(
                 ?>
                 <tr>
                     <td>
-                        <?php echo ++$i;?>
+                        <?php echo $i+1;?>
                     </td>
                     <td>
                         <?php echo $value['file_name'];?>
@@ -101,6 +111,9 @@ $data_submit = array(
                         <?php echo $value['status'];?>
                     </td>
                     <td>
+                        <?php echo $value['lead_source'];?>
+                    </td>
+                    <td>
                 <a href="<?php echo base_url('uploads/'.$value['file_name']); ?>">Uploaded File </a>
                 <?php if($value['status'] == 'failed'){?>
                         <a href="<?php echo base_url('uploads/errorlog/'.$value['file_name']); ?>">/ Error log </a>
@@ -108,7 +121,7 @@ $data_submit = array(
                     </td>
                 </tr>
                 <?php
-            }
+            $i++;}
         }?>
         </tbody>
     </table>
@@ -119,9 +132,9 @@ $data_submit = array(
 <script type="text/javascript">
 
     var table = $('#sample_3');
-    var columns = [4];
+    var columns = [5];
 
-    var initTable = function (table,columns) {
+    var inituploadTable = function (table,columns) {
         /*
          * Initialize DataTables, with no sorting on the 'details' column
          */
@@ -133,7 +146,7 @@ $data_submit = array(
                 "targets": columns
             }],
             "order": [
-                [2, 'desc']
+                [0, 'desc']
             ],
             "lengthMenu": [
                 [5, 15, 20, -1],
@@ -153,7 +166,7 @@ $data_submit = array(
             });
         });
     }
-    initTable(table,columns);
+    inituploadTable(table,columns);
     /*jQuery(document).ready(function() {
         var table = $('#sample_3');
         var columns = [4];

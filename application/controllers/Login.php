@@ -17,6 +17,7 @@ class Login extends CI_Controller {
 		// Initialization of class
 		parent::__construct();
           $this->load->model('Login_model','master');
+//          echo 'asdfashgdfas';exit;
      }
 
     /*

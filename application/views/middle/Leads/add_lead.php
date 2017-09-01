@@ -98,120 +98,124 @@ $remark_extra = 'style="rows:4 ; cols:80"';
     </div>
 </div>
 <div class="page-content">
-    <div class="container">
-        <div class="lead-form">
-            <?php
-            $url = base_url('leads/add');
-            echo form_open($url, $form_attributes);
-            ?>
-            <div class="lead-form-left">
-                <!--<div class="form-control">
-                    <label>Customer Type</label>
-                    <div class="radio-control">
-                        <input type="radio" name="is_existing_customer"
-                               value="1" <?php /*echo set_radio('is_existing_customer', '1', TRUE); */?> />
-                        <label>New</label>
+    <span class="bg-top"></span>
+    <div class="inner-content">
+        <div class="container">
+            <div class="lead-form">
+                <?php
+                $url = base_url('leads/add');
+                echo form_open($url, $form_attributes);
+                ?>
+                <div class="lead-form-left">
+                    <!--<div class="form-control">
+                        <label>Customer Type</label>
+                        <div class="radio-control">
+                            <input type="radio" name="is_existing_customer"
+                                   value="1" <?php /*echo set_radio('is_existing_customer', '1', TRUE); */?> />
+                            <label>New</label>
+                        </div>
+                        <div class="radio-control">
+                            <input type="radio" name="is_existing_customer"
+                                   value="0" <?php /*echo set_radio('is_existing_customer', '0'); */?> />
+                            <label>Existing</label>
+                        </div>
+                    </div>-->
+    <!--                --><?php //echo form_error('is_existing_customer'); ?>
+                    <div class="form-control">
+                        <label>Customer Name:</label>
+                        <?php echo form_input($data_customer);?>
                     </div>
-                    <div class="radio-control">
-                        <input type="radio" name="is_existing_customer"
-                               value="0" <?php /*echo set_radio('is_existing_customer', '0'); */?> />
-                        <label>Existing</label>
+                    <?php echo form_error('customer_name'); ?>
+                    <div class="form-control">
+                        <label>Customer Number:</label>
+                        <?php echo form_input($data_phone); ?>
                     </div>
-                </div>-->
-<!--                --><?php //echo form_error('is_existing_customer'); ?>
-                <div class="form-control">
-                    <label>Customer Name:</label>
-                    <?php echo form_input($data_customer);?>
-                </div>
-                <?php echo form_error('customer_name'); ?>
-                <div class="form-control">
-                    <label>Customer Number:</label>
-                    <?php echo form_input($data_phone); ?>
-                </div>
-                <?php echo form_error('contact_no'); ?>
-                <div class="form-control">
-                    <label>Product Category:</label>
-                    <?php echo form_dropdown('product_category_id', $options, set_value('product_category_id'), $category_extra) ?>
-                </div>
-                <?php echo form_error('product_category_id'); ?>
-                <div class="form-control" id="product_select">
-                    <label>Product</label>
-                    <?php echo form_dropdown('product_id', $product_options, set_value('product_id'), $product_extra) ?>
-                </div>
-                <?php echo form_error('product_id'); ?>
-                <div class="form-control range-slider">
-                    <label>Ticket Size</label>
-                    <div id="master">
-                        <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
+                    <?php echo form_error('contact_no'); ?>
+                    <div class="form-control">
+                        <label>Product Category:</label>
+                        <?php echo form_dropdown('product_category_id', $options, set_value('product_category_id'), $category_extra) ?>
                     </div>
-                    <div class="step">
-                        <span>5000</span>
-                        <span style="float: right">5 crore</span>
+                    <?php echo form_error('product_category_id'); ?>
+                    <div class="form-control" id="product_select">
+                        <label>Product</label>
+                        <?php echo form_dropdown('product_id', $product_options, set_value('product_id'), $product_extra) ?>
                     </div>
-                    <?php echo form_input($data_ticket_range)?>
+                    <?php echo form_error('product_id'); ?>
+                    <div class="form-control range-slider">
+                        <label>Ticket Size</label>
+                        <div id="master">
+                            <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
+                        </div>
+                        <div class="step">
+                            <span class="float-left">5000</span>
+                            <span class="float-right">5 crore</span>
+                        </div>
+                        <?php echo form_input($data_ticket_range)?>
+                    </div>
+
                 </div>
 
             </div>
 
-
-            <div class="lead-form-right">
-                <div class="form-control">
-                    <label>Branch Type:</label>
-                    <div class="radio-control">
-                        <input type="radio" id="is_own_branch" name="is_own_branch"
-                               value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
-                        <label>Own Branch</label>
+                <div class="lead-form-right">
+                    <div class="form-control">
+                        <label>Branch Type:</label>
+                        <div class="radio-control">
+                            <input type="radio" id="is_own_branch" name="is_own_branch"
+                                   value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
+                            <label>Own Branch</label>
+                        </div>
+                        <div class="radio-control">
+                            <input type="radio" name="is_own_branch" id="is_other_branch"
+                                   value="0" <?php echo set_radio('is_own_branch', '0'); ?> />
+                            <label>Other Branch</label>
+                        </div>
                     </div>
-                    <div class="radio-control">
-                        <input type="radio" name="is_own_branch" id="is_other_branch"
-                               value="0" <?php echo set_radio('is_own_branch', '0'); ?> />
-                        <label>Other Branch</label>
+                    <?php echo form_error('is_own_branch'); ?>
+                    <div id="state" class="form-control">
+                        <label>State:<?php echo $this->session->userdata('state_id');?></label>
+                        <?php echo form_dropdown('state_id', $data_state,$input['state_id'],'disabled') ?>
                     </div>
-                </div>
-                <?php echo form_error('is_own_branch'); ?>
-                <div id="state" class="form-control">
-                    <label>State:<?php echo $this->session->userdata('state_id');?></label>
-                    <?php echo form_dropdown('state_id', $data_state,$input['state_id'],'disabled') ?>
-                </div>
-                <?php echo form_error('state_id'); ?>
-                <div id="district" class="form-control">
-                    <label>District:</label>
-                    <?php echo form_dropdown('district_id', $data_district, $input['district_id'],'disabled') ?>
-                </div>
-                <?php echo form_error('district_id'); ?>
-                <div id="branch" class="form-control">
-                    <label>Branch:</label>
-                    <?php echo form_dropdown('branch_id', $data_branch, $input['branch_id'],'disabled') ?>
-                </div>
-                <?php echo form_error('branch_id'); ?>
-                
-                <!--<div id="identification" class="form-control">
-                    <label>Lead Identification:</label>
-                    <?php /*echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) */?>
-                </div>
-                --><?php /*echo form_error('lead_identification'); */?>
+                    <?php echo form_error('state_id'); ?>
+                    <div id="district" class="form-control">
+                        <label>District:</label>
+                        <?php echo form_dropdown('district_id', $data_district, $input['district_id'],'disabled') ?>
+                    </div>
+                    <?php echo form_error('district_id'); ?>
+                    <div id="branch" class="form-control">
+                        <label>Branch:</label>
+                        <?php echo form_dropdown('branch_id', $data_branch, $input['branch_id'],'disabled') ?>
+                    </div>
+                    <?php echo form_error('branch_id'); ?>
 
-                <div class="form-control">
-                    <label>Remark/Notes</label>
-                    <?php echo form_textarea($data_remark, '', $remark_extra);?>
+                    <!--<div id="identification" class="form-control">
+                        <label>Lead Identification:</label>
+                        <?php /*echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) */?>
+                    </div>
+                    --><?php /*echo form_error('lead_identification'); */?>
+
+                    <div class="form-control">
+                        <label>Remark/Notes</label>
+                        <?php echo form_textarea($data_remark, '', $remark_extra);?>
+                    </div>
+                    <?php echo form_error('remark'); ?>
                 </div>
-                <?php echo form_error('remark'); ?>
+                <div class="form-control form-submit clearfix">
+
+                    <a href="#" class="active float-right">
+                        <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                        <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
+                        <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                    </a>
+                    <a href="javascript:void(0);" class="reset float-right">
+                        Reset
+                    </a>
+                </div>
+                <?php echo form_close(); ?>
             </div>
-            <div class="form-control form-submit clearfix">
-                <a href="javascript:void(0);" class="float-right">
-                    <img alt="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                    <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
-                    <img alt="right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
-                </a>
-                <a href="javascript:void(0);" class="float-right">
-                    <img alt="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                    <span><input type="reset" class="custom_button" color: white" name="Submit" value="Reset"></span>
-                    <img alt="right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
-                </a>
-            </div>
-            <?php echo form_close(); ?>
         </div>
     </div>
+    <span class="bg-buttom"></span>
 </div>
 <script>
     $(document).ready(function(){
@@ -220,7 +224,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
             var div = $('.ui-slider-range');
             // setup master volume
             sliderElement.slider({
-                range: "min",
+                step:10000,
                 orientation: "horizontal",
                 max: 50000000,
                 min: 5000,

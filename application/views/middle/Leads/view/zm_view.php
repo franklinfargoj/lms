@@ -5,23 +5,23 @@
 
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center">Branch Manager</h3>
+        <h3 class="text-center">Zonal Manager</h3>
     </div>
 </div>
 <div class="page-content">
     <div class="container">
-        <table class="upload-table lead-table" id="sample_3">
+        <table class="display lead-table dataTable no-footer" id="sample_3">
             <thead>
             <tr class="top-header">
                 <th></th>
-                <th><input type="text" name="customername" placeholder="Search Employee Name"></th>
+                <th><input type="text" name="customername" placeholder="Search Branch Name"></th>
                 <th><input type="text" name="customername" placeholder="Search Generated Leads"></th>
                 <th><input type="text" name="customername" placeholder="Search Converted Leads"></th>
                 <th></th>
             </tr>
             <tr>
                 <th>Sr. No</th>
-                <th>Employee Name</th>
+                <th>Branch Name</th>
                 <th>Genrated Leads</th>
                 <th>Converted Leads</th>
                 <th>Action</th>
@@ -38,7 +38,7 @@
                             <?php echo ++$i;?>
                         </td>
                         <td>
-                            <?php echo $value['created_by_name'];?>
+                            <?php echo $value['branch_id'];?>
                         </td>
                         <td>
                             <?php echo $value['total'];?>
@@ -46,9 +46,9 @@
                         <td>
                             <?php $converted = 0;
                             if(!empty($leads['converted_leads'])) {
-                                if (in_array($value['created_by'], $leads['all_converted_created_by'])) {
+                                if (in_array($value['branch_id'], $leads['all_converted_branch_id'])) {
                                     foreach ($leads['converted_leads']as $k => $converted_value) {
-                                        if ($value['created_by'] == $converted_value['created_by'])
+                                        if ($value['branch_id'] == $converted_value['branch_id'])
                                             $converted = $converted_value['total'];
                                     }
                                 }
@@ -57,8 +57,8 @@
                             ?>
                         </td>
                         <td>
-                            <a href="<?php echo site_url('dashboard/leads_status/'.encode_id($value['created_by']).'/'.$value['created_by_name'])?>">View</a>
-                            <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by']));?>">Performance</a>
+                            <a href="<?php echo site_url('dashboard/leads_status/'.encode_id($value['branch_id']))?>">View</a>
+                            <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['branch_id']));?>">Performance</a>
                         </td>
                     </tr>
                     <?php
