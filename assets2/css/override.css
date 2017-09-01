@@ -121,9 +121,9 @@ img.loader {
     cursor: not-allowed;
 }
 
- .footer{
+/* .footer{
     position: relative;
-} 
+} */
 
 .lead-num > a:hover {
     background-color: #00559d;
