@@ -223,7 +223,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
             var div = $('.ui-slider-range');
             // setup master volume
             sliderElement.slider({
-                range: "min",
+                step:10000,
                 orientation: "horizontal",
                 max: 50000000,
                 min: 5000,

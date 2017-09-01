@@ -99,10 +99,10 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
         var div = $('#slider1div');
 
         slider1.slider({
-           range:"min",
            orientation:"horizontal",
             max: 20000000,
             min: 0,
+            step:100000,
             animate: true,
             values: [0],
             slide: function (event, ui) {
@@ -129,7 +129,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
         var div2 = $('#slider2div');
 
         slider2.slider({
-            range:"min",
+            step:.5,
             orientation:"horizontal",
             max: 30,
             min: 0,
@@ -160,7 +160,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
         var div3 = $('#slider3div');
 
         slider3.slider({
-            range:"min",
+            step:.25,
             orientation:"horizontal",
             max: 20,
             min: 5,
@@ -168,7 +168,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
             values: [5],
             slide: function (event, ui) {
                 interest.val(ui.values[0]);
-                var width = (ui.values[0]/20) * 100 + '%';
+                var width = (ui.values[0]-5)/15 * 100  + '%';
                 div3.width(width);
             }
         });
@@ -181,7 +181,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
                 slider3.slider('values', 0, interest.val());
                 var width = '100%';
                 if (interest.val() <= 20)
-                    width = (interest.val() / 20) * 100 + '%';
+                    var width = (interest.val()-5)/15 * 100  + '%';
                 div3.width(width);
             }
         });
@@ -191,29 +191,38 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
             rules:{
                 interest:{
                     required:true,
-                    number:true
+                    number:true,
+                    max:20,
+                    min:0
                 },
                 years:{
                     required:true,
-                    number:true
+                    number:true,
+                    max:30,
+                    min:0
                 },
                 amount:{
                     required:true,
-                    number:true
+                    number:true,
+                    max:20000000,
+                    min:0
                 }
             },
             messages:{
                 interest: {
                     required: "Please enter interest",
-                    number: "Only numbers allowed"
+                    number: "Only numbers allowed",
+                    max:"Please Enter a value less than or equal to 20"
                 },
                 years: {
                     required: "Please enter year",
-                    number: "Only numbers allowed"
+                    number: "Only numbers allowed",
+                    max:"Please Enter a value less than or equal to 30"
                 },
                 amount: {
                     required: "Please enter amount",
-                    number: "Only numbers allowed"
+                    number: "Only numbers allowed",
+                    max:"Please Enter a value less than or equal to 200L"
                 }
             }
         });

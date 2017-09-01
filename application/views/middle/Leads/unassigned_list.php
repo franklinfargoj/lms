@@ -9,7 +9,7 @@
 </div>
 <div class="page-content">
     <div class="container">
-        <table class="upload-table" id="sample_3">
+        <table class="display lead-table" id="sample_3">
             <thead>
             <tr class="top-header">
                 <th></th>
