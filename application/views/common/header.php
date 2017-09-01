@@ -59,7 +59,7 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('BM'))) {?>
-				<li class="<?php echo ($controller == 'leads' && $method == 'unassigned_leads') ? 'active' : ''?>">
+				<li class="<?php echo ($controller == 'leads' && ($method == 'unassigned_leads' || $method == 'unassigned_leads_details')) ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/unassigned_leads')?>">
 						Unassigned Leads
 					</a>
