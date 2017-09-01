@@ -217,9 +217,9 @@ class Leads extends CI_Controller
                 } else {
                     set_time_limit(0);
                     ini_set('memory_limit', '-1');
-                    $keys = ['customer_name', 'contact_no', 'is_existing_customer', 'is_own_branch', 'branch_id', 'zone_id', 'state_id', 'district_id', 'product_category_id', 'product_id', 'remark', 'lead_identification'];
+                    $keys = ['customer_name', 'contact_no', 'is_own_branch', 'branch_id', 'zone_id', 'state_id', 'district_id', 'product_category_id', 'product_id', 'remark'];
 
-                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:L', $keys);
+                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:J', $keys);
                     $validation = $this->validate_leads_data($excelData,$lead_source);
 
                     if (!empty($validation['insert_array'])) {
@@ -233,7 +233,8 @@ class Leads extends CI_Controller
                         create_excel_error_file($validation['data'], $target_path.$target_file,$target_file);
                         $data = array(
                             'file_name' => $target_file,
-                            'status' => 'failed'
+                            'status' => 'failed',
+                            'lead_source'=>$lead_source
                         );
                         $this->Lead->uploaded_log('uploaded_leads_log', $data);
                         $download_url = base_url('uploads/errorlog/'.$target_file);
@@ -243,7 +244,8 @@ class Leads extends CI_Controller
                     }
                     $data = array(
                         'file_name' => $file['file_name'],
-                        'status' => 'success'
+                        'status' => 'success',
+                        'lead_source'=>$lead_source
                     );
 //                    unlink($file['full_path']);
                     $this->Lead->uploaded_log('uploaded_leads_log', $data);
