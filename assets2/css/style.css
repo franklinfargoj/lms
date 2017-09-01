@@ -982,7 +982,7 @@ margin-top: 10px;
     background-repeat: no-repeat;
 }
 .range-slider .ui-slider{
-	border: 1px solid #acacac;
+	border: 1px solid #acacac !important;
 }
 
 .emi-content .range-slider label{
