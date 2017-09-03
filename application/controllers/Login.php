@@ -33,8 +33,6 @@ class Login extends CI_Controller {
      */
 	public function index()
 	{
-        /*pe($this->botdetectcaptcha);
-        exit;*/
         // make Captcha Html accessible to View code
         $arrData['captchaHtml'] = $this->botdetectcaptcha->Html();
         $arrData['captchaValidationMessage'] = '';
@@ -84,7 +82,7 @@ class Login extends CI_Controller {
                     } else {
                         // Captcha validation failed, return an error message
                         $arrData['captchaHtml'] = $this->botdetectcaptcha->Html();
-                        $arrData['captchaValidationMessage'] = 'CAPTCHA validation failed, please try again.';
+                        $arrData['captchaValidationMessage'] = 'Invalid Security Code.';
                         return $this->load->view("login",$arrData);
                     }
                }

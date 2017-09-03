@@ -188,6 +188,10 @@ class Lead  extends CI_Model
         return $this->update($where,$table,$data);
     }
 
+    public function insert_lead_data($data,$table){
+        return $this->insert($table,$data);
+    }
+
     
     /**
      * add_reminder

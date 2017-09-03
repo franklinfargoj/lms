@@ -82,11 +82,13 @@
 					//Assuming that the 'password' field value was incorrect:
 					echo form_error('password', '<span class="help-block">', '</span>');
 				?>
-				<div class="">
+				<div class="form-control">
 						<?php echo $captchaHtml; ?>
 						<input type="text" name="CaptchaCode" id="CaptchaCode" value="" size="35" style="height: 25px" />
+
 				</div>
 				<span class="help-block"><?php echo $captchaValidationMessage; ?></span>
+				<!-- <input type="text" name="captcha"  /> -->
 				<div class="form-control form-submit clearfix">
 					<!-- <input type="submit" name="submit" value="LOGIN" class="submit-btn"> -->
 					<a href="javascript:void(0);" class="active">
@@ -154,17 +156,20 @@
 			$('#login-form').validate({
 	            errorElement: 'span', //default input error message container
 	            errorClass: 'help-block', // default input error message class
-	            focusInvalid: false, // do not focus the last invalid input
+	            focusInvalid: true, // do not focus the last invalid input
 	            rules: {
 	                username: {
 	                    required: true
 	                },
 	                password: {
 	                    required: true
-	                }/*,
+	                },
+	                /*captcha: {
+	                    required: true
+	                },*/
 	                CaptchaCode: {
 	                    required: true
-	                }*/
+	                }
 	            },
 
 	            messages: {
@@ -173,10 +178,13 @@
 	                },
 	                password: {
 	                    required: "Please enter password"
-	                }/*,
+	                },
+	                /*captcha: {
+	                    required: "Please enter security code"
+	                },*/
 	                CaptchaCode: {
-	                    required: "Captcha Code required"
-	                }*/
+	                    required: "Please enter security code"
+	                }
 	            },
 	            highlight: function (element) { // hightlight error inputs
 	                $(element)

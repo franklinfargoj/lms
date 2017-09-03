@@ -24,7 +24,14 @@ var initTable = function (table,columns) {
             oTable.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
          table.find('thead tr:eq(0) th:eq(' + index + ') select').on('change', function () {
-            oTable.column($(this).parent().index() + ':visible').search(this.value).draw();
+            var term = '';
+            if(this.value == ''){
+                term = this.value;
+            }else{
+                term = "^"+this.value+"$";
+            }
+            oTable.column($(this).parent().index() + ':visible').search(term,true, false).draw();
+            
         });
     });
 }

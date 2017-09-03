@@ -31,7 +31,7 @@
 		<div class="main-content">
 			<div class="page-title">
 				<div class="container clearfix">
-					<h3 class="text-center">FAQ'S</h3>
+					<h3 class="text-center">Frequently Asked Questions</h3>
 				</div>
 			</div>
 			<div class="page-content">

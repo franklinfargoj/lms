@@ -15,15 +15,15 @@
             <tr class="top-header">
                 <th></th>
                 <th><input type="text" name="customername" placeholder="Search Employee Name"></th>
-                <th><input type="text" name="customername" placeholder="Search Generated Leads"></th>
-                <th><input type="text" name="customername" placeholder="Search Converted Leads"></th>
+                <th><!-- <input type="text" name="customername" placeholder="Search Generated Leads"> --></th>
+                <th><!-- <input type="text" name="customername" placeholder="Search Converted Leads"> --></th>
                 <th></th>
             </tr>
             <tr>
                 <th>Sr. No</th>
                 <th>Employee Name</th>
-                <th>Genrated Leads</th>
-                <th>Converted Leads</th>
+                <th>Genrated Leads (This Month)</th>
+                <th>Converted Leads (This Month)</th>
                 <th>Action</th>
             </tr>
 

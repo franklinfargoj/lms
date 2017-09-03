@@ -9,7 +9,7 @@
 <div class="page-content">
     <div class="container">
         <?php $status = array('Walk-in','Enquiry','Tie Ups','Analytics');
-        if(isset($unassigned_leads_count) && !empty($unassigned_leads_count)){?>
+        if(!empty($unassigned_leads_count)) foreach ($unassigned_leads_count as $key => $lead_source) ?>
         <div class="box-content">
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.$status[0])?>">
             <div class="box box-m">

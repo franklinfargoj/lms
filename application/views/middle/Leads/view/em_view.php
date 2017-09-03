@@ -1,3 +1,6 @@
+<?php
+$lead_type = $this->config->item('lead_type');
+?>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- END PAGE LEVEL STYLES -->
@@ -6,37 +9,25 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            <?php echo $title;?>
-
             <?php 
-                if(isset($status)){?>
-                (
-                    <?php     
-                        $lead_status = $this->config->item('lead_status');
+                if(isset($status)){
+                $lead_status = $this->config->item('lead_status');
                         echo $lead_status[$status];    
-                    ?>
-                )
-            <?php 
+                }else{
+                    echo ucwords($type);
                 }
-            ?>
 
-            <?php 
-                if(isset($lead_source)){?>
-                (
-                    <?php     
-                        echo ucwords($lead_source);           
-                    ?>
-                )
-            <?php 
-                }
             ?>
+            Leads
         </h3>
     </div>
 </div>
 <div class="lead-top">
     <div class="container clearfix">
         <div class="float-left">
-            <span class="total-lead">Total <?php echo ucwords($type);?> Leads</span>
+            <span class="total-lead">
+                Total
+            </span>
             <span class="lead-num"> : <?php echo count($leads);?></span>
         </div>
         <div class="float-right">
@@ -61,11 +52,11 @@
                          <th>
                             <?php
                                 $lead_status = $this->config->item('lead_status');
-                                $options['']='Select Status';
+                                $options1['']='Select Status';
                                 foreach ($lead_status as $key => $value) {
-                                    $options[$value] = $value;
+                                    $options1[$value] = $value;
                                 }
-                                echo form_dropdown('status', $options ,'',array());
+                                echo form_dropdown('status', $options1 ,'',array());
                             ?>
                         </th>
                         <?php }?>
@@ -73,17 +64,29 @@
                         <th><input type="text" name="conversiondate" value=""></th>
                         <?php }?>
                         <th>
-                            <select name="product">
-                                <option value="">Select Lead Type</option>
-                                <option value="HOT">HOT</option>
-                                <option value="WARM">WARM</option>
-                                <option value="COLD">COLD</option>
-                            </select>
+                            <?php
+                                $lead_type = $this->config->item('lead_type');
+                                $options2['']='Select Type';
+                                foreach ($lead_type as $key => $value) {
+                                    $options2[$value] = $value;
+                                }
+                                echo form_dropdown('status', $options2 ,'',array());
+                            ?>
                         </th>
                         <?php if($type == 'assigned'){?>
                         <!-- <th><input type="text" name="conversiondate" value=""></th> -->
                         <?php }?>
-                        <th><input type="text" name="conversiondate" value=""></th>
+                        <th>
+                            <?php
+                                if($lead_source){
+                                    $options3['']='Select Source';
+                                    foreach ($lead_source as $key => $value) {
+                                        $options3[$value] = $value;
+                                    }
+                                    echo form_dropdown('status', $options3 ,'',array());
+                                }
+                            ?>
+                        </th>
                         <th></th>
                     </tr>
                     <tr>
@@ -110,7 +113,7 @@
                         </th>
                         <?php }?>
                         <th>
-                            Lead as (H/W/C)
+                            Lead Identified As
                         </th>
                         <?php if($type == 'assigned'){?>
                         <!-- <th>
@@ -161,7 +164,7 @@
                             </td>
                             <?php }?>
                             <td>
-                                 <?php echo ucwords($value['lead_identification']);?>
+                                 <?php echo !empty($value['lead_identification']) ? ucwords($lead_type[$value['lead_identification']]) : '';?>
                             </td>
                             <?php if($type == 'assigned'){?>
                             <!-- <td>
@@ -212,14 +215,5 @@
         
         //Initialize datatable configuration
         initTable(table,columns);
-
-       $('.delete').click(function(){
-            var url = $(this).data('url');
-            bootbox.confirm("Are you sure want to delete?", function(result) {
-               if(result == true){
-                window.location.href = url;
-               }
-            }); 
-        });
     });
 </script>
