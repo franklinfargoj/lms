@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].':8844/DENABANK/lms';
+$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].'/lms';
 
 /*
 |--------------------------------------------------------------------------
@@ -527,12 +527,12 @@ $config['proxy_ips'] = '';
 
 $config['lead_status'] = array(
 	'NC' => 'Not Contacted',
+	'FU' => 'Interested/Follow up' ,
 	'DC' => 'Documets Collected',
 	'AO' => 'Account opened',
+	'Converted' => 'Converted',
 	'NI' => 'Drop/Not Interested',
 	'CBC' => 'Cannot be contacted',
-	'FU' => 'Interested/Follow up' ,
-	'Converted' => 'Converted',
 	'Closed' => 'Closed'
 	);
 
