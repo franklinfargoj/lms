@@ -573,6 +573,9 @@ strong{
 	border-bottom: 0 none;
 	margin-bottom: 25px;
 }
+.lead-form .form-control.form-submit{
+	margin-bottom: 0;
+}
 
 .form-control select{
 	font-size: 14px;
