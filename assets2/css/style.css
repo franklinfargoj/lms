@@ -442,7 +442,7 @@ body{
 	display: block;
 	color: #ffffff;
 	margin-bottom: 5px;
-
+	font-size: 15px;
 }
 .logged-in a{
 	color: #ffffff;
@@ -495,13 +495,17 @@ body{
 
 .main-content .lead-section{
 	padding:85px 100px;
-	margin: 70px 0;
+	margin: 20px 0;
 	box-sizing: border-box;
 	width: 50%;
 }
 
 .lead-section + .lead-section {
     border-left: 1px solid #dddddd;
+}
+
+.lead-data{
+	margin: 30px 0;
 }
 
 .lead-section h3{
@@ -568,6 +572,10 @@ strong{
 	width: 100%;
 	border-bottom: 0 none;
 	margin-bottom: 25px;
+}
+
+.form-control select{
+	font-size: 14px;
 }
 
 .lead-form .form-control input{
@@ -719,7 +727,7 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 .upload-content{
 	background-color: transparent;
     display: table;
-    margin: 2% auto;
+    margin: 0 auto 2%;
     table-layout: fixed;
     width: 100%;
 }
@@ -797,7 +805,10 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
     font-family: Montserrat;
     font-size: 13px;}
 .log-in a{color: #ffffff;}
-
+.unassigned-content .inner-content{width: 99.4%;}
+.unassigned-content .bg-top, .unassigned-content .bg-bottom{
+	max-width: 100%;
+}
 /*upload lead*/
 
 /*faq*/
@@ -1242,6 +1253,7 @@ margin-top: 10px;
     max-width: 1440px;
     box-sizing: border-box;
     margin: 0 auto;
+    background-repeat: no-repeat;
 }
 .bg-bottom{
 	background-image: url("../images/bg-bottom-new.png");
@@ -1252,6 +1264,7 @@ margin-top: 10px;
     max-width: 1440px;
     box-sizing: border-box;
     margin: 0 auto;
+    background-repeat: no-repeat;
 }
 .inner-content{
 	background-image: url("../images/bg-inner.png");

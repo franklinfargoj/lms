@@ -23,6 +23,9 @@
         right: 15px;
         top: 15px;
     }
+       .bg-top{width: 100%;}
+    .bg-bottom{width: 100%;}
+    .inner-content{width: 99.4%;}
 }
 
 @media only screen and (min-width:768px) and (max-width:1023px) {
@@ -82,4 +85,7 @@
      .emi-content{width: 100%;}
     .dataTables_wrapper{overflow-x: auto;}
     table.dataTable{overflow: hidden;}
+    .bg-top{width: 100%;}
+    .bg-bottom{width: 100%;}
+    .inner-content{width: 99.4%;}
 }
