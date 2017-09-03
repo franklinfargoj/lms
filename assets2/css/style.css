@@ -224,7 +224,7 @@ body{
 	background-color: transparent;
 	outline: none;
 	color: #8a8b8e;
-	font-size: 16px;
+	font-size: 14px;
 	padding: 0 5px;
 }
 .form-control{
@@ -365,7 +365,7 @@ body{
 	margin: 10px 0;
 }
 .header .top-navigation{
-	width: 45%;
+	width: 60%;
 	display: inline-block;
 	vertical-align: middle;
 }
@@ -464,16 +464,16 @@ body{
     background-size: contain;
 }
 .view-content{
- 	margin-top: 25px;
+ 	margin-top: 60px;
     text-align: center;
-    width: 70%;
+    width: 80%;
 }
 
 .view-content a{
 	background-color: #01559d;
     color: #ffffff;
     font-family: "Montserrat";
-    padding: 13px 35px;
+    padding: 13px 55px;
 }
 /*Footer*/
 
@@ -532,6 +532,7 @@ strong{
 .lead-count.blue{
 	background-image: url(../images/blue-circle.png);
 	background-size: 100% auto;
+	margin-left: 35px;
 }
 .lead-count span{
 	display: block;
@@ -546,9 +547,9 @@ strong{
 .lead-count span.small{
 	font-size: 25px;
 }
-.lead-count + .lead-count{
+/*.lead-count + .lead-count{
 	margin-left: 10px;
-}
+}*/
 
 .lead-form .lead-form-left{
 	width: 48%;
@@ -651,7 +652,8 @@ strong{
 .total-lead{font-weight: normal;}
 .lead-num{font-weight: 600;}
 .lead-num a{margin-top: 15px; display: inline-block;}
-.top-header{background-color: #61aeef; height: 68px;}
+.top-header{background-color: #61aeef; height: 50px;}
+table.dataTable .top-header th{padding: 0 18px;}
 .dataTables_length{display: none;}
 .dataTables_filter{display: none;}
 .top-header input,.top-header select{background-color: #61aeef; border: 1px solid #ffffff; padding: 5px; color: #ffffff;}
@@ -908,7 +910,7 @@ margin-top: 10px;
 .product-category select{
     width: 100%;
     height: 33px;
-    border: 1px solid #d3d3d3;
+    border: 1px solid #d3d3d3 !important;
  }
 
 .product-category.add-product{
@@ -986,40 +988,52 @@ margin-top: 10px;
 }
 .range-slider .ui-slider{
 	border: 1px solid #acacac !important;
+	background: #e2eef8 !important;
 }
 
 .emi-content .range-slider label{
-	width: 160px;
+	/*width: 160px;
 	color: #484848;
-	vertical-align: middle;
+	vertical-align: middle;*/
+	width: 160px;
+    color: #484848;
+    vertical-align: middle;
+    display: inline-block;
+    float: left;
+    margin-left: 0;
 }
 .emi-content .range-slider input{
     border: 1px solid #d3d3d3;
     height: 25px;
     width: auto;
     padding: 10px;
+    margin-bottom: 35px;
   }
 
 .emi-content .range-slider{
-	border-bottom:  none;
-	margin-bottom: 70px;
+	border-bottom: 1px dashed #ccc;
+    margin-bottom: 100px;
+    padding-bottom: 70px;
+    position: relative;
 }
 
 .emi-content .range-slider .ui-slider-horizontal{
-	width: 65%;
+	width: 98%;
 }
 .emi-content .range-slider .step{
 	position: relative;
 	top: -19px;
+	width: 98%;
 }
 .tick{
 	position: absolute;
 }
 .emi-content .range-slider input{
-	width: 115px;
+	/*width: 115px;
 	height: 25px;
 	left: -40px;
-	position: relative; 
+	position: relative; */
+	float: left;
 }
 .emi-content .form-submit{ 
 	width: auto;
@@ -1036,7 +1050,7 @@ margin-top: 10px;
     font-size: 32.21px;
     margin-bottom: 15px;
     width: 140px;
-    padding: 12px;
+    padding: 8px 12px 15px;
     height: 25px;
     background-color: transparent;
     display: block;
@@ -1052,14 +1066,32 @@ margin-top: 10px;
  .tick{
     color: #8b8b8b;
     font-size: 14px;
+    font-family: "Montserrat";
 }
 
 .emi-content{
-	width: 1245px;
-    margin: 0 auto;
+	margin: 0 auto;
+    padding: 30px 0 0;
+    width: 1245px;
 }
 .emi-content .value{
 	width: 50px !important;
+	position: absolute;
+    left: 370px;
+}
+.emi-content .range-slider .error{
+	margin-bottom: 15px;
+}
+
+.emi-content .range-slider label.error {
+    position: relative;
+    right: -105px;
+    top: -7px;
+    width: auto;
+}
+
+.emi-content .range-slider img{
+	width: auto !important;
 }
 /*EMI calculator*/
 
@@ -1202,7 +1234,7 @@ margin-top: 10px;
 }
 
 .bg-top{
-	background-image: url(../images/bg-top.png);
+	background-image: url("../images/bg-top-new.png");
     background-position: center top;
     display: block;
     background-size: 100% 100%;
@@ -1212,7 +1244,7 @@ margin-top: 10px;
     margin: 0 auto;
 }
 .bg-bottom{
-	background-image: url(../images/bg-bottom.png);
+	background-image: url("../images/bg-bottom-new.png");
     background-position: center bottom;
     display: block;
     background-size: 100% 100%;
@@ -1222,7 +1254,7 @@ margin-top: 10px;
     margin: 0 auto;
 }
 .inner-content{
-	background-image: url("../images/bg1.png");
+	background-image: url("../images/bg-inner.png");
 	background-position: center bottom;
 	display: block;
 	background-size: 100% 100%;
