@@ -1,3 +1,6 @@
+<div class="lead-data">
+<span class="bg-top"></span>
+<div class="inner-content">
 <div class="container clearfix">
 	<div class="lead-section float-left">
 		<h3 class="title">Lead <br><strong>Generated</strong></h3>
@@ -33,4 +36,7 @@
 			</div>
 		</div>
 	</div>
+</div>
+</div>
+<span class="bg-bottom"></span>
 </div>

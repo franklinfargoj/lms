@@ -6,7 +6,10 @@
         <h3 class="text-center">Unassigned Leads</h3>
     </div>
 </div>
+
 <div class="page-content">
+    <span class="bg-top"></span>
+    <div class="inner-content">
     <div class="container">
         <?php $status = array('Walk-in','Enquiry','Tie Ups','Analytics');
         if(!empty($unassigned_leads_count)) foreach ($unassigned_leads_count as $key => $lead_source) ?>
@@ -65,4 +68,6 @@
             </a>
         </div>
     </div>
+    </div>
+    <span class="bg-bottom"></span>
 </div>

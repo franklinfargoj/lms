@@ -53,13 +53,22 @@ $data_submit = array(
                     </div>
                     <span>
                     </span>
-               <div class="form-control form-submit clearfix">
+               <!--<div class="form-control form-submit clearfix">
                     <a href="javascript:void(0);" class="active">
 <!--                        <img alt ="left nav" src="--><?php ///*echo base_url().ASSETS;*/?><!--images/left-nav.png">-->
-                        <span><input class="custom_button" type="submit" name="Submit" value="Submit"></span>
+                        <!--<span><input class="custom_button" type="submit" name="Submit" value="Submit"></span>
 <!--                        <img alt = "right nav" src="--><?php ///*echo base_url().ASSETS;*/?><!--images/right-nav.png">-->
+                    <!--</a>
+                </div>-->
+
+            <div class="form-control form-submit clearfix">
+                <a href="javascript:void(0);" class="active float-right">
+                        <img alt="left nav" src="<?php echo base_url().ASSETS;?>/images/left-nav.png">
+                        <span><input class="custom_button" name="Submit" value="Submit" type="submit"></span>
+                        <img alt="right nav" src="<?php echo base_url().ASSETS;?>/images/right-nav.png">
                     </a>
-                </div>
+            </div>
+
 <!--                <button class="btn-submit" type="submit"></button>-->
                 <?php echo form_close();?>
             </div>
