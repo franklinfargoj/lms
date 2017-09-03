@@ -44,7 +44,6 @@ class Leads extends CI_Controller
         /*Create Breadcumb*/
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<label class = "error">', '</label>');
-//            $this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
             $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alphaNumeric');
             $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
             $this->form_validation->set_rules('lead_ticket_range', 'Range.', 'required|numeric');
@@ -52,7 +51,6 @@ class Leads extends CI_Controller
             $this->form_validation->set_rules('product_id', 'Product','required');
             $this->form_validation->set_rules('remark', 'Remark', 'required');
             $this->form_validation->set_rules('is_own_branch', 'Branch', 'required');
-//            $this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
 
             $input = get_session();
 
@@ -103,7 +101,14 @@ class Leads extends CI_Controller
             }
             $lead_data['lead_name'] = $this->input->post('customer_name');
             $lead_id = $this->Lead->add_leads($lead_data);
-            
+
+            //start send sms to customer
+
+            $customer_name = $lead_data['lead_name'];
+            $customer_mobile = $this->input->post('contact_no');
+            send_sms($customer_name,$customer_mobile);
+
+            //end send sms to customer
 
             $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
             if($assign_to == 'self'){
@@ -350,7 +355,12 @@ class Leads extends CI_Controller
         $objWriter->save('php://output');
     }
 
-
+    /**
+     * unassigned_leads_list
+     * loads the unassigned leads list of particular lead source
+     * @param $lead_status holds the choosesn lead source
+     * @autor Gourav Thatoi
+     */
     public function unassigned_leads_list($lead_status=''){
         /*Create Breadcumb*/
           $this->make_bread->add('Unassign Leads', '', 0);
@@ -362,13 +372,24 @@ class Leads extends CI_Controller
         load_view($middle,$arrData);
     }
 
+    /**
+     * unassigned_leads
+     * loads the unassigned leads count filtered by lead source
+     * @autor Gourav Thatoi
+     * @accss public
+     * @return array
+     */
     public function unassigned_leads(){
         /*Create Breadcumb*/
           $this->make_bread->add('Unassign Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
+        $select = array('db_leads.lead_source,COUNT(db_leads.lead_source) as total');
+        $table = Tbl_Leads;
+        $join = array('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
+        $group_by = array('db_leads.lead_source');
         $where = array(Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
-        $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($where);
+        $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
         $response = array();
         $keys=array('Walk-in'=>0,'Analytics'=>0,'Tie Ups'=>0,'Enquiry'=>0);
        foreach ($arrData['unassigned_leads_count'] as $k => $v){
@@ -732,5 +753,7 @@ class Leads extends CI_Controller
         exit;*/
         return $arrData;
     }
+
+
 
 }
