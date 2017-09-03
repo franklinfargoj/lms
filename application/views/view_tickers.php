@@ -30,11 +30,11 @@
 			</div>
 		</div>
 		<div class="main-content">
-			<div class="page-title">
+			<!-- <div class="page-title">
 				<div class="container clearfix">
 					<h3 class="text-center">Tickers</h3>
 				</div>
-			</div>
+			</div> -->
 			<div class="page-content">
 			  	<span class="bg-top"></span>
 				<div class="inner-content">
@@ -71,6 +71,7 @@
 			$( function() {
 				$( "#accordion" ).accordion();
 			});
+			//$('h3.ui-state-active').removeAttr('background-image');
 		</script>
 	</body>
 </html>

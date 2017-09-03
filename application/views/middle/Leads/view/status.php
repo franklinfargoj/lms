@@ -3,28 +3,7 @@
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- END PAGE LEVEL STYLES -->
 <?php $status = $this->config->item('lead_status');
-      $status_ytd = array(
-        'NC' => 'not_contacted',
-        'DC' => 'documents_collected',
-        'AO' => 'account_opened',
-        'NI' =>'drop_not_interested',
-        'CBC' =>'can_not_be_contacted',
-        'FU' => 'follow_up',
-        'Converted' =>'converted',
-        'Closed' => 'closed'
-        );
-      $status_mtd = array(
-        'NC' =>'month_not_contacted',
-        'DC' =>'month_documents_collected',
-        'AO' =>'month_account_opened',
-        'NI' =>'month_drop_not_interested',
-        'CBC' =>'month_can_not_be_contacted',
-        'FU' =>'month_follow_up',
-        'Converted' => 'month_converted',
-        'Closed' =>'month_closed'
-      );
-
-
+      
       $title = 'MY GENERATED LEAD';
       if($this->session->userdata('admin_type') == 'BM'){
           $title = $employee_name.' GENERATED LEAD';
@@ -55,14 +34,14 @@
                         echo form_dropdown('status', $options ,'',array());
                     ?>
                 </th>
-                <th><input type="text" name="customername" placeholder="Search MTD"></th>
-                <th><input type="text" name="customername" placeholder="Search YTD"></th>
+                <th><!-- <input type="text" name="customername" placeholder="Search MTD"> --></th>
+                <th><!-- <input type="text" name="customername" placeholder="Search YTD"> --></th>
             </tr>
             <tr>
                 <th>Sr No</th>
                 <th>Status</th>
-                <th>MTD</th>
-                <th>YTD</th>
+                <th>This Month</th>
+                <th>This Year</th>
             </tr>
             </thead>
             <tbody>
@@ -70,14 +49,12 @@
             if(!empty($status)){
                 $i = 0;
                 foreach ($status as $key => $value){ 
-                    $mtd = $status_mtd[$key];
-                    $ytd = $status_ytd[$key];
                 ?>
                 <tr>
                     <td><?php echo $i+1; ?></td>
                     <td><?php echo $value; ?></td>
-                    <td><a href="<?php echo site_url('leads/leads_list/generated/mtd/'.$key);?>" ><?php echo $$mtd; ?></a></td>
-                    <td><a href="<?php echo site_url('leads/leads_list/generated/ytd/'.$key);?>" ><?php echo $$ytd; ?></a></td>
+                    <td><a href="<?php echo site_url('leads/leads_list/generated/mtd/'.$key);?>" ><?php echo $$key['Month']; ?></a></td>
+                    <td><a href="<?php echo site_url('leads/leads_list/generated/ytd/'.$key);?>" ><?php echo $$key['Year']; ?></a></td>
                 </tr>
             <?php
             $i++; 

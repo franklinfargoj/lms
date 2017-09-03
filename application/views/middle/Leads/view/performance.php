@@ -3,18 +3,18 @@
 <!-- END PAGE LEVEL STYLES -->
     <div class="page-title">
         <div class="container clearfix">
-            <h3 class="text-center">Lead Performance</h3>
+            <h3 class="text-center">My Lead Performance</h3>
         </div>
     </div>
     <div class="page-content">
         <div class="container">
             <div class="performance-form-control">
-                <label for="">Performance</label>
+                <!-- <label for="">Performance</label> -->
                 <div class="performance-radio-control">
-                    <input type="radio" name="month_year" value="active" checked="" id="month"><label>MTD</label>
+                    <input type="radio" name="month_year" value="active" checked="" id="month"><label>This Month</label>
                 </div>
                 <div class="performance-radio-control">
-                    <input type="radio" name="month_year" value="inactive" id="year"><label>YTD</label>
+                    <input type="radio" name="month_year" value="inactive" id="year"><label>This Year</label>
                 </div>
             </div>
 

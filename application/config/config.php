@@ -534,6 +534,12 @@ $config['lead_status'] = array(
 	'NI' => 'Drop/Not Interested',
 	'CBC' => 'Cannot be contacted',
 	'Closed' => 'Closed'
+);
+
+$config['lead_type'] = array(
+	'HOT' => 'Highly Interested',
+	'WARM' => 'Close Enough Interested' ,
+	'COLD' => 'Low Interested'
 	);
 
 

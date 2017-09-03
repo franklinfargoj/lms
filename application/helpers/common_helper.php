@@ -329,3 +329,64 @@ function dropdown($data,$select_option){
     }
     return $result;
 }
+
+if(!function_exists('send_sms')){
+    function send_sms($mobile = '',$message='') {
+        
+        if($mobile!='') {
+            $CI =& get_instance();
+            $CI->load->model('Sms_model','sms');
+            $credentials = $CI->sms->get_sms_credentials();
+            $password = $CI->encrypt->decode($credentials['password']);
+            $url = $credentials['url'].'?username='.$credentials['username'].'&password='.$password.'&to='.$mobile.'&udh=0&from=DENABK&text='.$message;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            $output = curl_exec($ch);
+            curl_close($ch);
+
+            $response = ((array) simplexml_load_string($output));
+            return $response;
+
+        }
+    }
+}
+
+function sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL)
+{
+    //$d_type = ($device_type==0)? "appNameAndroid" : "appNameIOS";
+   // $collection = PushNotification::app($d_type)->to($device_id)->send($message);
+   // return $response = $collection->pushManager->getAdapter()->getResponse();
+   
+    $url = 'https://fcm.googleapis.com/fcm/send';
+    $server_key = 'AAAAJTxIDRs:APA91bGmPFIAFGn7ZMj1XX__Vw-ONFXBbUwsJp_F3qCBalPyYMhCWcRiNtj7l7PzuGKuwSyG950X8s1kYFMHQIVcyXhH-ylwcYBZzaPnpTGxKfB1yOeAVTEkyp69_jNc25QNroxb_b-Z';
+    $to = $device_id;
+    $notification_title = ($title==NULL) ? 'Notification' : $title;
+    $data = array('body'=>$message, 'title' => $notification_title, "icon" => "myicon","notification_type"=>"action");
+
+    $fields = json_encode(array('to' => $to, 'data' => $data));
+    $headers = array(
+        'Content-Type:application/json',
+        'Authorization:key='.$server_key
+    );
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+    $result = curl_exec($ch);
+
+    if ($result === FALSE) {
+       // die('FCM Send Error: ' . curl_error($ch));
+    }
+    curl_close($ch);
+    return $result;
+}

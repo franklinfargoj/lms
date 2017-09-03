@@ -1,5 +1,20 @@
 <?php 
 $lead_status = $this->config->item('lead_status');
+$lead_type = $this->config->item('lead_type');
+$color = 'gray';
+if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identification'])){
+    switch ($leads[0]['lead_identification']) {
+        case 'HOT':
+            $color = 'red';
+            break;
+        case 'WARM':
+            $color = 'green';
+            break;
+        case 'COLD':
+            $color = 'blue';
+            break;
+    }
+}
 ?>
 <div class="page-title">
     <div class="container clearfix">
@@ -35,12 +50,15 @@ $lead_status = $this->config->item('lead_status');
                             </div>
                             <div class="form-control">
                                 <label>Lead Identified as :</label> 
-                                <span class="detail-label red">
-                                    <?php echo !empty($leads[0]['lead_identification']) ? ucwords($leads[0]['lead_identification']) : '';?>
+                                <span class="detail-label" style="color:<?php echo $color;?>">
+                                    <?php echo !empty($leads[0]['lead_identification']) ? ucwords($lead_type[$leads[0]['lead_identification']]) : '';?>
                                 </span>
                             </div>
                             <div class="form-control">
-                                <label>Product Name:</label> <span class="detail-label">Home Loan</span>
+                                <label>Category Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['category_title']);?></span>
+                            </div>
+                            <div class="form-control">
+                                <label>Product Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['product_title']);?></span>
                             </div>
                             <div class="form-control">
                                 <label>Lead Status:</label> <span class="detail-label"><?php echo isset($leads[0]['status']) ? $lead_status[$leads[0]['status']] : 'NA';?></span>
@@ -81,12 +99,12 @@ $lead_status = $this->config->item('lead_status');
                                 </div>
                                 <div class="form-control">
                                     <label>Lead Identified as :</label> 
-                                    <span class="detail-label red">
+                                    <span class="detail-label">
                                         <?php 
                                             if(isset($lead_identification)){
                                                 $options2['']='Select';
-                                                foreach ($lead_identification as $key => $value) {
-                                                    $options2[$key] = $value;
+                                                foreach ($lead_type as $key => $value) {
+                                                    $options2[$key] = ucwords($value);
                                                 }
                                                 $js = array(
                                                         'id'       => 'lead_identification',
@@ -136,7 +154,7 @@ $lead_status = $this->config->item('lead_status');
                                         ?>
                                 </div>
                                 <div class="form-control followUp" style="display:none">
-                                    <label>Remind Text:</label>   
+                                    <label>Discussed Points:</label>   
                                     <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
                                 </div>
                                 <div class="form-control accountOpen" style="display:none">
@@ -152,6 +170,14 @@ $lead_status = $this->config->item('lead_status');
                                         echo form_input($data);
                                         ?>
                                 </div>
+                                <div class="form-control form-submit clearfix accountOpen" style="display:none">
+                                    <a href="javascript:void(0);" class="float-right verify_account">
+                                        <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                        <span>Verify</span>
+                                        <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                                    </a>
+                                </div>
+
                             <?php }?>
                         </div>
 
@@ -180,13 +206,13 @@ $lead_status = $this->config->item('lead_status');
                             <?php }?>
                         </div>
                         <div class="form-control form-submit clearfix">
-                        <?php if($type == 'assigned'){?>
-                            <a href="#" class="float-right">
-                                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                                    <span><input type="submit" class="custom_button" value="Submit" /></span>
-                                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
-                            </a>
-                        <?php }?>
+                            <?php if($type == 'assigned'){?>
+                                <a href="javascript:void(0);" class="float-right submit_button">
+                                        <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                        <span><input type="submit" class="custom_button" value="Submit" /></span>
+                                        <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                                </a>
+                            <?php }?>
                         </div>
                     <!-- </form> -->
                     <?php 
@@ -202,7 +228,8 @@ $lead_status = $this->config->item('lead_status');
 <script type="text/javascript">
     $(document).ready(function(){
         var lead_status = "<?php echo $leads[0]['status']?>";  //Current Lead status
-
+        var category_title = "<?php echo $leads[0]['category_title']?>";  //Current Category
+        
         if(lead_status == 'FU'){
             $('.followUp').show();              //Display follow up fields 
         }
@@ -216,13 +243,7 @@ $lead_status = $this->config->item('lead_status');
             $(this).datepicker({dateFormat: 'dd-mm-yy'});
 
         });
-        /*$("button[type='reset']").on("click", function(event){
-            //On Reset of form should display original values.
-            action(lead_status);
-            event.preventDefault();
-            $(this).closest('form').get(0).reset();
-        });*/
-
+        
         $('#product_category_id').change(function () {
             var csrf = $("input[name=csrf_dena_bank]").val();
             var category_id = $(this).val();
@@ -252,18 +273,23 @@ $lead_status = $this->config->item('lead_status');
         });
 
         var action = function(option){
+            $('.submit_button').show();
             if(option == 'FU'){
                $('.followUp').show();
                $('.accountOpen').hide();
             }else if(option == 'AO'){
-               $('.accountOpen').show();
-               $('.followUp').hide();
+                if(category_title != 'fee income'){
+                    $('.accountOpen').show();
+                    $('.submit_button').hide();
+                }
+                $('.followUp').hide();
             }else{
                 $('.accountOpen').hide();
                 $('.followUp').hide();
             }
         }
 
+        //Validation
         $.validator.addMethod("regx", function(value, element, regexpr) {
             return regexpr.test(value);
         });
@@ -280,7 +306,13 @@ $lead_status = $this->config->item('lead_status');
                     required: true
                 },
                 lead_identification : {
-                  required: true  
+                    required : function(el) {
+                        if(($('#lead_status').val() != 'NC') && ($('#lead_identification').val() == '')){
+                            return true
+                        }else{
+                            return false
+                        }
+                    }
                 }
             },
             messages: {

@@ -65,12 +65,12 @@ $customer_options['0'] = 'New';
 $customer_options['1'] = 'Existing';
 
 
-$options[''] = 'Select Product Category';
-foreach ($category as $key => $value) {
+$options = $category;
+/*foreach ($category as $key => $value) {
     $options[$value['id']] = $value['title'];
-}
+}*/
 
-$product_options[''] = 'Select Product';
+$product_options[''] = 'Select';
 if ($products != '') {
     foreach ($products as $key => $value) {
         $product_options[$value['id']] = $value['title'];
@@ -124,23 +124,23 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <div class="form-control">
                         <label>Customer Name:</label>
                         <?php echo form_input($data_customer);?>
+                        <?php echo form_error('customer_name'); ?>
                     </div>
-                    <?php echo form_error('customer_name'); ?>
                     <div class="form-control">
                         <label>Customer Number:</label>
                         <?php echo form_input($data_phone); ?>
+                        <?php echo form_error('contact_no'); ?>
                     </div>
-                    <?php echo form_error('contact_no'); ?>
                     <div class="form-control">
                         <label>Product Category:</label>
                         <?php echo form_dropdown('product_category_id', $options, set_value('product_category_id'), $category_extra) ?>
+                        <?php echo form_error('product_category_id'); ?>
                     </div>
-                    <?php echo form_error('product_category_id'); ?>
                     <div class="form-control" id="product_select">
                         <label>Product</label>
                         <?php echo form_dropdown('product_id', $product_options, set_value('product_id'), $product_extra) ?>
+                        <?php echo form_error('product_id'); ?>
                     </div>
-                    <?php echo form_error('product_id'); ?>
                     <div class="form-control range-slider">
                         <label>Ticket Size</label>
                         <div id="master">
@@ -148,7 +148,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         </div>
                         <div class="step">
                             <span class="float-left">5000</span>
-                            <span class="float-right">5 crore</span>
+                            <span class="float-right">1 Crore & above</span>
                         </div>
                         <?php echo form_input($data_ticket_range)?>
                     </div>
@@ -169,23 +169,23 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                                    value="0" <?php echo set_radio('is_own_branch', '0'); ?> />
                             <label>Other Branch</label>
                         </div>
+                        <?php echo form_error('is_own_branch'); ?>
                     </div>
-                    <?php echo form_error('is_own_branch'); ?>
                     <div id="state" class="form-control">
                         <label>State:<?php echo $this->session->userdata('state_id');?></label>
                         <?php echo form_dropdown('state_id', $data_state,$input['state_id'],'disabled') ?>
+                        <?php echo form_error('state_id'); ?>
                     </div>
-                    <?php echo form_error('state_id'); ?>
                     <div id="district" class="form-control">
                         <label>District:</label>
                         <?php echo form_dropdown('district_id', $data_district, $input['district_id'],'disabled') ?>
+                        <?php echo form_error('district_id'); ?>
                     </div>
-                    <?php echo form_error('district_id'); ?>
                     <div id="branch" class="form-control">
                         <label>Branch:</label>
                         <?php echo form_dropdown('branch_id', $data_branch, $input['branch_id'],'disabled') ?>
+                        <?php echo form_error('branch_id'); ?>
                     </div>
-                    <?php echo form_error('branch_id'); ?>
 
                     <!--<div id="identification" class="form-control">
                         <label>Lead Identification:</label>
@@ -196,12 +196,12 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <div class="form-control">
                         <label>Remark/Notes</label>
                         <?php echo form_textarea($data_remark, '', $remark_extra);?>
+                        <?php echo form_error('remark'); ?>
                     </div>
-                    <?php echo form_error('remark'); ?>
                 </div>
                 <div class="form-control form-submit clearfix">
 
-                    <a href="#" class="active float-right">
+                    <a href="javascript:void(0);" class="active float-right">
                         <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
                         <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
                         <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
@@ -223,15 +223,16 @@ $remark_extra = 'style="rows:4 ; cols:80"';
             var div = $('.ui-slider-range');
             // setup master volume
             sliderElement.slider({
-                step:10000,
+                step:5000,
                 orientation: "horizontal",
-                max: 50000000,
+                max: 10000000,
                 min: 5000,
                 animate: true,
                 values: [5000],
                 slide: function (event, ui) {
                     range.val(ui.values[0]);
-                    var width = (ui.values[0]/50000000) * 100 + '%';
+                    console.log(ui.values[0]);
+                    var width = (ui.values[0]-5000)/(10000000) * 100 + '%';
                     div.width(width);
                 }
             });
@@ -242,8 +243,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 if($.isNumeric(range.val())) {
                     sliderElement.slider('values', 0, range.val());
                     var width = '100%';
-                    if (range.val() <= 50000000)
-                        width = (range.val() / 50000000) * 100 + '%';
+                    if (range.val() <= 10000000)
+                        width = (range.val() / 10000000) * 100 + '%';
                     div.width(width);
                 }
             });
@@ -333,7 +334,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 },*/
                 lead_ticket_range: {
                     required: true,
-                    number:true
+                    number:true,
+                    min:5000,
                 },
                 state_id: {
                     required: true
@@ -361,8 +363,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     regx: "Special characters are not allowed"
                 },
                 lead_ticket_range: {
-                    required: "Please enter range",
-                    number: "Only numbers allowed"
+                    required: "Please select ticket range",
+                    number: "Only numbers allowed",
+                    min:"Please Enter a value greater than or equal to 5000"
                 },
                 contact_no: {
                     required: "Please enter phone number",
