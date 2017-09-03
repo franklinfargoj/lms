@@ -50,6 +50,7 @@
 								echo form_input($data);
 							?>
 					</div>
+					
 				</div>
 				<?php 
 					// Assuming that the 'title' field value was incorrect:
@@ -81,6 +82,11 @@
 					//Assuming that the 'password' field value was incorrect:
 					echo form_error('password', '<span class="help-block">', '</span>');
 				?>
+				<div class="">
+						<?php echo $captchaHtml; ?>
+						<input type="text" name="CaptchaCode" id="CaptchaCode" value="" size="35" style="height: 25px" />
+				</div>
+				<span class="help-block"><?php echo $captchaValidationMessage; ?></span>
 				<div class="form-control form-submit clearfix">
 					<!-- <input type="submit" name="submit" value="LOGIN" class="submit-btn"> -->
 					<a href="javascript:void(0);" class="active">
@@ -133,6 +139,8 @@
 	<script src="<?php echo base_url().ASSETS;?>/js/jquery.min.js" type="text/javascript"></script>
 	<script src="<?php echo base_url().ASSETS;?>/js/jquery.validate.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
+	$('.BDC_CaptchaImageDiv a').remove();
+	$('#ExampleCaptcha_SoundIcon').remove();
 		var inputs = $('.control--checkbox input');
 		inputs.on('change', function(){
 			var ref = $(this),
@@ -153,10 +161,10 @@
 	                },
 	                password: {
 	                    required: true
-	                },
-	                remember: {
-	                    required: false
-	                }
+	                }/*,
+	                CaptchaCode: {
+	                    required: true
+	                }*/
 	            },
 
 	            messages: {
@@ -165,7 +173,10 @@
 	                },
 	                password: {
 	                    required: "Please enter password"
-	                }
+	                }/*,
+	                CaptchaCode: {
+	                    required: "Captcha Code required"
+	                }*/
 	            },
 	            highlight: function (element) { // hightlight error inputs
 	                $(element)

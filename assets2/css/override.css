@@ -143,3 +143,15 @@ body{
     margin-right: 7px;
 }
 
+.BDC_CaptchaIconsDiv{
+    float: right;
+    margin-top: -50px;
+}
+
+#CaptchaCode{
+    width: 87.5%;
+    padding: 0 5px;
+    margin-top: 5px;
+ }
+
+

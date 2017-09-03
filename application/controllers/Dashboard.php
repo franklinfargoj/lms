@@ -112,11 +112,11 @@ class Dashboard extends CI_Controller {
         //for generated lead
         $where_generated_Array = array('branch_id' => $branch_id,
             'created_by !=' => 0,
-            'MONTH(created_on)' => date('m'));
+            'MONTH(created_on)' => date('m') - 1);
         $leads['generated_leads'] = $this->master->get_generated_lead_bm_zm($where_generated_Array);
         //for converted lead
         $where_converted_Array = array('branch_id' => $branch_id,
-            'MONTH(created_on)' => date('m'),
+            'MONTH(created_on)' => date('m') - 1,
             'created_by !=' => 0,
             'status' => 'converted');
         $leads['converted_leads'] = $this->master->get_converted_lead_bm_zm($where_converted_Array);
@@ -168,7 +168,7 @@ class Dashboard extends CI_Controller {
         $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
         $select = array();
         $middle = "Leads/view/performance";
-        $this->make_bread->add('lead performance', '', 0);
+        $this->make_bread->add('Lead Performance', '', 0);
         $result['breadcrumb'] = $this->make_bread->output();
 
         if ($this->session->userdata('admin_type') == 'ZM') {

@@ -16,8 +16,11 @@ class Login extends CI_Controller {
 	{
 		// Initialization of class
 		parent::__construct();
-          $this->load->model('Login_model','master');
-//          echo 'asdfashgdfas';exit;
+        $this->load->model('Login_model','master');
+        // load the BotDetect Captcha library and set its parameter
+        $this->load->library('botdetect/BotDetectCaptcha', array(
+            'captchaConfig' => 'ExampleCaptcha'
+        ));
      }
 
     /*
@@ -30,6 +33,11 @@ class Login extends CI_Controller {
      */
 	public function index()
 	{
+        /*pe($this->botdetectcaptcha);
+        exit;*/
+        // make Captcha Html accessible to View code
+        $arrData['captchaHtml'] = $this->botdetectcaptcha->Html();
+        $arrData['captchaValidationMessage'] = '';
           //Get tickers title
           $this->load->model('Ticker_model','ticker');
           $select = array('id','title');
@@ -55,18 +63,29 @@ class Login extends CI_Controller {
                {    $arrData['has_error'] = 'has-error';
                     return $this->load->view("login",$arrData);
                }else{
-                    $checkInput = array(
-                         'username' => $this->input->post('username'),
-                         'password' => md5($this->input->post('password'))
-                    );
-                    $loginData = $this->master->check_login($checkInput);
-                    if($loginData){
-                         $this->set_session($loginData[0]);
-                         $this->session->set_flashdata('success','Login success');
-                         redirect('dashboard');
-                    }else{
-                         $this->session->set_flashdata('error','Incorrect login details');
-                         redirect('login');
+                    // validate the user-entered Captcha code when the form is submitted
+                    $code = $this->input->post('CaptchaCode');
+                    $isHuman = $this->botdetectcaptcha->Validate($code);
+                    if ($isHuman) {
+                        // Captcha validation passed
+                        $checkInput = array(
+                             'username' => $this->input->post('username'),
+                             'password' => md5($this->input->post('password'))
+                        );
+                        $loginData = $this->master->check_login($checkInput);
+                        if($loginData){
+                             $this->set_session($loginData[0]);
+                             $this->session->set_flashdata('success','Login success');
+                             redirect('dashboard');
+                        }else{
+                             $this->session->set_flashdata('error','Incorrect login details');
+                             redirect('login');
+                        }
+                    } else {
+                        // Captcha validation failed, return an error message
+                        $arrData['captchaHtml'] = $this->botdetectcaptcha->Html();
+                        $arrData['captchaValidationMessage'] = 'CAPTCHA validation failed, please try again.';
+                        return $this->load->view("login",$arrData);
                     }
                }
           }else{

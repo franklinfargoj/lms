@@ -1,7 +1,9 @@
 <?php 
 	$controller =  $this->router->fetch_class();
 	$method =  $this->router->fetch_method();
-	$param = $this->uri->segment(3,0);
+	$param1 = $this->uri->segment(3,0);
+	$param2 = $this->uri->segment(4,0);
+	$param3 = $this->uri->segment(5,0);
 ?>
 
 <div class="header">
@@ -11,7 +13,7 @@
 		</div>
 		<div class="top-navigation">
 			<ul>
-				<li class="<?php echo ($controller == 'dashboard') ? 'active' : ''?>">
+				<li class="<?php echo (($controller == 'dashboard') || (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && $param1 == 'generated')) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard')?>">
 						Home
 					</a>
@@ -59,21 +61,21 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('BM'))) {?>
-				<li class="<?php echo ($controller == 'leads' && ($method == 'unassigned_leads' || $method == 'unassigned_leads_details')) ? 'active' : ''?>">
+				<li class="<?php echo (($controller == 'leads') && (in_array($method,array('unassigned_leads','unassigned_leads_details')))) ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/unassigned_leads')?>">
 						Unassigned Leads
 					</a>
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM'))) {?>
-				<li class="<?php echo ($controller == 'leads' && $method == 'leads_list' && $param == 'assigned') ? 'active' : ''?>">
+				<li class="<?php echo (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && $param1 == 'assigned') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
 						Assigned Leads
 					</a>
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
-				<li class="<?php echo ($controller == 'product') ? 'active' : ''?>">
+				<li class="<?php echo (($controller == 'dashboard') && ($method == 'emi_calculator')) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard/emi_calculator')?>">
 						Calculator
 					</a>
