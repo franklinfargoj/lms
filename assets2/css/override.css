@@ -30,13 +30,13 @@
 /* Login form css */
 
 /* Header css */
-.header .top-navigation {
+/*.header .top-navigation {
     width: 60%;
-}
+}*/
 
-.header .right-nav .logged-in {
+/*.header .right-nav .logged-in {
     width: 175px;
-}
+}*/
 /* Header css */
 
 .form label.error {
@@ -44,6 +44,8 @@
     border: none;
     width: 100%;
     color: red;
+    font-size: 14px;
+    margin-top: 10px;
 }
 
 

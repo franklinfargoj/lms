@@ -8,9 +8,8 @@
 </div>
 <div class="page-content">
     <span class="bg-top"></span>
-    <div class="inner-content">
+       <div class="inner-content">
         <div class="container">
-            <div class="inner-content">
                 <div class="product-category">
                     <!-- <form> -->
                     <?php
@@ -81,7 +80,6 @@
                     <!-- </form> -->
                     <?php echo form_close();?>
                 </div>
-            </div>
         </div>
     </div>
     <span class="bg-bottom"></span>

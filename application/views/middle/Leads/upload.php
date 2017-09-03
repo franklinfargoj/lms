@@ -33,6 +33,8 @@ $data_submit = array(
     </div>
 </div>
 <div class="page-content">
+    <span class="bg-top"></span>
+    <div class="inner-content">
     <div class="container">
         <div class="upload-content">
             <div class="upload-form">
@@ -126,6 +128,8 @@ $data_submit = array(
         </tbody>
     </table>
 </div>
+</div>
+<span class="bg-bottom"></span>
 </div>
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
 <!--<script src="--><?php //echo base_url().ASSETS;?><!--js/config.datatable.js"></script>-->
