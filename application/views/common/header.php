@@ -99,8 +99,10 @@
 		</div>
 		<div class="right-nav">
 				<div class="notification">
-					<span class="count">4</span>
-					<img src="<?php echo base_url().ASSETS;?>images/bell.png" alt="bell">
+					<a href="<?php echo site_url('notification');?>">
+						<span class="count">4</span>
+						<img src="<?php echo base_url().ASSETS;?>images/bell.png" alt="bell">
+					</a>
 				</div>
 				<div class="logged-in">
 					<img src="<?php echo base_url().ASSETS;?>images/pic.png" alt="pic">
