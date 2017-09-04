@@ -18,6 +18,7 @@ class Dashboard extends CI_Controller {
 		parent::__construct();
           is_logged_in();     //check login
           $this->load->model('Lead','master');
+          
 	}
 
 	/**
@@ -320,10 +321,10 @@ class Dashboard extends CI_Controller {
             if(!empty($status)){
                 foreach ($status as $key => $value) {
                     $whereArray = array(Tbl_Leads.'.branch_id' => $branch_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
-                    $result['not_contacted'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
+                    $result[$key]['Year'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
 
                     $whereArray = array(Tbl_Leads.'.branch_id' => $branch_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
-                    $result['month_not_contacted'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
+                    $result[$key]['Month'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
                 }
             }
         }
