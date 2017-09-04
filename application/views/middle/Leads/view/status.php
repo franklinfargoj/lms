@@ -50,12 +50,14 @@
             if(!empty($status)){
                 $i = 0;
                 foreach ($status as $key => $value){ 
+                    $month = $key['Month'];
+                    $year = $key['Year'];
                 ?>
                 <tr>
                     <td><?php echo $i+1; ?></td>
                     <td><?php echo $value; ?></td>
-                    <td><a href="<?php echo site_url('leads/leads_list/generated/mtd/'.$key);?>" ><?php echo $$key['Month']; ?></a></td>
-                    <td><a href="<?php echo site_url('leads/leads_list/generated/ytd/'.$key);?>" ><?php echo $$key['Year']; ?></a></td>
+                    <td><a href="<?php echo site_url('leads/leads_list/generated/mtd/'.$key);?>" ><?php echo $$month; ?></a></td>
+                    <td><a href="<?php echo site_url('leads/leads_list/generated/ytd/'.$key);?>" ><?php echo $$year; ?></a></td>
                 </tr>
             <?php
             $i++; 
