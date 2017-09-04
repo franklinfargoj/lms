@@ -454,23 +454,9 @@ class Leads extends CI_Controller
 
         //Get session data
         $login_user = get_session();
-        $middle = '';
-
-        if(isset($login_user['designation_name']) && !empty($login_user['designation_name'])){
-            switch ($login_user['designation_name']){
-                case 'EM':
-                    $arrData = $this->em_view($login_user,$arrData);
-                    $middle = "Leads/view/em_view";
-                    break;
-                case 'BM':
-                    $arrData = $this->bm_view($login_user,$arrData);
-                    $middle = "Leads/view/bm_view_original";
-                    break;
-            }
-        }
-        /*pe($arrData);
-        exit;*/
-        return load_view($middle,$arrData);
+        $arrData = $this->view($login_user,$arrData);
+        
+        return load_view('Leads/view',$arrData);
     }
 
     /**
@@ -559,32 +545,38 @@ class Leads extends CI_Controller
      */
     public function update_lead_status(){
         if($this->input->post()){
-
             $login_user = get_session();
             $lead_id = decode_id($this->input->post('lead_id'));
             $lead_type = $this->input->post('lead_type');
-            /*If Assigned List*/
-            if($lead_type == 'assigned'){
-                $lead_identification = $this->input->post('lead_identification');
-                $lead_status = $this->input->post('lead_status');
+            /****************************************************************
+                                For Assigned List
+            *****************************************************************/
+                if($lead_type == 'assigned'){
 
-                $interested = $this->input->post('interested');
-                if($interested == 1){
-                    $this->form_validation->set_rules('product_category_id','Product Category', 'required');
-                    $this->form_validation->set_rules('product_id','Product', 'required');
-                    if ($this->form_validation->run() == FALSE)
-                    {    
-                        /*$arrData['has_error'] = 'has-error';
-                        return load_view("Products/Product/add",$arrData);*/
-                        redirect('leads/leads_list/assigned/ytd');
-                    }
-                    $product_category_id = $this->input->post('product_category_id');
-                    $product_id = $this->input->post('product_id');
-                    //Function call for add new leads in selected product category hierarchy
-                    $this->update_lead_product($lead_id,$product_category_id,$product_id);
-                }
+                    $lead_identification = $this->input->post('lead_identification');
+                    $lead_status = $this->input->post('lead_status');
+                    $employee_id = $this->input->post('reroute_to');
+                    
+                    /****************************************************************
+                                If interested in other product
+                    *****************************************************************/
+                        $interested = $this->input->post('interested');
+                        if($interested == 1){
+                            $this->form_validation->set_rules('product_category_id','Product Category', 'required');
+                            $this->form_validation->set_rules('product_id','Product', 'required');
+                            if ($this->form_validation->run() == FALSE)
+                            {    
+                                /*$arrData['has_error'] = 'has-error';
+                                return load_view("Products/Product/add",$arrData);*/
+                                redirect('leads/leads_list/assigned/ytd');
+                            }
+                            $product_category_id = $this->input->post('product_category_id');
+                            $product_id = $this->input->post('product_id');
+                            //Function call for add new leads in selected product category hierarchy
+                            $this->update_lead_product($lead_id,$product_category_id,$product_id);
+                        }
+                    /*****************************************************************/
 
-                /*Update Lead Status*/
                     //Building input parameters for function to get_leads
                     $action = 'list';
                     $table = Tbl_LeadAssign;
@@ -593,88 +585,131 @@ class Leads extends CI_Controller
                     $leadsAssign = $this->Lead->get_leads($action,$table,$select,$where,$join = array(),$group_by = array(),$order_by = array());
                     $leads_data = $leadsAssign[0];
 
-                    //Set current entry as old (set is_updated = 0)
-                    $lead_status_data = array('is_updated' => 0);
-                    $response1 = $this->Lead->update_lead_data($where,$lead_status_data,Tbl_LeadAssign);
+                    $response1['status'] = 'success';
+                    if(($leads_data['status'] != $lead_status) || (isset($employee_id) && !empty($employee_id))){
+                        //Set current entry as old (set is_updated = 0)
+                        $lead_status_data = array('is_updated' => 0);
+                        $response1 = $this->Lead->update_lead_data($where,$lead_status_data,Tbl_LeadAssign);
 
-                    if($response1['status'] == 'success'){
-                        //Create new entry in table Lead Assign with changed status.
-                        $lead_status_data = array(
-                            'lead_id'   => $leads_data['lead_id'],
-                            'employee_id' => $leads_data['employee_id'],
-                            'employee_name' => $leads_data['employee_name'],
-                            'branch_id' => $leads_data['branch_id'],
-                            'district_id' => $leads_data['district_id'],
-                            'state_id' => $leads_data['state_id'],
-                            'zone_id' => $leads_data['zone_id'],
-                            'status' =>  $lead_status,
-                            'is_updated' => 1,
-                            'created_on' => date('y-m-d-H-i-s'),
-                            'created_by' => $login_user['hrms_id'],
-                            'created_by_name' => $login_user['full_name']
-                        );
-                        $this->Lead->insert_lead_data($lead_status_data,Tbl_LeadAssign);        
+                        if($response1['status'] == 'success'){
+                            //Create new entry in table Lead Assign with changed status.
+
+                            /****************************************************************
+                                                Update Lead Status
+                            *****************************************************************/
+                            $lead_status_data = array(
+                                'lead_id'   => $leads_data['lead_id'],
+                                'employee_id' => $leads_data['employee_id'],
+                                'employee_name' => $leads_data['employee_name'],
+                                'branch_id' => $leads_data['branch_id'],
+                                'district_id' => $leads_data['district_id'],
+                                'state_id' => $leads_data['state_id'],
+                                'zone_id' => $leads_data['zone_id'],
+                                'status' =>  $lead_status,
+                                'is_updated' => 1,
+                                'created_on' => date('y-m-d-H-i-s'),
+                                'created_by' => $login_user['hrms_id'],
+                                'created_by_name' => $login_user['full_name']
+                            );
+                            /*****************************************************************/
+
+                            /****************************************************************
+                                                Reroute Lead
+                            *****************************************************************/
+                            if(isset($employee_id) && !empty($employee_id)){
+                                $lead_status_data['employee_id'] = $employee_id;
+                                $lead_status_data['employee_name'] = 'New Employee2';
+                                if($leads_data['status'] != $lead_status){
+                                    $lead_status_data['status'] = $lead_status;
+                                }else{
+                                    $lead_status_data['status'] = $leads_data['status'];
+                                }
+                            }
+                            /*****************************************************************/
+
+                            $this->Lead->insert_lead_data($lead_status_data,Tbl_LeadAssign);        
+                        }
                     }
-                /*Update Lead Status*/
-
-                /*Update Lead Identification*/
-                    $where = array('id' => $lead_id);
-                    $lead_identification_data = array(
-                        'lead_identification' => $lead_identification
-                    );
-                    $response = $this->Lead->update_lead_data($where,$lead_identification_data,Tbl_Leads);
-                /*Update Lead Identification*/
-
-                
-                if(($response1['status'] == 'error') || $response2['status'] == 'error'){
-                     $this->session->set_flashdata('error','Failed to update lead information');
-                     redirect('leads/leads_list/assigned/ytd');
-                }else{
-                    if($lead_status == 'FU'){
-                        $remindData = array(
-                            'lead_id' => $lead_id,
-                            'remind_on' => date('y-m-d-H-i-s',strtotime($this->input->post('remind_on'))),
-                            'remind_to' => $this->input->post('remind_to'),
-                            'reminder_text' => $this->input->post('reminder_text') 
+                    
+                    /*****************************************************************
+                                    Update Lead Identification
+                    *****************************************************************/
+                        $where = array('id' => $lead_id);
+                        $lead_identification_data = array(
+                            'lead_identification' => $lead_identification
                         );
-                        //This will add entry into reminder scheduler for status (Interested/Follow up)
-                        $response = $this->Lead->add_reminder($remindData);
+                        $response2 = $this->Lead->update_lead_data($where,$lead_identification_data,Tbl_Leads);
+                    /*****************************************************************/
+
+                    
+                    if(($response1['status'] == 'error') || ($response2['status'] == 'error')){
+                         $this->session->set_flashdata('error','Failed to update lead information');
+                         redirect('leads/leads_list/assigned/ytd');
+                    }else{
+                        if($lead_status == 'FU'){
+                            $remindData = array(
+                                'lead_id' => $lead_id,
+                                'remind_on' => date('y-m-d-H-i-s',strtotime($this->input->post('remind_on'))),
+                                'remind_to' => $this->input->post('remind_to'),
+                                'reminder_text' => $this->input->post('reminder_text') 
+                            );
+                            //This will add entry into reminder scheduler for status (Interested/Follow up)
+                            $this->Lead->add_reminder($remindData);
+                        }
+                        $this->session->set_flashdata('success','Lead information updated successfully');
+                        redirect('leads/leads_list/assigned/ytd');
                     }
-                    $this->session->set_flashdata('success','Lead information updated successfully');
-                    redirect('leads/leads_list/assigned/ytd');
                 }
-            }
-            /*If Assigned List*/
+            /*****************************************************************/
 
-            /*If Unssigned List*/
-            if($lead_type == 'unassigned'){
-                $employee_id = $this->input->post('assign_to');
-                $this->assign_to($employee_id,$lead_id);
-                $this->session->set_flashdata('success','Lead Assigned Successfully.');
-                redirect('leads/unassigned_leads/'.encode_id('Walk-in'));
-            }
-            /*If Unssigned List*/
+
+            /*****************************************************************
+                                    For Unassigned List
+            *****************************************************************/
+                if($lead_type == 'unassigned'){
+                    $employee_id = $this->input->post('assign_to');
+                    $this->assign_to($employee_id,$lead_id);
+                    $this->session->set_flashdata('success','Lead Assigned Successfully.');
+                    redirect('leads/unassigned_leads/'.encode_id('Walk-in'));
+                }
+            /*****************************************************************/
         }
     }
     
+    /**
+     * update_lead_product
+     * Interested in other product
+     * @author Ashok Jadhav
+     * @access public
+     * @param empty
+     * @return array
+     */
     public function update_lead_product($lead_id,$product_category_id,$product_id){
         $login_user = get_session();
 
-        //Building input parameters for function to get_leads
+        //Building input parameters
         $table = Tbl_Leads;
         $where  = array(Tbl_Leads.'.id' => $lead_id);
         //link interested product id with current lead.
-            $data['product_category_id'] = $product_category_id; 
-            $data['product_id']     = $product_id; 
-            $response = $this->Lead->update($where,$table,$data);
-            if($response['status'] == 'error'){
-                return false;
-            }else{
-                return true;
-            }
+        $data['product_category_id'] = $product_category_id; 
+        $data['product_id']     = $product_id; 
+        $response = $this->Lead->update($where,$table,$data);
+        if($response['status'] == 'error'){
+            return false;
+        }else{
+            return true;
+        }
 
     }
 
+    /**
+     * assign_multiple
+     * Assign all (Unassigned) leads to selected employee
+     * @author Ashok Jadhav
+     * @access public
+     * @param empty
+     * @return array
+     */
     public function assign_multiple(){
         if($this->input->post()){
             $employee_id = $this->input->post('assign_to');
@@ -685,12 +720,14 @@ class Leads extends CI_Controller
             $this->session->set_flashdata('success','Lead Assigned Successfully.');
             redirect('leads/unassigned_leads/'.encode_id($lead_source));
         }
-
     }
+
+    
 
 
     /*Private Functions*/
-    private function em_view($login_user,$arrData){
+
+    private function view($login_user,$arrData){
 
         $type = $arrData['type']; 
         $till = $arrData['till'];
@@ -726,7 +763,13 @@ class Leads extends CI_Controller
         if($type == 'assigned'){
             $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on');
             if($till == 'ytd'){
-                $where  = array('la.employee_id' => $login_user['hrms_id'],'la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(la.created_on)' => date('Y'));
+                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(la.created_on)' => date('Y'));
+                if($login_user['designation_name'] == 'EM'){
+                    $where['la.employee_id'] = $login_user['hrms_id'];
+                }
+                if($login_user['designation_name'] == 'BM'){
+                    $where['la.created_by'] = $login_user['hrms_id'];
+                }
             }
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
             /*$join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');*/
@@ -734,54 +777,6 @@ class Leads extends CI_Controller
         $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
         $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
         $arrData['lead_source'] = $this->Lead->get_enum(Tbl_Leads,'lead_source');
-        
-        return $arrData;
-    }
-
-    /*Private Functions*/
-    private function bm_view($login_user,$arrData){
-
-        $type = $arrData['type']; 
-        $till = $arrData['till'];
-
-        //Parameters buiding for sending to list function.
-        $action = 'list';
-        $table = Tbl_Leads.' as l';
-        $join = array();
-        $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
-        if($type == 'generated'){
-            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on');
-            if($till == 'mtd'){
-                $where = array('l.created_by' => $login_user['hrms_id'],'MONTH(l.created_on)' => date('m'));
-            }
-            if($till == 'ytd'){
-                $where  = array('l.created_by' => $login_user['hrms_id'],'YEAR(l.created_on)' => date('Y'));
-            }
-            if(!empty($arrData['status'])){
-                $where['la.status'] = $arrData['status'];
-            }
-            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
-        }
-        if($type == 'converted'){
-            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on');
-            if($till == 'mtd'){
-                $where = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'MONTH(la.created_on)' => date('m'));
-            }
-            if($till == 'ytd'){
-                $where  = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'YEAR(la.created_on)' => date('Y'));
-            }
-            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
-        }
-        if($type == 'assigned'){
-            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on');
-            if($till == 'ytd'){
-                $where  = array('la.created_by' => $login_user['hrms_id'],'la.is_deleted' => 0,'YEAR(la.created_on)' => date('Y'));
-            }
-            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
-            /*$join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');*/
-        }
-        $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
-        $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
         
         return $arrData;
     }
