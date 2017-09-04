@@ -116,7 +116,7 @@ class Lead  extends CI_Model
         $this->db->from($table);
         $this->db->join($join[0],$join[1],$join[2]);
         $this->db->where($where);
-        $this->db->group_by($group_by);
+        $this->db->group_by('db_leads.lead_source');
         $result = $this->db->get()->result_array();
         return $result;
     }
@@ -276,6 +276,14 @@ class Lead  extends CI_Model
                 $result = $this->db->get_where(Tbl_Leads,$where_generated_Array)->result_array();
                 return $result;
             }
+            //for gm
+            if(array_key_exists('zone_id !=',$where_generated_Array)){
+                $this->db->select('zone_id, COUNT(zone_id) as total');
+                $this->db->group_by('zone_id');
+                $this->db->order_by('total','desc');
+                $result = $this->db->get_where(Tbl_Leads,$where_generated_Array)->result_array();
+                return $result;
+            }
             //for zonal manager
             $this->db->select('branch_id, COUNT(branch_id) as total');
             $this->db->group_by('branch_id');
@@ -288,17 +296,30 @@ class Lead  extends CI_Model
     public function get_converted_lead_bm_zm($where_converted_Array){
         $result = array();
         if(!empty($where_converted_Array)){
-            if(array_key_exists('branch_id',$where_converted_Array)){
-                $this->db->select('created_by, COUNT(created_by) as total', 'created_by_name');
-                $this->db->group_by('created_by');
-                $this->db->order_by('total','desc');
+            if(array_key_exists('employee_id',$where_converted_Array)){
+                $this->db->select('COUNT(created_by) as total');
+                $result = $this->db->get_where(Tbl_LeadAssign,$where_converted_Array)->result_array();
+                if(!empty($result)){
+                    return $result[0]['total'];
+                }
+                $total = 0;
+                return $total;
+
+            }
+            //for gm
+            if(array_key_exists('zone_id !=',$where_converted_Array)){
+                $this->db->select('COUNT(zone_id) as total');
                 $result = $this->db->get_where(Tbl_LeadAssign,$where_converted_Array)->result_array();
                 return $result;
             }
-            $this->db->select('branch_id, COUNT(branch_id) as total');
-            $this->db->group_by('branch_id');
-            $this->db->order_by('total','desc');
+            //for zonal
+            $this->db->select('COUNT(branch_id) as total');
             $result = $this->db->get_where(Tbl_LeadAssign,$where_converted_Array)->result_array();
+            if(!empty($result)){
+                return $result[0]['total'];
+            }
+            $total = 0;
+            return $total;
         }
         return $result;
 

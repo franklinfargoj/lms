@@ -231,7 +231,7 @@ class Master_model extends CI_Model{
 	}
 
 
-	private function view($select,$where,$table,$join = array(),$order_by = array()){
+	public function view($select,$where,$table,$join = array(),$order_by = array()){
 
 		$this->db->select($select,TRUE);
 		$this->db->from($table);
