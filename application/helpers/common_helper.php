@@ -491,3 +491,12 @@ function sendNotificationSingleClient($device_id,$device_type,$message,$title=NU
     curl_close($ch);
     return $result;
 }
+
+function get_notification_count(){
+    $CI =& get_instance();
+    $CI->load->model('Notification_model','notification');
+    $input = get_session();
+    
+    $notification_count = $CI->notification->get_notifications_count();
+    return $notification_count;
+}
