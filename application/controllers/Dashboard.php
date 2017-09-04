@@ -161,6 +161,7 @@ class Dashboard extends CI_Controller {
         $input = get_session();;
         $branch_id = decode_id($id);
         $created_by = decode_id($id);
+        $source = $this->config->item('lead_source');
         if($this->session->userdata('admin_type')=='EM')
         $created_by = $input['hrms_id'];
         $action = 'count';
@@ -173,127 +174,42 @@ class Dashboard extends CI_Controller {
         $result['breadcrumb'] = $this->make_bread->output();
 
         if ($this->session->userdata('admin_type') == 'ZM') {
-            //Walk-in
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Walk-in');
-            $result['lead_assigned_walkin'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Walk-in');
-            $result['month_lead_assigned_walkin'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Walk-in',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['lead_converted_walkin'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+            foreach ($source as $key => $lead_source){
+                $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $lead_source);
+                $result['lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $lead_source);
+                $result['month_lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Walk-in',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['month_lead_converted_walkin'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $lead_source,
+                    Tbl_LeadAssign . '.status' => 'Converted');
+                $result['lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
-            //Third Party
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Tie Ups');
-            $result['lead_assigned_tie_ups'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Tie Ups');
-            $result['month_lead_assigned_tie_ups'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Tie Ups',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['lead_converted_tie_ups'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Tie Ups',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['month_lead_converted_tie_ups'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            //Bank Website
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Enquiry');
-            $result['lead_assigned_enquiry'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Enquiry');
-            $result['month_lead_assigned_enquiry'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Enquiry',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['lead_converted_enquiry'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Enquiry',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['month_lead_converted_enquiry'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            //Analytics
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Analytics');
-            $result['lead_assigned_analytics'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Analytics');
-            $result['month_lead_assigned_analytics'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Analytics',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['lead_converted_analytics'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Analytics',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['month_lead_converted_analytics'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $lead_source,
+                    Tbl_LeadAssign . '.status' => 'Converted');
+                $result['month_lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+            }
 
         }if($this->session->userdata('admin_type') =='BM' || $this->session->userdata('admin_type') =='EM'){
-            //Walk-in
+
+            foreach ($source as $key => $lead_source){
             $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),
-                Tbl_Leads . '.lead_source' => 'Walk-in');
-            $result['lead_assigned_walkin'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                Tbl_Leads . '.lead_source' => $lead_source);
+            $result['lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
             $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),
-                Tbl_Leads . '.lead_source' => 'Walk-in');
-            $result['month_lead_assigned_walkin'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                Tbl_Leads . '.lead_source' => $lead_source);
+            $result['month_lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
             $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),
-                Tbl_Leads . '.lead_source' => 'Walk-in',Tbl_LeadAssign . '.status' => 'Converted');
-            $result['lead_converted_walkin'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                Tbl_Leads . '.lead_source' => $lead_source,Tbl_LeadAssign . '.status' => 'Converted');
+            $result['lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
             $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),
-                Tbl_Leads . '.lead_source' => 'Walk-in',Tbl_LeadAssign . '.status' => 'Converted');
-            $result['month_lead_converted_walkin'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                Tbl_Leads . '.lead_source' => $lead_source,Tbl_LeadAssign . '.status' => 'Converted');
+            $result['month_lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
-            //Third Party
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Tie Ups');
-            $result['lead_assigned_tie_ups'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Tie Ups');
-            $result['month_lead_assigned_tie_ups'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Tie Ups',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['lead_converted_tie_ups'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Tie Ups',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['month_lead_converted_tie_ups'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            //Bank Website
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Enquiry');
-            $result['lead_assigned_enquiry'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Enquiry');
-            $result['month_lead_assigned_enquiry'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Enquiry',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['lead_converted_enquiry'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Enquiry',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['month_lead_converted_enquiry'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            //Analytics
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Analytics');
-            $result['lead_assigned_analytics'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Analytics');
-            $result['month_lead_assigned_analytics'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => 'Analytics',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['lead_converted_analytics'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
-
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => 'Analytics',
-                Tbl_LeadAssign . '.status' => 'Converted');
-            $result['month_lead_converted_analytics'] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+            }
         }
         load_view($middle,$result);
 
