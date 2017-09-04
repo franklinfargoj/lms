@@ -15,7 +15,7 @@
     //Form
     $attributes = array(
         'role' => 'form',
-        'id' => 'detail_form',
+        'id' => 'assign_multiple',
         'class' => 'form',
         'autocomplete' => 'off'
     );
@@ -40,6 +40,18 @@
                         <option value="">Select Employee</option>
                         <option value="2">Employee 1</option>
                     </select>
+                    <?php 
+                        foreach ($unassigned_leads as $key => $value) {
+                            $data = array(
+                                'lead_ids[]' => $value['id'],
+                            );
+                            echo form_hidden($data);
+                        }
+                        $data1 = array(
+                            'lead_source' => $lead_source,
+                        );
+                        echo form_hidden($data1);
+                    ?>
                 </div>
                 <div class="form-control form-submit clearfix">
                     <a href="javascript:void(0);" class="float-right">
@@ -58,7 +70,9 @@
         </div>
     </div>
 </div>
-
+<?php 
+    echo form_close();
+?>
 <table class="upload-table lead-table" id="sample_3">
     <thead>
     <tr class="top-header">
@@ -116,14 +130,25 @@
     ?>
     </tbody>
 </table>
-<?php 
-    echo form_close();
-?>
+
 <script src="<?php echo base_url() . ASSETS; ?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url() . ASSETS; ?>js/config.datatable.js"></script>
 
 <script type="text/javascript">
     jQuery(document).ready(function() {
+        $("#assign_multiple").validate({
+            rules: {
+                assign_to: {
+                    required: true
+                }
+            },
+            messages: {
+                assign_to: {
+                    required: "Please select employee"
+                }
+            }
+        });
+
         var table = $('#sample_3');
         var columns = [4];
 

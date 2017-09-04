@@ -411,7 +411,7 @@ class Leads extends CI_Controller
         /*Create Breadcumb*/
 
         $arrData['unassigned_leads'] = $this->Lead->unassigned_leads('',$id);
-        $arrData['lead_source'] = $lead_source;
+        $arrData['lead_source'] = ucwords($lead_source);
         $middle = "Leads/unassigned_details";
         load_view($middle,$arrData);
     }
@@ -645,7 +645,8 @@ class Leads extends CI_Controller
             if($lead_type == 'unassigned'){
                 $employee_id = $this->input->post('assign_to');
                 $this->assign_to($employee_id,$lead_id);
-                redirect('leads/unassigned_leads');
+                $this->session->set_flashdata('success','Lead Assigned Successfully.');
+                redirect('leads/unassigned_leads/'.encode_id('Walk-in'));
             }
             /*If Unssigned List*/
         }
@@ -673,7 +674,11 @@ class Leads extends CI_Controller
         if($this->input->post()){
             $employee_id = $this->input->post('assign_to');
             $lead_ids = $this->input->post('lead_ids');
+            $lead_source = $this->input->post('lead_source');
+
             $this->assign_to($employee_id,$lead_ids);
+            $this->session->set_flashdata('success','Lead Assigned Successfully.');
+            redirect('leads/unassigned_leads/'.encode_id($lead_source));
         }
 
     }
@@ -800,9 +805,8 @@ class Leads extends CI_Controller
                 $assign_data['lead_id'] = $value;
                 $insertData[] = $assign_data;
             }
-            pe($insertData);
-            exit;
-            $this->db->insert_batch(Tbl_LeadAssign, $insertData);
+            
+            return $this->db->insert_batch(Tbl_LeadAssign, $insertData);
         }
     }
 

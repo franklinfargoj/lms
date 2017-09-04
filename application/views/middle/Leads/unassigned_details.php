@@ -29,7 +29,7 @@
 					<div class="form-control">
 						<label>Product Name:</label> <span class="detail-label"><?php echo ucwords($unassigned_leads[0]['product_title']);?></span>
 					</div>
-					<?php if((in_array($this->session->userdata('admin_type'),array('BM')))){
+					<?php if((in_array($this->session->userdata('admin_type'),array('BM'))) && ($lead_source == 'Walk-in')){
 						$data = array(
                             'lead_id' => encode_id($unassigned_leads[0]['id']),
                             'lead_type'    => 'unassigned'
@@ -59,7 +59,7 @@
 						<p class="remark-notes"><?php echo $unassigned_leads[0]['remark'];?></p>
 					</div>
 				</div>
-				<?php if((in_array($this->session->userdata('admin_type'),array('BM')))){?>
+				<?php if((in_array($this->session->userdata('admin_type'),array('BM'))) && ($lead_source == 'Walk-in')){?>
 					<div class="form-control form-submit clearfix">
 						<a href="javascript:void(0);" class="float-right">
 	                            <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
