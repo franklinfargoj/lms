@@ -361,20 +361,23 @@ class Leads extends CI_Controller
     }
 
 
-    public function unassigned_leads_list($lead_status=''){
+    public function unassigned_leads_list($lead_source=''){
+        $lead_source = decode_id($lead_source);
         /*Create Breadcumb*/
-          $this->make_bread->add('Unassign Leads', '', 0);
+          $this->make_bread->add('Unassigned Leads', 'leads/unassigned_leads', 0);
+          $this->make_bread->add(ucwords($lead_source),'', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
-
-        $arrData['unassigned_leads'] = $this->Lead->unassigned_leads($lead_status);
+        $unassigned_leads = $this->Lead->unassigned_leads($lead_source,'');
+        $arrData['unassigned_leads'] = $unassigned_leads;
+        $arrData['lead_source'] = $lead_source;
         $middle = "Leads/unassigned_list";
         load_view($middle,$arrData);
     }
 
     public function unassigned_leads(){
         /*Create Breadcumb*/
-          $this->make_bread->add('Unassign Leads', '', 0);
+          $this->make_bread->add('Unassigned Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
         $where = array(Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
@@ -390,16 +393,19 @@ class Leads extends CI_Controller
         load_view($middle,$arrData);
     }
 
-    public function unassigned_leads_details($id){
+    public function unassigned_leads_details($lead_source,$id){
+        $id = decode_id($id);
+        $lead_source = decode_id($lead_source);
+        
         /*Create Breadcumb*/
-        $this->make_bread->add('Unassign Leads', 'leads/unassigned_leads', 0);
-        $this->make_bread->add('Details', '', 0);
+        $this->make_bread->add('Unassigned Leads', 'leads/unassigned_leads', 0);
+        $this->make_bread->add(ucwords($lead_source),'leads/unassigned_leads_list/'.encode_id($lead_source), 0);
+        $this->make_bread->add('Lead Detail', '', 0);
         $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
-        $id = decode_id($id);
+
         $arrData['unassigned_leads'] = $this->Lead->unassigned_leads('',$id);
-        /*pe($arrData['unassigned_leads']);
-        exit;*/
+        $arrData['lead_source'] = $lead_source;
         $middle = "Leads/unassigned_details";
         load_view($middle,$arrData);
     }
@@ -543,9 +549,9 @@ class Leads extends CI_Controller
     public function update_lead_status(){
         if($this->input->post()){
 
+            $login_user = get_session();
             $lead_id = decode_id($this->input->post('lead_id'));
             $lead_type = $this->input->post('lead_type');
-
             /*If Assigned List*/
             if($lead_type == 'assigned'){
                 $lead_identification = $this->input->post('lead_identification');
@@ -568,39 +574,35 @@ class Leads extends CI_Controller
                 }
 
                 /*Update Lead Status*/
-                    $where = array('lead_id' => $lead_id,'is_updated' => 1);
-                    $lead_status_data = array(
-                        'is_updated' => 0,
-                    );
-                    $response1 = $this->Lead->update_lead_data($where,$lead_status_data,Tbl_LeadAssign);
-
                     //Building input parameters for function to get_leads
                     $action = 'list';
                     $table = Tbl_LeadAssign;
                     $select = array(Tbl_LeadAssign.'.*');
-                    $where  = array(Tbl_LeadAssign.'.lead_id' => $lead_id);
-
+                    $where = array(Tbl_LeadAssign.'.lead_id' => $lead_id,Tbl_LeadAssign.'.is_updated' => 1);
                     $leadsAssign = $this->Lead->get_leads($action,$table,$select,$where,$join = array(),$group_by = array(),$order_by = array());
                     $leads_data = $leadsAssign[0];
 
-                    $login_user = get_session();
-                    if($response1['status'] == 'success'){
-                        $lead_status_data = array(
-                        'lead_id'   => $leads_data['lead_id'],
-                        'employee_id' => $leads_data['employee_id'],
-                        'employee_name' => $leads_data['employee_name'],
-                        'branch_id' => $leads_data['branch_id'],
-                        'district_id' => $leads_data['district_id'],
-                        'state_id' => $leads_data['state_id'],
-                        'zone_id' => $leads_data['zone_id'],
-                        'status' =>  $lead_status,
-                        'is_updated' => 1,
-                        'created_on' => date('y-m-d-H-i-s'),
-                        'created_by' => $login_user['hrms_id'],
-                        'created_by_name' => $login_user['full_name']
-                    );
+                    //Set current entry as old (set is_updated = 0)
+                    $lead_status_data = array('is_updated' => 0);
+                    $response1 = $this->Lead->update_lead_data($where,$lead_status_data,Tbl_LeadAssign);
 
-                    $this->Lead->insert_lead_data($lead_status_data,Tbl_LeadAssign);        
+                    if($response1['status'] == 'success'){
+                        //Create new entry in table Lead Assign with changed status.
+                        $lead_status_data = array(
+                            'lead_id'   => $leads_data['lead_id'],
+                            'employee_id' => $leads_data['employee_id'],
+                            'employee_name' => $leads_data['employee_name'],
+                            'branch_id' => $leads_data['branch_id'],
+                            'district_id' => $leads_data['district_id'],
+                            'state_id' => $leads_data['state_id'],
+                            'zone_id' => $leads_data['zone_id'],
+                            'status' =>  $lead_status,
+                            'is_updated' => 1,
+                            'created_on' => date('y-m-d-H-i-s'),
+                            'created_by' => $login_user['hrms_id'],
+                            'created_by_name' => $login_user['full_name']
+                        );
+                        $this->Lead->insert_lead_data($lead_status_data,Tbl_LeadAssign);        
                     }
                 /*Update Lead Status*/
 
@@ -636,68 +638,13 @@ class Leads extends CI_Controller
             /*If Unssigned List*/
             if($lead_type == 'unassigned'){
                 $employee_id = $this->input->post('assign_to');
-                $assign_data = array(
-                    'lead_id' => $lead_id,
-                    'employee_id' => $employee_id,
-                    'employee_name' => 'Employee 1',
-                    'branch_id' => '12',
-                    'district_id' => '1',
-                    'state_id' => 1,
-                    'zone_id' => 1,
-                    'status' => 'NC',
-                    'created_by' => 3,
-                    'created_by_name' => 'Branch Manager'
-                );
-                $this->Lead->insert_assign($assign_data);
+                $this->assign_to($employee_id,$lead_id);
                 redirect('leads/unassigned_leads');
             }
             /*If Unssigned List*/
         }
     }
-
-     /**
-     * add_leads_other_product
-     * Add leads for other product 
-     * @author Ashok Jadhav
-     * @access public
-     * @param $lead_id,$product_category_id,$product_id
-     * @return boolean
-     */
-    /*public function add_leads_other_product($lead_id,$product_category_id,$product_id){
-        $login_user = get_session();
-
-        //Building input parameters for function to get_leads
-        $action = 'list';
-        $table = Tbl_Leads;
-        $select = array(Tbl_Leads.'.*');
-        $where  = array(Tbl_Leads.'.id' => $lead_id);
-
-        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join = array(),$group_by = array(),$order_by = array());
-        $leads_data = $leads[0];
-
-        $leads_data['product_category_id']  = $product_category_id;
-        $leads_data['product_id']   = $product_id;
-        $leads_data['created_by']   = $login_user['hrms_id'];
-        $leads_data['created_by_name']  = $login_user['full_name'];
-        $leads_data['created_by_branch_id']     = $login_user['branch_id'];
-        $leads_data['created_by_district_id']   = $login_user['district_id'];
-        $leads_data['created_by_state_id']  = $login_user['state_id'];
-        $leads_data['created_by_zone_id']   = $login_user['zone_id'];
-        $keys_to_remove = array('id','created_on','modified_by','modified_by_name','modified_on','lead_source');
-        foreach ($keys_to_remove as $key => $value) {
-            unset($leads_data[$value]);
-        }
-        if($this->Lead->add_leads($leads_data)){
-            //link interested product id with current lead.
-            $data = array('interested_product_id' => $product_id);
-            $this->Lead->update($where,$table,$data);
-            return true;
-        }else{
-            return false;
-        }
-        
-    }*/
-
+    
     public function update_lead_product($lead_id,$product_category_id,$product_id){
         $login_user = get_session();
 
@@ -715,6 +662,16 @@ class Leads extends CI_Controller
             }
 
     }
+
+    public function assign_multiple(){
+        if($this->input->post()){
+            $employee_id = $this->input->post('assign_to');
+            $lead_ids = $this->input->post('lead_ids');
+            $this->assign_to($employee_id,$lead_ids);
+        }
+
+    }
+
 
     /*Private Functions*/
     private function em_view($login_user,$arrData){
@@ -811,6 +768,36 @@ class Leads extends CI_Controller
         $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
         
         return $arrData;
+    }
+
+    private function assign_to($employee_id,$lead_ids){
+        if(!empty($lead_ids)){
+            $login_user = get_session();
+            $insertData = array();
+            $assign_data = array(
+                'employee_id' => $employee_id,
+                'employee_name' => 'Employee 1',
+                'branch_id' => '12',
+                'district_id' => '1',
+                'state_id' => 1,
+                'zone_id' => 1,
+                'status' => 'NC',
+                'created_by' => $login_user['hrms_id'],
+                'created_by_name' => $login_user['full_name']
+            );
+            if(is_array($lead_ids)){
+                $leads = $lead_ids;
+            }else{
+                $leads[] = $lead_ids;
+            }    
+            foreach ($leads as $key => $value) {
+                $assign_data['lead_id'] = $value;
+                $insertData[] = $assign_data;
+            }
+            pe($insertData);
+            exit;
+            $this->db->insert_batch(Tbl_LeadAssign, $insertData);
+        }
     }
 
 }

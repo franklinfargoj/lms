@@ -43,7 +43,7 @@
 							        'name'  => 'username',
 							        'id'    => 'username',
 							        'class' => '',
-							        'value'  => 'Username',
+							        'value'  => 'HRMS ID',
 							        'autocomplete' => 'off'
 							        
 								);
@@ -87,7 +87,13 @@
 						<input type="text" name="CaptchaCode" id="CaptchaCode" value="" size="35" style="height: 25px" />
 
 				</div>
-				<span class="help-block"><?php echo $captchaValidationMessage; ?></span>
+				<span class="help-block">
+					<?php 
+						if($this->session->flashdata('captchaValidationMessage')){
+							echo $this->session->flashdata('captchaValidationMessage');
+						}
+					?>
+				</span>
 				<!-- <input type="text" name="captcha"  /> -->
 				<div class="form-control form-submit clearfix">
 					<!-- <input type="submit" name="submit" value="LOGIN" class="submit-btn"> -->
@@ -159,7 +165,8 @@
 	            focusInvalid: true, // do not focus the last invalid input
 	            rules: {
 	                username: {
-	                    required: true
+	                    required: true,
+	                    number: true
 	                },
 	                password: {
 	                    required: true
@@ -174,7 +181,8 @@
 
 	            messages: {
 	                username: {
-	                    required: "Please enter username"
+	                    required: "Please enter HRMS ID",
+	                    number : "HRMS ID should contain only number"
 	                },
 	                password: {
 	                    required: "Please enter password"
@@ -203,14 +211,14 @@
 			$('#username')
 				  .on('focus', function(){
 				      var $this = $(this);
-				      if($this.val() == 'Username'){
+				      if($this.val() == 'HRMS ID'){
 				          $this.val('');
 				      }
 				  })
 				  .on('blur', function(){
 				      var $this = $(this);
 				      if($this.val() == ''){
-				          $this.val('Username');
+				          $this.val('HRMS ID');
 				      }
 				  });
 

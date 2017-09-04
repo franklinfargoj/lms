@@ -58,8 +58,9 @@ class Login extends CI_Controller {
                $this->form_validation->set_rules('username','Username', 'trim|required');
                $this->form_validation->set_rules('password','Password', 'trim|required');
                if ($this->form_validation->run() == FALSE)
-               {    $arrData['has_error'] = 'has-error';
-                    return $this->load->view("login",$arrData);
+               {    
+                    $this->session->set_flashdata('error','Incorrect login details');
+                    redirect('login');
                }else{
                     // validate the user-entered Captcha code when the form is submitted
                     $code = $this->input->post('CaptchaCode');
@@ -76,18 +77,17 @@ class Login extends CI_Controller {
                              $this->session->set_flashdata('success','Login success');
                              redirect('dashboard');
                         }else{
-                             $this->session->set_flashdata('error','Incorrect login details');
+                             $this->session->set_flashdata('error','Incorrect Login Details');
                              redirect('login');
                         }
                     } else {
                         // Captcha validation failed, return an error message
-                        $arrData['captchaHtml'] = $this->botdetectcaptcha->Html();
-                        $arrData['captchaValidationMessage'] = 'Invalid Security Code.';
-                        return $this->load->view("login",$arrData);
+                        $this->session->set_flashdata('error','Invalid Security Code');
+                        redirect('login');            
                     }
                }
           }else{
-               return $this->load->view("login",$arrData = array());
+            redirect('login');
           }
      }
      public function logOut(){
