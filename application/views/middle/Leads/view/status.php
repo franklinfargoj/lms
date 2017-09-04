@@ -49,7 +49,8 @@
             <?php 
             if(!empty($status)){
                 $i = 0;
-                foreach ($status as $key => $value){ 
+                foreach ($status as $key => $value){
+                    echo $key;
                     $month = $key['Month'];
                     $year = $key['Year'];
                 ?>
