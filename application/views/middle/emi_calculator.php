@@ -186,43 +186,49 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
             }
         });
 
-
+        $.validator.addMethod('minStrict', function (value, el, param) {
+            console.log(param);
+            return value > param;
+        });
         $("#emi").validate({
             rules:{
                 interest:{
                     required:true,
                     number:true,
-                    max:20,
-                    min:0
+                    minStrict:0,
+                    max:20
                 },
                 years:{
                     required:true,
                     number:true,
                     max:30,
-                    min:0
+                    minStrict:0,
                 },
                 amount:{
                     required:true,
                     number:true,
                     max:20000000,
-                    min:0
+                    minStrict:0,
                 }
             },
             messages:{
                 interest: {
                     required: "Please enter interest",
                     number: "Only numbers allowed",
-                    max:"Please Enter a value less than or equal to 20"
+                    max:"Please Enter a value less than or equal to 20",
+                    minStrict:"Please enter interest more than 0"
                 },
                 years: {
                     required: "Please enter year",
                     number: "Only numbers allowed",
-                    max:"Please Enter a value less than or equal to 30"
+                    max:"Please Enter a value less than or equal to 30",
+                    minStrict:"Please enter year more than 0"
                 },
                 amount: {
                     required: "Please enter amount",
                     number: "Only numbers allowed",
-                    max:"Please Enter a value less than or equal to 200L"
+                    max:"Please Enter a value less than or equal to 200L",
+                    minStrict:"Please enter amount more than 0"
                 }
             }
         });

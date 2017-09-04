@@ -258,6 +258,107 @@ if (!function_exists('create_excel_error_file'))
         $CI->session->set_userdata('error_file_path',$target_file_path);
     }
 }
+
+if(!function_exists('send_sms')){
+    function send_sms($name='',$mobile='') {
+        $feedid='';
+        $username='';
+        $pass='';
+        $senderid='';
+        $sms='';
+        if($mobile!='') {
+                $sms = "Thanks for showing interest with Dena Bank. We will contact you shortly";
+            $url = "http://bulkpush.mytoday.com/BulkSms/SingleMsgApi?feedid=$feedid&username=$username&password=$pass&To=$mobile&Text=" . urlencode($sms) . "&senderid=$senderid";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            $output = curl_exec($ch);
+            curl_close($ch);
+
+            $response = ((array) simplexml_load_string($output));
+            return $response;
+
+        }
+    }
+}
+
+if (!function_exists('send_push_notification')){
+    function send_push_notification($data, $message)
+    {
+        $deviceToken = $data['device_token'];
+        $deviceType = $data['device_type'];
+        if (isset($deviceToken) && $deviceToken != '') {
+            switch ($deviceType) {
+                case 'ios':        //Ios
+                    //Sending push notification to iOS device
+                    $passphrase = '12345';
+                    $apnsCert = FCPATH . 'assets/iphone/apns-pro.pem';
+                    $apnsHost = 'gateway.push.apple.com';
+                    $apnsPort = 2195;
+                    $streamContext = stream_context_create();
+                    stream_context_set_option($streamContext, 'ssl', 'allow_self_signed', true);
+                    stream_context_set_option($streamContext, 'ssl', 'verify_peer', false);
+                    stream_context_set_option($streamContext, 'ssl', 'local_cert', $apnsCert);
+                    stream_context_set_option($streamContext, 'ssl', 'passphrase', $passphrase);
+                    $apns = stream_socket_client('ssl://' . $apnsHost . ':' . $apnsPort, $error, $errorString, 2, STREAM_CLIENT_CONNECT, $streamContext);
+                    $body['aps'] = array(
+                        'badge' => +1,
+                        'alert' => $message,
+                        'sound' => 'default'
+                    );
+                    $payload = json_encode($body);
+                    $apnsMessage = chr(0) . chr(0) . chr(32) . pack('H*', str_replace(' ', '', $deviceToken)) . chr(0) . chr(strlen($payload)) . $payload;
+                    // Send it to the server
+                    $result = fwrite($apns, $apnsMessage);
+                    fclose($apns);        // Close the connection to the server
+                    return $result;
+                    break;
+                case 'android'://Android
+                    //setup for android push notification
+                    $API_ACCESS_KEY = "AIzaSyBsinqvQuP5sSNzwecJigkXgkZc67ucnQ0";
+                    $headers = array(
+                        'Authorization: key=' . $API_ACCESS_KEY,
+                        'Content-Type: application/json'
+                    );
+
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, 'https://android.googleapis.com/gcm/send');
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+                    //Sending push notification to Android devices
+                    $registrationIds = array($deviceToken);
+
+                    // prep the bundle
+                    $msg = array(
+                        'message' => $message,
+                        'title' => '',
+                        'subtitle' => '',
+                        'tickerText' => '',
+                        'vibrate' => 1,
+                        'sound' => 1
+                    );
+
+                    $fields = array(
+                        'registration_ids' => $registrationIds,
+                        'data' => $msg
+                    );
+
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+                    $result = curl_exec($ch);
+                    curl_close($ch);         // Close the connection to the server
+                    return $result;
+                    break;
+            }
+        }
+    }
+}
 function encode_id($id){
     // Get current CodeIgniter instance
     $CI =& get_instance();

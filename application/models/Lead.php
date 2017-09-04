@@ -109,12 +109,12 @@ class Lead  extends CI_Model
         
     }
 
-    public function unassigned_status_count($where){
-        $this->db->select('db_leads.lead_source,COUNT(db_leads.lead_source) as total');
-        $this->db->from('db_leads');
-        $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
+    public function unassigned_status_count($select,$table,$join,$where,$group_by){
+        $this->db->select($select);
+        $this->db->from($table);
+        $this->db->join($join[0],$join[1],$join[2]);
         $this->db->where($where);
-        $this->db->group_by('db_leads.lead_source');
+        $this->db->group_by($group_by);
         $result = $this->db->get()->result_array();
         return $result;
     }
@@ -132,7 +132,7 @@ class Lead  extends CI_Model
     {
         if($action == 'count'){
 //            return $this->db->where($where)->count_all_results($table);
-            return $this->counts($table,$select,$where,$join);
+            return $this->counts($table,$select,$where,$join,$group_by);
         }elseif($action == 'list'){
             return $this->lists($table,$select,$where,$join,$group_by,$order_by = array());
         }
@@ -306,7 +306,7 @@ class Lead  extends CI_Model
 
     }
 
-    private function counts($table,$select,$where,$join){
+    private function counts($table,$select,$where,$join,$group_by){
         $this->db->select($select,TRUE);
         $this->db->from($table);
         if(!empty($join)){
@@ -316,6 +316,9 @@ class Lead  extends CI_Model
         }
         if(!empty($where)){
             $this->db->where($where);
+        }
+        if(!empty($group_by)){
+            $this->db->group_by($group_by);
         }
         return $this->db->count_all_results();
 
@@ -353,6 +356,18 @@ class Lead  extends CI_Model
                 }
             }
         return array();
+    }
+
+    public function get_pending_leads($whereArray,$join){
+        $this->db->select(Tbl_Leads.'.id',Tbl_Leads.'.created_on',Tbl_LeadAssign.'.lead_id');
+        $this->db->from(Tbl_Leads);
+        $this->db->join($join['table'],$join['on_condition'],$join['type']);
+        $this->db->where($whereArray);
+        $pending_leads = $this->db->get()->result_array();
+        if(!empty($pending_leads)){
+            return $pending_leads;
+        }return array();
+
     }
 
 }

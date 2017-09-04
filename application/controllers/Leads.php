@@ -375,13 +375,24 @@ class Leads extends CI_Controller
         load_view($middle,$arrData);
     }
 
+    /**
+     * unassigned_leads
+     * loads the unassigned leads count filtered by lead source
+     * @autor Gourav Thatoi
+     * @accss public
+     * @return array
+     */
     public function unassigned_leads(){
         /*Create Breadcumb*/
           $this->make_bread->add('Unassigned Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
+        $select = array('db_leads.lead_source,COUNT(db_leads.lead_source) as total');
+        $table = Tbl_Leads;
+        $join = array('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
+        $group_by = array('db_leads.lead_source');
         $where = array(Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
-        $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($where);
+        $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
         $response = array();
         $keys=array('Walk-in'=>0,'Analytics'=>0,'Tie Ups'=>0,'Enquiry'=>0);
        foreach ($arrData['unassigned_leads_count'] as $k => $v){
@@ -799,5 +810,7 @@ class Leads extends CI_Controller
             $this->db->insert_batch(Tbl_LeadAssign, $insertData);
         }
     }
+
+
 
 }

@@ -455,7 +455,8 @@ $config['csrf_token_name'] = 'csrf_dena_bank';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = FALSE;
-$config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add_lead','api/v1/api/leads_performance','api/v1/api/category_products','api/v1/api/leads_status');
+$config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add_lead',
+    'api/v1/api/leads_performance','api/v1/api/category_products','api/v1/api/leads_status');
 
 /*
 |--------------------------------------------------------------------------
@@ -541,5 +542,8 @@ $config['lead_type'] = array(
 	'WARM' => 'Close Enough Interested' ,
 	'COLD' => 'Low Interested'
 	);
-
-
+$config['escalation_days_diff'] = array(
+    '2days'=>'-3days',
+    '4days'=>'-5days',
+    '6days'=>'-7days',
+    '8days'=>'-9days');
