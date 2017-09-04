@@ -350,7 +350,6 @@ class Dashboard extends CI_Controller {
                 }
             }
         }
-       pe($result);
        $middle = "Leads/view/status";
        load_view($middle,$result);
 
