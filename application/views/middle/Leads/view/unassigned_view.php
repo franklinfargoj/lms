@@ -21,8 +21,8 @@
                 <p>Walk-in</p>
                 <ul>
                 <?php $walkin = 0;
-                if($unassigned_leads_count['lead_source'] == 'Walk-in')
-                      $walkin = $unassigned_leads_count['total'];
+                if($unassigned_leads_count['Walk-in'] != 0)
+                      $walkin = $unassigned_leads_count['Walk-in'];
                     echo $walkin;
                 ?>
                 </ul>
@@ -34,8 +34,8 @@
                 <p>Enquiry</p>
                 <ul>
                     <?php $enquiry = 0;
-                    if($unassigned_leads_count['lead_source'] == 'Enquiry')
-                        $enquiry = $unassigned_leads_count['total'];
+                    if($unassigned_leads_count['Enquiry'] != 0)
+                        $enquiry = $unassigned_leads_count['Enquiry'];
                         echo $enquiry;
                     ?>
                 </ul>
@@ -47,8 +47,8 @@
                 <p>Tie Up's</p>
                 <ul>
                     <?php $tieups = 0;
-                    if($unassigned_leads_count['lead_source'] == 'Tie Ups')
-                        $tieups = $unassigned_leads_count['total'];
+                    if($unassigned_leads_count['Tie Ups'] != 0)
+                        $tieups = $unassigned_leads_count['Tie Ups'];
                     echo $tieups;
                     ?>
                 </ul>
@@ -60,8 +60,8 @@
                 <p>Analytics</p>
                 <ul>
                     <?php $analytics = 0;
-                    if($unassigned_leads_count['lead_source'] == 'Analytics')
-                        $analytics = $unassigned_leads_count['total'];
+                    if($unassigned_leads_count['Analytics'] != 0)
+                        $analytics = $unassigned_leads_count['Analytics'];
                     echo $analytics;
                     ?>
                 </ul>
