@@ -13,7 +13,7 @@
 		</div>
 		<div class="top-navigation">
 			<ul>
-				<li class="<?php echo (($controller == 'dashboard') || (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && $param1 == 'generated')) ? 'active' : ''?>">
+				<li class="<?php echo ((($controller == 'dashboard') && (in_array($method,array('index','leads_status')))) || (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && ($param1 == 'generated'))) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard')?>">
 						Home
 					</a>

@@ -196,21 +196,19 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
                             <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')))){?>
                                 <div class="form-control">
                                     <label>Reroute To:</label>   
-                                    <select name="product">
+                                    <select name="reroute_to">
                                         <option value="">Select Employee</option>
-                                        <option value="product1">Vishal</option>
-                                        <option value="product1">Ashok</option>
-                                        <option value="product1">Gourav</option>
-                                  </select>
+                                        <option value="2">Employee 1</option>
+                                    </select>
                                 </div>
                             <?php }?>
                         </div>
                         <div class="form-control form-submit clearfix">
                             <?php if($type == 'assigned'){?>
                                 <a href="javascript:void(0);" class="float-right submit_button">
-                                        <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                                        <span><input type="submit" class="custom_button" value="Submit" /></span>
-                                        <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                    <span><input type="submit" class="custom_button" value="Submit" /></span>
+                                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                                 </a>
                             <?php }?>
                         </div>
