@@ -6,7 +6,10 @@
         <h3 class="text-center">Unassigned Leads</h3>
     </div>
 </div>
+
 <div class="page-content">
+    <span class="bg-top"></span>
+    <div class="inner-content">
     <div class="container">
         <?php 
         $status = array('Walk-in','Enquiry','Tie Ups','Analytics');
@@ -67,4 +70,6 @@
         </div>
         <?php } ?>
     </div>
+</div>    </div>
+    <span class="bg-bottom"></span>
 </div>

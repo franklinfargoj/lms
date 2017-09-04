@@ -1,3 +1,9 @@
+<div class="page-content">
+<div class="container">
+<div class="unassigned-content">
+<span class="bg-top"></span>
+<div class="inner-content">
+<div class="container">
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url() . ASSETS; ?>css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- END PAGE LEVEL STYLES -->
@@ -118,6 +124,12 @@
 <?php 
     echo form_close();
 ?>
+</div>
+</div>
+<span class="bg-bottom"></span>
+</div>
+</div>
+</div>
 <script src="<?php echo base_url() . ASSETS; ?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url() . ASSETS; ?>js/config.datatable.js"></script>
 

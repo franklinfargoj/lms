@@ -4,7 +4,7 @@
 		width: 25%;
 	}
 	.header .top-navigation{
-		width: 56%;
+		width: 100%;
 	}
 	.header .right-nav{
 		width: 18%;
@@ -17,7 +17,15 @@
         width: 47%;
     }
     .emi-content{width: 100%;}
-    
+      .header .right-nav{
+        position: absolute;
+        width: 39%;
+        right: 15px;
+        top: 15px;
+    }
+       .bg-top{width: 100%;}
+    .bg-bottom{width: 100%;}
+    .inner-content{width: 99.4%;}
 }
 
 @media only screen and (min-width:768px) and (max-width:1023px) {
@@ -26,7 +34,7 @@
     }
     .header .right-nav{
     	position: absolute;
-	    width: 25%;
+	    width: 39%;
 	    right: 15px;
 	    top: 15px;
     }
@@ -34,7 +42,7 @@
     	display: inline-block;
     }
     .header .right-nav .notification{
-    	width: 20%;
+    	width: 10%;
     }
     .header .top-navigation{
     	width: 68%;
@@ -64,7 +72,7 @@
     }
 
     .header .right-nav .logged-in{
-        width: auto;
+        width: 213px;
     }
 
       .lead-form .lead-form-left{
@@ -75,7 +83,9 @@
         width: 48%;
     }
      .emi-content{width: 100%;}
-     .emi-content .range-slider input{width: 70px;}
-
-
+    .dataTables_wrapper{overflow-x: auto;}
+    table.dataTable{overflow: hidden;}
+    .bg-top{width: 100%;}
+    .bg-bottom{width: 100%;}
+    .inner-content{width: 99.4%;}
 }

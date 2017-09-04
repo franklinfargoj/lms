@@ -6,7 +6,10 @@
             <h3 class="text-center">My Lead Performance</h3>
         </div>
     </div>
+
     <div class="page-content">
+        <span class="bg-top"></span>
+        <div class="inner-content">
         <div class="container">
             <div class="performance-form-control">
                 <!-- <label for="">Performance</label> -->
@@ -61,6 +64,8 @@
                 <!-- </a> -->
             </div>
         </div>
+        </div>
+        <span class="bg-bottom"></span>
     </div>
 <script>
     $(document).ready(function () {

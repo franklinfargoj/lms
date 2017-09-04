@@ -13,6 +13,8 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 			</div>
 		</div>
 		<div class="page-content">
+            <span class="bg-top"></span>
+            <div class="inner-content">
 			<div class="container">
 				<div class="emi-content">
                     <?php
@@ -20,9 +22,12 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
                     ?>
 							<div class="form-control range-slider">
 									<label>Loan Amount</label>
-									<div id="slider1" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
-                                        <div id="slider1div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
-									</div>
+                                    <input type="text" id="amount" name="amount">
+                                   <!--  <label class="value">&#x20B9;</label> -->
+                                    <img class="value" src="<?php echo base_url().ASSETS;?>images/rupees.png" alt="rupees">
+							    <div id="slider1" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
+                                    <div id="slider1div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
+								</div>
 								<div class="step">
 									<span class="tick" style="left: 0%;">|<br><span class="marker">0</span></span>
 									<span class="tick" style="left: 12.5%;">|<br><span class="marker">25L</span></span>
@@ -34,11 +39,12 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 									<span class="tick" style="left:87.5%;">|<br><span class="marker">175L</span></span>
 									<span class="tick" style="left:100%;">|<br><span class="marker">200L</span></span>
 								</div>
-								<input type="text" id="amount" name="amount">
-								<label class="value">&#x20B9;</label>
+								
 							</div>
 							<div class="form-control range-slider">
-									<label>Loan Tenure</label>
+								<label>Loan Tenure</label>
+                                <input id ="years"type="text" name="years">
+                                <label class="value">Years</label>
 									<div id="slider2" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
                                         <div id="slider2div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
                                         <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
@@ -53,11 +59,11 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 									<span class="tick" style="left: 100%;">|<br><span class="marker">30</span></span>
 								</div>
 
-								<input id ="years"type="text" name="years">
-								<label class="value">years</label>
 							</div>
 							<div class="form-control range-slider">
 									<label>Interest Rate</label>
+                                    <input id="interest" type="text" name="interest">
+                                    <label class="value">%</label>
 									<div id="slider3" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
                                         <div id="slider3div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
                                         <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
@@ -71,9 +77,6 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
                                     <span class="tick" style="left: 83.34%;">|<br><span class="marker">17.5</span></span>
                                     <span class="tick" style="left: 100%;">|<br><span class="marker">20</span></span>
                                 </div>
-
-								<input id="interest" type="text" name="interest">
-								<label class="value">%</label>
 							</div>
 
 						<div class="form-control form-submit clearfix">
@@ -89,6 +92,8 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
                     <?php echo form_close(); ?>
 				</div>
 			</div>
+            </div>
+            <span class="bg-bottom"></span>
 		</div>
 
 <script>

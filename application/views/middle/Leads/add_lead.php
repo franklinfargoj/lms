@@ -214,7 +214,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
             </div>
         </div>
     </div>
-    <span class="bg-buttom"></span>
+    <span class="bg-bottom"></span>
 </div>
 <script>
     $(document).ready(function(){
