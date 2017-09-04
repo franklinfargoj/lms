@@ -105,10 +105,8 @@ class Lead  extends CI_Model
             $this->db->where('db_leads.id',$id);
         }
         $result = $this->db->get();
-        if($result->num_rows() > 0){
-            return $result->result_array();
-        }
-        return false;
+        return $result->result_array();
+        
     }
 
     public function unassigned_status_count($where){

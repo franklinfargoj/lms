@@ -1,6 +1,6 @@
 <div class="page-title">
 	<div class="container clearfix">
-		<h3 class="text-center">Unassigned Lead Detail</h3>
+		<h3 class="text-center">Lead Detail</h3>
 	</div>
 </div>
 <div class="page-content">
@@ -41,7 +41,7 @@
 						<select name="assign_to">
 							<option value="">Select Employee</option>
 						    <option value="2">Employee 1</option>
-					</select>
+						</select>
 					</div>
 					<?php }?>
 				</div>
@@ -61,7 +61,7 @@
 				</div>
 				<?php if((in_array($this->session->userdata('admin_type'),array('BM')))){?>
 					<div class="form-control form-submit clearfix">
-						<a href="#" class="float-right">
+						<a href="javascript:void(0);" class="float-right">
 	                            <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
 	                            <span><input type="submit" class="custom_button" value="Submit" /></span>
 	                            <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">

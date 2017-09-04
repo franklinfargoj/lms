@@ -6,8 +6,6 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            <?php echo $title;?>
-
             <?php 
                 if(isset($status)){?>
                 (

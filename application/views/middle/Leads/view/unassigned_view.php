@@ -12,7 +12,7 @@
         $status = array('Walk-in','Enquiry','Tie Ups','Analytics');
         if(!empty($unassigned_leads_count)) foreach ($unassigned_leads_count as $key => $lead_source) ?>
         <div class="box-content">
-            <a href="<?php echo site_url('leads/unassigned_leads_list/'.$status[0])?>">
+            <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[0]))?>">
             <div class="box box-m">
                 <img src="<?php echo base_url().ASSETS;?>images/self.png" alt="self">
                 <p>Walk-in</p>
@@ -25,7 +25,7 @@
                 </ul>
             </div>
             </a>
-            <a href="<?php echo site_url('leads/unassigned_leads_list/'.$status[1])?>">
+            <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[1]))?>">
             <div class="box">
                 <img src="<?php echo base_url().ASSETS;?>images/enquiry.png" alt="self">
                 <p>Enquiry</p>
@@ -33,12 +33,12 @@
                     <?php $enquiry = 0;
                     if($lead_source['lead_source'] == 'Enquiry')
                         $enquiry = $lead_source['total'];
-                    echo $enquiry;
+                        echo $enquiry;
                     ?>
                 </ul>
             </div>
             </a>
-            <a href="<?php echo site_url('leads/unassigned_leads_list/'.$status[2])?>">
+            <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[2]));?>">
             <div class="box box-m">
                 <img src="<?php echo base_url().ASSETS;?>images/tie-up.png" alt="self">
                 <p>Tie Up's</p>
@@ -51,7 +51,7 @@
                 </ul>
             </div>
             </a>
-            <a href="<?php echo site_url('leads/unassigned_leads_list/'.$status[3])?>">
+            <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[3]))?>">
             <div class="box">
                 <img src="<?php echo base_url().ASSETS;?>images/analytics.png" alt="self">
                 <p>Analytics</p>
