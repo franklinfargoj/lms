@@ -71,6 +71,11 @@
             }
             ?>
         </div>
+        <?php 
+        if((count($unread) == 0) && (count($read) == 0)){?>
+            <span> No Records Found</span>
+        <?php }
+        ?>
     </div>
 </div>
 
@@ -90,7 +95,6 @@
             },     
             cache: false,
             success: function(response){
-            console.log(response);
             if(response == 'true'){
                 location.reload();
              }

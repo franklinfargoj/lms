@@ -100,7 +100,9 @@
 		<div class="right-nav">
 				<div class="notification">
 					<a href="<?php echo site_url('notification');?>">
+						<?php if(get_notification_count() > 0){?>
 						<span class="count"><?php echo get_notification_count();?></span>
+						<?php }?>
 						<img src="<?php echo base_url().ASSETS;?>images/bell.png" alt="bell">
 					</a>
 				</div>
