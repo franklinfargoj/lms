@@ -104,3 +104,4 @@ define('Tbl_Log', 'uploaded_leads_log');
 define('Tbl_processing_center', 'processing_center_mapping');
 define('Tbl_LoginLog', 'db_app_login_logs');
 define('Tbl_SmsAuth', 'db_sms_credentials');
+define('Tbl_Notification', 'db_notification');

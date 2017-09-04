@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Leads extends CI_Controller
 {
 
@@ -116,6 +115,8 @@ class Leads extends CI_Controller
                     //Push notification
                     //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
 
+                    //Save notification
+                    $this->insert_notification($lead_data);
                 }
 
                 $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
@@ -159,6 +160,36 @@ class Leads extends CI_Controller
         else
         {
             return TRUE;
+        }
+    }
+
+    private function insert_notification($lead_data){
+        if(!empty($lead_data)){
+            $this->load->model('Notification_model','notification');
+            $this->load->model('Master_model','master');
+            $productData = $this->master->view_product($lead_data['product_id']);
+            $html = '<div class="lead-form-left">
+                        <div class="form-control">
+                        <label>Customer Name:  '.ucwords($lead_data['customer_name']).'</label>
+                        </div>
+                        <div class="form-control">
+                            <label>Phone Number :  '.ucwords($lead_data['contact_no']).'</label> 
+                        </div>
+                        <div class="form-control">
+                        <label>Category Name:  '.ucwords($productData[0]['category']).'</label>
+                        </div>
+                        <div class="form-control">
+                        <label>Product Name:  '.ucwords($productData[0]['title']).'</label>
+                        </div>
+                    </div>';       
+            $notificationData = array(
+                'title' => 'New lead added',
+                'description_text' => $html,
+                'notification_to' => $lead_data['created_by'],
+                'priority' => 'Normal'
+            );
+
+            return $this->notification->insert(Tbl_Notification,$notificationData);
         }
     }
 
