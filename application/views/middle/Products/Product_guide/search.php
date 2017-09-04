@@ -122,7 +122,7 @@
                 $('.loader').show();
                 </script>
     	        <?php }else{?>
-    	            <span class="no_result">No search result found</span>
+    	            <span class="no_result">No records found</span>
     	        <?php }?>
             <?php }?>
     		<!-- Tab contents ends here -->
