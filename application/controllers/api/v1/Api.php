@@ -959,5 +959,41 @@ class Api extends REST_Controller
         }
     }
 
+    public function assign_to(){
+        $params = $this->input->post();
+        if (!empty($params) && isset($params['lead_id']) && !empty($params['lead_id']) &&
+            isset($params['employee_id']) && !empty($params['employee_id']) &&
+            isset($params['employee_name']) && !empty($params['employee_name']) &&
+            isset($params['branch_id']) && !empty($params['branch_id']) &&
+            isset($params['district_id']) && !empty($params['district_id']) &&
+            isset($params['state_id']) && !empty($params['state_id']) &&
+            isset($params['zone_id']) && !empty($params['zone_id']) &&
+            isset($params['branch_manager_id']) && !empty($params['branch_manager_id']) &&
+            isset($params['branch_manager_name']) && !empty($params['branch_manager_name']))
+        {
+             $assign_data = array(
+                'employee_id' => $params['employee_id'],
+                'employee_name' => $params['employee_name'],
+                'branch_id' => $params['branch_id'],
+                'district_id' => $params['district_id'],
+                'state_id' => $params['state_id'],
+                'zone_id' => $params['zone_id'],
+                'status' => 'NC',
+                'created_by' => $params['branch_manager_id'],
+                'created_by_name' => $params['branch_manager_name']
+            );
+            $assigned = $this->Lead->insert_assign($assign_data);
+            if($assigned){
+                $res = array('result' => 'True',
+                    'data' => 'Lead Assigned Successfully');
+                returnJson($res);
+            }
+        }else{
+            $res = array('result' => 'False',
+                'data' => 'Invalid Request');
+            returnJson($res);
+        }
+    }
+
 
 }
