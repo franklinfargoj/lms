@@ -1057,7 +1057,7 @@ class Api extends REST_Controller
                         'created_by_name' => $params['branch_manager_name']
                     );
 
-                    $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+                    $result = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
                 }
             }
             if ($params['status'] == 'FU') {
@@ -1068,9 +1068,17 @@ class Api extends REST_Controller
                     'reminder_text' => $params['reminder_text']
                 );
                 //This will add entry into reminder scheduler for status (Interested/Follow up)
-                $this->Lead->add_reminder($remindData);
-                $res = array('result' => 'True',
-                    'data' => 'Lead Status Updated Successfully');
+                $result2 = $this->Lead->add_reminder($remindData);
+            }
+
+            if($result > 0 && $result2 >0){
+                $res = array('result' => 'False',
+                    'data' => 'Lead Status Change and Reminder Set Successfully ');
+                returnJson($res);
+            }
+            if($result > 0){
+                $res = array('result' => 'False',
+                    'data' => 'Lead Status Change Successfully ');
                 returnJson($res);
             }
 
