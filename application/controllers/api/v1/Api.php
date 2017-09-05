@@ -959,7 +959,7 @@ class Api extends REST_Controller
         }
     }
 
-    public function assign_to(){
+    public function assign_to_post(){
         $params = $this->input->post();
         if (!empty($params) && isset($params['lead_id']) && !empty($params['lead_id']) &&
             isset($params['employee_id']) && !empty($params['employee_id']) &&
