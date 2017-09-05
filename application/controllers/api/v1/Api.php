@@ -972,6 +972,7 @@ class Api extends REST_Controller
             isset($params['branch_manager_name']) && !empty($params['branch_manager_name']))
         {
              $assign_data = array(
+                'lead_id' => $params['lead_id'],
                 'employee_id' => $params['employee_id'],
                 'employee_name' => $params['employee_name'],
                 'branch_id' => $params['branch_id'],
