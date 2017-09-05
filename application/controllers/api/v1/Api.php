@@ -1026,6 +1026,8 @@ class Api extends REST_Controller
             isset($params['branch_manager_id']) && !empty($params['branch_manager_id']) &&
             isset($params['branch_manager_name']) && !empty($params['branch_manager_name'])
         ) {
+            $result =0;
+            $result2 =0;
             $action = 'list';
             $table = Tbl_LeadAssign;
             $select = array(Tbl_LeadAssign . '.*');
@@ -1071,14 +1073,21 @@ class Api extends REST_Controller
                 $result2 = $this->Lead->add_reminder($remindData);
             }
 
-            if($result > 0 && $result2 >0){
-                $res = array('result' => 'False',
-                    'data' => 'Lead Status Change and Reminder Set Successfully ');
+            if($result > 0 && $result2 > 0){
+                $res = array('result' => 'True',
+                    'data' => 'Lead Status Change and Reminder Save Successfully');
                 returnJson($res);
-            }
-            if($result > 0){
-                $res = array('result' => 'False',
-                    'data' => 'Lead Status Change Successfully ');
+            }elseif($result > 0){
+                $res = array('result' => 'True',
+                    'data' => 'Lead Status Change Successfully');
+                returnJson($res);
+            }elseif($result2 > 0){
+                $res = array('result' => 'True',
+                    'data' => 'Reminder Save Successfully');
+                returnJson($res);
+            }else{
+                $res = array('result' => 'True',
+                    'data' => 'Nothing To Update');
                 returnJson($res);
             }
 
