@@ -1001,5 +1001,83 @@ class Api extends REST_Controller
         }
     }
 
+    /**
+     * update_lead_status
+     * Only for assigned lead list able to change lead status / Add Follow Up details
+     * @author Ashok Jadhav
+     * @access public
+     * @param empty
+     * @return array
+     */
+    public function update_lead_status_post()
+    {
+        $params = $this->input->post();
+        if (!empty($params) && isset($params['lead_id']) && !empty($params['lead_id']) &&
+            isset($params['employee_id']) && !empty($params['employee_id']) &&
+            isset($params['status']) && !empty($params['status']) &&
+            isset($params['employee_name']) && !empty($params['employee_name']) &&
+            isset($params['branch_id']) && !empty($params['branch_id']) &&
+            isset($params['district_id']) && !empty($params['district_id']) &&
+            isset($params['state_id']) && !empty($params['state_id']) &&
+            isset($params['zone_id']) && !empty($params['zone_id']) &&
+            isset($params['remind_on']) && !empty($params['remind_on']) &&
+            isset($params['remind_to']) && !empty($params['remind_to']) &&
+            isset($params['reminder_text']) && !empty($params['reminder_text']) &&
+            isset($params['branch_manager_id']) && !empty($params['branch_manager_id']) &&
+            isset($params['branch_manager_name']) && !empty($params['branch_manager_name'])
+        ) {
+            $action = 'list';
+            $table = Tbl_LeadAssign;
+            $select = array(Tbl_LeadAssign . '.*');
+            $where = array(Tbl_LeadAssign . '.lead_id' => $params['lead_id'], Tbl_LeadAssign . '.is_updated' => 1);
+            $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+            $leads_data = $leadsAssign[0];
 
+            if (($leads_data['status'] != $params['status'])) {
+                //Set current entry as old (set is_updated = 0)
+                $lead_status_data = array('is_updated' => 0);
+                $response1 = $this->Lead->update_lead_data($where, $lead_status_data, Tbl_LeadAssign);
+
+                if ($response1['status'] == 'success') {
+                    //Create new entry in table Lead Assign with changed status.
+
+                    /****************************************************************
+                     * Update Lead Status
+                     *****************************************************************/
+                    $lead_status_data = array(
+                        'lead_id' => $params['lead_id'],
+                        'employee_id' => $params['employee_id'],
+                        'employee_name' => $params['employee_name'],
+                        'branch_id' => $params['branch_id'],
+                        'district_id' => $params['district_id'],
+                        'state_id' => $params['state_id'],
+                        'zone_id' => $params['zone_id'],
+                        'status' => $params['status'],
+                        'created_by' => $params['branch_manager_id'],
+                        'created_by_name' => $params['branch_manager_name']
+                    );
+
+                    $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+                }
+            }
+            if ($params['status'] == 'FU') {
+                $remindData = array(
+                    'lead_id' => $params['lead_id'],
+                    'remind_on' => date('y-m-d-H-i-s', strtotime($params['remind_on'])),
+                    'remind_to' => $params['remind_to'],
+                    'reminder_text' => $params['reminder_text']
+                );
+                //This will add entry into reminder scheduler for status (Interested/Follow up)
+                $this->Lead->add_reminder($remindData);
+                $res = array('result' => 'True',
+                    'data' => 'Lead Status Updated Successfully');
+                returnJson($res);
+            }
+
+        } else {
+            $res = array('result' => 'False',
+                'data' => 'Invalid Request');
+            returnJson($res);
+        }
+    }
 }
