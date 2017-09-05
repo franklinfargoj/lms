@@ -862,5 +862,46 @@ class Api extends REST_Controller
         }
 
     }
+    /**
+     * unassigned_leads_list
+     * loads the unassigned leads list filtered by lead source
+     * @autor Gourav Thatoi
+     * @accss public
+     * @return array
+     */
+    public function assigned_leads_list_post(){
+        $params = $this->input->post();
+        if (!empty($params) && isset($params['type']) && !empty($params['type'] && isset($params['id']) && !empty($params['id']))) {
+            $type = $params['type'];
+            $id = $params['id'];
+            $action = 'list';
+            $table = Tbl_Leads . ' as l';
+            $join = array();
+            $join[] = array('table' => Tbl_Products . ' as p', 'on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id', 'type' => '');
+
+            $select = array('l.id', 'l.customer_name', 'l.lead_identification', 'l.created_on', 'l.lead_source', 'p.title', 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on');
+            $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'));
+            if ($type == 'EM') {
+                $where['la.employee_id'] = $id;
+            }
+            if ($type == 'BM') {
+                $where['la.branch_id'] = $id;
+            }
+
+            $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
+                /*$join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');*/
+
+            $join[] = array('table' => Tbl_Reminder . ' as r', 'on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"', 'type' => 'left');
+            $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+
+            $res = array('result' => 'True',
+                'data' => $arrData['leads']);
+            returnJson($res);
+        }else{
+            $res = array('result' => 'False',
+                'data' => 'Invalid Request');
+            returnJson($res);
+        }
+    }
 
 }
