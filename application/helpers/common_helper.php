@@ -492,7 +492,7 @@ function sendNotificationSingleClient($device_id,$device_type,$message,$title=NU
     return $result;
 }
 
- function insert_notification($title,$description,$priority,$notification_to){
+ function notification_log($title,$description,$priority,$notification_to){
      $CI =& get_instance();
      $CI->load->model('Notification_model','notification');
         $notificationData = array(

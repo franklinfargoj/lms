@@ -989,7 +989,7 @@ class Api extends REST_Controller
                 $description="New Lead Assigned to you by ". $params['branch_manager_name'];
                 $notification_to=$params['employee_id'];
                 $priority="Normal";
-                insert_notification($title,$description,$priority,$notification_to);
+                notification_log($title,$description,$priority,$notification_to);
                 $res = array('result' => 'True',
                     'data' => 'Lead Assigned Successfully');
                 returnJson($res);
