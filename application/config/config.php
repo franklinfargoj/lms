@@ -457,7 +457,7 @@ $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = FALSE;
 $config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add_lead',
     'api/v1/api/leads_performance','api/v1/api/category_products','api/v1/api/leads_status',
-    'api/v1/api/leads_assigned_list','api/v1/api/product_details','api/v1/api/unassigned_leads_list');
+    'api/v1/api/leads_assigned_list','api/v1/api/product_details','api/v1/api/unassigned_leads_list','api/v1/api/unassigned_leads');
 
 /*
 |--------------------------------------------------------------------------

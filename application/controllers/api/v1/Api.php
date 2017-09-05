@@ -811,25 +811,31 @@ class Api extends REST_Controller
      * @accss public
      * @return array
      */
-    public function unassigned_leads_get(){
+    public function unassigned_leads_post(){
+        $params = $this->input->post();
+        if (!empty($params) && isset($params['branch_id']) && !empty($params['branch_id'])) {
+            $select = array('db_leads.lead_source,COUNT(db_leads.lead_source) as total');
+            $table = Tbl_Leads;
+            $join = array('db_lead_assign', 'db_lead_assign.lead_id = db_leads.id ', 'left');
+            $group_by = array('db_leads.lead_source');
+            $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+            $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select, $table, $join, $where, $group_by);
+            $response = array();
+            $keys = array('Walk-in' => 0, 'Analytics' => 0, 'Tie Ups' => 0, 'Enquiry' => 0);
+            foreach ($arrData['unassigned_leads_count'] as $k => $v) {
+                $keys[$v['lead_source']] = $v['total'];
 
-        $select = array('db_leads.lead_source,COUNT(db_leads.lead_source) as total');
-        $table = Tbl_Leads;
-        $join = array('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
-        $group_by = array('db_leads.lead_source');
-        $where = array(Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
-        $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
-        $response = array();
-        $keys=array('Walk-in'=>0,'Analytics'=>0,'Tie Ups'=>0,'Enquiry'=>0);
-        foreach ($arrData['unassigned_leads_count'] as $k => $v){
-            $keys[$v['lead_source']] = $v['total'];
-
+            }
+            //echo "<pre>";print_r($keys);die;
+            //$arrData['unassigned_leads_count'] = $keys;
+            $res = array('result' => 'True',
+                'data' => $keys);
+            returnJson($res);
+        }else{
+            $res = array('result' => 'False',
+                'data' => 'Invalid Request');
+            returnJson($res);
         }
-        //echo "<pre>";print_r($keys);die;
-        //$arrData['unassigned_leads_count'] = $keys;
-        $res = array('result' => 'True',
-            'data' => $keys);
-        returnJson($res);
 
     }
 
@@ -842,9 +848,10 @@ class Api extends REST_Controller
      */
     public function unassigned_leads_list_post(){
         $params = $this->input->post();
-        if (!empty($params) && isset($params['lead_source']) && !empty($params['lead_source'])) {
+        if (!empty($params) && isset($params['lead_source']) && !empty($params['lead_source'] && isset($params['branch_id']) && !empty($params['branch_id']))) {
             $lead_source = $params['lead_source'];
-            $unassigned_leads = $this->Lead->unassigned_leads($lead_source, '');
+            $branch_id = $params['branch_id'];
+            $unassigned_leads = $this->Lead->unassigned_leads_api($lead_source, $branch_id);
             $res = array('result' => 'True',
                 'data' => $unassigned_leads);
             returnJson($res);
