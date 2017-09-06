@@ -777,10 +777,10 @@ class Leads extends CI_Controller
         if($type == 'generated'){
             $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on');
             if($till == 'mtd'){
-                $where = array('MONTH(l.created_on)' => date('m')); //Month till date filter
+                $where = array('la.is_deleted' => 0,'la.is_updated' => 1,'MONTH(l.created_on)' => date('m')); //Month till date filter
             }
             if($till == 'ytd'){
-                $where  = array('YEAR(l.created_on)' => date('Y')); //Year till date filter
+                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(l.created_on)' => date('Y')); //Year till date filter
             }
             if($login_user['designation_name'] == 'EM'){
                     $where['l.created_by']  =   $login_user['hrms_id']; //Employee wise filter
@@ -797,15 +797,15 @@ class Leads extends CI_Controller
             if(!empty($arrData['status'])){
                 $where['la.status'] = $arrData['status'];
             }
-            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         }
         if($type == 'converted'){
             $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on');
             if($till == 'mtd'){
-                $where = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'MONTH(la.created_on)' => date('m'));
+                $where = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'la.is_updated' => 1,'MONTH(la.created_on)' => date('m'));
             }
             if($till == 'ytd'){
-                $where  = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'YEAR(la.created_on)' => date('Y'));
+                $where  = array('la.employee_id' => $login_user['hrms_id'],'la.status' => 'converted','la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(la.created_on)' => date('Y'));
             }
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         }
@@ -856,7 +856,15 @@ class Leads extends CI_Controller
                 $insertData[] = $assign_data;
             }
 
-            return $this->db->insert_batch(Tbl_LeadAssign, $insertData);
+            $insertData = $this->db->insert_batch(Tbl_LeadAssign, $insertData);
+            if($insertData){
+                //Add Notification
+                $title="New Lead Assigned";
+                $description="New Lead Assigned to you by Branch Manager";
+                $notification_to = $employee_id;
+                $priority="Normal";
+                notification_log($title,$description,$priority,$notification_to);
+            }
         }
     }
 
