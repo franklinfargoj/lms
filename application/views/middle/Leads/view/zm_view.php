@@ -8,6 +8,21 @@
         <h3 class="text-center">Zonal Manager</h3>
     </div>
 </div>
+<div class="lead-top">
+    <div class="container clearfix">
+        <div class="float-left">
+            <!--            <span class="total-lead">-->
+            <!--                Total-->
+            <!--            </span>-->
+            <!--            <span class="lead-num"> : --><?php //echo count($leads);?><!--</span>-->
+        </div>
+        <div class="float-right">
+            <a href="<?php echo base_url('dashboard/home_excel');?>">
+                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
+            </a>
+        </div>
+    </div>
+</div>
 <div class="page-content">
     <div class="container">
         <table class="display lead-table dataTable no-footer" id="sample_3">
@@ -38,17 +53,17 @@
                             <?php echo ++$i;?>
                         </td>
                         <td>
-                            <?php echo $value['branch_id'];?>
+                            <?php echo $value['created_by_branch_name'];?>
                         </td>
                         <td>
-                            <?php echo $value['total'];?>
+                            <?php echo $value['total_generated'];?>
                         </td>
                         <td>
-                            <?php echo $value['converted_leads'];?>
+                            <?php echo $value['total_converted'];?>
                         </td>
                         <td>
-                            <a href="<?php echo site_url('dashboard/leads_status/'.encode_id($value['branch_id']))?>">View</a>
-                            <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['branch_id']));?>">Performance</a>
+                            <a href="<?php echo site_url('dashboard/leads_status/'.encode_id($value['created_by_branch_id']))?>">View</a>
+                            <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by_branch_id']));?>">Performance</a>
                         </td>
                     </tr>
                     <?php

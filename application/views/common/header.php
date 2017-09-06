@@ -1,9 +1,10 @@
 <?php 
 	$controller =  $this->router->fetch_class();
 	$method =  $this->router->fetch_method();
-	$param1 = $this->uri->segment(3,0);
-	$param2 = $this->uri->segment(4,0);
-	$param3 = $this->uri->segment(5,0);
+    $param1 = $this->uri->segment(3,0);
+    $param2 = $this->uri->segment(4,0);
+    $param3 = $this->uri->segment(5,0);
+    $param4 = $this->uri->segment(6,0);
 ?>
 
 <div class="header">

@@ -841,4 +841,39 @@ class Leads extends CI_Controller
         }
     }
 
+    /**
+     * export_excel_listing
+     * Excel export of listing
+     * @author Gourav Thatoi
+     * @access public
+     * @paramas none
+     * @return  void
+     */
+    public function export_excel_listing($type,$till,$status = null,$lead_source = null)
+    {
+        if($type == 'assigned'){
+            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
+                'Status','Followup Date','Lead Identified As','Lead Source');
+        }
+        if($type == 'generated'){
+            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
+                'Status','Followup Date','Lead Identified As','Lead Source');
+        }
+        $arrData['type'] = $type;
+        $arrData['till'] = $till;
+
+        if($lead_source != 'all'){
+            $arrData['lead_source'] = $lead_source;
+        }
+
+        //Create Breadcumb
+        if(($status != 'all') && ($status != null)){
+            $arrData['status'] = $status;
+        }
+        //Get session data
+        $login_user = get_session();
+        $data = $this->view($login_user,$arrData);
+        export_excel($header_value,$data,$type);
+    }
+
 }

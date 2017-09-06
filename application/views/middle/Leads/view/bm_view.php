@@ -17,7 +17,7 @@
 <!--            <span class="lead-num"> : --><?php //echo count($leads);?><!--</span>-->
         </div>
         <div class="float-right">
-            <a href="<?php echo base_url('dashboard/export_excel');?>">
+            <a href="<?php echo base_url('dashboard/home_excel');?>">
                 <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
             </a>
         </div>
@@ -56,10 +56,10 @@
                             <?php echo $value['created_by_name'];?>
                         </td>
                         <td>
-                            <?php echo $value['total'];?>
+                            <?php echo $value['total_generated'];?>
                         </td>
                         <td>
-                            <?php echo $value['converted_leads'];?>
+                            <?php echo $value['total_converted'];?>
                         </td>
                         <td>
                             <a href="<?php echo site_url('dashboard/leads_status/'.encode_id($value['created_by']).'/'.$value['created_by_name'])?>">View</a>

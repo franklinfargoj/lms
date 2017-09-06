@@ -513,3 +513,209 @@ function get_notification_count(){
     $notification_count = $CI->notification->get_notifications_count();
     return $notification_count;
 }
+
+function get_details($designation_name){
+    //        $curl_handle = curl_init();
+//        curl_setopt($curl_handle, CURLOPT_URL, 'http://10.0.11.33/payo_app/users/update_synapse_info');
+//
+//        if(!isset($params['user_id']) || !isset($params['password']) || ($params['user_id'] == NULL) ||  ($params['password'] == NULL)){
+//            $err['result'] = false;
+//            $err['data'] = "Invalid Request";
+//            returnJson($err);
+//        }
+//
+//        $user_id = $params['user_id'];
+//        $password = $params['password'];
+//        $device_token = $params['device_token'];
+//
+//        $curl_handle = curl_init();
+//        curl_setopt($curl_handle, CURLOPT_URL, '');
+//        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+//        curl_setopt($curl_handle, CURLOPT_POST, 1);
+//        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
+//            'user_id' => $user_id,
+//            'password' => $password
+//        ));
+//
+//        $buffer = curl_exec($curl_handle);
+//        curl_close($curl_handle);
+//
+//        $result = json_decode($buffer);
+
+    $result['basic_info'] = array(
+        'hrms_id' => '12',
+        'dept_id' => '12',
+        'dept_type_id' => '123',
+        'dept_type_name' => 'BR',
+        'branch_id' => '12',
+        'district_id' => '1234',
+        'state_id' => '1234',
+        'zone_id' => '1234',
+        'full_name' => 'mukesh kurmi',
+        'supervisor_id' => '009',
+        'designation_id' => '4',
+        'designation_name' => $designation_name,
+        'mobile' => '9975772432',
+        'email_id' => 'mukesh.kurmi@wwindia.com',
+    );
+    $result['employee_list'][] = array(
+        'id' => '2',
+        'full_name' => 'mukesh kurmi',
+    );
+    $result['employee_list'][] = array(
+        'id' => '13',
+        'full_name' => 'anup',
+    );
+    $result['employee_list'][] = array(
+        'id' => '15',
+        'full_name' => 'anup',
+    );
+    $result['branch_list'][] = array(
+        'id' => '12',
+        'full_name' => 'branch1',
+    );
+    $result['branch_list'][] = array(
+        'id' => '13',
+        'full_name' => 'branch2',
+    );
+    $result['zone_list'][] = array(
+        'id' => '12',
+        'full_name' => 'zone1',
+    );
+    $result['zone_list'][] = array(
+        'id' => '13',
+        'full_name' => 'zone2',
+    );
+    $result['status'] = 'success';
+
+    return $result;
+}
+
+/**
+ * export_excel
+ * Excel export of branch manager home
+ * @author Gourav Thatoi
+ */
+function export_excel($header_value,$data,$type=''){
+    $CI = & get_instance();
+    $CI->load->library('excel');
+    $file_name = time().'data.xls';
+    $excel_alpha = unserialize(EXCEL_ALPHA);
+    $objPHPExcel = $CI->excel;
+    $objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
+    $objPHPExcel->getDefaultStyle()->getFont()->setSize(11);
+    $objPHPExcel->getDefaultStyle()->getFont()->setBold(true);
+    foreach ($header_value as $key=>$value ){
+        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[$key])->setAutoSize(true);
+    }
+    $objPHPExcel->getDefaultStyle()
+        ->getAlignment()
+        ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $styleArray = array(
+        'borders' => array(
+            'allborders' => array(
+                'style' => PHPExcel_Style_Border::BORDER_THIN
+            )
+        )
+    );
+    $fontArray = array(
+        'font'  => array(
+            'bold'  => true,
+            'size'  => 22
+        ));
+    $textfontArray = array(
+        'font'  => array(
+            'bold'  => true,
+            'size'  => 11
+        ));
+    $text_bold_false = array(
+        'font'  => array(
+            'bold'  => false,
+            'size'  => 11
+        ));
+    $fileType = 'Excel5';
+    $time = time();
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel5");
+    $objSheet = $objPHPExcel->getActiveSheet();
+    $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(-1);
+    foreach ($header_value as $key => $value){
+        $objSheet->getStyle($excel_alpha[$key].'1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objSheet->getCell($excel_alpha[$key].'1')->setValue($value);
+    }
+
+    $i=2;$j=1;
+    switch ($type){
+        case '':
+            foreach ($data as $key => $value){
+
+                if(isset($value['created_by_name'])){
+                    $name = $value['created_by_name'];
+                }
+                if(isset($value['created_by_branch_name'])){
+                    $name = $value['created_by_branch_name'];
+                }
+                foreach ($header_value as $k => $v){
+                    $objSheet->getStyle($excel_alpha[$k].$i)
+                        ->getAlignment()
+                        ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    if($k == 1){
+                        $objSheet->getStyle($excel_alpha[1].$i)
+                            ->getAlignment()
+                            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                    }
+                }
+                $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
+                $objSheet->getCell($excel_alpha[1].$i)->setValue($name);
+                $objSheet->getCell($excel_alpha[2].$i)->setValue($value['total_generated']);
+                $objSheet->getCell($excel_alpha[3].$i)->setValue($value['total_converted']);
+                $i++;$j++;
+            }
+            break;
+        case 'assigned':
+            $lead_status = $CI->config->item('lead_status');
+            foreach ($data['leads'] as $key => $value){
+                foreach ($header_value as $k => $v){
+                    $objSheet->getStyle($excel_alpha[$k].$i)
+                        ->getAlignment()
+                        ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    if($k == 1){
+                        $objSheet->getStyle($excel_alpha[1].$i)
+                            ->getAlignment()
+                            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                    }
+                    if($k == 2){
+                        $objSheet->getStyle($excel_alpha[2].$i)
+                            ->getAlignment()
+                            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                    }
+                }
+                $created_date = explode(' ',$value['created_on']);
+                $now = date_create(date('Y-m-d')); // or your date as well
+                $generated_date = date_create($created_date[0]);
+                $datediff = date_diff($now,$generated_date);
+                $elapse_date = $datediff->format("%a days");
+                $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
+                $objSheet->getCell($excel_alpha[1].$i)->setValue(ucwords($value['customer_name']));
+                $objSheet->getCell($excel_alpha[2].$i)->setValue(ucwords($value['title']));
+                $objSheet->getCell($excel_alpha[3].$i)->setValue($elapse_date);
+                $objSheet->getCell($excel_alpha[4].$i)->setValue(ucwords($lead_status[$value['status']]));
+                $objSheet->getCell($excel_alpha[5].$i)->setValue(date('d-m-Y',strtotime($value['remind_on'])));
+                $objSheet->getCell($excel_alpha[6].$i)->setValue(ucwords($value['lead_source']));
+                $i++;$j++;
+            }
+            break;
+    }
+
+    //downloads excel
+    make_upload_directory('uploads');
+    make_upload_directory('uploads/excel_list');
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$file_name.'"');
+    //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+    $objWriter->save('php://output');
+
+}

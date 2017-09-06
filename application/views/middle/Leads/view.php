@@ -31,7 +31,14 @@ $lead_type = $this->config->item('lead_type');
             <span class="lead-num"> : <?php echo count($leads);?></span>
         </div>
         <div class="float-right">
-            <a href="">
+            <?php
+            $param1 = !is_null($this->uri->segment(3)) ? $this->uri->segment(3).'/' : '';
+            $param2 = !is_null($this->uri->segment(4)) ? $this->uri->segment(4).'/' : '';
+            $param3 = !is_null($this->uri->segment(5)) ? $this->uri->segment(5).'/' : '';
+            $param4 = !is_null($this->uri->segment(6)) ? $this->uri->segment(6).'/' : '';
+            ?>
+            <a href="<?php echo base_url('Leads/export_excel_listing/'
+                .$param1.$param2.$param3.$param4);?>">
                 <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
             </a>
         </div>

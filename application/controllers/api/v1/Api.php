@@ -57,79 +57,9 @@ class Api extends REST_Controller
         $device_token = $params['device_token'];
         $device_type = $params['device_type'];
 
-//        $curl_handle = curl_init();
-//        curl_setopt($curl_handle, CURLOPT_URL, 'http://10.0.11.33/payo_app/users/update_synapse_info');
-//
-//        if(!isset($params['user_id']) || !isset($params['password']) || ($params['user_id'] == NULL) ||  ($params['password'] == NULL)){
-//            $err['result'] = false;
-//            $err['data'] = "Invalid Request";
-//            returnJson($err);
-//        }
-//
-//        $user_id = $params['user_id'];
-//        $password = $params['password'];
-//        $device_token = $params['device_token'];
-//
-//        $curl_handle = curl_init();
-//        curl_setopt($curl_handle, CURLOPT_URL, '');
-//        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($curl_handle, CURLOPT_POST, 1);
-//        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
-//            'user_id' => $user_id,
-//            'password' => $password
-//        ));
-//
-//        $buffer = curl_exec($curl_handle);
-//        curl_close($curl_handle);
-//
-//        $result = json_decode($buffer);
+         $result = get_details($params['designation_name']);
 
-        $result['basic_info'] = array(
-            'hrms_id' => '12',
-            'dept_id' => '12',
-            'dept_type_id' => '123',
-            'dept_type_name' => 'BR',
-            'branch_id' => '12',
-            'district_id' => '1234',
-            'state_id' => '1234',
-            'zone_id' => '1234',
-            'full_name' => 'mukesh kurmi',
-            'supervisor_id' => '009',
-            'designation_id' => '4',
-            'designation_name' => $params['designation_name'],
-            'mobile' => '9975772432',
-            'email_id' => 'mukesh.kurmi@wwindia.com',
-        );
-        $result['employee_list'][] = array(
-            'id' => '12',
-            'full_name' => 'mukesh kurmi',
-        );
-        $result['employee_list'][] = array(
-            'id' => '13',
-            'full_name' => 'anup',
-        );
-        $result['employee_list'][] = array(
-            'id' => '15',
-            'full_name' => 'anup',
-        );
-        $result['branch_list'][] = array(
-            'id' => '12',
-            'full_name' => 'branch1',
-        );
-        $result['branch_list'][] = array(
-            'id' => '13',
-            'full_name' => 'branch2',
-        );
-        $result['zone_list'][] = array(
-            'id' => '12',
-            'full_name' => 'zone1',
-        );
-        $result['zone_list'][] = array(
-            'id' => '13',
-            'full_name' => 'zone2',
-        );
-        $result['status'] = 'success';
-//        returnJson($data);
+//        returnJson($result);
 
         if (isset($result['status']) && $result['status'] == 'success') {
 

@@ -111,18 +111,43 @@ class Dashboard extends CI_Controller {
     public function bm_view($branch_id){
 
         //for generated lead
-        $where_generated_Array = array('branch_id' => $branch_id,
-            'MONTH(created_on)' => date('m') - 1);
-        $leads = $this->master->get_generated_lead_bm_zm($where_generated_Array);
+        $where_month_Array = array('branch_id' => $branch_id,
+            'MONTH(created_on)' => date('m'));
+        $generated_value = $this->master->get_generated_lead_bm_zm($where_month_Array);
         //for converted lead
-        foreach ($leads as $key =>$value){
-            $where_converted_Array = array('employee_id' => $value['created_by'],
-                'MONTH(created_on)' => date('m') - 1,
-                'status' => 'converted');
-            $converted = $this->master->get_converted_lead_bm_zm($where_converted_Array);
-            $leads[$key]['converted_leads'] = $converted;
+        $final = array();
+        $login_user = get_session();
+        $result = get_details($login_user['designation_name']);
+        foreach ($result['employee_list'] as $key =>$value){
+            $generated_key_value = array();
+            foreach ($generated_value as $k => $v) {
+                $generated_key_value[$v['created_by']] = $v['total'];
+            }
+            if (!array_key_exists($value['id'], $generated_key_value)) {
+                $push_generated = array(
+                    'created_by' => $value['id'],
+                    'created_by_name' => $value['full_name'],
+                    'total_generated' => 0);
+            } else {
+                $push_generated = array(
+                    'created_by' => $value['id'],
+                    'created_by_name' => $value['full_name'],
+                    'total_generated' => $generated_key_value[$value['id']]);
+            }
+            $final[$value['id']] = $push_generated;
         }
-        return $leads;
+        foreach ($final as $id => $value) {
+
+            $where_month_Array = array('employee_id' => $value['created_by'],
+                'MONTH(created_on)' => date('m'),
+                'status' => 'converted');
+            $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
+            if (!empty($converted)) {
+                $converted = 0;
+            }
+            $final[$value['created_by']]['total_converted'] = $converted;
+        }
+        return $final;
     }
 
     /**
@@ -132,19 +157,44 @@ class Dashboard extends CI_Controller {
      */
     public function zm_view($zone_id){
 
-        //for generated lead
-        $where_generated_Array = array('zone_id' => $zone_id,
+        $where_month_Array = array('zone_id' => $zone_id,
             'MONTH(created_on)' => date('m'));
-        $leads = $this->master->get_generated_lead_bm_zm($where_generated_Array);
-        //for converted lead
-        foreach ($leads as $key =>$value){
-            $where_converted_Array = array('branch_id' => $value['created_by_branch_id'],
-                'MONTH(created_on)' => date('m') - 1,
-                'status' => 'converted');
-            $converted = $this->master->get_converted_lead_bm_zm($where_converted_Array);
-            $leads[$key]['converted_leads'] = $converted;
+
+        $generated = $this->master->get_generated_lead_bm_zm($where_month_Array);
+        $generated_key_value = array();
+        $final = array();
+        $login_user = get_session();
+        $result = get_details($login_user['designation_name']);
+        foreach ($generated as $k => $v) {
+            $generated_key_value[$v['branch_id']] = $v['total'];
         }
-        return $leads;
+        foreach ($result['branch_list'] as $key => $val) {
+            if (!array_key_exists($val['id'], $generated_key_value)) {
+                $push_generated = array(
+                    'created_by_branch_id' => $val['id'],
+                    'created_by_branch_name' => $val['full_name'],
+                    'total_generated' => 0);
+            } else {
+                $push_generated = array(
+                    'created_by_branch_id' => $val['id'],
+                    'created_by_branch_name' => $val['full_name'],
+                    'total_generated' => $generated_key_value[$val['id']]);
+            }
+            $final[$val['id']] = $push_generated;
+        }
+        //for converted
+        foreach ($final as $id => $value) {
+
+            $where_month_Array = array('branch_id' => $value['created_by_branch_id'],
+                'MONTH(created_on)' => date('m'),
+                'status' => 'converted');
+            $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
+            if (!empty($converted)) {
+                $converted = 0;
+            }
+            $final[$value['created_by_branch_id']]['total_converted'] = $converted;
+        }
+        return $final;
     }
 
 
@@ -273,106 +323,26 @@ class Dashboard extends CI_Controller {
         load_view($middle,$result);
     }
 
-    /**
-     * export_excel
-     * Excel export
-     * @author Gourav Thatoi
-     * @access public
-     * @paramas none
-     * @return  void
-     */
-    public function export_excel(){
-        $this->load->library('excel');
-        $file_name = time().'data.xls';
-        $excel_alpha = unserialize(EXCEL_ALPHA);
-        $objPHPExcel = $this->excel;
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
-        $objPHPExcel->getDefaultStyle()->getFont()->setSize(11);
-        $objPHPExcel->getDefaultStyle()->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[0])->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[1])->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[2])->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[3])->setAutoSize(true);
-        $objPHPExcel->getDefaultStyle()
-            ->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $styleArray = array(
-            'borders' => array(
-                'allborders' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN
-                )
-            )
-        );
-        $fontArray = array(
-            'font'  => array(
-                'bold'  => true,
-                'size'  => 22
-            ));
-        $textfontArray = array(
-            'font'  => array(
-                'bold'  => true,
-                'size'  => 11
-            ));
-        $text_bold_false = array(
-            'font'  => array(
-                'bold'  => false,
-                'size'  => 11
-            ));
-        $fileType = 'Excel5';
-        $time = time();
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel5");
-        $objSheet = $objPHPExcel->getActiveSheet();
-        $objSheet->getStyle($excel_alpha[0].'1')
-            ->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objSheet->getStyle($excel_alpha[1].'1')
-            ->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objSheet->getStyle($excel_alpha[2].'1')
-            ->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objSheet->getStyle($excel_alpha[3].'1')
-            ->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(-1);
-        $objSheet->getCell($excel_alpha[0].'1')->setValue('Sr.No');
-        $objSheet->getCell($excel_alpha[1].'1')->setValue('Employee Name');
-        $objSheet->getCell($excel_alpha[2].'1')->setValue('Generated Leads(This Month)');
-        $objSheet->getCell($excel_alpha[3].'1')->setValue('Converted Leads(This Month)');
 
+    public function home_excel(){
         $login_user = get_session();
-        $branch_id = $login_user['branch_id'];
-        $branch_data = $this->bm_view($branch_id);
-        $i=2;$j=1;
-        foreach ($branch_data as $key => $value){
-            $objSheet->getStyle($excel_alpha[0].$i)
-                ->getAlignment()
-                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            $objSheet->getStyle($excel_alpha[1].$i)
-                ->getAlignment()
-                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objSheet->getStyle($excel_alpha[2].$i)
-                ->getAlignment()
-                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            $objSheet->getStyle($excel_alpha[3].$i)
-                ->getAlignment()
-                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
-            $objSheet->getCell($excel_alpha[1].$i)->setValue($value['created_by_name']);
-            $objSheet->getCell($excel_alpha[2].$i)->setValue($value['total']);
-            $objSheet->getCell($excel_alpha[3].$i)->setValue($value['converted_leads']);
-            $i++;$j++;
+        $designation_type = $login_user['designation_name'];
+        switch ($designation_type){
+            case 'BM':
+                $header_value = array('Sr.No','Employee Name','Generated Leads(This Month)',
+                    'Converted Leads(This Month)');
+                $id = $login_user['branch_id'];
+                $data = $this->bm_view($id);
+                export_excel($header_value,$data);
+                break;
+            case 'ZM':
+                $header_value = array('Sr.No','Branch Name','Generated Leads(This Month)',
+                    'Converted Leads(This Month)');
+                $id = $login_user['zone_id'];
+                $data = $this->zm_view($id);
+                export_excel($header_value,$data);
+                break;
         }
-
-        //downloads excel
-        make_upload_directory('uploads');
-        make_upload_directory('uploads/excel_list');
-        header('Content-Type: application/vnd.ms-excel'); //mime type
-        header('Content-Disposition: attachment;filename="'.$file_name.'"');
-        //tell browser what's the file name
-        header('Cache-Control: max-age=0'); //no cache
-        $objWriter->save('php://output');
-
     }
-    
+
 }
