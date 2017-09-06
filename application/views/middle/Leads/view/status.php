@@ -55,8 +55,44 @@
                 <tr>
                     <td><?php echo $i+1; ?></td>
                     <td><?php echo $value; ?></td>
-                    <td><a href="<?php echo site_url('leads/leads_list/generated/mtd/'.$key.$param);?>" ><?php echo $$key['Month']; ?></a></td>
-                    <td><a href="<?php echo site_url('leads/leads_list/generated/ytd/'.$key.$param);?>" ><?php echo $$key['Year']; ?></a></td>
+                    <?php
+                        switch ($key) {
+                            case 'NC':
+                                $Month = $NC['Month'];
+                                $Year = $NC['Year'];
+                                break;
+                            case 'FU':
+                                $Month = $FU['Month'];
+                                $Year = $FU['Year'];
+                                break;
+                            case 'DC':
+                                $Month = $DC['Month'];
+                                $Year = $DC['Year'];
+                                break;
+                            case 'AO':
+                                $Month = $AO['Month'];
+                                $Year = $AO['Year'];
+                                break;
+                            case 'Converted':
+                                $Month = $Converted['Month'];
+                                $Year = $Converted['Year'];
+                                break;
+                            case 'NI':
+                                $Month = $NI['Month'];
+                                $Year = $NI['Year'];
+                                break;
+                            case 'CBC':
+                                $Month = $CBC['Month'];
+                                $Year = $CBC['Year'];
+                                break;
+                            case 'Closed':
+                                $Month = $Closed['Month'];
+                                $Year = $Closed['Year'];
+                                break;
+                        }
+                    ?>
+                    <td><a href="<?php echo site_url('leads/leads_list/generated/mtd/'.$key.$param);?>" ><?php echo $Month; ?></a></td>
+                    <td><a href="<?php echo site_url('leads/leads_list/generated/ytd/'.$key.$param);?>" ><?php echo $Year; ?></a></td>
                 </tr>
             <?php
             $i++; 

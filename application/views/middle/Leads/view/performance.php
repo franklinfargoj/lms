@@ -3,7 +3,9 @@
 <!-- END PAGE LEVEL STYLES -->
     <div class="page-title">
         <div class="container clearfix">
-            <h3 class="text-center">My Lead Performance</h3>
+            <h3 class="text-center">
+                <?php echo $title;?>
+            </h3>
         </div>
     </div>
 
