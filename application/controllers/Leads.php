@@ -446,6 +446,7 @@ class Leads extends CI_Controller
 
         $arrData['unassigned_leads'] = $this->Lead->unassigned_leads('',$id);
         $arrData['lead_source'] = ucwords($lead_source);
+
         $middle = "Leads/unassigned_details";
         load_view($middle,$arrData);
     }
@@ -486,7 +487,6 @@ class Leads extends CI_Controller
         //Get session data
         $login_user = get_session();
         $arrData = $this->view($login_user,$arrData);
-        
         return load_view('Leads/view',$arrData);
     }
 

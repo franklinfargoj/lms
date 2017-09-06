@@ -646,7 +646,7 @@ class Api extends REST_Controller
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
-                    if (!empty($converted)) {
+                    if (empty($converted)) {
                         $converted = 0;
                     }
                     $final[$value['created_by']]['total_converted'] = $converted;
@@ -685,7 +685,7 @@ class Api extends REST_Controller
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
-                    if (!empty($converted)) {
+                    if (empty($converted)) {
                         $converted = 0;
                     }
                     $final[$value['created_by_branch_id']]['total_converted'] = $converted;
@@ -723,7 +723,7 @@ class Api extends REST_Controller
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
-                    if (!empty($converted)) {
+                    if (empty($converted)) {
                         $converted = 0;
                     }
                     $final[$value['created_by_zone_id']]['total_converted'] = $converted;
