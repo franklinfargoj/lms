@@ -33,23 +33,21 @@
         </h3>
     </div>
 </div>
-<div class="lead-top">
-    <div class="container clearfix">
-        <div class="float-left">
-            <span class="total-lead">Total <?php echo ucwords($type);?> Leads</span>
-            <span class="lead-num"> : <?php echo count($leads);?></span>
-        </div>
-        <div class="float-right">
-            <a href="">
-                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
-            </a>
-        </div>
-    </div>
-</div>
 <div class="page-content">
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
+            <div class="lead-top clearfix">
+                <div class="float-left">
+                    <span class="total-lead">Total <?php echo ucwords($type);?> Leads</span>
+                    <span class="lead-num"> : <?php echo count($leads);?></span>
+                </div>
+                <div class="float-right">
+                    <a href="">
+                        <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
+                    </a>
+                </div>
+            </div>
             <table id="sample_3" class="display lead-table">
                 <thead>
                     <tr class="top-header">
