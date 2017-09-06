@@ -173,8 +173,15 @@ $lead_type = $this->config->item('lead_type');
                                  <?php echo ucwords($value['lead_source']);?>
                             </td>
                             <td>
-                                <?php if(isset($status)){?>
-                                    <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']).'/'.$status)?>">View</a>
+                                <?php 
+                                    if(isset($status)){
+                                        if(isset($param)){
+                                            $parameter = encode_id($param);
+                                        }else{
+                                            $parameter = '';
+                                        }
+                                ?>
+                                    <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']).'/'.$status.'/'.$parameter)?>">View</a>
                                 <?php }else{
                                 ?>
                                     <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']))?>">View</a>

@@ -165,31 +165,27 @@ class Leads extends CI_Controller
 
     private function insert_notification($lead_data){
         if(!empty($lead_data)){
-            $this->load->model('Notification_model','notification');
             $this->load->model('Master_model','master');
             $productData = $this->master->view_product($lead_data['product_id']);
-            $html = '<div class="lead-form-left">
-                        <div class="form-control">
-                        <label>Customer Name:  '.ucwords($lead_data['customer_name']).'</label>
-                        </div>
-                        <div class="form-control">
-                            <label>Phone Number :  '.ucwords($lead_data['contact_no']).'</label> 
-                        </div>
-                        <div class="form-control">
-                        <label>Category Name:  '.ucwords($productData[0]['category']).'</label>
-                        </div>
-                        <div class="form-control">
-                        <label>Product Name:  '.ucwords($productData[0]['title']).'</label>
-                        </div>
-                    </div>';       
-            $notificationData = array(
-                'title' => 'New lead added',
-                'description_text' => $html,
-                'notification_to' => $lead_data['created_by'],
-                'priority' => 'Normal'
-            );
 
-            return $this->notification->insert(Tbl_Notification,$notificationData);
+            $title = 'New lead added';
+            $description = '<div class="lead-form-left">
+                                <div class="form-control">
+                                    <label>Customer Name:  '.ucwords($lead_data['customer_name']).'</label>
+                                </div>
+                                <div class="form-control">
+                                    <label>Phone Number :  '.ucwords($lead_data['contact_no']).'</label> 
+                                </div>
+                                <div class="form-control">
+                                    <label>Category Name:  '.ucwords($productData[0]['category']).'</label>
+                                </div>
+                                <div class="form-control">
+                                    <label>Product Name:  '.ucwords($productData[0]['title']).'</label>
+                                </div>
+                            </div>';   
+            $priority = 'Normal';
+            $notification_to = $lead_data['created_by'];    
+            return notification_log($title,$description,$priority,$notification_to);
         }
     }
 
@@ -414,6 +410,8 @@ class Leads extends CI_Controller
      * @return array
      */
     public function unassigned_leads(){
+        $login_user = get_session();
+
         /*Create Breadcumb*/
           $this->make_bread->add('Unassigned Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
@@ -422,7 +420,7 @@ class Leads extends CI_Controller
         $table = Tbl_Leads;
         $join = array('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $group_by = array('db_leads.lead_source');
-        $where = array(Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
+        $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id'],Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
         $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
         $response = array();
         $keys=array('Walk-in'=>0,'Analytics'=>0,'Tie Ups'=>0,'Enquiry'=>0);
@@ -460,22 +458,24 @@ class Leads extends CI_Controller
      * @param $type,$till
      * @return array
      */
-    public function leads_list($type,$till,$status = null,$lead_source = null){
+    public function leads_list($type,$till,$status = null,$param = null){
         //Call to helper function to fetch Page title as we are using same list view for all lead list
         
         //$arrData['title'] = $title;
         $arrData['type'] = $type;
         $arrData['till'] = $till;
         
-        if($lead_source != 'all'){
-            $arrData['lead_source'] = $lead_source;
+        if(isset($param) && !empty($param)){
+            $arrData['param'] = decode_id($param);
+            $this->make_bread->add('Generated Leads', 'dashboard/leads_status/'.$param, 0);   
+        }else{
+            $this->make_bread->add('My Generated Leads', 'dashboard/leads_status', 0);   
         }
 
         //Create Breadcumb
         if(($status != 'all') && ($status != null)){
             $leads_status = $this->config->item('lead_status');
             $arrData['status'] = $status;
-            $this->make_bread->add('My Generated Leads', 'dashboard/leads_status', 0);   
             $this->make_bread->add($leads_status[$status], '', 0);   
             
         }else{
@@ -498,7 +498,7 @@ class Leads extends CI_Controller
      * @param $type,$till,$lead_id
      * @return array
      */
-    public function details($type,$till,$lead_id,$status = null){
+    public function details($type,$till,$lead_id,$status = null,$param = null){
         $lead_id = decode_id($lead_id);
         $title = get_lead_title($type,$till);
         $arrData['title'] = $title;
@@ -506,11 +506,17 @@ class Leads extends CI_Controller
         $arrData['till'] = $till;
         $breadUrl = 'leads/leads_list/'.$type.'/'.$till;
         if(!empty($status)){
-            $breadUrl = 'leads/leads_list/'.$type.'/'.$till.'/'.$status;
             $leads_status = $this->config->item('lead_status');
             $arrData['status'] = $status;
-            $this->make_bread->add('My Generated Leads', 'dashboard/leads_status', 0);   
-            $this->make_bread->add($leads_status[$status], $breadUrl, 0);   
+            if(isset($param) && !empty($param)){
+                $this->make_bread->add('Generated Leads', 'dashboard/leads_status/'.$param, 0);
+                $breadUrl = 'leads/leads_list/'.$type.'/'.$till.'/'.$status.'/'.$param;
+                $this->make_bread->add($leads_status[$status], $breadUrl, 0);   
+            }else{
+                $this->make_bread->add('My Generated Leads', 'dashboard/leads_status', 0);   
+                $breadUrl = 'leads/leads_list/'.$type.'/'.$till.'/'.$status;
+                $this->make_bread->add($leads_status[$status], $breadUrl, 0);   
+            }
         }else{
             $this->make_bread->add(ucwords($type.' Leads'),$breadUrl, 0);
         }
@@ -771,10 +777,22 @@ class Leads extends CI_Controller
         if($type == 'generated'){
             $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on');
             if($till == 'mtd'){
-                $where = array('l.created_by' => $login_user['hrms_id'],'MONTH(l.created_on)' => date('m'));
+                $where = array('MONTH(l.created_on)' => date('m')); //Month till date filter
             }
             if($till == 'ytd'){
-                $where  = array('l.created_by' => $login_user['hrms_id'],'YEAR(l.created_on)' => date('Y'));
+                $where  = array('YEAR(l.created_on)' => date('Y')); //Year till date filter
+            }
+            if($login_user['designation_name'] == 'EM'){
+                    $where['l.created_by']  =   $login_user['hrms_id']; //Employee wise filter
+            }
+            if(($login_user['designation_name'] == 'BM') && (!empty($arrData['param']))){
+                $where['l.created_by'] = $arrData['param']; //Employee wise filter for branch manager
+            }
+            if(($login_user['designation_name'] == 'ZM') && (!empty($arrData['param']))){
+                $where['l.branch_id'] = $arrData['param']; //Branch wise filter for zone manager
+            }
+            if(($login_user['designation_name'] == 'RM') && (!empty($arrData['param']))){
+                $where['l.zone_id'] = $arrData['param']; //Zone wise filter for zone manager
             }
             if(!empty($arrData['status'])){
                 $where['la.status'] = $arrData['status'];
@@ -799,7 +817,7 @@ class Leads extends CI_Controller
                     $where['la.employee_id'] = $login_user['hrms_id'];
                 }
                 if($login_user['designation_name'] == 'BM'){
-                    $where['la.created_by'] = $login_user['hrms_id'];
+                    $where['la.branch_id'] = $login_user['branch_id'];
                 }
             }
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
@@ -807,8 +825,9 @@ class Leads extends CI_Controller
         }
         $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
         $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+        /*pe($this->db->last_query());
+        exit;*/
         $arrData['lead_source'] = $this->Lead->get_enum(Tbl_Leads,'lead_source');
-        
         return $arrData;
     }
     private function assign_to($employee_id,$lead_ids)
