@@ -827,9 +827,9 @@ class Api extends REST_Controller
 
             }
             //echo "<pre>";print_r($keys);die;
-            $arrData[] = $keys;
+            $arrData['unassigned_leads_count'] = $keys;
             $res = array('result' => 'True',
-                'data' => $arrData);
+                'data' => $arrData['unassigned_leads_count']);
             returnJson($res);
         }else{
             $res = array('result' => 'False',
