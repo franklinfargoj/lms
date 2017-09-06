@@ -162,7 +162,7 @@ class Dashboard extends CI_Controller {
 
         $where_month_Array = array(
             'zone_id' => $zone_id,
-            'MONTH(created_on)' => date('m') - 1
+            'MONTH(created_on)' => date('m')
         );
         $generated = $this->master->get_generated_lead_bm_zm($where_month_Array);
         $generated_key_value = array();
@@ -212,7 +212,7 @@ class Dashboard extends CI_Controller {
 
         $where_month_Array = array(
             'zone_id !=' => NULL,
-            'MONTH(created_on)' => date('m') - 1
+            'MONTH(created_on)' => date('m')
         );
         $generated = $this->master->get_generated_lead_bm_zm($where_month_Array);
         $generated_key_value = array();
