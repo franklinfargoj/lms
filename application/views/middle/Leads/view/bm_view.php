@@ -29,9 +29,9 @@
 
             </thead>
             <tbody>
-            <?php if(!empty($leads['generated_leads'])){
+            <?php if(!empty($leads)){
                 $i = 0;
-                foreach ($leads['generated_leads'] as $key => $value) {
+                foreach ($leads as $key => $value) {
                     ?>
                     <tr>
                         <td>
@@ -44,17 +44,7 @@
                             <?php echo $value['total'];?>
                         </td>
                         <td>
-                            <?php $converted = 0;
-                            if(!empty($leads['converted_leads'])) {
-                                if (in_array($value['created_by'], $leads['all_converted_created_by'])) {
-                                    foreach ($leads['converted_leads']as $k => $converted_value) {
-                                        if ($value['created_by'] == $converted_value['created_by'])
-                                            $converted = $converted_value['total'];
-                                    }
-                                }
-                            }
-                            echo $converted;
-                            ?>
+                            <?php echo $value['converted_leads'];?>
                         </td>
                         <td>
                             <a href="<?php echo site_url('dashboard/leads_status/'.encode_id($value['created_by']).'/'.$value['created_by_name'])?>">View</a>
