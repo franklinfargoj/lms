@@ -700,6 +700,9 @@ table.dataTable .top-header th{padding: 0 18px;}
 	overflow: hidden;
 	margin-top: 20px;
 }
+.dataTables_wrapper {
+	overflow-x: auto;
+}
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover{
 	background: #0d4992;
 }
@@ -1090,7 +1093,9 @@ margin-top: 10px;
     font-size: 16px;
     margin-bottom: 20px;
     color: #000000;
-    display: block;
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 15px;
  }
 
  .tick{

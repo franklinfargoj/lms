@@ -88,8 +88,8 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 							<div class="emi-section">
                                 <label>Your EMI</label>
                                 <span style="color: black" id="your_emi" class="input-box"></span>
+                                <div class="emi-month-text">per month</div>
                             </div>
-							<div class="emi-month-text">per month</div>
 						</div>
                     <?php echo form_close(); ?>
 				</div>
