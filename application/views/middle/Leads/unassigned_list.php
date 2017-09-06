@@ -37,13 +37,10 @@
         </div>
         <div class="float-right">
             <?php
-            $param1 = !is_null($this->uri->segment(3)) ? $this->uri->segment(3).'/' : '';
-            $param2 = !is_null($this->uri->segment(4)) ? $this->uri->segment(4).'/' : '';
-            $param3 = !is_null($this->uri->segment(5)) ? $this->uri->segment(5).'/' : '';
-            $param4 = !is_null($this->uri->segment(6)) ? $this->uri->segment(6).'/' : '';
+            $param1 = isset($lead_source) ? $lead_source : '';
             ?>
             <a href="<?php echo base_url('Leads/export_excel_listing/unassigned/'
-                .$param1.$param2.$param3.$param4);?>">
+                .encode_id($param1));?>">
                 <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
             </a>
         </div>
