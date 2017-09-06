@@ -767,6 +767,51 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $i++;$j++;
             }
 
+            case 'generated':
+            foreach ($data['leads'] as $key => $value) {
+                foreach ($header_value as $k => $v) {
+                    $objSheet->getStyle($excel_alpha[$k] . $i)
+                        ->getAlignment()
+                        ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    if ($k == 1) {
+                        $objSheet->getStyle($excel_alpha[1] . $i)
+                            ->getAlignment()
+                            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                    }
+                    if ($k == 2) {
+                        $objSheet->getStyle($excel_alpha[2] . $i)
+                            ->getAlignment()
+                            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                    }
+                }
+
+                $created_date = explode(' ', $value['created_on']);
+
+                $now = date_create(date('Y-m-d')); // or your date as well
+                //echo $created_date[0];
+                $generated_date = date_create($created_date[0]);
+                $datediff = date_diff($now, $generated_date);
+
+                $elapse_date = $datediff->format("%a days");
+                if($value['created_on'] == NULL || empty($value['created_on'])){
+                    $elapse_date = '';
+                }
+                $objSheet->getStyle($excel_alpha[0].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[1].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[2].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[3].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[4].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[5].($i))->applyFromArray($text_bold_false);
+
+                $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
+                $objSheet->getCell($excel_alpha[1].$i)->setValue(ucwords($value['customer_name']));
+                $objSheet->getCell($excel_alpha[2].$i)->setValue(ucwords($value['title']));
+                $objSheet->getCell($excel_alpha[3].$i)->setValue($elapse_date);
+                $objSheet->getCell($excel_alpha[4].$i)->setValue($value['lead_identification']);
+                $objSheet->getCell($excel_alpha[5].$i)->setValue($value['lead_source']);
+                $i++;$j++;
+            }
+
     }
 
     //downloads excel
