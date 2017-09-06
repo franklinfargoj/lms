@@ -4,6 +4,7 @@
 	$param1 = $this->uri->segment(3,0);
 	$param2 = $this->uri->segment(4,0);
 	$param3 = $this->uri->segment(5,0);
+	$param4 = $this->uri->segment(6,0);
 ?>
 
 <div class="header">
@@ -13,7 +14,7 @@
 		</div>
 		<div class="top-navigation">
 			<ul>
-				<li class="<?php echo ((($controller == 'dashboard') && (in_array($method,array('index','leads_status')))) || (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && ($param1 == 'generated'))) ? 'active' : ''?>">
+				<li class="<?php echo ((($controller == 'dashboard') && (in_array($method,array('index','leads_status','leads_performance')))) || (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && ($param1 == 'generated'))) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard')?>">
 						Home
 					</a>

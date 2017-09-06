@@ -53,7 +53,7 @@
                             <?php echo ++$i;?>
                         </td>
                         <td>
-                            <?php echo $value['created_by_branch_name'];?>
+                            <?php echo ucwords($value['created_by_branch_name']);?>
                         </td>
                         <td>
                             <?php echo $value['total_generated'];?>
@@ -63,6 +63,7 @@
                         </td>
                         <td>
                             <a href="<?php echo site_url('dashboard/leads_status/'.encode_id($value['created_by_branch_id']))?>">View</a>
+                            <span>/</span> 
                             <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by_branch_id']));?>">Performance</a>
                         </td>
                     </tr>
