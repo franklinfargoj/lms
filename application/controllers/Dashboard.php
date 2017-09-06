@@ -112,18 +112,16 @@ class Dashboard extends CI_Controller {
 
         //for generated lead
         $where_generated_Array = array('branch_id' => $branch_id,
-            'created_by !=' => 0,
             'MONTH(created_on)' => date('m') - 1);
-        $leads['generated_leads'] = $this->master->get_generated_lead_bm_zm($where_generated_Array);
+        $leads = $this->master->get_generated_lead_bm_zm($where_generated_Array);
         //for converted lead
-        $where_converted_Array = array('branch_id' => $branch_id,
-            'MONTH(created_on)' => date('m') - 1,
-            'created_by !=' => 0,
-            'status' => 'converted');
-        $leads['converted_leads'] = $this->master->get_converted_lead_bm_zm($where_converted_Array);
-        if(!empty($leads['converted_leads']))
-            $leads['all_converted_created_by'] = array_column($leads['converted_leads'],'created_by');
-
+        foreach ($leads as $key =>$value){
+            $where_converted_Array = array('employee_id' => $value['created_by'],
+                'MONTH(created_on)' => date('m') - 1,
+                'status' => 'converted');
+            $converted = $this->master->get_converted_lead_bm_zm($where_converted_Array);
+            $leads[$key]['converted_leads'] = $converted;
+        }
         return $leads;
     }
 
@@ -136,18 +134,16 @@ class Dashboard extends CI_Controller {
 
         //for generated lead
         $where_generated_Array = array('zone_id' => $zone_id,
-            'created_by !=' => 0,
             'MONTH(created_on)' => date('m'));
-        $leads['generated_leads'] = $this->master->get_generated_lead_bm_zm($where_generated_Array);
+        $leads = $this->master->get_generated_lead_bm_zm($where_generated_Array);
         //for converted lead
-        $where_converted_Array = array('zone_id' => $zone_id,
-            'MONTH(created_on)' => date('m'),
-            'created_by !=' => 0,
-            'status' => 'converted');
-        $leads['converted_leads'] = $this->master->get_converted_lead_bm_zm($where_converted_Array);
-        if(!empty($leads['converted_leads']))
-            $leads['all_converted_branch_id'] = array_column($leads['converted_leads'],'branch_id');
-
+        foreach ($leads as $key =>$value){
+            $where_converted_Array = array('branch_id' => $value['created_by_branch_id'],
+                'MONTH(created_on)' => date('m') - 1,
+                'status' => 'converted');
+            $converted = $this->master->get_converted_lead_bm_zm($where_converted_Array);
+            $leads[$key]['converted_leads'] = $converted;
+        }
         return $leads;
     }
 
@@ -275,6 +271,109 @@ class Dashboard extends CI_Controller {
         $result['breadcrumb'] = $this->make_bread->output();
         $middle = '/emi_calculator';
         load_view($middle,$result);
+    }
+
+    /**
+     * export_excel
+     * Excel export
+     * @author Gourav Thatoi
+     * @access public
+     * @paramas none
+     * @return  void
+     */
+    public function export_excel(){
+        $this->load->library('excel');
+        $file_name = time().'data.xls';
+        $excel_alpha = unserialize(EXCEL_ALPHA);
+        $objPHPExcel = $this->excel;
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
+        $objPHPExcel->getDefaultStyle()->getFont()->setSize(11);
+        $objPHPExcel->getDefaultStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[0])->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[1])->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[2])->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[3])->setAutoSize(true);
+        $objPHPExcel->getDefaultStyle()
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            )
+        );
+        $fontArray = array(
+            'font'  => array(
+                'bold'  => true,
+                'size'  => 22
+            ));
+        $textfontArray = array(
+            'font'  => array(
+                'bold'  => true,
+                'size'  => 11
+            ));
+        $text_bold_false = array(
+            'font'  => array(
+                'bold'  => false,
+                'size'  => 11
+            ));
+        $fileType = 'Excel5';
+        $time = time();
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel5");
+        $objSheet = $objPHPExcel->getActiveSheet();
+        $objSheet->getStyle($excel_alpha[0].'1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objSheet->getStyle($excel_alpha[1].'1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objSheet->getStyle($excel_alpha[2].'1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objSheet->getStyle($excel_alpha[3].'1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(-1);
+        $objSheet->getCell($excel_alpha[0].'1')->setValue('Sr.No');
+        $objSheet->getCell($excel_alpha[1].'1')->setValue('Employee Name');
+        $objSheet->getCell($excel_alpha[2].'1')->setValue('Generated Leads(This Month)');
+        $objSheet->getCell($excel_alpha[3].'1')->setValue('Converted Leads(This Month)');
+
+        $login_user = get_session();
+        $branch_id = $login_user['branch_id'];
+        $branch_data = $this->bm_view($branch_id);
+        pe($branch_data);
+        $i=2;$j=1;
+        foreach ($branch_data as $key => $value){
+            $objSheet->getStyle($excel_alpha[0].$i)
+                ->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objSheet->getStyle($excel_alpha[1].$i)
+                ->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            $objSheet->getStyle($excel_alpha[2].$i)
+                ->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objSheet->getStyle($excel_alpha[3].$i)
+                ->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
+            $objSheet->getCell($excel_alpha[1].$i)->setValue($value['employee_name']);
+            $objSheet->getCell($excel_alpha[2].$i)->setValue($value['employee_name']);
+            $objSheet->getCell($excel_alpha[3].$i)->setValue($value['employee_name']);
+            $i++;$j++;
+        }
+
+        //downloads excel
+        make_upload_directory('uploads');
+        make_upload_directory('uploads/excel_list');
+        header('Content-Type: application/vnd.ms-excel'); //mime type
+        header('Content-Disposition: attachment;filename="'.$file_name.'"');
+        //tell browser what's the file name
+        header('Cache-Control: max-age=0'); //no cache
+        $objWriter->save('php://output');
+
     }
     
 }

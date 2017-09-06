@@ -811,9 +811,9 @@ class Leads extends CI_Controller
         
         return $arrData;
     }
-
-    private function assign_to($employee_id,$lead_ids){
-        if(!empty($lead_ids)){
+    private function assign_to($employee_id,$lead_ids)
+    {
+        if (!empty($lead_ids)) {
             $login_user = get_session();
             $insertData = array();
             $assign_data = array(
@@ -827,20 +827,18 @@ class Leads extends CI_Controller
                 'created_by' => $login_user['hrms_id'],
                 'created_by_name' => $login_user['full_name']
             );
-            if(is_array($lead_ids)){
+            if (is_array($lead_ids)) {
                 $leads = $lead_ids;
-            }else{
+            } else {
                 $leads[] = $lead_ids;
-            }    
+            }
             foreach ($leads as $key => $value) {
                 $assign_data['lead_id'] = $value;
                 $insertData[] = $assign_data;
             }
-            
+
             return $this->db->insert_batch(Tbl_LeadAssign, $insertData);
         }
     }
-
-
 
 }
