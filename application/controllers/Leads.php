@@ -876,8 +876,16 @@ class Leads extends CI_Controller
         }
         if($type == 'generated'){
             $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
-                'Status','Followup Date','Lead Identified As','Lead Source');
+                'Lead Identified As','Lead Source');
         }
+
+        if($type == 'unassigned'){
+            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days','Lead Source');
+            $lead_source = decode_id($till);
+            $data = $this->Lead->unassigned_leads($lead_source,'');
+            export_excel($header_value,$data,$type,$lead_source);
+        }
+
         $arrData['type'] = $type;
         $arrData['till'] = $till;
 
@@ -885,7 +893,6 @@ class Leads extends CI_Controller
             $arrData['lead_source'] = $lead_source;
         }
 
-        //Create Breadcumb
         if(($status != 'all') && ($status != null)){
             $arrData['status'] = $status;
         }

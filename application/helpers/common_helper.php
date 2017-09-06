@@ -596,7 +596,7 @@ function get_details($designation_name){
  * Excel export of branch manager home
  * @author Gourav Thatoi
  */
-function export_excel($header_value,$data,$type=''){
+function export_excel($header_value,$data,$type='',$lead_source=''){
     $CI = & get_instance();
     $CI->load->library('excel');
     $file_name = time().'data.xls';
@@ -707,6 +707,38 @@ function export_excel($header_value,$data,$type=''){
                 $i++;$j++;
             }
             break;
+        case 'unassigned':
+            foreach ($data as $key => $value) {
+                foreach ($header_value as $k => $v) {
+                    $objSheet->getStyle($excel_alpha[$k] . $i)
+                        ->getAlignment()
+                        ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    if ($k == 1) {
+                        $objSheet->getStyle($excel_alpha[1] . $i)
+                            ->getAlignment()
+                            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                    }
+                    if ($k == 2) {
+                        $objSheet->getStyle($excel_alpha[2] . $i)
+                            ->getAlignment()
+                            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                    }
+                }
+                $created_date = explode(' ', $value['created_on']);
+
+                $now = date_create(date('Y-m-d')); // or your date as well
+                //echo $created_date[0];
+                $generated_date = date_create($created_date[0]);
+                $datediff = date_diff($now, $generated_date);
+                $elapse_date = $datediff->format("%a days");
+                $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
+                $objSheet->getCell($excel_alpha[1].$i)->setValue($value['lead_name']);
+                $objSheet->getCell($excel_alpha[2].$i)->setValue($value['product_title']);
+                $objSheet->getCell($excel_alpha[3].$i)->setValue($elapse_date);
+                $objSheet->getCell($excel_alpha[4].$i)->setValue($lead_source);
+                $i++;$j++;
+            }
+
     }
 
     //downloads excel
