@@ -62,7 +62,7 @@
                             <?php echo $value['total_converted'];?>
                         </td>
                         <td>
-                            <a href="<?php echo site_url('dashboard/leads_status/'.encode_id($value['created_by']).'/'.$value['created_by_name'])?>">View</a>
+                            <a href="<?php echo site_url('dashboard/leads_status/'.encode_id($value['created_by']));?>">View</a>
                             <span>/</span> 
                             <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by']));?>">Performance</a>
                         </td>
