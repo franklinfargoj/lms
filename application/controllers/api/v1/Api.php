@@ -821,9 +821,9 @@ class Api extends REST_Controller
             $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
             $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select, $table, $join, $where, $group_by);
             $response = array();
-            $keys = array('Walk-in' => 0, 'Analytics' => 0, 'Tie Ups' => 0, 'Enquiry' => 0);
+            $keys = array('Walk-in' => "0", 'Analytics' => "0", 'Tie Ups' => "0", 'Enquiry' => "0");
             foreach ($arrData['unassigned_leads_count'] as $k => $v) {
-                $keys[$v['lead_source']] = (string)$v['total'];
+                $keys[$v['lead_source']] = $v['total'];
 
             }
             //echo "<pre>";print_r($keys);die;
