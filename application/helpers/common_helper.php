@@ -389,7 +389,7 @@ function get_session(){
         'branch_id' => '3',
         'district_id' => '1',
         'state_id' => '1',
-        'zone_id' => '1234',
+        'zone_id' => '13',
         'full_name' => $CI->session->userdata('admin_name'),
         'supervisor_id' => '009',
         'designation_id' => '4',
