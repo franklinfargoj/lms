@@ -458,22 +458,24 @@ class Leads extends CI_Controller
      * @param $type,$till
      * @return array
      */
-    public function leads_list($type,$till,$status = null,$lead_source = null){
+    public function leads_list($type,$till,$status = null,$param = null){
         //Call to helper function to fetch Page title as we are using same list view for all lead list
         
         //$arrData['title'] = $title;
         $arrData['type'] = $type;
         $arrData['till'] = $till;
         
-        if($lead_source != 'all'){
-            $arrData['lead_source'] = $lead_source;
+        if(isset($param) && !empty($param)){
+            $arrData['param'] = decode_id($param);
+            $this->make_bread->add('Generated Leads', 'dashboard/leads_status/'.$param, 0);   
+        }else{
+            $this->make_bread->add('My Generated Leads', 'dashboard/leads_status', 0);   
         }
 
         //Create Breadcumb
         if(($status != 'all') && ($status != null)){
             $leads_status = $this->config->item('lead_status');
             $arrData['status'] = $status;
-            $this->make_bread->add('My Generated Leads', 'dashboard/leads_status', 0);   
             $this->make_bread->add($leads_status[$status], '', 0);   
             
         }else{
@@ -496,7 +498,7 @@ class Leads extends CI_Controller
      * @param $type,$till,$lead_id
      * @return array
      */
-    public function details($type,$till,$lead_id,$status = null){
+    public function details($type,$till,$lead_id,$status = null,$param = null){
         $lead_id = decode_id($lead_id);
         $title = get_lead_title($type,$till);
         $arrData['title'] = $title;
@@ -504,11 +506,17 @@ class Leads extends CI_Controller
         $arrData['till'] = $till;
         $breadUrl = 'leads/leads_list/'.$type.'/'.$till;
         if(!empty($status)){
-            $breadUrl = 'leads/leads_list/'.$type.'/'.$till.'/'.$status;
             $leads_status = $this->config->item('lead_status');
             $arrData['status'] = $status;
-            $this->make_bread->add('My Generated Leads', 'dashboard/leads_status', 0);   
-            $this->make_bread->add($leads_status[$status], $breadUrl, 0);   
+            if(isset($param) && !empty($param)){
+                $this->make_bread->add('Generated Leads', 'dashboard/leads_status/'.$param, 0);
+                $breadUrl = 'leads/leads_list/'.$type.'/'.$till.'/'.$status.'/'.$param;
+                $this->make_bread->add($leads_status[$status], $breadUrl, 0);   
+            }else{
+                $this->make_bread->add('My Generated Leads', 'dashboard/leads_status', 0);   
+                $breadUrl = 'leads/leads_list/'.$type.'/'.$till.'/'.$status;
+                $this->make_bread->add($leads_status[$status], $breadUrl, 0);   
+            }
         }else{
             $this->make_bread->add(ucwords($type.' Leads'),$breadUrl, 0);
         }
@@ -777,11 +785,14 @@ class Leads extends CI_Controller
             if($login_user['designation_name'] == 'EM'){
                     $where['l.created_by']  =   $login_user['hrms_id']; //Employee wise filter
             }
-            if($login_user['designation_name'] == 'BM'){
-                $where['l.branch_id'] = $login_user['branch_id']; //Branch wise filter
+            if(($login_user['designation_name'] == 'BM') && (!empty($arrData['param']))){
+                $where['l.created_by'] = $arrData['param']; //Employee wise filter for branch manager
             }
-            if($login_user['designation_name'] == 'ZM'){
-                $where['l.zone_id'] = $login_user['zone_id']; //Zone wise filter
+            if(($login_user['designation_name'] == 'ZM') && (!empty($arrData['param']))){
+                $where['l.branch_id'] = $arrData['param']; //Branch wise filter for zone manager
+            }
+            if(($login_user['designation_name'] == 'RM') && (!empty($arrData['param']))){
+                $where['l.zone_id'] = $arrData['param']; //Zone wise filter for zone manager
             }
             if(!empty($arrData['status'])){
                 $where['la.status'] = $arrData['status'];
