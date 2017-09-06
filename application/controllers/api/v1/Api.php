@@ -1269,4 +1269,27 @@ class Api extends REST_Controller
             returnJson($res);
         }
     }
+    /**
+     * update_lead_product
+     * Interested in other product
+     * @author Ashok Jadhav
+     * @access public
+     * @param empty
+     * @return array
+     */
+    public function update_lead_product($lead_id,$product_category_id,$product_id){
+        //Building input parameters
+        $table = Tbl_Leads;
+        $where  = array(Tbl_Leads.'.id' => $lead_id);
+        //link interested product id with current lead.
+        $data['product_category_id'] = $product_category_id;
+        $data['product_id']     = $product_id;
+        $response = $this->Lead->update($where,$table,$data);
+        if($response['status'] == 'error'){
+            return false;
+        }else{
+            return true;
+        }
+
+    }
 }
