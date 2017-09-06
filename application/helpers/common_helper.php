@@ -702,8 +702,9 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $generated_date = date_create($created_date[0]);
                 $datediff = date_diff($now,$generated_date);
                 $elapse_date = $datediff->format("%a days");
-                if($value['created_on'] == NULL || empty($value['created_on'])){
-                    $elapse_date = '';
+                $follow_up_date = date('d-m-Y',strtotime($value['remind_on']));
+                if($value['remind_on'] == NULL || empty($value['remind_on'])){
+                    $follow_up_date = '';
                 }
 
                 $objSheet->getStyle($excel_alpha[0].($i))->applyFromArray($text_bold_false);
@@ -719,7 +720,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $objSheet->getCell($excel_alpha[2].$i)->setValue(ucwords($value['title']));
                 $objSheet->getCell($excel_alpha[3].$i)->setValue($elapse_date);
                 $objSheet->getCell($excel_alpha[4].$i)->setValue(ucwords($lead_status[$value['status']]));
-                $objSheet->getCell($excel_alpha[5].$i)->setValue(date('d-m-Y',strtotime($value['remind_on'])));
+                $objSheet->getCell($excel_alpha[5].$i)->setValue($follow_up_date);
                 $objSheet->getCell($excel_alpha[6].$i)->setValue(ucwords($value['lead_source']));
                 $i++;$j++;
             }
@@ -750,9 +751,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $datediff = date_diff($now, $generated_date);
 
                 $elapse_date = $datediff->format("%a days");
-                if($value['created_on'] == NULL || empty($value['created_on'])){
-                    $elapse_date = '';
-                }
+
                 $objSheet->getStyle($excel_alpha[0].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[1].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[2].($i))->applyFromArray($text_bold_false);
@@ -793,9 +792,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $datediff = date_diff($now, $generated_date);
 
                 $elapse_date = $datediff->format("%a days");
-                if($value['created_on'] == NULL || empty($value['created_on'])){
-                    $elapse_date = '';
-                }
+                
                 $objSheet->getStyle($excel_alpha[0].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[1].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[2].($i))->applyFromArray($text_bold_false);
