@@ -97,6 +97,10 @@ class Dashboard extends CI_Controller {
                     $arrData['leads'] = $this->zm_view($zone_id);
                     $middle = "Leads/view/zm_view";
                     break;
+                case 'RM':
+                    $arrData['leads'] = $this->gm_view();
+                    $middle = "Leads/view/gm_view";
+                    break;
             }
 
         }
@@ -168,6 +172,8 @@ class Dashboard extends CI_Controller {
         foreach ($generated as $k => $v) {
             $generated_key_value[$v['branch_id']] = $v['total'];
         }
+        /*pe($this->db->last_query());
+        exit;*/
         foreach ($result['branch_list'] as $key => $val) {
             if (!array_key_exists($val['id'], $generated_key_value)) {
                 $push_generated = array(
@@ -197,6 +203,60 @@ class Dashboard extends CI_Controller {
         return $final;
     }
 
+    /**
+     * zm_view
+     * loads the zonal manager view
+     * @author Gourav Thatoi
+     */
+    public function gm_view(){
+
+        $where_month_Array = array(
+            'zone_id !=' => NULL,
+            'MONTH(created_on)' => date('m') - 1
+        );
+        $generated = $this->master->get_generated_lead_bm_zm($where_month_Array);
+        $generated_key_value = array();
+        $final = array();
+        $login_user = get_session();
+        $result = get_details($login_user['designation_name']);
+        foreach ($generated as $k => $v) {
+            $generated_key_value[$v['zone_id']] = $v['total'];
+        }
+        
+        foreach ($result['zone_list'] as $key => $val) {
+            if (!array_key_exists($val['id'], $generated_key_value)) {
+                $push_generated = array(
+                    'created_by_zone_id' => $val['id'],
+                    'created_by_zone_name' => $val['full_name'],
+                    'total_generated' => 0
+                );
+            } else {
+                $push_generated = array(
+                    'created_by_zone_id' => $val['id'],
+                    'created_by_zone_name' => $val['full_name'],
+                    'total_generated' => $generated_key_value[$val['id']]
+                );
+            }
+            $final[$val['id']] = $push_generated;
+        }
+        /*pe($final);
+        exit;*/
+        //for converted
+        foreach ($final as $id => $value) {
+            $where_month_Array = array(
+                'zone_id' => $value['created_by_zone_id'],
+                'MONTH(created_on)' => date('m'),
+                'status' => 'converted'
+            );
+            $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
+            if (!empty($converted)) {
+                $converted = 0;
+            }
+            $final[$value['created_by_zone_id']]['total_converted'] = $converted;
+        }
+        return $final;
+    }
+
 
     /**
      * leads_performance
@@ -220,7 +280,8 @@ class Dashboard extends CI_Controller {
         $result['breadcrumb'] = $this->make_bread->output();
 
         if ($this->session->userdata('admin_type') == 'ZM') {
-
+            $result['title'] = 'Lead Performance';
+            $this->make_bread->add('Lead Performance', '', 0);
             foreach ($source as $key => $lead_source){
                 $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $lead_source);
                 $result['lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
@@ -236,27 +297,35 @@ class Dashboard extends CI_Controller {
                 $result['month_lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
             }
 
-        }if($this->session->userdata('admin_type') =='BM' || $this->session->userdata('admin_type') =='EM'){
-
+        }
+        if($this->session->userdata('admin_type') =='BM' || $this->session->userdata('admin_type') =='EM'){
+            if($this->session->userdata('admin_type') =='EM'){
+                $result['title'] = 'My Lead Performance';
+                $this->make_bread->add('My Lead Performance', '', 0);
+            }else{
+                $result['title'] = 'Lead Performance';
+                $this->make_bread->add('Lead Performance', '', 0);
+            }
             foreach ($source as $key => $lead_source){
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),
-                Tbl_Leads . '.lead_source' => $lead_source);
-            $result['lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),
+                    Tbl_Leads . '.lead_source' => $lead_source);
+                $result['lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),
-                Tbl_Leads . '.lead_source' => $lead_source);
-            $result['month_lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),
+                    Tbl_Leads . '.lead_source' => $lead_source);
+                $result['month_lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),
-                Tbl_Leads . '.lead_source' => $lead_source,Tbl_LeadAssign . '.status' => 'Converted');
-            $result['lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),
+                    Tbl_Leads . '.lead_source' => $lead_source,Tbl_LeadAssign . '.status' => 'Converted');
+                $result['lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
-            $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),
-                Tbl_Leads . '.lead_source' => $lead_source,Tbl_LeadAssign . '.status' => 'Converted');
-            $result['month_lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),
+                    Tbl_Leads . '.lead_source' => $lead_source,Tbl_LeadAssign . '.status' => 'Converted');
+                $result['month_lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
 
             }
         }
+        $result['breadcrumb'] = $this->make_bread->output();
         load_view($middle,$result);
 
     }
@@ -279,6 +348,8 @@ class Dashboard extends CI_Controller {
             $id=$this->uri->segment(3);
             $branch_id = decode_id($id);
             $result['branch_id'] = $branch_id;
+            $this->make_bread->add('Generated Leads', '', 0);
+//            $this->make_bread->add($branch_id, '', 0);  //Put Branch name Here
 
             if(!empty($status)){
                 foreach ($status as $key => $value) {
@@ -290,6 +361,27 @@ class Dashboard extends CI_Controller {
                 }
             }
         }
+
+        if(!empty($designation_type) && $designation_type == 'RM'){
+            $table = Tbl_LeadAssign;
+            $action = 'count';
+            $id=$this->uri->segment(3);
+            $zone_id = decode_id($id);
+            $result['zone_id'] = $zone_id;
+            $this->make_bread->add('Generated Leads', '', 0);
+//            $this->make_bread->add($branch_id, '', 0);  //Put Branch name Here
+
+            if(!empty($status)){
+                foreach ($status as $key => $value) {
+                    $whereArray = array(Tbl_Leads.'.zone_id' => $zone_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+                    $result[$key]['Year'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
+
+                    $whereArray = array(Tbl_Leads.'.zone_id' => $zone_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
+                    $result[$key]['Month'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
+                }
+            }
+        }
+        
         if(!empty($designation_type) && ($designation_type == 'BM' || $designation_type == 'EM')){
             $table = Tbl_LeadAssign;
             $action = 'count';
@@ -302,6 +394,8 @@ class Dashboard extends CI_Controller {
                 $result['employee_id'] = $employee_id;
                 $result['employee_name'] = $input['full_name'];
             }
+            $this->make_bread->add('Generated Leads', '', 0);
+            //$this->make_bread->add($employee_id, '', 0);  //Put Employee name Here
             if(!empty($status)){
                 foreach ($status as $key => $value) {
                     $whereArray = array(Tbl_Leads.'.created_by'=>$employee_id,'status'=>$key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
@@ -312,17 +406,17 @@ class Dashboard extends CI_Controller {
                 }
             }
         }
-       $middle = "Leads/view/status";
-       load_view($middle,$result);
+        $result['breadcrumb'] = $this->make_bread->output();
+        $middle = "Leads/view/status";
+        load_view($middle,$result);
 
    }
     public function emi_calculator(){
-        $this->make_bread->add('emi-calculator', '', 0);
+        $this->make_bread->add('EMI Calculator', '', 0);
         $result['breadcrumb'] = $this->make_bread->output();
         $middle = '/emi_calculator';
         load_view($middle,$result);
     }
-
 
     public function home_excel(){
         $login_user = get_session();
@@ -344,5 +438,4 @@ class Dashboard extends CI_Controller {
                 break;
         }
     }
-
 }

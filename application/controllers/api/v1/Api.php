@@ -84,7 +84,7 @@ class Api extends REST_Controller
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'],Tbl_LeadAssign . 'lead_id', NULL);
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . 'lead_id', NULL);
                 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }
@@ -751,7 +751,7 @@ class Api extends REST_Controller
             $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
             $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select, $table, $join, $where, $group_by);
             $response = array();
-            $keys = array('Walk-in' => 0, 'Analytics' => 0, 'Tie Ups' => 0, 'Enquiry' => 0);
+            $keys = array('Walk-in' => "0", 'Analytics' => "0", 'Tie Ups' => "0", 'Enquiry' => "0");
             foreach ($arrData['unassigned_leads_count'] as $k => $v) {
                 $keys[$v['lead_source']] = $v['total'];
 
@@ -950,9 +950,6 @@ class Api extends REST_Controller
             isset($params['district_id']) && !empty($params['district_id']) &&
             isset($params['state_id']) && !empty($params['state_id']) &&
             isset($params['zone_id']) && !empty($params['zone_id']) &&
-            isset($params['remind_on']) && !empty($params['remind_on']) &&
-            isset($params['remind_to']) && !empty($params['remind_to']) &&
-            isset($params['reminder_text']) && !empty($params['reminder_text']) &&
             isset($params['branch_manager_id']) && !empty($params['branch_manager_id']) &&
             isset($params['branch_manager_name']) && !empty($params['branch_manager_name'])
         ) {
@@ -964,6 +961,26 @@ class Api extends REST_Controller
             $where = array(Tbl_LeadAssign . '.lead_id' => $params['lead_id'], Tbl_LeadAssign . '.is_updated' => 1);
             $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
             $leads_data = $leadsAssign[0];
+
+            /****************************************************************
+            If interested in other product
+             *****************************************************************/
+            $interested = $params['interested'];
+            if($interested == 1){
+                if(isset($params['product_category_id']) && !empty($params['product_category_id']) && isset($params['product_id']) && !empty($params['product_id'])){
+                    $product_category_id = $params['product_category_id'];
+                    $product_id = $params['product_id'];
+                    //Function call for add new leads in selected product category hierarchy
+                    $result3 = $this->update_lead_product($params['lead_id'],$product_category_id,$product_id);
+
+                }else{
+                    $res = array('result' => 'False',
+                        'data' => 'Invalid Request for Other Interest');
+                    returnJson($res);
+                }
+
+            }
+            /*****************************************************************/
 
             if (($leads_data['status'] != $params['status'])) {
                 //Set current entry as old (set is_updated = 0)
@@ -993,19 +1010,27 @@ class Api extends REST_Controller
                 }
             }
             if ($params['status'] == 'FU') {
-                $remindData = array(
-                    'lead_id' => $params['lead_id'],
-                    'remind_on' => date('y-m-d-H-i-s', strtotime($params['remind_on'])),
-                    'remind_to' => $params['remind_to'],
-                    'reminder_text' => $params['reminder_text']
-                );
-                //This will add entry into reminder scheduler for status (Interested/Follow up)
-                $result2 = $this->Lead->add_reminder($remindData);
+                if(isset($params['remind_on']) && !empty($params['remind_on']) &&
+                    isset($params['remind_to']) && !empty($params['remind_to']) &&
+                    isset($params['reminder_text']) && !empty($params['reminder_text'])) {
+                    $remindData = array(
+                        'lead_id' => $params['lead_id'],
+                        'remind_on' => date('y-m-d-H-i-s', strtotime($params['remind_on'])),
+                        'remind_to' => $params['remind_to'],
+                        'reminder_text' => $params['reminder_text']
+                    );
+                    //This will add entry into reminder scheduler for status (Interested/Follow up)
+                    $result2 = $this->Lead->add_reminder($remindData);
+                }else{
+                    $res = array('result' => 'False',
+                        'data' => 'Invalid Request For Following Status');
+                    returnJson($res);
+                }
             }
 
-            if($result > 0 && $result2 > 0){
+            if($result > 0 && $result2 > 0 && $result2 > 3){
                 $res = array('result' => 'True',
-                    'data' => 'Lead Status Change and Reminder Save Successfully');
+                    'data' => 'Lead Status Change and Reminder and Other Product Save Successfully');
                 returnJson($res);
             }elseif($result > 0){
                 $res = array('result' => 'True',
@@ -1014,6 +1039,10 @@ class Api extends REST_Controller
             }elseif($result2 > 0){
                 $res = array('result' => 'True',
                     'data' => 'Reminder Save Successfully');
+                returnJson($res);
+            }elseif($result3 > 0){
+                $res = array('result' => 'True',
+                    'data' => 'Other Interested product Save Successfully');
                 returnJson($res);
             }else{
                 $res = array('result' => 'True',
@@ -1026,5 +1055,171 @@ class Api extends REST_Controller
                 'data' => 'Invalid Request');
             returnJson($res);
         }
+    }
+
+    public function refresh_dashboard_post()
+    {
+        $params = $this->input->post();
+        if (!empty($params) && isset($params['user_id']) && !empty($params['user_id']) && isset($params['designation_name']) && !empty($params['designation_name']))
+        {
+            $user_id = $params['user_id'];
+
+            $result['basic_info'] = array(
+                'hrms_id' => '12',
+                'dept_id' => '12',
+                'dept_type_id' => '123',
+                'dept_type_name' => 'BR',
+                'branch_id' => '12',
+                'district_id' => '1234',
+                'state_id' => '1234',
+                'zone_id' => '1234',
+                'full_name' => 'mukesh kurmi',
+                'supervisor_id' => '009',
+                'designation_id' => '4',
+                'designation_name' => $params['designation_name'],
+                'mobile' => '9975772432',
+                'email_id' => 'mukesh.kurmi@wwindia.com',
+            );
+            $result['employee_list'][] = array(
+                'id' => '12',
+                'full_name' => 'mukesh kurmi',
+            );
+            $result['employee_list'][] = array(
+                'id' => '13',
+                'full_name' => 'anup',
+            );
+            $result['employee_list'][] = array(
+                'id' => '15',
+                'full_name' => 'anup',
+            );
+            $result['branch_list'][] = array(
+                'id' => '12',
+                'full_name' => 'branch1',
+            );
+            $result['branch_list'][] = array(
+                'id' => '13',
+                'full_name' => 'branch2',
+            );
+            $result['zone_list'][] = array(
+                'id' => '12',
+                'full_name' => 'zone1',
+            );
+            $result['zone_list'][] = array(
+                'id' => '13',
+                'full_name' => 'zone2',
+            );
+            $result['status'] = 'success';
+//        returnJson($data);
+
+
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'BM') {
+                if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
+                    $branch_id = $result['basic_info']['branch_id'];
+                    $type = 'BM';
+                    $final = $this->count($type, $branch_id, $result);
+
+                    $leads['generated_converted'] = $final;
+                    //for assigned lead
+                    $where_assigned_Array = array('branch_id' => $branch_id,
+                        'YEAR(created_on)' => date('Y'));
+                }
+                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
+                $action = 'count';
+                $select = array();
+                $table = Tbl_Leads;
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . 'lead_id', NULL);
+                $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
+                $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+            }
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'EM') {
+            if (isset($result['basic_info']['hrms_id']) && $result['basic_info']['hrms_id'] != '') {
+                    $created_id = $result['basic_info']['hrms_id'];
+
+                    //Parameters buiding for sending to list function.
+                    $action = 'count';
+                    $select = array();
+                    $join = array();
+                    $group_by = array();
+
+                    //For Generated Leads Count
+                    $table = Tbl_Leads;
+
+                    //Month till date
+                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
+                    $leads['generated_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //Year till date
+                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+                    $leads['generated_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //For converted leads Count
+                    $table = Tbl_LeadAssign;
+
+                    //Month till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+                    $leads['converted_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+
+                    //Year till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $leads['converted_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //For assigned leads Count
+                    $table = Tbl_LeadAssign;
+
+                    //Year till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+                }
+
+            }
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'ZM') {
+                if (isset($result['basic_info']['zone_id']) && $result['basic_info']['zone_id'] != '') {
+                    $zone_id = $result['basic_info']['zone_id'];
+                    $type = 'ZM';
+                    $final = $this->count($type, $zone_id, $result);
+                    $leads['generated_converted'] = $final;
+                }
+            }
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'GM') {
+                $type = 'GM';
+                $final = $this->count($type, '', $result);
+                $leads['generated_converted'] = $final;
+            }
+
+
+            $result = array(
+                "result" => 'True',
+                "data" => ['count' => $leads, 'basic_info' => $result['basic_info']]
+            );
+            returnJson($result);
+        }else{
+            $res = array('result' => 'False',
+                'data' => 'Invalid Request');
+            returnJson($res);
+        }
+    }
+    /**
+     * update_lead_product
+     * Interested in other product
+     * @author Ashok Jadhav
+     * @access public
+     * @param empty
+     * @return array
+     */
+    public function update_lead_product($lead_id,$product_category_id,$product_id){
+        //Building input parameters
+        $table = Tbl_Leads;
+        $where  = array(Tbl_Leads.'.id' => $lead_id);
+        //link interested product id with current lead.
+        $data['product_category_id'] = $product_category_id;
+        $data['product_id']     = $product_id;
+        $response = $this->Lead->update($where,$table,$data);
+        if($response['status'] == 'error'){
+            return false;
+        }else{
+            return true;
+        }
+
     }
 }

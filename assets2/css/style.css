@@ -1,4 +1,4 @@
-/*@font-face {
+ 	/*@font-face {
   font-family: 'Montserrat-Regular';
   src: url('../fonts/Montserrat-Regular.eot?#iefix') format('embedded-opentype'),  url('../fonts/Montserrat-Regular.woff') format('woff'), url('../fonts/Montserrat-Regular.ttf')  format('truetype'), url('../fonts/Montserrat-Regular.svg#Montserrat-Regular') format('svg');
   font-weight: normal;
@@ -494,7 +494,7 @@ body{
 }
 
 .main-content .lead-section{
-	padding:85px 100px;
+	padding: 30px 100px;
 	margin: 20px 0;
 	box-sizing: border-box;
 	width: 50%;
@@ -505,7 +505,7 @@ body{
 }
 
 .lead-data{
-	margin: 30px 0;
+	margin: 50px 0 30px;
 }
 
 .lead-section h3{
@@ -659,10 +659,10 @@ strong{
 	text-decoration: underline;
 }
 .lead-top{margin-bottom: 20px;}
-.lead-top .float-left{font-family: "Montserrat";font-size: 16px;color: #484848; padding-top: 15px;}
+.lead-top .float-left{font-family: "Montserrat";font-size: 16px;color: #484848; }
 .total-lead{font-weight: normal;}
 .lead-num{font-weight: 600;}
-.lead-num a{margin-top: 15px; display: inline-block;}
+.lead-num a{ display: inline-block;}
 .top-header{background-color: #61aeef; height: 50px;}
 table.dataTable .top-header th{padding: 0 18px;}
 .dataTables_length{display: none;}
@@ -699,6 +699,9 @@ table.dataTable .top-header th{padding: 0 18px;}
 .dataTables_paginate{
 	overflow: hidden;
 	margin-top: 20px;
+}
+.dataTables_wrapper {
+	overflow-x: auto;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover{
 	background: #0d4992;
@@ -1026,8 +1029,8 @@ margin-top: 10px;
 
 .emi-content .range-slider{
 	border-bottom: 1px dashed #ccc;
-    margin-bottom: 100px;
-    padding-bottom: 70px;
+    margin-bottom: 40px;
+    padding-bottom: 34px;
     position: relative;
 }
 
@@ -1062,21 +1065,39 @@ margin-top: 10px;
 	border: 1px solid #ccc;
     font-weight: 500;
     font-size: 32.21px;
-    margin-bottom: 15px;
     width: 140px;
     padding: 8px 12px 15px;
     height: 25px;
     background-color: transparent;
-    display: block;
+    display: table-cell;
+    vertical-align: middle;
 }
-.emi-content .form-submit div{
-	display: inline-block;
-    text-align: center;
-    width: 100%;
+
+.emi-content .form-submit .emi-section {
+	display: table;
+	margin-bottom: 15px;
+}
+
+.emi-content .form-submit label{
+	display: table-cell;
     font-family: "Montserrat";
     font-size: 16px;
     margin-bottom: 20px;
+    color: #000000;
+    vertical-align: middle;
+    padding-right: 15px;
  }
+
+ .emi-content .form-submit .emi-month-text {
+ 	font-family: "Montserrat";
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #000000;
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 15px;
+ }
+
  .tick{
     color: #8b8b8b;
     font-size: 14px;
@@ -1315,7 +1336,7 @@ margin-top: 10px;
 
 /*Page title*/
 .page-title{
-	padding: 30px 0;
+	padding: 15px 0;
 }
 .page-title h3{
 	font-size: 24px;
