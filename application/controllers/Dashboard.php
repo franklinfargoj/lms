@@ -343,7 +343,6 @@ class Dashboard extends CI_Controller {
         $login_user = get_session();
         $branch_id = $login_user['branch_id'];
         $branch_data = $this->bm_view($branch_id);
-        pe($branch_data);
         $i=2;$j=1;
         foreach ($branch_data as $key => $value){
             $objSheet->getStyle($excel_alpha[0].$i)
@@ -359,9 +358,9 @@ class Dashboard extends CI_Controller {
                 ->getAlignment()
                 ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
             $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
-            $objSheet->getCell($excel_alpha[1].$i)->setValue($value['employee_name']);
-            $objSheet->getCell($excel_alpha[2].$i)->setValue($value['employee_name']);
-            $objSheet->getCell($excel_alpha[3].$i)->setValue($value['employee_name']);
+            $objSheet->getCell($excel_alpha[1].$i)->setValue($value['created_by_name']);
+            $objSheet->getCell($excel_alpha[2].$i)->setValue($value['total']);
+            $objSheet->getCell($excel_alpha[3].$i)->setValue($value['converted_leads']);
             $i++;$j++;
         }
 
