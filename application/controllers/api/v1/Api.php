@@ -823,7 +823,7 @@ class Api extends REST_Controller
             $response = array();
             $keys = array('Walk-in' => 0, 'Analytics' => 0, 'Tie Ups' => 0, 'Enquiry' => 0);
             foreach ($arrData['unassigned_leads_count'] as $k => $v) {
-                $keys[$v['lead_source']] = $v['total'];
+                $keys[$v['lead_source']] = (string)$v['total'];
 
             }
             //echo "<pre>";print_r($keys);die;
