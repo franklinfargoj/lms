@@ -1020,9 +1020,6 @@ class Api extends REST_Controller
             isset($params['district_id']) && !empty($params['district_id']) &&
             isset($params['state_id']) && !empty($params['state_id']) &&
             isset($params['zone_id']) && !empty($params['zone_id']) &&
-            isset($params['remind_on']) && !empty($params['remind_on']) &&
-            isset($params['remind_to']) && !empty($params['remind_to']) &&
-            isset($params['reminder_text']) && !empty($params['reminder_text']) &&
             isset($params['branch_manager_id']) && !empty($params['branch_manager_id']) &&
             isset($params['branch_manager_name']) && !empty($params['branch_manager_name'])
         ) {
@@ -1034,6 +1031,26 @@ class Api extends REST_Controller
             $where = array(Tbl_LeadAssign . '.lead_id' => $params['lead_id'], Tbl_LeadAssign . '.is_updated' => 1);
             $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
             $leads_data = $leadsAssign[0];
+
+            /****************************************************************
+            If interested in other product
+             *****************************************************************/
+            $interested = $params['interested'];
+            if($interested == 1){
+                if(isset($params['product_category_id']) && !empty($params['product_category_id']) && isset($params['product_id']) && !empty($params['product_id'])){
+                    $product_category_id = $params['product_category_id'];
+                    $product_id = $params['product_id'];
+                    //Function call for add new leads in selected product category hierarchy
+                    $result3 = $this->update_lead_product($params['lead_id'],$product_category_id,$product_id);
+
+                }else{
+                    $res = array('result' => 'False',
+                        'data' => 'Invalid Request for Other Interest');
+                    returnJson($res);
+                }
+
+            }
+            /*****************************************************************/
 
             if (($leads_data['status'] != $params['status'])) {
                 //Set current entry as old (set is_updated = 0)
@@ -1063,19 +1080,27 @@ class Api extends REST_Controller
                 }
             }
             if ($params['status'] == 'FU') {
-                $remindData = array(
-                    'lead_id' => $params['lead_id'],
-                    'remind_on' => date('y-m-d-H-i-s', strtotime($params['remind_on'])),
-                    'remind_to' => $params['remind_to'],
-                    'reminder_text' => $params['reminder_text']
-                );
-                //This will add entry into reminder scheduler for status (Interested/Follow up)
-                $result2 = $this->Lead->add_reminder($remindData);
+                if(isset($params['remind_on']) && !empty($params['remind_on']) &&
+                    isset($params['remind_to']) && !empty($params['remind_to']) &&
+                    isset($params['reminder_text']) && !empty($params['reminder_text'])) {
+                    $remindData = array(
+                        'lead_id' => $params['lead_id'],
+                        'remind_on' => date('y-m-d-H-i-s', strtotime($params['remind_on'])),
+                        'remind_to' => $params['remind_to'],
+                        'reminder_text' => $params['reminder_text']
+                    );
+                    //This will add entry into reminder scheduler for status (Interested/Follow up)
+                    $result2 = $this->Lead->add_reminder($remindData);
+                }else{
+                    $res = array('result' => 'False',
+                        'data' => 'Invalid Request For Following Status');
+                    returnJson($res);
+                }
             }
 
-            if($result > 0 && $result2 > 0){
+            if($result > 0 && $result2 > 0 && $result2 > 3){
                 $res = array('result' => 'True',
-                    'data' => 'Lead Status Change and Reminder Save Successfully');
+                    'data' => 'Lead Status Change and Reminder and Other Product Save Successfully');
                 returnJson($res);
             }elseif($result > 0){
                 $res = array('result' => 'True',
@@ -1084,6 +1109,10 @@ class Api extends REST_Controller
             }elseif($result2 > 0){
                 $res = array('result' => 'True',
                     'data' => 'Reminder Save Successfully');
+                returnJson($res);
+            }elseif($result3 > 0){
+                $res = array('result' => 'True',
+                    'data' => 'Other Interested product Save Successfully');
                 returnJson($res);
             }else{
                 $res = array('result' => 'True',
