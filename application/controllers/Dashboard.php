@@ -160,9 +160,10 @@ class Dashboard extends CI_Controller {
      */
     public function zm_view($zone_id){
 
-        $where_month_Array = array('zone_id' => $zone_id,
-            'MONTH(created_on)' => date('m'));
-
+        $where_month_Array = array(
+            'zone_id' => $zone_id,
+            'MONTH(created_on)' => date('m')
+        );
         $generated = $this->master->get_generated_lead_bm_zm($where_month_Array);
         $generated_key_value = array();
         $final = array();
@@ -211,7 +212,7 @@ class Dashboard extends CI_Controller {
 
         $where_month_Array = array(
             'zone_id !=' => NULL,
-            'MONTH(created_on)' => date('m') - 1
+            'MONTH(created_on)' => date('m')
         );
         $generated = $this->master->get_generated_lead_bm_zm($where_month_Array);
         $generated_key_value = array();
@@ -276,9 +277,6 @@ class Dashboard extends CI_Controller {
         $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
         $select = array();
         $middle = "Leads/view/performance";
-        $this->make_bread->add('My Lead Performance', '', 0);
-        $result['breadcrumb'] = $this->make_bread->output();
-
         if ($this->session->userdata('admin_type') == 'ZM') {
             $result['title'] = 'Lead Performance';
             $this->make_bread->add('Lead Performance', '', 0);
@@ -360,9 +358,8 @@ class Dashboard extends CI_Controller {
         $result = array();
         $status = $this->config->item('lead_status');
         $designation_type = $this->session->userdata('admin_type');
-        $this->make_bread->add('My Generated Leads', '', 0);
         $join[] = array('table' => Tbl_Leads, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
-        $result['breadcrumb'] = $this->make_bread->output();
+        
         if(!empty($designation_type) && $designation_type == 'ZM'){
             $table = Tbl_LeadAssign;
             $action = 'count';

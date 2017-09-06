@@ -856,7 +856,15 @@ class Leads extends CI_Controller
                 $insertData[] = $assign_data;
             }
 
-            return $this->db->insert_batch(Tbl_LeadAssign, $insertData);
+            $insertData = $this->db->insert_batch(Tbl_LeadAssign, $insertData);
+            if($insertData){
+                //Add Notification
+                $title="New Lead Assigned";
+                $description="New Lead Assigned to you by Branch Manager";
+                $notification_to = $employee_id;
+                $priority="Normal";
+                notification_log($title,$description,$priority,$notification_to);
+            }
         }
     }
 
