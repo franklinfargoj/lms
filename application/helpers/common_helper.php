@@ -792,7 +792,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $datediff = date_diff($now, $generated_date);
 
                 $elapse_date = $datediff->format("%a days");
-                
+
                 $objSheet->getStyle($excel_alpha[0].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[1].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[2].($i))->applyFromArray($text_bold_false);
