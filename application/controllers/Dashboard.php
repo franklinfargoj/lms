@@ -436,107 +436,24 @@ class Dashboard extends CI_Controller {
         load_view($middle,$result);
     }
 
-    /**
-     * export_excel
-     * Excel export
-     * @author Gourav Thatoi
-     * @access public
-     * @paramas none
-     * @return  void
-     */
-    public function export_excel(){
-        $this->load->library('excel');
-        $file_name = time().'data.xls';
-        $excel_alpha = unserialize(EXCEL_ALPHA);
-        $objPHPExcel = $this->excel;
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
-        $objPHPExcel->getDefaultStyle()->getFont()->setSize(11);
-        $objPHPExcel->getDefaultStyle()->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[0])->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[1])->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[2])->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension($excel_alpha[3])->setAutoSize(true);
-        $objPHPExcel->getDefaultStyle()
-            ->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $styleArray = array(
-            'borders' => array(
-                'allborders' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN
-                )
-            )
-        );
-        $fontArray = array(
-            'font'  => array(
-                'bold'  => true,
-                'size'  => 22
-            ));
-        $textfontArray = array(
-            'font'  => array(
-                'bold'  => true,
-                'size'  => 11
-            ));
-        $text_bold_false = array(
-            'font'  => array(
-                'bold'  => false,
-                'size'  => 11
-            ));
-        $fileType = 'Excel5';
-        $time = time();
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel5");
-        $objSheet = $objPHPExcel->getActiveSheet();
-        $objSheet->getStyle($excel_alpha[0].'1')
-            ->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objSheet->getStyle($excel_alpha[1].'1')
-            ->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objSheet->getStyle($excel_alpha[2].'1')
-            ->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objSheet->getStyle($excel_alpha[3].'1')
-            ->getAlignment()
-            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(-1);
-        $objSheet->getCell($excel_alpha[0].'1')->setValue('Sr.No');
-        $objSheet->getCell($excel_alpha[1].'1')->setValue('Employee Name');
-        $objSheet->getCell($excel_alpha[2].'1')->setValue('Generated Leads(This Month)');
-        $objSheet->getCell($excel_alpha[3].'1')->setValue('Converted Leads(This Month)');
-
+    public function home_excel(){
         $login_user = get_session();
-        $branch_id = $login_user['branch_id'];
-        $branch_data = $this->bm_view($branch_id);
-        pe($branch_data);
-        $i=2;$j=1;
-        foreach ($branch_data as $key => $value){
-            $objSheet->getStyle($excel_alpha[0].$i)
-                ->getAlignment()
-                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            $objSheet->getStyle($excel_alpha[1].$i)
-                ->getAlignment()
-                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objSheet->getStyle($excel_alpha[2].$i)
-                ->getAlignment()
-                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            $objSheet->getStyle($excel_alpha[3].$i)
-                ->getAlignment()
-                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
-            $objSheet->getCell($excel_alpha[1].$i)->setValue($value['employee_name']);
-            $objSheet->getCell($excel_alpha[2].$i)->setValue($value['employee_name']);
-            $objSheet->getCell($excel_alpha[3].$i)->setValue($value['employee_name']);
-            $i++;$j++;
+        $designation_type = $login_user['designation_name'];
+        switch ($designation_type){
+            case 'BM':
+                $header_value = array('Sr.No','Employee Name','Generated Leads(This Month)',
+                    'Converted Leads(This Month)');
+                $id = $login_user['branch_id'];
+                $data = $this->bm_view($id);
+                export_excel($header_value,$data);
+                break;
+            case 'ZM':
+                $header_value = array('Sr.No','Branch Name','Generated Leads(This Month)',
+                    'Converted Leads(This Month)');
+                $id = $login_user['zone_id'];
+                $data = $this->zm_view($id);
+                export_excel($header_value,$data);
+                break;
         }
-
-        //downloads excel
-        make_upload_directory('uploads');
-        make_upload_directory('uploads/excel_list');
-        header('Content-Type: application/vnd.ms-excel'); //mime type
-        header('Content-Disposition: attachment;filename="'.$file_name.'"');
-        //tell browser what's the file name
-        header('Cache-Control: max-age=0'); //no cache
-        $objWriter->save('php://output');
-
     }
-    
 }

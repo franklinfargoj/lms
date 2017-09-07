@@ -57,79 +57,9 @@ class Api extends REST_Controller
         $device_token = $params['device_token'];
         $device_type = $params['device_type'];
 
-//        $curl_handle = curl_init();
-//        curl_setopt($curl_handle, CURLOPT_URL, 'http://10.0.11.33/payo_app/users/update_synapse_info');
-//
-//        if(!isset($params['user_id']) || !isset($params['password']) || ($params['user_id'] == NULL) ||  ($params['password'] == NULL)){
-//            $err['result'] = false;
-//            $err['data'] = "Invalid Request";
-//            returnJson($err);
-//        }
-//
-//        $user_id = $params['user_id'];
-//        $password = $params['password'];
-//        $device_token = $params['device_token'];
-//
-//        $curl_handle = curl_init();
-//        curl_setopt($curl_handle, CURLOPT_URL, '');
-//        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($curl_handle, CURLOPT_POST, 1);
-//        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
-//            'user_id' => $user_id,
-//            'password' => $password
-//        ));
-//
-//        $buffer = curl_exec($curl_handle);
-//        curl_close($curl_handle);
-//
-//        $result = json_decode($buffer);
+         $result = get_details($params['designation_name']);
 
-        $result['basic_info'] = array(
-            'hrms_id' => '12',
-            'dept_id' => '12',
-            'dept_type_id' => '123',
-            'dept_type_name' => 'BR',
-            'branch_id' => '12',
-            'district_id' => '1234',
-            'state_id' => '1234',
-            'zone_id' => '1234',
-            'full_name' => 'mukesh kurmi',
-            'supervisor_id' => '009',
-            'designation_id' => '4',
-            'designation_name' => $params['designation_name'],
-            'mobile' => '9975772432',
-            'email_id' => 'mukesh.kurmi@wwindia.com',
-        );
-        $result['employee_list'][] = array(
-            'id' => '12',
-            'full_name' => 'mukesh kurmi',
-        );
-        $result['employee_list'][] = array(
-            'id' => '13',
-            'full_name' => 'anup',
-        );
-        $result['employee_list'][] = array(
-            'id' => '15',
-            'full_name' => 'anup',
-        );
-        $result['branch_list'][] = array(
-            'id' => '12',
-            'full_name' => 'branch1',
-        );
-        $result['branch_list'][] = array(
-            'id' => '13',
-            'full_name' => 'branch2',
-        );
-        $result['zone_list'][] = array(
-            'id' => '12',
-            'full_name' => 'zone1',
-        );
-        $result['zone_list'][] = array(
-            'id' => '13',
-            'full_name' => 'zone2',
-        );
-        $result['status'] = 'success';
-//        returnJson($data);
+//        returnJson($result);
 
         if (isset($result['status']) && $result['status'] == 'success') {
 
@@ -154,7 +84,7 @@ class Api extends REST_Controller
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
-                $where = array(Tbl_LeadAssign . 'lead_id', NULL);
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . 'lead_id', NULL);
                 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }
@@ -716,7 +646,7 @@ class Api extends REST_Controller
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
-                    if (!empty($converted)) {
+                    if (empty($converted)) {
                         $converted = 0;
                     }
                     $final[$value['created_by']]['total_converted'] = $converted;
@@ -755,7 +685,7 @@ class Api extends REST_Controller
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
-                    if (!empty($converted)) {
+                    if (empty($converted)) {
                         $converted = 0;
                     }
                     $final[$value['created_by_branch_id']]['total_converted'] = $converted;
@@ -793,7 +723,7 @@ class Api extends REST_Controller
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
-                    if (!empty($converted)) {
+                    if (empty($converted)) {
                         $converted = 0;
                     }
                     $final[$value['created_by_zone_id']]['total_converted'] = $converted;
@@ -821,7 +751,7 @@ class Api extends REST_Controller
             $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
             $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select, $table, $join, $where, $group_by);
             $response = array();
-            $keys = array('Walk-in' => 0, 'Analytics' => 0, 'Tie Ups' => 0, 'Enquiry' => 0);
+            $keys = array('Walk-in' => "0", 'Analytics' => "0", 'Tie Ups' => "0", 'Enquiry' => "0");
             foreach ($arrData['unassigned_leads_count'] as $k => $v) {
                 $keys[$v['lead_source']] = $v['total'];
 
@@ -1125,5 +1055,171 @@ class Api extends REST_Controller
                 'data' => 'Invalid Request');
             returnJson($res);
         }
+    }
+
+    public function refresh_dashboard_post()
+    {
+        $params = $this->input->post();
+        if (!empty($params) && isset($params['user_id']) && !empty($params['user_id']) && isset($params['designation_name']) && !empty($params['designation_name']))
+        {
+            $user_id = $params['user_id'];
+
+            $result['basic_info'] = array(
+                'hrms_id' => '12',
+                'dept_id' => '12',
+                'dept_type_id' => '123',
+                'dept_type_name' => 'BR',
+                'branch_id' => '12',
+                'district_id' => '1234',
+                'state_id' => '1234',
+                'zone_id' => '1234',
+                'full_name' => 'mukesh kurmi',
+                'supervisor_id' => '009',
+                'designation_id' => '4',
+                'designation_name' => $params['designation_name'],
+                'mobile' => '9975772432',
+                'email_id' => 'mukesh.kurmi@wwindia.com',
+            );
+            $result['employee_list'][] = array(
+                'id' => '12',
+                'full_name' => 'mukesh kurmi',
+            );
+            $result['employee_list'][] = array(
+                'id' => '13',
+                'full_name' => 'anup',
+            );
+            $result['employee_list'][] = array(
+                'id' => '15',
+                'full_name' => 'anup',
+            );
+            $result['branch_list'][] = array(
+                'id' => '12',
+                'full_name' => 'branch1',
+            );
+            $result['branch_list'][] = array(
+                'id' => '13',
+                'full_name' => 'branch2',
+            );
+            $result['zone_list'][] = array(
+                'id' => '12',
+                'full_name' => 'zone1',
+            );
+            $result['zone_list'][] = array(
+                'id' => '13',
+                'full_name' => 'zone2',
+            );
+            $result['status'] = 'success';
+//        returnJson($data);
+
+
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'BM') {
+                if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
+                    $branch_id = $result['basic_info']['branch_id'];
+                    $type = 'BM';
+                    $final = $this->count($type, $branch_id, $result);
+
+                    $leads['generated_converted'] = $final;
+                    //for assigned lead
+                    $where_assigned_Array = array('branch_id' => $branch_id,
+                        'YEAR(created_on)' => date('Y'));
+                }
+                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
+                $action = 'count';
+                $select = array();
+                $table = Tbl_Leads;
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . 'lead_id', NULL);
+                $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
+                $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+            }
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'EM') {
+            if (isset($result['basic_info']['hrms_id']) && $result['basic_info']['hrms_id'] != '') {
+                    $created_id = $result['basic_info']['hrms_id'];
+
+                    //Parameters buiding for sending to list function.
+                    $action = 'count';
+                    $select = array();
+                    $join = array();
+                    $group_by = array();
+
+                    //For Generated Leads Count
+                    $table = Tbl_Leads;
+
+                    //Month till date
+                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
+                    $leads['generated_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //Year till date
+                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+                    $leads['generated_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //For converted leads Count
+                    $table = Tbl_LeadAssign;
+
+                    //Month till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+                    $leads['converted_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+
+                    //Year till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $leads['converted_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //For assigned leads Count
+                    $table = Tbl_LeadAssign;
+
+                    //Year till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+                }
+
+            }
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'ZM') {
+                if (isset($result['basic_info']['zone_id']) && $result['basic_info']['zone_id'] != '') {
+                    $zone_id = $result['basic_info']['zone_id'];
+                    $type = 'ZM';
+                    $final = $this->count($type, $zone_id, $result);
+                    $leads['generated_converted'] = $final;
+                }
+            }
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'GM') {
+                $type = 'GM';
+                $final = $this->count($type, '', $result);
+                $leads['generated_converted'] = $final;
+            }
+
+
+            $result = array(
+                "result" => 'True',
+                "data" => ['count' => $leads, 'basic_info' => $result['basic_info']]
+            );
+            returnJson($result);
+        }else{
+            $res = array('result' => 'False',
+                'data' => 'Invalid Request');
+            returnJson($res);
+        }
+    }
+    /**
+     * update_lead_product
+     * Interested in other product
+     * @author Ashok Jadhav
+     * @access public
+     * @param empty
+     * @return array
+     */
+    public function update_lead_product($lead_id,$product_category_id,$product_id){
+        //Building input parameters
+        $table = Tbl_Leads;
+        $where  = array(Tbl_Leads.'.id' => $lead_id);
+        //link interested product id with current lead.
+        $data['product_category_id'] = $product_category_id;
+        $data['product_id']     = $product_id;
+        $response = $this->Lead->update($where,$table,$data);
+        if($response['status'] == 'error'){
+            return false;
+        }else{
+            return true;
+        }
+
     }
 }

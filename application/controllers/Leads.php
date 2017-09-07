@@ -446,6 +446,7 @@ class Leads extends CI_Controller
 
         $arrData['unassigned_leads'] = $this->Lead->unassigned_leads('',$id);
         $arrData['lead_source'] = ucwords($lead_source);
+
         $middle = "Leads/unassigned_details";
         load_view($middle,$arrData);
     }
@@ -486,7 +487,6 @@ class Leads extends CI_Controller
         //Get session data
         $login_user = get_session();
         $arrData = $this->view($login_user,$arrData);
-        
         return load_view('Leads/view',$arrData);
     }
 
@@ -866,6 +866,48 @@ class Leads extends CI_Controller
                 notification_log($title,$description,$priority,$notification_to);
             }
         }
+    }
+
+    /**
+     * export_excel_listing
+     * Excel export of listing
+     * @author Gourav Thatoi
+     * @access public
+     * @paramas none
+     * @return  void
+     */
+    public function export_excel_listing($type,$till,$status = null,$lead_source = null)
+    {
+        if($type == 'assigned'){
+            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
+                'Status','Followup Date','Lead Identified As','Lead Source');
+        }
+        if($type == 'generated'){
+            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
+                'Lead Identified As','Lead Source');
+        }
+
+        if($type == 'unassigned'){
+            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days','Lead Source');
+            $lead_source = decode_id($till);
+            $data = $this->Lead->unassigned_leads($lead_source,'');
+            export_excel($header_value,$data,$type,$lead_source);
+        }
+
+        $arrData['type'] = $type;
+        $arrData['till'] = $till;
+
+        if($lead_source != 'all'){
+            $arrData['lead_source'] = $lead_source;
+        }
+
+        if(($status != 'all') && ($status != null)){
+            $arrData['status'] = $status;
+        }
+        //Get session data
+        $login_user = get_session();
+        $data = $this->view($login_user,$arrData);
+        export_excel($header_value,$data,$type);
     }
 
 }
