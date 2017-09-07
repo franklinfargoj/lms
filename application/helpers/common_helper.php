@@ -823,3 +823,17 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
     $objWriter->save('php://output');
 
 }
+
+function call_external_url($url) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    //curl_setopt($ch, CURLOPT_HTTPHEADER, '');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, '');
+    curl_exec($ch);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return($result);
+}

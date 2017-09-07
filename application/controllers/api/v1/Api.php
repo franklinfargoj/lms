@@ -1387,4 +1387,141 @@ class Api extends REST_Controller
         }
 
     }
+
+    public function authenticationnew_post()
+    {
+        $params = $this->input->post();
+
+//
+//        if(!isset($params['user_id']) || !isset($params['device_token']) || !isset($params['password']) || ($params['user_id'] == NULL) || ($params['device_token'] == NULL) || ($params['password'] == NULL)){
+//            $err['result'] = false;
+//            $err['data'] = "Invalid Request";
+//            returnJson($err);
+//        }
+
+        if (!isset($params['user_id']) || !isset($params['password']) || !isset($params['device_token']) ||
+            !isset($params['device_type']) || ($params['device_type'] == NULL) ||
+            ($params['user_id'] == NULL) || ($params['password'] == NULL || ($params['device_token'] == NULL))) {
+            $err['result'] = false;
+            $err['data'] = "Invalid Request";
+            returnJson($err);
+        }
+
+        $user_id = $params['user_id'];
+        $password = $params['password'];
+        $device_token = $params['device_token'];
+        $device_type = $params['device_type'];
+
+        //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);die;
+        $auth_response = call_external_url(HRMS_API_URL_AUTH.'/'.$user_id.'/'.$password);
+        $result = json_decode($auth_response);
+        if ($result->DBK_LMS_AUTH->password == 'True') {
+           // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
+            $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$result->DBK_LMS_AUTH->username);
+            $records = json_decode($records_response);
+            echo "<pre>";print_r($records);die;
+        }else{
+
+        }
+        $result = get_details($params['designation_name']);
+
+//        returnJson($result);
+
+        if (isset($result['status']) && $result['status'] == 'success') {
+
+            $data = array('device_token' => $device_token,
+                'employee_id' => $result['basic_info']['hrms_id'],
+                'device_type' => $device_type
+            );
+            $this->Login_model->insert_login_log($data);
+
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'BM') {
+                if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
+                    $branch_id = $result['basic_info']['branch_id'];
+                    $type = 'BM';
+                    $final = $this->count($type, $branch_id, $result);
+
+                    $leads['generated_converted'] = $final;
+                    //for assigned lead
+                    $where_assigned_Array = array('branch_id' => $branch_id,
+                        'YEAR(created_on)' => date('Y'));
+                }
+                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
+                $action = 'count';
+                $select = array();
+                $table = Tbl_Leads;
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . 'lead_id', NULL);
+                $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
+                $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+            }
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'EM') {
+                if (isset($result['basic_info']['hrms_id']) && $result['basic_info']['hrms_id'] != '') {
+                    $created_id = $result['basic_info']['hrms_id'];
+
+                    //Parameters buiding for sending to list function.
+                    $action = 'count';
+                    $select = array();
+                    $join = array();
+                    $group_by = array();
+
+                    //For Generated Leads Count
+                    $table = Tbl_Leads;
+
+                    //Month till date
+                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
+                    $leads['generated_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //Year till date
+                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+                    $leads['generated_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //For converted leads Count
+                    $table = Tbl_LeadAssign;
+
+                    //Month till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+                    $leads['converted_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+
+                    //Year till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $leads['converted_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //For assigned leads Count
+                    $table = Tbl_LeadAssign;
+
+                    //Year till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+                }
+
+            }
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'ZM') {
+                if (isset($result['basic_info']['zone_id']) && $result['basic_info']['zone_id'] != '') {
+                    $zone_id = $result['basic_info']['zone_id'];
+                    $type = 'ZM';
+                    $final = $this->count($type, $zone_id, $result);
+                    $leads['generated_converted'] = $final;
+                }
+            }
+            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'GM') {
+                $type = 'GM';
+                $final = $this->count($type, '', $result);
+                $leads['generated_converted'] = $final;
+            }
+
+
+            $result = array(
+                "result" => True,
+                "data" => ['count' => $leads, 'basic_info' => $result['basic_info']]
+            );
+            returnJson($result);
+        } else {
+            $error = array(
+                "result" => false,
+                "data" => "Invalid username or password."
+            );
+            returnJson($error);
+        }
+    }
 }
