@@ -1413,7 +1413,7 @@ class Api extends REST_Controller
             $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$result->DBK_LMS_AUTH->username);
             $records = json_decode($records_response);
             $data = array('device_token' => $device_token,
-                'employee_id' => $result['basic_info']['hrms_id'],
+                'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
                 'device_type' => $device_type
             );
             $this->Login_model->insert_login_log($data); // login log
