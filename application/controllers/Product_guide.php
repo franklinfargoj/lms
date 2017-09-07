@@ -182,7 +182,7 @@ class Product_guide extends CI_Controller {
           /*Create Breadcumb*/
 
           $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
-          $arrData['category_list'] = dropdown($category_list,true);
+          $arrData['category_list'] = dropdown($category_list,'Select');
 
           return load_view("Products/Product_guide/search",$arrData);
      }
@@ -216,10 +216,10 @@ class Product_guide extends CI_Controller {
                $arrData['product_id'] = $product_id;
 
                $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
-               $arrData['category_list'] = dropdown($category_list,true);
+               $arrData['category_list'] = dropdown($category_list,'Select');
 
                $product_list = $this->Lead->get_all_products(array('category_id' => $product_category_id,'is_deleted' => 0,'status' => 'active'));
-               $arrData['product_list'] = dropdown($product_list,true);
+               $arrData['product_list'] = dropdown($product_list,'Select');
 
                //Search for product description
                $arrData['searchResult'] = $this->master->view_product_guide($product_id);

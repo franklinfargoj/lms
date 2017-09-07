@@ -386,7 +386,7 @@ function get_session(){
         'dept_id' => '12',
         'dept_type_id' => '123',
         'dept_type_name' => 'BR',
-        'branch_id' => '12',
+        'branch_id' => '3',
         'district_id' => '1',
         'state_id' => '1',
         'zone_id' => '4',
@@ -422,8 +422,8 @@ function get_lead_title($type){
 
 function dropdown($data,$select_option){
     $result = array();
-    if($select_option == true){
-        $result[''] = 'Select';
+    if($select_option != ''){
+        $result[''] = $select_option;
     }
     foreach ($data as $key => $value) {
         $result[$value['id']] =  ucwords($value['title']);  

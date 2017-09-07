@@ -50,7 +50,7 @@ class Leads extends CI_Controller
         $arrData['product_selected'] = '';
         $arrData['products'] = '';
         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
-        $arrData['category'] = dropdown($category_list,true);
+        $arrData['category'] = dropdown($category_list,'Select');
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<span class = "help-block">', '</span>');
             //$this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
@@ -201,18 +201,19 @@ class Leads extends CI_Controller
     {
         if ($this->input->post()) {
             $category_id = $this->input->post("category_id");
+            $select_label = $this->input->post("select_label");
             $whereArray = array('category_id' => $category_id,'is_deleted' => 0,'status' => 'active');
             $products = $this->Lead->get_all_products($whereArray);
             $product_extra = 'class="form-control" id="product_id"';
             if (!empty($products)) {
-                $options[''] = 'Select';
+                $options[''] = $select_label;
                 foreach ($products as $key => $value) {
                     $options[$value['id']] = ucwords($value['title']);
                 }
                 $html = '<label>Product:</label>';
                 $html .= form_dropdown('product_id', $options, '', $product_extra);
             } else {
-                $options[''] = 'Select';
+                $options[''] = $select_label;
                 $html = '<label>Product:</label>';
                 $html .= form_dropdown('product_id', $options, '', $product_extra);
             }
@@ -576,7 +577,7 @@ class Leads extends CI_Controller
                 $arrData['lead_status'] = $this->Lead->get_enum(Tbl_LeadAssign,'status');
                 $arrData['lead_identification'] = $this->Lead->get_enum(Tbl_Leads,'lead_identification');
                 $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
-                $arrData['category_list'] = dropdown($category_list,true);
+                $arrData['category_list'] = dropdown($category_list,'Select');
             }
             $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
             

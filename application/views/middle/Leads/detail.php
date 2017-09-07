@@ -247,7 +247,8 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
                 url: baseUrl + "leads/productlist",
                 data: {
                     '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
-                    category_id: category_id
+                    category_id: category_id,
+                    select_label:'Select'
                 }
             }).success(function (resp) {
                 if (resp) {
