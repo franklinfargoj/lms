@@ -88,7 +88,7 @@ $lead_type = $this->config->item('lead_type');
                         <th></th>
                     </tr>
                     <tr>
-                        <th>
+                        <th align="center">
                             Sr. No.
                         </th>
                         <th>
@@ -97,7 +97,7 @@ $lead_type = $this->config->item('lead_type');
                         <th>
                             Product Name
                         </th>
-                        <th>
+                        <th align="center">
                             Elapsed Days
                         </th>
                         <?php if(!isset($status)){?>
@@ -106,7 +106,7 @@ $lead_type = $this->config->item('lead_type');
                         </th>
                         <?php }?>
                         <?php if($type == 'assigned'){?>
-                        <th>
+                        <th align="center">
                             Followup date
                         </th>
                         <?php }?>
@@ -133,7 +133,7 @@ $lead_type = $this->config->item('lead_type');
                         foreach ($leads as $key => $value) {
                     ?>  
                         <tr>
-                            <td>
+                            <td align="center">
                                  <?php echo ++$i;?>
                             </td>
                             <td>
@@ -142,13 +142,13 @@ $lead_type = $this->config->item('lead_type');
                             <td>
                                  <?php echo ucwords($value['title']);?>
                             </td>
-                            <td>
+                            <td align="center">
                                  <?php 
                                     $created_date = explode(' ',$value['created_on']);
                                     $now = date_create(date('Y-m-d')); // or your date as well
                                     $generated_date = date_create($created_date[0]);
                                     $datediff = date_diff($now,$generated_date);
-                                    echo $datediff->format("%a days");
+                                    echo $datediff->format("%a");
                                 ?>
                             </td>
                             <?php if(!isset($status)){?>
@@ -157,7 +157,7 @@ $lead_type = $this->config->item('lead_type');
                             </td>
                             <?php }?>
                             <?php if($type == 'assigned'){?>
-                            <td>
+                            <td align="center">
                                  <?php echo isset($value['remind_on']) ? date('d-m-Y',strtotime($value['remind_on'])) : '';?>
                             </td>
                             <?php }?>

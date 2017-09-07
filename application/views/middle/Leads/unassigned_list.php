@@ -1,3 +1,12 @@
+<div class="page-title">
+    <div class="container clearfix">
+        <h3 class="text-center">
+            <?php 
+                echo ucwords($lead_source);
+            ?>
+        </h3>
+    </div>
+</div>
 <div class="page-content">
 <div class="container">
 <div class="unassigned-content">
@@ -8,15 +17,6 @@
 <link href="<?php echo base_url() . ASSETS; ?>css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- END PAGE LEVEL STYLES -->
 <!-- BEGIN PRODUCT CATEGOEY-->
-<div class="page-title">
-    <div class="container clearfix">
-        <h3 class="text-center">
-            <?php 
-                echo ucwords($lead_source);
-            ?>
-        </h3>
-    </div>
-</div>
 <?php 
     //Form
     $attributes = array(
