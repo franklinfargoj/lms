@@ -29,7 +29,7 @@ $lead_type = $this->config->item('lead_type');
             <div class="lead-top clearfix">
                 <div class="float-left">
                     <span class="total-lead">
-                        Total
+                        Total Leads
                     </span>
                     <span class="lead-num"> : <?php echo count($leads);?></span>
                 </div>
