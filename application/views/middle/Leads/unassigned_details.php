@@ -29,7 +29,7 @@
 					<div class="form-control">
 						<label>Product Name:</label> <span class="detail-label"><?php echo ucwords($unassigned_leads[0]['product_title']);?></span>
 					</div>
-					<?php if((in_array($this->session->userdata('admin_type'),array('BM'))) && ($lead_source == 'Walk-in')){
+					<?php if((in_array($this->session->userdata('admin_type'),array('BM')))){
 						$data = array(
                             'lead_id' => encode_id($unassigned_leads[0]['id']),
                             'lead_type'    => 'unassigned'

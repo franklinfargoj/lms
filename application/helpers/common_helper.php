@@ -422,8 +422,8 @@ function get_lead_title($type){
 
 function dropdown($data,$select_option){
     $result = array();
-    if($select_option == true){
-        $result[''] = 'Select';
+    if($select_option != ''){
+        $result[''] = $select_option;
     }
     foreach ($data as $key => $value) {
         $result[$value['id']] =  ucwords($value['title']);  

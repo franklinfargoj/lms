@@ -4,7 +4,7 @@
 <!-- END PAGE LEVEL STYLES -->
 <?php 
     $status = $this->config->item('lead_status');
-    $title = 'Generated Leads';
+    $title = ucwords($type).' Leads';
 ?>
 <div class="page-title">
     <div class="container clearfix">
@@ -20,7 +20,6 @@
                 <th></th>
                 <th>
                     <?php
-                    
                         $options['']='Select Status';
                         foreach ($status as $key => $value) {
                             $options[$value] = $value;
@@ -50,6 +49,9 @@
                         $param = '/'.encode_id($branch_id);
                     }else if(isset($zone_id) && !empty($zone_id)){
                         $param = '/'.encode_id($zone_id);
+                    }
+                    if(isset($lead_source) && !empty($lead_source)){
+                        $param .= '/'.$lead_source;
                     }
                 ?>
                 <tr>
@@ -91,8 +93,8 @@
                                 break;
                         }
                     ?>
-                    <td><a href="<?php echo site_url('leads/leads_list/generated/mtd/'.$key.$param);?>" ><?php echo $Month; ?></a></td>
-                    <td><a href="<?php echo site_url('leads/leads_list/generated/ytd/'.$key.$param);?>" ><?php echo $Year; ?></a></td>
+                    <td><a href="<?php echo site_url('leads/leads_list/'.$type.'/mtd/'.$key.$param);?>" ><?php echo $Month; ?></a></td>
+                    <td><a href="<?php echo site_url('leads/leads_list/'.$type.'/ytd/'.$key.$param);?>" ><?php echo $Year; ?></a></td>
                 </tr>
             <?php
             $i++; 
