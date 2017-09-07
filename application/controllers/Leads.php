@@ -664,7 +664,7 @@ class Leads extends CI_Controller
                             }
                             /*****************************************************************/
 
-                            $this->Lead->insert_lead_data($lead_status_data,Tbl_LeadAssign);        
+                            $this->Lead->insert_lead_data($lead_status_data,Tbl_LeadAssign);
                         }
                     }
                     
