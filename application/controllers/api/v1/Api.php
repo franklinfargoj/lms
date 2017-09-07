@@ -1392,13 +1392,6 @@ class Api extends REST_Controller
     {
         $params = $this->input->post();
 
-//
-//        if(!isset($params['user_id']) || !isset($params['device_token']) || !isset($params['password']) || ($params['user_id'] == NULL) || ($params['device_token'] == NULL) || ($params['password'] == NULL)){
-//            $err['result'] = false;
-//            $err['data'] = "Invalid Request";
-//            returnJson($err);
-//        }
-
         if (!isset($params['user_id']) || !isset($params['password']) || !isset($params['device_token']) ||
             !isset($params['device_type']) || ($params['device_type'] == NULL) ||
             ($params['user_id'] == NULL) || ($params['password'] == NULL || ($params['device_token'] == NULL))) {
@@ -1412,49 +1405,38 @@ class Api extends REST_Controller
         $device_token = $params['device_token'];
         $device_type = $params['device_type'];
 
-        //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);die;
+        //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
         $auth_response = call_external_url(HRMS_API_URL_AUTH.'/'.$user_id.'/'.$password);
         $result = json_decode($auth_response);
         if ($result->DBK_LMS_AUTH->password == 'True') {
            // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
             $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$result->DBK_LMS_AUTH->username);
             $records = json_decode($records_response);
-            echo "<pre>";print_r($records);die;
-        }else{
-echo "hjh";die;
-        }
-        $result = get_details($params['designation_name']);
-
-//        returnJson($result);
-
-        if (isset($result['status']) && $result['status'] == 'success') {
-
             $data = array('device_token' => $device_token,
                 'employee_id' => $result['basic_info']['hrms_id'],
                 'device_type' => $device_type
             );
-            $this->Login_model->insert_login_log($data);
+            $this->Login_model->insert_login_log($data); // login log
 
-            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'BM') {
-                if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
-                    $branch_id = $result['basic_info']['branch_id'];
-                    $type = 'BM';
-                    $final = $this->count($type, $branch_id, $result);
+            $result['basic_info'] = array(
+                'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
+                'dept_id' => $records->dbk_lms_emp_record1->deptid,
+                'dept_type_id' => $records->dbk_dept_type,
+                'dept_type_name' => $records->dbk_lms_emp_record1->dept_discription,
+                'branch_id' => $records->dbk_lms_emp_record1->deptid,
+                'district_id' => $records->dbk_lms_emp_record1->district,
+                'state_id' => $records->dbk_lms_emp_record1->state,
+                'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
+                'full_name' => $records->dbk_lms_emp_record1->name,
+                'supervisor_id' => $records->dbk_lms_emp_record1->supervisor,
+                'designation_id' => $records->dbk_lms_emp_record1->designation_id,
+                'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
+                'mobile' => $records->dbk_lms_emp_record1->phone,
+                'email_id' => $records->dbk_lms_emp_record1->email,
+            );
 
-                    $leads['generated_converted'] = $final;
-                    //for assigned lead
-                    $where_assigned_Array = array('branch_id' => $branch_id,
-                        'YEAR(created_on)' => date('Y'));
-                }
-                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
-                $action = 'count';
-                $select = array();
-                $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . 'lead_id', NULL);
-                $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
-                $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
-            }
-            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'EM') {
+            // employee
+            if ($records->dbk_lms_emp_record1->designation_id == '540401') {
                 if (isset($result['basic_info']['hrms_id']) && $result['basic_info']['hrms_id'] != '') {
                     $created_id = $result['basic_info']['hrms_id'];
 
@@ -1496,32 +1478,50 @@ echo "hjh";die;
                 }
 
             }
-            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'ZM') {
+            // BM
+            if ($records->dbk_lms_emp_record1->designation_id == '520299') {
+                if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
+                    $branch_id = $result['basic_info']['branch_id'];
+                    $type = 'BM';
+                    $final = $this->count($type, $branch_id, $records->dbk_lms_emp_record1->DBK_LMS_COLL);
+
+                    $leads['generated_converted'] = $final;
+                    //for assigned lead
+                    $where_assigned_Array = array('branch_id' => $branch_id,
+                        'YEAR(created_on)' => date('Y'));
+                }
+                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
+                $action = 'count';
+                $select = array();
+                $table = Tbl_Leads;
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . 'lead_id', NULL);
+                $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
+                $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+            }
+            //ZM
+            if ($records->dbk_lms_emp_record1->designation_id == '550502') {
                 if (isset($result['basic_info']['zone_id']) && $result['basic_info']['zone_id'] != '') {
                     $zone_id = $result['basic_info']['zone_id'];
                     $type = 'ZM';
-                    $final = $this->count($type, $zone_id, $result);
+                    $final = $this->count($type, $zone_id, $records->dbk_lms_emp_record1->DBK_LMS_COLL);
                     $leads['generated_converted'] = $final;
                 }
             }
-            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'GM') {
+            // GM
+            if ($records->dbk_lms_emp_record1->designation_id == '560601') {
                 $type = 'GM';
-                $final = $this->count($type, '', $result);
+                $final = $this->count($type, '', $records->dbk_lms_emp_record1->DBK_LMS_COLL);
                 $leads['generated_converted'] = $final;
             }
-
-
             $result = array(
                 "result" => True,
                 "data" => ['count' => $leads, 'basic_info' => $result['basic_info']]
             );
             returnJson($result);
-        } else {
-            $error = array(
-                "result" => false,
-                "data" => "Invalid username or password."
-            );
-            returnJson($error);
+        }else{
+            $err['result'] = false;
+            $err['data'] = "Invalid Login Credential.Please Enter Again OR Contact Administrator";
+            returnJson($err);
         }
     }
 }
