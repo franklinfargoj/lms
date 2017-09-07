@@ -714,6 +714,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $objSheet->getStyle($excel_alpha[4].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[5].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[6].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[7].($i))->applyFromArray($text_bold_false);
 
                 $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
                 $objSheet->getCell($excel_alpha[1].$i)->setValue(ucwords($value['customer_name']));
@@ -721,7 +722,8 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $objSheet->getCell($excel_alpha[3].$i)->setValue($elapse_date);
                 $objSheet->getCell($excel_alpha[4].$i)->setValue(ucwords($lead_status[$value['status']]));
                 $objSheet->getCell($excel_alpha[5].$i)->setValue($follow_up_date);
-                $objSheet->getCell($excel_alpha[6].$i)->setValue(ucwords($value['lead_source']));
+                $objSheet->getCell($excel_alpha[6].$i)->setValue($value['lead_identification']);
+                $objSheet->getCell($excel_alpha[7].$i)->setValue(ucwords($value['lead_source']));
                 $i++;$j++;
             }
             break;
