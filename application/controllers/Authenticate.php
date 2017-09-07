@@ -27,6 +27,7 @@ class Authenticate extends CI_Controller
 
     public function check_authentication($username,$password)
     {
+        //echo $username;die;
         //True Response
         $true_res = '{"DBK_LMS_AUTH":
                             {
@@ -44,15 +45,15 @@ class Authenticate extends CI_Controller
                             }
                     }';
         if($username == '0006094' && $password == '0006094'){
-            return $true_res;
+            echo $true_res;
         }elseif($username == '0003391' && $password =='0003391' ){
-            return $true_res;
+            echo $true_res;
         }elseif($username == '0007963' && $password == '0007963'){
-            return $true_res;
+            echo $true_res;
         }elseif($username == '0006561' && $password =='0006561' ){
-            return $true_res;
+            echo $true_res;
         }else{
-            return $false_res;
+            echo $false_res;
         }
     }
 

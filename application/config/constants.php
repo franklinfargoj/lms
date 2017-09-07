@@ -108,8 +108,8 @@ define('Tbl_SmsAuth', 'db_sms_credentials');
 define('Tbl_Notification', 'db_notification');
 //define('HRMS_API_URL_AUTH', 'https://172.25.3.26:8445/PSIGW/RESTListeningConnector/DBK_LMS_AUTH.v1/?');
 //define('HRMS_API_URL_GET_RECORD', 'https://172.25.3.26:8445/PSIGW/RESTListeningConnector/DBK_LMS_EMP_RECORD1.v1/?emplid=');
-define('HRMS_API_URL_AUTH', 'http://staging.php-dev.in:8844/DENABANK/lms/authenticate/check_authentication/');
-define('HRMS_API_URL_GET_RECORD', 'http://staging.php-dev.in:8844/DENABANK/lms/authenticate/get_records');
+define('HRMS_API_URL_AUTH', 'http://localhost/lms/authenticate/check_authentication');
+define('HRMS_API_URL_GET_RECORD', 'http://localhost/lms/authenticate/get_records');
 
 define('EXCEL_ALPHA', serialize(array(
     '0'=>'A',
