@@ -85,9 +85,9 @@ $lead_type = $this->config->item('lead_type');
                         <?php }?>
                         <th>
                             <?php
-                                if($lead_source){
+                                if($lead_sources){
                                     $options3['']='Select Source';
-                                    foreach ($lead_source as $key => $value) {
+                                    foreach ($lead_sources as $key => $value) {
                                         $options3[$value] = $value;
                                     }
                                     echo form_dropdown('status', $options3 ,'',array());
@@ -183,18 +183,20 @@ $lead_type = $this->config->item('lead_type');
                             </td>
                             <td>
                                 <?php 
-                                    if(isset($status)){
-                                        if(isset($param)){
-                                            $parameter = encode_id($param);
-                                        }else{
-                                            $parameter = '';
-                                        }
+                                $parameter = '';
+                                $source = 'empty';
+                                if(isset($status) && !empty($status)){
+                                    $parameter .= '/'.$status; 
+                                }
+                                if(isset($param) && !empty($param)){
+                                    $parameter .= '/'.encode_id($param); 
+                                }
+                                if(isset($lead_source) && !empty($lead_source)){
+                                    $parameter .= '/'.$lead_source; 
+                                    $source = $lead_source;
+                                }
                                 ?>
-                                    <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']).'/'.$status.'/'.$parameter)?>">View</a>
-                                <?php }else{
-                                ?>
-                                    <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']))?>">View</a>
-                                <?php }?>
+                                <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']).$parameter)?>">View</a>
                             </td>
                         </tr>   
                     <?php   
@@ -213,18 +215,19 @@ $lead_type = $this->config->item('lead_type');
     jQuery(document).ready(function() { 
         var table = $('#sample_3');
         var columns = [];
-
         var type = "<?php echo $type ?>";
+        var lead_source = "<?php echo $source ?>";
         switch(type) {
             case 'generated':
                 columns = [6];
                 break;
-            case 'converted':
-                columns = [6];
-                break;
             case 'assigned':
+            if(lead_source == 'empty'){
                 columns = [8];
-                break;
+            }else{
+                columns = [6];
+            }
+            break;
         }
         
         //Initialize datatable configuration

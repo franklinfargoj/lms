@@ -19,11 +19,8 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">Lead Detail</h3>
-        <?php if(isset($status)){?>
-            <a href="<?php echo site_url('leads/leads_list/'.$type.'/'.$till.'/'.$status);?>" class="reset float-right">Back</a>
-        <?php }else{
-        ?>
-            <a href="<?php echo site_url('leads/leads_list/'.$type.'/'.$till);?>" class="reset float-right">Back</a>
+        <?php if(isset($backUrl)){?>
+            <a href="<?php echo site_url($backUrl);?>" class="reset float-right">Back</a>
         <?php }?>
     </div>
 </div>
