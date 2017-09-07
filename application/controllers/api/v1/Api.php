@@ -1414,16 +1414,14 @@ class Api extends REST_Controller
 
         //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);die;
         $auth_response = call_external_url(HRMS_API_URL_AUTH.'/'.$user_id.'/'.$password);
-        echo $auth_response;
         $result = json_decode($auth_response);
-        print_r($result);die;
         if ($result->DBK_LMS_AUTH->password == 'True') {
            // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
             $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$result->DBK_LMS_AUTH->username);
             $records = json_decode($records_response);
             echo "<pre>";print_r($records);die;
         }else{
-
+echo "hjh";die;
         }
         $result = get_details($params['designation_name']);
 

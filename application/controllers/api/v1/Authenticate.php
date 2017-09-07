@@ -27,7 +27,6 @@ class Authenticate extends CI_Controller
 
     public function check_authentication($username,$password)
     {
-        echo $username;die;
         //True Response
         $true_res = '{"DBK_LMS_AUTH":
                             {
@@ -114,19 +113,19 @@ class Authenticate extends CI_Controller
 
         switch ($emp_id) {
             case '0006094':
-                return $gm_response;
+                echo $gm_response;
         break;
             case '0003391':
-                return $zm_response;
+                echo $zm_response;
         break;
             case '0003391':
-                return $bm_response;
+                echo $bm_response;
         break;
             case '0007963':
-                return $em_response;
+                echo $em_response;
         break;
             default:
-                return false;
+                echo false;
         }
 
     }
