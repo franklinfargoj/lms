@@ -1564,7 +1564,7 @@ class Api extends REST_Controller
                     $final[$value['created_by']]['total_converted'] = $converted;
                 }
                 $refinal = array_values($final);
-                return array($refinal);
+                return $refinal;
                 break;
 
             case 'ZM':
@@ -1604,7 +1604,7 @@ class Api extends REST_Controller
                     $final[$value['created_by_branch_id']]['total_converted'] = $converted;
                 }
                 $refinal = array_values($final);
-                return array($refinal);
+                return $refinal;
                 break;
 
             case 'GM':
@@ -1643,7 +1643,7 @@ class Api extends REST_Controller
                     $final[$value['created_by_zone_id']]['total_converted'] = $converted;
                 }
                 $refinal = array_values($final);
-                return array($refinal);
+                return $refinal;
                 break;
 
         }
