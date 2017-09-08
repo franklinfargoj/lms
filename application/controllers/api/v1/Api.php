@@ -1670,6 +1670,29 @@ class Api extends REST_Controller
         }
     }
 
+    public function notification_list_post(){
+        $params = $this->input->post();
+        if(isset($params['hrms_id']) && !empty($params['hrms_id'])){
+            $action = 'list';
+            $hrms_id = $params['hrms_id'];
+            $table = Tbl_Notification.' as n';
+            $select= array('n.*');
+            $unread_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 0);
+            $order_by = "n.priority ASC";
+            $result['unread'] = $this->notification->get_notifications($action,$select,$unread_where,$table,$join = array(),$order_by);
+
+            $read_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 1);
+            $result['read'] = $this->notification->get_notifications($action,$select,$read_where,$table,$join = array(),$order_by);
+
+            $res = array('result'=>True,
+                'data'=>$result);
+            returnJson($res);
+        }
+            $res = array('result'=>False,
+                'data'=>'Missing parameter.');
+            returnJson($res);
+    }
+
     public function refresh_dashboardnew_post()
     {
         $params = $this->input->post();
