@@ -1640,7 +1640,8 @@ class Api extends REST_Controller
                     }
                     $final[$value['created_by_zone_id']]['total_converted'] = $converted;
                 }
-                return $final;
+                $refinal = array_values($final);
+                return $refinal;
                 break;
 
         }
