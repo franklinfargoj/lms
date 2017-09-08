@@ -20,7 +20,7 @@
         <!--            <span class="lead-num"> : --><?php //echo count($leads);?><!--</span>-->
                 </div>
                 <div class="float-right">
-                    <a href="<?php echo base_url('dashboard/export_excel');?>">
+                    <a href="<?php echo base_url('dashboard/home_excel');?>">
                         <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
                     </a>
                 </div>
