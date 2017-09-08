@@ -16,6 +16,8 @@ $lead_status = $this->config->item('lead_status');
 
 <div class="lead-form">
     <span class="bg-top"></span>
+    <div class="inner-content">
+            <div class="container">
     <?php 
         //Form
         $attributes = array(
@@ -35,7 +37,7 @@ $lead_status = $this->config->item('lead_status');
     ?>
     <div class="lead-form-left">
         <div class="form-control">
-            <label>Start Date:</label>   
+            <label id="cal">Start Date:</label>   
             <?php 
                 if(isset($start_date)){
                     $start_date = $start_date;
@@ -159,7 +161,7 @@ $lead_status = $this->config->item('lead_status');
         </a>
     </div>
     <?php echo form_close();?>
-    <span class="bg-bottom"></span>
+    
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
