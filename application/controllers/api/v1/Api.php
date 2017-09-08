@@ -29,7 +29,7 @@ class Api extends REST_Controller
         $this->load->model('Ticker_model', 'ticker');
         $this->load->model('Master_model');
         $this->load->model('Faq_model', 'faq');
-
+        $this->load->model('Notification_model','notification');
     }
 
 
@@ -59,8 +59,17 @@ class Api extends REST_Controller
 
         $result = get_details($params['designation_name']);
 
-//        returnJson($result);
+        $hrms_id = $user_id;
 
+        $action='count';
+        $table = Tbl_Notification.' as n';
+        $select= array('n.*');
+        $unread_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 0);
+        $order_by = "n.priority ASC";
+        $leads['unread_notification'] = $this->notification->get_notifications($action,$select,$unread_where,$table,$join = array(),$order_by);
+
+        $read_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 1);
+        $leads['read_notification'] = $this->notification->get_notifications($action,$select,$read_where,$table,$join = array(),$order_by);
         if (isset($result['status']) && $result['status'] == 'success') {
 
             $data = array('device_token' => $device_token,
@@ -75,7 +84,7 @@ class Api extends REST_Controller
                     $type = 'BM';
                     $final = $this->count($type, $branch_id, $result);
 
-                    $leads['generated_converted'] = array($final);
+                    $leads['generated_converted'] = $final;
                     //for assigned lead
                     $where_assigned_Array = array('branch_id' => $branch_id,
                         'YEAR(created_on)' => date('Y'));
@@ -1435,6 +1444,18 @@ class Api extends REST_Controller
                 'mobile' => $records->dbk_lms_emp_record1->phone,
                 'email_id' => $records->dbk_lms_emp_record1->email,
             );
+
+            $hrms_id = $records->dbk_lms_emp_record1->EMPLID;
+
+            $action='count';
+            $table = Tbl_Notification.' as n';
+            $select= array('n.*');
+            $unread_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 0);
+            $order_by = "n.priority ASC";
+            $leads['unread_notification'] = $this->notification->get_notifications($action,$select,$unread_where,$table,$join = array(),$order_by);
+
+            $read_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 1);
+            $leads['read_notification'] = $this->notification->get_notifications($action,$select,$read_where,$table,$join = array(),$order_by);
 
             // employee
             if ($records->dbk_lms_emp_record1->designation_id == '540401') {
