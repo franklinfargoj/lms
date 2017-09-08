@@ -1580,13 +1580,13 @@ class Api extends REST_Controller
                 foreach ($result as $key => $val) {
                     if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                         $push_generated = array(
-                            'created_by_branch_id' => $val->DESCR10,
-                            'created_by_branch_name' => $val->DESCR30,
+                            'created_by' => $val->DESCR10,
+                            'created_by_name' => $val->DESCR30,
                             'total_generated' => 0);
                     } else {
                         $push_generated = array(
-                            'created_by_branch_id' => $val->DESCR10,
-                            'created_by_branch_name' => $val->DESCR30,
+                            'created_by' => $val->DESCR10,
+                            'created_by_name' => $val->DESCR30,
                             'total_generated' => $generated_key_value[$val->DESCR10]);
                     }
                     $final[$val->DESCR10] = $push_generated;
@@ -1619,8 +1619,8 @@ class Api extends REST_Controller
                 foreach ($result as $key => $val) {
                     if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                         $push_generated = array(
-                            'created_by_zone_id' => $val->DESCR10,
-                            'created_by_zone_name' => $val->DESCR30,
+                            'created_by' => $val->DESCR10,
+                            'created_by_name' => $val->DESCR30,
                             'total_generated' => 0);
                     } else {
                         $push_generated = array(
