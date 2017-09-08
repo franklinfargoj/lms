@@ -714,6 +714,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $objSheet->getStyle($excel_alpha[4].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[5].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[6].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[7].($i))->applyFromArray($text_bold_false);
 
                 $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
                 $objSheet->getCell($excel_alpha[1].$i)->setValue(ucwords($value['customer_name']));
@@ -721,7 +722,8 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $objSheet->getCell($excel_alpha[3].$i)->setValue($elapse_date);
                 $objSheet->getCell($excel_alpha[4].$i)->setValue(ucwords($lead_status[$value['status']]));
                 $objSheet->getCell($excel_alpha[5].$i)->setValue($follow_up_date);
-                $objSheet->getCell($excel_alpha[6].$i)->setValue(ucwords($value['lead_source']));
+                $objSheet->getCell($excel_alpha[6].$i)->setValue($value['lead_identification']);
+                $objSheet->getCell($excel_alpha[7].$i)->setValue(ucwords($value['lead_source']));
                 $i++;$j++;
             }
             break;
@@ -792,7 +794,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $datediff = date_diff($now, $generated_date);
 
                 $elapse_date = $datediff->format("%a days");
-                
+
                 $objSheet->getStyle($excel_alpha[0].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[1].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[2].($i))->applyFromArray($text_bold_false);
@@ -820,4 +822,19 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
     header('Cache-Control: max-age=0'); //no cache
     $objWriter->save('php://output');
 
+}
+
+function call_external_url($url) {
+    //return file_get_contents($url);die;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 0);
+    //curl_setopt($ch, CURLOPT_HTTPHEADER, '');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+   // curl_setopt($ch, CURLOPT_POSTFIELDS, '');
+    curl_exec($ch);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return($result);
 }

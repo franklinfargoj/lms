@@ -8,39 +8,39 @@
         <h3 class="text-center">Branch Manager</h3>
     </div>
 </div>
-<div class="lead-top">
-    <div class="container clearfix">
-        <div class="float-left">
-<!--            <span class="total-lead">-->
-<!--                Total-->
-<!--            </span>-->
-<!--            <span class="lead-num"> : --><?php //echo count($leads);?><!--</span>-->
-        </div>
-        <div class="float-right">
-            <a href="<?php echo base_url('dashboard/home_excel');?>">
-                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
-            </a>
-        </div>
-    </div>
-</div>
 <div class="page-content">
-    <div class="container">
-        <table class="display lead-table" id="sample_3">
-            <thead>
-            <tr class="top-header">
-                <th></th>
-                <th><input type="text" name="customername" placeholder="Search Employee Name"></th>
-                <th><!-- <input type="text" name="customername" placeholder="Search Generated Leads"> --></th>
-                <th><!-- <input type="text" name="customername" placeholder="Search Converted Leads"> --></th>
-                <th></th>
-            </tr>
-            <tr>
-                <th>Sr. No</th>
-                <th>Employee Name</th>
-                <th>Genrated Leads (This Month)</th>
-                <th>Converted Leads (This Month)</th>
-                <th>Action</th>
-            </tr>
+    <span class="bg-top"></span>
+    <div class="inner-content">
+        <div class="container">
+            <div class="lead-top clearfix">
+                <div class="float-left">
+        <!--            <span class="total-lead">-->
+        <!--                Total-->
+        <!--            </span>-->
+        <!--            <span class="lead-num"> : --><?php //echo count($leads);?><!--</span>-->
+                </div>
+                <div class="float-right">
+                    <a href="<?php echo base_url('dashboard/export_excel');?>">
+                        <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
+                    </a>
+                </div>
+            </div>
+            <table class="display lead-table" id="sample_3">
+                <thead>
+                <tr class="top-header">
+                    <th></th>
+                    <th><input type="text" name="customername" placeholder="Search Employee Name"></th>
+                    <th><!-- <input type="text" name="customername" placeholder="Search Generated Leads"> --></th>
+                    <th><!-- <input type="text" name="customername" placeholder="Search Converted Leads"> --></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Employee Name</th>
+                    <th>Genrated Leads (This Month)</th>
+                    <th>Converted Leads (This Month)</th>
+                    <th>Action</th>
+                </tr>
 
             </thead>
             <tbody>
@@ -73,6 +73,7 @@
             </tbody>
         </table>
     </div>
+    <span class="bg-bottom"></span>
 </div>
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>
