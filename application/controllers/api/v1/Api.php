@@ -1594,14 +1594,14 @@ class Api extends REST_Controller
                 //for converted
                 foreach ($final as $id => $value) {
 
-                    $where_month_Array = array('branch_id' => $value['created_by_branch_id'],
+                    $where_month_Array = array('branch_id' => $value['created_by'],
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     if (empty($converted)) {
                         $converted = 0;
                     }
-                    $final[$value['created_by_branch_id']]['total_converted'] = $converted;
+                    $final[$value['created_by']]['total_converted'] = $converted;
                 }
                 $refinal = array_values($final);
                 return $refinal;
@@ -1624,8 +1624,8 @@ class Api extends REST_Controller
                             'total_generated' => 0);
                     } else {
                         $push_generated = array(
-                            'created_by_zone_id' => $val->DESCR10,
-                            'created_by_zone_name' => $val->DESCR30,
+                            'created_by' => $val->DESCR10,
+                            'created_by_name' => $val->DESCR30,
                             'total_generated' => $generated_key_value[$val->DESCR10]);
                     }
                     $final[$val->DESCR10] = $push_generated;
@@ -1633,14 +1633,14 @@ class Api extends REST_Controller
                 //for converted
                 foreach ($final as $id => $value) {
 
-                    $where_month_Array = array('zone_id' => $value['created_by_zone_id'],
+                    $where_month_Array = array('zone_id' => $value['created_by'],
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     if (empty($converted)) {
                         $converted = 0;
                     }
-                    $final[$value['created_by_zone_id']]['total_converted'] = $converted;
+                    $final[$value['created_by']]['total_converted'] = $converted;
                 }
                 $refinal = array_values($final);
                 return $refinal;
