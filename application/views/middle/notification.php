@@ -3,6 +3,8 @@
 		<h3 class="text-center">Notification</h3>
 	</div>
 </div>
+<span class="bg-top"></span>
+<div class="inner-content">
 <div class="page-content">
     <div class="container">
         <div id="accordion" class="notifi-accordion">
@@ -78,7 +80,8 @@
         ?>
     </div>
 </div>
-
+</div>
+<span class="bg-bottom"></span>
 <script>
     $( function() {
         $("#accordion").accordion();

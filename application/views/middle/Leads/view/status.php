@@ -13,7 +13,10 @@
     </div>
 </div>
 <div class="page-content">
-    <div class="container">
+<span class="bg-top"></span>
+<div class="inner-content">
+    <div class="container ">
+
         <table class="upload-table lead-table" id="sample_3">
             <thead>
             <tr class="top-header">
@@ -31,10 +34,10 @@
                 <th><!-- <input type="text" name="customername" placeholder="Search YTD"> --></th>
             </tr>
             <tr>
-                <th>Sr No</th>
+                <th style="text-align:center">Sr No</th>
                 <th>Status</th>
-                <th>This Month</th>
-                <th>This Year</th>
+                <th style="text-align:center">This Month</th>
+                <th style="text-align:center">This Year</th>
             </tr>
             </thead>
             <tbody>
@@ -55,7 +58,7 @@
                     }
                 ?>
                 <tr>
-                    <td><?php echo $i+1; ?></td>
+                    <td style="text-align:center"><?php echo $i+1; ?></td>
                     <td><?php echo $value; ?></td>
                     <?php
                         switch ($key) {
@@ -93,8 +96,8 @@
                                 break;
                         }
                     ?>
-                    <td><a href="<?php echo site_url('leads/leads_list/'.$type.'/mtd/'.$key.$param);?>" ><?php echo $Month; ?></a></td>
-                    <td><a href="<?php echo site_url('leads/leads_list/'.$type.'/ytd/'.$key.$param);?>" ><?php echo $Year; ?></a></td>
+                    <td style="text-align:center"><a href="<?php echo site_url('leads/leads_list/'.$type.'/mtd/'.$key.$param);?>" ><?php echo $Month; ?></a></td>
+                    <td style="text-align:center"><a href="<?php echo site_url('leads/leads_list/'.$type.'/ytd/'.$key.$param);?>" ><?php echo $Year; ?></a></td>
                 </tr>
             <?php
             $i++; 
@@ -104,6 +107,8 @@
             </tbody>
         </table>
     </div>
+    </div>
+    <span class="bg-bottom"></span>
 </div>
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>

@@ -19,9 +19,7 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">Lead Detail</h3>
-        <?php if(isset($backUrl)){?>
-            <a href="<?php echo site_url($backUrl);?>" class="reset float-right">Back</a>
-        <?php }?>
+        
     </div>
 </div>
 <div class="page-content">
@@ -41,7 +39,8 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
                             );
                         echo form_open(site_url().'leads/update_lead_status', $attributes);
                     ?>
-                        <div class="lead-form-left">
+                        <div class="lead-form-left  top-m">
+
                             <div class="form-control">
                                 <label>Lead ID:</label> <span class="detail-label"><?php echo ucwords($leads[0]['id']);?></span>
                             </div>
@@ -180,7 +179,10 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
 
 
                         <div class="lead-form-right">
-                            <div class="form-control">
+                        <?php if(isset($backUrl)){?>
+            <a href="<?php echo site_url($backUrl);?>" class="reset float-right abbas"> < Back</a>
+        <?php }?>
+                            <div class="form-control ">
                                 <label>Customer Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['customer_name']);?></span>
                             </div>
                             <div class="form-control">

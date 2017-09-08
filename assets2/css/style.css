@@ -637,9 +637,66 @@ strong{
 /*add lead*/
 
 /*lead*/
+/*-------ravish---*/
 img#rs {
     margin: 0 0 0px 10px;
 }
+.abbas {
+    text-decoration: none;
+    border: 3px solid #01559d;
+    padding: 3px 12px;
+    color: #01559d;
+    margin-right: 0;
+}
+.abbas:hover{
+	background: #01559d;
+	color: #fff;
+}
+
+.top-m{margin-top: 40px;}
+.l-top{margin-bottom: 12px!important;}
+.abbas1 {
+    margin: 0 13px;
+    font-size: 18px;
+}
+ .bg-red {
+    background:url(../images/red-circle.png)no-repeat;
+    background-size: cover;
+        position: relative;
+    height: 48px;
+    width: 48px;
+    margin: 0 auto;
+}
+.m-b{
+	margin-bottom: 40px!important;
+}
+#finline{
+    display: inline!important;
+    position: relative;
+    top: 12px;
+    right: 180px;
+    padding-bottom: 10px;
+}
+#btnravish{
+	margin-top: -18px;
+}
+.form label.error {
+    float: left;
+    border: none;
+     width: 42%	; 
+    color: red;
+    font-size: 14px;
+    margin-top: 0px;
+    margin-right: -148px;
+}
+.error#assign_to-error {
+    position: absolute;
+    width: 76%;
+    display: inline;
+    right: 170px;
+    top: 23px;
+}
+/*-------------*/
 .lead-table thead{
 	background-color: #00559d;
 }
@@ -662,7 +719,7 @@ img#rs {
 	text-decoration: underline;
 }
 .lead-top{margin-bottom: 20px;}
-.lead-top .float-left{font-family: "Montserrat";font-size: 16px;color: #484848; }
+.lead-top .float-left{font-family: "Montserrat";font-size: 16px;color: #484848;margin-top: 15px; }
 .total-lead{font-weight: normal;}
 .lead-num{font-weight: 600;}
 .lead-num a{ display: inline-block;}
@@ -1157,6 +1214,7 @@ margin-top: 10px;
     text-align: center;
     border: 1px solid #d7d7d7;
     margin-bottom: 45px;
+    padding-bottom: 25px;
 }
 .box-m {margin-right: 44px;}
 .box img{
@@ -1170,9 +1228,12 @@ margin-top: 10px;
 }
 .box ul{
     width: 100%;
-    background: #f5f8fd;
+    background: none;
     display: block;
-    padding: 15px 0;
+    padding: 12px 0;
+    color: #fff;
+    font-weight: bold;
+    font-size: 22px;
 }
 .box li{
     width: 49%;
@@ -1180,12 +1241,19 @@ margin-top: 10px;
     font-size: 13px;
     color: #333333;
     letter-spacing: 0.5px;
-        line-height: 20px;
+        line-height: 30px;
 }
 .box span{
     font-size: 18px;
     color: #333333;
     font-weight: bold;
+        font-size: 18px;
+    color: #333333;
+    font-weight: bold;
+    top: 12px;
+    left: 20px;
+    color: #fff;
+        vertical-align: text-top;
 }
 /*lead performance*/
 /*notification*/
@@ -1339,7 +1407,7 @@ margin-top: 10px;
 
 /*Page title*/
 .page-title{
-	padding: 15px 0;
+	padding: 15px 0 0;
 }
 .page-title h3{
 	font-size: 24px;

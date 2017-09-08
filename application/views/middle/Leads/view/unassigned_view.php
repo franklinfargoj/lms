@@ -19,6 +19,7 @@
             <div class="box box-m">
                 <img src="<?php echo base_url().ASSETS;?>images/self.png" alt="self">
                 <p>Walk-in</p>
+                <div class="bg-red">
                 <ul>
                 <?php $walkin = 0;
                 if($unassigned_leads_count['Walk-in'] != 0)
@@ -26,12 +27,14 @@
                     echo $walkin;
                 ?>
                 </ul>
+                </div>
             </div>
             </a>
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[1]))?>">
             <div class="box">
                 <img src="<?php echo base_url().ASSETS;?>images/enquiry.png" alt="self">
                 <p>Enquiry</p>
+                <div class="bg-red">
                 <ul>
                     <?php $enquiry = 0;
                     if($unassigned_leads_count['Enquiry'] != 0)
@@ -39,12 +42,14 @@
                         echo $enquiry;
                     ?>
                 </ul>
+                </div>
             </div>
             </a>
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[2]));?>">
             <div class="box box-m">
                 <img src="<?php echo base_url().ASSETS;?>images/tie-up.png" alt="self">
                 <p>Tie Up's</p>
+                <div class="bg-red">
                 <ul>
                     <?php $tieups = 0;
                     if($unassigned_leads_count['Tie Ups'] != 0)
@@ -52,12 +57,14 @@
                     echo $tieups;
                     ?>
                 </ul>
+                </div>
             </div>
             </a>
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[3]))?>">
             <div class="box">
                 <img src="<?php echo base_url().ASSETS;?>images/analytics.png" alt="self">
                 <p>Analytics</p>
+                <div class="bg-red">
                 <ul>
                     <?php $analytics = 0;
                     if($unassigned_leads_count['Analytics'] != 0)
@@ -65,6 +72,7 @@
                     echo $analytics;
                     ?>
                 </ul>
+                </div>
             </div>
             </a>
         </div>
