@@ -118,10 +118,10 @@ class Authenticate extends CI_Controller
             case '0003391':
                 echo $zm_response;
         break;
-            case '0003391':
+            case '0007963':
                 echo $bm_response;
         break;
-            case '0007963':
+            case '0006561':
                 echo $em_response;
         break;
             default:
