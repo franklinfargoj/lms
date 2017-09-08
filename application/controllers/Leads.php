@@ -763,12 +763,15 @@ class Leads extends CI_Controller
     public function assign_multiple(){
         if($this->input->post()){
             $employee_id = $this->input->post('assign_to');
-            $lead_ids = $this->input->post('lead_ids');
             $lead_source = $this->input->post('lead_source');
-
-            $this->assign_to($employee_id,$lead_ids);
-            $this->session->set_flashdata('success','Lead Assigned Successfully.');
-            redirect('leads/unassigned_leads/'.encode_id($lead_source));
+            $lead_ids = $this->input->post('lead_ids');
+            if(empty($lead_ids)){
+                $this->session->set_flashdata('error','Please select atleast one lead');    
+            }else{
+                $this->assign_to($employee_id,$lead_ids);
+                $this->session->set_flashdata('success','Lead Assigned Successfully.');
+            }
+            redirect('leads/unassigned_leads_list/'.encode_id($lead_source));
         }
     }
 
