@@ -75,7 +75,7 @@ class Api extends REST_Controller
                     $type = 'BM';
                     $final = $this->count($type, $branch_id, $result);
 
-                    $leads['generated_converted'] = $final;
+                    $leads['generated_converted'] = array($final);
                     //for assigned lead
                     $where_assigned_Array = array('branch_id' => $branch_id,
                         'YEAR(created_on)' => date('Y'));
@@ -684,7 +684,8 @@ class Api extends REST_Controller
                     }
                     $final[$value['created_by']]['total_converted'] = $converted;
                 }
-                return $final;
+                $refinal = array_values($final);
+                return $refinal;
                 break;
 
             case 'ZM':
@@ -723,7 +724,8 @@ class Api extends REST_Controller
                     }
                     $final[$value['created_by_branch_id']]['total_converted'] = $converted;
                 }
-                return $final;
+                $refinal = array_values($final);
+                return $refinal;
                 break;
 
             case 'GM':
@@ -761,7 +763,8 @@ class Api extends REST_Controller
                     }
                     $final[$value['created_by_zone_id']]['total_converted'] = $converted;
                 }
-                return $final;
+                $refinal = array_values($final);
+                return $refinal;
                 break;
 
         }
