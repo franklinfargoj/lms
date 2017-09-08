@@ -1648,4 +1648,120 @@ class Api extends REST_Controller
 
         }
     }
+
+    public function refresh_dashboardnew_post()
+    {
+        $params = $this->input->post();
+        if (!empty($params) && isset($params['hrms_id']) && !empty($params['hrms_id'])) {
+
+            // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
+            $records_response = call_external_url(HRMS_API_URL_GET_RECORD . '/' . $params['hrms_id']);
+            $records = json_decode($records_response);
+
+            $result['basic_info'] = array(
+                'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
+                'dept_id' => $records->dbk_lms_emp_record1->deptid,
+                'dept_type_id' => $records->dbk_lms_emp_record1->dbk_dept_type,
+                'dept_type_name' => $records->dbk_lms_emp_record1->dept_discription,
+                'branch_id' => $records->dbk_lms_emp_record1->deptid,
+                'district_id' => $records->dbk_lms_emp_record1->district,
+                'state_id' => $records->dbk_lms_emp_record1->state,
+                'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
+                'full_name' => $records->dbk_lms_emp_record1->name,
+                'supervisor_id' => $records->dbk_lms_emp_record1->supervisor,
+                'designation_id' => $records->dbk_lms_emp_record1->designation_id,
+                'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
+                'mobile' => $records->dbk_lms_emp_record1->phone,
+                'email_id' => $records->dbk_lms_emp_record1->email,
+            );
+
+            // employee
+            if ($records->dbk_lms_emp_record1->designation_id == '540401') {
+                if (isset($result['basic_info']['hrms_id']) && $result['basic_info']['hrms_id'] != '') {
+                    $created_id = $result['basic_info']['hrms_id'];
+
+                    //Parameters buiding for sending to list function.
+                    $action = 'count';
+                    $select = array();
+                    $join = array();
+                    $group_by = array();
+
+                    //For Generated Leads Count
+                    $table = Tbl_Leads;
+
+                    //Month till date
+                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
+                    $leads['generated_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //Year till date
+                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+                    $leads['generated_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //For converted leads Count
+                    $table = Tbl_LeadAssign;
+
+                    //Month till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+                    $leads['converted_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+
+                    //Year till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $leads['converted_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    //For assigned leads Count
+                    $table = Tbl_LeadAssign;
+
+                    //Year till date
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+                }
+
+            }
+            // BM
+            if ($records->dbk_lms_emp_record1->designation_id == '520299') {
+                if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
+                    $branch_id = $result['basic_info']['branch_id'];
+                    $type = 'BM';
+                    $final = $this->countnew($type, $branch_id, $records->dbk_lms_emp_record1->DBK_LMS_COLL);
+
+                    $leads['generated_converted'] = $final;
+                    //for assigned lead
+                    $where_assigned_Array = array('branch_id' => $branch_id,
+                        'YEAR(created_on)' => date('Y'));
+                }
+                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
+                $action = 'count';
+                $select = array();
+                $table = Tbl_Leads;
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'], Tbl_LeadAssign . 'lead_id', NULL);
+                $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
+                $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+            }
+            //ZM
+            if ($records->dbk_lms_emp_record1->designation_id == '550502') {
+                if (isset($result['basic_info']['zone_id']) && $result['basic_info']['zone_id'] != '') {
+                    $zone_id = $result['basic_info']['zone_id'];
+                    $type = 'ZM';
+                    $final = $this->countnew($type, $zone_id, $records->dbk_lms_emp_record1->DBK_LMS_COLL);
+                    $leads['generated_converted'] = $final;
+                }
+            }
+            // GM
+            if ($records->dbk_lms_emp_record1->designation_id == '560601') {
+                $type = 'GM';
+                $final = $this->countnew($type, '', $records->dbk_lms_emp_record1->DBK_LMS_COLL);
+                $leads['generated_converted'] = $final;
+            }
+            $result = array(
+                "result" => True,
+                "data" => ['count' => $leads, 'basic_info' => $result['basic_info']]
+            );
+            returnJson($result);
+        }else{
+            $res = array('result' => False,
+                'data' => 'Invalid Access');
+            returnJson($res);
+        }
+    }
 }
