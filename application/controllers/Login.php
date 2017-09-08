@@ -33,6 +33,9 @@ class Login extends CI_Controller {
      */
 	public function index()
 	{
+        showList();
+        $isLoggedIn = $this->session->userdata('isLoggedIn');
+        if (!empty($isLoggedIn)) { redirect('dashboard'); }
         // make Captcha Html accessible to View code
         $arrData['captchaHtml'] = $this->botdetectcaptcha->Html();
         $arrData['captchaValidationMessage'] = '';

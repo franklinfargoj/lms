@@ -111,7 +111,7 @@ class Dashboard extends CI_Controller {
      * loads the branch manager view
      * @author Gourav Thatoi
      */
-    public function bm_view($branch_id){
+    private function bm_view($branch_id){
 
         //for generated lead
         $where_month_Array = array('branch_id' => $branch_id,
@@ -158,7 +158,7 @@ class Dashboard extends CI_Controller {
      * loads the zonal manager view
      * @author Gourav Thatoi
      */
-    public function zm_view($zone_id){
+    private function zm_view($zone_id){
 
         $where_month_Array = array(
             'zone_id' => $zone_id,
@@ -208,7 +208,7 @@ class Dashboard extends CI_Controller {
      * loads the zonal manager view
      * @author Gourav Thatoi
      */
-    public function gm_view(){
+    private function gm_view(){
 
         $where_month_Array = array(
             'zone_id !=' => NULL,
