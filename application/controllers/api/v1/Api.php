@@ -1408,7 +1408,7 @@ class Api extends REST_Controller
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
                 'dept_id' => $records->dbk_lms_emp_record1->deptid,
-                'dept_type_id' => $records->dbk_dept_type,
+                'dept_type_id' => $records->dbk_lms_emp_record1->dbk_dept_type,
                 'dept_type_name' => $records->dbk_lms_emp_record1->dept_discription,
                 'branch_id' => $records->dbk_lms_emp_record1->deptid,
                 'district_id' => $records->dbk_lms_emp_record1->district,
