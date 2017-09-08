@@ -21,8 +21,16 @@ class Lead  extends CI_Model
 	public function add_leads($lead_data = array())
 	{
 		if (!empty($lead_data)) {
+            $this->db->db_debug = FALSE;
             $this->db->insert($this->_tbl_db_leads, $lead_data);
-            return $this->db->insert_id();
+            $errors = $this->db->error();
+            if($errors['code']){
+                $response['status'] = 'error';
+                $response['code'] = $errors['code'];
+                return $response;
+            }else{
+                return $this->db->insert_id();
+            }
 		}
 		return false;
 	}
@@ -353,7 +361,9 @@ class Lead  extends CI_Model
             $this->db->from(Tbl_Products);
             $this->db->where('id',$prod_id);
             $result =  $this->db->get()->result();
-            return $result[0]->default_assign;
+            if(!empty($result)){
+                return $result[0]->default_assign;
+            }
         }
         return false;
     }
