@@ -143,6 +143,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     </div>
                     <div class="form-control range-slider">
                         <label>Ticket Size</label>
+                         <?php echo form_input($data_ticket_range)?><img src="../assets2/images/rupees.png" alt="rupees" id="rs">
                         <div id="master">
                             <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
                         </div>
@@ -150,7 +151,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                             <span class="float-left">5000</span>
                             <span class="float-right">1 Crore & above</span>
                         </div>
-                        <?php echo form_input($data_ticket_range)?>
+                       
                     </div>
 
                 </div>

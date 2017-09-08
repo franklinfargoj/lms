@@ -608,8 +608,8 @@ strong{
 .radio-control label{display: inline-block;}
 .lead-form .form-control textarea{ border: 1px solid #d3d3d3; width: 99%;}
 .lead-form .form-control label{vertical-align: top;}
-.ui-slider-horizontal{width: 65%; display: inline-block;}
-.range-slider input{width: 25%; display: inline-block; float: right; margin-top: -20px;}
+.ui-slider-horizontal{width: 100%; display: inline-block;margin-top: 22px;}
+.range-slider input{width: 25%; display: inline-block;  margin-top: -20px;}
 .ui-widget-header{background-color: #ed4c4c;}
 .reset{
 	margin-right: 20px;
@@ -632,11 +632,14 @@ strong{
 .lead-form .form-submit .reset{
 	margin-right: 20px;
 }
-.step{width: 65%;display: inline-block;}
+.step{width: 100%;display: inline-block;    margin-top: 5px;}
 .step span.float-left, .step span.float-right{font-family: "Montserrat"; font-size: 13px; color: #333333; font-weight: 500; margin-top: 5px;}
 /*add lead*/
 
 /*lead*/
+img#rs {
+    margin: 0 0 0px 10px;
+}
 .lead-table thead{
 	background-color: #00559d;
 }
