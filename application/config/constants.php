@@ -111,7 +111,6 @@ define('Tbl_Notification', 'db_notification');
 define('HRMS_API_URL_AUTH', 'http://staging.php-dev.in:8844/DENABANK/lms/api/v1/authenticate/check_authentication');
 define('HRMS_API_URL_GET_RECORD', 'http://staging.php-dev.in:8844/DENABANK/lms/api/v1/authenticate/get_records');
 
-define('Tbl_LoginLog', 'db_app_login_logs');
 
 
 define('EXCEL_ALPHA', serialize(array(
