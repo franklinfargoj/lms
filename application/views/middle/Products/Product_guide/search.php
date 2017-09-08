@@ -88,7 +88,7 @@
     			<?php echo form_close();?>
     		</div>
 
-            <img class="loader" src="http://10.0.11.34/lms/assets2/images/35.gif" style="display:none;">
+            <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
             <!-- Tab contents start here -->
             <?php if(isset($searchResult)){?>
                 <?php if(!empty($searchResult)){?>

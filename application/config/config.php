@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].':8844/DENABANK/lms';
+$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].'/lms';
 
 /*
 |--------------------------------------------------------------------------
@@ -545,7 +545,7 @@ $config['lead_status'] = array(
 
 $config['lead_type'] = array(
 	'HOT' => 'Highly Interested',
-	'WARM' => 'Close Enough Interested' ,
+	'WARM' => 'Medium interested' ,
 	'COLD' => 'Low Interested'
 	);
 $config['escalation_days_diff'] = array(

@@ -90,8 +90,8 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','RM'))) {?>
-				<li class="<?php echo ($controller == '') ? 'active' : ''?>">
-					<a href="">
+				<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>">
+					<a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">
 						Reports
 					</a>
 				</li>

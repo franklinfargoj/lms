@@ -386,7 +386,7 @@ function get_session(){
         'dept_id' => '12',
         'dept_type_id' => '123',
         'dept_type_name' => 'BR',
-        'branch_id' => '12',
+        'branch_id' => '3',
         'district_id' => '1',
         'state_id' => '1',
         'zone_id' => '4',
@@ -571,7 +571,7 @@ function get_details($designation_name){
         'full_name' => 'anup',
     );
     $result['branch_list'][] = array(
-        'id' => '12',
+        'id' => '3',
         'full_name' => 'branch1',
     );
     $result['branch_list'][] = array(
@@ -579,7 +579,7 @@ function get_details($designation_name){
         'full_name' => 'branch2',
     );
     $result['zone_list'][] = array(
-        'id' => '12',
+        'id' => '4',
         'full_name' => 'zone1',
     );
     $result['zone_list'][] = array(
