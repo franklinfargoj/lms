@@ -22,7 +22,7 @@ $lead_type = $this->config->item('lead_type');
         </h3>
     </div>
 </div>
-<div class="lead-top">
+<!-- <div class="lead-top">
     <div class="container clearfix">
         <div class="float-left">
             <span class="total-lead">
@@ -43,7 +43,7 @@ $lead_type = $this->config->item('lead_type');
             </a>
         </div>
     </div>
-</div>
+</div> -->
 <div class="page-content">
     <span class="bg-top"></span>
     <div class="inner-content">

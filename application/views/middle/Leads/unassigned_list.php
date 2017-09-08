@@ -1,14 +1,7 @@
 <div class="page-content">
     <div class="container">
         <div class="unassigned-content">
-        <span class="bg-top"></span>
-        <div class="inner-content">
-            <div class="container">
-                <!-- BEGIN PAGE LEVEL STYLES -->
-                <link href="<?php echo base_url() . ASSETS; ?>css/jquery.dataTables.min.css" rel="stylesheet">
-                <!-- END PAGE LEVEL STYLES -->
-                <!-- BEGIN PRODUCT CATEGOEY-->
-                <div class="page-title">
+        <div class="page-title">
                     <div class="container clearfix">
                         <h3 class="text-center">
                             <?php 
@@ -17,6 +10,14 @@
                         </h3>
                     </div>
                 </div>
+        <span class="bg-top"></span>
+        <div class="inner-content">
+            <div class="container">
+                <!-- BEGIN PAGE LEVEL STYLES -->
+                <link href="<?php echo base_url() . ASSETS; ?>css/jquery.dataTables.min.css" rel="stylesheet">
+                <!-- END PAGE LEVEL STYLES -->
+                <!-- BEGIN PRODUCT CATEGOEY-->
+                
                 <?php 
                     //Form
                     $attributes = array(
@@ -31,7 +32,7 @@
                     <div class="container clearfix">
                         <div class="float-left">
                             <span class="total-lead">
-                                Total
+                                Total Leads
                             </span>
                             <span class="lead-num"> : <?php echo count($unassigned_leads);?></span>
                         </div>
@@ -40,8 +41,8 @@
                                 //if(ucwords($lead_source) != 'Walk-in'){
                                     if ($unassigned_leads) {
                             ?>
-                                <div class="form-control">
-                                    <label>Assign To:</label>   
+                                <div class="form-control" id="finline">
+                                    <label>Assign To : </label>&nbsp;&nbsp;   
                                     <select name="assign_to">
                                         <option value="">Select Employee</option>
                                         <option value="2">Employee 1</option>
@@ -59,7 +60,7 @@
                                         echo form_hidden($data1);
                                     ?>
                                 </div>
-                                <div class="form-control form-submit clearfix">
+                                <div class="form-control form-submit clearfix" id="btnravish">
                                     <a href="javascript:void(0);" class="float-right">
                                             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
                                             <span><input type="submit" class="custom_button" value="Submit" /></span>
@@ -98,10 +99,10 @@
                             // Would produce: <input type="checkbox" name="newsletter" id="newsletter" value="1" style="margin:10px" />
                         ?>
                         </th>
-                        <th>Sr. No</th>
+                        <th style="text-align:center">Sr. No</th>
                         <th>Customer Name</th>
                         <th>Product Name</th>
-                        <th>Elapsed Days</th>
+                        <th style="text-align:center">Elapsed Days</th>
                         <th>Details</th>
                     </tr>
                     </thead>
@@ -112,7 +113,7 @@
                             foreach ($unassigned_leads as $key => $value) {
                     ?>
                             <tr>
-                                <td>
+                                <td >
                                 <?php 
                                     $data = array(
                                         'name'          => 'lead_ids[]',
@@ -124,7 +125,7 @@
                                     // Would produce: <input type="checkbox" name="newsletter" id="newsletter" value="1" style="margin:10px" />
                                 ?>
                                 </td>
-                                <td>
+                                <td style="text-align:center">
                                     <?php 
                                         echo ++$i; 
                                     ?>
@@ -136,14 +137,14 @@
                                 <td>
                                     <?php echo ucwords($value['product_title']); ?>
                                 </td>
-                                <td>
+                                <td  style="text-align:center">
                                     <?php $created_date = explode(' ', $value['created_on']);
 
                                     $now = date_create(date('Y-m-d')); // or your date as well
                                     //echo $created_date[0];
                                     $generated_date = date_create($created_date[0]);
                                     $datediff = date_diff($now, $generated_date);
-                                    echo $datediff->format("%a days");
+                                    echo $datediff->format("%a ");
                                     ?>
                                 </td>
                                 <td>
