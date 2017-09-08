@@ -544,7 +544,7 @@ $config['lead_status'] = array(
 
 $config['lead_type'] = array(
 	'HOT' => 'Highly Interested',
-	'WARM' => 'Close Enough Interested' ,
+	'WARM' => 'Medium interested' ,
 	'COLD' => 'Low Interested'
 	);
 $config['escalation_days_diff'] = array(
