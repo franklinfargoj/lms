@@ -545,21 +545,43 @@ class Api extends REST_Controller
 
     public function masters_get()
     {
-        $lead_status['lead_details'][0] = array('zone_id'=>1,
+        $lead_status['lead_details'][] =
+            array(
+            'zone_id'=>1,
             'zone_name'=>'BBSR',
-            'state'=>array(
-                'odisha'=>array('districts'=>array('dist1'=>array('Branch9','Branch8'),'dist2'=>array('branches'=>array('Branch1','Branch2')),
-                    'dist3'=>array('branches'=>array('Branch3','Branch4'))))));
-        $lead_status['lead_details'][1]=array('zone_id'=>2,
-            'zone_name'=>'zone2',
-            'state'=>array(
-        'maharastra'=>array('districts'=>array('dist5'=>array('branches'=>array('Branch12','Branch18')),'dist9'=>array('branches'=>array('Branch11','Branch22')),
-            'dist13'=>array('branches'=>array('Branch23','Branch34'))))));
-        $lead_status['lead_details'][2]=array('zone_id'=>3,
-            'zone_name'=>'zone3',
-            'state'=>array(
-        'maharastra'=>array('districts'=>array('dist52'=>array('branches'=>array('Branch9','Branch8')),'dist8'=>array('branches'=>array('Branch7','Branch7')),
-            'dist13'=>array('branches'=>array('Branch99','Branch00'))))));
+            'state'=>array('odisha' => [array(
+                'districts'=>[array('dist1'=>array(
+                    'branches'=>array(
+                        'Branch9','Branch8'
+                    )
+                ))
+                ]
+            )]));
+        $lead_status['lead_details'][] =
+            array(
+            'zone_id'=>2,
+            'zone_name'=>'BB',
+            'state'=>array('maharastra' => [array(
+                'districts'=>[array('dist1'=>array(
+                    'branches'=>array(
+                        'Branch9','Branch8'
+                    )
+                ))
+                ]
+            )]));
+        $lead_status['lead_details'][] =
+            array(
+            'zone_id'=>3,
+            'zone_name'=>'westbengal',
+            'state'=>array('odisha' => [array(
+                'districts'=>[array('dist1'=>array(
+                    'branches'=>array(
+                        'Branch9','Branch8'
+                    )
+                ))
+                ]
+            )]));
+
         $final = array();
         $table = Tbl_Category;
         $join = array();
