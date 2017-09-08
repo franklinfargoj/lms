@@ -162,7 +162,7 @@ class Api extends REST_Controller
         } else {
             $error = array(
                 "result" => false,
-                "data" => "Invalid username or password."
+                "data" => array("Invalid username or password.")
             );
             returnJson($error);
         }
@@ -239,7 +239,7 @@ class Api extends REST_Controller
             }
         }
         $data = array('result' => False,
-            'data' => 'parameter missing');
+            'data' => array('parameter missing'));
         returnJson($data);
     }
 
@@ -302,7 +302,7 @@ class Api extends REST_Controller
 
         if(is_array($lead_id)){
             $result = array('result' => False,
-                'data' => 'wrong product id or category id .');
+                'data' => array('wrong product id or category id .'));
             returnJson($result);
         }
 
@@ -377,7 +377,7 @@ class Api extends REST_Controller
             returnJson($result);
         }
         $result = array('result' => False,
-            'data' => 'No data found');
+            'data' => array('No data found'));
         returnJson($result);
     }
 
@@ -392,7 +392,7 @@ class Api extends REST_Controller
             returnJson($result);
         }
         $result = array('result' => False,
-            'data' => 'No data found');
+            'data' => array('No data found'));
         returnJson($result);
     }
 
@@ -463,7 +463,7 @@ class Api extends REST_Controller
         } else {
             $error = array(
                 "result" => false,
-                "data" => "Invalid username or password."
+                "data" => array("Invalid username or password.")
             );
             returnJson($error);
         }
@@ -498,7 +498,7 @@ class Api extends REST_Controller
         }
         $error = array(
             "result" => false,
-            "data" => "No data found."
+            "data" => array("No data found.")
         );
         returnJson($error);
 
@@ -547,6 +547,7 @@ class Api extends REST_Controller
 
                             $whereArray = array(Tbl_Leads . '.branch_id' => $branch_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
                             $result[$i]['MONTH'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
+                            $result[$i]['status'] = $value;
                             $i++;
                         }
                     }
@@ -558,7 +559,7 @@ class Api extends REST_Controller
         }
         $error = array(
             "result" => False,
-            "data" => "Missing Parameters."
+            "data" => array("Missing Parameters.")
         );
         returnJson($error);
     }
@@ -596,7 +597,7 @@ class Api extends REST_Controller
             returnJson($res);
         }
         $res = array('result' => False,
-            'data' => 'No data found');
+            'data' => array('No data found'));
         returnJson($res);
     }
 
@@ -615,7 +616,7 @@ class Api extends REST_Controller
             }
         }
         $res = array('result' => False,
-            'data' => 'Wrong Parameters');
+            'data' => array('Wrong Parameters'));
         returnJson($res);
     }
 
@@ -651,7 +652,7 @@ class Api extends REST_Controller
             returnJson($res);
         } else {
             $res = array('result' => False,
-                'data' => 'Wrong Parameters');
+                'data' => array('Wrong Parameters'));
             returnJson($res);
         }
     }
@@ -809,7 +810,7 @@ class Api extends REST_Controller
             returnJson($res);
         } else {
             $res = array('result' => False,
-                'data' => 'Invalid Request');
+                'data' => array('Invalid Request'));
             returnJson($res);
         }
 
@@ -825,7 +826,8 @@ class Api extends REST_Controller
     public function unassigned_leads_list_post()
     {
         $params = $this->input->post();
-        if (!empty($params) && isset($params['lead_source']) && !empty($params['lead_source'] && isset($params['branch_id']) && !empty($params['branch_id']))) {
+        if (!empty($params) && isset($params['lead_source']) && !empty($params['lead_source']
+            && isset($params['branch_id']) && !empty($params['branch_id']))) {
             $lead_source = $params['lead_source'];
             $branch_id = $params['branch_id'];
             $unassigned_leads = $this->Lead->unassigned_leads_api($lead_source, $branch_id);
@@ -834,7 +836,7 @@ class Api extends REST_Controller
             returnJson($res);
         } else {
             $res = array('result' => False,
-                'data' => 'Invalid Request');
+                'data' => array('Invalid Request'));
             returnJson($res);
         }
 
@@ -842,7 +844,7 @@ class Api extends REST_Controller
 
     /**
      * unassigned_leads_list
-     * loads the unassigned leads list filtered by lead source
+     * loads the assigned leads list filtered by lead source
      * @autor Gourav Thatoi
      * @accss public
      * @return array
@@ -877,7 +879,7 @@ class Api extends REST_Controller
             returnJson($res);
         } else {
             $res = array('result' => False,
-                'data' => 'Invalid Request');
+                'data' => array('Invalid Request'));
             returnJson($res);
         }
     }
@@ -885,7 +887,7 @@ class Api extends REST_Controller
     /**
      * details
      * Get Leads details based on type of lead (Generated,Converted,Assigned)
-     * @author Ashok Jadhav
+     * @author Gourav Thatoi
      * @access public
      * @param $type ,$till,$lead_id
      * @return array
@@ -933,7 +935,7 @@ class Api extends REST_Controller
             returnJson($res);
         } else {
             $res = array('result' => False,
-                'data' => 'Invalid Request');
+                'data' => array('Invalid Request'));
             returnJson($res);
         }
     }
@@ -975,7 +977,7 @@ class Api extends REST_Controller
             }
         } else {
             $res = array('result' => False,
-                'data' => 'Invalid Request');
+                'data' => array('Invalid Request'));
             returnJson($res);
         }
     }
@@ -983,7 +985,7 @@ class Api extends REST_Controller
     /**
      * update_lead_status
      * Only for assigned lead list able to change lead status / Add Follow Up details
-     * @author Ashok Jadhav
+     * @author Gourav Thatoi
      * @access public
      * @param empty
      * @return array
@@ -1015,7 +1017,7 @@ class Api extends REST_Controller
             $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             if (empty($leadsAssign)) {
                 $res = array('result' => False,
-                    'data' => 'No assigned lead found.');
+                    'data' => array('No assigned lead found.'));
                 returnJson($res);
             }
             $leads_data = $leadsAssign[0];
@@ -1033,7 +1035,7 @@ class Api extends REST_Controller
 
                     } else {
                         $res = array('result' => False,
-                            'data' => 'Invalid Request for Other Interest');
+                            'data' => array('Invalid Request for Other Interest'));
                         returnJson($res);
                     }
 
@@ -1043,7 +1045,7 @@ class Api extends REST_Controller
             $all_status = $this->config->item('lead_status');
             if(!array_key_exists($params['status'],$all_status)){
                 $res = array('result'=>false,
-                    'data'=>'Unknown status.');
+                    'data'=>array('Unknown status.'));
                 returnJson($res);
             }
             /*****************************************************************/
@@ -1107,7 +1109,7 @@ class Api extends REST_Controller
                     $response2 = $this->Lead->update_lead_data($where, $lead_identification_data, Tbl_Leads);
                 } else {
                     $res = array('result' => False,
-                        'data' => 'Unknown lead identification');
+                        'data' => array('Unknown lead identification'));
                     returnJson($res);
                 }
             }
@@ -1133,7 +1135,7 @@ class Api extends REST_Controller
                         $result2 = $this->Lead->add_reminder($remindData);
                     } else {
                         $res = array('result' => False,
-                            'data' => 'Invalid Request For Following Status');
+                            'data' => array('Invalid Request For Following Status'));
                         returnJson($res);
                     }
                 }
@@ -1144,45 +1146,45 @@ class Api extends REST_Controller
 
             if ($result['status'] == 'success' && $result2['status'] == 'success' && $result3['status'] == 'success') {
                 $res = array('result' => True,
-                    'data' => 'Lead Status Change and Reminder and Other Product Save Successfully');
+                    'data' => array('Lead Status Change and Reminder and Other Product Save Successfully'));
                 returnJson($res);
             } elseif ($result['status'] == 'success' && $result4['status'] == 'reroute') {
                 $res = array('result' => True,
-                    'data' => 'Lead Status Changed Successfully and Lead rerouted successfully.');
+                    'data' => array('Lead Status Changed Successfully and Lead rerouted successfully.'));
                 returnJson($res);
             } elseif ($result['status'] == 'success' && $response2['status'] == 'success') {
                 $res = array('result' => True,
-                    'data' => 'Lead Status and Lead Identification Changed Successfully ');
+                    'data' => array('Lead Status and Lead Identification Changed Successfully '));
                 returnJson($res);
             } elseif ($response2['status'] == 'success') {
                 $res = array('result' => True,
-                    'data' => 'Lead Identification Changed Successfully ');
+                    'data' => array('Lead Identification Changed Successfully '));
                 returnJson($res);
             } elseif ($result['status'] == 'success') {
                 $res = array('result' => True,
-                    'data' => 'Lead Status Changed Successfully');
+                    'data' => array('Lead Status Changed Successfully'));
                 returnJson($res);
             } elseif ($result2['status'] == 'success' && $response2['status'] == 'success') {
                 $res = array('result' => True,
-                    'data' => 'Lead Identification and Reminder Saved Successfully');
+                    'data' => array('Lead Identification and Reminder Saved Successfully'));
                 returnJson($res);
             } elseif ($result2['status'] == 'success') {
                 $res = array('result' => True,
-                    'data' => 'Reminder Saved Successfully');
+                    'data' => array('Reminder Saved Successfully'));
                 returnJson($res);
             } elseif ($result3['status'] == 'success') {
                 $res = array('result' => True,
-                    'data' => 'Other Interested product Saved Successfully');
+                    'data' => array('Other Interested product Saved Successfully'));
                 returnJson($res);
             } else {
                 $res = array('result' => True,
-                    'data' => 'Nothing To Update');
+                    'data' => array('Nothing To Update'));
                 returnJson($res);
             }
 
         } else {
             $res = array('result' => False,
-                'data' => 'Invalid Request');
+                'data' => array('Invalid Request'));
             returnJson($res);
         }
     }
@@ -1324,7 +1326,7 @@ class Api extends REST_Controller
             returnJson($result);
         } else {
             $res = array('result' => False,
-                'data' => 'Invalid Request');
+                'data' => array('Invalid Request'));
             returnJson($res);
         }
     }
@@ -1392,7 +1394,7 @@ class Api extends REST_Controller
 
         } else {
             $res = array('result' => False,
-                'data' => 'Parameters missing');
+                'data' => array('Parameters missing'));
             returnJson($res);
         }
 
@@ -1670,6 +1672,11 @@ class Api extends REST_Controller
         }
     }
 
+    /**
+     * notification_list
+     * gives the list of notifications order by priority
+     * @author Gourav Thatoi
+     */
     public function notification_list_post(){
         $params = $this->input->post();
         if(isset($params['hrms_id']) && !empty($params['hrms_id'])){
@@ -1689,8 +1696,75 @@ class Api extends REST_Controller
             returnJson($res);
         }
             $res = array('result'=>False,
-                'data'=>'Missing parameter.');
+                'data'=>array('Missing parameter.'));
             returnJson($res);
+    }
+
+    /**
+     * assigned_leads_status
+     * lead performance assigned leads count status wise
+     * @author Gourav Thatoi
+     */
+    public function assigned_leads_status_post(){
+        $result = array();
+        $params = $this->input->post();
+        if(isset($params) && !empty($params) && isset($params['id']) && !empty($params['id'])
+            && isset($params['lead_source']) && !empty($params['lead_source'])
+            &&isset($params['designation_name']) && !empty($params['designation_name'])){
+
+            $status = $this->config->item('lead_status');
+            $id = $params['id'];
+            $designation_type = $params['designation_name'];
+            $lead_source = $params['lead_source'];
+            //Building common parameters
+            $action = 'count';
+            $table = Tbl_Leads.' as l';
+            $where = array('la.is_deleted' => 0,'la.is_updated' => 1);
+            $join = array();
+            $join[] = array('table' => Tbl_LeadAssign.' as la', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
+
+            //User Level conditions
+            if(!empty($designation_type) && $designation_type == 'RM'){
+                $where['la.zone_id'] = $id;
+            }
+            if(!empty($designation_type) && $designation_type == 'ZM'){
+                $where['la.branch_id'] = $id;
+            }
+            if(!empty($designation_type) && $designation_type == 'BM'){
+                $where['la.employee_id'] = $id;
+            }
+            if(!empty($designation_type) && $designation_type == 'EM'){
+                $where['la.employee_id'] = $id;
+            }
+
+            if(!empty($lead_source)){
+                $where['l.lead_source'] = $lead_source;
+            }
+            $year_where['YEAR(la.created_on)'] = date('Y');
+            $month_where['MONTH(la.created_on)'] = date('m');
+            if(!empty($status)){
+                foreach ($status as $key => $value) {
+                    $where['status'] = $key;
+
+                    //This Year Assigned
+                    $year_where = array_merge($year_where,$where);
+
+                    //This Month Assigned
+                    $month_where = array_merge($month_where,$where);
+
+                    $result['Month'] = $this->Lead->get_leads($action, $table, '', $month_where, $join, '', '');
+                    $result['Year'] = $this->Lead->get_leads($action, $table, '', $year_where, $join, '', '');
+                    $result['status'] = $value;
+                }
+            }
+            $res = array('result'=>True,
+                'data'=>$result);
+            returnJson($res);
+        }
+        $res = array('result'=>False,
+            'data'=>array('Missing parameter.'));
+        returnJson($res);
+
     }
 
     public function refresh_dashboardnew_post()
