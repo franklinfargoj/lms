@@ -5,22 +5,7 @@
 
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center">Zonal Manager</h3>
-    </div>
-</div>
-<div class="lead-top">
-    <div class="container clearfix">
-        <div class="float-left">
-            <!--            <span class="total-lead">-->
-            <!--                Total-->
-            <!--            </span>-->
-            <!--            <span class="lead-num"> : --><?php //echo count($leads);?><!--</span>-->
-        </div>
-        <div class="float-right">
-            <a href="<?php echo base_url('dashboard/home_excel');?>">
-                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
-            </a>
-        </div>
+        <h3 class="text-center">Genaral Manager</h3>
     </div>
 </div>
 <div class="page-content">
@@ -30,13 +15,13 @@
             <tr class="top-header">
                 <th></th>
                 <th><input type="text" name="customername" placeholder="Search Branch Name"></th>
-                <th><input type="text" name="customername" placeholder="Search Generated Leads"></th>
-                <th><input type="text" name="customername" placeholder="Search Converted Leads"></th>
+                <th><!-- <input type="text" name="customername" placeholder="Search Generated Leads"> --></th>
+                <th><!-- <input type="text" name="customername" placeholder="Search Converted Leads"> --></th>
                 <th></th>
             </tr>
             <tr>
                 <th>Sr. No</th>
-                <th>Branch Name</th>
+                <th>Zone Name</th>
                 <th>Genrated Leads</th>
                 <th>Converted Leads</th>
                 <th>Action</th>
@@ -53,7 +38,7 @@
                             <?php echo ++$i;?>
                         </td>
                         <td>
-                            <?php echo ucwords($value['created_by_branch_name']);?>
+                            <?php echo ucwords($value['created_by_zone_name']);?>
                         </td>
                         <td>
                             <?php echo $value['total_generated'];?>
@@ -62,9 +47,9 @@
                             <?php echo $value['total_converted'];?>
                         </td>
                         <td>
-                            <a href="<?php echo site_url('dashboard/leads_status/generated/'.encode_id($value['created_by_branch_id']))?>">View</a>
+                            <a href="<?php echo site_url('dashboard/leads_status/generated/'.encode_id($value['created_by_zone_id']))?>">View</a>
                             <span>/</span> 
-                            <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by_branch_id']));?>">Performance</a>
+                            <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by_zone_id']));?>">Performance</a>
                         </td>
                     </tr>
                     <?php

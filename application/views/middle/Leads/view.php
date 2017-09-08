@@ -22,6 +22,28 @@ $lead_type = $this->config->item('lead_type');
         </h3>
     </div>
 </div>
+<div class="lead-top">
+    <div class="container clearfix">
+        <div class="float-left">
+            <span class="total-lead">
+                Total
+            </span>
+            <span class="lead-num"> : <?php echo count($leads);?></span>
+        </div>
+        <div class="float-right">
+            <?php
+            $param1 = isset($type) ? $type.'/' : '';
+            $param2 = isset($till) ? $till.'/' : '';
+            $param3 = isset($status) ? $status.'/' : '';
+            $param4 = isset($param) ? $param.'/' : '';
+            ?>
+            <a href="<?php echo base_url('leads/export_excel_listing/'
+                .$param1.$param2.$param3.$param4);?>">
+                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
+            </a>
+        </div>
+    </div>
+</div>
 <div class="page-content">
     <span class="bg-top"></span>
     <div class="inner-content">
@@ -76,9 +98,9 @@ $lead_type = $this->config->item('lead_type');
                         <?php }?>
                         <th>
                             <?php
-                                if($lead_source){
+                                if($lead_sources){
                                     $options3['']='Select Source';
-                                    foreach ($lead_source as $key => $value) {
+                                    foreach ($lead_sources as $key => $value) {
                                         $options3[$value] = $value;
                                     }
                                     echo form_dropdown('status', $options3 ,'',array());
@@ -173,12 +195,21 @@ $lead_type = $this->config->item('lead_type');
                                  <?php echo ucwords($value['lead_source']);?>
                             </td>
                             <td>
-                                <?php if(isset($status)){?>
-                                    <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']).'/'.$status)?>">View</a>
-                                <?php }else{
+                                <?php 
+                                $parameter = '';
+                                $source = 'empty';
+                                if(isset($status) && !empty($status)){
+                                    $parameter .= '/'.$status; 
+                                }
+                                if(isset($param) && !empty($param)){
+                                    $parameter .= '/'.encode_id($param); 
+                                }
+                                if(isset($lead_source) && !empty($lead_source)){
+                                    $parameter .= '/'.$lead_source; 
+                                    $source = $lead_source;
+                                }
                                 ?>
-                                    <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']))?>">View</a>
-                                <?php }?>
+                                <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']).$parameter)?>">View</a>
                             </td>
                         </tr>   
                     <?php   
@@ -197,18 +228,19 @@ $lead_type = $this->config->item('lead_type');
     jQuery(document).ready(function() { 
         var table = $('#sample_3');
         var columns = [];
-
         var type = "<?php echo $type ?>";
+        var lead_source = "<?php echo $source ?>";
         switch(type) {
             case 'generated':
                 columns = [6];
                 break;
-            case 'converted':
-                columns = [6];
-                break;
             case 'assigned':
+            if(lead_source == 'empty'){
                 columns = [8];
-                break;
+            }else{
+                columns = [6];
+            }
+            break;
         }
         
         //Initialize datatable configuration

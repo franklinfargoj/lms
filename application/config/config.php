@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].'/lms';
+$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].':8844/DENABANK/lms';
 
 /*
 |--------------------------------------------------------------------------
@@ -457,7 +457,11 @@ $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = FALSE;
 $config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add_lead',
     'api/v1/api/leads_performance','api/v1/api/category_products','api/v1/api/leads_status',
-    'api/v1/api/leads_assigned_list','api/v1/api/product_details','api/v1/api/unassigned_leads_list','api/v1/api/unassigned_leads','api/v1/api/assigned_leads_list','api/v1/api/lead_details','api/v1/api/assign_to','api/v1/api/update_lead_status','api/v1/api/refresh_dashboard');
+    'api/v1/api/leads_assigned_list','api/v1/api/product_details','api/v1/api/unassigned_leads_list',
+    'api/v1/api/unassigned_leads','api/v1/api/assigned_leads_list','api/v1/api/lead_details',
+    'api/v1/api/assign_to','api/v1/api/update_lead_status','api/v1/api/refresh_dashboard',
+    'api/v1/api/multiple_leads_assign','api/v1/api/authenticationnew','api/v1/authenticate/check_authentication'
+);
 
 /*
 |--------------------------------------------------------------------------

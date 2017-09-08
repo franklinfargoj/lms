@@ -158,15 +158,27 @@ $remark_extra = 'style="rows:4 ; cols:80"';
 
                 <div class="lead-form-right">
                     <div class="form-control">
-                        <label>Branch Type:</label>
-                        <div class="radio-control">
-                            <input type="radio" id="is_own_branch" name="is_own_branch"
-                                   value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
-                            <label>Own Branch</label>
-                        </div>
-                        <div class="radio-control">
+                        
+                        <?php 
+                            if(in_array($this->session->userdata('admin_type'),array('RM','ZM'))){
+                                $checked = TRUE;
+                                $style = "style='display:none'";
+                            }else{
+                                $checked = FALSE;
+                                $style = "";
+                        ?>
+                            <label>Branch Type:</label>
+                            <div class="radio-control">
+                                <input type="radio" id="is_own_branch" name="is_own_branch"
+                                       value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
+                                <label>Own Branch</label>
+                            </div>
+                        <?php
+                            }
+                        ?>
+                        <div class="radio-control" <?php echo $style;?>>
                             <input type="radio" name="is_own_branch" id="is_other_branch"
-                                   value="0" <?php echo set_radio('is_own_branch', '0'); ?> />
+                                   value="0" <?php echo set_radio('is_own_branch', '0',$checked); ?> />
                             <label>Other Branch</label>
                         </div>
                         <?php echo form_error('is_own_branch'); ?>
@@ -290,7 +302,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 url: base_url + "leads/productlist",
                 data: {
                     '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
-                    category_id: category_id
+                    category_id: category_id,
+                    select_label:'Select'
                 }
             }).success(function (resp) {
                 if (resp) {

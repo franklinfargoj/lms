@@ -42,36 +42,36 @@
                     <th>Action</th>
                 </tr>
 
-                </thead>
-                <tbody>
-                <?php if(!empty($leads)){
-                    $i = 0;
-                    foreach ($leads as $key => $value) {
-                        ?>
-                        <tr>
-                            <td>
-                                <?php echo ++$i;?>
-                            </td>
-                            <td>
-                                <?php echo $value['created_by_name'];?>
-                            </td>
-                            <td>
-                                <?php echo $value['total'];?>
-                            </td>
-                            <td>
-                                <?php echo $value['converted_leads'];?>
-                            </td>
-                            <td>
-                                <a href="<?php echo site_url('dashboard/leads_status/'.encode_id($value['created_by']).'/'.$value['created_by_name'])?>">View</a>
-                                <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by']));?>">Performance</a>
-                            </td>
-                        </tr>
-                        <?php
-                    }
-                }?>
-                </tbody>
-            </table>
-        </div>
+            </thead>
+            <tbody>
+            <?php if(!empty($leads)){
+                $i = 0;
+                foreach ($leads as $key => $value) {
+                    ?>
+                    <tr>
+                        <td>
+                            <?php echo ++$i;?>
+                        </td>
+                        <td>
+                            <?php echo ucwords($value['created_by_name']);?>
+                        </td>
+                        <td>
+                            <?php echo $value['total_generated'];?>
+                        </td>
+                        <td>
+                            <?php echo $value['total_converted'];?>
+                        </td>
+                        <td>
+                            <a href="<?php echo site_url('dashboard/leads_status/generated/'.encode_id($value['created_by']));?>">View</a>
+                            <span>/</span> 
+                            <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by']));?>">Performance</a>
+                        </td>
+                    </tr>
+                    <?php
+                }
+            }?>
+            </tbody>
+        </table>
     </div>
     <span class="bg-bottom"></span>
 </div>
