@@ -1444,10 +1444,10 @@ class Api extends REST_Controller
 
         //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
         $auth_response = call_external_url(HRMS_API_URL_AUTH.'/'.$user_id.'/'.$password);
-        $result = json_decode($auth_response);
-        if ($result->DBK_LMS_AUTH->password == 'True') {
+        $auth = json_decode($auth_response);
+        if ($auth->DBK_LMS_AUTH->password == 'True') {
            // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-            $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$result->DBK_LMS_AUTH->username);
+            $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$auth->DBK_LMS_AUTH->username);
             $records = json_decode($records_response);
             $data = array('device_token' => $device_token,
                 'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
@@ -1520,7 +1520,7 @@ class Api extends REST_Controller
                 if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
                     $branch_id = $result['basic_info']['branch_id'];
                     $type = 'BM';
-                    $final = $this->count($type, $branch_id, $records->dbk_lms_emp_record1->DBK_LMS_COLL);
+                    $final = $this->countnew($type, $branch_id, $records->dbk_lms_emp_record1->DBK_LMS_COLL);
 
                     $leads['generated_converted'] = $final;
                     //for assigned lead
@@ -1540,14 +1540,14 @@ class Api extends REST_Controller
                 if (isset($result['basic_info']['zone_id']) && $result['basic_info']['zone_id'] != '') {
                     $zone_id = $result['basic_info']['zone_id'];
                     $type = 'ZM';
-                    $final = $this->count($type, $zone_id, $records->dbk_lms_emp_record1->DBK_LMS_COLL);
+                    $final = $this->countnew($type, $zone_id, $records->dbk_lms_emp_record1->DBK_LMS_COLL);
                     $leads['generated_converted'] = $final;
                 }
             }
             // GM
             if ($records->dbk_lms_emp_record1->designation_id == '560601') {
                 $type = 'GM';
-                $final = $this->count($type, '', $records->dbk_lms_emp_record1->DBK_LMS_COLL);
+                $final = $this->countnew($type, '', $records->dbk_lms_emp_record1->DBK_LMS_COLL);
                 $leads['generated_converted'] = $final;
             }
             $result = array(
@@ -1559,6 +1559,126 @@ class Api extends REST_Controller
             $err['result'] = false;
             $err['data'] = "Invalid Login Credential.Please Enter Again OR Contact Administrator";
             returnJson($err);
+        }
+    }
+
+    private function countnew($type, $ids, $result)
+    {
+        switch ($type) {
+            case 'BM':
+                $where_month_Array = array('branch_id' => $ids,
+                    'MONTH(created_on)' => date('m'));
+                $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
+                $generated_key_value = array();
+                $final = array();
+                foreach ($generated['generated_leads'] as $k => $v) {
+                    $generated_key_value[$v['created_by']] = $v['total'];
+                }
+                foreach ($result as $key => $val) {
+                    if (!array_key_exists($val->DESCR10, $generated_key_value)) {
+                        $push_generated = array(
+                            'created_by' => $val->DESCR10,
+                            'created_by_name' => $val->DESCR30,
+                            'total_generated' => 0);
+                    } else {
+                        $push_generated = array(
+                            'created_by' => $val->DESCR10,
+                            'created_by_name' => $val->DESCR30,
+                            'total_generated' => $generated_key_value[$val->DESCR10]);
+                    }
+                    $final[$val->DESCR10] = $push_generated;
+                }
+                foreach ($final as $id => $value) {
+
+                    $where_month_Array = array('employee_id' => $value['created_by'],
+                        'MONTH(created_on)' => date('m'),
+                        'status' => 'converted');
+                    $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
+                    if (empty($converted)) {
+                        $converted = 0;
+                    }
+                    $final[$value['created_by']]['total_converted'] = $converted;
+                }
+                return $final;
+                break;
+
+            case 'ZM':
+                $where_month_Array = array('zone_id' => $ids,
+                    'MONTH(created_on)' => date('m'));
+
+                $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
+                $generated_key_value = array();
+                $final = array();
+                foreach ($generated['generated_leads'] as $k => $v) {
+                    $generated_key_value[$v['branch_id']] = $v['total'];
+                }
+                foreach ($result as $key => $val) {
+                    if (!array_key_exists($val->DESCR10, $generated_key_value)) {
+                        $push_generated = array(
+                            'created_by_branch_id' => $val->DESCR10,
+                            'created_by_branch_name' => $val->DESCR30,
+                            'total_generated' => 0);
+                    } else {
+                        $push_generated = array(
+                            'created_by_branch_id' => $val->DESCR10,
+                            'created_by_branch_name' => $val->DESCR30,
+                            'total_generated' => $generated_key_value[$val->DESCR10]);
+                    }
+                    $final[$val->DESCR10] = $push_generated;
+                }
+                //for converted
+                foreach ($final as $id => $value) {
+
+                    $where_month_Array = array('branch_id' => $value['created_by_branch_id'],
+                        'MONTH(created_on)' => date('m'),
+                        'status' => 'converted');
+                    $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
+                    if (empty($converted)) {
+                        $converted = 0;
+                    }
+                    $final[$value['created_by_branch_id']]['total_converted'] = $converted;
+                }
+                return $final;
+                break;
+
+            case 'GM':
+                $where_generated_Array = array('zone_id !=' => NULL,
+                    'MONTH(created_on)' => date('m'));
+                $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_generated_Array);
+                $generated_key_value = array();
+                $final = array();
+                foreach ($generated['generated_leads'] as $k => $v) {
+                    $generated_key_value[$v['zone_id']] = $v['total'];
+                }
+                foreach ($result as $key => $val) {
+                    if (!array_key_exists($val->DESCR10, $generated_key_value)) {
+                        $push_generated = array(
+                            'created_by_zone_id' => $val->DESCR10,
+                            'created_by_zone_name' => $val->DESCR30,
+                            'total_generated' => 0);
+                    } else {
+                        $push_generated = array(
+                            'created_by_zone_id' => $val->DESCR10,
+                            'created_by_zone_name' => $val->DESCR30,
+                            'total_generated' => $generated_key_value[$val->DESCR10]);
+                    }
+                    $final[$val->DESCR10] = $push_generated;
+                }
+                //for converted
+                foreach ($final as $id => $value) {
+
+                    $where_month_Array = array('zone_id' => $value['created_by_zone_id'],
+                        'MONTH(created_on)' => date('m'),
+                        'status' => 'converted');
+                    $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
+                    if (empty($converted)) {
+                        $converted = 0;
+                    }
+                    $final[$value['created_by_zone_id']]['total_converted'] = $converted;
+                }
+                return $final;
+                break;
+
         }
     }
 }
