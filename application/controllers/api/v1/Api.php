@@ -325,9 +325,9 @@ class Api extends REST_Controller
 
         //Push notification
         //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
-
+        $success_message = array('Lead added Successfully.');
         $result = array('result' => True,
-            'data' => 'Lead added Successfully.',
+            'data' => $success_message,
             'unique id'=>$unique_id);
         returnJson($result);
 
@@ -1808,4 +1808,5 @@ class Api extends REST_Controller
             returnJson($res);
         }
     }
+
 }
