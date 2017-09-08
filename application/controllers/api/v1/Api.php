@@ -247,7 +247,7 @@ class Api extends REST_Controller
             'created_by_district_id' => 'Created By District',
             'created_by_zone_id' => 'Created By Zone', 'created_by_branch_id' => 'Created By Branch',
             'latitude' => 'Latitude', 'longitude' => 'Longitude',
-            'remark' => 'Remark');
+            'remark' => 'Remark','unique_id'=>'Unique Id');
         $phone_extra = '';
         $cust_name_extra = '';
         foreach ($params as $k => $value) {
@@ -278,6 +278,9 @@ class Api extends REST_Controller
                 'data' => $error);
             returnJson($result);
         }
+        $unique_id = $lead_data['unique_id'];
+        unset($lead_data['unique_id']);
+
         $lead_data['lead_name'] = $this->input->post('customer_name');
         $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
         $whereArray = array('product_id' => $lead_data['product_id'], 'branch_id' => $lead_data['branch_id']);
@@ -287,6 +290,13 @@ class Api extends REST_Controller
             $lead_data['branch_id'] = $routed_id;
         }
         $lead_id = $this->Lead->add_leads($lead_data);
+
+        if(is_array($lead_id)){
+            $result = array('result' => False,
+                'data' => 'wrong product id or category id .');
+            returnJson($result);
+        }
+
         if ($assign_to == 'self') {
             $lead_assign['lead_id'] = $lead_id;
             $lead_assign['employee_id'] = $params['created_by'];
@@ -308,7 +318,8 @@ class Api extends REST_Controller
         //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
 
         $result = array('result' => True,
-            'data' => 'Lead added Successfully.');
+            'data' => 'Lead added Successfully.',
+            'unique id'=>$unique_id);
         returnJson($result);
 
     }
