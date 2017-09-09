@@ -1461,7 +1461,7 @@ class Api extends REST_Controller
             $leads['read_notification'] = $this->notification->get_notifications($action,$select,$read_where,$table,$join = array(),$order_by);
 
             // employee
-            if ($records->dbk_lms_emp_record1->designation_id == '540401') {
+            if ($result['basic_info']['designation'] == 'EM') {
                 if (isset($result['basic_info']['hrms_id']) && $result['basic_info']['hrms_id'] != '') {
                     $created_id = $result['basic_info']['hrms_id'];
 
@@ -1504,7 +1504,7 @@ class Api extends REST_Controller
 
             }
             // BM
-            if ($records->dbk_lms_emp_record1->designation_id == '520299') {
+            if ($result['basic_info']['designation'] == 'BM') {
                 if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
                     $branch_id = $result['basic_info']['branch_id'];
                     $type = 'BM';
@@ -1512,7 +1512,7 @@ class Api extends REST_Controller
 
                     $leads['generated_converted'] = $final;
                     //for assigned lead
-                    $where_assigned_Array = array('branch_id' => $branch_id,
+                    $where_assigned_Array = array('branch1_id' => $branch_id,
                         'YEAR(created_on)' => date('Y'));
                 }
                 $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
@@ -1524,7 +1524,7 @@ class Api extends REST_Controller
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }
             //ZM
-            if ($records->dbk_lms_emp_record1->designation_id == '550502') {
+            if ($result['basic_info']['designation'] == 'ZM') {
                 if (isset($result['basic_info']['zone_id']) && $result['basic_info']['zone_id'] != '') {
                     $zone_id = $result['basic_info']['zone_id'];
                     $type = 'ZM';
@@ -1533,7 +1533,7 @@ class Api extends REST_Controller
                 }
             }
             // GM
-            if ($records->dbk_lms_emp_record1->designation_id == '560601') {
+            if ($result['basic_info']['designation'] == 'GM') {
                 $type = 'GM';
                 $final = $this->countnew($type, '', $records->dbk_lms_emp_record1->DBK_LMS_COLL);
                 $leads['generated_converted'] = $final;
