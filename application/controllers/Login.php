@@ -114,6 +114,7 @@ class Login extends CI_Controller {
                                     'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
                                     'mobile' => $records->dbk_lms_emp_record1->phone,
                                     'email_id' => $records->dbk_lms_emp_record1->email,
+                                    'list'=>$records->dbk_lms_emp_record1->DBK_LMS_COLL
                                 );
                                 $this->set_session($result);
                                 $this->session->set_flashdata('success','Login success');
@@ -179,6 +180,7 @@ class Login extends CI_Controller {
                  'mobile' => $data['mobile'],
                  'email_id' => $data['email_id'],
                  'isLoggedIn' => TRUE,
+                 'list'=>$data['list']
              );
 
           $this->session->set_userdata($login_user);
