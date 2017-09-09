@@ -120,7 +120,7 @@ class Dashboard extends CI_Controller {
         //for converted lead
         $final = array();
         $login_user = get_session();
-        $result = get_details($login_user['designation_name']);
+        $result = get_details($login_user['hrms_id']);
         foreach ($result['list'] as $key =>$value){
             $generated_key_value = array();
             foreach ($generated_value as $k => $v) {
