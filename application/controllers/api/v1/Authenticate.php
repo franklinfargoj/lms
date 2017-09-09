@@ -79,7 +79,7 @@ class Authenticate extends CI_Controller
 //Response for Zone
         $zm_response = '{"dbk_lms_emp_record1":
                                     {
-                                        "EMPLID": "0003391","deptid": "026656","dbk_dept_type": "ZD","dept_discription": "Zonal Office","district": "","state": "GJ","dbk_state_id": "009822","name": "JATIN HARIBHAI SARAVYA","supervisor": "0002423","designation_id": "550502","designation_descr": "ZONAL MANAGER-SC-V","url": "NA","phone": "7567123556","email": "dummy@dummy.com","detail": "","DBK_LMS_COLL": [
+                                        "EMPLID": "0003391","deptid": "026656","dbk_dept_type": "ZD","dept_discription": "Zonal Office","district": "","state": "GJ","dbk_state_id": "026223","name": "JATIN HARIBHAI SARAVYA","supervisor": "0002423","designation_id": "550502","designation_descr": "ZONAL MANAGER-SC-V","url": "NA","phone": "7567123556","email": "dummy@dummy.com","detail": "","DBK_LMS_COLL": [
                                         {"DESCR10": "000564","DESCR30": "BRANCH1"},{
                                         "DESCR10": "000036","DESCR30": "BRANCH2"},{
                                         "DESCR10": "000039","DESCR30": "BRANCH3"},{
@@ -96,7 +96,7 @@ class Authenticate extends CI_Controller
 // Response Branch Manager
         $bm_response = '{"dbk_lms_emp_record1":
                                     {
-                                        "EMPLID": "0007963","deptid": "000564","dbk_dept_type": "BR","dept_discription": "Branch","district": "DELHI","state": "DL","dbk_state_id": "009871","name": ". ASHISH SINGH","supervisor": "0002958","designation_id": "520299","designation_descr": "BRANCH MANAGER-SC-II","url": "NA","phone": "9971866702","email": "dummy@dummy.com","detail": "","DBK_LMS_COLL": [
+                                        "EMPLID": "0007963","deptid": "000564","dbk_dept_type": "BR","dept_discription": "Branch","district": "DELHI","state": "DL","dbk_state_id": "026656","name": ". ASHISH SINGH","supervisor": "0002958","designation_id": "520299","designation_descr": "BRANCH MANAGER-SC-II","url": "NA","phone": "9971866702","email": "dummy@dummy.com","detail": "","DBK_LMS_COLL": [
                                         {"DESCR10": "0006561","DESCR30": "NAME1"},{
                                         "DESCR10": "0006288","DESCR30": "NAME2"},{
                                         "DESCR10": "0011350","DESCR30": "NAME3"},{
