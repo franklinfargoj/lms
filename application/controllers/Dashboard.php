@@ -168,7 +168,7 @@ class Dashboard extends CI_Controller {
         $generated_key_value = array();
         $final = array();
         $login_user = get_session();
-        $result = get_details($login_user['hrms']);
+        $result = get_details($login_user['hrms_id']);
         foreach ($generated as $k => $v) {
             $generated_key_value[$v['branch_id']] = $v['total'];
         }
