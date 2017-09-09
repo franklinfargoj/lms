@@ -19,7 +19,7 @@
 						Home
 					</a>
 				</li>
-				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'leads' && $method == 'add') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/add')?>">
 						Add Lead 
@@ -75,21 +75,21 @@
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
 				<li class="<?php echo (($controller == 'dashboard') && ($method == 'emi_calculator')) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard/emi_calculator')?>">
 						Calculator
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'product_guide') ? 'active' : ''?>">
 					<a href="<?php echo site_url('product_guide/view')?>">
 						Product Guide
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','RM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>">
 					<a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">
 						Reports

@@ -379,7 +379,19 @@ function decode_id($id){
 function get_session(){
     $CI =& get_instance();
     //return $CI->session->userdata();
-
+    $designation = '';
+    $bm=array(520299,530399,540499,550599,560315,510113,520213,530213,540213,550213,560213);
+    $zm=array(550502,560602,540402,550503);
+    $gm=array(560601,570701,540405);
+    if(in_array($CI->session->userdata('designation_id'),$bm)){
+        $designation = 'BM';
+    }elseif(in_array($CI->session->userdata('designation_id'),$zm)){
+        $designation = 'ZM';
+    }elseif(in_array($CI->session->userdata('designation_id'),$gm)){
+        $designation = 'GM';
+    }else{
+        $designation = 'EM';
+    }
     $input = array(
         /*'hrms_id' => '312',*/
         'hrms_id' => $CI->session->userdata('admin_id'),
@@ -392,7 +404,7 @@ function get_session(){
         'full_name' => $CI->session->userdata('admin_name'),
         'supervisor_id' => $CI->session->userdata('supervisor_id'),
         'designation_id' => $CI->session->userdata('designation_id'),
-        'designation_name' => $CI->session->userdata('admin_type'),
+        'designation_name' => $designation,
         'mobile' => $CI->session->userdata('mobile'),
         'email_id' => $CI->session->userdata('email_id')
     );
