@@ -860,7 +860,7 @@ class Api extends REST_Controller
             $join = array();
             $join[] = array('table' => Tbl_Products . ' as p', 'on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id', 'type' => '');
 
-            $select = array('l.id', 'l.customer_name', 'l.lead_identification', 'l.created_on', 'l.lead_source', 'p.title', 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on');
+            $select = array('l.id', 'l.customer_name','l.contact_no', 'l.lead_identification', 'l.created_on', 'l.lead_source', 'p.title', 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on');
             $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'));
             if ($type == 'EM') {
                 $where['la.employee_id'] = $id;

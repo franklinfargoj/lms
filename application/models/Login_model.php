@@ -53,7 +53,7 @@ class Login_model extends CI_Model{
 	 * @return array
 	 */
 	public function get_admin_details($where){
-		return $this->db->select('id,name,password')
+		return $this->db->select('id,full_name,password')
 					->from(Tbl_Admin)
 					->where($where)
 					->get()

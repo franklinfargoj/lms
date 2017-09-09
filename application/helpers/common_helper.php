@@ -80,14 +80,14 @@ function is_logged_in() {
     $CI =& get_instance();
     // We need to use $CI->session instead of $this->session
     $isLoggedIn = $CI->session->userdata('isLoggedIn');
-    if (empty($isLoggedIn)) { redirect('login'); }
+    if ($isLoggedIn != 'TRUE') { redirect('login'); }
 }
 
 function loginUserId(){
     // Get current CodeIgniter instance
     $CI =& get_instance();
     // We need to use $CI->session instead of $this->session
-    $admin_id = $CI->session->userdata('admin_id');
+    $admin_id = $CI->session->userdata('hrms_id');
     return $admin_id ? $admin_id : 0;
 }
 
@@ -382,20 +382,19 @@ function get_session(){
 
     $input = array(
         /*'hrms_id' => '312',*/
-        'hrms_id' => $CI->session->userdata('admin_id'),
-        'dept_id' => '12',
-        'dept_type_id' => '123',
-        'dept_type_name' => 'BR',
-        'branch_id' => '3',
-        'district_id' => '1',
-        'state_id' => '1',
-        'zone_id' => '4',
-        'full_name' => $CI->session->userdata('admin_name'),
-        'supervisor_id' => '009',
-        'designation_id' => '4',
-        'designation_name' => $CI->session->userdata('admin_type'),
-        'mobile' => '9975772432',
-        'email_id' => 'mukesh.kurmi@wwindia.com'
+        'hrms_id' => $CI->session->userdata('hrms_id'),
+        'dept_type_id' => $CI->session->userdata('dept_type_id'),
+        'dept_type_name' => $CI->session->userdata('dept_type_name'),
+        'branch_id' => $CI->session->userdata('branch_id'),
+        'district_id' => $CI->session->userdata('district_id'),
+        'state_id' => $CI->session->userdata('state_id'),
+        'zone_id' => $CI->session->userdata('zone_id'),
+        'full_name' => $CI->session->userdata('full_name'),
+        'supervisor_id' => $CI->session->userdata('supervisor_id'),
+        'designation_id' => $CI->session->userdata('designation_id'),
+        'designation_name' => $CI->session->userdata('designation_name'),
+        'mobile' => $CI->session->userdata('mobile'),
+        'email_id' => $CI->session->userdata('email_id')
     );
     return $input;
 }
