@@ -1792,10 +1792,23 @@ class Api extends REST_Controller
                 'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
                 'mobile' => $records->dbk_lms_emp_record1->phone,
                 'email_id' => $records->dbk_lms_emp_record1->email,
+                'designation'=>get_designation($records->dbk_lms_emp_record1->designation_id)
             );
 
+            $hrms_id = $records->dbk_lms_emp_record1->EMPLID;
+
+            $action='count';
+            $table = Tbl_Notification.' as n';
+            $select= array('n.*');
+            $unread_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 0);
+            $order_by = "n.priority ASC";
+            $leads['unread_notification'] = $this->notification->get_notifications($action,$select,$unread_where,$table,$join = array(),$order_by);
+
+            $read_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 1);
+            $leads['read_notification'] = $this->notification->get_notifications($action,$select,$read_where,$table,$join = array(),$order_by);
+
             // employee
-            if ($records->dbk_lms_emp_record1->designation_id == '540401') {
+            if ($result['basic_info']['designation'] == 'EM') {
                 if (isset($result['basic_info']['hrms_id']) && $result['basic_info']['hrms_id'] != '') {
                     $created_id = $result['basic_info']['hrms_id'];
 
@@ -1838,7 +1851,7 @@ class Api extends REST_Controller
 
             }
             // BM
-            if ($records->dbk_lms_emp_record1->designation_id == '520299') {
+            if ($result['basic_info']['designation'] == 'BM') {
                 if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
                     $branch_id = $result['basic_info']['branch_id'];
                     $type = 'BM';
@@ -1846,19 +1859,19 @@ class Api extends REST_Controller
 
                     $leads['generated_converted'] = $final;
                     //for assigned lead
-                    $where_assigned_Array = array('branch_id' => $branch_id,
+                    $where_assigned_Array = array('branch_id' => $branch_id,'is_updated'=>1,
                         'YEAR(created_on)' => date('Y'));
                 }
                 $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'], Tbl_LeadAssign . 'lead_id', NULL);
-                $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
+                $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }
             //ZM
-            if ($records->dbk_lms_emp_record1->designation_id == '550502') {
+            if ($result['basic_info']['designation'] == 'ZM') {
                 if (isset($result['basic_info']['zone_id']) && $result['basic_info']['zone_id'] != '') {
                     $zone_id = $result['basic_info']['zone_id'];
                     $type = 'ZM';
@@ -1867,7 +1880,7 @@ class Api extends REST_Controller
                 }
             }
             // GM
-            if ($records->dbk_lms_emp_record1->designation_id == '560601') {
+            if ($result['basic_info']['designation'] == 'GM') {
                 $type = 'GM';
                 $final = $this->countnew($type, '', $records->dbk_lms_emp_record1->DBK_LMS_COLL);
                 $leads['generated_converted'] = $final;
