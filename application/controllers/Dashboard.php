@@ -126,7 +126,7 @@ class Dashboard extends CI_Controller {
             foreach ($generated_value as $k => $v) {
                 $generated_key_value[$v['created_by']] = $v['total'];
             }
-            if (!array_key_exists($value['id'], $generated_key_value)) {
+            if (!array_key_exists($value->DESCR10, $generated_key_value)) {
                 $push_generated = array(
                     'created_by' => $value->DESCR10,
                     'created_by_name' => $value->DESCR30,
