@@ -61,7 +61,7 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
                             </div>
                            
                             <div class="form-control">
-                                <label>Assign To:</label> <span class="detail-label">Employee 1</span>
+                                <label>Assign To:</label> <span class="detail-label"><?php echo ucwords($leads[0]['employee_name']);?></span>
                             </div>
                             <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('EM','BM')))){?>
                                 <div class="form-control">
@@ -197,7 +197,10 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
                                     <label>Reroute To:</label>   
                                     <select name="reroute_to">
                                         <option value="">Select Employee</option>
-                                        <option value="2">Employee 1</option>
+                                        <?php $result = get_details($this->session->userdata('admin_id'));?>
+                                        <?php foreach ($result['list'] as $key =>$value){?>
+                                            <option value="<?php echo $value->DESCR10.'-'.$value->DESCR30;?>"><?php echo ucwords($value->DESCR30);?></option>
+                                        <?php }?>
                                     </select>
                                 </div>
                             <?php }?>

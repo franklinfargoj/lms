@@ -40,7 +40,10 @@
 						<label>Assign To:</label>   
 						<select name="assign_to">
 							<option value="">Select Employee</option>
-						    <option value="2">Employee 1</option>
+							<?php $result = get_details($this->session->userdata('admin_id'));?>
+							<?php foreach ($result['list'] as $key =>$value){?>
+								<option value="<?php echo $value->DESCR10.'-'.$value->DESCR30;?>"><?php echo ucwords($value->DESCR30);?></option>
+							<?php }?>
 						</select>
 					</div>
 					<?php }?>

@@ -565,7 +565,7 @@ class Leads extends CI_Controller
             }
             if($type == 'assigned'){
                 //SELECT COLUMNS
-                $select = array('l.id','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','r.remind_on','r.reminder_text');
+                $select = array('l.id','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','r.remind_on','r.reminder_text');
 
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
@@ -669,8 +669,9 @@ class Leads extends CI_Controller
                                                 Reroute Lead
                             *****************************************************************/
                             if(isset($employee_id) && !empty($employee_id)){
-                                $lead_status_data['employee_id'] = $employee_id;
-                                $lead_status_data['employee_name'] = 'New Employee2';
+                                $explode_employee = explode('-',$employee_id);
+                                $lead_status_data['employee_id'] = $explode_employee[0];
+                                $lead_status_data['employee_name'] = $explode_employee[1];
                                 if($leads_data['status'] != $lead_status){
                                     $lead_status_data['status'] = $lead_status;
                                 }else{
@@ -869,16 +870,17 @@ class Leads extends CI_Controller
     }
     private function assign_to($employee_id,$lead_ids)
     {
+       $explode_employee = explode('-',$employee_id);
         if (!empty($lead_ids)) {
             $login_user = get_session();
             $insertData = array();
             $assign_data = array(
-                'employee_id' => $employee_id,
-                'employee_name' => 'Employee 1',
-                'branch_id' => '12',
-                'district_id' => '1',
-                'state_id' => 1,
-                'zone_id' => 1,
+                'employee_id' => $explode_employee[0],
+                'employee_name' => $explode_employee[1],
+                'branch_id' => $login_user['branch_id'],
+                'district_id' => $login_user['district_id'],
+                'state_id' => $login_user['state_id'],
+                'zone_id' => $login_user['zone_id'],
                 'status' => 'NC',
                 'created_by' => $login_user['hrms_id'],
                 'created_by_name' => $login_user['full_name']
