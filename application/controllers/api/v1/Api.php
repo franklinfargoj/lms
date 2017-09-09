@@ -1512,7 +1512,7 @@ class Api extends REST_Controller
 
                     $leads['generated_converted'] = $final;
                     //for assigned lead
-                    $where_assigned_Array = array('branch1_id' => $branch_id,
+                    $where_assigned_Array = array('branch_id' => $branch_id,'is_updated'=>1,
                         'YEAR(created_on)' => date('Y'));
                 }
                 $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
