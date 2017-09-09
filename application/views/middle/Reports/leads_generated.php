@@ -1,5 +1,6 @@
 <?php
 $lead_type = $this->config->item('lead_type');
+$lead_status = $this->config->item('lead_status');
 ?>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
@@ -7,7 +8,7 @@ $lead_type = $this->config->item('lead_type');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Type Report
+            Leads Generated Report
         </h3>
     </div>
 </div>
@@ -22,7 +23,7 @@ $lead_type = $this->config->item('lead_type');
             'class' => 'form',
             'autocomplete' => 'off'
         );
-        echo form_open(site_url().'reports/index/leads_type_reports', $attributes);
+        echo form_open(site_url().'reports/index/leads_generated', $attributes);
         $data = array(
             'view'   => isset($view) ? $view : '',
             'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
@@ -172,7 +173,7 @@ $lead_type = $this->config->item('lead_type');
         <div class="container clearfix">
             <div class="float-left">
                 <span class="total-lead">
-                    Total Leads
+                    Total Generated Leads
                 </span>
                 <span class="lead-num"> : <?php echo $Total;?></span>
             </div>
@@ -190,7 +191,7 @@ $lead_type = $this->config->item('lead_type');
                 <table id="sample_3" class="display lead-table">
                     <thead>
                         <tr>
-                            <th>
+                            <th align="center">
                                 Sr. No.
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -217,20 +218,20 @@ $lead_type = $this->config->item('lead_type');
                             <th>
                                 Product Name
                             </th>
-                            <th>
-                                Total Leads
+                            <th align="center">
+                                Total Generated Leads
                             </th>
                             <?php 
-                                foreach ($lead_type as $key => $value) {
-                                    
+                                foreach ($lead_status as $key => $value) {
+                                    //if(!in_array($key,array('AO','Converted','Closed'))){
                             ?>
-                            <th>
+                            <th align="center">
                                 <?php
                                     echo $value; 
                                 ?>
                             </th>
                             <?php
-                                    
+                                    //}
                                 }
                             ?>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
@@ -246,7 +247,7 @@ $lead_type = $this->config->item('lead_type');
                         foreach ($leads as $key => $value) {
                     ?>
                         <tr>
-                            <td>
+                            <td align="center">
                                 <?php echo ++$i;?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -266,7 +267,7 @@ $lead_type = $this->config->item('lead_type');
                             <?php if(in_array($viewName,array('EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['employee_id']) ? $value['employee_id'] : '';
+                                    echo isset($value['created_by']) ? $value['created_by'] : '';
                                 ?>
                             </td>
                             <?php }?>
@@ -285,27 +286,27 @@ $lead_type = $this->config->item('lead_type');
                                     echo !empty($product) ? ucwords($product) : 'All';
                                 ?>
                             </td>
-                            <td>
+                            <td align="center">
                                 <?php 
                                     echo $value['total'];
                                 ?>
                             </td>
                             <?php 
                             //pe($value['status']);
-                                foreach ($lead_type as $k => $v) {
+                                foreach ($lead_status as $k => $v) {
                                     //if(!in_array($k,array('AO','Converted','Closed'))){
                             ?>
-                            <td>
+                            <td align="center">
                                 <?php
-                                if(in_array($k,array_keys($value['lead_identification']))){
-                                        echo $value['lead_identification'][$k];
+                                if(in_array($k,array_keys($value['status']))){
+                                        echo $value['status'][$k];
                                     }else{
                                         echo 0;
                                     }
                                 ?>
                             </td>
                             <?php
-                                   // }
+                                    //}
                                 }
                             ?>
                             <?php if(in_array($viewName,array('ZM','BM'))){
@@ -323,7 +324,7 @@ $lead_type = $this->config->item('lead_type');
                                         if($view == 'branch' || $view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_type_reports/branch'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_generated/branch'.$param)?>">
                                         Branch View
                                     </a>
                                     <span>/</span> 
@@ -336,7 +337,7 @@ $lead_type = $this->config->item('lead_type');
                                         if($view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_type_reports/employee'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_generated/employee'.$param)?>">
                                         Employee View
                                     </a> 
                                 <?php

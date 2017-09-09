@@ -8,9 +8,8 @@ $lead_status = $this->config->item('lead_status');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Pendancy Leads
+            Pendancy Leads Report
         </h3>
-        <span style="float:right"><a href="<?php echo site_url('reports/index/leads_type_reports')?>">Lead Type</a></span>
     </div>
 </div>
 
@@ -174,9 +173,9 @@ $lead_status = $this->config->item('lead_status');
         <div class="container clearfix">
             <div class="float-left">
                 <span class="total-lead">
-                    Total
+                    Total Pending Leads
                 </span>
-                <span class="lead-num"> : <?php echo count($leads);?></span>
+                <span class="lead-num"> : <?php echo $Total;?></span>
             </div>
             <div class="float-right">
                 <a href="<?php echo base_url('leads/export_excel_listing/');?>">
