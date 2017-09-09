@@ -121,23 +121,23 @@ class Dashboard extends CI_Controller {
         $final = array();
         $login_user = get_session();
         $result = get_details($login_user['designation_name']);
-        foreach ($result['employee_list'] as $key =>$value){
+        foreach ($result['list'] as $key =>$value){
             $generated_key_value = array();
             foreach ($generated_value as $k => $v) {
                 $generated_key_value[$v['created_by']] = $v['total'];
             }
             if (!array_key_exists($value['id'], $generated_key_value)) {
                 $push_generated = array(
-                    'created_by' => $value['id'],
-                    'created_by_name' => $value['full_name'],
+                    'created_by' => $value->DESCR10,
+                    'created_by_name' => $value->DESCR30,
                     'total_generated' => 0);
             } else {
                 $push_generated = array(
-                    'created_by' => $value['id'],
-                    'created_by_name' => $value['full_name'],
-                    'total_generated' => $generated_key_value[$value['id']]);
+                    'created_by' => $value->DESCR10,
+                    'created_by_name' => $value->DESCR30,
+                    'total_generated' => $generated_key_value[$value->DESCR10]);
             }
-            $final[$value['id']] = $push_generated;
+            $final[$value->DESCR10] = $push_generated;
         }
         foreach ($final as $id => $value) {
 

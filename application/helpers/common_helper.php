@@ -525,78 +525,29 @@ function get_notification_count(){
     return $notification_count;
 }
 
-function get_details($designation_name){
-    //        $curl_handle = curl_init();
-//        curl_setopt($curl_handle, CURLOPT_URL, 'http://10.0.11.33/payo_app/users/update_synapse_info');
-//
-//        if(!isset($params['user_id']) || !isset($params['password']) || ($params['user_id'] == NULL) ||  ($params['password'] == NULL)){
-//            $err['result'] = false;
-//            $err['data'] = "Invalid Request";
-//            returnJson($err);
-//        }
-//
-//        $user_id = $params['user_id'];
-//        $password = $params['password'];
-//        $device_token = $params['device_token'];
-//
-//        $curl_handle = curl_init();
-//        curl_setopt($curl_handle, CURLOPT_URL, '');
-//        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($curl_handle, CURLOPT_POST, 1);
-//        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
-//            'user_id' => $user_id,
-//            'password' => $password
-//        ));
-//
-//        $buffer = curl_exec($curl_handle);
-//        curl_close($curl_handle);
-//
-//        $result = json_decode($buffer);
+function get_details($hrms_id){
 
+    // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
+    $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$hrms_id);
+    $records = json_decode($records_response);
     $result['basic_info'] = array(
-        'hrms_id' => '12',
-        'dept_id' => '12',
-        'dept_type_id' => '123',
-        'dept_type_name' => 'BR',
-        'branch_id' => '12',
-        'district_id' => '1234',
-        'state_id' => '1234',
-        'zone_id' => '1234',
-        'full_name' => 'mukesh kurmi',
-        'supervisor_id' => '009',
-        'designation_id' => '4',
-        'designation_name' => $designation_name,
-        'mobile' => '9975772432',
-        'email_id' => 'mukesh.kurmi@wwindia.com',
+        'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
+        'dept_id' => $records->dbk_lms_emp_record1->deptid,
+        'dept_type_id' => $records->dbk_lms_emp_record1->dbk_dept_type,
+        'dept_type_name' => $records->dbk_lms_emp_record1->dept_discription,
+        'branch_id' => $records->dbk_lms_emp_record1->deptid,
+        'district_id' => $records->dbk_lms_emp_record1->district,
+        'state_id' => $records->dbk_lms_emp_record1->state,
+        'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
+        'full_name' => $records->dbk_lms_emp_record1->name,
+        'supervisor_id' => $records->dbk_lms_emp_record1->supervisor,
+        'designation_id' => $records->dbk_lms_emp_record1->designation_id,
+        'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
+        'mobile' => $records->dbk_lms_emp_record1->phone,
+        'email_id' => $records->dbk_lms_emp_record1->email,
     );
-    $result['employee_list'][] = array(
-        'id' => '2',
-        'full_name' => 'mukesh kurmi',
-    );
-    $result['employee_list'][] = array(
-        'id' => '13',
-        'full_name' => 'anup',
-    );
-    $result['employee_list'][] = array(
-        'id' => '15',
-        'full_name' => 'anup',
-    );
-    $result['branch_list'][] = array(
-        'id' => '3',
-        'full_name' => 'branch1',
-    );
-    $result['branch_list'][] = array(
-        'id' => '13',
-        'full_name' => 'branch2',
-    );
-    $result['zone_list'][] = array(
-        'id' => '4',
-        'full_name' => 'zone1',
-    );
-    $result['zone_list'][] = array(
-        'id' => '13',
-        'full_name' => 'zone2',
-    );
+    $result['list']=$records->dbk_lms_emp_record1->DBK_LMS_COLL;
+
     $result['status'] = 'success';
 
     return $result;
