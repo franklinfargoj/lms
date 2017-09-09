@@ -111,7 +111,7 @@
 					<img src="<?php echo base_url().ASSETS;?>images/pic.png" alt="pic">
 					<div>
 					<span class="name">Hi, <?php echo $this->session->userdata('admin_name');?> !!</span>
-						<span class="name">Hi, <?php echo $this->session->userdata('admin_type');?> !!</span>
+						<span class="name">(<?php echo $this->session->userdata('admin_type');?>)</span>
 					<a href="<?php echo site_url('login/logOut');?>">Logout</a>
 					</div>
 				</div>
