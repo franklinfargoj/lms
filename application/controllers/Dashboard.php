@@ -218,26 +218,26 @@ class Dashboard extends CI_Controller {
         $generated_key_value = array();
         $final = array();
         $login_user = get_session();
-        $result = get_details($login_user['designation_name']);
+        $result = get_details($login_user['hrms_id']);
         foreach ($generated as $k => $v) {
             $generated_key_value[$v['zone_id']] = $v['total'];
         }
         
         foreach ($result['zone_list'] as $key => $val) {
-            if (!array_key_exists($val['id'], $generated_key_value)) {
+            if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                 $push_generated = array(
-                    'created_by_zone_id' => $val['id'],
-                    'created_by_zone_name' => $val['full_name'],
+                    'created_by_zone_id' => $val->DESCR10,
+                    'created_by_zone_name' => $val->DESCR30,
                     'total_generated' => 0
                 );
             } else {
                 $push_generated = array(
-                    'created_by_zone_id' => $val['id'],
-                    'created_by_zone_name' => $val['full_name'],
-                    'total_generated' => $generated_key_value[$val['id']]
+                    'created_by_zone_id' => $val->DESCR10,
+                    'created_by_zone_name' => $val->DESCR30,
+                    'total_generated' => $generated_key_value[$val->DESCR10]
                 );
             }
-            $final[$val['id']] = $push_generated;
+            $final[$val->DESCR10] = $push_generated;
         }
         /*pe($final);
         exit;*/
