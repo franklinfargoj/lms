@@ -8,15 +8,13 @@ $lead_status = $this->config->item('lead_status');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Pendancy Leads Report
+            Leads Generated Report
         </h3>
     </div>
 </div>
 
 <div class="lead-form">
     <span class="bg-top"></span>
-    <div class="inner-content">
-            <div class="container">
     <?php 
         //Form
         $attributes = array(
@@ -25,7 +23,7 @@ $lead_status = $this->config->item('lead_status');
             'class' => 'form',
             'autocomplete' => 'off'
         );
-        echo form_open(site_url().'reports/index/pendancy_leads_reports', $attributes);
+        echo form_open(site_url().'reports/index/leads_generated', $attributes);
         $data = array(
             'view'   => isset($view) ? $view : '',
             'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
@@ -36,7 +34,7 @@ $lead_status = $this->config->item('lead_status');
     ?>
     <div class="lead-form-left">
         <div class="form-control">
-            <label id="cal">Start Date:</label>   
+            <label>Start Date:</label>   
             <?php 
                 if(isset($start_date)){
                     $start_date = $start_date;
@@ -160,7 +158,7 @@ $lead_status = $this->config->item('lead_status');
         </a>
     </div>
     <?php echo form_close();?>
-    
+    <span class="bg-bottom"></span>
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
@@ -175,7 +173,7 @@ $lead_status = $this->config->item('lead_status');
         <div class="container clearfix">
             <div class="float-left">
                 <span class="total-lead">
-                    Total Pending Leads
+                    Total Generated Leads
                 </span>
                 <span class="lead-num"> : <?php echo $Total;?></span>
             </div>
@@ -193,7 +191,7 @@ $lead_status = $this->config->item('lead_status');
                 <table id="sample_3" class="display lead-table">
                     <thead>
                         <tr>
-                            <th>
+                            <th align="center">
                                 Sr. No.
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -220,20 +218,20 @@ $lead_status = $this->config->item('lead_status');
                             <th>
                                 Product Name
                             </th>
-                            <th>
-                                Total Pending Leads
+                            <th align="center">
+                                Total Generated Leads
                             </th>
                             <?php 
                                 foreach ($lead_status as $key => $value) {
-                                    if(!in_array($key,array('AO','Converted','Closed'))){
+                                    //if(!in_array($key,array('AO','Converted','Closed'))){
                             ?>
-                            <th>
+                            <th align="center">
                                 <?php
                                     echo $value; 
                                 ?>
                             </th>
                             <?php
-                                    }
+                                    //}
                                 }
                             ?>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
@@ -249,7 +247,7 @@ $lead_status = $this->config->item('lead_status');
                         foreach ($leads as $key => $value) {
                     ?>
                         <tr>
-                            <td>
+                            <td align="center">
                                 <?php echo ++$i;?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -269,7 +267,7 @@ $lead_status = $this->config->item('lead_status');
                             <?php if(in_array($viewName,array('EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['employee_id']) ? $value['employee_id'] : '';
+                                    echo isset($value['created_by']) ? $value['created_by'] : '';
                                 ?>
                             </td>
                             <?php }?>
@@ -288,7 +286,7 @@ $lead_status = $this->config->item('lead_status');
                                     echo !empty($product) ? ucwords($product) : 'All';
                                 ?>
                             </td>
-                            <td>
+                            <td align="center">
                                 <?php 
                                     echo $value['total'];
                                 ?>
@@ -296,9 +294,9 @@ $lead_status = $this->config->item('lead_status');
                             <?php 
                             //pe($value['status']);
                                 foreach ($lead_status as $k => $v) {
-                                    if(!in_array($k,array('AO','Converted','Closed'))){
+                                    //if(!in_array($k,array('AO','Converted','Closed'))){
                             ?>
-                            <td>
+                            <td align="center">
                                 <?php
                                 if(in_array($k,array_keys($value['status']))){
                                         echo $value['status'][$k];
@@ -308,7 +306,7 @@ $lead_status = $this->config->item('lead_status');
                                 ?>
                             </td>
                             <?php
-                                    }
+                                    //}
                                 }
                             ?>
                             <?php if(in_array($viewName,array('ZM','BM'))){
@@ -326,7 +324,7 @@ $lead_status = $this->config->item('lead_status');
                                         if($view == 'branch' || $view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/pendancy_leads_reports/branch'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_generated/branch'.$param)?>">
                                         Branch View
                                     </a>
                                     <span>/</span> 
@@ -339,7 +337,7 @@ $lead_status = $this->config->item('lead_status');
                                         if($view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/pendancy_leads_reports/employee'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_generated/employee'.$param)?>">
                                         Employee View
                                     </a> 
                                 <?php
