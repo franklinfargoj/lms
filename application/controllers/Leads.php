@@ -824,12 +824,12 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         }
         if($type == 'assigned'){
-            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on');
+            $select = array('l.id','l.customer_name','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on');
             if($till == 'mtd'){
-                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'MONTH(la.created_on)' => date('m'));
+                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'MONTH(la.created_on)' => date('m'),'la.created_on >= DATE_ADD( CURDATE( ) , INTERVAL -45 DAY )');
             }
             if($till == 'ytd'){
-                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(la.created_on)' => date('Y'));
+                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(la.created_on)' => date('Y'),'la.created_on >= DATE_ADD( CURDATE( ) , INTERVAL -45 DAY )');
             }
             if(!empty($arrData['param'])){
                 if($login_user['designation_name'] == 'EM'){
@@ -860,6 +860,7 @@ class Leads extends CI_Controller
                 $where['l.lead_source'] = $arrData['lead_source'];
             }
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+
         }
         $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
         $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
