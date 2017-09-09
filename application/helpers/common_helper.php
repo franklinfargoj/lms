@@ -379,7 +379,7 @@ function decode_id($id){
 function get_session(){
     $CI =& get_instance();
     //return $CI->session->userdata();
-    $designation = '';
+    $designation = $CI->session->userdata('admin_type');
     $bm=array(520299,530399,540499,550599,560315,510113,520213,530213,540213,550213,560213);
     $zm=array(550502,560602,540402,550503);
     $gm=array(560601,570701,540405);
