@@ -80,6 +80,7 @@ class Leads extends CI_Controller
                 $lead_data['state_id'] = $lead_data['created_by_state_id'] = $login_user['state_id'];
                 $lead_data['branch_id'] = $lead_data['created_by_branch_id'] = $login_user['branch_id'];
                 $lead_data['district_id'] = $lead_data['created_by_district_id'] = $login_user['district_id'];
+                $lead_data['zone_id'] = $lead_data['zone_id'] = $login_user['zone_id'];
                 $branch_id = $login_user['branch_id'];
 
                 if($this->input->post('is_own_branch') == '0'){
