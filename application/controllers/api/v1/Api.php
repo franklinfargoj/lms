@@ -1445,6 +1445,7 @@ class Api extends REST_Controller
                 'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
                 'mobile' => $records->dbk_lms_emp_record1->phone,
                 'email_id' => $records->dbk_lms_emp_record1->email,
+                'designation'=>get_designation($records->dbk_lms_emp_record1->designation_id)
             );
 
             $hrms_id = $records->dbk_lms_emp_record1->EMPLID;

@@ -919,3 +919,18 @@ function dummy_branch_details(){
 
     return $lead_status['branch_details'];
     }
+function get_designation($designation_id){
+    $bm=array(520299,530399,540499,550599,560315,510113,520213,530213,540213,550213,560213);
+    $zm=array(550502,560602,540402,550503);
+    $gm=array(560601,570701,540405);
+    if(in_array($designation_id,$bm)){
+        $designation = 'BM';
+    }elseif(in_array($designation_id,$zm)){
+        $designation = 'ZM';
+    }elseif(in_array($designation_id,$gm)){
+        $designation = 'GM';
+    }else{
+        $designation = 'EM';
+    }
+    return $designation;
+}
