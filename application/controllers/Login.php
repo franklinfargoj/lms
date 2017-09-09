@@ -163,17 +163,17 @@ class Login extends CI_Controller {
      private function set_session($data){
             //echo "<pre>";print_r($data);die;
              $login_user = array(
-                 'hrms_id' => $data['hrms_id'],
+                 'admin_id' => $data['hrms_id'],
                  'dept_type_id' => $data['dept_type_id'],
                  'dept_type_name' => $data['dept_type_name'],
                  'branch_id' => $data['branch_id'],
                  'district_id' => $data['district_id'],
                  'state_id' => $data['state_id'],
                  'zone_id' => $data['zone_id'],
-                 'full_name' => $data['full_name'],
+                 'admin_name' => $data['full_name'],
                  'supervisor_id' => $data['supervisor_id'],
                  'designation_id' => $data['designation_id'],
-                 'designation_name' => $data['designation_name'],
+                 'admin_type' => $data['designation_name'],
                  'mobile' => $data['mobile'],
                  'email_id' => $data['email_id'],
                  'isLoggedIn' => TRUE,

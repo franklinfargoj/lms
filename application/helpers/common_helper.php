@@ -382,17 +382,17 @@ function get_session(){
 
     $input = array(
         /*'hrms_id' => '312',*/
-        'hrms_id' => $CI->session->userdata('hrms_id'),
+        'hrms_id' => $CI->session->userdata('admin_id'),
         'dept_type_id' => $CI->session->userdata('dept_type_id'),
         'dept_type_name' => $CI->session->userdata('dept_type_name'),
         'branch_id' => $CI->session->userdata('branch_id'),
         'district_id' => $CI->session->userdata('district_id'),
         'state_id' => $CI->session->userdata('state_id'),
         'zone_id' => $CI->session->userdata('zone_id'),
-        'full_name' => $CI->session->userdata('full_name'),
+        'full_name' => $CI->session->userdata('admin_name'),
         'supervisor_id' => $CI->session->userdata('supervisor_id'),
         'designation_id' => $CI->session->userdata('designation_id'),
-        'designation_name' => $CI->session->userdata('designation_name'),
+        'designation_name' => $CI->session->userdata('admin_type'),
         'mobile' => $CI->session->userdata('mobile'),
         'email_id' => $CI->session->userdata('email_id')
     );
