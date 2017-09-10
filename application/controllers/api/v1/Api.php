@@ -1513,13 +1513,13 @@ class Api extends REST_Controller
                     $leads['generated_converted'] = $final;
                     //for assigned lead
                     $where_assigned_Array = array('branch_id' => $branch_id,'is_updated'=>1,
-                        'YEAR(created_on)' => date('Y'));
+                        'YEAR(created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
                 }
                 $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day);
                 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }
