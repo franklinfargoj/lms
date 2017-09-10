@@ -37,8 +37,8 @@
             <tr>
                 <th style="text-align:center">Sr. No</th>
                 <th>Branch Name</th>
-                <th style="text-align:center">Genrated Leads(This Month)</th>
-                <th style="text-align:center">Converted Leads(This Month)</th>
+                <th style="text-align:center">Genrated Leads (This Month)</th>
+                <th style="text-align:center">Converted Leads (This Month)</th>
                 <th>Action</th>
             </tr>
 
