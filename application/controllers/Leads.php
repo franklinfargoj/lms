@@ -423,7 +423,7 @@ class Leads extends CI_Controller
         $table = Tbl_Leads;
         $join = array('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $group_by = array('db_leads.lead_source');
-        $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id'],Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day,Tbl_LeadAssign.'.is_updated'=>1);
+        $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id'],Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day);
         $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
         $response = array();
         $keys=array('Walk-in'=>0,'Analytics'=>0,'Tie Ups'=>0,'Enquiry'=>0);
