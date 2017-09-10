@@ -161,11 +161,12 @@ $lead_type = $this->config->item('lead_type');
                             </td>
                             <td align="center">
                                  <?php
-                                    $created_date = explode(' ',$value['created_on']);
-                                    $now = date_create(date('Y-m-d')); // or your date as well
-                                    $generated_date = date_create($created_date[0]);
-                                    $datediff = date_diff($now,$generated_date);
-                                    echo $datediff->format("%a");
+//                                    $created_date = explode(' ',$value['created_on']);
+//                                    $now = date_create(date('Y-m-d')); // or your date as well
+//                                    $generated_date = date_create($created_date[0]);
+//                                    $datediff = date_diff($now,$generated_date);
+//                                    echo $datediff->format("%a");
+                                  echo $value['elapsed_day'];
                                 ?>
                             </td>
                             <?php if(!isset($status)){?>
