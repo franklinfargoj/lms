@@ -223,7 +223,7 @@ class Dashboard extends CI_Controller {
             $generated_key_value[$v['zone_id']] = $v['total'];
         }
         
-        foreach ($result['zone_list'] as $key => $val) {
+        foreach ($result['list'] as $key => $val) {
             if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                 $push_generated = array(
                     'created_by_zone_id' => $val->DESCR10,
