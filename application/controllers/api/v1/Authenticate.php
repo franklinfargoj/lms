@@ -79,7 +79,7 @@ class Authenticate extends CI_Controller
 //Response for Zone
         $zm_response = '{"dbk_lms_emp_record1":
                                     {
-                                        "EMPLID": "0003391","deptid": "026656","dbk_dept_type": "ZD","dept_discription": "Zonal Office","district": "","state": "GJ","dbk_state_id": "026223","name": "JATIN HARIBHAI SARAVYA","supervisor": "0002423","designation_id": "550502","designation_descr": "ZONAL MANAGER-SC-V","url": "NA","phone": "7567123556","email": "dummy@dummy.com","detail": "","DBK_LMS_COLL": [
+                                        "EMPLID": "0003391","deptid": "026656","dbk_dept_type": "ZD","dept_discription": "Zonal Office","district": "","state": "GJ","dbk_state_id": "026656","name": "JATIN HARIBHAI SARAVYA","supervisor": "0002423","designation_id": "550502","designation_descr": "ZONAL MANAGER-SC-V","url": "NA","phone": "7567123556","email": "dummy@dummy.com","detail": "","DBK_LMS_COLL": [
                                         {"DESCR10": "000564","DESCR30": "BRANCH1"},{
                                         "DESCR10": "000036","DESCR30": "BRANCH2"},{
                                         "DESCR10": "000039","DESCR30": "BRANCH3"},{
@@ -107,7 +107,7 @@ class Authenticate extends CI_Controller
 // Response Employee
         $em_response = '{"dbk_lms_emp_record1":
                                     {
-                                        "EMPLID": "0006561","deptid": "000564","dbk_dept_type": "HD","dept_discription": "HO Department","district": "MUMBAI","state": "MH","dbk_state_id": "009999","name": "SANDEEP KUMAR BHATOA","supervisor": "0001598","designation_id": "540401","designation_descr": "CHIEF MANAGER","url": "NA","phone": "9833124070","email": "dummy@dummy.com","detail": "","DBK_LMS_COLL": {"DESCR10": "","DESCR30": ""}
+                                        "EMPLID": "0006561","deptid": "000564","dbk_dept_type": "HD","dept_discription": "HO Department","district": "MUMBAI","state": "MH","dbk_state_id": "026656","name": "SANDEEP KUMAR BHATOA","supervisor": "0001598","designation_id": "540401","designation_descr": "CHIEF MANAGER","url": "NA","phone": "9833124070","email": "dummy@dummy.com","detail": "","DBK_LMS_COLL": {"DESCR10": "","DESCR30": ""}
                                     }
                          }';
 
