@@ -22,8 +22,8 @@
             <tr>
                 <th style="text-align:center">Sr. No</th>
                 <th>Zone Name</th>
-                <th style="text-align:center">Genrated Leads</th>
-                <th style="text-align:center">Converted Leads</th>
+                <th style="text-align:center">Genrated Leads(This Month)</th>
+                <th style="text-align:center">Converted Leads(This Month)</th>
                 <th>Action</th>
             </tr>
 
