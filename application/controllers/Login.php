@@ -184,6 +184,5 @@ class Login extends CI_Controller {
              );
 
           $this->session->set_userdata($login_user);
-         echo "<pre>";print_r($_SESSION);die;
      }
 }
