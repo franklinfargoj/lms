@@ -20,10 +20,10 @@
                 <th></th>
             </tr>
             <tr>
-                <th>Sr. No</th>
+                <th style="text-align:center">Sr. No</th>
                 <th>Zone Name</th>
-                <th>Genrated Leads</th>
-                <th>Converted Leads</th>
+                <th style="text-align:center">Genrated Leads</th>
+                <th style="text-align:center">Converted Leads</th>
                 <th>Action</th>
             </tr>
 
@@ -34,16 +34,16 @@
                 foreach ($leads as $key => $value) {
                     ?>
                     <tr>
-                        <td>
+                        <td style="text-align:center">
                             <?php echo ++$i;?>
                         </td>
                         <td>
                             <?php echo ucwords($value['created_by_zone_name']);?>
                         </td>
-                        <td>
+                        <td style="text-align:center">
                             <?php echo $value['total_generated'];?>
                         </td>
-                        <td>
+                        <td style="text-align:center">
                             <?php echo $value['total_converted'];?>
                         </td>
                         <td>
