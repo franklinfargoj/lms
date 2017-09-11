@@ -385,7 +385,8 @@ button.ui-button::-moz-focus-inner {
 }
 .ui-datepicker td {
 	border: 0;
-	padding: 1px;
+	padding: 0 8px;
+	font-size: 17px;
 }
 .ui-datepicker td span,
 .ui-datepicker td a {
@@ -903,8 +904,6 @@ body .ui-tooltip {
 }
 .ui-widget.ui-widget-content {
 	border: 1px solid #c5c5c5;
-	top: 275px!important;
-	position: relative;
 	
 }
 .ui-widget-content {

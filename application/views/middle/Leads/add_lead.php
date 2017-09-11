@@ -147,6 +147,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <div id="master">
                             <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
                         </div>
+                        
                         <div class="step">
                             <span class="float-left">5000</span>
                             <span class="float-right">1 Crore & above</span>
