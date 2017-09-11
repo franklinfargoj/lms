@@ -25,14 +25,27 @@ $data_account = array('name' => 'account_no',
     'id' => 'account_no',
     'value' => set_value('account_no', '')
 );
+
 $data_state[''] = 'Select State';
-$data_state['1'] = 'Odisha';
+if ($states != '') {
+    foreach ($states as $key => $value) {
+        $data_state[$value['code']] = $value['name'];
+    }
+}
 
 $data_branch[''] = 'Select Branch';
-$data_branch['1'] = 'Laxmisagar';
+if ($branches != '') {
+    foreach ($branches as $key => $value) {
+        $data_branch[$value['code']] = $value['name'];
+    }
+}
 
 $data_district[''] = 'Select District';
-$data_district['1'] = 'Khordha';
+if ($districts != '') {
+    foreach ($districts as $key => $value) {
+        $data_district[$value['code']] = $value['name'];
+    }
+}
 
 $data_department_name = array('name' => 'department_name',
     'id' => 'department_name',
@@ -90,6 +103,9 @@ $branch_options['0'] = 'Other Branch';
 $category_extra = 'id="product_category"';
 $product_extra = 'id="product"';
 $extra = '';
+$state_extra = 'id="state_id"';
+$district_extra = 'id="district_id"';
+$branch_extra = 'id="branch_id"';
 $remark_extra = 'style="rows:4 ; cols:80"';
 ?>
 <div class="page-title">
@@ -186,17 +202,17 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     </div>
                     <div id="state" class="form-control">
                         <label>State:<?php echo $this->session->userdata('state_id');?></label>
-                        <?php echo form_dropdown('state_id', $data_state,$input['state_id'],'disabled') ?>
+                        <?php echo form_dropdown('state_id', $data_state,$input['state_id'],'disabled '.$state_extra) ?>
                         <?php echo form_error('state_id'); ?>
                     </div>
                     <div id="district" class="form-control">
                         <label>District:</label>
-                        <?php echo form_dropdown('district_id', $data_district, $input['district_id'],'disabled') ?>
+                        <?php echo form_dropdown('district_id', $data_district,$input['district_id'],'disabled '.$district_extra) ?>
                         <?php echo form_error('district_id'); ?>
                     </div>
                     <div id="branch" class="form-control">
                         <label>Branch:</label>
-                        <?php echo form_dropdown('branch_id', $data_branch, $input['branch_id'],'disabled') ?>
+                        <?php echo form_dropdown('branch_id', $data_branch,$input['branch_id'],'disabled '.$branch_extra) ?>
                         <?php echo form_error('branch_id'); ?>
                     </div>
 
@@ -272,30 +288,49 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         }
 
         $('#is_other_branch').click(function () {
+            var dist = '<select name="district_id" id = "district_id"><option value="">Select District</option></select>';
+            var branch = '<select name="branch_id" id = "branch_id"><option value="">Select Branch</option></select>';
+
             $('select[name="state_id"]').prop('disabled',false);
             $('select[name="branch_id"]').prop('disabled',false);
             $('select[name="district_id"]').prop('disabled',false);
             $('select[name="state_id"]').val('');
-            $('select[name="branch_id"]').val('');
-            $('select[name="district_id"]').val('');
+            $('select[name="branch_id"]').html(branch);
+            $('select[name="district_id"]').html(dist);
         });
         $('#is_own_branch').click(function () {
             if ($('#is_own_branch').is(':checked')) {
                 var state = "<?php echo $input['state_id'];?>";
-                var branch = "<?php echo $input['branch_id'];?>";
-                var district = "<?php echo $input['district_id'];?>";
-                $('select[name="state_id"]').val(state);
-                $('select[name="branch_id"]').val(branch);
-                $('select[name="district_id"]').val(district);
+                var branch = "<?php echo $input['branch_id']?>";
+                var dist = "<?php echo $input['district_id'];?>"
 
-                $('select[name="state_id"]').prop('disabled',true);
-                $('select[name="branch_id"]').prop('disabled',true);
-                $('select[name="district_id"]').prop('disabled',true);
+                $.ajax({
+                    method:'POST',
+                    url: base_url + 'leads/is_own_branch',
+                    data:{
+                        '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                        district_code:dist,
+                        branch_code:branch,
+                    }
+                }).success(function (resp) {
+                    if(resp){
+                        var resp = JSON.parse(resp);
+                        $("#branch_id").html(resp['html']);
+                        $("#district_id").html(resp['html2']);
+
+                        $('select[name="state_id"]').val(state);
+                        $('select[name="state_id"]').prop('disabled',true);
+                        $('select[name="branch_id"]').prop('disabled',true);
+                        $('select[name="district_id"]').prop('disabled',true);
+                    }
+                });
+
+
             }
         });
 
+        var base_url = "<?php echo base_url();?>";
         $('#product_category').change(function () {
-            var base_url = "<?php echo base_url();?>";
             var category_id = $('#product_category').val();
             var csrf = $("input[name=csrf_dena_bank]").val();
             $.ajax({
@@ -311,6 +346,42 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     $("#product_select").html(resp);
                 }
             });
+        });
+
+
+        $('#state_id').change(function () {
+           var state_code = $('#state_id').val();
+           $.ajax({
+              method:'POST',
+              url: base_url + 'leads/district_list',
+              data:{
+                  '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                  state_code:state_code,
+                  select_label:'Select District'
+              }
+           }).success(function (resp) {
+              if(resp){
+                  $("#district_id").html(resp);
+              }
+           });
+        });
+
+        $('#district_id').change(function () {
+           var district_code = $('#district_id').val();
+           $.ajax({
+              method:'POST',
+              url: base_url + 'leads/branch_list',
+              data:{
+                  '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                  district_code:district_code,
+                  select_label:'Select Branch'
+              }
+           }).success(function (resp) {
+              if(resp){
+                  console.log(resp);
+                  $("#branch_id").html(resp);
+              }
+           });
         });
 
         $.validator.addMethod("regx", function (value, element, regexpr) {

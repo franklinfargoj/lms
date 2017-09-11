@@ -17,7 +17,7 @@ class Leads extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-        is_logged_in();
+//        is_logged_in();
         $this->load->model('Lead');
         
         /*
@@ -46,9 +46,22 @@ class Leads extends CI_Controller
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
 
+        $session_data = get_session();
+
         $arrData['category_selected'] = '';
         $arrData['product_selected'] = '';
         $arrData['products'] = '';
+
+        $action = 'list';$table=Tbl_state;$select=array('code','name');
+        $arrData['states'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+
+        $action = 'list';$table=Tbl_district;$select=array('code','name');
+        $arrData['districts'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+
+        $action = 'list';$table=Tbl_branch;$select=array('code','name');
+        $arrData['branches'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+
+
         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
         $arrData['category'] = dropdown($category_list,'Select');
         if ($this->input->post("Submit") == "Submit") {
@@ -948,6 +961,110 @@ class Leads extends CI_Controller
         $login_user = get_session();
         $data = $this->view($login_user,$arrData);
         export_excel($header_value,$data,$type);
+    }
+
+    /*
+     * district_list
+     * Fetches districts according to selected state.
+     * @author Gourav Thatoi
+     * @access public
+     * @param none
+     * @return json
+     */
+    public function district_list()
+    {
+        if ($this->input->post()) {
+            $state_id = $this->input->post("state_code");
+            $select_label = $this->input->post("select_label");
+            $whereArray = array('state_code'=> $state_id);
+            $action='list';$table=Tbl_district;$select=array('code','name');
+            $districts = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
+            $district_extra = 'id="district_id"';
+            if (!empty($districts)) {
+                $options[''] = $select_label;
+                foreach ($districts as $key => $value) {
+                    $options[$value['code']] = ucwords($value['name']);
+                }
+                $html = '<label>District:</label>';
+                $html .= form_dropdown('district_id', $options, '', $district_extra);
+            } else {
+                $options[''] = $select_label;
+                $html = '<label>District:</label>';
+                $html .= form_dropdown('district_id', $options, '', $district_extra);
+            }
+            echo $html;
+        }
+    }
+    /*
+     * branch_list
+     * Fetches districts according to selected state.
+     * @author Gourav Thatoi
+     * @access public
+     * @param none
+     * @return json
+     */
+    public function branch_list()
+    {
+        if ($this->input->post()) {
+            $district_code = $this->input->post("district_code");
+            $select_label = $this->input->post("select_label");
+            $whereArray = array('district_code'=> $district_code);
+            $action='list';$table=Tbl_branch;$select=array('code','name');
+            $branches = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
+            $branch_extra = 'id="branch_id"';
+            if (!empty($branches)) {
+                $options[''] = $select_label;
+                foreach ($branches as $key => $value) {
+                    $options[$value['code']] = ucwords($value['name']);
+                }
+                $html = '<label>Branch:</label>';
+                $html .= form_dropdown('branch_id', $options, '', $branch_extra);
+            } else {
+                $options[''] = $select_label;
+                $html = '<label>Branch:</label>';
+                $html .= form_dropdown('branch_id', $options, '', $branch_extra);
+            }
+            echo $html;
+        }
+    }
+    public function is_own_branch(){
+        if ($this->input->post()) {
+            $district_code = $this->input->post("district_code");
+            $branch_code = $this->input->post("branch_code");
+            $action='list';$table=Tbl_branch;$select=array('code','name');
+            $branches = $this->Lead->get_leads($action,$table,$select,'','','','');
+            $table = Tbl_district;
+            $districts = $this->Lead->get_leads($action,$table,$select,'','','','');
+            $branch_extra = 'id="branch_id"';
+            $district_extra = 'id="district_id"';
+            if (!empty($branches)) {
+                $options[''] = 'Select Branch';
+                foreach ($branches as $key => $value) {
+                    $options[$value['code']] = ucwords($value['name']);
+                }
+                $html = '<label>Branch:</label>';
+                $html .= form_dropdown('branch_id', $options, $branch_code, $branch_extra);
+            } else {
+                $options[''] = 'Select Branch';
+                $html = '<label>Branch:</label>';
+                $html .= form_dropdown('branch_id', $options, '', $branch_extra);
+            }
+            if (!empty($districts)) {
+                $dist_options[''] = 'Select District';
+                foreach ($districts as $key => $value) {
+                    $dist_options[$value['code']] = ucwords($value['name']);
+                }
+                $html2 = '<label>District:</label>';
+                $html2 .= form_dropdown('district_id', $dist_options, $district_code, $district_extra);
+            } else {
+                $dist_options[''] = 'Select District';
+                $html2 = '<label>District:</label>';
+                $html2 .= form_dropdown('district_id', $dist_options, '', $district_extra);
+            }
+            $data['html'] = $html;
+            $data['html2'] = $html2;
+            echo json_encode($data);
+        }
     }
 
 }
