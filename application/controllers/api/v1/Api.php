@@ -795,7 +795,7 @@ class Api extends REST_Controller
             $table = Tbl_Leads;
             $join = array('db_lead_assign', 'db_lead_assign.lead_id = db_leads.id ', 'left');
             $group_by = array('db_leads.lead_source');
-            $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'], Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day);
+            $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'], Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
             $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select, $table, $join, $where, $group_by);
             $response = array();
             $keys = array('Walk-in' => "0", 'Analytics' => "0", 'Tie Ups' => "0", 'Enquiry' => "0");
@@ -1515,7 +1515,7 @@ class Api extends REST_Controller
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day);
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
                 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }
@@ -1862,7 +1862,7 @@ class Api extends REST_Controller
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day);
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
                 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }

@@ -108,7 +108,6 @@ class Lead  extends CI_Model
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');
         $this->db->where('db_lead_assign.lead_id',NULL);
         $this->db->where('db_leads.branch_id',$login_user['branch_id']);
-        $this->db->where('db_leads.created_on >= DATE_ADD( CURDATE( ) , INTERVAL -45 DAY )');
         if(!empty($lead_status)){
             $this->db->where('db_leads.lead_source',$lead_status);
         }
