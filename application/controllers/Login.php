@@ -93,9 +93,9 @@ class Login extends CI_Controller {
                                 // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
                                 $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$auth->DBK_LMS_AUTH->username);
                                 $records = json_decode($records_response);
-                                $data = array('device_token' => NULL,
+                                $data = array('device_token' => 'sdasda',
                                     'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
-                                    'device_type' => NULL
+                                    'device_type' => 'ios'
                                 );
                                 $this->master->insert_login_log($data); // login log
 

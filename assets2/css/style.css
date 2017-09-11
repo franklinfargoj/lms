@@ -435,7 +435,7 @@ body{
 .header .right-nav .logged-in{
 	display: inline-block;
 	vertical-align: middle;
-	width:135px;
+	width:200px;
 }
 
 .logged-in img{
