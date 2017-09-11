@@ -445,6 +445,7 @@ if(!function_exists('send_sms')){
             $password = $CI->encrypt->decode($credentials['password']);
             $url = $credentials['url'].'?username='.$credentials['username'].'&password='.$password.'&to='.$mobile.'&udh=&from=DENABK&text='.$message;
             $ch = curl_init();
+            echo $ch;die;
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_HEADER, 0);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
