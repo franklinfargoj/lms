@@ -111,8 +111,8 @@ class Leads extends CI_Controller
                 $lead_id = $this->Lead->add_leads($lead_data);
                 if($lead_id != false){
                     //send sms
-                    /*$message = 'Thanks for showing interest with Dena Bank. We will contact you shortly';
-                    send_sms($this->input->post('contact_no'),$message);*/
+                    $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
+                    send_sms($this->input->post('contact_no'),$message);
 
                     //Push notification
                     //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
