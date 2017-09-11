@@ -452,10 +452,9 @@ if(!function_exists('send_sms')){
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
             curl_setopt($ch, CURLOPT_TIMEOUT, 10);
             $output = curl_exec($ch);
+            die('FCM Send Error: ' . curl_error($ch));
             curl_close($ch);
-
-            $response = $output;
-            echo $response;die;
+            return $output;
 
         }
     }
