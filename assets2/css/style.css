@@ -1033,7 +1033,7 @@ margin-top: 10px;
 	font-family: "Montserrat";
 	font-weight: 500;
 }
-.ui-widget.ui-widget-content{border: 0 none !important;    top: 275px!important;}
+.ui-widget.ui-widget-content{border: 0 none !important;    top: -3px!important;}
 .product-guide-tab .ui-state-default.ui-state-active{
 	background-color: #01559d !important;
 	color: #ffffff;
