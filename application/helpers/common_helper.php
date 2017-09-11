@@ -451,10 +451,6 @@ if(!function_exists('send_sms')){
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             $output = curl_exec($ch);
             curl_close($ch);
-            if(curl_error($ch))
-            {
-                echo 'error:' . curl_error($ch);die;
-            }
             echo $output;
             die;
             return $output;die;
