@@ -454,8 +454,8 @@ if(!function_exists('send_sms')){
             $output = curl_exec($ch);
             curl_close($ch);
 
-            $response = ((array) simplexml_load_string($output));
-            return $response;
+            $response = $output;
+            echo $response;die;
 
         }
     }
