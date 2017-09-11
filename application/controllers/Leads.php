@@ -612,21 +612,19 @@ class Leads extends CI_Controller
                     /****************************************************************
                                 If interested in other product
                     *****************************************************************/
-                        $interested = $this->input->post('interested');
+                        /*$interested = $this->input->post('interested');
                         if($interested == 1){
                             $this->form_validation->set_rules('product_category_id','Product Category', 'required');
                             $this->form_validation->set_rules('product_id','Product', 'required');
                             if ($this->form_validation->run() == FALSE)
                             {    
-                                /*$arrData['has_error'] = 'has-error';
-                                return load_view("Products/Product/add",$arrData);*/
                                 redirect('leads/leads_list/assigned/ytd');
                             }
                             $product_category_id = $this->input->post('product_category_id');
                             $product_id = $this->input->post('product_id');
                             //Function call for add new leads in selected product category hierarchy
                             $this->update_lead_product($lead_id,$product_category_id,$product_id);
-                        }
+                        }*/
                     /*****************************************************************/
 
                     //Building input parameters for function to get_leads
