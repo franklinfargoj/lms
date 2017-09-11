@@ -451,10 +451,11 @@ if(!function_exists('send_sms')){
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             $output = curl_exec($ch);
             curl_close($ch);
-            echo $output;
-            die;
+//            echo $output;
+//            die;
 //            $output = file_get_contents($url);
 //            echo $output;die;
+            return $output;
 
         }
     }
