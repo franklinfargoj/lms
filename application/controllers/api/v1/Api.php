@@ -249,7 +249,7 @@ class Api extends REST_Controller
         $error = array();
         $validations = array('customer_name' => 'Customer Name', 'contact_no' => 'Phone No',
             'product_category_id' => 'Product Category', 'product_id' => 'Product', 'lead_ticket_range' => 'Range',
-            'is_own_branch' => 'Own Branch / Other Branch', 'created_by' => 'Created By', 'created_by_name' => 'Created By Name',
+            'is_own_branch' => 'Own Branch / Other Branch', 'created_by' => 'Created By',
             'state_id' => 'State', 'district_id' => 'District',
             'zone_id' => 'Zone', 'branch_id' => 'Branch', 'department_name' => 'Department Name',
             'department_id' => 'Department Id', 'created_by_state_id' => 'Created By State',
@@ -1378,11 +1378,7 @@ class Api extends REST_Controller
                 'created_by' => $params['hrms_id'],
                 'created_by_name' => $params['full_name']
             );
-            if (is_array($params['lead_id'])) {
-                $leads = $params['lead_id'];
-            } else {
-                $leads[] = $params['lead_id'];
-            }
+            $leads = explode(',',$params['lead_id']);
             foreach ($leads as $key => $value) {
                 $assign_data['lead_id'] = $value;
                 $insertData[] = $assign_data;
