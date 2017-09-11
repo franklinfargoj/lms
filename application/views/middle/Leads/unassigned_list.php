@@ -42,10 +42,13 @@
                                     if ($unassigned_leads) {
                             ?>
                                 <div class="form-control" id="finline">
-                                    <label>Assign To : </label>&nbsp;&nbsp;   
+                                    <label>Assign To : </label>&nbsp;&nbsp;
                                     <select name="assign_to">
                                         <option value="">Select Employee</option>
-                                        <option value="2">Employee 1</option>
+                                    <?php $result = get_details($this->session->userdata('admin_id'));?>
+                                        <?php foreach ($result['list'] as $key =>$value){?>
+                                        <option value="<?php echo $value->DESCR10.'-'.$value->DESCR30;?>"><?php echo ucwords($value->DESCR30);?></option>
+                                        <?php }?>
                                     </select>
                                     <?php 
                                         /*foreach ($unassigned_leads as $key => $value) {

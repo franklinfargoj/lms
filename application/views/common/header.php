@@ -19,7 +19,7 @@
 						Home
 					</a>
 				</li>
-				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'leads' && $method == 'add') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/add')?>">
 						Add Lead 
@@ -75,23 +75,23 @@
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
 				<li class="<?php echo (($controller == 'dashboard') && ($method == 'emi_calculator')) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard/emi_calculator')?>">
 						Calculator
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','RM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'product_guide') ? 'active' : ''?>">
 					<a href="<?php echo site_url('product_guide/view')?>">
 						Product Guide
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','RM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>">
-					<a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">
+					<a href="<?php echo site_url('reports/view')?>">
 						Reports
 					</a>
 				</li>
@@ -111,6 +111,7 @@
 					<img src="<?php echo base_url().ASSETS;?>images/pic.png" alt="pic">
 					<div>
 					<span class="name">Hi, <?php echo $this->session->userdata('admin_name');?> !!</span>
+						<span class="name">(<?php echo $this->session->userdata('admin_type');?>)</span>
 					<a href="<?php echo site_url('login/logOut');?>">Logout</a>
 					</div>
 				</div>

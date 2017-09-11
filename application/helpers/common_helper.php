@@ -80,14 +80,14 @@ function is_logged_in() {
     $CI =& get_instance();
     // We need to use $CI->session instead of $this->session
     $isLoggedIn = $CI->session->userdata('isLoggedIn');
-    if (empty($isLoggedIn)) { redirect('login'); }
+    if ($isLoggedIn != 'TRUE') { redirect('login'); }
 }
 
 function loginUserId(){
     // Get current CodeIgniter instance
     $CI =& get_instance();
     // We need to use $CI->session instead of $this->session
-    $admin_id = $CI->session->userdata('admin_id');
+    $admin_id = $CI->session->userdata('hrms_id');
     return $admin_id ? $admin_id : 0;
 }
 
@@ -259,32 +259,32 @@ if (!function_exists('create_excel_error_file'))
     }
 }
 
-if(!function_exists('send_sms')){
-    function send_sms($name='',$mobile='') {
-        $feedid='';
-        $username='';
-        $pass='';
-        $senderid='';
-        $sms='';
-        if($mobile!='') {
-                $sms = "Thanks for showing interest with Dena Bank. We will contact you shortly";
-            $url = "http://bulkpush.mytoday.com/BulkSms/SingleMsgApi?feedid=$feedid&username=$username&password=$pass&To=$mobile&Text=" . urlencode($sms) . "&senderid=$senderid";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-            $output = curl_exec($ch);
-            curl_close($ch);
-
-            $response = ((array) simplexml_load_string($output));
-            return $response;
-
-        }
-    }
-}
+//if(!function_exists('send_sms')){
+//    function send_sms($name='',$mobile='') {
+//        $feedid='';
+//        $username='';
+//        $pass='';
+//        $senderid='';
+//        $sms='';
+//        if($mobile!='') {
+//                $sms = "Thanks for showing interest with Dena Bank. We will contact you shortly";
+//            $url = "http://bulkpush.mytoday.com/BulkSms/SingleMsgApi?feedid=$feedid&username=$username&password=$pass&To=$mobile&Text=" . urlencode($sms) . "&senderid=$senderid";
+//            $ch = curl_init();
+//            curl_setopt($ch, CURLOPT_URL, $url);
+//            curl_setopt($ch, CURLOPT_HEADER, 0);
+//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+//            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+//            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+//            $output = curl_exec($ch);
+//            curl_close($ch);
+//
+//            $response = ((array) simplexml_load_string($output));
+//            return $response;
+//
+//        }
+//    }
+//}
 
 if (!function_exists('send_push_notification')){
     function send_push_notification($data, $message)
@@ -380,22 +380,26 @@ function get_session(){
     $CI =& get_instance();
     //return $CI->session->userdata();
 
+    $designation = get_designation($CI->session->userdata('designation_id'));
+    if($designation == false){
+        $designation = $CI->session->userdata('admin_type');
+    }
+    $CI->session->set_userdata('admin_type',$designation);
     $input = array(
         /*'hrms_id' => '312',*/
         'hrms_id' => $CI->session->userdata('admin_id'),
-        'dept_id' => '12',
-        'dept_type_id' => '123',
-        'dept_type_name' => 'BR',
-        'branch_id' => '3',
-        'district_id' => '1',
-        'state_id' => '1',
-        'zone_id' => '4',
+        'dept_type_id' => $CI->session->userdata('dept_type_id'),
+        'dept_type_name' => $CI->session->userdata('dept_type_name'),
+        'branch_id' => $CI->session->userdata('branch_id'),
+        'district_id' => $CI->session->userdata('district_id'),
+        'state_id' => $CI->session->userdata('state_id'),
+        'zone_id' => $CI->session->userdata('zone_id'),
         'full_name' => $CI->session->userdata('admin_name'),
-        'supervisor_id' => '009',
-        'designation_id' => '4',
-        'designation_name' => $CI->session->userdata('admin_type'),
-        'mobile' => '9975772432',
-        'email_id' => 'mukesh.kurmi@wwindia.com'
+        'supervisor_id' => $CI->session->userdata('supervisor_id'),
+        'designation_id' => $CI->session->userdata('designation_id'),
+        'designation_name' => $designation,
+        'mobile' => $CI->session->userdata('mobile'),
+        'email_id' => $CI->session->userdata('email_id')
     );
     return $input;
 }
@@ -433,25 +437,25 @@ function dropdown($data,$select_option){
 
 if(!function_exists('send_sms')){
     function send_sms($mobile = '',$message='') {
-        
+
         if($mobile!='') {
             $CI =& get_instance();
             $CI->load->model('Sms_model','sms');
             $credentials = $CI->sms->get_sms_credentials();
             $password = $CI->encrypt->decode($credentials['password']);
-            $url = $credentials['url'].'?username='.$credentials['username'].'&password='.$password.'&to='.$mobile.'&udh=0&from=DENABK&text='.$message;
+            $url = $credentials['url'].'?username='.$credentials['username'].'&password='.$password.'&to='.$mobile.'&udh=&from=DENABK&text='.urlencode($message);
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             $output = curl_exec($ch);
             curl_close($ch);
-
-            $response = ((array) simplexml_load_string($output));
-            return $response;
+//            echo $output;
+//            die;
+//            $output = file_get_contents($url);
+//            echo $output;die;
+            return $output;
 
         }
     }
@@ -514,78 +518,31 @@ function get_notification_count(){
     return $notification_count;
 }
 
-function get_details($designation_name){
-    //        $curl_handle = curl_init();
-//        curl_setopt($curl_handle, CURLOPT_URL, 'http://10.0.11.33/payo_app/users/update_synapse_info');
-//
-//        if(!isset($params['user_id']) || !isset($params['password']) || ($params['user_id'] == NULL) ||  ($params['password'] == NULL)){
-//            $err['result'] = false;
-//            $err['data'] = "Invalid Request";
-//            returnJson($err);
-//        }
-//
-//        $user_id = $params['user_id'];
-//        $password = $params['password'];
-//        $device_token = $params['device_token'];
-//
-//        $curl_handle = curl_init();
-//        curl_setopt($curl_handle, CURLOPT_URL, '');
-//        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($curl_handle, CURLOPT_POST, 1);
-//        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
-//            'user_id' => $user_id,
-//            'password' => $password
-//        ));
-//
-//        $buffer = curl_exec($curl_handle);
-//        curl_close($curl_handle);
-//
-//        $result = json_decode($buffer);
+function get_details($hrms_id){
 
-    $result['basic_info'] = array(
-        'hrms_id' => '12',
-        'dept_id' => '12',
-        'dept_type_id' => '123',
-        'dept_type_name' => 'BR',
-        'branch_id' => '12',
-        'district_id' => '1234',
-        'state_id' => '1234',
-        'zone_id' => '1234',
-        'full_name' => 'mukesh kurmi',
-        'supervisor_id' => '009',
-        'designation_id' => '4',
-        'designation_name' => $designation_name,
-        'mobile' => '9975772432',
-        'email_id' => 'mukesh.kurmi@wwindia.com',
-    );
-    $result['employee_list'][] = array(
-        'id' => '2',
-        'full_name' => 'mukesh kurmi',
-    );
-    $result['employee_list'][] = array(
-        'id' => '13',
-        'full_name' => 'anup',
-    );
-    $result['employee_list'][] = array(
-        'id' => '15',
-        'full_name' => 'anup',
-    );
-    $result['branch_list'][] = array(
-        'id' => '3',
-        'full_name' => 'branch1',
-    );
-    $result['branch_list'][] = array(
-        'id' => '13',
-        'full_name' => 'branch2',
-    );
-    $result['zone_list'][] = array(
-        'id' => '4',
-        'full_name' => 'zone1',
-    );
-    $result['zone_list'][] = array(
-        'id' => '13',
-        'full_name' => 'zone2',
-    );
+    // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
+//    $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$hrms_id);
+//    $records = json_decode($records_response);
+//    $result['basic_info'] = array(
+//        'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
+//        'dept_id' => $records->dbk_lms_emp_record1->deptid,
+//        'dept_type_id' => $records->dbk_lms_emp_record1->dbk_dept_type,
+//        'dept_type_name' => $records->dbk_lms_emp_record1->dept_discription,
+//        'branch_id' => $records->dbk_lms_emp_record1->deptid,
+//        'district_id' => $records->dbk_lms_emp_record1->district,
+//        'state_id' => $records->dbk_lms_emp_record1->state,
+//        'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
+//        'full_name' => $records->dbk_lms_emp_record1->name,
+//        'supervisor_id' => $records->dbk_lms_emp_record1->supervisor,
+//        'designation_id' => $records->dbk_lms_emp_record1->designation_id,
+//        'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
+//        'mobile' => $records->dbk_lms_emp_record1->phone,
+//        'email_id' => $records->dbk_lms_emp_record1->email,
+//    );
+//    $result['list']=$records->dbk_lms_emp_record1->DBK_LMS_COLL;
+    $CI =& get_instance();
+    $result['list']=$CI->session->userdata('list');
+
     $result['status'] = 'success';
 
     return $result;
@@ -957,3 +914,24 @@ function dummy_branch_details(){
 
     return $lead_status['branch_details'];
     }
+
+    function get_designation($designation_id){
+
+        $bm=array(520299,530399,540499,550599,560315,510113,520213,530213,540213,550213,560213);
+        $zm=array(550502,560602,540402,550503);
+        $gm=array(560601,570701,540405);
+
+        $designation = false;
+        if(in_array($designation_id,$bm)){
+            $designation = 'BM';
+        }elseif(in_array($designation_id,$zm)){
+            $designation = 'ZM';
+        }elseif(in_array($designation_id,$gm)){
+            $designation = 'GM';
+        }else{
+            $designation = 'EM';
+        }
+        return $designation;
+    }
+
+

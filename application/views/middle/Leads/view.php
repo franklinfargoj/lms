@@ -64,10 +64,9 @@ $lead_type = $this->config->item('lead_type');
             <table id="sample_3" class="display lead-table">
                 <thead>
                     <tr class="top-header">
-                        <th></th>
                         <th><input type="text" name="customername" value=""></th>
                         <th><input type="text" name="productname" value=""></th>
-                        <th><input type="text" name="finaccno" value=""></th>
+                        <th><input type="text" name="finaccno" value="" size="2"></th>
                         <?php if(!isset($status)){?>
                          <th>
                             <?php
@@ -110,9 +109,7 @@ $lead_type = $this->config->item('lead_type');
                         <th></th>
                     </tr>
                     <tr>
-                        <th align="center">
-                            Sr. No.
-                        </th>
+
                         <th>
                             Customer Name
                         </th>
@@ -155,9 +152,7 @@ $lead_type = $this->config->item('lead_type');
                         foreach ($leads as $key => $value) {
                     ?>  
                         <tr>
-                            <td align="center">
-                                 <?php echo ++$i;?>
-                            </td>
+
                             <td>
                                  <?php echo ucwords($value['customer_name']);?>
                             </td>
@@ -165,12 +160,13 @@ $lead_type = $this->config->item('lead_type');
                                  <?php echo ucwords($value['title']);?>
                             </td>
                             <td align="center">
-                                 <?php 
-                                    $created_date = explode(' ',$value['created_on']);
-                                    $now = date_create(date('Y-m-d')); // or your date as well
-                                    $generated_date = date_create($created_date[0]);
-                                    $datediff = date_diff($now,$generated_date);
-                                    echo $datediff->format("%a");
+                                 <?php
+//                                    $created_date = explode(' ',$value['created_on']);
+//                                    $now = date_create(date('Y-m-d')); // or your date as well
+//                                    $generated_date = date_create($created_date[0]);
+//                                    $datediff = date_diff($now,$generated_date);
+//                                    echo $datediff->format("%a");
+                                  echo $value['elapsed_day'];
                                 ?>
                             </td>
                             <?php if(!isset($status)){?>
@@ -232,13 +228,13 @@ $lead_type = $this->config->item('lead_type');
         var lead_source = "<?php echo $source ?>";
         switch(type) {
             case 'generated':
-                columns = [6];
+                columns = [5];
                 break;
             case 'assigned':
             if(lead_source == 'empty'){
-                columns = [8];
+                columns = [7];
             }else{
-                columns = [6];
+                columns = [5];
             }
             break;
         }

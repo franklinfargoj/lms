@@ -33,6 +33,8 @@ class Login extends CI_Controller {
      */
 	public function index()
 	{
+        $isLoggedIn = $this->session->userdata('isLoggedIn');
+        if (!empty($isLoggedIn)) { redirect('dashboard'); }
         // make Captcha Html accessible to View code
         $arrData['captchaHtml'] = $this->botdetectcaptcha->Html();
         $arrData['captchaValidationMessage'] = '';
@@ -67,19 +69,62 @@ class Login extends CI_Controller {
                     $isHuman = $this->botdetectcaptcha->Validate($code);
                     if ($isHuman) {
                         // Captcha validation passed
-                        $checkInput = array(
-                             'username' => $this->input->post('username'),
-                             'password' => md5($this->input->post('password'))
-                        );
-                        $loginData = $this->master->check_login($checkInput);
-                        if($loginData){
-                             $this->set_session($loginData[0]);
-                             $this->session->set_flashdata('success','Login success');
-                             redirect('dashboard');
+                        if($this->input->post('username') == '1111111'){
+                            $checkInput = array(
+                                'hrms_id' => $this->input->post('username'),
+                                'password' => md5($this->input->post('password'))
+                            );
+                            $loginData = $this->master->check_login($checkInput);
+                            if($loginData){
+                                $this->set_session($loginData[0]);
+                                $this->session->set_flashdata('success','Login success');
+                                redirect('dashboard');
+                            }else{
+                                $this->session->set_flashdata('error','Incorrect Login Details');
+                                redirect('login');
+                            }
                         }else{
-                             $this->session->set_flashdata('error','Incorrect Login Details');
-                             redirect('login');
+                            $hrms_id = $this->input->post('username');
+                            $password = $this->input->post('password');
+                            //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
+                            $auth_response = call_external_url(HRMS_API_URL_AUTH.'/'.$hrms_id.'/'.$password);
+                            $auth = json_decode($auth_response);
+                            if ($auth->DBK_LMS_AUTH->password == 'True') {
+                                // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
+                                $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$auth->DBK_LMS_AUTH->username);
+                                $records = json_decode($records_response);
+                                $data = array('device_token' => NULL,
+                                    'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
+                                    'device_type' => NULL
+                                );
+                                $this->master->insert_login_log($data); // login log
+
+                                $result = array(
+                                    'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
+                                    'dept_id' => $records->dbk_lms_emp_record1->deptid,
+                                    'dept_type_id' => $records->dbk_lms_emp_record1->dbk_dept_type,
+                                    'dept_type_name' => $records->dbk_lms_emp_record1->dept_discription,
+                                    'branch_id' => $records->dbk_lms_emp_record1->deptid,
+                                    'district_id' => $records->dbk_lms_emp_record1->district,
+                                    'state_id' => $records->dbk_lms_emp_record1->state,
+                                    'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
+                                    'full_name' => $records->dbk_lms_emp_record1->name,
+                                    'supervisor_id' => $records->dbk_lms_emp_record1->supervisor,
+                                    'designation_id' => $records->dbk_lms_emp_record1->designation_id,
+                                    'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
+                                    'mobile' => $records->dbk_lms_emp_record1->phone,
+                                    'email_id' => $records->dbk_lms_emp_record1->email,
+                                    'list'=>$records->dbk_lms_emp_record1->DBK_LMS_COLL
+                                );
+                                $this->set_session($result);
+                                $this->session->set_flashdata('success','Login success');
+                                redirect('dashboard');
+                            }else{
+                                $this->session->set_flashdata('error','Invalid Login Credential.Please Enter Again OR Contact Administrator');
+                                redirect('login');
+                            }
                         }
+
                     } else {
                         // Captcha validation failed, return an error message
                         $this->session->set_flashdata('error','Invalid Security Code');
@@ -119,10 +164,25 @@ class Login extends CI_Controller {
 
 
      private function set_session($data){
-          $login_user = array("admin_name" => $data['name'],"admin_type"=>$data['admin_type'],"admin_id"=>$data['id'],"isLoggedIn"=>TRUE);
+            //echo "<pre>";print_r($data);die;
+             $login_user = array(
+                 'admin_id' => $data['hrms_id'],
+                 'dept_type_id' => $data['dept_type_id'],
+                 'dept_type_name' => $data['dept_type_name'],
+                 'branch_id' => $data['branch_id'],
+                 'district_id' => $data['district_id'],
+                 'state_id' => $data['state_id'],
+                 'zone_id' => $data['zone_id'],
+                 'admin_name' => $data['full_name'],
+                 'supervisor_id' => $data['supervisor_id'],
+                 'designation_id' => $data['designation_id'],
+                 'admin_type' => $data['designation_name'],
+                 'mobile' => $data['mobile'],
+                 'email_id' => $data['email_id'],
+                 'isLoggedIn' => TRUE,
+                 'list'=>$data['list']
+             );
+
           $this->session->set_userdata($login_user);
      }
-
-
-     
 }

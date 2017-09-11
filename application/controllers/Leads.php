@@ -80,6 +80,7 @@ class Leads extends CI_Controller
                 $lead_data['state_id'] = $lead_data['created_by_state_id'] = $login_user['state_id'];
                 $lead_data['branch_id'] = $lead_data['created_by_branch_id'] = $login_user['branch_id'];
                 $lead_data['district_id'] = $lead_data['created_by_district_id'] = $login_user['district_id'];
+                $lead_data['zone_id'] = $lead_data['created_by_zone_id'] = $login_user['zone_id'];
                 $branch_id = $login_user['branch_id'];
 
                 if($this->input->post('is_own_branch') == '0'){
@@ -91,6 +92,7 @@ class Leads extends CI_Controller
                 
                 $lead_data['created_by'] = $login_user['hrms_id'];
                 $lead_data['created_by_name'] = $login_user['full_name'];
+
                 $keys = array('customer_name','contact_no','product_category_id','product_id',
                     'is_own_branch','remark','lead_ticket_range');
                 foreach ($keys as $k => $value){
@@ -109,8 +111,8 @@ class Leads extends CI_Controller
                 $lead_id = $this->Lead->add_leads($lead_data);
                 if($lead_id != false){
                     //send sms
-                    /*$message = 'Thanks for showing interest with Dena Bank. We will contact you shortly';
-                    send_sms($this->input->post('contact_no'),$message);*/
+                    $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
+                    send_sms($this->input->post('contact_no'),$message);
 
                     //Push notification
                     //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
@@ -421,7 +423,7 @@ class Leads extends CI_Controller
         $table = Tbl_Leads;
         $join = array('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $group_by = array('db_leads.lead_source');
-        $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id'],Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
+        $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id'],Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day);
         $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
         $response = array();
         $keys=array('Walk-in'=>0,'Analytics'=>0,'Tie Ups'=>0,'Enquiry'=>0);
@@ -563,7 +565,7 @@ class Leads extends CI_Controller
             }
             if($type == 'assigned'){
                 //SELECT COLUMNS
-                $select = array('l.id','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','r.remind_on','r.reminder_text');
+                $select = array('l.id','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','r.remind_on','r.reminder_text');
 
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
@@ -667,8 +669,9 @@ class Leads extends CI_Controller
                                                 Reroute Lead
                             *****************************************************************/
                             if(isset($employee_id) && !empty($employee_id)){
-                                $lead_status_data['employee_id'] = $employee_id;
-                                $lead_status_data['employee_name'] = 'New Employee2';
+                                $explode_employee = explode('-',$employee_id);
+                                $lead_status_data['employee_id'] = $explode_employee[0];
+                                $lead_status_data['employee_name'] = $explode_employee[1];
                                 if($leads_data['status'] != $lead_status){
                                     $lead_status_data['status'] = $lead_status;
                                 }else{
@@ -821,12 +824,12 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         }
         if($type == 'assigned'){
-            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on');
+            $select = array('l.id','l.customer_name','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
             if($till == 'mtd'){
-                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'MONTH(la.created_on)' => date('m'));
+                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'MONTH(la.created_on)' => date('m'),'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
             }
             if($till == 'ytd'){
-                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(la.created_on)' => date('Y'));
+                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(la.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
             }
             if(!empty($arrData['param'])){
                 if($login_user['designation_name'] == 'EM'){
@@ -857,6 +860,7 @@ class Leads extends CI_Controller
                 $where['l.lead_source'] = $arrData['lead_source'];
             }
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+
         }
         $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
         $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
@@ -867,16 +871,17 @@ class Leads extends CI_Controller
     }
     private function assign_to($employee_id,$lead_ids)
     {
+       $explode_employee = explode('-',$employee_id);
         if (!empty($lead_ids)) {
             $login_user = get_session();
             $insertData = array();
             $assign_data = array(
-                'employee_id' => $employee_id,
-                'employee_name' => 'Employee 1',
-                'branch_id' => '12',
-                'district_id' => '1',
-                'state_id' => 1,
-                'zone_id' => 1,
+                'employee_id' => $explode_employee[0],
+                'employee_name' => $explode_employee[1],
+                'branch_id' => $login_user['branch_id'],
+                'district_id' => $login_user['district_id'],
+                'state_id' => $login_user['state_id'],
+                'zone_id' => $login_user['zone_id'],
                 'status' => 'NC',
                 'created_by' => $login_user['hrms_id'],
                 'created_by_name' => $login_user['full_name']

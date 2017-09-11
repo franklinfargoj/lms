@@ -7,9 +7,8 @@ $lead_type = $this->config->item('lead_type');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Lead Type Reports
+            Leads Type Report
         </h3>
-        <span style="float:right"><a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">Pendancy Leads</a></span>
     </div>
 </div>
 
@@ -23,7 +22,7 @@ $lead_type = $this->config->item('lead_type');
             'class' => 'form',
             'autocomplete' => 'off'
         );
-        echo form_open(site_url().'reports/index/pendancy_leads_reports', $attributes);
+        echo form_open(site_url().'reports/index/leads_type_reports', $attributes);
         $data = array(
             'view'   => isset($view) ? $view : '',
             'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
@@ -173,9 +172,9 @@ $lead_type = $this->config->item('lead_type');
         <div class="container clearfix">
             <div class="float-left">
                 <span class="total-lead">
-                    Total
+                    Total Leads
                 </span>
-                <span class="lead-num"> : <?php echo count($leads);?></span>
+                <span class="lead-num"> : <?php echo $Total;?></span>
             </div>
             <div class="float-right">
                 <a href="<?php echo base_url('leads/export_excel_listing/');?>">
