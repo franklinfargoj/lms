@@ -455,7 +455,7 @@ if(!function_exists('send_sms')){
             {
                 echo 'error:' . curl_error($ch);die;
             }
-            return $output;
+            return $output;die;
 
         }
     }
