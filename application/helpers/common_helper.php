@@ -259,7 +259,7 @@ if (!function_exists('create_excel_error_file'))
     }
 }
 
-if(!function_exists('send_sms')){
+/*if(!function_exists('send_sms')){
     function send_sms($name='',$mobile='') {
         $feedid='';
         $username='';
@@ -284,7 +284,7 @@ if(!function_exists('send_sms')){
 
         }
     }
-}
+}*/
 
 if (!function_exists('send_push_notification')){
     function send_push_notification($data, $message)
