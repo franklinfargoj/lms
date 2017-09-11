@@ -113,7 +113,7 @@ class Leads extends CI_Controller
                     //send sms
                     $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
                     send_sms($this->input->post('contact_no'),$message);
-
+die;
                     //Push notification
                     //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
 
