@@ -265,9 +265,9 @@ class Api extends REST_Controller
                 if ($k == 'phone_no') {
                     $phone_extra = '|max_length[10]|min_length[10]|numeric';
                 }
-                if ($k == 'customer_name') {
-                    $cust_name_extra = '|callback_alphaNumeric';
-                }
+//                if ($k == 'customer_name') {
+//                    $cust_name_extra = '|callback_alphaNumeric';
+//                }
                 $this->form_validation->set_rules($k, '', 'required' . $phone_extra . $cust_name_extra);
                 if ($this->form_validation->run() === FALSE) {
                     $error[] = form_error($k);
