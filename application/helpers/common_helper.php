@@ -443,7 +443,7 @@ if(!function_exists('send_sms')){
             $CI->load->model('Sms_model','sms');
             $credentials = $CI->sms->get_sms_credentials();
             $password = $CI->encrypt->decode($credentials['password']);
-            $url = $credentials['url'].'?username='.$credentials['username'].'&password='.$password.'&to='.$mobile.'&udh=0&from=DENABK&text='.$message;
+            $url = $credentials['url'].'?username='.$credentials['username'].'&password='.$password.'&to='.$mobile.'&udh=&from=DENABK&text='.$message;
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_HEADER, 0);
