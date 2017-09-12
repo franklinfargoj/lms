@@ -255,21 +255,21 @@ $lead_status = $this->config->item('lead_status');
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['zone_name']) ? $value['zone_name'] : '?';
+                                    echo isset($value['zone_name']) ? $value['zone_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['branch_name']) ? $value['branch_name'] : '?';
+                                    echo isset($value['branch_name']) ? $value['branch_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['employee_name']) ? $value['employee_name'] : '?';
+                                    echo isset($value['employee_name']) ? $value['employee_name'] : '';
                                 ?>
                             </td>
                             <?php }?>

@@ -24,8 +24,7 @@ class Reports extends CI_Controller
 
     public function index($action,$view = null,$zone_id = null,$branch_id = null,$export = 'no')
     {
-        $this->make_bread->add('Reports', '', 0);   
-        $arrData['breadcrumb'] = $this->make_bread->output();
+        $this->make_bread->add('Reports', 'reports/view', 0);
         $arrData['view'] = $view;
         $arrData['zone_id'] = decode_id($zone_id);
         $arrData['branch_id'] = decode_id($branch_id);
@@ -73,6 +72,7 @@ class Reports extends CI_Controller
         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
         $arrData['category_list'] = dropdown($category_list,'All');
         $arrData['lead_sources'] = $this->Lead->get_enum(Tbl_Leads,'lead_source');
+        $arrData['breadcrumb'] = $this->make_bread->output();
         return load_view('Reports/'.$action,$arrData);
     }
 
@@ -84,7 +84,7 @@ class Reports extends CI_Controller
     }
 
     private function pendancy_leads_reports($arrData){
-
+        $this->make_bread->add('Pendancy Leads Report', '', 0);
         $login_user = get_session();
         //Build Input Parameter
         $action = 'list';
@@ -265,7 +265,7 @@ class Reports extends CI_Controller
 
 
     private function leads_type_reports($arrData){
-
+        $this->make_bread->add('Leads Type Report', '', 0);
         $login_user = get_session();
         $lead_type = array_keys($this->config->item('lead_type'));
         //Build Input Parameter
@@ -447,7 +447,7 @@ class Reports extends CI_Controller
     }
 
     private function leads_generated($arrData){
-
+        $this->make_bread->add('Leads Generated Report', '', 0);
         $login_user = get_session();
         $lead_status = array_keys($this->config->item('lead_status'));
         //Build Input Parameter
@@ -631,7 +631,7 @@ class Reports extends CI_Controller
     }
 
     private function leads_assigned($arrData){
-
+        $this->make_bread->add('Leads Assigned Report', '', 0);
         $login_user = get_session();
         $lead_status = array_keys($this->config->item('lead_status'));
         //Build Input Parameter
@@ -815,7 +815,7 @@ class Reports extends CI_Controller
     }
 
     private function leads_generated_vs_converted($type,$arrData){
-
+        $this->make_bread->add('Leads Generated Vs Converted Report', '', 0);
         $login_user = get_session();
         $lead_status = array_keys($this->config->item('lead_status'));
         //Build Input Parameter
@@ -1033,7 +1033,7 @@ class Reports extends CI_Controller
     }
 
     private function leads_classification($arrData){
-
+        $this->make_bread->add('Leads Classifcation Report', '', 0);
         $login_user = get_session();
         //Build Input Parameter
         $action = 'list';
@@ -1205,7 +1205,7 @@ class Reports extends CI_Controller
     }
 
     private function usage($arrData){
-
+        $this->make_bread->add('Usage Report', '', 0);
         $login_user = get_session();
         //Build Input Parameter
         $action = 'list';

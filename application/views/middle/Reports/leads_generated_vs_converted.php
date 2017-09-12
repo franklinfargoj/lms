@@ -247,21 +247,21 @@
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['zone_id']) ? $value['zone_name'] : 'All';
+                                    echo isset($value['zone_name']) ? $value['zone_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['branch_id']) ? $value['branch_name'] : 'All';
+                                    echo isset($value['branch_name']) ? $value['branch_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['employee_id']) ? $value['employee_name'] : '';
+                                    echo isset($value['employee_name']) ? $value['employee_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
