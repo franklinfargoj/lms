@@ -56,7 +56,7 @@ $lead_type = $this->config->item('lead_type');
                     <span class="lead-num"> : <?php echo count($leads);?></span>
                 </div>
                 <div class="float-right">
-                    <a href="">
+                    <a href="<?php echo base_url('leads/export_excel_listing');?>">
                         <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
                     </a>
                 </div>

@@ -12,10 +12,7 @@ $lead_status = $this->config->item('lead_status');
         </h3>
     </div>
 </div>
-
-<div class="lead-form">
-    <span class="bg-top"></span>
-    <?php 
+<?php 
         //Form
         $attributes = array(
             'role' => 'form',
@@ -32,6 +29,8 @@ $lead_status = $this->config->item('lead_status');
 
         echo form_hidden($data);
     ?>
+<div class="lead-form">
+    <span class="bg-top"></span>
     <div class="lead-form-left">
         <div class="form-control">
             <label>Start Date:</label>   
@@ -157,7 +156,6 @@ $lead_status = $this->config->item('lead_status');
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-    <?php echo form_close();?>
     <span class="bg-bottom"></span>
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
@@ -168,8 +166,7 @@ $lead_status = $this->config->item('lead_status');
     $('.loader').show();
 </script>
 <!-- BEGIN LEADS -->
-<div id="result" style="display:none;">
-    <div class="lead-top">
+    <div class="lead-top result" style="display:none;">
         <div class="container clearfix">
             <div class="float-left">
                 <span class="total-lead">
@@ -178,12 +175,17 @@ $lead_status = $this->config->item('lead_status');
                 <span class="lead-num"> : <?php echo $Total;?></span>
             </div>
             <div class="float-right">
-                <a href="<?php echo base_url('leads/export_excel_listing/');?>">
+                <a href="javascript:void(0);" class="export_to_excel">
                     <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
+                </a>
+                <a href="javascript:void(0);" class="export_national">
+                    Download National Data
                 </a>
             </div>
         </div>
     </div>
+    <?php echo form_close();?>
+<div class="result" style="display:none;">
     <div class="page-content">
         <span class="bg-top"></span>
         <div class="inner-content">
@@ -253,21 +255,21 @@ $lead_status = $this->config->item('lead_status');
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['zone_id']) ? $value['zone_id'] : 'All';
+                                    echo isset($value['zone_name']) ? $value['zone_name'] : '?';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['branch_id']) ? $value['branch_id'] : 'All';
+                                    echo isset($value['branch_name']) ? $value['branch_name'] : '?';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['created_by']) ? $value['created_by'] : '';
+                                    echo isset($value['employee_name']) ? $value['employee_name'] : '?';
                                 ?>
                             </td>
                             <?php }?>
@@ -430,19 +432,34 @@ $lead_status = $this->config->item('lead_status');
                     return false;
                 }else{
                     $('.custom_button').attr('disabled','disabled');
-                    $('#result').hide();
+                    $('.result').hide();
                     $('.no_result').hide();
                     $('.loader').show();
                     setTimeout(function(){        
                         form.submit();
-                    }, 2000);
+                        $('.custom_button').removeAttr('disabled');
+                        $('.result').show();
+                        $('.loader').hide();
+                    }, 1000);
                 }
             }
         });
 
         setTimeout(function(){        
             $('.loader').hide();
-            $('#result').show();
+            $('.result').show();
         }, 2000);
+
+        $('.export_to_excel').click(function(){
+            var input = "<input type='hidden' id='export' name='export' value='yes'/>";
+            $(this).append(input);
+            $('#search_form').submit();
+        });
+
+        $('.export_national').click(function(){
+            var input = "<input type='hidden' id='export' name='export' value='yes'/><input type='hidden' id='national' name='national' value='yes'/>";
+            $(this).append(input);
+            $('#search_form').submit();
+        });
     });
 </script>
