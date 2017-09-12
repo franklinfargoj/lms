@@ -81,6 +81,11 @@
 						Calculator
 					</a>
 				</li>
+                <li class="<?php echo (($controller == 'dashboard') && ($method == 'fd_calculator')) ? 'active' : ''?>">
+					<a href="<?php echo site_url('dashboard/fd_calculator')?>">
+						Fd Calculator
+					</a>
+				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'product_guide') ? 'active' : ''?>">

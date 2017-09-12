@@ -420,4 +420,17 @@ class Lead  extends CI_Model
 
     }
 
+    public function get_all_branch_detail(){
+        $this->db->select('z.id AS z_id,z.code AS zone_code,z.name AS zone_name,s.id AS s_id,s.code AS state_code,s.name AS state_name,d.id AS d_id,d.code AS dist_code,d.name AS dist_name,b.id AS b_id,b.code AS branch_code,b.name AS branch_name');
+        $this->db->from(Tbl_district . ' AS d');
+        $this->db->join(Tbl_branch . ' AS b', 'b.district_code= d.code');
+        $this->db->join(Tbl_state . ' AS s', 's.code = d.state_code');
+        $this->db->join(Tbl_zone . ' AS z', 'z.code = s.zone_code');
+        $result = $this->db->get()->result_array();
+        if(!empty($result)){
+            return $result;
+        }
+        return false;
+    }
+
 }

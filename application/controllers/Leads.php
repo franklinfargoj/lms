@@ -46,8 +46,6 @@ class Leads extends CI_Controller
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
 
-        $session_data = get_session();
-
         $arrData['category_selected'] = '';
         $arrData['product_selected'] = '';
         $arrData['products'] = '';
