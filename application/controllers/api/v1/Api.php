@@ -1436,6 +1436,8 @@ class Api extends REST_Controller
             $records = json_decode($records_response);
             $data = array('device_token' => $device_token,
                 'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
+                'branch_id' => $records->dbk_lms_emp_record1->deptid,
+                'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
                 'device_type' => $device_type
             );
             $this->Login_model->insert_login_log($data); // login log
@@ -1566,23 +1568,32 @@ class Api extends REST_Controller
             case 'BM':
                 $where_month_Array = array('branch_id' => $ids,
                     'MONTH(created_on)' => date('m'));
-                $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
+                $where_year_Array = array('branch_id' => $ids,
+                    'YEAR(created_on)' => date('Y'));
+                $generated['monthly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
+                $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
+                $generated_key_value_year = array();
                 $final = array();
-                foreach ($generated['generated_leads'] as $k => $v) {
+                foreach ($generated['monthly_generated_leads'] as $k => $v) {
                     $generated_key_value[$v['created_by']] = $v['total'];
+                }
+                foreach ($generated['yearly_generated_leads'] as $k => $v) {
+                    $generated_key_value_year[$v['created_by']] = $v['total'];
                 }
                 foreach ($result as $key => $val) {
                     if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => $val->DESCR30,
-                            'total_generated' => 0);
+                            'total_generated_mtd' => 0,
+                            'total_generated_ytd' => 0);
                     } else {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => $val->DESCR30,
-                            'total_generated' => $generated_key_value[$val->DESCR10]);
+                            'total_generated_mtd' => $generated_key_value[$val->DESCR10],
+                            'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
                     }
                     $final[$val->DESCR10] = $push_generated;
                 }
@@ -1591,11 +1602,19 @@ class Api extends REST_Controller
                     $where_month_Array = array('employee_id' => $value['created_by'],
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
+                    $where_year_Array = array('employee_id' => $value['created_by'],
+                        'YEAR(created_on)' => date('Y'),
+                        'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
+                    $converted_yearly = $this->Lead->get_converted_lead_bm_zm($where_year_Array);
                     if (empty($converted)) {
                         $converted = 0;
                     }
-                    $final[$value['created_by']]['total_converted'] = $converted;
+                    if (empty($converted_yearly)) {
+                        $converted_yearly = 0;
+                    }
+                    $final[$value['created_by']]['total_converted_mtd'] = $converted;
+                    $final[$value['created_by']]['total_converted_ytd'] = $converted_yearly;
                 }
                 $refinal = array_values($final);
                 return $refinal;
@@ -1605,23 +1624,32 @@ class Api extends REST_Controller
                 $where_month_Array = array('zone_id' => $ids,
                     'MONTH(created_on)' => date('m'));
 
-                $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
+                $where_year_Array = array('zone_id' => $ids,
+                    'YEAR(created_on)' => date('Y'));
+                $generated['monthly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
+                $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
+                $generated_key_value_year = array();
                 $final = array();
-                foreach ($generated['generated_leads'] as $k => $v) {
+                foreach ($generated['monthly_generated_leads'] as $k => $v) {
                     $generated_key_value[$v['branch_id']] = $v['total'];
+                }
+                foreach ($generated['yearly_generated_leads'] as $k => $v) {
+                    $generated_key_value_year[$v['branch_id']] = $v['total'];
                 }
                 foreach ($result as $key => $val) {
                     if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => $val->DESCR30,
-                            'total_generated' => 0);
+                            'total_generated' => 0,
+                            'total_converted' => 0);
                     } else {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => $val->DESCR30,
-                            'total_generated' => $generated_key_value[$val->DESCR10]);
+                            'total_generated_mtd' => $generated_key_value[$val->DESCR10],
+                            'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
                     }
                     $final[$val->DESCR10] = $push_generated;
                 }
@@ -1631,11 +1659,19 @@ class Api extends REST_Controller
                     $where_month_Array = array('branch_id' => $value['created_by'],
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
+                    $where_year_Array = array('branch_id' => $value['created_by'],
+                        'YEAR(created_on)' => date('Y'),
+                        'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
+                    $converted_yearly = $this->Lead->get_converted_lead_bm_zm($where_year_Array);
                     if (empty($converted)) {
                         $converted = 0;
                     }
-                    $final[$value['created_by']]['total_converted'] = $converted;
+                    if (empty($converted_yearly)) {
+                        $converted_yearly = 0;
+                    }
+                    $final[$value['created_by']]['total_converted_mtd'] = $converted;
+                    $final[$value['created_by']]['total_converted_ytd'] = $converted_yearly;
                 }
                 $refinal = array_values($final);
                 return $refinal;
@@ -1644,23 +1680,32 @@ class Api extends REST_Controller
             case 'GM':
                 $where_generated_Array = array('zone_id !=' => NULL,
                     'MONTH(created_on)' => date('m'));
+                $where_year_Array = array('zone_id !=' => NULL,
+                    'YEAR(created_on)' => date('Y'));
                 $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_generated_Array);
+                $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
+                $generated_key_value_year = array();
                 $final = array();
                 foreach ($generated['generated_leads'] as $k => $v) {
                     $generated_key_value[$v['zone_id']] = $v['total'];
+                }
+                foreach ($generated['yearly_generated_leads'] as $k => $v) {
+                    $generated_key_value_year[$v['zone_id']] = $v['total'];
                 }
                 foreach ($result as $key => $val) {
                     if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => $val->DESCR30,
-                            'total_generated' => 0);
+                            'total_generated_mtd' => 0,
+                            'total_generated_ytd' => 0);
                     } else {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => $val->DESCR30,
-                            'total_generated' => $generated_key_value[$val->DESCR10]);
+                            'total_generated_mtd' => $generated_key_value[$val->DESCR10],
+                            'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
                     }
                     $final[$val->DESCR10] = $push_generated;
                 }
@@ -1670,11 +1715,19 @@ class Api extends REST_Controller
                     $where_month_Array = array('zone_id' => $value['created_by'],
                         'MONTH(created_on)' => date('m'),
                         'status' => 'converted');
+                    $where_year_Array = array('zone_id' => $value['created_by'],
+                        'YEAR(created_on)' => date('Y'),
+                        'status' => 'converted');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
+                    $converted_yearly = $this->Lead->get_converted_lead_bm_zm($where_year_Array);
                     if (empty($converted)) {
                         $converted = 0;
                     }
-                    $final[$value['created_by']]['total_converted'] = $converted;
+                    if (empty($converted_yearly)) {
+                        $converted_yearly = 0;
+                    }
+                    $final[$value['created_by']]['total_converted_mtd'] = $converted;
+                    $final[$value['created_by']]['total_converted_ytd'] = $converted_yearly;
                 }
                 $refinal = array_values($final);
                 return $refinal;
