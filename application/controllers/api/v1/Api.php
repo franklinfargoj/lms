@@ -1093,7 +1093,7 @@ class Api extends REST_Controller
                          *****************************************************************/
                         if (isset($params['reroute_to']) && !empty($params['reroute_to'])) {
                             $lead_status_data['employee_id'] = $params['reroute_to'];
-                            $lead_status_data['employee_name'] = $params['employee_name'];
+                            $lead_status_data['employee_name'] = $params['reroute_to_name'];
                             if ($leads_data['status'] != $params['status']) {
                                 $lead_status_data['status'] = $params['status'];
                             } else {
