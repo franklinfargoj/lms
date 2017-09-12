@@ -1058,9 +1058,7 @@ class Api extends REST_Controller
                 $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                 $leads_data = $leadsAssign[0];
                 $response1['status'] = 'success';
-                if (($leads_data['status'] != $params['status']) ||
-                    (isset($params['reroute_to']) && !empty($params['reroute_to']))
-                ) {
+                if (($leads_data['status'] != $params['status'])) {
                     //Set current entry as old (set is_updated = 0)
                     $lead_status_data = array('is_updated' => 0);
                     $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
