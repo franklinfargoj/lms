@@ -354,7 +354,7 @@ function get_session(){
     //return $CI->session->userdata();
 
     $designation = get_designation($CI->session->userdata('designation_id'));
-    if($designation == false){
+    if($CI->session->userdata('admin_id') == '1111111'){
         $designation = $CI->session->userdata('admin_type');
     }
     $CI->session->set_userdata('admin_type',$designation);
