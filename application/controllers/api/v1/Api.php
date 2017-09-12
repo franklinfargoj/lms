@@ -2161,6 +2161,18 @@ class Api extends REST_Controller
                 $res = array('result' => True,
                     'data' => array('Lead Status and Lead Identification and Reminder Save Successfully'));
                 returnJson($res);
+            }elseif ($result1['status'] == 'success' && $result2['status'] == 'success') {
+                $res = array('result' => True,
+                    'data' => array('Lead Status and Lead Identification Save Successfully'));
+                returnJson($res);
+            }elseif ($result1['status'] == 'success' && $result3['status'] == 'success') {
+                $res = array('result' => True,
+                    'data' => array('Lead Status and Lead Identification Reminder Save Successfully'));
+                returnJson($res);
+            }elseif ($result2['status'] == 'success' && $result3['status'] == 'success') {
+                $res = array('result' => True,
+                    'data' => array('Lead Identification and Reminder Save Successfully'));
+                returnJson($res);
             }elseif($result1['status'] == 'success'){
                 $res = array('result' => True,
                     'data' => array('Lead Status Updated Successfully'));
