@@ -94,8 +94,11 @@ class Login extends CI_Controller {
                                 // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
                                 $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$auth->DBK_LMS_AUTH->username);
                                 $records = json_decode($records_response);
+                                //pe($records);
                                 $data = array('device_token' => NULL,
                                     'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
+                                    'branch_id' => $records->dbk_lms_emp_record1->deptid,
+                                    'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
                                     'device_type' => NULL
                                 );
                                 $this->master->insert_login_log($data); // login log
@@ -117,6 +120,8 @@ class Login extends CI_Controller {
                                     'email_id' => $records->dbk_lms_emp_record1->email,
                                     'list'=>$records->dbk_lms_emp_record1->DBK_LMS_COLL
                                 );
+/*pe($result);
+exit;*/
                                 $this->set_session($result);
                                 $this->session->set_flashdata('success','Login success');
                                 redirect('dashboard');

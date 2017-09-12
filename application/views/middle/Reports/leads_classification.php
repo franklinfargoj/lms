@@ -1,30 +1,34 @@
+<?php
+$lead_type = $this->config->item('lead_type');
+$lead_status = $this->config->item('lead_status');
+?>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- END PAGE LEVEL STYLES -->
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Generated Vs Converted Report
+            Leads Classification Report
         </h3>
     </div>
 </div>
 <?php 
-        //Form
-        $attributes = array(
-            'role' => 'form',
-            'id' => 'search_form',
-            'class' => 'form',
-            'autocomplete' => 'off'
-        );
-        echo form_open(site_url().'reports/index/leads_generated_vs_converted', $attributes);
-        $data = array(
-            'view'   => isset($view) ? $view : '',
-            'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
-            'branch_id' => isset($branch_id) ? encode_id($branch_id) : ''
-        );
+    //Form
+    $attributes = array(
+        'role' => 'form',
+        'id' => 'search_form',
+        'class' => 'form',
+        'autocomplete' => 'off'
+    );
+    echo form_open(site_url().'reports/index/leads_classification', $attributes);
+    $data = array(
+        'view'   => isset($view) ? $view : '',
+        'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
+        'branch_id' => isset($branch_id) ? encode_id($branch_id) : ''
+    );
 
-        echo form_hidden($data);
-    ?>
+    echo form_hidden($data);
+?>
 <div class="lead-form">
     <span class="bg-top"></span>
     <div class="lead-form-left">
@@ -162,19 +166,14 @@
     $('.loader').show();
 </script>
 <!-- BEGIN LEADS -->
+
 <div class="lead-top result" style="display:none;">
     <div class="container clearfix">
         <div class="float-left">
             <span class="total-lead">
-                Total Generated Leads
+                Total Ticket Size (Rs)
             </span>
-            <span class="lead-num"> : <?php echo $G_Total;?></span>
-        </div>
-        <div class="float-right">
-            <span class="total-lead">
-                Total Converted Leads
-            </span>
-            <span class="lead-num"> : <?php echo $C_Total;?></span>
+            <span class="lead-num"> : <?php echo $Total;?></span>
         </div>
         <div class="float-right">
             <a href="javascript:void(0);" class="export_to_excel">
@@ -223,10 +222,7 @@
                                 Product Name
                             </th>
                             <th align="center">
-                                Total Leads Generated
-                            </th>
-                            <th align="center">
-                                Total Leads Converted
+                                Ticket Size (Rs)
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
@@ -247,21 +243,21 @@
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['zone_id']) ? $value['zone_name'] : 'All';
+                                    echo isset($value['employee_name']) ? $value['zone_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['branch_id']) ? $value['branch_name'] : 'All';
+                                    echo isset($value['employee_name']) ? $value['branch_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['employee_id']) ? $value['employee_name'] : '';
+                                    echo isset($value['employee_name']) ? $value['employee_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
@@ -282,12 +278,7 @@
                             </td>
                             <td align="center">
                                 <?php 
-                                    echo isset($value['generated_count']) ? $value['generated_count'] : 0;
-                                ?>
-                            </td>
-                            <td align="center">
-                                <?php 
-                                    echo isset($value['converted_count']) ? $value['converted_count'] : 0;
+                                    echo $value['ticket'];
                                 ?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM'))){
@@ -305,7 +296,7 @@
                                         if($view == 'branch' || $view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_generated_vs_converted/branch'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_classification/branch'.$param)?>">
                                         Branch View
                                     </a>
                                     <span>/</span> 
@@ -318,7 +309,7 @@
                                         if($view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_generated_vs_converted/employee'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_classification/employee'.$param)?>">
                                         Employee View
                                     </a> 
                                 <?php

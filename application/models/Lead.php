@@ -420,4 +420,15 @@ class Lead  extends CI_Model
 
     }
 
+    public function get_employee_dump($select,$where,$group_by,$table){
+            $this->db->select($select,TRUE);
+            $this->db->from($table);
+            if(!empty($where)){
+                $this->db->where($where);
+            }
+            $this->db->group_by($group_by);
+            $Q = $this->db->get();
+            return $Q->result();
+    }
+
 }
