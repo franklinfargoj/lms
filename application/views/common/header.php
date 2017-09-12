@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$controller =  $this->router->fetch_class();
 	$method =  $this->router->fetch_method();
     $param1 = $this->uri->segment(3,0);

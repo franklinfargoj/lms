@@ -9,10 +9,10 @@ $lead_type = $this->config->item('lead_type');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            <?php 
+            <?php
                 if(isset($status)){
                 $lead_status = $this->config->item('lead_status');
-                        echo $lead_status[$status];    
+                        echo $lead_status[$status];
                 }else{
                     echo ucwords($type);
                 }
@@ -22,28 +22,13 @@ $lead_type = $this->config->item('lead_type');
         </h3>
     </div>
 </div>
-<!-- <div class="lead-top">
-    <div class="container clearfix">
-        <div class="float-left">
-            <span class="total-lead">
-                Total
-            </span>
-            <span class="lead-num"> : <?php echo count($leads);?></span>
-        </div>
-        <div class="float-right">
-            <?php
-            $param1 = isset($type) ? $type.'/' : '';
-            $param2 = isset($till) ? $till.'/' : '';
-            $param3 = isset($status) ? $status.'/' : '';
-            $param4 = isset($param) ? $param.'/' : '';
-            ?>
-            <a href="<?php echo base_url('leads/export_excel_listing/'
-                .$param1.$param2.$param3.$param4);?>">
-                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
-            </a>
-        </div>
-    </div>
-</div> -->
+<?php
+$param1 = isset($type) ? $type.'/' : '';
+$param2 = isset($till) ? $till.'/' : '';
+$param3 = isset($status) ? $status.'/' : '';
+$param4 = isset($param) ? $param.'/' : '';
+?>
+
 <div class="page-content">
     <span class="bg-top"></span>
     <div class="inner-content">
@@ -56,8 +41,9 @@ $lead_type = $this->config->item('lead_type');
                     </span>
                     <span class="lead-num"> : <?php echo count($leads);?></span>
                 </div>
+
                 <div class="float-right">
-                    <a href="">
+                    <a href="<?php echo base_url('leads/export_excel_listing/'.$param1.$param2.$param3.$param4);?>">
                         <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
                     </a>
                 </div>

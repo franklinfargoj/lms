@@ -15,6 +15,30 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
             break;
     }
 }
+$input = get_session();
+$data_state[''] = 'Select State';
+if ($states != '') {
+    foreach ($states as $key => $value) {
+        $data_state[$value['code']] = $value['name'];
+    }
+}
+
+$data_branch[''] = 'Select Branch';
+if ($branches != '') {
+    foreach ($branches as $key => $value) {
+        $data_branch[$value['code']] = $value['name'];
+    }
+}
+
+$data_district[''] = 'Select District';
+if ($districts != '') {
+    foreach ($districts as $key => $value) {
+        $data_district[$value['code']] = $value['name'];
+    }
+}
+$state_extra = 'id="state_id"';
+$district_extra = 'id="district_id"';
+$branch_extra = 'id="branch_id"';
 ?>
 <div class="page-title">
     <div class="container clearfix">
@@ -64,7 +88,7 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
                                 <label>Assign To:</label> <span class="detail-label"><?php echo ucwords($leads[0]['employee_name']);?></span>
                             </div>
                             <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('EM','BM')))){?>
-                                <div class="form-control">
+                                <!-- <div class="form-control">
                                     <label>Interest in other product</label>
                                     <div class="radio-control">
                                          <?php 
@@ -92,7 +116,7 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
                                             echo form_dropdown('product_category_id', $options , '',$js);    
                                         }
                                     ?>
-                                </div>
+                                </div> -->
                                 <div class="form-control">
                                     <label>Lead Identified as :</label> 
                                     <span class="detail-label">
@@ -193,7 +217,36 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
                                 <p class="remark-notes"><?php echo isset($leads[0]['remark']) ? $leads[0]['remark'] : 'NA';?></p>
                             </div>
                             <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')))){?>
-                                <div class="form-control">
+                            <div class="form-control">
+                                <label>Reroute:</label>
+                                <div class="radio-control">
+                                    <input type="radio" id="is_own_branch" name="is_own_branch"
+                                           value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
+                                    <label>Own Branch</label>
+                                </div>
+                                <div class="radio-control">
+                                    <input type="radio" name="is_own_branch" id="is_other_branch"
+                                           value="0" <?php echo set_radio('is_own_branch', '0'); ?> />
+                                    <label>Other Branch</label>
+                                </div>
+                                <?php echo form_error('is_own_branch'); ?>
+                            </div>
+                                <div id="state" class="form-control">
+                                    <label>State:</label>
+                                    <?php echo form_dropdown('state_id', $data_state,$input['state_id'],''.$state_extra) ?>
+                                    <?php echo form_error('state_id'); ?>
+                                </div>
+                                <div id="district" class="form-control">
+                                    <label>District:</label>
+                                    <?php echo form_dropdown('district_id', $data_district,$input['district_id'],''.$district_extra) ?>
+                                    <?php echo form_error('district_id'); ?>
+                                </div>
+                                <div id="branch" class="form-control">
+                                    <label>Branch:</label>
+                                    <?php echo form_dropdown('branch_id', $data_branch,$input['branch_id'],''.$branch_extra) ?>
+                                    <?php echo form_error('branch_id'); ?>
+                                </div>
+                                <div class="form-control" id="reroute">
                                     <label>Reroute To:</label>   
                                     <select name="reroute_to">
                                         <option value="">Select Employee</option>
@@ -314,6 +367,15 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
                             return false
                         }
                     }
+                },
+                state_id: {
+                    required: true
+                },
+                district_id: {
+                    required: true
+                },
+                branch_id: {
+                    required: true
                 }
             },
             messages: {
@@ -328,7 +390,77 @@ if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identificat
                 },
                 lead_identification : {
                     required: "Please select lead identification"
+                },
+                district_id: {
+                    required: "Please select district"
+                },
+                state_id: {
+                    required: "Please select state"
+                },
+                branch_id: {
+                    required: "Please select branch"
                 }
+            }
+        });
+    });
+
+    var base_url = "<?php echo base_url();?>";
+    if ($('#is_own_branch').is(':checked')) {
+        $("#state").hide();
+        $("#branch").hide();
+        $("#district").hide();
+        $("#reroute").show();
+    }
+
+    $('#is_other_branch').click(function () {
+        var dist = '<select name="district_id" id = "district_id"><option value="">Select District</option></select>';
+        var branch = '<select name="branch_id" id = "branch_id"><option value="">Select Branch</option></select>';
+        $("#state").show();
+        $("#branch").show();
+        $("#district").show();
+        $("#reroute").hide();
+        $('select[name="state_id"]').val('');
+        $('select[name="branch_id"]').html(branch);
+        $('select[name="district_id"]').html(dist);
+    });
+    $('#is_own_branch').click(function () {
+        $("#state").hide();
+        $("#branch").hide();
+        $("#district").hide();
+        $("#reroute").show();
+    });
+    $('#state_id').change(function () {
+        var state_code = $('#state_id').val();
+        console.log(state_code);
+        $.ajax({
+            method:'POST',
+            url: base_url + 'leads/district_list',
+            data:{
+                '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                state_code:state_code,
+                select_label:'Select District'
+            }
+        }).success(function (resp) {
+            if(resp){
+                $("#district_id").html(resp);
+            }
+        });
+    });
+
+    $('#district_id').change(function () {
+        var district_code = $('#district_id').val();
+        $.ajax({
+            method:'POST',
+            url: base_url + 'leads/branch_list',
+            data:{
+                '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                district_code:district_code,
+                select_label:'Select Branch'
+            }
+        }).success(function (resp) {
+            if(resp){
+                console.log(resp);
+                $("#branch_id").html(resp);
             }
         });
     });

@@ -108,7 +108,6 @@ class Lead  extends CI_Model
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');
         $this->db->where('db_lead_assign.lead_id',NULL);
         $this->db->where('db_leads.branch_id',$login_user['branch_id']);
-        $this->db->where('db_leads.created_on >= DATE_ADD( CURDATE( ) , INTERVAL -45 DAY )');
         if(!empty($lead_status)){
             $this->db->where('db_leads.lead_source',$lead_status);
         }
@@ -405,7 +404,7 @@ class Lead  extends CI_Model
     }
 
     public function unassigned_leads_api($lead_status = '',$branch_id = ''){
-        $this->db->select('db_leads.*,db_master_products.title as product_title');
+        $this->db->select('db_leads.*,DATEDIFF(CURDATE( ),db_leads.created_on) as elapsed_day,db_master_products.title as product_title');
         $this->db->from('db_leads');
         $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');

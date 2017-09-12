@@ -49,6 +49,17 @@ class Leads extends CI_Controller
         $arrData['category_selected'] = '';
         $arrData['product_selected'] = '';
         $arrData['products'] = '';
+
+        $action = 'list';$table=Tbl_state;$select=array('code','name');
+        $arrData['states'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+
+        $action = 'list';$table=Tbl_district;$select=array('code','name');
+        $arrData['districts'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+
+        $action = 'list';$table=Tbl_branch;$select=array('code','name');
+        $arrData['branches'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+
+
         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
         $arrData['category'] = dropdown($category_list,'Select');
         if ($this->input->post("Submit") == "Submit") {
@@ -423,7 +434,7 @@ class Leads extends CI_Controller
         $table = Tbl_Leads;
         $join = array('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $group_by = array('db_leads.lead_source');
-        $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id'],Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day);
+        $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id'],Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
         $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
         $response = array();
         $keys=array('Walk-in'=>0,'Analytics'=>0,'Tie Ups'=>0,'Enquiry'=>0);
@@ -519,7 +530,14 @@ class Leads extends CI_Controller
         $arrData['type'] = $type;
         $arrData['till'] = $till;
         $lead_status = $this->config->item('lead_status');
+        $action = 'list';$table=Tbl_state;$select=array('code','name');
+        $arrData['states'] = $this->Lead->get_leads($action,$table,$select,'','','','');
 
+        $action = 'list';$table=Tbl_district;$select=array('code','name');
+        $arrData['districts'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+
+        $action = 'list';$table=Tbl_branch;$select=array('code','name');
+        $arrData['branches'] = $this->Lead->get_leads($action,$table,$select,'','','','');
         if($type == 'assigned'){
             if(($status != null) && ($lead_source != null)){
                 //Breadcumb creation for Lead Performance Source wise
@@ -609,24 +627,27 @@ class Leads extends CI_Controller
                     $lead_status = $this->input->post('lead_status');
                     $employee_id = $this->input->post('reroute_to');
                     
-                    /****************************************************************
-                                If interested in other product
-                    *****************************************************************/
-                        $interested = $this->input->post('interested');
-                        if($interested == 1){
-                            $this->form_validation->set_rules('product_category_id','Product Category', 'required');
-                            $this->form_validation->set_rules('product_id','Product', 'required');
-                            if ($this->form_validation->run() == FALSE)
-                            {    
-                                /*$arrData['has_error'] = 'has-error';
-                                return load_view("Products/Product/add",$arrData);*/
-                                redirect('leads/leads_list/assigned/ytd');
-                            }
-                            $product_category_id = $this->input->post('product_category_id');
-                            $product_id = $this->input->post('product_id');
-                            //Function call for add new leads in selected product category hierarchy
-                            $this->update_lead_product($lead_id,$product_category_id,$product_id);
-                        }
+                    if ($this->input->post('is_own_branch') == '0') {
+                        $action = 'list';
+                        $table = Tbl_Leads;
+                        $select = array(Tbl_Leads . '.*');
+                        $where = array(Tbl_Leads . '.id' => $lead_id);
+                        $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+                        $leads_data = $leadsAssign[0];
+                        $id = $leads_data['id'];
+                        $leads_data['reroute_from_branch_id'] = $leads_data['branch_id'];
+                        $leads_data['state_id'] = $this->input->post('state_id');
+                        $leads_data['branch_id'] = $this->input->post('branch_id');
+                        $leads_data['district_id'] = $this->input->post('district_id');
+                        unset($leads_data['id']);
+                        $this->Lead->insert_lead_data($leads_data,Tbl_Leads);
+                        $whereUpdate = array('lead_id'=>$id);
+                        $table = Tbl_LeadAssign;
+                        $data = array('is_updated'=>0);
+                        $this->Lead->update($whereUpdate,$table,$data);
+                    }
+                    else{
+
                     /*****************************************************************/
 
                     //Building input parameters for function to get_leads
@@ -641,23 +662,24 @@ class Leads extends CI_Controller
                     if(($leads_data['status'] != $lead_status) || (isset($employee_id) && !empty($employee_id))){
                         //Set current entry as old (set is_updated = 0)
                         $lead_status_data = array('is_updated' => 0);
-                        $response1 = $this->Lead->update_lead_data($where,$lead_status_data,Tbl_LeadAssign);
+                        $response1 = $this->Lead->update_lead_data($where, $lead_status_data, Tbl_LeadAssign);
 
-                        if($response1['status'] == 'success'){
+                        if ($response1['status'] == 'success') {
+
                             //Create new entry in table Lead Assign with changed status.
 
                             /****************************************************************
-                                                Update Lead Status
-                            *****************************************************************/
+                             * Update Lead Status
+                             *****************************************************************/
                             $lead_status_data = array(
-                                'lead_id'   => $leads_data['lead_id'],
+                                'lead_id' => $leads_data['lead_id'],
                                 'employee_id' => $leads_data['employee_id'],
                                 'employee_name' => $leads_data['employee_name'],
                                 'branch_id' => $leads_data['branch_id'],
                                 'district_id' => $leads_data['district_id'],
                                 'state_id' => $leads_data['state_id'],
                                 'zone_id' => $leads_data['zone_id'],
-                                'status' =>  $lead_status,
+                                'status' => $lead_status,
                                 'is_updated' => 1,
                                 'created_on' => date('y-m-d-H-i-s'),
                                 'created_by' => $login_user['hrms_id'],
@@ -666,24 +688,24 @@ class Leads extends CI_Controller
                             /*****************************************************************/
 
                             /****************************************************************
-                                                Reroute Lead
-                            *****************************************************************/
-                            if(isset($employee_id) && !empty($employee_id)){
-                                $explode_employee = explode('-',$employee_id);
+                             * Reroute Lead
+                             *****************************************************************/
+                            if (isset($employee_id) && !empty($employee_id)) {
+                                $explode_employee = explode('-', $employee_id);
                                 $lead_status_data['employee_id'] = $explode_employee[0];
                                 $lead_status_data['employee_name'] = $explode_employee[1];
-                                if($leads_data['status'] != $lead_status){
+                                if ($leads_data['status'] != $lead_status) {
                                     $lead_status_data['status'] = $lead_status;
-                                }else{
+                                } else {
                                     $lead_status_data['status'] = $leads_data['status'];
                                 }
                             }
                             /*****************************************************************/
 
-                            $this->Lead->insert_lead_data($lead_status_data,Tbl_LeadAssign);
+                            $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
                         }
                     }
-                    
+                }
                     /*****************************************************************
                                     Update Lead Identification
                     *****************************************************************/
@@ -948,6 +970,110 @@ class Leads extends CI_Controller
         $login_user = get_session();
         $data = $this->view($login_user,$arrData);
         export_excel($header_value,$data,$type);
+    }
+
+    /*
+     * district_list
+     * Fetches districts according to selected state.
+     * @author Gourav Thatoi
+     * @access public
+     * @param none
+     * @return json
+     */
+    public function district_list()
+    {
+        if ($this->input->post()) {
+            $state_id = $this->input->post("state_code");
+            $select_label = $this->input->post("select_label");
+            $whereArray = array('state_code'=> $state_id);
+            $action='list';$table=Tbl_district;$select=array('code','name');
+            $districts = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
+            $district_extra = 'id="district_id"';
+            if (!empty($districts)) {
+                $options[''] = $select_label;
+                foreach ($districts as $key => $value) {
+                    $options[$value['code']] = ucwords($value['name']);
+                }
+                $html = '<label>District:</label>';
+                $html .= form_dropdown('district_id', $options, '', $district_extra);
+            } else {
+                $options[''] = $select_label;
+                $html = '<label>District:</label>';
+                $html .= form_dropdown('district_id', $options, '', $district_extra);
+            }
+            echo $html;
+        }
+    }
+    /*
+     * branch_list
+     * Fetches districts according to selected state.
+     * @author Gourav Thatoi
+     * @access public
+     * @param none
+     * @return json
+     */
+    public function branch_list()
+    {
+        if ($this->input->post()) {
+            $district_code = $this->input->post("district_code");
+            $select_label = $this->input->post("select_label");
+            $whereArray = array('district_code'=> $district_code);
+            $action='list';$table=Tbl_branch;$select=array('code','name');
+            $branches = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
+            $branch_extra = 'id="branch_id"';
+            if (!empty($branches)) {
+                $options[''] = $select_label;
+                foreach ($branches as $key => $value) {
+                    $options[$value['code']] = ucwords($value['name']);
+                }
+                $html = '<label>Branch:</label>';
+                $html .= form_dropdown('branch_id', $options, '', $branch_extra);
+            } else {
+                $options[''] = $select_label;
+                $html = '<label>Branch:</label>';
+                $html .= form_dropdown('branch_id', $options, '', $branch_extra);
+            }
+            echo $html;
+        }
+    }
+    public function is_own_branch(){
+        if ($this->input->post()) {
+            $district_code = $this->input->post("district_code");
+            $branch_code = $this->input->post("branch_code");
+            $action='list';$table=Tbl_branch;$select=array('code','name');
+            $branches = $this->Lead->get_leads($action,$table,$select,'','','','');
+            $table = Tbl_district;
+            $districts = $this->Lead->get_leads($action,$table,$select,'','','','');
+            $branch_extra = 'id="branch_id"';
+            $district_extra = 'id="district_id"';
+            if (!empty($branches)) {
+                $options[''] = 'Select Branch';
+                foreach ($branches as $key => $value) {
+                    $options[$value['code']] = ucwords($value['name']);
+                }
+                $html = '<label>Branch:</label>';
+                $html .= form_dropdown('branch_id', $options, $branch_code, $branch_extra);
+            } else {
+                $options[''] = 'Select Branch';
+                $html = '<label>Branch:</label>';
+                $html .= form_dropdown('branch_id', $options, '', $branch_extra);
+            }
+            if (!empty($districts)) {
+                $dist_options[''] = 'Select District';
+                foreach ($districts as $key => $value) {
+                    $dist_options[$value['code']] = ucwords($value['name']);
+                }
+                $html2 = '<label>District:</label>';
+                $html2 .= form_dropdown('district_id', $dist_options, $district_code, $district_extra);
+            } else {
+                $dist_options[''] = 'Select District';
+                $html2 = '<label>District:</label>';
+                $html2 .= form_dropdown('district_id', $dist_options, '', $district_extra);
+            }
+            $data['html'] = $html;
+            $data['html2'] = $html2;
+            echo json_encode($data);
+        }
     }
 
 }
