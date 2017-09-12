@@ -1015,17 +1015,20 @@ class Api extends REST_Controller
                 returnJson($res);
             }
             $all_status = $this->config->item('lead_status');
-            if(!array_key_exists($params['status'],$all_status)){
-                $res = array('result'=>false,
-                    'data'=>array('Unknown status.'));
+            if (!array_key_exists($params['status'], $all_status)) {
+                $res = array('result' => false,
+                    'data' => array('Unknown status.'));
                 returnJson($res);
             }
+            if (isset($params['reroute_to_own_branch'])) {
+
             if ($params['reroute_to_own_branch'] == 0) {
-                if(!isset($params['branch_id']) || empty($params['branch_id']) ||
-                   !isset($params['district_id']) || empty($params['district_id']) ||
-                   !isset($params['state_id']) || empty($params['state_id'])){
-                    $res = array('result'=>False,
-                        'data'=>array('State id or District id or Branch id missing.'));
+                if (!isset($params['branch_id']) || empty($params['branch_id']) ||
+                    !isset($params['district_id']) || empty($params['district_id']) ||
+                    !isset($params['state_id']) || empty($params['state_id'])
+                ) {
+                    $res = array('result' => False,
+                        'data' => array('State id or District id or Branch id missing.'));
                     returnJson($res);
                 }
                 $action = 'list';
@@ -1040,13 +1043,12 @@ class Api extends REST_Controller
                 $leads_data['branch_id'] = $params['branch_id'];
                 $leads_data['district_id'] = $params['district_id'];
                 unset($leads_data['id']);
-                $this->Lead->insert_lead_data($leads_data,Tbl_Leads);
-                $whereUpdate = array('lead_id'=>$id);
+                $this->Lead->insert_lead_data($leads_data, Tbl_Leads);
+                $whereUpdate = array('lead_id' => $id);
                 $table = Tbl_LeadAssign;
-                $data = array('is_updated'=>0);
-                $this->Lead->update($whereUpdate,$table,$data);
-            }
-            else{
+                $data = array('is_updated' => 0);
+                $this->Lead->update($whereUpdate, $table, $data);
+            } else {
                 /*****************************************************************/
                 //Building input parameters for function to get_leads
                 $action = 'list';
@@ -1057,7 +1059,8 @@ class Api extends REST_Controller
                 $leads_data = $leadsAssign[0];
                 $response1['status'] = 'success';
                 if (($leads_data['status'] != $params['status']) ||
-                    (isset($params['reroute_to']) && !empty($params['reroute_to']))) {
+                    (isset($params['reroute_to']) && !empty($params['reroute_to']))
+                ) {
                     //Set current entry as old (set is_updated = 0)
                     $lead_status_data = array('is_updated' => 0);
                     $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
@@ -1097,7 +1100,7 @@ class Api extends REST_Controller
                                 $lead_status_data['status'] = $leads_data['status'];
                             }
                             $result4['status'] = 'reroute';
-                        }else{
+                        } else {
                             $res = array('result' => False,
                                 'data' => array('Reroute to parameter missing.'));
                             returnJson($res);
@@ -1106,6 +1109,7 @@ class Api extends REST_Controller
                         $result = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
                     }
                 }
+            }
             }
             $response2['status'] = '';
             /*****************************************************************
