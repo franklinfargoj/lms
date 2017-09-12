@@ -98,17 +98,17 @@ $param4 = isset($param) ? $param.'/' : '';
                     </tr>
                     <tr>
 
-                        <th>
+                        <th style="text-align:left">
                             Customer Name
                         </th>
-                        <th>
+                        <th style="text-align:left">
                             Product Name
                         </th>
                         <th align="center">
                             Elapsed Days
                         </th>
                         <?php if(!isset($status)){?>
-                        <th>
+                        <th style="text-align:left">
                             Status
                         </th>
                         <?php }?>
@@ -117,7 +117,7 @@ $param4 = isset($param) ? $param.'/' : '';
                             Followup date
                         </th>
                         <?php }?>
-                        <th>
+                        <th style="text-align:left">
                             Lead Identified As
                         </th>
                         <?php if($type == 'assigned'){?>
@@ -125,10 +125,10 @@ $param4 = isset($param) ? $param.'/' : '';
                             Intrested Other Product
                         </th> -->
                         <?php }?>
-                         <th>
+                         <th style="text-align:left">
                             Lead Source
                         </th>
-                       <th>
+                       <th style="text-align:left">
                             Details
                         </th>
                     </tr>
