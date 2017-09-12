@@ -29,7 +29,7 @@ class Api extends REST_Controller
         $this->load->model('Ticker_model', 'ticker');
         $this->load->model('Master_model');
         $this->load->model('Faq_model', 'faq');
-        $this->load->model('Notification_model','notification');
+        $this->load->model('Notification_model', 'notification');
     }
 
 
@@ -61,15 +61,15 @@ class Api extends REST_Controller
 
         $hrms_id = $user_id;
 
-        $action='count';
-        $table = Tbl_Notification.' as n';
-        $select= array('n.*');
-        $unread_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 0);
+        $action = 'count';
+        $table = Tbl_Notification . ' as n';
+        $select = array('n.*');
+        $unread_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 0);
         $order_by = "n.priority ASC";
-        $leads['unread_notification'] = $this->notification->get_notifications($action,$select,$unread_where,$table,$join = array(),$order_by);
+        $leads['unread_notification'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by);
 
-        $read_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 1);
-        $leads['read_notification'] = $this->notification->get_notifications($action,$select,$read_where,$table,$join = array(),$order_by);
+        $read_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 1);
+        $leads['read_notification'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by);
         if (isset($result['status']) && $result['status'] == 'success') {
 
             $data = array('device_token' => $device_token,
@@ -93,7 +93,7 @@ class Api extends REST_Controller
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . 'lead_id', NULL);
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'], Tbl_LeadAssign . 'lead_id', NULL);
                 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }
@@ -256,7 +256,7 @@ class Api extends REST_Controller
             'created_by_district_id' => 'Created By District',
             'created_by_zone_id' => 'Created By Zone', 'created_by_branch_id' => 'Created By Branch',
             'latitude' => 'Latitude', 'longitude' => 'Longitude',
-            'remark' => 'Remark','unique_id'=>'Unique Id');
+            'remark' => 'Remark', 'unique_id' => 'Unique Id');
         $phone_extra = '';
         $cust_name_extra = '';
         foreach ($params as $k => $value) {
@@ -275,7 +275,8 @@ class Api extends REST_Controller
                     $lead_data[$k] = $value;
                 }
                 unset($validations[$k]);
-                $phone_extra = '';$cust_name_extra = '';
+                $phone_extra = '';
+                $cust_name_extra = '';
             }
         }
         if (!empty($validations)) {
@@ -301,7 +302,7 @@ class Api extends REST_Controller
         }
         $lead_id = $this->Lead->add_leads($lead_data);
 
-        if(is_array($lead_id)){
+        if (is_array($lead_id)) {
             $result = array('result' => False,
                 'data' => array('wrong product id or category id .'));
             returnJson($result);
@@ -329,7 +330,7 @@ class Api extends REST_Controller
         $success_message = array('Lead added Successfully.');
         $result = array('result' => True,
             'data' => $success_message,
-            'unique id'=>$unique_id);
+            'unique id' => $unique_id);
         returnJson($result);
 
     }
@@ -342,10 +343,10 @@ class Api extends REST_Controller
     * @param array $pwd,$dataArray
     * @return String
     */
-    public function alphaNumeric($str,$name='')
+    public function alphaNumeric($str, $name = '')
     {
         if (!preg_match('/^[a-zA-Z0-9\s]+$/i', $str)) {
-            $this->form_validation->set_message('alphaNumeric', 'Please enter only alpha numeric characters for '.$name.'.');
+            $this->form_validation->set_message('alphaNumeric', 'Please enter only alpha numeric characters for ' . $name . '.');
             return FALSE;
         } else {
             return TRUE;
@@ -567,8 +568,45 @@ class Api extends REST_Controller
 
     public function masters_get()
     {
-        $lead_status['branch_details'] = dummy_branch_details();
+        $result = $this->Lead->get_all_branch_detail();
 
+        $response = [];
+        foreach ($result as $row) {
+            if (!array_key_exists($row['z_id'], $response)) {
+                $response[$row['z_id']] = [
+                    'zone_code' => $row['zone_code'],
+                    'zone_name' => $row['zone_name'],
+                    'states'=>[],
+                ];
+            }
+            if (!array_key_exists($row['s_id'], $response[$row['z_id']]['states'])) {
+                $response[$row['z_id']]['states'][$row['s_id']] = [
+                    'code' => $row['state_code'],
+                    'name' => $row['state_name'],
+                    'districts'=>[]
+                ];
+            }
+            if (!array_key_exists($row['d_id'], $response[$row['z_id']]['states'][$row['s_id']]['districts'])) {
+                $response[$row['z_id']]['states'][$row['s_id']]['districts'][$row['d_id']] = [
+                    'code' => $row['dist_code'],
+                    'name' => $row['dist_name'],
+                    'branches'=>[]
+                ];
+            }
+            $response[$row['z_id']]['states'][$row['s_id']]['districts'][$row['d_id']]['branches'][] = [
+                    'code' => $row['branch_code'],
+                    'name' => $row['branch_name']
+                ];
+
+        }
+
+        $lead_status['branch_details'] = array(array_values($response));
+
+        $table = Tbl_state . ' as s';
+        $join[] = array('table' => Tbl_district, 'on_condition' => Tbl_district . '.state_code = s.code', 'type' => 'left');
+
+        $table = Tbl_district . ' as d';
+        $join[] = array('table' => Tbl_branch, 'on_condition' => Tbl_branch . '.zone_code = d.code', 'type' => 'left');
         $final = array();
         $table = Tbl_Category;
         $join = array();
@@ -591,6 +629,7 @@ class Api extends REST_Controller
             $lead_status['category_products'] = $final;
             $lead_status['status'] = $this->config->item('lead_status');
             $lead_status['lead_source'] = $this->config->item('lead_source');
+            $lead_status['lead_identification'] = $this->config->item('lead_type');
         }
         if (!empty($lead_status)) {
             $res = array('result' => True,
@@ -796,7 +835,7 @@ class Api extends REST_Controller
             $table = Tbl_Leads;
             $join = array('db_lead_assign', 'db_lead_assign.lead_id = db_leads.id ', 'left');
             $group_by = array('db_leads.lead_source');
-            $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'], Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day);
+            $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'], Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
             $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select, $table, $join, $where, $group_by);
             $response = array();
             $keys = array('Walk-in' => "0", 'Analytics' => "0", 'Tie Ups' => "0", 'Enquiry' => "0");
@@ -828,7 +867,7 @@ class Api extends REST_Controller
     {
         $params = $this->input->post();
         if (!empty($params) && isset($params['lead_source']) && !empty($params['lead_source']
-            && isset($params['branch_id']) && !empty($params['branch_id']))) {
+                && isset($params['branch_id']) && !empty($params['branch_id']))) {
             $lead_source = $params['lead_source'];
             $branch_id = $params['branch_id'];
             $unassigned_leads = $this->Lead->unassigned_leads_api($lead_source, $branch_id);
@@ -844,7 +883,7 @@ class Api extends REST_Controller
     }
 
     /**
-     * unassigned_leads_list
+     * assigned_leads_list
      * loads the assigned leads list filtered by lead source
      * @autor Gourav Thatoi
      * @accss public
@@ -861,8 +900,8 @@ class Api extends REST_Controller
             $join = array();
             $join[] = array('table' => Tbl_Products . ' as p', 'on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id', 'type' => '');
 
-            $select = array('l.id', 'l.customer_name','l.contact_no', 'l.lead_identification', 'la.created_on', 'l.lead_source', 'p.title', 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
-            $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
+            $select = array('l.id', 'l.customer_name', 'l.contact_no', 'l.lead_identification', 'la.created_on', 'l.lead_source', 'p.title', 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on', 'DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
+            $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
             if ($type == 'EM') {
                 $where['la.employee_id'] = $id;
             }
@@ -1113,19 +1152,19 @@ class Api extends REST_Controller
             /*****************************************************************
              * Update Lead Identification
              *****************************************************************/
-                $all_lead_types = $this->config->item('lead_type');
-                    if ($leads['lead_identification'] != $params['lead_identification'] &&
-                        array_key_exists($params['lead_identification'], $all_lead_types)) {
-                        $where = array('id' => $params['lead_id']);
-                        $lead_identification_data = array(
-                            'lead_identification' => $params['lead_identification']
-                        );
-                        $response2 = $this->Lead->update_lead_data($where, $lead_identification_data, Tbl_Leads);
-                    }else{
-                        $res = array('result' => False,
-                            'data' => array('Unknown lead identification'));
-                        returnJson($res);
-                    }
+            $all_lead_types = $this->config->item('lead_type');
+            if ($leads['lead_identification'] != $params['lead_identification'] &&
+                array_key_exists($params['lead_identification'], $all_lead_types)) {
+                $where = array('id' => $params['lead_id']);
+                $lead_identification_data = array(
+                    'lead_identification' => $params['lead_identification']
+                );
+                $response2 = $this->Lead->update_lead_data($where, $lead_identification_data, Tbl_Leads);
+            } else {
+                $res = array('result' => False,
+                    'data' => array('Unknown lead identification'));
+                returnJson($res);
+            }
             /*****************************************************************/
 
 
@@ -1185,7 +1224,7 @@ class Api extends REST_Controller
                 $res = array('result' => True,
                     'data' => array('Reminder Saved Successfully'));
                 returnJson($res);
-            }else {
+            } else {
                 $res = array('result' => True,
                     'data' => array('Nothing To Update'));
                 returnJson($res);
@@ -1391,7 +1430,7 @@ class Api extends REST_Controller
                 'created_by_name' => $params['full_name']
             );
 
-            $leads = explode(',',$params['lead_id']);
+            $leads = explode(',', $params['lead_id']);
             foreach ($leads as $key => $value) {
                 $assign_data['lead_id'] = $value;
                 $insertData[] = $assign_data;
@@ -1427,11 +1466,11 @@ class Api extends REST_Controller
         $device_type = $params['device_type'];
 
         //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
-        $auth_response = call_external_url(HRMS_API_URL_AUTH.'/'.$user_id.'/'.$password);
+        $auth_response = call_external_url(HRMS_API_URL_AUTH . '/' . $user_id . '/' . $password);
         $auth = json_decode($auth_response);
         if ($auth->DBK_LMS_AUTH->password == 'True') {
-           // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-            $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$auth->DBK_LMS_AUTH->username);
+            // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
+            $records_response = call_external_url(HRMS_API_URL_GET_RECORD . '/' . $auth->DBK_LMS_AUTH->username);
             $records = json_decode($records_response);
             $data = array('device_token' => $device_token,
                 'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
@@ -1456,20 +1495,20 @@ class Api extends REST_Controller
                 'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
                 'mobile' => $records->dbk_lms_emp_record1->phone,
                 'email_id' => $records->dbk_lms_emp_record1->email,
-                'designation'=>get_designation($records->dbk_lms_emp_record1->designation_id)
+                'designation' => get_designation($records->dbk_lms_emp_record1->designation_id)
             );
 
             $hrms_id = $records->dbk_lms_emp_record1->EMPLID;
 
-            $action='count';
-            $table = Tbl_Notification.' as n';
-            $select= array('n.*');
-            $unread_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 0);
+            $action = 'count';
+            $table = Tbl_Notification . ' as n';
+            $select = array('n.*');
+            $unread_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 0);
             $order_by = "n.priority ASC";
-            $leads['unread_notification'] = $this->notification->get_notifications($action,$select,$unread_where,$table,$join = array(),$order_by);
+            $leads['unread_notification'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by);
 
-            $read_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 1);
-            $leads['read_notification'] = $this->notification->get_notifications($action,$select,$read_where,$table,$join = array(),$order_by);
+            $read_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 1);
+            $leads['read_notification'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by);
 
             // employee
             if ($result['basic_info']['designation'] == 'EM') {
@@ -1523,14 +1562,14 @@ class Api extends REST_Controller
 
                     $leads['generated_converted'] = $final;
                     //for assigned lead
-                    $where_assigned_Array = array('branch_id' => $branch_id,'is_updated'=>1,
-                        'YEAR(created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
+                    $where_assigned_Array = array('branch_id' => $branch_id, 'is_updated' => 1,
+                        'YEAR(created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
                 }
                 $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day);
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'], Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . Tbl_Leads . '.created_on) <=' => Elapsed_day);
                 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }
@@ -1554,7 +1593,7 @@ class Api extends REST_Controller
                 "data" => ['count' => $leads, 'basic_info' => $result['basic_info']]
             );
             returnJson($result);
-        }else{
+        } else {
             $err['result'] = false;
             $err['data'] = "Invalid Login Credential.Please Enter Again OR Contact Administrator";
             returnJson($err);
@@ -1740,27 +1779,28 @@ class Api extends REST_Controller
      * gives the list of notifications order by priority
      * @author Gourav Thatoi
      */
-    public function notification_list_post(){
+    public function notification_list_post()
+    {
         $params = $this->input->post();
-        if(isset($params['hrms_id']) && !empty($params['hrms_id'])){
+        if (isset($params['hrms_id']) && !empty($params['hrms_id'])) {
             $action = 'list';
             $hrms_id = $params['hrms_id'];
-            $table = Tbl_Notification.' as n';
-            $select= array('n.*');
-            $unread_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 0);
+            $table = Tbl_Notification . ' as n';
+            $select = array('n.*');
+            $unread_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 0);
             $order_by = "n.priority ASC";
-            $result['unread'] = $this->notification->get_notifications($action,$select,$unread_where,$table,$join = array(),$order_by);
+            $result['unread'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by);
 
-            $read_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 1);
-            $result['read'] = $this->notification->get_notifications($action,$select,$read_where,$table,$join = array(),$order_by);
+            $read_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 1);
+            $result['read'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by);
 
-            $res = array('result'=>True,
-                'data'=>$result);
+            $res = array('result' => True,
+                'data' => $result);
             returnJson($res);
         }
-            $res = array('result'=>False,
-                'data'=>array('Missing parameter.'));
-            returnJson($res);
+        $res = array('result' => False,
+            'data' => array('Missing parameter.'));
+        returnJson($res);
     }
 
     /**
@@ -1768,12 +1808,13 @@ class Api extends REST_Controller
      * lead performance assigned leads count status wise
      * @author Gourav Thatoi
      */
-    public function assigned_leads_status_post(){
+    public function assigned_leads_status_post()
+    {
         $result = array();
         $params = $this->input->post();
-        if(isset($params) && !empty($params) && isset($params['id']) && !empty($params['id'])
+        if (isset($params) && !empty($params) && isset($params['id']) && !empty($params['id'])
             && isset($params['lead_source']) && !empty($params['lead_source'])
-            &&isset($params['designation_name']) && !empty($params['designation_name'])){
+            && isset($params['designation_name']) && !empty($params['designation_name'])) {
 
             $status = $this->config->item('lead_status');
             $id = $params['id'];
@@ -1781,51 +1822,51 @@ class Api extends REST_Controller
             $lead_source = $params['lead_source'];
             //Building common parameters
             $action = 'count';
-            $table = Tbl_Leads.' as l';
-            $where = array('la.is_deleted' => 0,'la.is_updated' => 1);
+            $table = Tbl_Leads . ' as l';
+            $where = array('la.is_deleted' => 0, 'la.is_updated' => 1);
             $join = array();
-            $join[] = array('table' => Tbl_LeadAssign.' as la', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
+            $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
 
             //User Level conditions
-            if(!empty($designation_type) && $designation_type == 'RM'){
+            if (!empty($designation_type) && $designation_type == 'RM') {
                 $where['la.zone_id'] = $id;
             }
-            if(!empty($designation_type) && $designation_type == 'ZM'){
+            if (!empty($designation_type) && $designation_type == 'ZM') {
                 $where['la.branch_id'] = $id;
             }
-            if(!empty($designation_type) && $designation_type == 'BM'){
+            if (!empty($designation_type) && $designation_type == 'BM') {
                 $where['la.employee_id'] = $id;
             }
-            if(!empty($designation_type) && $designation_type == 'EM'){
+            if (!empty($designation_type) && $designation_type == 'EM') {
                 $where['la.employee_id'] = $id;
             }
 
-            if(!empty($lead_source)){
+            if (!empty($lead_source)) {
                 $where['l.lead_source'] = $lead_source;
             }
             $year_where['YEAR(la.created_on)'] = date('Y');
             $month_where['MONTH(la.created_on)'] = date('m');
-            if(!empty($status)){
+            if (!empty($status)) {
                 foreach ($status as $key => $value) {
                     $where['status'] = $key;
 
                     //This Year Assigned
-                    $year_where = array_merge($year_where,$where);
+                    $year_where = array_merge($year_where, $where);
 
                     //This Month Assigned
-                    $month_where = array_merge($month_where,$where);
+                    $month_where = array_merge($month_where, $where);
 
                     $result['Month'] = $this->Lead->get_leads($action, $table, '', $month_where, $join, '', '');
                     $result['Year'] = $this->Lead->get_leads($action, $table, '', $year_where, $join, '', '');
                     $result['status'] = $value;
                 }
             }
-            $res = array('result'=>True,
-                'data'=>array($result));
+            $res = array('result' => True,
+                'data' => array($result));
             returnJson($res);
         }
-        $res = array('result'=>False,
-            'data'=>array('Missing parameter.'));
+        $res = array('result' => False,
+            'data' => array('Missing parameter.'));
         returnJson($res);
 
     }
@@ -1854,20 +1895,20 @@ class Api extends REST_Controller
                 'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
                 'mobile' => $records->dbk_lms_emp_record1->phone,
                 'email_id' => $records->dbk_lms_emp_record1->email,
-                'designation'=>get_designation($records->dbk_lms_emp_record1->designation_id)
+                'designation' => get_designation($records->dbk_lms_emp_record1->designation_id)
             );
 
             $hrms_id = $records->dbk_lms_emp_record1->EMPLID;
 
-            $action='count';
-            $table = Tbl_Notification.' as n';
-            $select= array('n.*');
-            $unread_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 0);
+            $action = 'count';
+            $table = Tbl_Notification . ' as n';
+            $select = array('n.*');
+            $unread_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 0);
             $order_by = "n.priority ASC";
-            $leads['unread_notification'] = $this->notification->get_notifications($action,$select,$unread_where,$table,$join = array(),$order_by);
+            $leads['unread_notification'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by);
 
-            $read_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 1);
-            $leads['read_notification'] = $this->notification->get_notifications($action,$select,$read_where,$table,$join = array(),$order_by);
+            $read_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 1);
+            $leads['read_notification'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by);
 
             // employee
             if ($result['basic_info']['designation'] == 'EM') {
@@ -1921,14 +1962,14 @@ class Api extends REST_Controller
 
                     $leads['generated_converted'] = $final;
                     //for assigned lead
-                    $where_assigned_Array = array('branch_id' => $branch_id,'is_updated'=>1,
-                        'YEAR(created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
+                    $where_assigned_Array = array('branch_id' => $branch_id, 'is_updated' => 1,
+                        'YEAR(created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
                 }
                 $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'],Tbl_LeadAssign . '.lead_id' => NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_Leads.'.created_on) <=' => Elapsed_day);
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'], Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . Tbl_Leads . '.created_on) <=' => Elapsed_day);
                 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }
@@ -1952,7 +1993,7 @@ class Api extends REST_Controller
                 "data" => ['count' => $leads, 'basic_info' => $result['basic_info']]
             );
             returnJson($result);
-        }else{
+        } else {
             $res = array('result' => False,
                 'data' => array('Invalid Access'));
             returnJson($res);
@@ -1966,24 +2007,25 @@ class Api extends REST_Controller
      * @return json
      * @author Gourav Thatoi
      */
-    public function update_notification_count_post(){
+    public function update_notification_count_post()
+    {
         $params = $this->input->post();
-        if(isset($params['hrms_id']) && !empty($params['hrms_id']) &&
-           isset($params['notification_id']) && !empty($params['notification_id'])){
+        if (isset($params['hrms_id']) && !empty($params['hrms_id']) &&
+            isset($params['notification_id']) && !empty($params['notification_id'])) {
             $hrms_id = $params['hrms_id'];
-            $table = Tbl_Notification.' as n';
-            $where = array('n.notification_to' => $hrms_id,'id'=>$params['notification_id']);
-            $data = array('is_read'=>1);
-            $this->Lead->update($where,$table,$data);
+            $table = Tbl_Notification . ' as n';
+            $where = array('n.notification_to' => $hrms_id, 'id' => $params['notification_id']);
+            $data = array('is_read' => 1);
+            $this->Lead->update($where, $table, $data);
 
             $action = 'count';
-            $unread_where  = array('n.notification_to' => $hrms_id,'n.is_read' => 0);
-            $result['unread'] = $this->notification->get_notifications($action,'',$unread_where,$table,$join = array(),'');
+            $unread_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 0);
+            $result['unread'] = $this->notification->get_notifications($action, '', $unread_where, $table, $join = array(), '');
 
-            $res = array('result'=>True,
-                'data'=>array($result));
+            $res = array('result' => True,
+                'data' => array($result));
             returnJson($res);
-        }else{
+        } else {
 
         }
     }
@@ -1995,22 +2037,23 @@ class Api extends REST_Controller
      * @return json
      * @author Gourav Thatoi
      */
-    public function check_account_no_post(){
+    public function check_account_no_post()
+    {
         $params = $this->input->post();
-        if(isset($params['lead_id']) && !empty($params['lead_id']) &&
-            isset($params['account_no']) && !empty($params['account_no'])){
+        if (isset($params['lead_id']) && !empty($params['lead_id']) &&
+            isset($params['account_no']) && !empty($params['account_no'])) {
             $url = '';
 //            $result = call_external_url($url);
             $result['result'] = True;
-            if($result['result'] == True){
+            if ($result['result'] == True) {
 
                 $table = Tbl_Leads;
-                $where = array('id'=>$params['lead_id']);
-                $data = array('opened_account_no'=>$params['account_no']);
-                $update = $this->Lead->update_lead_data($where,$data,$table);
-                if(isset($update['affected_rows']) && $update['affected_rows'] > 0){
-                    $result = array('result'=>True,
-                        'data'=>array('Account number '.$params['account_no'].' exists.'));
+                $where = array('id' => $params['lead_id']);
+                $data = array('opened_account_no' => $params['account_no']);
+                $update = $this->Lead->update_lead_data($where, $data, $table);
+                if (isset($update['affected_rows']) && $update['affected_rows'] > 0) {
+                    $result = array('result' => True,
+                        'data' => array('Account number ' . $params['account_no'] . ' exists.'));
                     returnJson($result);
                 }
                 $res = array('result' => False,
@@ -2018,7 +2061,7 @@ class Api extends REST_Controller
                 returnJson($res);
             }
 
-        }else{
+        } else {
             $res = array('result' => False,
                 'data' => array('Parameters missing.'));
             returnJson($res);

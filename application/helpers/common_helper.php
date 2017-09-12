@@ -910,3 +910,16 @@ function dummy_branch_details(){
     }
 
 
+function fix_keys($array) {
+
+    foreach ($array as $k => $val) {
+
+        if (is_array($val)) {
+            $array[$k] = fix_keys($val);
+        }else{
+            return array_values($array);
+        }
+    }
+
+    return $array;
+}
