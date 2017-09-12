@@ -48,10 +48,11 @@ $lead_type = $this->config->item('lead_type');
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
+        
             <div class="lead-top clearfix">
                 <div class="float-left">
                     <span class="total-lead">
-                        Total Leads
+                        Total Leads 
                     </span>
                     <span class="lead-num"> : <?php echo count($leads);?></span>
                 </div>
@@ -61,6 +62,7 @@ $lead_type = $this->config->item('lead_type');
                     </a>
                 </div>
             </div>
+            <div class="over">
             <table id="sample_3" class="display lead-table">
                 <thead>
                     <tr class="top-header">
@@ -214,6 +216,8 @@ $lead_type = $this->config->item('lead_type');
                 </tbody>
             </table>
         </div>
+
+    </div>
     </div>
     <span class="bg-bottom"></span>
 </div>
