@@ -463,7 +463,7 @@ $config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add
     'api/v1/api/multiple_leads_assign','api/v1/api/authenticationnew','api/v1/api/refresh_dashboardnew',
     'api/v1/authenticate/check_authentication','api/v1/api/notification_list',
     'api/v1/api/assigned_leads_status','api/v1/api/update_notification_count',
-    'api/v1/api/check_account_no'
+    'api/v1/api/check_account_no','api/v1/api/update_lead_status_by_em'
     );
 
 /*
