@@ -999,12 +999,11 @@ class Api extends REST_Controller
             isset($params['status']) && !empty($params['status']) &&
             isset($params['lead_identification']) && !empty($params['lead_identification']) &&
             isset($params['employee_name']) && !empty($params['employee_name']) &&
-            isset($params['branch_manager_id']) && !empty($params['branch_manager_id']) &&
-            isset($params['branch_manager_name']) && !empty($params['branch_manager_name']) &&
-            isset($params['reroute_to_branch'])) {
+            isset($params['logged_in_hrms_id']) && !empty($params['logged_in_hrms_id']) &&
+//            isset($params['logged_in_emp_name']) && !empty($params['logged_in_emp_name']) &&
+            isset($params['reroute_to_own_branch'])) {
             $result['status'] = 'error';
             $result2['status'] = 'error';
-            $result3['status'] = 'error';
             $result4['status'] = 'error';
             $action = 'list';
             $join[] = array('table' => Tbl_Leads . ' as l', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
@@ -1012,20 +1011,11 @@ class Api extends REST_Controller
             $select = array('la.*', 'l.lead_identification');
             $where = array('la.lead_id' => $params['lead_id'], 'la.is_updated' => 1);
             $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+            $leads = $leadsAssign[0];
             if (empty($leadsAssign)) {
                 $res = array('result' => False,
                     'data' => array('No assigned lead found.'));
                 returnJson($res);
-            }
-            /****************************************************************
-             * If interested in other product
-             *****************************************************************/
-            if (isset($params['product_category_id']) && !empty($params['product_category_id']) && isset($params['product_id']) && !empty($params['product_id'])) {
-                $product_category_id = $params['product_category_id'];
-                $product_id = $params['product_id'];
-                //Function call for add new leads in selected product category hierarchy
-                $result3 = $this->update_lead_product($params['lead_id'], $product_category_id, $product_id);
-
             }
             $all_status = $this->config->item('lead_status');
             if(!array_key_exists($params['status'],$all_status)){
@@ -1033,7 +1023,7 @@ class Api extends REST_Controller
                     'data'=>array('Unknown status.'));
                 returnJson($res);
             }
-            if ($params['reroute_to_branch'] == 0) {
+            if ($params['reroute_to_own_branch'] == 0) {
                 if(!isset($params['branch_id']) || empty($params['branch_id']) ||
                    !isset($params['district_id']) || empty($params['district_id']) ||
                    !isset($params['state_id']) || empty($params['state_id'])){
@@ -1092,8 +1082,8 @@ class Api extends REST_Controller
                             'status' => $params['status'],
                             'is_updated' => 1,
                             'created_on' => date('y-m-d-H-i-s'),
-                            'created_by' => $params['branch_manager_id'],
-                            'created_by_name' => $params['branch_manager_name']
+                            'created_by' => $params['logged_in_hrms_id'],
+                            'created_by_name' => $params['logged_in_emp_name']
                         );
 
                         /*****************************************************************/
@@ -1125,17 +1115,18 @@ class Api extends REST_Controller
              * Update Lead Identification
              *****************************************************************/
                 $all_lead_types = $this->config->item('lead_type');
-                if (array_key_exists($params['lead_identification'], $all_lead_types)) {
-                    $where = array('id' => $params['lead_id']);
-                    $lead_identification_data = array(
-                        'lead_identification' => $params['lead_identification']
-                    );
-                    $response2 = $this->Lead->update_lead_data($where, $lead_identification_data, Tbl_Leads);
-                } else {
-                    $res = array('result' => False,
-                        'data' => array('Unknown lead identification'));
-                    returnJson($res);
-                }
+                    if ($leads['lead_identification'] != $params['lead_identification'] &&
+                        array_key_exists($params['lead_identification'], $all_lead_types)) {
+                        $where = array('id' => $params['lead_id']);
+                        $lead_identification_data = array(
+                            'lead_identification' => $params['lead_identification']
+                        );
+                        $response2 = $this->Lead->update_lead_data($where, $lead_identification_data, Tbl_Leads);
+                    }else{
+                        $res = array('result' => False,
+                            'data' => array('Unknown lead identification'));
+                        returnJson($res);
+                    }
             /*****************************************************************/
 
 
@@ -1167,9 +1158,9 @@ class Api extends REST_Controller
 
             /*****************************************************************/
 
-            if ($result['status'] == 'success' && $result2['status'] == 'success' && $result3['status'] == 'success') {
+            if ($result['status'] == 'success' && $result2['status'] == 'success') {
                 $res = array('result' => True,
-                    'data' => array('Lead Status Change and Reminder and Other Product Save Successfully'));
+                    'data' => array('Lead Status Change and Reminder Saved Successfully'));
                 returnJson($res);
             } elseif ($result['status'] == 'success' && $result4['status'] == 'reroute') {
                 $res = array('result' => True,
@@ -1195,11 +1186,7 @@ class Api extends REST_Controller
                 $res = array('result' => True,
                     'data' => array('Reminder Saved Successfully'));
                 returnJson($res);
-            } elseif ($result3['status'] == 'success') {
-                $res = array('result' => True,
-                    'data' => array('Other Interested product Saved Successfully'));
-                returnJson($res);
-            } else {
+            }else {
                 $res = array('result' => True,
                     'data' => array('Nothing To Update'));
                 returnJson($res);
