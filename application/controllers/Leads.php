@@ -816,7 +816,7 @@ class Leads extends CI_Controller
         $join = array();
         $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
         if($type == 'generated'){
-            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on');
+            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on','DATEDIFF(CURDATE( ),l.created_on) as elapsed_day');
             if($till == 'mtd'){
                 $where = array('la.is_deleted' => 0,'la.is_updated' => 1,'MONTH(l.created_on)' => date('m')); //Month till date filter
             }
