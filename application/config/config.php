@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].':8844/DENABANK/lms';
+$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].'/lms';
 
 /*
 |--------------------------------------------------------------------------
@@ -462,7 +462,8 @@ $config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add
     'api/v1/api/assign_to','api/v1/api/update_lead_status','api/v1/api/refresh_dashboard',
     'api/v1/api/multiple_leads_assign','api/v1/api/authenticationnew','api/v1/api/refresh_dashboardnew',
     'api/v1/authenticate/check_authentication','api/v1/api/notification_list',
-    'api/v1/api/assigned_leads_status'
+    'api/v1/api/assigned_leads_status','api/v1/api/update_notification_count',
+    'api/v1/api/check_account_no'
     );
 
 /*
