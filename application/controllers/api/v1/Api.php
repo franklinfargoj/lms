@@ -998,7 +998,6 @@ class Api extends REST_Controller
             isset($params['employee_id']) && !empty($params['employee_id']) &&
             isset($params['status']) && !empty($params['status']) &&
             isset($params['lead_identification']) && !empty($params['lead_identification']) &&
-            isset($params['employee_name']) && !empty($params['employee_name']) &&
             isset($params['logged_in_hrms_id']) && !empty($params['logged_in_hrms_id']) &&
 //            isset($params['logged_in_emp_name']) && !empty($params['logged_in_emp_name']) &&
             isset($params['reroute_to_own_branch'])) {
