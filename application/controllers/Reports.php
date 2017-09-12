@@ -128,6 +128,9 @@ class Reports extends CI_Controller
             $viewName = 'BM';
         }else{
             $viewName = $login_user['designation_name'];
+            if($viewName == 'GM'){
+                $viewName = 'ZM';
+            }
         }
 
         $WHERE = array();
@@ -187,6 +190,7 @@ class Reports extends CI_Controller
             //$WHERE['designation'] = 'ZD';
             $GROUP_BY = array('zone_id');
         }
+
         $TABLE  = 'employee_dump';
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
@@ -310,6 +314,9 @@ class Reports extends CI_Controller
             $viewName = 'BM';
         }else{
             $viewName = $login_user['designation_name'];
+            if($viewName == 'GM'){
+                $viewName = 'ZM';
+            }
         }
         
         $WHERE = array();
@@ -492,6 +499,9 @@ class Reports extends CI_Controller
             $viewName = 'BM';
         }else{
             $viewName = $login_user['designation_name'];
+            if($viewName == 'GM'){
+                $viewName = 'ZM';
+            }
         }
 
         $WHERE = array();
@@ -676,6 +686,9 @@ class Reports extends CI_Controller
             $viewName = 'BM';
         }else{
             $viewName = $login_user['designation_name'];
+            if($viewName == 'GM'){
+                $viewName = 'ZM';
+            }
         }
         
         $WHERE = array();
@@ -815,7 +828,6 @@ class Reports extends CI_Controller
     }
 
     private function leads_generated_vs_converted($type,$arrData){
-        $this->make_bread->add('Leads Generated Vs Converted Report', '', 0);
         $login_user = get_session();
         $lead_status = array_keys($this->config->item('lead_status'));
         //Build Input Parameter
@@ -868,6 +880,9 @@ class Reports extends CI_Controller
             $viewName = 'BM';
         }else{
             $viewName = $login_user['designation_name'];
+            if($viewName == 'GM'){
+                $viewName = 'ZM';
+            }
         }
         $arrData['viewName'] = $viewName;
 
@@ -949,6 +964,7 @@ class Reports extends CI_Controller
     }
 
     private function combine($arrData){
+        $this->make_bread->add('Leads Generated Vs Converted Report', '', 0);
         $viewName = $arrData['viewName'];
         $arrData['G_Total'] = $arrData['C_Total'] = 0;    
         $arrData['leads'] = array();
@@ -1076,6 +1092,9 @@ class Reports extends CI_Controller
             $viewName = 'BM';
         }else{
             $viewName = $login_user['designation_name'];
+            if($viewName == 'GM'){
+                $viewName = 'ZM';
+            }
         }
         
         $WHERE = array();
@@ -1230,6 +1249,9 @@ class Reports extends CI_Controller
             $viewName = 'BM';
         }else{
             $viewName = $login_user['designation_name'];
+            if($viewName == 'GM'){
+                $viewName = 'ZM';
+            }
         }
         
         $WHERE = array();
