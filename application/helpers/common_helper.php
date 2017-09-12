@@ -259,33 +259,6 @@ if (!function_exists('create_excel_error_file'))
     }
 }
 
-//if(!function_exists('send_sms')){
-//    function send_sms($name='',$mobile='') {
-//        $feedid='';
-//        $username='';
-//        $pass='';
-//        $senderid='';
-//        $sms='';
-//        if($mobile!='') {
-//                $sms = "Thanks for showing interest with Dena Bank. We will contact you shortly";
-//            $url = "http://bulkpush.mytoday.com/BulkSms/SingleMsgApi?feedid=$feedid&username=$username&password=$pass&To=$mobile&Text=" . urlencode($sms) . "&senderid=$senderid";
-//            $ch = curl_init();
-//            curl_setopt($ch, CURLOPT_URL, $url);
-//            curl_setopt($ch, CURLOPT_HEADER, 0);
-//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-//            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-//            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-//            $output = curl_exec($ch);
-//            curl_close($ch);
-//
-//            $response = ((array) simplexml_load_string($output));
-//            return $response;
-//
-//        }
-//    }
-//}
-
 if (!function_exists('send_push_notification')){
     function send_push_notification($data, $message)
     {

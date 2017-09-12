@@ -88,7 +88,7 @@ $branch_extra = 'id="branch_id"';
                                 <label>Assign To:</label> <span class="detail-label"><?php echo ucwords($leads[0]['employee_name']);?></span>
                             </div>
                             <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('EM','BM')))){?>
-                                <div class="form-control">
+                                <!-- <div class="form-control">
                                     <label>Interest in other product</label>
                                     <div class="radio-control">
                                          <?php 
@@ -116,7 +116,7 @@ $branch_extra = 'id="branch_id"';
                                             echo form_dropdown('product_category_id', $options , '',$js);    
                                         }
                                     ?>
-                                </div>
+                                </div> -->
                                 <div class="form-control">
                                     <label>Lead Identified as :</label> 
                                     <span class="detail-label">

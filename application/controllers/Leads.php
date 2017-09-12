@@ -17,7 +17,7 @@ class Leads extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-//        is_logged_in();
+        is_logged_in();
         $this->load->model('Lead');
         
         /*
@@ -45,8 +45,6 @@ class Leads extends CI_Controller
           $this->make_bread->add('Add Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
-
-        $session_data = get_session();
 
         $arrData['category_selected'] = '';
         $arrData['product_selected'] = '';
@@ -623,35 +621,12 @@ class Leads extends CI_Controller
             /****************************************************************
                                 For Assigned List
             *****************************************************************/
-                if($lead_type == 'assigned') {
+                if($lead_type == 'assigned'){
 
                     $lead_identification = $this->input->post('lead_identification');
                     $lead_status = $this->input->post('lead_status');
                     $employee_id = $this->input->post('reroute_to');
-
-                    /****************************************************************
-                     * If interested in other product
-                     *****************************************************************/
-                    $interested = $this->input->post('interested');
-                    if ($interested == 1) {
-                        $this->form_validation->set_rules('product_category_id', 'Product Category', 'required');
-                        $this->form_validation->set_rules('product_id', 'Product', 'required');
-                        if ($this->input->post('is_own_branch') == '0') {
-                            $this->form_validation->set_rules('state_id', 'State', 'required');
-                            $this->form_validation->set_rules('branch_id', 'Branch', 'required');
-                            $this->form_validation->set_rules('district_id', 'District', 'required');
-                        }
-                        if ($this->form_validation->run() == FALSE) {
-                            /*$arrData['has_error'] = 'has-error';
-                            return load_view("Products/Product/add",$arrData);*/
-                            redirect('leads/leads_list/assigned/ytd');
-                        }
-                        $product_category_id = $this->input->post('product_category_id');
-                        $product_id = $this->input->post('product_id');
-                        //Function call for add new leads in selected product category hierarchy
-                        $this->update_lead_product($lead_id, $product_category_id, $product_id);
-                    }
-
+                    
                     if ($this->input->post('is_own_branch') == '0') {
                         $action = 'list';
                         $table = Tbl_Leads;
@@ -678,13 +653,13 @@ class Leads extends CI_Controller
                     //Building input parameters for function to get_leads
                     $action = 'list';
                     $table = Tbl_LeadAssign;
-                    $select = array(Tbl_LeadAssign . '.*');
-                    $where = array(Tbl_LeadAssign . '.lead_id' => $lead_id, Tbl_LeadAssign . '.is_updated' => 1);
-                    $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+                    $select = array(Tbl_LeadAssign.'.*');
+                    $where = array(Tbl_LeadAssign.'.lead_id' => $lead_id,Tbl_LeadAssign.'.is_updated' => 1);
+                    $leadsAssign = $this->Lead->get_leads($action,$table,$select,$where,$join = array(),$group_by = array(),$order_by = array());
                     $leads_data = $leadsAssign[0];
 
                     $response1['status'] = 'success';
-                    if (($leads_data['status'] != $lead_status) || (isset($employee_id) && !empty($employee_id))) {
+                    if(($leads_data['status'] != $lead_status) || (isset($employee_id) && !empty($employee_id))){
                         //Set current entry as old (set is_updated = 0)
                         $lead_status_data = array('is_updated' => 0);
                         $response1 = $this->Lead->update_lead_data($where, $lead_status_data, Tbl_LeadAssign);
