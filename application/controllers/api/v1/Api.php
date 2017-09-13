@@ -619,9 +619,27 @@ class Api extends REST_Controller
                 }
             }
             $lead_status['category_products'] = $final;
-            $lead_status['status'] = $this->config->item('lead_status');
-            $lead_status['lead_source'] = $this->config->item('lead_source');
-            $lead_status['lead_identification'] = $this->config->item('lead_type');
+            $final_status = array();
+            $final_source = array();
+            $final_type = array();
+            foreach ($this->config->item('lead_status') as $key => $value){
+                $status['id'] = $key;
+                $status['title'] = $value;
+                $final_status[] = $status;
+            }
+            foreach ($this->config->item('lead_source') as $key => $value){
+                $status['id'] = $key;
+                $status['title'] = $value;
+                $final_source[] = $status;
+            }
+            foreach ($this->config->item('lead_type') as $key => $value){
+                $status['id'] = $key;
+                $status['title'] = $value;
+                $final_type[] = $status;
+            }
+            $lead_status['status'] = $final_status;
+            $lead_status['lead_source'] = $final_source;
+            $lead_status['lead_identification'] = $final_type;
         }
         if (!empty($lead_status)) {
             $res = array('result' => True,
