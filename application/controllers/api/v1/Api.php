@@ -567,10 +567,31 @@ class Api extends REST_Controller
                     if (!empty($status)) {
                         $i = 0;
                         foreach ($status as $key => $value) {
-                            $whereArray = array(Tbl_Leads . '.branch_id' => $branch_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+                            $whereArray = array(Tbl_Leads . '.branch_id' => $branch_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
                             $result[$i]['YEAR'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
 
-                            $whereArray = array(Tbl_Leads . '.branch_id' => $branch_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
+                            $whereArray = array(Tbl_Leads . '.branch_id' => $branch_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'), Tbl_LeadAssign . '.is_updated' => 1);
+                            $result[$i]['MONTH'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
+                            $result[$i]['status'] = $value;
+                            $i++;
+                        }
+                    }
+                    $res = array('result' => True,
+                        'data' => $result);
+                    returnJson($res);
+                    break;
+                case 'GM':
+                    $table = Tbl_LeadAssign;
+                    $action = 'count';
+                    $zone_id = $params['id'];
+
+                    if (!empty($status)) {
+                        $i = 0;
+                        foreach ($status as $key => $value) {
+                            $whereArray = array(Tbl_Leads . '.zone_id' => $zone_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
+                            $result[$i]['YEAR'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
+
+                            $whereArray = array(Tbl_Leads . '.zone_id' => $zone_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'), Tbl_LeadAssign . '.is_updated' => 1);
                             $result[$i]['MONTH'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
                             $result[$i]['status'] = $value;
                             $i++;
