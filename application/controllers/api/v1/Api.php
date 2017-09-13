@@ -272,7 +272,12 @@ class Api extends REST_Controller
                 if ($this->form_validation->run() === FALSE) {
                     $error[] = form_error($k);
                 } else {
-                    $lead_data[$k] = $value;
+                    if($k=='customer_name'){
+                        $value = ucwords(strtolower($value));
+                        $lead_data[$k] = $value;
+                    }else{
+                        $lead_data[$k] = $value;
+                    }
                 }
                 unset($validations[$k]);
                 $phone_extra = '';

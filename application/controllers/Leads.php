@@ -107,7 +107,11 @@ class Leads extends CI_Controller
                 $keys = array('customer_name','contact_no','product_category_id','product_id',
                     'is_own_branch','remark','lead_ticket_range');
                 foreach ($keys as $k => $value){
-                    $lead_data[$value] = $this->input->post($value);
+                    if($value=='customer_name'){
+                        $lead_data[$value] = ucwords(strtolower($this->input->post($value)));
+                    }else{
+                        $lead_data[$value] = $this->input->post($value);
+                    }
 
                 }
                 $action = 'list';
