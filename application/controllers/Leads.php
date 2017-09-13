@@ -110,9 +110,15 @@ class Leads extends CI_Controller
                     $lead_data[$value] = $this->input->post($value);
 
                 }
+                $action = 'list';
+                $select = array('map_with');
+                $table = Tbl_Products;
+                $where = array('id'=>$lead_data['product_id']);
+                $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+                $product_mapped_with=$product_mapped_with[0]['map_with'];
                 $lead_data['department_name'] = $this->session->userdata('department_name');
                 $lead_data['department_id'] = $this->session->userdata('department_id');
-                $whereArray = array('product_id'=>$lead_data['product_id'],'branch_id'=>$lead_data['branch_id']);
+                $whereArray = array('processing_center'=>$product_mapped_with,'branch_id'=>$lead_data['branch_id']);
                 $routed_id = $this->Lead->check_mapping($whereArray);
                 if(!is_array($routed_id)){
                     $lead_data['reroute_from_branch_id'] = $branch_id;
@@ -120,17 +126,17 @@ class Leads extends CI_Controller
                 }
                 $lead_data['lead_name'] = $this->input->post('customer_name');
                 $lead_id = $this->Lead->add_leads($lead_data);
-                if($lead_id != false){
-                    //send sms
-                    $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
-                    send_sms($this->input->post('contact_no'),$message);
-
-                    //Push notification
-                    //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
-
-                    //Save notification
-                    $this->insert_notification($lead_data);
-                }
+//                if($lead_id != false){
+//                    //send sms
+//                    $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
+//                    send_sms($this->input->post('contact_no'),$message);
+//
+//                    //Push notification
+//                    //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
+//
+//                    //Save notification
+//                    $this->insert_notification($lead_data);
+//                }
 
                 $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
                 if($assign_to == 'self'){
