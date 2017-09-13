@@ -568,46 +568,37 @@ class Api extends REST_Controller
 
     public function masters_get()
     {
-        $result = $this->Lead->get_all_branch_detail();
 
-        $response = [];
-        foreach ($result as $row) {
-            if (!array_key_exists($row['z_id'], $response)) {
-                $response[$row['z_id']] = [
-                    'zone_code' => $row['z_id'],
-                    'zone_name' => $row['zone_name'],
-                    'states'=>[],
-                ];
+        $lead_status['branch_details'] = array();
+        //get zone and state list
+        $action = 'list';
+        $select = array('z.code as z_code', 'z.name as z_name', Tbl_state . '.name as s_name', Tbl_state . '.code as s_code');
+        $table = Tbl_zone . ' as z';
+        $join[] = array('table' => Tbl_state, 'on_condition' => Tbl_state . '.zone_code = z.code', 'type' => 'left');
+        $zone_state = $this->Lead->get_leads($action, $table, $select, '', $join, '', '');
+        //
+        $final_details = array();$respone = array();
+        foreach ($zone_state as $key => $state_zone) {
+            $table = Tbl_district . ' as d';
+            $select = array('code As id', 'name');
+            $where = array('state_code' => $state_zone['s_code']);
+            $districts = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            foreach ($districts as $dist_key => $all_dist) {
+                $table = Tbl_branch . ' as b';
+                $select = array('code As id', 'name');
+                $where = array('district_code' => $all_dist['id']);
+                $branches = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+                $districts[$dist_key]['branches'] = $branches;
             }
-            if (!array_key_exists($row['s_id'], $response[$row['z_id']]['states'])) {
-                $response[$row['z_id']]['states'][$row['s_id']] = [
-                    'code' => $row['state_code'],
-                    'name' => $row['state_name'],
-                    'districts'=>[]
-                ];
-            }
-            if (!array_key_exists($row['d_id'], $response[$row['z_id']]['states'][$row['s_id']]['districts'])) {
-                $response[$row['z_id']]['states'][$row['s_id']]['districts'][$row['d_id']] = [array(
-                    'code' => $row['dist_code'],
-                    'name' => $row['dist_name'],
-                    'branches'=>[]
-                    )
-                ];
-            }
-            $response[$row['z_id']]['states'][$row['s_id']]['districts'][$row['d_id']]['branches'][] = [
-                    'code' => $row['branch_code'],
-                    'name' => $row['branch_name']
-                ];
-
+            $final_details['zone_id'] = $state_zone['z_code'];
+            $final_details['zone_name'] = $state_zone['z_name'];
+            $final_details['state'] = [
+                array('id'=>$state_zone['s_code'],'name'=>$state_zone['s_name'],'districts'=>$districts)
+            ];
+            $respone[] = $final_details;
         }
+        $lead_status['branch_details'] = $respone;
 
-        $lead_status['branch_details'] = array(array_values($response));
-
-        $table = Tbl_state . ' as s';
-        $join[] = array('table' => Tbl_district, 'on_condition' => Tbl_district . '.state_code = s.code', 'type' => 'left');
-
-        $table = Tbl_district . ' as d';
-        $join[] = array('table' => Tbl_branch, 'on_condition' => Tbl_branch . '.zone_code = d.code', 'type' => 'left');
         $final = array();
         $table = Tbl_Category;
         $join = array();
@@ -822,7 +813,7 @@ class Api extends REST_Controller
     }
 
     /**
-                 * unassigned_leads
+     * unassigned_leads
      * loads the unassigned leads count filtered by lead source
      * @autor Gourav Thatoi
      * @accss public
@@ -836,7 +827,7 @@ class Api extends REST_Controller
             $table = Tbl_Leads;
             $join = array('db_lead_assign', 'db_lead_assign.lead_id = db_leads.id ', 'left');
             $group_by = array('db_leads.lead_source');
-            $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'], Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+            $where = array(Tbl_Leads . '.branch_id' => $params['branch_id'], Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . Tbl_Leads . '.created_on) <=' => Elapsed_day);
             $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select, $table, $join, $where, $group_by);
             $response = array();
             $keys = array('Walk-in' => "0", 'Analytics' => "0", 'Tie Ups' => "0", 'Enquiry' => "0");
@@ -947,12 +938,12 @@ class Api extends REST_Controller
             $join[] = array('table' => Tbl_Category . ' as c', 'on_condition' => 'l.product_category_id = c.id', 'type' => '');
 
             if ($type == 'generated') {
-                $select = array('l.id', 'l.customer_name', 'l.lead_identification', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status','l.remark');
+                $select = array('l.id', 'l.customer_name', 'l.lead_identification', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
                 $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => 'left');
             }
 
             if ($type == 'converted') {
-                $select = array('l.id', 'l.customer_name', 'l.lead_identification', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status','l.remark');
+                $select = array('l.id', 'l.customer_name', 'l.lead_identification', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
                 $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
@@ -960,7 +951,7 @@ class Api extends REST_Controller
 
             if ($type == 'assigned') {
                 //SELECT COLUMNS
-                $select = array('l.id', 'l.remark', 'l.customer_name', 'l.lead_identification', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/, 'c.title AS category_title', 'l.product_category_id', 'la.status', 'la.employee_id', 'r.remind_on', 'r.reminder_text','l.remark');
+                $select = array('l.id', 'l.remark', 'l.customer_name', 'l.lead_identification', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/, 'c.title AS category_title', 'l.product_category_id', 'la.status', 'la.employee_id', 'r.remind_on', 'r.reminder_text', 'l.remark');
 
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
@@ -1065,8 +1056,7 @@ class Api extends REST_Controller
             if ($params['reroute_to_own_branch'] == 0) {
                 if (!isset($params['branch_id']) || empty($params['branch_id']) ||
                     !isset($params['district_id']) || empty($params['district_id']) ||
-                    !isset($params['state_id']) || empty($params['state_id'])
-                ) {
+                    !isset($params['state_id']) || empty($params['state_id'])) {
                     $res = array('result' => False,
                         'data' => array('State id or District id or Branch id missing.'));
                     returnJson($res);
@@ -1098,7 +1088,8 @@ class Api extends REST_Controller
                 $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                 $leads_data = $leadsAssign[0];
                 $response1['status'] = 'success';
-                if (($leads_data['status'] != $params['status'])) {
+                if (($leads_data['status'] != $params['status']) ||
+                    (isset($params['reroute_to']) && !empty($params['reroute_to']))) {
                     //Set current entry as old (set is_updated = 0)
                     $lead_status_data = array('is_updated' => 0);
                     $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
@@ -1131,7 +1122,7 @@ class Api extends REST_Controller
                          *****************************************************************/
                         if (isset($params['reroute_to']) && !empty($params['reroute_to'])) {
                             $lead_status_data['employee_id'] = $params['reroute_to'];
-                            $lead_status_data['employee_name'] = $params['reroute_to_name'];
+                            $lead_status_data['employee_name'] = $params['employee_name'];
                             if ($leads_data['status'] != $params['status']) {
                                 $lead_status_data['status'] = $params['status'];
                             } else {
@@ -1549,7 +1540,7 @@ class Api extends REST_Controller
                     $table = Tbl_LeadAssign;
 
                     //Year till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id,Tbl_LeadAssign .'.is_updated'=>1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , '.Tbl_LeadAssign.'.created_on) <=' => Elapsed_day);
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
                     $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
                 }
 
