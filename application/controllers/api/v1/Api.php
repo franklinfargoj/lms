@@ -2078,7 +2078,7 @@ class Api extends REST_Controller
             $result1['status'] = 'error' ;
             $result2['status'] = 'error' ;
             $result3['status'] = 'error';
-            $resul4['status'] = 'error';
+            $result4['status'] = 'error';
             $action = 'list';
             $table = Tbl_LeadAssign;
             $select = array(Tbl_LeadAssign . '.*');
@@ -2180,7 +2180,8 @@ class Api extends REST_Controller
 
 
                     //====================Reroute to same branch
-                    if (isset($params['reroute_to']) && empty($params['reroute_to']) && isset($params['reroute_to_name']) && empty($params['reroute_to_name']))
+                    if (isset($params['reroute_to']) && !empty($params['reroute_to']) &&
+                        isset($params['reroute_to_name']) && !empty($params['reroute_to_name']))
                     {
                         //Set current entry as old (set is_updated = 0)
                         $lead_status_data = array('is_updated' => 0);
@@ -2209,6 +2210,10 @@ class Api extends REST_Controller
                             $result4 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
 
                         }
+                    }else{
+                        $res = array('result' => False,
+                            'data' => array('Invalid Request for Reroute'));
+                        returnJson($res);
                     }
                     if ($result1['status'] == 'success' && $result2['status'] == 'success' && $result3['status'] == 'success') {
                         $res = array('result' => True,
