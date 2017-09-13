@@ -680,7 +680,7 @@ class Api extends REST_Controller
         $join[] = array('table' => Tbl_Products . ' as p', 'on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id', 'type' => '');
 
         $select = array('l.id', 'l.customer_name', 'l.lead_identification', 'l.created_on', 'l.lead_source',
-          "UCASE(p.title) as title", 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on');
+          "CONCAT(UCASE(LEFT(p.title, 1)),LCASE(SUBSTRING(p.title, 2))) as title", 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on');
         $where = array('la.employee_id' => $login_user['hrms_id'], 'la.is_deleted' => 0, 'YEAR(la.created_on)' => date('Y'));
         $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
 
