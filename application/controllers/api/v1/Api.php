@@ -905,7 +905,7 @@ class Api extends REST_Controller
             $lead_source = $params['lead_source'];
             $branch_id = $params['branch_id'];
             $unassigned_leads = $this->Lead->unassigned_leads_api($lead_source, $branch_id);
-            $unassigned_leads[0]['product_title'] = ucwords($unassigned_leads[0]['product_title']);
+            //$unassigned_leads[0]['product_title'] = ucwords($unassigned_leads[0]['product_title']);
             $res = array('result' => True,
                 'data' => $unassigned_leads);
             returnJson($res);
