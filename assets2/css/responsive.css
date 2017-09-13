@@ -88,4 +88,11 @@
     .bg-top{width: 100%;}
     .bg-bottom{width: 100%;}
     .inner-content{width: 99.4%;}
+    /*ravish---*/
+    .lead-count.ravisha{
+        width: 143px;
+    }
+    .ravishbtn{
+        margin: 60px auto 0;
+    }
 }
