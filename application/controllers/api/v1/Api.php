@@ -2137,6 +2137,24 @@ class Api extends REST_Controller
                     returnJson($res);
                 }else{
                     if (($leads_data['status'] != $params['status'])) {
+
+                        if ($params['status'] == 'FU') {
+                            if (isset($params['remind_on']) && !empty($params['remind_on']) &&
+                                isset($params['reminder_text']) && !empty($params['reminder_text'])) {
+                                $remindData = array(
+                                    'lead_id' => $params['lead_id'],
+                                    'remind_on' => date('y-m-d-H-i-s', strtotime($params['remind_on'])),
+                                    'remind_to' => $leads_data['employee_id'],
+                                    'reminder_text' => $params['reminder_text']
+                                );
+                                //This will add entry into reminder scheduler for status (Interested/Follow up)
+                                $result3 = $this->Lead->add_reminder($remindData);
+                            } else {
+                                $res = array('result' => False,
+                                    'data' => array('Invalid Request For Follow up Status'));
+                                returnJson($res);
+                            }
+                        }
                         //Set current entry as old (set is_updated = 0)
                         $lead_status_data = array('is_updated' => 0);
                         $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
@@ -2228,10 +2246,6 @@ class Api extends REST_Controller
                             $result4 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
 
                         }
-                    }else{
-                        $res = array('result' => False,
-                            'data' => array('Invalid Request for Reroute'));
-                        returnJson($res);
                     }
                     if ($result1['status'] == 'success' && $result2['status'] == 'success' && $result3['status'] == 'success') {
                         $res = array('result' => True,
