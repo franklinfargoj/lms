@@ -160,7 +160,7 @@ $lead_status = $this->config->item('lead_status');
         </a>
     </div>
     <?php echo form_close();?>
-    
+   
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
@@ -187,7 +187,7 @@ $lead_status = $this->config->item('lead_status');
         </div>
     </div>
     <div class="page-content">
-        <span class="bg-top"></span>
+        <!--<span class="bg-top"></span>-->
         <div class="inner-content">
             <div class="container">
                 <table id="sample_3" class="display lead-table">
