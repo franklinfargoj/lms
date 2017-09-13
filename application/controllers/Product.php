@@ -174,6 +174,18 @@ class Product extends CI_Controller {
           redirect('product');
      }
 
+     /*
+     * delete
+     * Delete product (Soft Delete)
+     * @author Ashok Jadhav
+     * @access public
+     * @param $id
+     * @return void
+     */
+     public function manage_points(){
+          
+     }
+
      
 
      ##################################
