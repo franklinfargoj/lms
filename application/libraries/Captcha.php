@@ -56,7 +56,7 @@ class Captcha {
                 'img_path' => 'captcha/',
                 'img_url' => $this->baseUrl . '/captcha/',
                 'font_path' => $this->captchaFontPath,
-                'img_width' => '300',
+                'img_width' => '240',
                 'img_height' => '30',
                 'expiration' => 3600,
                 'font_size' => '50',

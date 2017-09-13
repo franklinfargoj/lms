@@ -1,5 +1,7 @@
 <div class="passwordinner">
-    <div class="pull-left" id="captcha_img"><?php echo $capimage; ?></div>
+    <div class="pull-left" id="captcha_img" style="width:18%;position:absolute;">
+        <?php echo $capimage; ?>
+    </div>
     <span id="refresh_captcha" style="cursor:pointer;float:right">
         <img src="<?php echo base_url().ASSETS.'images/refresh.gif'?>">
     </span>

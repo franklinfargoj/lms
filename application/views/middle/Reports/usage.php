@@ -36,7 +36,7 @@ $lead_status = $this->config->item('lead_status');
             <label>Start Date:</label>   
             <?php 
                 if(isset($start_date)){
-                    $start_date = $start_date;
+                    $start_date = date('d/m/Y',strtotime($start_date));
                 }else{
                     $start_date = '';
                 }
@@ -58,7 +58,7 @@ $lead_status = $this->config->item('lead_status');
             <label>End Date:</label>   
             <?php 
                 if(isset($end_date)){
-                    $end_date = $end_date;
+                    $end_date = date('d/m/Y',strtotime($end_date));
                 }else{
                     $end_date = '';
                 }
@@ -96,7 +96,7 @@ $lead_status = $this->config->item('lead_status');
     <div class="container clearfix">
         <div class="float-left">
             <span class="total-lead">
-                Total 
+                Total User Count
             </span>
             <span class="lead-num"> : <?php echo $Total;?></span>
         </div>
@@ -105,8 +105,8 @@ $lead_status = $this->config->item('lead_status');
                 <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
             </a>
             <a href="javascript:void(0);" class="export_national">
-                        Download National Data
-                    </a>
+                Download Bank Data
+            </a>
         </div>
     </div>
 </div>
@@ -263,74 +263,13 @@ $lead_status = $this->config->item('lead_status');
 <script type="text/javascript">
     jQuery(document).ready(function() { 
         var table = $('#sample_3');
-        console.log(table.length);
         if(table.length > 0){
             var columns = [3];
         
             //Initialize datatable configuration
             initTable(table,columns);
         }
-        
-        $("#start_date, #end_date").datepicker({
-            dateFormat: 'yy-mm-dd'
-        });
-
-        $('#search_form').validate({
-            rules: {
-                start_date: {
-                    required: true,
-                    dateISO: true
-                },
-                end_date: {
-                    required: true,
-                    dateISO: true
-                }
-            },
-            messages: {
-                start_date: {
-                    required: "Start Date required",
-                    dateISO: "Invalid date. Must be formatted yyyy-mm-dd"
-                },
-                end_date: {
-                    required: "End Date required",
-                    dateISO: "Invalid date. Must be formatted yyyy-mm-dd"
-                }
-            },
-            submitHandler: function(form) {
-                var startDate = $('#start_date').datepicker("getDate"),
-                endDate = $('#end_date').datepicker("getDate");
-                if (startDate && endDate && startDate > endDate) {
-                    alert("Start date is greater than the end date.");
-                    $('#start_date').datepicker("setDate", endDate);
-                    return false;
-                }else{
-                    $('.custom_button').attr('disabled','disabled');
-                    $('.result').hide();
-                    $('.no_result').hide();
-                    $('.loader').show();
-                    setTimeout(function(){        
-                        form.submit();
-                        $('.custom_button').removeAttr('disabled');
-                        $('.result').show();
-                        $('.loader').hide();
-                    }, 1000);
-                }
-            }
-        });
-
-        setTimeout(function(){        
-            $('.loader').hide();
-            $('.result').show();
-        }, 2000);
-        $('.export_to_excel').click(function(){
-            var input = "<input type='hidden' id='export' name='export' value='yes'/>";
-            $(this).append(input);
-            $('#search_form').submit();
-        });
-        $('.export_national').click(function(){
-            var input = "<input type='hidden' id='export' name='export' value='yes'/><input type='hidden' id='national' name='national' value='yes'/>";
-            $(this).append(input);
-            $('#search_form').submit();
-        });
     });
 </script>
+<script src="<?php echo base_url().ASSETS;?>js/reports.js"></script>
+
