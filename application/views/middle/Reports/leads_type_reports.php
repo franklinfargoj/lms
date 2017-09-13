@@ -14,6 +14,8 @@ $lead_type = $this->config->item('lead_type');
 
 <div class="lead-form">
     <span class="bg-top"></span>
+        <div class="inner-content">
+        <div class="container">
     <?php 
         //Form
         $attributes = array(
@@ -156,8 +158,7 @@ $lead_type = $this->config->item('lead_type');
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-    <?php echo form_close();?>
-    <span class="bg-bottom"></span>
+    <?php echo form_close();?>     
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
@@ -168,7 +169,7 @@ $lead_type = $this->config->item('lead_type');
 </script>
 <!-- BEGIN LEADS -->
 <div id="result" style="display:none;">
-    <div class="lead-top">
+    <div class="lead-top">  
         <div class="container clearfix">
             <div class="float-left">
                 <span class="total-lead">
@@ -181,10 +182,9 @@ $lead_type = $this->config->item('lead_type');
                     <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
                 </a>
             </div>
+            </div>
         </div>
-    </div>
     <div class="page-content">
-        <span class="bg-top"></span>
         <div class="inner-content">
             <div class="container">
                 <table id="sample_3" class="display lead-table">
