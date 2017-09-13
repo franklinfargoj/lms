@@ -24,6 +24,8 @@
     </div>
 </div>
 <div class="page-content">
+<span class="bg-top"></span>
+    <div class="inner-content">
     <div class="container">
         <table class="display lead-table dataTable no-footer" id="sample_3">
             <thead>
@@ -74,6 +76,7 @@
         </table>
     </div>
 </div>
+<span class="bg-bottom"></span>
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>
 <script type="text/javascript">

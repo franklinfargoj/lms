@@ -178,8 +178,6 @@ class Product extends CI_Controller {
           redirect('product');
      }
 
-     
-
      ##################################
      /*Private Functions*/
      ##################################

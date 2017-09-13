@@ -33,10 +33,11 @@ $param4 = isset($lead_source) ? $lead_source.'/' : '';
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
+        
             <div class="lead-top clearfix">
                 <div class="float-left">
                     <span class="total-lead">
-                        Total Leads
+                        Total Leads 
                     </span>
                     <span class="lead-num"> : <?php echo count($leads);?></span>
                 </div>
@@ -47,6 +48,7 @@ $param4 = isset($lead_source) ? $lead_source.'/' : '';
                     </a>
                 </div>
             </div>
+            <div class="over">
             <table id="sample_3" class="display lead-table">
                 <thead>
                     <tr class="top-header">
@@ -96,17 +98,17 @@ $param4 = isset($lead_source) ? $lead_source.'/' : '';
                     </tr>
                     <tr>
 
-                        <th>
+                        <th style="text-align:left">
                             Customer Name
                         </th>
-                        <th>
+                        <th style="text-align:left">
                             Product Name
                         </th>
                         <th align="center">
                             Elapsed Days
                         </th>
                         <?php if(!isset($status)){?>
-                        <th>
+                        <th style="text-align:left">
                             Status
                         </th>
                         <?php }?>
@@ -115,7 +117,7 @@ $param4 = isset($lead_source) ? $lead_source.'/' : '';
                             Followup date
                         </th>
                         <?php }?>
-                        <th>
+                        <th style="text-align:left">
                             Lead Identified As
                         </th>
                         <?php if($type == 'assigned'){?>
@@ -123,10 +125,10 @@ $param4 = isset($lead_source) ? $lead_source.'/' : '';
                             Intrested Other Product
                         </th> -->
                         <?php }?>
-                         <th>
+                         <th style="text-align:left">
                             Lead Source
                         </th>
-                       <th>
+                       <th style="text-align:left">
                             Details
                         </th>
                     </tr>
@@ -200,6 +202,8 @@ $param4 = isset($lead_source) ? $lead_source.'/' : '';
                 </tbody>
             </table>
         </div>
+
+    </div>
     </div>
     <span class="bg-bottom"></span>
 </div>
