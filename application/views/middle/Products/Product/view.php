@@ -82,9 +82,17 @@
                                 <a class="" href="<?php echo site_url('product/edit/'. encode_id($value['id']));?>">
                                     Edit
                                 </a> 
-                                <span>/</span> 
+                                <span>|</span> 
                                 <a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('product/delete/'. encode_id($value['id']))?>">
                                     Delete
+                                </a> 
+                                <span>|</span> 
+                                <a class="" href="<?php echo site_url('product_guide/manage_points/'. encode_id($value['id']));?>">
+                                    Manage Points
+                                </a>
+                                <span>|</span> 
+                                <a class="" href="<?php echo site_url('product_guide/points_distrubution/'. encode_id($value['id']));?>">
+                                    Points Distrubution
                                 </a> 
                             </td>
                         </tr>   

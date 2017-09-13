@@ -230,4 +230,111 @@ class Product_guide extends CI_Controller {
                redirect('product_guide/view');
           }  
      }
+
+     public function manage_points($productId)
+     {    
+          if(!$productId){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product');
+          }
+          $productId = decode_id($productId);
+          $arrData['product'] = $this->master->view_product($productId);
+          if(count($arrData['product']) > 1){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product');
+          }
+          /*Create Breadcumb*/
+          $this->make_bread->add('Product', 'product', 0);
+          $this->make_bread->add(ucwords($arrData['product'][0]['title']), '', 0);
+          $this->make_bread->add('Manage Points', '', 1);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+          /*Create Breadcumb*/
+
+          if($this->input->post()){
+               $product_id = $this->input->post('product_id');
+               $this->form_validation->set_rules('from_range','Min Range', 'trim|numeric|required');
+               $this->form_validation->set_rules('to_range','Max Range', 'trim|numeric|required');
+               $this->form_validation->set_rules('points','Points', 'trim|numeric|required');
+               if ($this->form_validation->run() == FALSE){    
+                    $arrData['has_error'] = 'has-error';
+                    return load_view("Products/Product_guide/manage_points",$arrData);
+               }else{
+                    $insert = array(
+                         'product_id' => $productId,
+                         'from_range' => $this->input->post('from_range'),
+                         'to_range' => $this->input->post('to_range'),
+                         'points' => $this->input->post('points'),
+                         'created_by' => loginUserId()
+                    );
+                    if($insert['from_range'] > $insert['to_range']){
+                         $this->session->set_flashdata('error','Min range should be less than max range'); 
+                        redirect('product_guide/manage_points/'.encode_id($productId));
+                    }
+                    $where = array('product_id' => $productId);
+                    $valid = $this->master->view_points($where);
+                    if($valid){
+                         if($insert['from_range'] < $valid[0]['to_range']){
+                             $this->session->set_flashdata('error','Please enter range above '.$valid[0]['from_range'].' - '.$valid[0]['to_range']); 
+                             redirect('product_guide/manage_points/'.encode_id($productId));
+                         }
+                    }
+                    $response = $this->master->add_points($insert);
+                    if($response['status'] == 'error'){
+                         $this->session->set_flashdata('error','Failed to add points');
+                    }else{
+                         $this->session->set_flashdata('success','Points added successfully.');
+                    }
+                    redirect('product_guide/manage_points/'.encode_id($productId));
+               }
+          }else{
+               return load_view("Products/Product_guide/manage_points",$arrData);
+          }
+     }
+
+
+     public function points_distrubution($productId)
+     {    
+          if(!$productId){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product');
+          }
+          $productId = decode_id($productId);
+          $arrData['product'] = $this->master->view_product($productId);
+          if(count($arrData['product']) > 1){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product');
+          }
+          /*Create Breadcumb*/
+          $this->make_bread->add('Product', 'product', 0);
+          $this->make_bread->add(ucwords($arrData['product'][0]['title']), '', 0);
+          $this->make_bread->add('Points Distrubution', '', 1);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+          /*Create Breadcumb*/
+
+          if($this->input->post()){
+               $product_id = $this->input->post('product_id');
+               $this->form_validation->set_rules('generator_contrubution','Lead Generator Contribution', 'trim|numeric|required');
+               $this->form_validation->set_rules('convertor_contrubution','Lead Convertor Contribution', 'trim|numeric|required');
+               if ($this->form_validation->run() == FALSE){    
+                    $arrData['has_error'] = 'has-error';
+                    return load_view("Products/Product_guide/points_distrubution",$arrData);
+               }else{
+                    $insert = array(
+                         'product_id' => $productId,
+                         'generator_contrubution' => $this->input->post('generator_contrubution'),
+                         'convertor_contrubution' => $this->input->post('convertor_contrubution'),
+                         'created_by' => loginUserId()
+                    );
+                    $response = $this->master->points_distrubute($insert);
+                    if($response['status'] == 'error'){
+                         $this->session->set_flashdata('error','Failed to distribute points');
+                    }else{
+                         $this->session->set_flashdata('success','Points distribute successfully.');
+                    }
+                    redirect('product_guide/points_distrubution/'.encode_id($productId));
+               }
+          }else{
+               return load_view("Products/Product_guide/points_distrubution",$arrData);
+          }
+     }
 }
