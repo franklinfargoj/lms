@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$controller =  $this->router->fetch_class();
 	$method =  $this->router->fetch_method();
     $param1 = $this->uri->segment(3,0);
@@ -79,6 +79,11 @@
 				<li class="<?php echo (($controller == 'dashboard') && ($method == 'emi_calculator')) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard/emi_calculator')?>">
 						Calculator
+					</a>
+				</li>
+                <li class="<?php echo (($controller == 'dashboard') && ($method == 'fd_calculator')) ? 'active' : ''?>">
+					<a href="<?php echo site_url('dashboard/fd_calculator')?>">
+						Fd Calculator
 					</a>
 				</li>
 				<?php }?>

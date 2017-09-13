@@ -73,7 +73,7 @@
             </tbody>
         </table>
     </div>
-    <span class="bg-bottom"></span>
+    <span class="bg-bottom" id="bg-w"></span>
 </div>
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>

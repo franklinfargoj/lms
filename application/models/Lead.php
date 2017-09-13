@@ -108,7 +108,6 @@ class Lead  extends CI_Model
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');
         $this->db->where('db_lead_assign.lead_id',NULL);
         $this->db->where('db_leads.branch_id',$login_user['branch_id']);
-        $this->db->where('db_leads.created_on >= DATE_ADD( CURDATE( ) , INTERVAL -45 DAY )');
         if(!empty($lead_status)){
             $this->db->where('db_leads.lead_source',$lead_status);
         }
@@ -405,7 +404,7 @@ class Lead  extends CI_Model
     }
 
     public function unassigned_leads_api($lead_status = '',$branch_id = ''){
-        $this->db->select('db_leads.*,db_master_products.title as product_title');
+        $this->db->select('db_leads.*,DATEDIFF(CURDATE( ),db_leads.created_on) as elapsed_day,db_master_products.title as product_title');
         $this->db->from('db_leads');
         $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');
@@ -430,6 +429,19 @@ class Lead  extends CI_Model
             $this->db->group_by($group_by);
             $Q = $this->db->get();
             return $Q->result();
+    }
+
+    public function get_all_branch_detail(){
+        $this->db->select('z.id AS z_id,z.code AS zone_code,z.name AS zone_name,s.id AS s_id,s.code AS state_code,s.name AS state_name,d.id AS d_id,d.code AS dist_code,d.name AS dist_name,b.id AS b_id,b.code AS branch_code,b.name AS branch_name');
+        $this->db->from(Tbl_district . ' AS d');
+        $this->db->join(Tbl_branch . ' AS b', 'b.district_code= d.code');
+        $this->db->join(Tbl_state . ' AS s', 's.code = d.state_code');
+        $this->db->join(Tbl_zone . ' AS z', 'z.code = s.zone_code');
+        $result = $this->db->get()->result_array();
+        if(!empty($result)){
+            return $result;
+        }
+        return false;
     }
 
 }

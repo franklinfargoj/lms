@@ -259,33 +259,6 @@ if (!function_exists('create_excel_error_file'))
     }
 }
 
-/*if(!function_exists('send_sms')){
-    function send_sms($name='',$mobile='') {
-        $feedid='';
-        $username='';
-        $pass='';
-        $senderid='';
-        $sms='';
-        if($mobile!='') {
-                $sms = "Thanks for showing interest with Dena Bank. We will contact you shortly";
-            $url = "http://bulkpush.mytoday.com/BulkSms/SingleMsgApi?feedid=$feedid&username=$username&password=$pass&To=$mobile&Text=" . urlencode($sms) . "&senderid=$senderid";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-            $output = curl_exec($ch);
-            curl_close($ch);
-
-            $response = ((array) simplexml_load_string($output));
-            return $response;
-
-        }
-    }
-}*/
-
 if (!function_exists('send_push_notification')){
     function send_push_notification($data, $message)
     {
@@ -381,7 +354,7 @@ function get_session(){
     //return $CI->session->userdata();
 
     $designation = get_designation($CI->session->userdata('designation_id'));
-    if($designation == false){
+    if($CI->session->userdata('admin_id') == '1111111'){
         $designation = $CI->session->userdata('admin_type');
     }
     $CI->session->set_userdata('admin_type',$designation);
@@ -437,26 +410,26 @@ function dropdown($data,$select_option){
 
 if(!function_exists('send_sms')){
     function send_sms($mobile = '',$message='') {
-        
+
         if($mobile!='') {
             $CI =& get_instance();
             $CI->load->model('Sms_model','sms');
             $credentials = $CI->sms->get_sms_credentials();
             //pe($credentials);
             $password = $CI->encrypt->decode($credentials['password']);
-            $url = $credentials['url'].'?username='.$credentials['username'].'&password='.$password.'&to='.$mobile.'&udh=0&from=DENABK&text='.$message;
+            $url = $credentials['url'].'?username='.$credentials['username'].'&password='.$password.'&to='.$mobile.'&udh=&from=DENABK&text='.urlencode($message);
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             $output = curl_exec($ch);
             curl_close($ch);
-
-            $response = ((array) simplexml_load_string($output));
-            return $response;
+//            echo $output;
+//            die;
+//            $output = file_get_contents($url);
+//            echo $output;die;
+            return $output;
 
         }
     }
@@ -937,3 +910,16 @@ function dummy_branch_details(){
     }
 
 
+function fix_keys($array) {
+
+    foreach ($array as $k => $val) {
+
+        if (is_array($val)) {
+            $array[$k] = fix_keys($val);
+        }else{
+            return array_values($array);
+        }
+    }
+
+    return $array;
+}
