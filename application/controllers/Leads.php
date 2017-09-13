@@ -126,17 +126,17 @@ class Leads extends CI_Controller
                 }
                 $lead_data['lead_name'] = $this->input->post('customer_name');
                 $lead_id = $this->Lead->add_leads($lead_data);
-//                if($lead_id != false){
-//                    //send sms
-//                    $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
-//                    send_sms($this->input->post('contact_no'),$message);
-//
-//                    //Push notification
-//                    //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
-//
-//                    //Save notification
-//                    $this->insert_notification($lead_data);
-//                }
+                if($lead_id != false){
+                    //send sms
+                    $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
+                    send_sms($this->input->post('contact_no'),$message);
+
+                    //Push notification
+                    //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
+
+                    //Save notification
+                    $this->insert_notification($lead_data);
+                }
 
                 $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
                 if($assign_to == 'self'){
