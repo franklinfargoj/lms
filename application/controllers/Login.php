@@ -185,6 +185,12 @@ class Login extends CI_Controller {
 
     function load_captcha($type = 'display')
     {
+        //Delete Previous captcha image
+        $files = glob('captcha/*'); // get all file names
+        foreach($files as $file){ // iterate files
+          if(is_file($file))
+            unlink($file); // delete file
+        }
         $captcha = $this->captcha->generateCaptcha();
         //print_r( $captcha);die;
         $capimage = $captcha['image']; //echo $data['capimage'];
