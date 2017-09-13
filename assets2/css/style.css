@@ -382,9 +382,15 @@ body{
 	-webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-      display: table;
+      overflow: hidden;
 
 }
+.container form {
+padding-bottom: 15px;
+    border-bottom: 1px solid #d3d3d3;
+    margin-bottom: 30px;
+    padding-top: 15px; }
+
 .small-container{
 	max-width: 1000px;
 	margin: 0 auto;
@@ -479,6 +485,9 @@ body{
 	color: #ffffff;
 	margin-bottom: 5px;
 	font-size: 15px;
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .logged-in a{
 	color: #ffffff;
@@ -645,7 +654,7 @@ strong{
 }
 .radio-control label{display: inline-block;}
 .lead-form .form-control textarea{ border: 1px solid #d3d3d3; width: 99%;}
-.lead-form .form-control label{vertical-align: top;}
+.lead-form .form-control label{vertical-align:middle;}
 .ui-slider-horizontal{width: 100%; display: inline-block;margin-top: 22px;}
 .range-slider input{width: 25%; display: inline-block;  margin-top: -20px;}
 .ui-widget-header{background-color: #ed4c4c;}
@@ -800,7 +809,7 @@ label#ticket_range-error {
 	color: #666666;
 	text-decoration: underline;
 }
-.lead-top{margin-bottom: 20px;}
+.lead-top{margin-bottom: 20px;     display: inline-block;  width: 100%;}
 .lead-top .float-left{font-family: "Montserrat-Regular";font-size: 16px;color: #484848;margin-top: 15px; }
 .total-lead{font-weight: normal;}
 .lead-num{font-weight: 600;}
