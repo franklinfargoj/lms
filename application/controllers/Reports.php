@@ -1291,7 +1291,7 @@ class Reports extends CI_Controller
             $group_by[] = 'l.branch_id';
 
             //Get Listing for branch
-            $SELECT = array('branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('branch_id','branch_name','zone_id','zone_name','COUNT(hrms_id) as total_user'); 
             if(isset($where['l.zone_id'])){
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
@@ -1306,7 +1306,7 @@ class Reports extends CI_Controller
             $group_by[] = 'l.zone_id';
 
             //Get Listing for branch
-            $SELECT = array('zone_id','zone_name'); 
+            $SELECT = array('zone_id','zone_name','COUNT(hrms_id) as total_user'); 
             $WHERE = array();
             //$WHERE['designation'] = 'ZD';
             $GROUP_BY = array('zone_id');
@@ -1366,6 +1366,10 @@ class Reports extends CI_Controller
                 $arrData['leads'][$index]['branch_id'] = $value->branch_id;
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                if(isset($value->total_user)){
+                    $arrData['leads'][$index]['total_user'] = $value->total_user;
+                    $arrData['leads'][$index]['not_logged_in'] = ($arrData['leads'][$index]['total_user'] - $arrData['leads'][$index]['total']);
+                }
             }
 
             //Zone Manager Login
@@ -1376,6 +1380,8 @@ class Reports extends CI_Controller
                 }
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                $arrData['leads'][$index]['total_user'] = $value->total_user;
+                $arrData['leads'][$index]['not_logged_in'] = ($arrData['leads'][$index]['total_user'] - $arrData['leads'][$index]['total']);
             }
         }
         return $arrData;
@@ -1421,7 +1427,7 @@ class Reports extends CI_Controller
                 if(($arrData['view'] == 'employee') || ($arrData['viewName'] == 'EM' && $arrData['view'] == '')){
                     $usage_col = array('Logged in count');
                 }else{
-                    $usage_col = array('Logged in User');
+                    $usage_col = array('Total User','Logged in User','Not logged in User');
                 }
                 $header_value = array_merge($header_value,$usage_col);
                 break;
@@ -1510,6 +1516,14 @@ class Reports extends CI_Controller
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['converted_count']) ? $value['converted_count'] : 0);
             }else if($action == 'leads_classification'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['ticket']) ? $value['ticket'] : 0);
+            }else if($action == 'usage'){
+                if(($data['view'] == 'employee') || ($data['viewName'] == 'EM' && $data['view'] == '')){
+                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue($value['total']);
+                }else{
+                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['total_user']) ? $value['total_user'] : 0);
+                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue($value['total']);
+                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['not_logged_in']) ? $value['not_logged_in'] : 0);
+                }
             }else{
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue($value['total']);
             }

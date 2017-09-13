@@ -143,7 +143,13 @@ $lead_status = $this->config->item('lead_status');
                             </th>
                             <?php }else{?>
                             <th align="center">
+                                Total User
+                            </th>
+                            <th align="center">
                                 Logged in User
+                            </th>
+                            <th align="center">
+                                Not Logged in User
                             </th>
                             <?php }?>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
@@ -183,11 +189,21 @@ $lead_status = $this->config->item('lead_status');
                                 ?>
                             </td>
                             <?php }?>
-                            <td align="center">
-                                <?php 
-                                    echo $value['total'];
-                                ?>
-                            </td>
+                            <?php if(in_array($viewName,array('EM'))){?>
+                                <td align="center">
+                                    <?php echo  $value['total'];?>
+                                </td>
+                                <?php }else{?>
+                                <td align="center">
+                                    <?php echo  isset($value['total_user']) ? $value['total_user'] : 0;?>
+                                </td>
+                                <td align="center">
+                                    <?php echo  $value['total'];?>
+                                </td>
+                                <td align="center">
+                                    <?php echo isset($value['not_logged_in']) ? $value['not_logged_in'] : 0;?>
+                                </td>
+                            <?php }?>
                             <?php if(in_array($viewName,array('ZM','BM'))){
                                 $param = '';
                                 if(isset($value['zone_id'])){

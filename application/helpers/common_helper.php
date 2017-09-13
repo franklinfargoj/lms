@@ -87,7 +87,7 @@ function loginUserId(){
     // Get current CodeIgniter instance
     $CI =& get_instance();
     // We need to use $CI->session instead of $this->session
-    $admin_id = $CI->session->userdata('hrms_id');
+    $admin_id = $CI->session->userdata('admin_id');
     return $admin_id ? $admin_id : 0;
 }
 
