@@ -294,7 +294,14 @@ class Api extends REST_Controller
 
         $lead_data['lead_name'] = $this->input->post('customer_name');
         $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
-        $whereArray = array('product_id' => $lead_data['product_id'], 'branch_id' => $lead_data['branch_id']);
+        $action = 'list';
+        $select = array('map_with');
+        $table = Tbl_Products;
+        $where = array('id'=>$lead_data['product_id']);
+        $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+        $product_mapped_with=$product_mapped_with[0]['map_with'];
+
+        $whereArray = array('processing_center'=>$product_mapped_with, 'branch_id' => $lead_data['branch_id']);
         $routed_id = $this->Lead->check_mapping($whereArray);
         if (!is_array($routed_id)) {
             $lead_data['reroute_from_branch_id'] = $lead_data['branch_id'];
@@ -306,6 +313,17 @@ class Api extends REST_Controller
             $result = array('result' => False,
                 'data' => array('wrong product id or category id .'));
             returnJson($result);
+        }
+        if($lead_id != false){
+            //send sms
+        $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
+        send_sms($lead_data['contact_no'],$message);
+
+        //Push notification
+        //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
+
+        //Save notification
+        $this->insert_notification($lead_data);
         }
 
         if ($assign_to == 'self') {
@@ -2293,6 +2311,32 @@ class Api extends REST_Controller
             $res = array('result' => False,
                 'data' => array('Invalid Request'));
             returnJson($res);
+        }
+   }
+
+    private function insert_notification($lead_data){
+        if(!empty($lead_data)){
+            $this->load->model('Master_model','master');
+            $productData = $this->master->view_product($lead_data['product_id']);
+
+            $title = 'New lead added';
+            $description = '<div class="lead-form-left">
+                                <div class="form-control">
+                                    <label>Customer Name:  '.ucwords($lead_data['customer_name']).'</label>
+                                </div>
+                                <div class="form-control">
+                                    <label>Phone Number :  '.ucwords($lead_data['contact_no']).'</label> 
+                                </div>
+                                <div class="form-control">
+                                    <label>Category Name:  '.ucwords($productData[0]['category']).'</label>
+                                </div>
+                                <div class="form-control">
+                                    <label>Product Name:  '.ucwords($productData[0]['title']).'</label>
+                                </div>
+                            </div>';
+            $priority = 'Normal';
+            $notification_to = $lead_data['created_by'];
+            return notification_log($title,$description,$priority,$notification_to);
         }
     }
 
