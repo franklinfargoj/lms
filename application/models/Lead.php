@@ -144,7 +144,7 @@ class Lead  extends CI_Model
 //            return $this->db->where($where)->count_all_results($table);
             return $this->counts($table,$select,$where,$join,$group_by);
         }elseif($action == 'list'){
-            return $this->lists($table,$select,$where,$join,$group_by,$order_by = array());
+            return $this->lists($table,$select,$where,$join,$group_by,$order_by);
         }
     }
 

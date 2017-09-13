@@ -30,8 +30,8 @@ class Reports extends CI_Controller
         $arrData['branch_id'] = decode_id($branch_id);
         $arrData['national'] = '';
         if($this->input->post()){
-            $arrData['start_date']     = $this->input->post('start_date');
-            $arrData['end_date']   = $this->input->post('end_date');
+            $arrData['start_date']  = str_replace('/', '-',$this->input->post('start_date'));
+            $arrData['end_date']   = str_replace('/', '-',$this->input->post('end_date'));
             $arrData['product_category_id']    = $this->input->post('product_category_id');
             $arrData['product_id']     = $this->input->post('product_id');
             $arrData['lead_source'] = $this->input->post('lead_source');
@@ -57,8 +57,8 @@ class Reports extends CI_Controller
             }
         }else{
             $d = new DateTime('first day of this month');
-            $arrData['start_date']  = $d->format('Y-m-d');
-            $arrData['end_date']   = date('Y-m-d');
+            $arrData['start_date'] = str_replace('/', '-', $d->format('d/m/Y'));
+            $arrData['end_date']   = str_replace('/', '-',date('d/m/Y'));
             if($action == 'leads_generated_vs_converted'){
                 $arrData = $this->$action('generated',$arrData);
                 $arrData = $this->$action('converted',$arrData);
@@ -84,7 +84,6 @@ class Reports extends CI_Controller
     }
 
     private function pendancy_leads_reports($arrData){
-        $this->make_bread->add('Pendancy Leads Report', '', 0);
         $login_user = get_session();
         //Build Input Parameter
         $action = 'list';
@@ -123,10 +122,22 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
+            $this->make_bread->add('Pendancy Leads Report', 'reports/index/pendancy_leads_reports', 0);
+            if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
+                if(!empty($arrData['branch_id'])){
+                    if($login_user['designation_name'] != 'BM'){
+                        $this->make_bread->add('Branch View', 'reports/index/pendancy_leads_reports/branch/'.encode_id($arrData['zone_id']), 0);
+                    }
+                }
+            }
+            $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
+            $this->make_bread->add('Pendancy Leads Report', 'reports/index/pendancy_leads_reports', 0);
+            $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
+            $this->make_bread->add('Pendancy Leads Report', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -193,7 +204,7 @@ class Reports extends CI_Controller
 
         $TABLE  = 'employee_dump';
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
-        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
+        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
         $arrData['leads'] = array();
         $arrData['Total'] = 0;
@@ -269,7 +280,6 @@ class Reports extends CI_Controller
 
 
     private function leads_type_reports($arrData){
-        $this->make_bread->add('Leads Type Report', '', 0);
         $login_user = get_session();
         $lead_type = array_keys($this->config->item('lead_type'));
         //Build Input Parameter
@@ -309,10 +319,22 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
+            $this->make_bread->add('Leads Type Report', 'reports/index/leads_type_reports', 0);
+            if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
+                if(!empty($arrData['branch_id'])){
+                    if($login_user['designation_name'] != 'BM'){
+                        $this->make_bread->add('Branch View', 'reports/index/leads_type_reports/branch/'.encode_id($arrData['zone_id']), 0);
+                    }
+                }
+            }
+            $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
+            $this->make_bread->add('Leads Type Report', 'reports/index/leads_type_reports', 0);
+            $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
+            $this->make_bread->add('Leads Type Report', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -379,7 +401,7 @@ class Reports extends CI_Controller
         $TABLE  = 'employee_dump';
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
 
-        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
+        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
         $arrData['leads'] = array();
         $arrData['Total'] = 0;    
@@ -454,7 +476,6 @@ class Reports extends CI_Controller
     }
 
     private function leads_generated($arrData){
-        $this->make_bread->add('Leads Generated Report', '', 0);
         $login_user = get_session();
         $lead_status = array_keys($this->config->item('lead_status'));
         //Build Input Parameter
@@ -494,10 +515,22 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
+            $this->make_bread->add('Leads Generated Report', 'reports/index/leads_generated', 0);
+            if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
+                if(!empty($arrData['branch_id'])){
+                    if($login_user['designation_name'] != 'BM'){
+                        $this->make_bread->add('Branch View', 'reports/index/leads_generated/branch/'.encode_id($arrData['zone_id']), 0);
+                    }
+                }
+            } 
+            $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
+            $this->make_bread->add('Leads Generated Report', 'reports/index/leads_generated', 0);
+            $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
+            $this->make_bread->add('Leads Generated Report', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -564,7 +597,7 @@ class Reports extends CI_Controller
         $TABLE  = 'employee_dump';
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
 
-        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
+        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
         $arrData['leads'] = array();
         $arrData['Total'] = 0;    
@@ -641,7 +674,6 @@ class Reports extends CI_Controller
     }
 
     private function leads_assigned($arrData){
-        $this->make_bread->add('Leads Assigned Report', '', 0);
         $login_user = get_session();
         $lead_status = array_keys($this->config->item('lead_status'));
         //Build Input Parameter
@@ -681,10 +713,22 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
+            $this->make_bread->add('Leads Assigned Report',  'reports/index/leads_assigned', 0);
+            if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
+                if(!empty($arrData['branch_id'])){
+                    if($login_user['designation_name'] != 'BM'){
+                        $this->make_bread->add('Branch View', 'reports/index/leads_assigned/branch/'.encode_id($arrData['zone_id']), 0);
+                    }
+                }
+            }
+            $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
+            $this->make_bread->add('Leads Assigned Report',  'reports/index/leads_assigned', 0);
+            $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
+            $this->make_bread->add('Leads Assigned Report', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -753,7 +797,7 @@ class Reports extends CI_Controller
         $TABLE  = 'employee_dump';
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
 
-        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
+        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
         $arrData['leads'] = array();
         $arrData['Total'] = 0;    
@@ -865,7 +909,6 @@ class Reports extends CI_Controller
         //If Product selected
         if(!empty($arrData['product_id'])){
             $where['l.product_id'] = $arrData['product_id'];
-
             $productData = $this->Master->view_product($arrData['product_id']);
             $arrData['product'] = $productData[0]['title'];   //Get Title
         }
@@ -964,8 +1007,24 @@ class Reports extends CI_Controller
     }
 
     private function combine($arrData){
-        $this->make_bread->add('Leads Generated Vs Converted Report', '', 0);
+        $login_user = get_session();
         $viewName = $arrData['viewName'];
+        if($arrData['view'] == 'employee'){
+            $this->make_bread->add('Leads Generated Vs Converted Report', 'reports/index/leads_generated_vs_converted', 0);
+            if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
+                if(!empty($arrData['branch_id'])){
+                    if($login_user['designation_name'] != 'BM'){
+                        $this->make_bread->add('Branch View', 'reports/index/leads_generated_vs_converted/branch/'.encode_id($arrData['zone_id']), 0);
+                    }
+                }
+            }
+            $this->make_bread->add('Employee View', '', 0);
+        }else if($arrData['view']){
+            $this->make_bread->add('Leads Generated Vs Converted Report', 'reports/index/leads_generated_vs_converted', 0);
+            $this->make_bread->add('Branch View', '', 0);
+        }else{
+            $this->make_bread->add('Leads Generated Vs Converted Report', '', 0);
+        }
         $arrData['G_Total'] = $arrData['C_Total'] = 0;    
         $arrData['leads'] = array();
         $leads = array_merge($arrData['generated'],$arrData['converted']);
@@ -1049,7 +1108,6 @@ class Reports extends CI_Controller
     }
 
     private function leads_classification($arrData){
-        $this->make_bread->add('Leads Classifcation Report', '', 0);
         $login_user = get_session();
         //Build Input Parameter
         $action = 'list';
@@ -1087,10 +1145,22 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
+            $this->make_bread->add('Leads Classifcation Report', 'reports/index/leads_classification', 0);
+            if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
+                if(!empty($arrData['branch_id'])){
+                    if($login_user['designation_name'] != 'BM'){
+                        $this->make_bread->add('Branch View', 'reports/index/leads_classification/branch/'.encode_id($arrData['zone_id']), 0);
+                    }
+                }
+            }
+            $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
+            $this->make_bread->add('Leads Classifcation Report', 'reports/index/leads_classification', 0);
+            $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
+            $this->make_bread->add('Leads Classifcation Report','', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -1155,8 +1225,9 @@ class Reports extends CI_Controller
         $TABLE  = 'employee_dump';
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
 
-        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
-        //pe($this->db->last_query());
+        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'lead_ticket_range DESC');
+        /*pe($this->db->last_query());
+        exit;*/
         $arrData['leads'] = array();
         $arrData['Total'] = 0;    
         foreach ($leads as $key => $value) {
@@ -1224,7 +1295,6 @@ class Reports extends CI_Controller
     }
 
     private function usage($arrData){
-        $this->make_bread->add('Usage Report', '', 0);
         $login_user = get_session();
         //Build Input Parameter
         $action = 'list';
@@ -1244,10 +1314,22 @@ class Reports extends CI_Controller
         }
         
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
+            $this->make_bread->add('Usage Report', 'reports/index/usage', 0);
+            if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
+                if(!empty($arrData['branch_id'])){
+                    if($login_user['designation_name'] != 'BM'){
+                        $this->make_bread->add('Branch View', 'reports/index/usage/branch/'.encode_id($arrData['zone_id']), 0);
+                    }
+                }
+            }
+            $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
+            $this->make_bread->add('Usage Report', 'reports/index/usage', 0);
+            $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
+            $this->make_bread->add('Usage Report', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -1315,8 +1397,7 @@ class Reports extends CI_Controller
         $TABLE  = 'employee_dump';
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
         //pe($list);
-        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
-        // /pe($this->db->last_query());
+        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         $arrData['leads'] = array();
         $arrData['Total'] = 0;   
         //pe($leads); 
@@ -1338,7 +1419,6 @@ class Reports extends CI_Controller
                 $index = $value['zone_id'];
                 $arrData['leads'][$index]['zone_id'] = $value['zone_id'];
             }
-            $arrData['Total'] += $value['count'];    
             $arrData['leads'][$index]['total'] = $value['count'];
         }
         $arrData['viewName'] = $viewName;
@@ -1354,6 +1434,7 @@ class Reports extends CI_Controller
                 $arrData['leads'][$index]['branch_id'] = $value->branch_id;
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                $arrData['Total'] = count($list);    
             }
 
             //Branch Manager Login
@@ -1368,6 +1449,7 @@ class Reports extends CI_Controller
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
                 if(isset($value->total_user)){
                     $arrData['leads'][$index]['total_user'] = $value->total_user;
+                    $arrData['Total'] += $value->total_user;    
                     $arrData['leads'][$index]['not_logged_in'] = ($arrData['leads'][$index]['total_user'] - $arrData['leads'][$index]['total']);
                 }
             }
@@ -1380,8 +1462,11 @@ class Reports extends CI_Controller
                 }
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-                $arrData['leads'][$index]['total_user'] = $value->total_user;
-                $arrData['leads'][$index]['not_logged_in'] = ($arrData['leads'][$index]['total_user'] - $arrData['leads'][$index]['total']);
+                if(isset($value->total_user)){
+                    $arrData['leads'][$index]['total_user'] = $value->total_user;
+                    $arrData['Total'] += $value->total_user;    
+                    $arrData['leads'][$index]['not_logged_in'] = ($arrData['leads'][$index]['total_user'] - $arrData['leads'][$index]['total']);
+                }
             }
         }
         return $arrData;
