@@ -98,7 +98,7 @@ class Authenticate extends CI_Controller
         $bm_response = '{"dbk_lms_emp_record1":
                                     {
                                         "EMPLID": "0007963","deptid": "000564","dbk_dept_type": "BR","dept_discription": "Branch","district": "DELHI","state": "DL","dbk_state_id": "009871","name": ". ASHISH SINGH","supervisor": "0002958","designation_id": "520299","designation_descr": "BRANCH MANAGER-SC-II","url": "NA","phone": "9971866702","email": "dummy@dummy.com","detail": "","DBK_LMS_COLL": [
-                                        {"DESCR10": "0003504","DESCR30": "NAME1"},{
+                                        {"DESCR10": "0003504","DESCR30": "SANDEEP KUMAR BHATOA"},{
                                         "DESCR10": "0006288","DESCR30": "NAME2"},{
                                         "DESCR10": "0011350","DESCR30": "NAME3"},{
                                         "DESCR10": "0013243","DESCR30": "NAME4"}]}
