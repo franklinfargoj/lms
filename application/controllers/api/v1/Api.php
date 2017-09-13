@@ -679,7 +679,8 @@ class Api extends REST_Controller
         $join = array();
         $join[] = array('table' => Tbl_Products . ' as p', 'on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id', 'type' => '');
 
-        $select = array('l.id', 'l.customer_name', 'l.lead_identification', 'l.created_on', 'l.lead_source', 'p.title', 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on');
+        $select = array('l.id', 'l.customer_name', 'l.lead_identification', 'l.created_on', 'l.lead_source',
+          "UCASE(p.title) as title", 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on');
         $where = array('la.employee_id' => $login_user['hrms_id'], 'la.is_deleted' => 0, 'YEAR(la.created_on)' => date('Y'));
         $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
 
@@ -881,6 +882,7 @@ class Api extends REST_Controller
             $lead_source = $params['lead_source'];
             $branch_id = $params['branch_id'];
             $unassigned_leads = $this->Lead->unassigned_leads_api($lead_source, $branch_id);
+            $unassigned_leads[0]['product_title'] = ucwords($unassigned_leads[0]['product_title']);
             $res = array('result' => True,
                 'data' => $unassigned_leads);
             returnJson($res);
@@ -980,6 +982,8 @@ class Api extends REST_Controller
                 /*$join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');*/
             }
             $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+            $arrData['leads'][0]['product_title']=ucwords($arrData['leads'][0]['product_title']);
+            $arrData['leads'][0]['category_title']=ucwords($arrData['leads'][0]['category_title']);
             $res = array('result' => True,
                 'data' => $arrData['leads']);
             returnJson($res);
