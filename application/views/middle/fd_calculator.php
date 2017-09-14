@@ -6,9 +6,8 @@
  * Time: 2:14 PM
  */
 $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset' => '', 'id' => 'fd_calculate');
-$data_month = array('name'=>'month','id'=>'month','placeholder'=>'Months');
-$data_days = array('name'=>'days','id'=>'days','placeholder'=>'Days');
-$data_amount = array('name'=>'amount','id'=>'amount');
+$data_number = array('name'=>'tenure','id'=>'tenure','placeholder'=>'Months');
+$data_amount = array('name'=>'principal','id'=>'principal');
 $data_interest = array('name'=>'interest','id'=>'interest');
 $data_maturity = array('name'=>'maturity','id'=>'maturity');
 ?>
@@ -29,28 +28,46 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                     <div class="form-control">
                         <label>Senior Citizen:</label>
                         <div class="radio-control">
-                            <input type="radio" id="is_own_branch" name="is_own_branch"
-                                   value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
+                            <input type="radio" id="senior" name="citizen"
+                                   value="1" <?php echo set_radio('citizen', '1', TRUE); ?>/>
                             <label>Yes</label>
                         </div>
                         <div class="radio-control">
-                            <input type="radio" name="is_own_branch" id="is_other_branch"
-                                   value="0" <?php echo set_radio('is_own_branch', '0'); ?> />
+                            <input type="radio" name="citizen" id="junior"
+                                   value="0" <?php echo set_radio('citizen', '0'); ?>/>
                             <label>No</label>
                         </div>
                     </div>
                     <div class="form-control">
-                        <label>Deposit Term:</label>
-                            <?php echo form_input($data_month);?>
-                            <?php echo form_input($data_days);?>
-                    </div>
-                    <div class="form-control">
-                        <label>Amount of F.D:</label>
-                            <?php echo form_input($data_amount);?>
+                        <label>Principal (Rs.):</label>
+                        <?php echo form_input($data_amount);?>
                     </div>
                     <div class="form-control">
                         <label>Rate of Interest:</label>
-                            <?php echo form_input($data_interest);?>
+                        <?php echo form_input($data_interest);?>
+                    </div>
+                    <div class="form-control">
+                        <label>Period:</label>
+                            <?php
+                                $data_period[''] = 'Select';
+                                $data_period['1'] = 'year(s)';
+                                $data_period['12'] = 'month(s)';
+                                $data_period['365'] = 'day(s)';
+                            ?>
+                            <?php echo form_input($data_number);?>
+                            <?php echo form_dropdown('tenurePeriod',$data_period,'','id=tenurePeriod')?>
+                    </div>
+                    <div class="form-control">
+                        <label>Frequency:</label>
+                        <?php
+                        $data_fd[''] = 'Select Frequency';
+                        $data_fd['0'] = 'Simple Interest';
+                        $data_fd['12'] = 'Monthly';
+                        $data_fd['4'] = 'Quaterly';
+                        $data_fd['2'] = 'Halfyearly';
+                        $data_fd['1'] = 'Annually';
+                        ?>
+                        <?php echo form_dropdown('frequency',$data_fd,'','id=frequency')?>
                     </div>
                     <div class="form-control form-submit clearfix">
 
@@ -73,63 +90,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
         </div>
     </div>
 </div>
+<script src = "<?php echo base_url().ASSETS;?>/js/calculator.js"></script>
 <script>
-    $.validator.addMethod('minStrict', function (value, el, param) {
-        return value > param;
-    });
-    $("#fd_calculate").validate({
-        rules:{
-            interest:{
-                required:true,
-                number:true,
-                minStrict:0,
-                max:20
-            },
-            month:{
-                required:true,
-                minStrict:0,
-                number:true
-            },
-            days:{
-                required:true,
-                minStrict:0,
-                number:true
-            },
-            amount:{
-                required:true,
-                minStrict:0,
-                number:true
-            }
-        },
-        messages:{
-            interest: {
-                required: "Please enter interest",
-                number: "Only numbers allowed",
-                max:"Please Enter a value less than or equal to 20",
-                minStrict:"Please enter interest more than 0"
-            },
-            month: {
-                required: "Please enter month",
-                number: "Only numbers allowed",
-                minStrict:"Please enter month more than 0"
-            },
-            days: {
-                required: "Please enter days",
-                number: "Only numbers allowed",
-                minStrict:"Please enter days more than 0"
-            },
-            amount: {
-                required: "Please enter amount",
-                number: "Only numbers allowed",
-                minStrict:"Please enter amount more than 0"
-            }
-        }
-    });
-    var month = $('#month').val();
-    var days = $('#days').val();
-    var interest = $('#interest').val();
-    var amount = $('#amount').val();
-
-
-
+    fd_calculator();
 </script>
