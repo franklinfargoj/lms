@@ -30,8 +30,8 @@ class Reports extends CI_Controller
         $arrData['branch_id'] = decode_id($branch_id);
         $arrData['national'] = '';
         if($this->input->post()){
-            $arrData['start_date']  = str_replace('/', '-',$this->input->post('start_date'));
-            $arrData['end_date']   = str_replace('/', '-',$this->input->post('end_date'));
+            $arrData['start_date']  = str_replace('-', '-',$this->input->post('start_date'));
+            $arrData['end_date']   = str_replace('-', '-',$this->input->post('end_date'));
             $arrData['product_category_id']    = $this->input->post('product_category_id');
             $arrData['product_id']     = $this->input->post('product_id');
             $arrData['lead_source'] = $this->input->post('lead_source');
@@ -57,8 +57,8 @@ class Reports extends CI_Controller
             }
         }else{
             $d = new DateTime('first day of this month');
-            $arrData['start_date'] = str_replace('/', '-', $d->format('d/m/Y'));
-            $arrData['end_date']   = str_replace('/', '-',date('d/m/Y'));
+            $arrData['start_date'] = str_replace('-', '-', $d->format('d-m-Y'));
+            $arrData['end_date']   = str_replace('-', '-',date('d-m-Y'));
             if($action == 'leads_generated_vs_converted'){
                 $arrData = $this->$action('generated',$arrData);
                 $arrData = $this->$action('converted',$arrData);
@@ -1476,9 +1476,9 @@ class Reports extends CI_Controller
     public function export_to_excel($action,$arrData){
         /*pe($arrData);
         exit;*/
-        if(($arrData['view'] == 'employee') || ($arrData['viewName'] == 'EM' && $arrData['view'] == '')){
+        if($arrData['viewName'] == 'EM'){
             $header_value = array('Sr.No','Zone','Branch','Employee Name','Source Type','Category Name','Product Name');
-        }else if(($arrData['view'] == 'branch') || ($arrData['viewName'] == 'BM' && $arrData['view'] == '')){
+        }else if($arrData['viewName'] == 'BM'){
             $header_value = array('Sr.No','Zone','Branch','Source Type','Category Name','Product Name');   
         }else{
             $header_value = array('Sr.No','Zone','Source Type','Category Name','Product Name');
@@ -1509,7 +1509,7 @@ class Reports extends CI_Controller
                 $header_value = array_merge($header_value,$leads_classification_col);
                 break;
             case 'usage':
-                if(($arrData['view'] == 'employee') || ($arrData['viewName'] == 'EM' && $arrData['view'] == '')){
+                if($arrData['viewName'] == 'EM'){
                     $usage_col = array('Logged in count');
                 }else{
                     $usage_col = array('Total User','Logged in User','Not logged in User');
@@ -1586,11 +1586,11 @@ class Reports extends CI_Controller
             $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
             $objSheet->getCell($excel_alpha[1].$i)->setValue(ucwords($value['zone_name']));
             $col = 1;
-            if(($data['view'] == 'employee') || ($data['viewName'] == 'EM' && $data['view'] == '')){
+            if($data['viewName'] == 'EM'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']));
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['employee_name']));
             }
-            if(($data['view'] == 'branch') || ($data['viewName'] == 'BM' && $data['view'] == '')){
+            if($data['viewName'] == 'BM'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']));
             }
             $objSheet->getCell($excel_alpha[++$col].$i)->setValue(!empty($data['lead_source']) ? ucwords($data['lead_source']) : 'All');
@@ -1602,7 +1602,7 @@ class Reports extends CI_Controller
             }else if($action == 'leads_classification'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['ticket']) ? $value['ticket'] : 0);
             }else if($action == 'usage'){
-                if(($data['view'] == 'employee') || ($data['viewName'] == 'EM' && $data['view'] == '')){
+                if($data['viewName'] == 'EM'){
                     $objSheet->getCell($excel_alpha[++$col].$i)->setValue($value['total']);
                 }else{
                     $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['total_user']) ? $value['total_user'] : 0);

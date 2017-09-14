@@ -66,7 +66,7 @@
                                 <a class="" href="<?php echo site_url('product_category/edit/'. encode_id($value['id']));?>">
                                     Edit
                                 </a>
-                                <span>/</span> 
+                                <span>|</span> 
                                 <a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('product_category/delete/'. encode_id($value['id']))?>">
                                     Delete
                                 </a> 

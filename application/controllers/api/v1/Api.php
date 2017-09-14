@@ -1738,8 +1738,8 @@ class Api extends REST_Controller
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => $val->DESCR30,
-                            'total_generated' => 0,
-                            'total_converted' => 0);
+                            'total_generated_mtd' => 0,
+                            'total_generated_ytd' => 0);
                     } else {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,

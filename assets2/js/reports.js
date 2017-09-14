@@ -1,15 +1,16 @@
 jQuery(document).ready(function() { 
     $("#start_date, #end_date").datepicker({
-        dateFormat: 'dd/mm/yy'
+        dateFormat: 'dd-mm-yy',
+        maxDate: 0
     });
 
     $.validator.addMethod(
         "CustomDate",
         function(value, element) {
             // put your own logic here, this is just a (crappy) example
-            return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+            return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
         },
-        "Please enter a date in the format dd/mm/yyyy."
+        "Please enter a date in the format dd-mm-yyyy."
     );
 
     $('#search_form').validate({
@@ -43,7 +44,7 @@ jQuery(document).ready(function() {
                 $('.result').hide();
                 $('.no_result').hide();
                 $('.loader').show();
-                setTimeout(function(){        
+                setTimeout(function(){ 
                     form.submit();
                     if(($('#export').length > 0) || ($('#national').length > 0)){
                         $('.custom_button').removeAttr('disabled');

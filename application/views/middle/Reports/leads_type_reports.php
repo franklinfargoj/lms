@@ -11,28 +11,23 @@ $lead_type = $this->config->item('lead_type');
         </h3>
     </div>
 </div>
+<?php 
+    //Form
+    $attributes = array(
+        'role' => 'form',
+        'id' => 'search_form',
+        'class' => 'form',
+        'autocomplete' => 'off'
+    );
+    echo form_open(site_url().'reports/index/leads_type_reports', $attributes);
+    $data = array(
+        'view'   => isset($view) ? $view : '',
+        'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
+        'branch_id' => isset($branch_id) ? encode_id($branch_id) : ''
+    );
 
-<div class="lead-form">
-    <span class="bg-top"></span>
-        <div class="inner-content">
-        <div class="container">
-    <?php 
-        //Form
-        $attributes = array(
-            'role' => 'form',
-            'id' => 'search_form',
-            'class' => 'form',
-            'autocomplete' => 'off'
-        );
-        echo form_open(site_url().'reports/index/leads_type_reports', $attributes);
-        $data = array(
-            'view'   => isset($view) ? $view : '',
-            'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
-            'branch_id' => isset($branch_id) ? encode_id($branch_id) : ''
-        );
-
-        echo form_hidden($data);
-    ?>
+    echo form_hidden($data);
+?>
 <div class="lead-form">
     <span class="bg-top"></span>
     <div class="lead-form-left">
@@ -40,7 +35,7 @@ $lead_type = $this->config->item('lead_type');
             <label>Start Date:</label>   
             <?php 
                 if(isset($start_date)){
-                    $start_date = date('d/m/Y',strtotime($start_date));
+                    $start_date = date('d-m-Y',strtotime($start_date));
                 }else{
                     $start_date = '';
                 }
@@ -107,7 +102,7 @@ $lead_type = $this->config->item('lead_type');
             <label>End Date:</label>   
             <?php 
                 if(isset($end_date)){
-                    $end_date = date('d/m/Y',strtotime($end_date));
+                    $end_date = date('d-m-Y',strtotime($end_date));
                 }else{
                     $end_date = '';
                 }
@@ -160,7 +155,6 @@ $lead_type = $this->config->item('lead_type');
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-    <?php echo form_close();?>     
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
@@ -183,10 +177,8 @@ $lead_type = $this->config->item('lead_type');
                 <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
             </a>
             <a href="javascript:void(0);" class="export_national">
-                    Download Bank Data
-                </a>
-            </div>
-            </div>
+                Download Bank Data
+            </a>
         </div>
     </div>
 </div>

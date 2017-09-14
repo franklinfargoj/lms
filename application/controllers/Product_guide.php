@@ -273,7 +273,7 @@ class Product_guide extends CI_Controller {
                     $where = array('product_id' => $productId);
                     $valid = $this->master->view_points($where);
                     if($valid){
-                         if($insert['from_range'] < $valid[0]['to_range']){
+                         if($insert['from_range'] <= $valid[0]['to_range']){
                              $this->session->set_flashdata('error','Please enter range above '.$valid[0]['from_range'].' - '.$valid[0]['to_range']); 
                              redirect('product_guide/manage_points/'.encode_id($productId));
                          }
@@ -300,6 +300,8 @@ class Product_guide extends CI_Controller {
           }
           $productId = decode_id($productId);
           $arrData['product'] = $this->master->view_product($productId);
+          $where = array('product_id' => $productId,'active' => 1);
+          $arrData['points_distrubution'] = $this->master->view_points_distrubute($where);
           if(count($arrData['product']) > 1){
                $this->session->set_flashdata('error','Invalid access');
                redirect('product');

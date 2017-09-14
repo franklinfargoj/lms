@@ -36,7 +36,7 @@ $lead_status = $this->config->item('lead_status');
             <label>Start Date:</label>   
             <?php 
                 if(isset($start_date)){
-                    $start_date = date('d/m/Y',strtotime($start_date));
+                    $start_date = date('d-m-Y',strtotime($start_date));
                 }else{
                     $start_date = '';
                 }
@@ -103,7 +103,7 @@ $lead_status = $this->config->item('lead_status');
             <label>End Date:</label>   
             <?php 
                 if(isset($end_date)){
-                    $end_date = $end_date;
+                    $end_date = date('d-m-Y',strtotime($end_date));
                 }else{
                     $end_date = '';
                 }

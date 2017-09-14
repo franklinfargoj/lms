@@ -116,39 +116,55 @@ class Dashboard extends CI_Controller {
         //for generated lead
         $where_month_Array = array('branch_id' => $branch_id,
             'MONTH(created_on)' => date('m'));
-        $generated_value = $this->master->get_generated_lead_bm_zm($where_month_Array);
+        $where_year_Array = array('branch_id' => $branch_id,
+                    'YEAR(created_on)' => date('Y'));
+        $generated['monthly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_month_Array);
+        $generated['yearly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_year_Array);
+        $generated_key_value = array();
+        $generated_key_value_year = array();
+        $final = array();
+        foreach ($generated['monthly_generated_leads'] as $k => $v) {
+            $generated_key_value[$v['created_by']] = $v['total'];
+        }
+        foreach ($generated['yearly_generated_leads'] as $k => $v) {
+            $generated_key_value_year[$v['created_by']] = $v['total'];
+        }
+
+
         //for converted lead
         $final = array();
         $login_user = get_session();
         $result = get_details($login_user['hrms_id']);
-        foreach ($result['list'] as $key =>$value){
-            $generated_key_value = array();
-            foreach ($generated_value as $k => $v) {
-                $generated_key_value[$v['created_by']] = $v['total'];
-            }
-            if (!array_key_exists($value->DESCR10, $generated_key_value)) {
+        foreach ($result['list'] as $key =>$val){
+            if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                 $push_generated = array(
-                    'created_by' => $value->DESCR10,
-                    'created_by_name' => $value->DESCR30,
-                    'total_generated' => 0);
-            } else {
+                    'created_by' => $val->DESCR10,
+                    'created_by_name' => $val->DESCR30,
+                    'total_generated_mtd' => 0,
+                    'total_generated_ytd' => 0);
+            }else {
                 $push_generated = array(
-                    'created_by' => $value->DESCR10,
-                    'created_by_name' => $value->DESCR30,
-                    'total_generated' => $generated_key_value[$value->DESCR10]);
+                    'created_by' => $val->DESCR10,
+                    'created_by_name' => $val->DESCR30,
+                    'total_generated_mtd' => $generated_key_value[$val->DESCR10],
+                    'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
             }
-            $final[$value->DESCR10] = $push_generated;
+            $final[$val->DESCR10] = $push_generated;
         }
         foreach ($final as $id => $value) {
 
-            $where_month_Array = array('employee_id' => $value['created_by'],
-                'MONTH(created_on)' => date('m'),
-                'status' => 'converted');
+            $where_month_Array = array('employee_id' => $value['created_by'],'MONTH(created_on)' => date('m'),'status' => 'converted');
+            $where_year_Array = array('employee_id' => $value['created_by'],'YEAR(created_on)' => date('Y'),'status' => 'converted');
             $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
+            $converted_yearly = $this->master->get_converted_lead_bm_zm($where_year_Array);
             if (empty($converted)) {
                 $converted = 0;
             }
-            $final[$value['created_by']]['total_converted'] = $converted;
+            if (empty($converted_yearly)) {
+                $converted_yearly = 0;
+            }
+            $final[$value['created_by']]['total_converted_mtd'] = $converted;
+            $final[$value['created_by']]['total_converted_ytd'] = $converted_yearly;
         }
         return $final;
     }
@@ -160,45 +176,59 @@ class Dashboard extends CI_Controller {
      */
     private function zm_view($zone_id){
 
-        $where_month_Array = array(
-            'zone_id' => $zone_id,
-            'MONTH(created_on)' => date('m')
-        );
-        $generated = $this->master->get_generated_lead_bm_zm($where_month_Array);
+        $where_month_Array = array('zone_id' => $zone_id,'MONTH(created_on)' => date('m'));
+        $where_year_Array = array('zone_id' => $zone_id,'YEAR(created_on)' => date('Y'));
+        $generated['monthly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_month_Array);
+        $generated['yearly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_year_Array);
+        /*pe($generated);
+        exit;*/
         $generated_key_value = array();
+        $generated_key_value_year = array();
+        $final = array();
+        foreach ($generated['monthly_generated_leads'] as $k => $v) {
+            $generated_key_value[$v['branch_id']] = $v['total'];
+        }
+        foreach ($generated['yearly_generated_leads'] as $k => $v) {
+            $generated_key_value_year[$v['branch_id']] = $v['total'];
+        }
         $final = array();
         $login_user = get_session();
         $result = get_details($login_user['hrms_id']);
-        foreach ($generated as $k => $v) {
-            $generated_key_value[$v['branch_id']] = $v['total'];
-        }
-        /*pe($this->db->last_query());
-        exit;*/
         foreach ($result['list'] as $key => $val) {
             if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                 $push_generated = array(
-                    'created_by_branch_id' => $val->DESCR10,
-                    'created_by_branch_name' => $val->DESCR30,
-                    'total_generated' => 0);
+                    'created_by' => $val->DESCR10,
+                    'created_by_name' => $val->DESCR30,
+                    'total_generated_mtd' => 0,
+                    'total_generated_ytd' => 0);
             } else {
                 $push_generated = array(
-                    'created_by_branch_id' => $val->DESCR10,
-                    'created_by_branch_name' => $val->DESCR30,
-                    'total_generated' => $generated_key_value[$val->DESCR10]);
+                    'created_by' => $val->DESCR10,
+                    'created_by_name' => $val->DESCR30,
+                    'total_generated_mtd' => $generated_key_value[$val->DESCR10],
+                    'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
             }
             $final[$val->DESCR10] = $push_generated;
         }
         //for converted
         foreach ($final as $id => $value) {
 
-            $where_month_Array = array('branch_id' => $value['created_by_branch_id'],
+            $where_month_Array = array('branch_id' => $value['created_by'],
                 'MONTH(created_on)' => date('m'),
                 'status' => 'converted');
+            $where_year_Array = array('branch_id' => $value['created_by'],
+                'YEAR(created_on)' => date('Y'),
+                'status' => 'converted');
             $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
+            $converted_yearly = $this->master->get_converted_lead_bm_zm($where_year_Array);
             if (empty($converted)) {
                 $converted = 0;
             }
-            $final[$value['created_by_branch_id']]['total_converted'] = $converted;
+            if (empty($converted_yearly)) {
+                $converted_yearly = 0;
+            }
+            $final[$value['created_by']]['total_converted_mtd'] = $converted;
+            $final[$value['created_by']]['total_converted_ytd'] = $converted_yearly;
         }
         return $final;
     }
@@ -210,49 +240,58 @@ class Dashboard extends CI_Controller {
      */
     private function gm_view(){
 
-        $where_month_Array = array(
-            'zone_id !=' => NULL,
-            'MONTH(created_on)' => date('m')
-        );
-        $generated = $this->master->get_generated_lead_bm_zm($where_month_Array);
+        $where_generated_Array = array('zone_id !=' => NULL,
+            'MONTH(created_on)' => date('m'));
+        $where_year_Array = array('zone_id !=' => NULL,
+            'YEAR(created_on)' => date('Y'));
+        $generated['generated_leads'] = $this->master->get_generated_lead_bm_zm($where_generated_Array);
+        $generated['yearly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_year_Array);
         $generated_key_value = array();
+        $generated_key_value_year = array();
         $final = array();
-        $login_user = get_session();
-        $result = get_details($login_user['hrms_id']);
-        foreach ($generated as $k => $v) {
+        foreach ($generated['generated_leads'] as $k => $v) {
             $generated_key_value[$v['zone_id']] = $v['total'];
         }
-        
+        foreach ($generated['yearly_generated_leads'] as $k => $v) {
+            $generated_key_value_year[$v['zone_id']] = $v['total'];
+        }
+        $login_user = get_session();
+        $result = get_details($login_user['hrms_id']);
         foreach ($result['list'] as $key => $val) {
             if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                 $push_generated = array(
-                    'created_by_zone_id' => $val->DESCR10,
-                    'created_by_zone_name' => $val->DESCR30,
-                    'total_generated' => 0
-                );
+                    'created_by' => $val->DESCR10,
+                    'created_by_name' => $val->DESCR30,
+                    'total_generated_mtd' => 0,
+                    'total_generated_ytd' => 0);
             } else {
                 $push_generated = array(
-                    'created_by_zone_id' => $val->DESCR10,
-                    'created_by_zone_name' => $val->DESCR30,
-                    'total_generated' => $generated_key_value[$val->DESCR10]
-                );
+                    'created_by' => $val->DESCR10,
+                    'created_by_name' => $val->DESCR30,
+                    'total_generated_mtd' => $generated_key_value[$val->DESCR10],
+                    'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
             }
             $final[$val->DESCR10] = $push_generated;
         }
-        /*pe($final);
-        exit;*/
         //for converted
         foreach ($final as $id => $value) {
-            $where_month_Array = array(
-                'zone_id' => $value['created_by_zone_id'],
+
+            $where_month_Array = array('zone_id' => $value['created_by'],
                 'MONTH(created_on)' => date('m'),
-                'status' => 'converted'
-            );
+                'status' => 'converted');
+            $where_year_Array = array('zone_id' => $value['created_by'],
+                'YEAR(created_on)' => date('Y'),
+                'status' => 'converted');
             $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
+            $converted_yearly = $this->master->get_converted_lead_bm_zm($where_year_Array);
             if (empty($converted)) {
                 $converted = 0;
             }
-            $final[$value['created_by_zone_id']]['total_converted'] = $converted;
+            if (empty($converted_yearly)) {
+                $converted_yearly = 0;
+            }
+            $final[$value['created_by']]['total_converted_mtd'] = $converted;
+            $final[$value['created_by']]['total_converted_ytd'] = $converted_yearly;
         }
         return $final;
     }
@@ -567,8 +606,8 @@ class Dashboard extends CI_Controller {
         $designation_type = $login_user['designation_name'];
         switch ($designation_type){
             case 'BM':
-                $header_value = array('Sr.No','Employee Name','Generated Leads(This Month)',
-                    'Converted Leads(This Month)');
+                $header_value = array('Sr.No','Employee Name','Generated Leads(This Month)','Generated Leads(This Year)',
+                    'Converted Leads(This Month)','Converted Leads(This Year)');
                 $id = $login_user['branch_id'];
                 $data = $this->bm_view($id);
                 export_excel($header_value,$data);

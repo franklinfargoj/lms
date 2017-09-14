@@ -87,7 +87,7 @@ $branch_extra = 'id="branch_id"';
                             <div class="form-control">
                                 <label>Assign To:</label> <span class="detail-label"><?php echo ucwords($leads[0]['employee_name']);?></span>
                             </div>
-                            <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('EM','BM')))){?>
+                            <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('EM','BM'))) && ($leads[0]['status'] != 'Converted')){?>
                                 <!-- <div class="form-control">
                                     <label>Interest in other product</label>
                                     <div class="radio-control">
@@ -146,6 +146,9 @@ $branch_extra = 'id="branch_id"';
                                         echo form_hidden($data);
                                         $options1['']='Select';
                                         foreach ($lead_status as $key => $value) {
+                                            if((in_array($this->session->userdata('admin_type'),array('EM'))) && (in_array($key,array('Converted')))){
+                                                continue;
+                                            }
                                             $options1[$key] = $value;
                                         }
                                         $js = array(
@@ -204,8 +207,8 @@ $branch_extra = 'id="branch_id"';
 
                         <div class="lead-form-right">
                         <?php if(isset($backUrl)){?>
-            <a href="<?php echo site_url($backUrl);?>" class="reset float-right abbas"> < Back</a>
-        <?php }?>
+                            <a href="<?php echo site_url($backUrl);?>" class="reset float-right abbas"> < Back</a>
+                        <?php }?>
                             <div class="form-control ">
                                 <label>Customer Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['customer_name']);?></span>
                             </div>
@@ -216,7 +219,7 @@ $branch_extra = 'id="branch_id"';
                                 <label>Remark/Notes</label>
                                 <p class="remark-notes"><?php echo isset($leads[0]['remark']) ? $leads[0]['remark'] : 'NA';?></p>
                             </div>
-                            <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')))){?>
+                            <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM'))) && ($leads[0]['status'] != 'Converted')){?>
                             <div class="form-control">
                                 <label>Reroute:</label>
                                 <div class="radio-control">
@@ -259,7 +262,7 @@ $branch_extra = 'id="branch_id"';
                             <?php }?>
                         </div>
                         <div class="form-control form-submit clearfix">
-                            <?php if($type == 'assigned'){?>
+                            <?php if(($type == 'assigned') && ($leads[0]['status'] != 'Converted')){?>
                                 <a href="javascript:void(0);" class="float-right submit_button">
                                     <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
                                     <span><input type="submit" class="custom_button" value="Submit" /></span>
@@ -293,7 +296,7 @@ $branch_extra = 'id="branch_id"';
         });
 
         $('body').on('focus',".datepicker_recurring_start", function(){
-            $(this).datepicker({dateFormat: 'dd-mm-yy'});
+            $(this).datepicker({dateFormat: 'dd-mm-yy',minDate: 0});
 
         });
         
@@ -347,6 +350,14 @@ $branch_extra = 'id="branch_id"';
         $.validator.addMethod("regx", function(value, element, regexpr) {
             return regexpr.test(value);
         });
+        $.validator.addMethod(
+        "CustomDate",
+        function(value, element) {
+            // put your own logic here, this is just a (crappy) example
+            return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
+        },
+        "Please enter a date in the format dd-mm-yyyy."
+    );
 
         $("#detail_form").validate({
             rules: {
@@ -357,7 +368,8 @@ $branch_extra = 'id="branch_id"';
                     required: true
                 },
                 remind_on: {
-                    required: true
+                    required: true,
+                    CustomDate:true
                 },
                 lead_identification : {
                     required : function(el) {
