@@ -11,8 +11,6 @@
 
 <div class="lead-form">
     <span class="bg-top"></span>
-
-        <div class="inner-content" >
     <?php 
         //Form
         $attributes = array(
@@ -30,7 +28,7 @@
 
         echo form_hidden($data);
     ?>
-    <div class="lead-form-left" id="l-width">
+    <div class="lead-form-left">
         <div class="form-control">
             <label>Start Date:</label>   
             <?php 
@@ -97,7 +95,7 @@
             ?>
         </div>
     </div>
-    <div class="lead-form-right" id="r-width">
+    <div class="lead-form-right">
         <div class="form-control endDate">
             <label>End Date:</label>   
             <?php 
@@ -147,7 +145,7 @@
                 }
             ?>
         </div>
-    
+    </div>
     <div class="form-control form-submit clearfix">
         <a href="javascript:void(0);" class="float-right">
             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
@@ -155,9 +153,7 @@
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-    </div>
     <?php echo form_close();?>
-    </div>
     <span class="bg-bottom"></span>
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">

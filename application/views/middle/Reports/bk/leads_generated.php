@@ -1,18 +1,22 @@
+<?php
+$lead_type = $this->config->item('lead_type');
+$lead_status = $this->config->item('lead_status');
+?>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- END PAGE LEVEL STYLES -->
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Generated Vs Converted Report
+            Leads Generated Report
         </h3>
     </div>
 </div>
 
 <div class="lead-form">
+<div class="container clearfix">
     <span class="bg-top"></span>
-
-        <div class="inner-content" >
+    
     <?php 
         //Form
         $attributes = array(
@@ -21,7 +25,7 @@
             'class' => 'form',
             'autocomplete' => 'off'
         );
-        echo form_open(site_url().'reports/index/leads_generated_vs_converted', $attributes);
+        echo form_open(site_url().'reports/index/leads_generated', $attributes);
         $data = array(
             'view'   => isset($view) ? $view : '',
             'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
@@ -30,7 +34,7 @@
 
         echo form_hidden($data);
     ?>
-    <div class="lead-form-left" id="l-width">
+    <div class="lead-form-left">
         <div class="form-control">
             <label>Start Date:</label>   
             <?php 
@@ -97,7 +101,7 @@
             ?>
         </div>
     </div>
-    <div class="lead-form-right" id="r-width">
+    <div class="lead-form-right">
         <div class="form-control endDate">
             <label>End Date:</label>   
             <?php 
@@ -147,7 +151,7 @@
                 }
             ?>
         </div>
-    
+    </div>
     <div class="form-control form-submit clearfix">
         <a href="javascript:void(0);" class="float-right">
             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
@@ -155,10 +159,9 @@
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-    </div>
     <?php echo form_close();?>
-    </div>
     <span class="bg-bottom"></span>
+</div>
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
@@ -175,19 +178,13 @@
                 <span class="total-lead">
                     Total Generated Leads
                 </span>
-                <span class="lead-num"> : <?php echo $G_Total;?></span>
+                <span class="lead-num"> : <?php echo $Total;?></span>
             </div>
             <div class="float-right">
-                <span class="total-lead">
-                    Total Converted Leads
-                </span>
-                <span class="lead-num"> : <?php echo $C_Total;?></span>
-            </div>
-            <!-- <div class="float-right">
                 <a href="<?php echo base_url('leads/export_excel_listing/');?>">
                     <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
                 </a>
-            </div> -->
+            </div>
         </div>
     </div>
     <div class="page-content">
@@ -225,11 +222,21 @@
                                 Product Name
                             </th>
                             <th align="center">
-                                Total Leads Generated
+                                Total Generated Leads
                             </th>
+                            <?php 
+                                foreach ($lead_status as $key => $value) {
+                                    //if(!in_array($key,array('AO','Converted','Closed'))){
+                            ?>
                             <th align="center">
-                                Total Leads Converted
+                                <?php
+                                    echo $value; 
+                                ?>
                             </th>
+                            <?php
+                                    //}
+                                }
+                            ?>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
                                 Action
@@ -263,7 +270,7 @@
                             <?php if(in_array($viewName,array('EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['employee_id']) ? $value['employee_id'] : '';
+                                    echo isset($value['created_by']) ? $value['created_by'] : '';
                                 ?>
                             </td>
                             <?php }?>
@@ -284,14 +291,27 @@
                             </td>
                             <td align="center">
                                 <?php 
-                                    echo isset($value['generated_count']) ? $value['generated_count'] : 0;
+                                    echo $value['total'];
                                 ?>
                             </td>
+                            <?php 
+                            //pe($value['status']);
+                                foreach ($lead_status as $k => $v) {
+                                    //if(!in_array($k,array('AO','Converted','Closed'))){
+                            ?>
                             <td align="center">
-                                <?php 
-                                    echo isset($value['converted_count']) ? $value['converted_count'] : 0;
+                                <?php
+                                if(in_array($k,array_keys($value['status']))){
+                                        echo $value['status'][$k];
+                                    }else{
+                                        echo 0;
+                                    }
                                 ?>
                             </td>
+                            <?php
+                                    //}
+                                }
+                            ?>
                             <?php if(in_array($viewName,array('ZM','BM'))){
                                 $param = '';
                                 if(isset($value['zone_id'])){
@@ -307,7 +327,7 @@
                                         if($view == 'branch' || $view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_generated_vs_converted/branch'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_generated/branch'.$param)?>">
                                         Branch View
                                     </a>
                                     <span>/</span> 
@@ -320,7 +340,7 @@
                                         if($view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_generated_vs_converted/employee'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_generated/employee'.$param)?>">
                                         Employee View
                                     </a> 
                                 <?php

@@ -15,6 +15,8 @@ $lead_status = $this->config->item('lead_status');
 
 <div class="lead-form">
     <span class="bg-top"></span>
+
+        <div class="inner-content">
     <?php 
         //Form
         $attributes = array(
@@ -32,7 +34,7 @@ $lead_status = $this->config->item('lead_status');
 
         echo form_hidden($data);
     ?>
-    <div class="lead-form-left">
+    <div class="lead-form-left" id="l-width">
         <div class="form-control">
             <label>Start Date:</label>   
             <?php 
@@ -99,7 +101,7 @@ $lead_status = $this->config->item('lead_status');
             ?>
         </div>
     </div>
-    <div class="lead-form-right">
+    <div class="lead-form-right" id="r-width">
         <div class="form-control endDate">
             <label>End Date:</label>   
             <?php 
@@ -158,6 +160,7 @@ $lead_status = $this->config->item('lead_status');
         </a>
     </div>
     <?php echo form_close();?>
+    </div>
     <span class="bg-bottom"></span>
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
