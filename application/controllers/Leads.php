@@ -135,9 +135,22 @@ class Leads extends CI_Controller
                     $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
                     send_sms($this->input->post('contact_no'),$message);
 
-                    //Push notification
-                    //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
+                    $select = array('device_token','device_type');
+                    $emp_id = $this->session->userdata('admin_id');
+                    $where = array('employee_id'=>$emp_id);
+                    $order_by = 'id desc';
+                    $limit = '1';
+                    $table = Tbl_LoginLog;
+                    $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
+                    $device_id = $device_values[0]['device_token'];
+                    $device_type = $device_values[0]['device_type'];
+                    if((!empty($device_type) || $device_type != NULL) &&
+                        ($device_id != NULL || !empty($device_id))){
 
+                        $message = 'Lead added successfully.';
+                        //Push notification
+                        sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
+                    }
                     //Save notification
                     $this->insert_notification($lead_data);
                 }
