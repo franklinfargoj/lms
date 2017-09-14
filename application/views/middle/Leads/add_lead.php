@@ -1,4 +1,8 @@
+ 
 
+
+
+      
 <?php
 $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset' => '', 'id' => 'addlead');
 $data_customer = array('name' => 'customer_name',
@@ -25,27 +29,14 @@ $data_account = array('name' => 'account_no',
     'id' => 'account_no',
     'value' => set_value('account_no', '')
 );
-
 $data_state[''] = 'Select State';
-if ($states != '') {
-    foreach ($states as $key => $value) {
-        $data_state[$value['code']] = $value['name'];
-    }
-}
+$data_state['1'] = 'Odisha';
 
 $data_branch[''] = 'Select Branch';
-if ($branches != '') {
-    foreach ($branches as $key => $value) {
-        $data_branch[$value['code']] = $value['name'];
-    }
-}
+$data_branch['1'] = 'Laxmisagar';
 
 $data_district[''] = 'Select District';
-if ($districts != '') {
-    foreach ($districts as $key => $value) {
-        $data_district[$value['code']] = $value['name'];
-    }
-}
+$data_district['1'] = 'Khordha';
 
 $data_department_name = array('name' => 'department_name',
     'id' => 'department_name',
@@ -103,9 +94,6 @@ $branch_options['0'] = 'Other Branch';
 $category_extra = 'id="product_category"';
 $product_extra = 'id="product"';
 $extra = '';
-$state_extra = 'id="state_id"';
-$district_extra = 'id="district_id"';
-$branch_extra = 'id="branch_id"';
 $remark_extra = 'style="rows:4 ; cols:80"';
 ?>
 <div class="page-title">
@@ -122,6 +110,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 $url = base_url('leads/add');
                 echo form_open($url, $form_attributes);
                 ?>
+                <p id="note"><span style="color:red;">*</span> These fields are required</p>
                 <div class="lead-form-left">
                     <!--<div class="form-control">
                         <label>Customer Type</label>
@@ -137,28 +126,29 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         </div>
                     </div>-->
     <!--                --><?php //echo form_error('is_existing_customer'); ?>
+                    
                     <div class="form-control">
-                        <label>Customer Name:</label>
+                        <label>Customer Name:<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_customer);?>
                         <?php echo form_error('customer_name'); ?>
                     </div>
                     <div class="form-control">
-                        <label>Customer Number:</label>
+                        <label>Customer Number:<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_phone); ?>
                         <?php echo form_error('contact_no'); ?>
                     </div>
                     <div class="form-control">
-                        <label>Product Category:</label>
+                        <label>Product Category:<span style="color:red;">*</span> </label>
                         <?php echo form_dropdown('product_category_id', $options, set_value('product_category_id'), $category_extra) ?>
                         <?php echo form_error('product_category_id'); ?>
                     </div>
                     <div class="form-control" id="product_select">
-                        <label>Product</label>
+                        <label>Product:<span style="color:red;">*</span> </label>
                         <?php echo form_dropdown('product_id', $product_options, set_value('product_id'), $product_extra) ?>
                         <?php echo form_error('product_id'); ?>
                     </div>
                     <div class="form-control range-slider">
-                        <label>Ticket Size</label>
+                        <label>Ticket Size:<span style="color:red;">*</span> </label>
                          <?php echo form_input($data_ticket_range)?><img src="../assets2/images/rupees.png" alt="rupees" id="rs">
                         <div id="master">
                             <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
@@ -178,14 +168,14 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <div class="form-control">
                         
                         <?php 
-                            if(in_array($this->session->userdata('admin_type'),array('GM','ZM'))){
+                            if(in_array($this->session->userdata('admin_type'),array('RM','ZM'))){
                                 $checked = TRUE;
                                 $style = "style='display:none'";
                             }else{
                                 $checked = FALSE;
                                 $style = "";
                         ?>
-                            <label>Branch Type:</label>
+                            <label>Branch Type:<span style="color:red;">*</span> </label>
                             <div class="radio-control">
                                 <input type="radio" id="is_own_branch" name="is_own_branch"
                                        value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
@@ -202,18 +192,18 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <?php echo form_error('is_own_branch'); ?>
                     </div>
                     <div id="state" class="form-control">
-                        <label>State:</label>
-                        <?php echo form_dropdown('state_id', $data_state,$input['state_id'],'disabled '.$state_extra) ?>
+                        <label>State:<?php echo $this->session->userdata('state_id');?></label>
+                        <?php echo form_dropdown('state_id', $data_state,$input['state_id'],'disabled') ?>
                         <?php echo form_error('state_id'); ?>
                     </div>
                     <div id="district" class="form-control">
-                        <label>District:</label>
-                        <?php echo form_dropdown('district_id', $data_district,$input['district_id'],'disabled '.$district_extra) ?>
+                        <label>District:<span style="color:red;">*</span> </label>
+                        <?php echo form_dropdown('district_id', $data_district, $input['district_id'],'disabled') ?>
                         <?php echo form_error('district_id'); ?>
                     </div>
                     <div id="branch" class="form-control">
-                        <label>Branch:</label>
-                        <?php echo form_dropdown('branch_id', $data_branch,$input['branch_id'],'disabled '.$branch_extra) ?>
+                        <label>Branch:<span style="color:red;">*</span> </label>
+                        <?php echo form_dropdown('branch_id', $data_branch, $input['branch_id'],'disabled') ?>
                         <?php echo form_error('branch_id'); ?>
                     </div>
 
@@ -224,7 +214,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     --><?php /*echo form_error('lead_identification'); */?>
 
                     <div class="form-control">
-                        <label>Remark/Notes</label>
+                        <label>Remark/Notes:<span style="color:red;">*</span> </label>
                         <?php echo form_textarea($data_remark, '', $remark_extra);?>
                         <?php echo form_error('remark'); ?>
                     </div>
@@ -289,49 +279,30 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         }
 
         $('#is_other_branch').click(function () {
-            var dist = '<select name="district_id" id = "district_id"><option value="">Select District</option></select>';
-            var branch = '<select name="branch_id" id = "branch_id"><option value="">Select Branch</option></select>';
-
             $('select[name="state_id"]').prop('disabled',false);
             $('select[name="branch_id"]').prop('disabled',false);
             $('select[name="district_id"]').prop('disabled',false);
             $('select[name="state_id"]').val('');
-            $('select[name="branch_id"]').html(branch);
-            $('select[name="district_id"]').html(dist);
+            $('select[name="branch_id"]').val('');
+            $('select[name="district_id"]').val('');
         });
         $('#is_own_branch').click(function () {
             if ($('#is_own_branch').is(':checked')) {
                 var state = "<?php echo $input['state_id'];?>";
-                var branch = "<?php echo $input['branch_id']?>";
-                var dist = "<?php echo $input['district_id'];?>"
+                var branch = "<?php echo $input['branch_id'];?>";
+                var district = "<?php echo $input['district_id'];?>";
+                $('select[name="state_id"]').val(state);
+                $('select[name="branch_id"]').val(branch);
+                $('select[name="district_id"]').val(district);
 
-                $.ajax({
-                    method:'POST',
-                    url: base_url + 'leads/is_own_branch',
-                    data:{
-                        '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
-                        district_code:dist,
-                        branch_code:branch,
-                    }
-                }).success(function (resp) {
-                    if(resp){
-                        var resp = JSON.parse(resp);
-                        $("#branch_id").html(resp['html']);
-                        $("#district_id").html(resp['html2']);
-
-                        $('select[name="state_id"]').val(state);
-                        $('select[name="state_id"]').prop('disabled',true);
-                        $('select[name="branch_id"]').prop('disabled',true);
-                        $('select[name="district_id"]').prop('disabled',true);
-                    }
-                });
-
-
+                $('select[name="state_id"]').prop('disabled',true);
+                $('select[name="branch_id"]').prop('disabled',true);
+                $('select[name="district_id"]').prop('disabled',true);
             }
         });
 
-        var base_url = "<?php echo base_url();?>";
         $('#product_category').change(function () {
+            var base_url = "<?php echo base_url();?>";
             var category_id = $('#product_category').val();
             var csrf = $("input[name=csrf_dena_bank]").val();
             $.ajax({
@@ -347,42 +318,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     $("#product_select").html(resp);
                 }
             });
-        });
-
-
-        $('#state_id').change(function () {
-           var state_code = $('#state_id').val();
-           $.ajax({
-              method:'POST',
-              url: base_url + 'leads/district_list',
-              data:{
-                  '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
-                  state_code:state_code,
-                  select_label:'Select District'
-              }
-           }).success(function (resp) {
-              if(resp){
-                  $("#district_id").html(resp);
-              }
-           });
-        });
-
-        $('#district_id').change(function () {
-           var district_code = $('#district_id').val();
-           $.ajax({
-              method:'POST',
-              url: base_url + 'leads/branch_list',
-              data:{
-                  '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
-                  district_code:district_code,
-                  select_label:'Select Branch'
-              }
-           }).success(function (resp) {
-              if(resp){
-                  console.log(resp);
-                  $("#branch_id").html(resp);
-              }
-           });
         });
 
         $.validator.addMethod("regx", function (value, element, regexpr) {

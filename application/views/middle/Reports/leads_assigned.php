@@ -103,7 +103,7 @@ $lead_status = $this->config->item('lead_status');
             <label>End Date:</label>   
             <?php 
                 if(isset($end_date)){
-                    $end_date = date('d/m/Y',strtotime($end_date));
+                    $end_date = $end_date;
                 }else{
                     $end_date = '';
                 }
@@ -156,6 +156,7 @@ $lead_status = $this->config->item('lead_status');
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
+    <?php echo form_close();?>
     <span class="bg-bottom"></span>
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">

@@ -41,6 +41,28 @@
 							echo form_dropdown('category_id', $options , $productDetail[0]['category_id'],$js);
 						?>
 					</div>
+                    <div class="form-control">
+                        <?php
+                        $attributes = array(
+                            'class' => '',
+                            'style' => ''
+                        );
+                        echo form_label('Map With:', 'map_with', $attributes);
+                        $map[''] = 'Select';
+                        foreach ($this->config->item('map') as $k => $map_value){
+                            $map[$k]=$map_value;
+                        }
+
+                        $js = array(
+                            'id'       => 'map_with',
+                            'class'	   => ''
+                            /*'onChange' => 'some_function();'*/
+                        );
+                        echo form_dropdown('map_with', $map , $productDetail[0]['map_with'],$js);
+
+                        echo form_error('map_with', '<span class="help-block">', '</span>');
+                        ?>
+                    </div>
 					<div class="form-control">
 						<?php 
 							$attributes = array(
@@ -159,6 +181,9 @@
             },
             turn_around_time: {
                 required: true
+            },
+            map_with: {
+                required: true
             }
         },
         messages: {
@@ -170,6 +195,9 @@
             },
             turn_around_time: {
                 required: "Please select turn around time"
+            },
+            map_with: {
+                required: "Please select map with"
             }
         }
     });

@@ -26,17 +26,18 @@ $lead_type = $this->config->item('lead_type');
 $param1 = isset($type) ? $type.'/' : '';
 $param2 = isset($till) ? $till.'/' : '';
 $param3 = isset($status) ? $status.'/' : '';
-$param4 = isset($param) ? $param.'/' : '';
+$param4 = isset($lead_source) ? $lead_source.'/' : '';
 ?>
 
 <div class="page-content">
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
+        
             <div class="lead-top clearfix">
                 <div class="float-left">
                     <span class="total-lead">
-                        Total Leads
+                        Total Leads 
                     </span>
                     <span class="lead-num"> : <?php echo count($leads);?></span>
                 </div>
@@ -47,6 +48,7 @@ $param4 = isset($param) ? $param.'/' : '';
                     </a>
                 </div>
             </div>
+            <div class="over">
             <table id="sample_3" class="display lead-table">
                 <thead>
                     <tr class="top-header">
@@ -96,17 +98,17 @@ $param4 = isset($param) ? $param.'/' : '';
                     </tr>
                     <tr>
 
-                        <th>
+                        <th style="text-align:left">
                             Customer Name
                         </th>
-                        <th>
+                        <th style="text-align:left">
                             Product Name
                         </th>
                         <th align="center">
                             Elapsed Days
                         </th>
                         <?php if(!isset($status)){?>
-                        <th>
+                        <th style="text-align:left">
                             Status
                         </th>
                         <?php }?>
@@ -115,7 +117,7 @@ $param4 = isset($param) ? $param.'/' : '';
                             Followup date
                         </th>
                         <?php }?>
-                        <th>
+                        <th style="text-align:left">
                             Lead Identified As
                         </th>
                         <?php if($type == 'assigned'){?>
@@ -123,10 +125,10 @@ $param4 = isset($param) ? $param.'/' : '';
                             Intrested Other Product
                         </th> -->
                         <?php }?>
-                         <th>
+                         <th style="text-align:left">
                             Lead Source
                         </th>
-                       <th>
+                       <th style="text-align:left">
                             Details
                         </th>
                     </tr>
@@ -200,6 +202,8 @@ $param4 = isset($param) ? $param.'/' : '';
                 </tbody>
             </table>
         </div>
+
+    </div>
     </div>
     <span class="bg-bottom"></span>
 </div>

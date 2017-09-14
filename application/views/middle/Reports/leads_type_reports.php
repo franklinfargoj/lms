@@ -11,7 +11,12 @@ $lead_type = $this->config->item('lead_type');
         </h3>
     </div>
 </div>
-<?php 
+
+<div class="lead-form">
+    <span class="bg-top"></span>
+        <div class="inner-content">
+        <div class="container">
+    <?php 
         //Form
         $attributes = array(
             'role' => 'form',
@@ -155,7 +160,7 @@ $lead_type = $this->config->item('lead_type');
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-    <span class="bg-bottom"></span>
+    <?php echo form_close();?>     
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
@@ -180,13 +185,14 @@ $lead_type = $this->config->item('lead_type');
             <a href="javascript:void(0);" class="export_national">
                     Download Bank Data
                 </a>
+            </div>
+            </div>
         </div>
     </div>
 </div>
 <?php echo form_close();?>
 <div class="result" style="display:none;">
     <div class="page-content">
-        <span class="bg-top"></span>
         <div class="inner-content">
             <div class="container">
                 <table id="sample_3" class="display lead-table">

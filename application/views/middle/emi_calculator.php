@@ -194,7 +194,6 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
         });
 
         $.validator.addMethod('minStrict', function (value, el, param) {
-            console.log(param);
             return value > param;
         });
         $("#emi").validate({
