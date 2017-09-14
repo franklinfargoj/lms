@@ -795,6 +795,17 @@ label#ticket_range-error {
 	width: 45%;
 	margin-right: 3%;
 }
+.container .form {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #d3d3d3;
+    margin-bottom: 30px;
+    padding-top: 15px;
+}
+a.btn-Download{
+    color: gray;
+    bottom: 18px;
+    text-decoration: underline;
+}
 /*-------------*/
 .lead-table thead{
 	background-color: #00559d;

@@ -107,12 +107,22 @@ class Leads extends CI_Controller
                 $keys = array('customer_name','contact_no','product_category_id','product_id',
                     'is_own_branch','remark','lead_ticket_range');
                 foreach ($keys as $k => $value){
-                    $lead_data[$value] = $this->input->post($value);
+                    if($value=='customer_name'){
+                        $lead_data[$value] = ucwords(strtolower($this->input->post($value)));
+                    }else{
+                        $lead_data[$value] = $this->input->post($value);
+                    }
 
                 }
+                $action = 'list';
+                $select = array('map_with');
+                $table = Tbl_Products;
+                $where = array('id'=>$lead_data['product_id']);
+                $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+                $product_mapped_with=$product_mapped_with[0]['map_with'];
                 $lead_data['department_name'] = $this->session->userdata('department_name');
                 $lead_data['department_id'] = $this->session->userdata('department_id');
-                $whereArray = array('product_id'=>$lead_data['product_id'],'branch_id'=>$lead_data['branch_id']);
+                $whereArray = array('processing_center'=>$product_mapped_with,'branch_id'=>$lead_data['branch_id']);
                 $routed_id = $this->Lead->check_mapping($whereArray);
                 if(!is_array($routed_id)){
                     $lead_data['reroute_from_branch_id'] = $branch_id;
@@ -578,7 +588,7 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_Category.' as c','on_condition' => 'l.product_category_id = c.id','type' => '');
 
             if($type == 'generated'){
-                $select = array('l.id','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title','c.title AS category_title','l.product_category_id','la.status');
+                $select = array('l.id','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
                 $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             }
             if($type == 'assigned'){
@@ -816,7 +826,7 @@ class Leads extends CI_Controller
         $join = array();
         $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
         if($type == 'generated'){
-            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on');
+            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on','DATEDIFF(CURDATE( ),l.created_on) as elapsed_day');
             if($till == 'mtd'){
                 $where = array('la.is_deleted' => 0,'la.is_updated' => 1,'MONTH(l.created_on)' => date('m')); //Month till date filter
             }

@@ -26,7 +26,7 @@ $lead_type = $this->config->item('lead_type');
 $param1 = isset($type) ? $type.'/' : '';
 $param2 = isset($till) ? $till.'/' : '';
 $param3 = isset($status) ? $status.'/' : '';
-$param4 = isset($param) ? $param.'/' : '';
+$param4 = isset($lead_source) ? $lead_source.'/' : '';
 ?>
 
 <div class="page-content">

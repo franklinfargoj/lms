@@ -130,7 +130,7 @@ class Master_model extends CI_Model{
 	 * @return array
 	 */
 	public function view_product($id = null,$where = array(),$order_by = array()){
-		$select = array(Tbl_Products.'.id',Tbl_Products.'.title',Tbl_Products.'.default_assign',Tbl_Products.'.created_by',Tbl_Products.'.status',Tbl_Products.'.turn_around_time',Tbl_Category.'.title AS category','category_id');
+		$select = array(Tbl_Products.'.id',Tbl_Products.'.map_with',Tbl_Products.'.title',Tbl_Products.'.default_assign',Tbl_Products.'.created_by',Tbl_Products.'.status',Tbl_Products.'.turn_around_time',Tbl_Category.'.title AS category','category_id');
 		$where[Tbl_Products.'.is_deleted'] = 0;
 		if(!empty($id)){
 			$where[Tbl_Products.'.id'] = $id;
@@ -195,6 +195,41 @@ class Master_model extends CI_Model{
 		}
 		$join = array('table' => Tbl_Products,'on_condition' => Tbl_Products.'.id = '.Tbl_ProductDetails.'.product_id','type' => 'right');
 		return $this->view($select,$where,Tbl_ProductDetails , $join,$order_by);
+	}
+
+	#####################################
+	/* Manage Points */
+	#####################################
+
+	/**
+	 * add_product
+	 * @author Ashok Jadhav
+	 * @access public
+	 * @param $data
+	 * @return int
+	 */
+	public function add_points($data){
+		return $this->insert(Tbl_Manage_Points,$data);
+	}
+
+	public function points_distrubute($data){
+		$where = array('product_id' => $data['product_id'],'active' => 1);
+		$current_distrubution = $this->view_points_distrubute($where);
+		if(count($current_distrubution) > 0){
+			$data1 = array('active' => 0);
+			$this->update($where,Tbl_Points_Distributor,$data1);	
+		}
+		return $this->insert(Tbl_Points_Distributor,$data);
+	}
+
+	public function view_points_distrubute($where = array()){
+		$select = array('id','product_id','generator_contrubution','convertor_contrubution','active');
+		return $this->view($select,$where,Tbl_Points_Distributor,$join = array(),$order_by = array());
+	}
+
+	public function view_points($where = array()){
+		$select = array('id','product_id','from_range','to_range','points');
+		return $this->view($select,$where,Tbl_Manage_Points,$join = array(),$order_by = array());
 	}
 
 

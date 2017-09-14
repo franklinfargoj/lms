@@ -24,7 +24,7 @@
 						'id' => 'login-form',
 						'autocomplete' => 'off'
 					);
-					echo form_open(site_url().'login/check_login', $attributes);
+					echo form_open(site_url().'login', $attributes);
 				?>
 				<h3>LOGIN</h3>
 				<?php echo $this->load->view('common/message',array(),TRUE);?>
@@ -82,19 +82,7 @@
 					//Assuming that the 'password' field value was incorrect:
 					echo form_error('password', '<span class="help-block">', '</span>');
 				?>
-				<div class="form-control">
-						<?php echo $captchaHtml; ?>
-						<input type="text" name="CaptchaCode" id="CaptchaCode" value="" size="35" style="height: 25px" />
-
-				</div>
-				<span class="help-block">
-					<?php 
-						if($this->session->flashdata('captchaValidationMessage')){
-							echo $this->session->flashdata('captchaValidationMessage');
-						}
-					?>
-				</span>
-				<!-- <input type="text" name="captcha"  /> -->
+				<?php echo $this->load->view('common/captcha',array(),TRUE);?>
 				<div class="form-control form-submit clearfix">
 					<!-- <input type="submit" name="submit" value="LOGIN" class="submit-btn"> -->
 					<a href="javascript:void(0);" class="active">
@@ -147,8 +135,7 @@
 	<script src="<?php echo base_url().ASSETS;?>/js/jquery.min.js" type="text/javascript"></script>
 	<script src="<?php echo base_url().ASSETS;?>/js/jquery.validate.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
-	$('.BDC_CaptchaImageDiv a').remove();
-	$('#ExampleCaptcha_SoundIcon').remove();
+		var base_url = "<?php echo base_url()?>";
 		var inputs = $('.control--checkbox input');
 		inputs.on('change', function(){
 			var ref = $(this),
@@ -174,7 +161,7 @@
 	                /*captcha: {
 	                    required: true
 	                },*/
-	                CaptchaCode: {
+	                captext: {
 	                    required: true
 	                }
 	            },
@@ -190,7 +177,7 @@
 	                /*captcha: {
 	                    required: "Please enter security code"
 	                },*/
-	                CaptchaCode: {
+	                captext: {
 	                    required: "Please enter security code"
 	                }
 	            },
@@ -236,6 +223,19 @@
 				      }
 				  });
 		})
+	
+	$('#refresh_captcha').click(function(){
+        $.ajax({
+                method: "GET",
+                url: base_url + "login/load_captcha/refresh",
+                data: {
+                }
+            }).success(function (resp) {
+                if (resp) {
+                    $('#captcha_img').html(resp);
+                }
+            });
+    });
 	</script>
 
 </body>

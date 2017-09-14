@@ -8,32 +8,32 @@ $lead_status = $this->config->item('lead_status');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Assigned Report
+            Usage Report
         </h3>
     </div>
 </div>
 <?php 
-        //Form
-        $attributes = array(
-            'role' => 'form',
-            'id' => 'search_form',
-            'class' => 'form',
-            'autocomplete' => 'off'
-        );
-        echo form_open(site_url().'reports/index/leads_assigned', $attributes);
-        $data = array(
-            'view'   => isset($view) ? $view : '',
-            'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
-            'branch_id' => isset($branch_id) ? encode_id($branch_id) : ''
-        );
+    //Form
+    $attributes = array(
+        'role' => 'form',
+        'id' => 'search_form',
+        'class' => 'form',
+        'autocomplete' => 'off'
+    );
+    echo form_open(site_url().'reports/index/usage', $attributes);
+    $data = array(
+        'view'   => isset($view) ? $view : '',
+        'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
+        'branch_id' => isset($branch_id) ? encode_id($branch_id) : ''
+    );
 
-        echo form_hidden($data);
-    ?>
+    echo form_hidden($data);
+?>
 <div class="lead-form">
     <span class="bg-top"></span>
     <div class="inner-content">
-    <div class="container ">
-        <div class="form">
+     <div class="container">
+    <div class="form">
     <div class="lead-form-left" id="l-width">
         <div class="form-control">
             <label>Start Date:</label>   
@@ -54,59 +54,14 @@ $lead_status = $this->config->item('lead_status');
                 echo form_input($data);
             ?>
         </div>
-        <div class="form-control interested-info">
-            <?php 
-                $attributes = array(
-                    'class' => '',
-                    'style' => ''
-                );
-                echo form_label('Product Category:', 'product_category_id', $attributes);
-
-                if(isset($category_list)){
-                    $options = $category_list;
-                    $js = array(
-                            'id'       => 'product_category_id',
-                            'class'    => ''
-                    );
-                    if(isset($product_category_id)){
-                        $product_category_id = $product_category_id;
-                    }else{
-                        $product_category_id = '';
-                    }
-                    echo form_dropdown('product_category_id', $options , $product_category_id,$js);    
-                }
-            ?>
-        </div>
-        <div class="form-control">
-            <?php 
-                $attributes = array(
-                    'class' => '',
-                    'style' => ''
-                );
-                echo form_label('Lead Source:', 'lead_source', $attributes);
-            ?>
-            <?php 
-                if($lead_sources){
-                    $options3['']='All';
-                    foreach ($lead_sources as $key => $value) {
-                        $options3[$value] = $value;
-                    }
-                    if(isset($lead_source)){
-                        $lead_source = $lead_source;
-                    }else{
-                        $lead_source = '';
-                    }
-                    echo form_dropdown('lead_source', $options3 ,$lead_source,array());
-                }
-            ?>
-        </div>
+        
     </div>
     <div class="lead-form-right" id="r-width">
         <div class="form-control endDate">
             <label>End Date:</label>   
             <?php 
                 if(isset($end_date)){
-                    $end_date = $end_date;
+                    $end_date = date('d/m/Y',strtotime($end_date));
                 }else{
                     $end_date = '';
                 }
@@ -121,37 +76,7 @@ $lead_status = $this->config->item('lead_status');
                 echo form_input($data);
             ?>
         </div>
-        <div class="form-control productlist">
-            <?php 
-                $attributes = array(
-                    'class' => '',
-                    'style' => ''
-                );
-                echo form_label('Product:', 'product_id', $attributes);
-            ?>
-            <?php 
-                if(isset($product_list)){
-                    $options = $product_list;
-                    $js = array(
-                            'id'       => 'product_id',
-                            'class'    => ''
-                    );
-                    if(isset($product_id)){
-                        $product_id = $product_id;
-                    }else{
-                        $product_id = '';
-                    }
-                    echo form_dropdown('product_id', $options ,$product_id,$js);    
-                }else{
-            ?>
-                <select name="product_id">
-                    <option value="">All</option>
-                </select>
-            <?php 
-                }
-            ?>
-        </div>
-   
+    
     <div class="form-control form-submit clearfix">
         <a href="javascript:void(0);" class="float-right">
             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
@@ -159,11 +84,10 @@ $lead_status = $this->config->item('lead_status');
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-     </div>
-     </div>
-     </div>
-    <?php echo form_close();?>
-  
+    </div>
+   </div>
+    </div>
+
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){
@@ -172,11 +96,12 @@ $lead_status = $this->config->item('lead_status');
     $('.loader').show();
 </script>
 <!-- BEGIN LEADS -->
-<div class="lead-top result"  style="display:none;">
+
+<div class="lead-top result" style="display:none;">
     <div class="container clearfix">
         <div class="float-left">
             <span class="total-lead">
-                Total Assigned Leads
+                Total User Count
             </span>
             <span class="lead-num"> : <?php echo $Total;?></span>
         </div>
@@ -185,9 +110,10 @@ $lead_status = $this->config->item('lead_status');
                 Export to Excel 
             </a>
             &nbsp;|
+
             <a href="javascript:void(0);" class="export_national btn-Download">
-                    Download Bank Data
-                </a>
+                Download Bank Data
+            </a>
         </div>
     </div>
 </div>
@@ -195,7 +121,6 @@ $lead_status = $this->config->item('lead_status');
 <div class="result" style="display:none;">
     <div class="page-content">
         
-        <div class="inner-content">
             <div class="container">
                 <table id="sample_3" class="display lead-table">
                     <thead>
@@ -218,31 +143,21 @@ $lead_status = $this->config->item('lead_status');
                                 Employee Name
                             </th>
                             <?php }?>
-                            <th>
-                                Source Type
+                            <?php if(in_array($viewName,array('EM'))){?>
+                            <th align="center">
+                                Logged in count
                             </th>
-                            <th>
-                                Category Name
-                            </th>
-                            <th>
-                                Product Name
+                            <?php }else{?>
+                            <th align="center">
+                                Total User
                             </th>
                             <th align="center">
-                                Total Assigned Leads
+                                Logged in User
                             </th>
-                            <?php 
-                                foreach ($lead_status as $key => $value) {
-                                    //if(!in_array($key,array('AO','Converted','Closed'))){
-                            ?>
                             <th align="center">
-                                <?php
-                                    echo $value; 
-                                ?>
+                                Not Logged in User
                             </th>
-                            <?php
-                                    //}
-                                }
-                            ?>
+                            <?php }?>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
                                 Action
@@ -269,7 +184,7 @@ $lead_status = $this->config->item('lead_status');
                             <?php if(in_array($viewName,array('BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['branch_name']) ? $value['branch_name'] : '';
+                                    echo isset($value['zone_name']) ? $value['branch_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
@@ -280,44 +195,21 @@ $lead_status = $this->config->item('lead_status');
                                 ?>
                             </td>
                             <?php }?>
-                            <td>
-                                <?php 
-                                    echo !empty($lead_source) ? ucwords($lead_source) : 'All';
-                                ?>
-                            </td>
-                            <td>
-                                <?php 
-                                    echo !empty($category) ? ucwords($category) : 'All';
-                                ?>
-                            </td>
-                            <td>
-                                <?php 
-                                    echo !empty($product) ? ucwords($product) : 'All';
-                                ?>
-                            </td>
-                            <td align="center">
-                                <?php 
-                                    echo $value['total'];
-                                ?>
-                            </td>
-                            <?php 
-                            //pe($value['status']);
-                                foreach ($lead_status as $k => $v) {
-                                    //if(!in_array($k,array('AO','Converted','Closed'))){
-                            ?>
-                            <td align="center">
-                                <?php
-                                if(in_array($k,array_keys($value['status']))){
-                                        echo $value['status'][$k];
-                                    }else{
-                                        echo 0;
-                                    }
-                                ?>
-                            </td>
-                            <?php
-                                    //}
-                                }
-                            ?>
+                            <?php if(in_array($viewName,array('EM'))){?>
+                                <td align="center">
+                                    <?php echo  $value['total'];?>
+                                </td>
+                                <?php }else{?>
+                                <td align="center">
+                                    <?php echo  isset($value['total_user']) ? $value['total_user'] : 0;?>
+                                </td>
+                                <td align="center">
+                                    <?php echo  $value['total'];?>
+                                </td>
+                                <td align="center">
+                                    <?php echo isset($value['not_logged_in']) ? $value['not_logged_in'] : 0;?>
+                                </td>
+                            <?php }?>
                             <?php if(in_array($viewName,array('ZM','BM'))){
                                 $param = '';
                                 if(isset($value['zone_id'])){
@@ -333,7 +225,7 @@ $lead_status = $this->config->item('lead_status');
                                         if($view == 'branch' || $view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_assigned/branch'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/usage/branch'.$param)?>">
                                         Branch View
                                     </a>
                                     <span>/</span> 
@@ -346,7 +238,7 @@ $lead_status = $this->config->item('lead_status');
                                         if($view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_assigned/employee'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/usage/employee'.$param)?>">
                                         Employee View
                                     </a> 
                                 <?php
@@ -378,33 +270,13 @@ $lead_status = $this->config->item('lead_status');
 <script type="text/javascript">
     jQuery(document).ready(function() { 
         var table = $('#sample_3');
-        console.log(table.length);
         if(table.length > 0){
-            var columns = [5];
+            var columns = [3];
         
             //Initialize datatable configuration
             initTable(table,columns);
         }
-        
-        $('#product_category_id').change(function () {
-            var csrf = $("input[name=csrf_dena_bank]").val();
-            var category_id = $(this).val();
-            $.ajax({
-                method: "POST",
-                url: baseUrl + "leads/productlist",
-                data: {
-                    '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
-                    category_id: category_id,
-                    select_label:'All'
-                }
-            }).success(function (resp) {
-                if (resp) {
-                    $('.productlist').remove();
-                    var html = '<div class="form-control productlist">'+resp+'</div>';
-                    $( html ).insertAfter( ".endDate" );
-                }
-            });
-        });
     });
 </script>
 <script src="<?php echo base_url().ASSETS;?>js/reports.js"></script>
+

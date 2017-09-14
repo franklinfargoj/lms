@@ -18,9 +18,7 @@ class Login extends CI_Controller {
 		parent::__construct();
         $this->load->model('Login_model','master');
         // load the BotDetect Captcha library and set its parameter
-        $this->load->library('botdetect/BotDetectCaptcha', array(
-            'captchaConfig' => 'ExampleCaptcha'
-        ));
+        $this->load->library('captcha');
      }
 
     /*
@@ -35,107 +33,93 @@ class Login extends CI_Controller {
 	{
         $isLoggedIn = $this->session->userdata('isLoggedIn');
         if (!empty($isLoggedIn)) { redirect('dashboard'); }
-        // make Captcha Html accessible to View code
-        $arrData['captchaHtml'] = $this->botdetectcaptcha->Html();
-        $arrData['captchaValidationMessage'] = '';
-          //Get tickers title
-          $this->load->model('Ticker_model','ticker');
-          $select = array('id','title');
-          $where['is_deleted'] = 0;
-          $arrData['tickers'] = $this->ticker->view($select,$where,Tbl_Ticker,array(),array(),$limit = 2);
-          return $this->load->view("login",$arrData);
+        //Get tickers title
+            $this->load->model('Ticker_model','ticker');
+            $select = array('id','title');
+            $where['is_deleted'] = 0;
+            $arrData['tickers'] = $this->ticker->view($select,$where,Tbl_Ticker,array(),array(),$limit = 2);
+        //Get tickers title    
+        if($this->input->post()){
+            $this->form_validation->set_rules('username','Username', 'trim|required');
+            $this->form_validation->set_rules('password','Password', 'trim|required');
+            $this->form_validation->set_rules('captext','Security code', 'trim|required|callback_check_captcha');
+            if ($this->form_validation->run() == FALSE)
+            {    
+                $arrData['has_error'] = 'has-error';
+                //Generate Captcha
+                $arrData['capimage'] = $this->load_captcha();
+                //Generate Captcha
+                return $this->load->view("login",$arrData);
+            }else{
+                // Captcha validation passed
+                if($this->input->post('username') == '1111111'){
+                    $checkInput = array(
+                        'hrms_id' => $this->input->post('username'),
+                        'password' => md5($this->input->post('password'))
+                    );
+                    $loginData = $this->master->check_login($checkInput);
+                    if($loginData){
+                        $this->set_session($loginData[0]);
+                        $this->session->set_flashdata('success','Login success');
+                        redirect('dashboard');
+                    }else{
+                        $this->session->set_flashdata('error','Incorrect Login Details');
+                        redirect('login');
+                    }
+                }else{
+                    $hrms_id = $this->input->post('username');
+                    $password = $this->input->post('password');
+                    //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
+                    $auth_response = call_external_url(HRMS_API_URL_AUTH.'/'.$hrms_id.'/'.$password);
+                    $auth = json_decode($auth_response);
+                    if ($auth->DBK_LMS_AUTH->password == 'True') {
+                        // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
+                        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$auth->DBK_LMS_AUTH->username);
+                        $records = json_decode($records_response);
+                        //pe($records);
+                        $data = array('device_token' => NULL,
+                            'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
+                            'branch_id' => $records->dbk_lms_emp_record1->deptid,
+                            'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
+                            'device_type' => NULL
+                        );
+                        $this->master->insert_login_log($data); // login log
+
+                        $result = array(
+                            'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
+                            'dept_id' => $records->dbk_lms_emp_record1->deptid,
+                            'dept_type_id' => $records->dbk_lms_emp_record1->dbk_dept_type,
+                            'dept_type_name' => $records->dbk_lms_emp_record1->dept_discription,
+                            'branch_id' => $records->dbk_lms_emp_record1->deptid,
+                            'district_id' => $records->dbk_lms_emp_record1->district,
+                            'state_id' => $records->dbk_lms_emp_record1->state,
+                            'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
+                            'full_name' => $records->dbk_lms_emp_record1->name,
+                            'supervisor_id' => $records->dbk_lms_emp_record1->supervisor,
+                            'designation_id' => $records->dbk_lms_emp_record1->designation_id,
+                            'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
+                            'mobile' => $records->dbk_lms_emp_record1->phone,
+                            'email_id' => $records->dbk_lms_emp_record1->email,
+                            'list'=>$records->dbk_lms_emp_record1->DBK_LMS_COLL
+                        );
+                        $this->set_session($result);
+                        $this->session->set_flashdata('success','Login success');
+                        redirect('dashboard');
+                    }else{
+                        $this->session->set_flashdata('error','Invalid Login Credential.Please Enter Again OR Contact Administrator');
+                        redirect('login');
+                    }
+                }
+            }
+        }else{
+        //Generate Captcha
+        $arrData['capimage'] = $this->load_captcha();
+        //Generate Captcha
+        }
+        return $this->load->view("login",$arrData);
 	}
 
-     /*
-     * add
-     * Add product name under category.
-     * @author Ashok Jadhav
-     * @access public
-     * @param none
-     * @return void
-     */
-     public function check_login()
-     {
-          if($this->input->post()){
-               $this->form_validation->set_rules('username','Username', 'trim|required');
-               $this->form_validation->set_rules('password','Password', 'trim|required');
-               if ($this->form_validation->run() == FALSE)
-               {    
-                    $this->session->set_flashdata('error','Incorrect login details');
-                    redirect('login');
-               }else{
-                    // validate the user-entered Captcha code when the form is submitted
-                    $code = $this->input->post('CaptchaCode');
-                    $isHuman = $this->botdetectcaptcha->Validate($code);
-                    $isHuman = 1;
-                    if ($isHuman) {
-                        // Captcha validation passed
-                        if($this->input->post('username') == '1111111'){
-                            $checkInput = array(
-                                'hrms_id' => $this->input->post('username'),
-                                'password' => md5($this->input->post('password'))
-                            );
-                            $loginData = $this->master->check_login($checkInput);
-                            if($loginData){
-                                $this->set_session($loginData[0]);
-                                $this->session->set_flashdata('success','Login success');
-                                redirect('dashboard');
-                            }else{
-                                $this->session->set_flashdata('error','Incorrect Login Details');
-                                redirect('login');
-                            }
-                        }else{
-                            $hrms_id = $this->input->post('username');
-                            $password = $this->input->post('password');
-                            //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
-                            $auth_response = call_external_url(HRMS_API_URL_AUTH.'/'.$hrms_id.'/'.$password);
-                            $auth = json_decode($auth_response);
-                            if ($auth->DBK_LMS_AUTH->password == 'True') {
-                                // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-                                $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$auth->DBK_LMS_AUTH->username);
-                                $records = json_decode($records_response);
-                                $data = array('device_token' => 'sdasda',
-                                    'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
-                                    'device_type' => 'ios'
-                                );
-                                $this->master->insert_login_log($data); // login log
-
-                                $result = array(
-                                    'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
-                                    'dept_id' => $records->dbk_lms_emp_record1->deptid,
-                                    'dept_type_id' => $records->dbk_lms_emp_record1->dbk_dept_type,
-                                    'dept_type_name' => $records->dbk_lms_emp_record1->dept_discription,
-                                    'branch_id' => $records->dbk_lms_emp_record1->deptid,
-                                    'district_id' => $records->dbk_lms_emp_record1->district,
-                                    'state_id' => $records->dbk_lms_emp_record1->state,
-                                    'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
-                                    'full_name' => $records->dbk_lms_emp_record1->name,
-                                    'supervisor_id' => $records->dbk_lms_emp_record1->supervisor,
-                                    'designation_id' => $records->dbk_lms_emp_record1->designation_id,
-                                    'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
-                                    'mobile' => $records->dbk_lms_emp_record1->phone,
-                                    'email_id' => $records->dbk_lms_emp_record1->email,
-                                    'list'=>$records->dbk_lms_emp_record1->DBK_LMS_COLL
-                                );
-                                $this->set_session($result);
-                                $this->session->set_flashdata('success','Login success');
-                                redirect('dashboard');
-                            }else{
-                                $this->session->set_flashdata('error','Invalid Login Credential.Please Enter Again OR Contact Administrator');
-                                redirect('login');
-                            }
-                        }
-
-                    } else {
-                        // Captcha validation failed, return an error message
-                        $this->session->set_flashdata('error','Invalid Security Code');
-                        redirect('login');            
-                    }
-               }
-          }else{
-            redirect('login');
-          }
-     }
+     
      public function logOut(){
           $login_user = array("admin_name" => null,"site_user"=>null,"admin_id"=>null,"isLoggedIn" => FALSE);
           $this->session->set_userdata($login_user);
@@ -186,4 +170,41 @@ class Login extends CI_Controller {
 
           $this->session->set_userdata($login_user);
      }
+
+
+    // callback function to check the captcha
+    function check_captcha($input) {//echo $this->session->userdata('captchaWord');die;
+        if ($this->session->userdata('captchaWord') != $input) {
+            // set the validation error
+            $this->form_validation->set_message('check_captcha', 'The entered Security Code is incorrect.');
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    function load_captcha($type = 'display')
+    {
+        //Delete Previous captcha image
+        $files = glob('captcha/*'); // get all file names
+        foreach($files as $file){ // iterate files
+          if(is_file($file))
+            unlink($file); // delete file
+        }
+        $captcha = $this->captcha->generateCaptcha();
+        //print_r( $captcha);die;
+        $capimage = $captcha['image']; //echo $data['capimage'];
+        $newdata = array(
+            'captchaWord' => $captcha['word'],
+            'captchaTime' => $captcha['time'],
+        );
+
+        $this->session->set_userdata($newdata);
+        if($type == 'refresh'){
+            echo $capimage;
+        }else{
+            return $capimage;
+        }
+    }
+
 }

@@ -16,7 +16,7 @@ class Dashboard extends CI_Controller {
 	{
 		// Initialization of class
 		parent::__construct();
-          is_logged_in();     //check login
+//          is_logged_in();     //check login
           $this->load->model('Lead','master');
           
 	}
@@ -581,5 +581,18 @@ class Dashboard extends CI_Controller {
                 export_excel($header_value,$data);
                 break;
         }
+    }
+
+    public function fd_calculator(){
+        $this->make_bread->add('FD Calculator', '', 0);
+        $result['breadcrumb'] = $this->make_bread->output();
+        $middle = '/fd_calculator';
+        load_view($middle,$result);
+    }
+    public function rd_calculator(){
+        $this->make_bread->add('RD Calculator', '', 0);
+        $result['breadcrumb'] = $this->make_bread->output();
+        $middle = '/rd_calculator';
+        load_view($middle,$result);
     }
 }

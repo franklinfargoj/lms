@@ -109,6 +109,11 @@ define('Tbl_Notification', 'db_notification');
 define('Tbl_state', 'db_state');
 define('Tbl_branch', 'db_branch');
 define('Tbl_district', 'db_district');
+define('Tbl_zone', 'db_zone');
+define('Tbl_Manage_Points', 'db_manage_points');
+define('Tbl_Points_Distributor', 'db_points_distrubution');
+
+
 //define('HRMS_API_URL_AUTH', 'https://172.25.3.26:8445/PSIGW/RESTListeningConnector/DBK_LMS_AUTH.v1/?');
 //define('HRMS_API_URL_GET_RECORD', 'https://172.25.3.26:8445/PSIGW/RESTListeningConnector/DBK_LMS_EMP_RECORD1.v1/?emplid=');
 define('HRMS_API_URL_AUTH', 'http://staging.php-dev.in:8844/DENABANK/lms/api/v1/authenticate/check_authentication');

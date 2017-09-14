@@ -29,4 +29,16 @@
         </h3>
 	</div>
 	<hr>
+  <div class="container clearfix">
+    <h3 class="text">
+           <a href="<?php echo site_url('reports/index/leads_classification')?>">6.Leads Classification Report</a>
+        </h3>
+  </div>
+  <hr>
+  <div class="container clearfix">
+    <h3 class="text">
+           <a href="<?php echo site_url('reports/index/usage')?>">7.Usage Report</a>
+        </h3>
+  </div>
+  <hr>
 </div>

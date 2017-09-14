@@ -8,32 +8,32 @@ $lead_status = $this->config->item('lead_status');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Assigned Report
+            Leads Classification Report
         </h3>
     </div>
 </div>
 <?php 
-        //Form
-        $attributes = array(
-            'role' => 'form',
-            'id' => 'search_form',
-            'class' => 'form',
-            'autocomplete' => 'off'
-        );
-        echo form_open(site_url().'reports/index/leads_assigned', $attributes);
-        $data = array(
-            'view'   => isset($view) ? $view : '',
-            'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
-            'branch_id' => isset($branch_id) ? encode_id($branch_id) : ''
-        );
+    //Form
+    $attributes = array(
+        'role' => 'form',
+        'id' => 'search_form',
+        'class' => 'form',
+        'autocomplete' => 'off'
+    );
+    echo form_open(site_url().'reports/index/leads_classification', $attributes);
+    $data = array(
+        'view'   => isset($view) ? $view : '',
+        'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
+        'branch_id' => isset($branch_id) ? encode_id($branch_id) : ''
+    );
 
-        echo form_hidden($data);
-    ?>
+    echo form_hidden($data);
+?>
 <div class="lead-form">
     <span class="bg-top"></span>
     <div class="inner-content">
-    <div class="container ">
-        <div class="form">
+    <div class="container">
+    <div class="form">
     <div class="lead-form-left" id="l-width">
         <div class="form-control">
             <label>Start Date:</label>   
@@ -106,7 +106,7 @@ $lead_status = $this->config->item('lead_status');
             <label>End Date:</label>   
             <?php 
                 if(isset($end_date)){
-                    $end_date = $end_date;
+                    $end_date = date('d/m/Y',strtotime($end_date));
                 }else{
                     $end_date = '';
                 }
@@ -160,10 +160,9 @@ $lead_status = $this->config->item('lead_status');
         </a>
     </div>
      </div>
-     </div>
-     </div>
-    <?php echo form_close();?>
-  
+    </div>
+    </div>
+
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){
@@ -172,11 +171,12 @@ $lead_status = $this->config->item('lead_status');
     $('.loader').show();
 </script>
 <!-- BEGIN LEADS -->
-<div class="lead-top result"  style="display:none;">
+
+<div class="lead-top result" style="display:none;">
     <div class="container clearfix">
         <div class="float-left">
             <span class="total-lead">
-                Total Assigned Leads
+                Total Ticket Size (Rs)
             </span>
             <span class="lead-num"> : <?php echo $Total;?></span>
         </div>
@@ -194,8 +194,6 @@ $lead_status = $this->config->item('lead_status');
 <?php echo form_close();?>
 <div class="result" style="display:none;">
     <div class="page-content">
-        
-        <div class="inner-content">
             <div class="container">
                 <table id="sample_3" class="display lead-table">
                     <thead>
@@ -228,21 +226,8 @@ $lead_status = $this->config->item('lead_status');
                                 Product Name
                             </th>
                             <th align="center">
-                                Total Assigned Leads
+                                Ticket Size (Rs)
                             </th>
-                            <?php 
-                                foreach ($lead_status as $key => $value) {
-                                    //if(!in_array($key,array('AO','Converted','Closed'))){
-                            ?>
-                            <th align="center">
-                                <?php
-                                    echo $value; 
-                                ?>
-                            </th>
-                            <?php
-                                    //}
-                                }
-                            ?>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
                                 Action
@@ -297,27 +282,9 @@ $lead_status = $this->config->item('lead_status');
                             </td>
                             <td align="center">
                                 <?php 
-                                    echo $value['total'];
+                                    echo isset($value['ticket']) ? $value['ticket'] : '';
                                 ?>
                             </td>
-                            <?php 
-                            //pe($value['status']);
-                                foreach ($lead_status as $k => $v) {
-                                    //if(!in_array($k,array('AO','Converted','Closed'))){
-                            ?>
-                            <td align="center">
-                                <?php
-                                if(in_array($k,array_keys($value['status']))){
-                                        echo $value['status'][$k];
-                                    }else{
-                                        echo 0;
-                                    }
-                                ?>
-                            </td>
-                            <?php
-                                    //}
-                                }
-                            ?>
                             <?php if(in_array($viewName,array('ZM','BM'))){
                                 $param = '';
                                 if(isset($value['zone_id'])){
@@ -333,7 +300,7 @@ $lead_status = $this->config->item('lead_status');
                                         if($view == 'branch' || $view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_assigned/branch'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_classification/branch'.$param)?>">
                                         Branch View
                                     </a>
                                     <span>/</span> 
@@ -346,7 +313,7 @@ $lead_status = $this->config->item('lead_status');
                                         if($view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_assigned/employee'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_classification/employee'.$param)?>">
                                         Employee View
                                     </a> 
                                 <?php

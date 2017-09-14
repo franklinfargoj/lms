@@ -8,12 +8,7 @@
         </h3>
     </div>
 </div>
-
-<div class="lead-form">
-    <span class="bg-top"></span>
-
-        <div class="inner-content" >
-    <?php 
+<?php 
         //Form
         $attributes = array(
             'role' => 'form',
@@ -30,12 +25,17 @@
 
         echo form_hidden($data);
     ?>
-    <div class="lead-form-left" id="l-width">
+<div class="lead-form">
+    <span class="bg-top"></span>
+    <div class="inner-content">
+    <div class="container">
+    <div class="form">
+    <div class="lead-form-left">
         <div class="form-control">
             <label>Start Date:</label>   
             <?php 
                 if(isset($start_date)){
-                    $start_date = $start_date;
+                    $start_date = date('d/m/Y',strtotime($start_date));
                 }else{
                     $start_date = '';
                 }
@@ -97,12 +97,12 @@
             ?>
         </div>
     </div>
-    <div class="lead-form-right" id="r-width">
+    <div class="lead-form-right">
         <div class="form-control endDate">
             <label>End Date:</label>   
             <?php 
                 if(isset($end_date)){
-                    $end_date = $end_date;
+                    $end_date = date('d/m/Y',strtotime($end_date));
                 }else{
                     $end_date = '';
                 }
@@ -147,7 +147,7 @@
                 }
             ?>
         </div>
-    
+    </div>
     <div class="form-control form-submit clearfix">
         <a href="javascript:void(0);" class="float-right">
             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
@@ -156,10 +156,7 @@
         </a>
     </div>
     </div>
-    <?php echo form_close();?>
     </div>
-    <span class="bg-bottom"></span>
-</div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){
@@ -168,31 +165,35 @@
     $('.loader').show();
 </script>
 <!-- BEGIN LEADS -->
-<div id="result" style="display:none;">
-    <div class="lead-top">
-        <div class="container clearfix">
-            <div class="float-left">
-                <span class="total-lead">
-                    Total Generated Leads
-                </span>
-                <span class="lead-num"> : <?php echo $G_Total;?></span>
-            </div>
-            <div class="float-right">
-                <span class="total-lead">
-                    Total Converted Leads
-                </span>
-                <span class="lead-num"> : <?php echo $C_Total;?></span>
-            </div>
-            <!-- <div class="float-right">
-                <a href="<?php echo base_url('leads/export_excel_listing/');?>">
-                    <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
-                </a>
-            </div> -->
+<div class="lead-top result" style="display:none;">
+    <div class="container clearfix">
+        <div class="float-left">
+            <span class="total-lead">
+                Total Generated Leads
+            </span>
+            <span class="lead-num"> : <?php echo $G_Total;?></span>
+        </div>
+        <div class="float-right">
+            <span class="total-lead">
+                Total Converted Leads
+            </span>
+            <span class="lead-num"> : <?php echo $C_Total;?></span>
+        </div>
+        <div class="float-right">
+             <a href="javascript:void(0);" class="export_to_excel btn-Download">
+                Export to Excel 
+            </a>
+            &nbsp;|
+            <a href="javascript:void(0);" class="export_national btn-Download">
+                    Download Bank Data 
+                </a>&nbsp;&nbsp;&nbsp;
         </div>
     </div>
+</div>
+<?php echo form_close();?>
+<div class="result" style="display:none;">
     <div class="page-content">
-        <span class="bg-top"></span>
-        <div class="inner-content">
+        
             <div class="container">
                 <table id="sample_3" class="display lead-table">
                     <thead>
@@ -249,21 +250,21 @@
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['zone_id']) ? $value['zone_id'] : 'All';
+                                    echo isset($value['zone_name']) ? $value['zone_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['branch_id']) ? $value['branch_id'] : 'All';
+                                    echo isset($value['branch_name']) ? $value['branch_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['employee_id']) ? $value['employee_id'] : '';
+                                    echo isset($value['employee_name']) ? $value['employee_name'] : '';
                                 ?>
                             </td>
                             <?php }?>
@@ -337,7 +338,7 @@
                 </table>
             </div>
         </div>
-        <span class="bg-bottom"></span>
+        <span class="bg-bottom" id="bg-w"></span>
     </div>
 </div>
 <?php
@@ -378,54 +379,6 @@
                 }
             });
         });
-
-        $("#start_date, #end_date").datepicker({
-            dateFormat: 'yy-mm-dd'
-        });
-
-        $('#search_form').validate({
-            rules: {
-                start_date: {
-                    required: true,
-                    dateISO: true
-                },
-                end_date: {
-                    required: true,
-                    dateISO: true
-                }
-            },
-            messages: {
-                start_date: {
-                    required: "Start Date required",
-                    dateISO: "Invalid date. Must be formatted yyyy-mm-dd"
-                },
-                end_date: {
-                    required: "End Date required",
-                    dateISO: "Invalid date. Must be formatted yyyy-mm-dd"
-                }
-            },
-            submitHandler: function(form) {
-                var startDate = $('#start_date').datepicker("getDate"),
-                endDate = $('#end_date').datepicker("getDate");
-                if (startDate && endDate && startDate > endDate) {
-                    alert("Start date is greater than the end date.");
-                    $('#start_date').datepicker("setDate", endDate);
-                    return false;
-                }else{
-                    $('.custom_button').attr('disabled','disabled');
-                    $('#result').hide();
-                    $('.no_result').hide();
-                    $('.loader').show();
-                    setTimeout(function(){        
-                        form.submit();
-                    }, 2000);
-                }
-            }
-        });
-
-        setTimeout(function(){        
-            $('.loader').hide();
-            $('#result').show();
-        }, 2000);
     });
 </script>
+<script src="<?php echo base_url().ASSETS;?>js/reports.js"></script>
