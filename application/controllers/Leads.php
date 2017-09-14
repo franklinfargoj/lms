@@ -137,7 +137,7 @@ class Leads extends CI_Controller
 
                     $select = array('device_token','device_type');
                     $emp_id = $this->session->userdata('admin_id');
-                    $where = array('employee_id'=>$emp_id);
+                    $where = array('employee_id'=>$emp_id,'device_token !='=>NULL,'device_type !='=>NULL);
                     $order_by = 'id desc';
                     $limit = '1';
                     $table = Tbl_LoginLog;
