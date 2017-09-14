@@ -501,13 +501,15 @@ class Api extends REST_Controller
         $table = Tbl_Category;
         $join = array();
         $select = array(Tbl_Category . '.title', Tbl_Category . '.id');
-        $result = $this->Lead->lists($table, $select, array(), $join, array(), array());
+        $where = array(Tbl_Category . '.status !='=>'inactive',Tbl_Category . '.is_deleted != '=>'1');
+        $result = $this->Lead->lists($table, $select, $where, $join, array(), array());
         $products = array();
         if (!empty($result)) {
             foreach ($result as $key => $value) {
                 $table = Tbl_Products;
                 $join = array();
-                $where = array(Tbl_Products . '.category_id' => $value['id']);
+                $where = array(Tbl_Products . '.category_id' => $value['id'],
+                    Tbl_Products . '.status !='=>'inactive',Tbl_Products. '.is_deleted !='=>'1');
                 $select = array(Tbl_Products . '.title', Tbl_Products . '.id');
                 $products = $this->Lead->lists($table, $select, $where, $join, array(), array());
                 $data['category_id'] = $value['id'];
