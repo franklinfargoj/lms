@@ -27,6 +27,9 @@
     ?>
 <div class="lead-form">
     <span class="bg-top"></span>
+    <div class="inner-content">
+    <div class="container">
+    <div class="form">
     <div class="lead-form-left">
         <div class="form-control">
             <label>Start Date:</label>   
@@ -152,8 +155,8 @@
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-    <span class="bg-bottom"></span>
-</div>
+    </div>
+    </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){
@@ -177,20 +180,20 @@
             <span class="lead-num"> : <?php echo $C_Total;?></span>
         </div>
         <div class="float-right">
-            <a href="javascript:void(0);" class="export_to_excel">
-                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
+             <a href="javascript:void(0);" class="export_to_excel btn-Download">
+                Export to Excel 
             </a>
-            <a href="javascript:void(0);" class="export_national">
-                    Download Bank Data
-                </a>
+            &nbsp;|
+            <a href="javascript:void(0);" class="export_national btn-Download">
+                    Download Bank Data 
+                </a>&nbsp;&nbsp;&nbsp;
         </div>
     </div>
 </div>
 <?php echo form_close();?>
 <div class="result" style="display:none;">
     <div class="page-content">
-        <span class="bg-top"></span>
-        <div class="inner-content">
+        
             <div class="container">
                 <table id="sample_3" class="display lead-table">
                     <thead>
@@ -335,7 +338,7 @@
                 </table>
             </div>
         </div>
-        <span class="bg-bottom"></span>
+        <span class="bg-bottom" id="bg-w"></span>
     </div>
 </div>
 <?php

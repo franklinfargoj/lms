@@ -249,7 +249,7 @@ body{
 .form-control input{
 	width: 97.5%;
 	height: 45px;
-	line-height: 45px;
+	/*line-height: 45px;*/
 	border:0px;
 	background-color: transparent;
 	outline: none;
@@ -629,7 +629,8 @@ strong{
 
 .lead-form .form-control input{
 	border: 1px solid #d3d3d3;
-	    height: 27px;
+	    height: auto;
+	    padding: 6px;
 }
 
 .lead-form .form-control select{
@@ -786,7 +787,25 @@ label#ticket_range-error {
     margin-top: 0;
 }
 
-
+#l-width{
+	width: 45%;
+	margin-left: 3%;
+}
+#r-width{
+	width: 45%;
+	margin-right: 3%;
+}
+.container .form {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #d3d3d3;
+    margin-bottom: 30px;
+    padding-top: 15px;
+}
+a.btn-Download{
+    color: gray;
+    bottom: 18px;
+    text-decoration: underline;
+}
 /*-------------*/
 .lead-table thead{
 	background-color: #00559d;
@@ -1175,7 +1194,7 @@ margin-top: 10px;
     border: 1px solid #d3d3d3;
     height: 25px;
     width: auto;
-    padding: 10px;
+    padding: 6px 10px;
     margin-bottom: 35px;
   }
 

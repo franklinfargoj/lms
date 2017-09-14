@@ -34,7 +34,6 @@ $lead_type = $this->config->item('lead_type');
         echo form_hidden($data);
     ?>
 <div class="lead-form">
-    <span class="bg-top"></span>
     <div class="lead-form-left">
         <div class="form-control">
             <label>Start Date:</label>   
@@ -179,10 +178,11 @@ $lead_type = $this->config->item('lead_type');
             <span class="lead-num"> : <?php echo $Total;?></span>
         </div>
         <div class="float-right">
-            <a href="javascript:void(0);" class="export_to_excel">
-                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
+            <a href="javascript:void(0);" class="export_to_excel btn-Download">
+                Export to Excel 
             </a>
-            <a href="javascript:void(0);" class="export_national">
+            &nbsp;|
+            <a href="javascript:void(0);" class="export_national btn-Download">
                     Download Bank Data
                 </a>
             </div>
@@ -361,7 +361,7 @@ $lead_type = $this->config->item('lead_type');
                 </table>
             </div>
         </div>
-        <span class="bg-bottom"></span>
+        <span class="bg-bottom" ></span>
     </div>
 </div>
 <?php

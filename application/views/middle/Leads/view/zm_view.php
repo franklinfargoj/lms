@@ -31,17 +31,17 @@
             <thead>
             <tr class="top-header">
                 <th></th>
-                <th><input type="text" name="customername" placeholder="Search Branch Name"></th>
+                <th style="text-align:left"><input type="text" name="customername" placeholder="Search Branch Name"></th>
                 <th><!--<input type="text" name="customername" placeholder="Search Generated Leads">--></th>
                 <th><!--<input type="text" name="customername" placeholder="Search Converted Leads">--></th>
                 <th></th>
             </tr>
             <tr>
                 <th style="text-align:center">Sr. No</th>
-                <th>Branch Name</th>
+                <th style="text-align:left">Branch Name</th>
                 <th style="text-align:center">Generated Leads (This Month)</th>
                 <th style="text-align:center">Converted Leads (This Month)</th>
-                <th>Action</th>
+                <th style="text-align:left">Action</th>
             </tr>
 
             </thead>
