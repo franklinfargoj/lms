@@ -218,17 +218,17 @@ class Api extends REST_Controller
                     $i = 0;
                     foreach ($source as $key => $lead_source) {
                         $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $lead_source);
-                        $result[$i]['year_lead_assigned_' . $key] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $result[$i]['year_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
                         $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $lead_source);
-                        $result[$i]['month_lead_assigned_' . $key] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $result[$i]['month_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
 
                         $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $lead_source,
                             Tbl_LeadAssign . '.status' => 'Converted');
-                        $result[$i]['year_lead_converted_' . $key] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $result[$i]['year_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
 
                         $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $lead_source,
                             Tbl_LeadAssign . '.status' => 'Converted');
-                        $result[$i]['month_lead_converted_' . $key] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $result[$i]['month_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
                         $result[$i]['lead_source'] = $lead_source;
                         $i++;
                     }
@@ -236,6 +236,36 @@ class Api extends REST_Controller
                     $data = array('result' => True,
                         'data' => $result);
                     returnJson($data);
+                    break;
+                case 'GM':
+                    $join = array();
+                    $zone_id = $params['id'];
+                    $action = 'count';
+                    $table = Tbl_Leads;
+                    $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
+                    $select = array();
+                    $i = 0;
+                    foreach ($source as $key => $lead_source) {
+                        $where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $lead_source);
+                        $result[$i]['year_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $lead_source);
+                        $result[$i]['month_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+
+                        $where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $lead_source,
+                            Tbl_LeadAssign . '.status' => 'Converted');
+                        $result[$i]['year_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+
+                        $where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $lead_source,
+                            Tbl_LeadAssign . '.status' => 'Converted');
+                        $result[$i]['month_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $result[$i]['lead_source'] = $lead_source;
+                        $i++;
+                    }
+
+                    $data = array('result' => True,
+                        'data' => $result);
+                    returnJson($data);
+                    break;
             }
         }
         $data = array('result' => False,
