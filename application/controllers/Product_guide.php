@@ -246,7 +246,8 @@ class Product_guide extends CI_Controller {
           /*Create Breadcumb*/
           $this->make_bread->add('Product', 'product', 0);
           $this->make_bread->add(ucwords($arrData['product'][0]['title']), '', 0);
-          $this->make_bread->add('Manage Points', '', 1);
+          $this->make_bread->add('Manage Points', 'product_guide/view_points/'.encode_id($productId), 0);
+          $this->make_bread->add('Add', '', 1);
           $arrData['breadcrumb'] = $this->make_bread->output();
           /*Create Breadcumb*/
 
@@ -273,8 +274,8 @@ class Product_guide extends CI_Controller {
                     $where = array('product_id' => $productId);
                     $valid = $this->master->view_points($where);
                     if($valid){
-                         if($insert['from_range'] <= $valid[0]['to_range']){
-                             $this->session->set_flashdata('error','Please enter range above '.$valid[0]['from_range'].' - '.$valid[0]['to_range']); 
+                         if(($insert['from_range'] <= $valid[0]['to_range']) || ($insert['from_range'] > ($valid[0]['to_range'] + 1))){
+                             $this->session->set_flashdata('error','Please enter range above ('.$valid[0]['from_range'].' - '.$valid[0]['to_range'].') starting from '.($valid[0]['to_range'] + 1)); 
                              redirect('product_guide/manage_points/'.encode_id($productId));
                          }
                     }
@@ -338,5 +339,30 @@ class Product_guide extends CI_Controller {
           }else{
                return load_view("Products/Product_guide/points_distrubution",$arrData);
           }
+     }
+
+     public function view_points($productId)
+     {    
+          if(!$productId){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product');
+          }
+          $productId = decode_id($productId);
+          $arrData['product'] = $this->master->view_product($productId);
+          if(count($arrData['product']) > 1){
+               $this->session->set_flashdata('error','Invalid access');
+               redirect('product');
+          }
+          /*Create Breadcumb*/
+          $this->make_bread->add('Product', 'product', 0);
+          $this->make_bread->add(ucwords($arrData['product'][0]['title']), '', 0);
+          $this->make_bread->add('Manage Points', '', 1);
+          $arrData['breadcrumb'] = $this->make_bread->output();
+          /*Create Breadcumb*/
+
+          $where = array('product_id' => $productId);
+          $arrData['pointsData'] = $this->master->view_points($where);
+
+          return load_view("Products/Product_guide/view_points",$arrData);
      }
 }

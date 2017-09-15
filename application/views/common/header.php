@@ -34,7 +34,7 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-				<li class="<?php echo (($controller == 'product') || ($controller == 'product_guide' && (in_array($method,array('index','add','manage_points','points_distrubution'))))) ? 'active' : ''?>">
+				<li class="<?php echo (($controller == 'product') || ($controller == 'product_guide' && (in_array($method,array('index','add','manage_points','view_points','points_distrubution'))))) ? 'active' : ''?>">
 					<a href="<?php echo site_url('product')?>">
 						Products
 					</a>
