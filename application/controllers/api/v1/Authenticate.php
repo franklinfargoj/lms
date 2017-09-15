@@ -51,6 +51,8 @@ class Authenticate extends CI_Controller
             echo $true_res;
         }elseif($username == '0006561' && $password =='0006561' ){
             echo $true_res;
+        }elseif($username == '0007965' && $password =='0007965' ){
+            echo $true_res;
         }else{
             echo $false_res;
         }
@@ -111,6 +113,16 @@ class Authenticate extends CI_Controller
                                     }
                          }';
 
+        // Response Branch Manager
+        $bm1_response = '{"dbk_lms_emp_record1":
+                                    {
+                                        "EMPLID": "0007965","deptid": "000561","dbk_dept_type": "BR","dept_discription": "Branch","district": "DELHI","state": "DL","dbk_state_id": "026656","name": ". ASHISH SINGH","supervisor": "0002958","designation_id": "520299","designation_descr": "BRANCH MANAGER-SC-II","url": "NA","phone": "9971866702","email": "dummy@dummy.com","detail": "","DBK_LMS_COLL": [
+                                        {"DESCR10": "0006565","DESCR30": "SANDY"},{
+                                        "DESCR10": "0006288","DESCR30": "NAME2"},{
+                                        "DESCR10": "0011350","DESCR30": "NAME3"},{
+                                        "DESCR10": "0013243","DESCR30": "NAME4"}]}
+                        }';
+
         switch ($emp_id) {
             case '0006094':
                 echo $gm_response;
@@ -124,6 +136,9 @@ class Authenticate extends CI_Controller
             case '0006561':
                 echo $em_response;
         break;
+            case '0007965':
+                echo $bm1_response;
+                break;
             default:
                 echo false;
         }

@@ -31,7 +31,10 @@ $lead_status = $this->config->item('lead_status');
     ?>
 <div class="lead-form">
     <span class="bg-top"></span>
-    <div class="lead-form-left">
+    <div class="inner-content">
+    <div class="container">
+    <div class="form">
+    <div class="lead-form-left" id="l-width">
         <div class="form-control">
             <label>Start Date:</label>   
             <?php 
@@ -98,7 +101,7 @@ $lead_status = $this->config->item('lead_status');
             ?>
         </div>
     </div>
-    <div class="lead-form-right">
+    <div class="lead-form-right" id="r-width">
         <div class="form-control endDate">
             <label>End Date:</label>   
             <?php 
@@ -148,7 +151,7 @@ $lead_status = $this->config->item('lead_status');
                 }
             ?>
         </div>
-    </div>
+    
     <div class="form-control form-submit clearfix">
         <a href="javascript:void(0);" class="float-right">
             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
@@ -156,7 +159,8 @@ $lead_status = $this->config->item('lead_status');
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-    <span class="bg-bottom"></span>
+    </div>
+    </div>
 </div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
@@ -175,10 +179,11 @@ $lead_status = $this->config->item('lead_status');
                 <span class="lead-num"> : <?php echo $Total;?></span>
             </div>
             <div class="float-right">
-                <a href="javascript:void(0);" class="export_to_excel">
-                    <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
-                </a>
-                <a href="javascript:void(0);" class="export_national">
+                <a href="javascript:void(0);" class="export_to_excel btn-Download">
+                Export to Excel 
+            </a>
+            &nbsp;|
+                <a href="javascript:void(0);" class="export_national btn-Download">
                     Download Bank Data
                 </a>
             </div>
@@ -187,8 +192,6 @@ $lead_status = $this->config->item('lead_status');
     <?php echo form_close();?>
 <div class="result" style="display:none;">
     <div class="page-content">
-        <span class="bg-top"></span>
-        <div class="inner-content">
             <div class="container">
                 <table id="sample_3" class="display lead-table">
                     <thead>
@@ -355,8 +358,9 @@ $lead_status = $this->config->item('lead_status');
                     </tbody>
                 </table>
             </div>
+        
         </div>
-        <span class="bg-bottom"></span>
+        <span class="bg-bottom" id="bg-w" > </span>
     </div>
 </div>
 <?php

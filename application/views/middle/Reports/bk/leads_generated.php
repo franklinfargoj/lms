@@ -8,11 +8,16 @@ $lead_status = $this->config->item('lead_status');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Assigned Report
+            Leads Generated Report
         </h3>
     </div>
 </div>
-<?php 
+
+<div class="lead-form">
+<div class="container clearfix">
+    <span class="bg-top"></span>
+    
+    <?php 
         //Form
         $attributes = array(
             'role' => 'form',
@@ -20,7 +25,7 @@ $lead_status = $this->config->item('lead_status');
             'class' => 'form',
             'autocomplete' => 'off'
         );
-        echo form_open(site_url().'reports/index/leads_assigned', $attributes);
+        echo form_open(site_url().'reports/index/leads_generated', $attributes);
         $data = array(
             'view'   => isset($view) ? $view : '',
             'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
@@ -29,17 +34,12 @@ $lead_status = $this->config->item('lead_status');
 
         echo form_hidden($data);
     ?>
-<div class="lead-form">
-    <span class="bg-top"></span>
-    <div class="inner-content">
-    <div class="container ">
-        <div class="form">
-    <div class="lead-form-left" id="l-width">
+    <div class="lead-form-left">
         <div class="form-control">
             <label>Start Date:</label>   
             <?php 
                 if(isset($start_date)){
-                    $start_date = date('d/m/Y',strtotime($start_date));
+                    $start_date = $start_date;
                 }else{
                     $start_date = '';
                 }
@@ -101,7 +101,7 @@ $lead_status = $this->config->item('lead_status');
             ?>
         </div>
     </div>
-    <div class="lead-form-right" id="r-width">
+    <div class="lead-form-right">
         <div class="form-control endDate">
             <label>End Date:</label>   
             <?php 
@@ -151,7 +151,7 @@ $lead_status = $this->config->item('lead_status');
                 }
             ?>
         </div>
-   
+    </div>
     <div class="form-control form-submit clearfix">
         <a href="javascript:void(0);" class="float-right">
             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
@@ -159,11 +159,10 @@ $lead_status = $this->config->item('lead_status');
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-     </div>
-     </div>
-     </div>
     <?php echo form_close();?>
-  
+    <span class="bg-bottom"></span>
+</div>
+</div>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){
@@ -172,29 +171,24 @@ $lead_status = $this->config->item('lead_status');
     $('.loader').show();
 </script>
 <!-- BEGIN LEADS -->
-<div class="lead-top result"  style="display:none;">
-    <div class="container clearfix">
-        <div class="float-left">
-            <span class="total-lead">
-                Total Assigned Leads
-            </span>
-            <span class="lead-num"> : <?php echo $Total;?></span>
-        </div>
-        <div class="float-right">
-            <a href="javascript:void(0);" class="export_to_excel btn-Download">
-                Export to Excel 
-            </a>
-            &nbsp;|
-            <a href="javascript:void(0);" class="export_national btn-Download">
-                    Download Bank Data
+<div id="result" style="display:none;">
+    <div class="lead-top">
+        <div class="container clearfix">
+            <div class="float-left">
+                <span class="total-lead">
+                    Total Generated Leads
+                </span>
+                <span class="lead-num"> : <?php echo $Total;?></span>
+            </div>
+            <div class="float-right">
+                <a href="<?php echo base_url('leads/export_excel_listing/');?>">
+                    <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
                 </a>
+            </div>
         </div>
     </div>
-</div>
-<?php echo form_close();?>
-<div class="result" style="display:none;">
     <div class="page-content">
-        
+        <span class="bg-top"></span>
         <div class="inner-content">
             <div class="container">
                 <table id="sample_3" class="display lead-table">
@@ -228,7 +222,7 @@ $lead_status = $this->config->item('lead_status');
                                 Product Name
                             </th>
                             <th align="center">
-                                Total Assigned Leads
+                                Total Generated Leads
                             </th>
                             <?php 
                                 foreach ($lead_status as $key => $value) {
@@ -262,21 +256,21 @@ $lead_status = $this->config->item('lead_status');
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['zone_name']) ? $value['zone_name'] : '';
+                                    echo isset($value['zone_id']) ? $value['zone_id'] : 'All';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['branch_name']) ? $value['branch_name'] : '';
+                                    echo isset($value['branch_id']) ? $value['branch_id'] : 'All';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['employee_name']) ? $value['employee_name'] : '';
+                                    echo isset($value['created_by']) ? $value['created_by'] : '';
                                 ?>
                             </td>
                             <?php }?>
@@ -333,7 +327,7 @@ $lead_status = $this->config->item('lead_status');
                                         if($view == 'branch' || $view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_assigned/branch'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_generated/branch'.$param)?>">
                                         Branch View
                                     </a>
                                     <span>/</span> 
@@ -346,7 +340,7 @@ $lead_status = $this->config->item('lead_status');
                                         if($view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_assigned/employee'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_generated/employee'.$param)?>">
                                         Employee View
                                     </a> 
                                 <?php
@@ -363,8 +357,7 @@ $lead_status = $this->config->item('lead_status');
                 </table>
             </div>
         </div>
-        </div>
-        <span class="bg-bottom" id="bg-w"></span>
+        <span class="bg-bottom"></span>
     </div>
 </div>
 <?php
@@ -405,6 +398,54 @@ $lead_status = $this->config->item('lead_status');
                 }
             });
         });
+
+        $("#start_date, #end_date").datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+
+        $('#search_form').validate({
+            rules: {
+                start_date: {
+                    required: true,
+                    dateISO: true
+                },
+                end_date: {
+                    required: true,
+                    dateISO: true
+                }
+            },
+            messages: {
+                start_date: {
+                    required: "Start Date required",
+                    dateISO: "Invalid date. Must be formatted yyyy-mm-dd"
+                },
+                end_date: {
+                    required: "End Date required",
+                    dateISO: "Invalid date. Must be formatted yyyy-mm-dd"
+                }
+            },
+            submitHandler: function(form) {
+                var startDate = $('#start_date').datepicker("getDate"),
+                endDate = $('#end_date').datepicker("getDate");
+                if (startDate && endDate && startDate > endDate) {
+                    alert("Start date is greater than the end date.");
+                    $('#start_date').datepicker("setDate", endDate);
+                    return false;
+                }else{
+                    $('.custom_button').attr('disabled','disabled');
+                    $('#result').hide();
+                    $('.no_result').hide();
+                    $('.loader').show();
+                    setTimeout(function(){        
+                        form.submit();
+                    }, 2000);
+                }
+            }
+        });
+
+        setTimeout(function(){        
+            $('.loader').hide();
+            $('#result').show();
+        }, 2000);
     });
 </script>
-<script src="<?php echo base_url().ASSETS;?>js/reports.js"></script>

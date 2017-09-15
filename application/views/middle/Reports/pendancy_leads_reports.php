@@ -32,7 +32,8 @@ $lead_status = $this->config->item('lead_status');
 <div class="lead-form">
     <span class="bg-top"></span>
     <div class="inner-content">
-        <div class="container">
+        <div class="container ">
+        <div class="form">
             <div class="lead-form-left">
                     <div class="form-control">
                         <label id="cal">Start Date:</label>   
@@ -175,20 +176,21 @@ $lead_status = $this->config->item('lead_status');
                     <span class="lead-num"> : <?php echo $Total;?></span>
                 </div>
                 <div class="float-right">
-                    <a href="javascript:void(0);" class="export_to_excel">
-                        <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
+                    <a href="javascript:void(0);" class="export_to_excel btn-Download">
+                        Export to Excel 
                     </a>
-                    <a href="javascript:void(0);" class="export_national">
+                    &nbsp;|
+                    <a href="javascript:void(0);" class="export_national btn-Download">
                         Download Bank Data
                     </a>
                 </div>
             </div>
-        </div>
+        
     <?php echo form_close();?>
     <div class="result" style="display:none;">
         <div class="page-content">
-            <span class="bg-top"></span>
-            <div class="inner-content">
+            
+            
                 <div class="container">
                     <table id="sample_3" class="display lead-table">
                         <thead>
@@ -355,10 +357,14 @@ $lead_status = $this->config->item('lead_status');
                         </tbody>
                     </table>
                 </div>
+            
             </div>
-            <span class="bg-bottom"></span>
-        </div>
-    </div>
+            </div>
+            </div>
+              </div>
+            <span class="bg-bottom" id="bg-w"></span>
+      
+    
 <?php
     }else{?>
     <span class="no_result">No records found</span>

@@ -21,7 +21,7 @@
             <thead>
             <tr class="top-header">
                 <th></th>
-                <th>
+                <th style="text-align:left">
                     <?php
                         $options['']='Select Status';
                         foreach ($status as $key => $value) {
@@ -35,7 +35,7 @@
             </tr>
             <tr>
                 <th style="text-align:center">Sr No</th>
-                <th>Status</th>
+                <th style="text-align:left">Status</th>
                 <th style="text-align:center">This Month</th>
                 <th style="text-align:center">This Year</th>
             </tr>
