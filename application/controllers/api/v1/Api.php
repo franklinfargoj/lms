@@ -334,8 +334,8 @@ class Api extends REST_Controller
         $table = Tbl_Products;
         $where = array('id'=>$lead_data['product_id']);
         $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+        $product_name=$product_mapped_with[0]['title'];
         $product_mapped_with=$product_mapped_with[0]['map_with'];
-
         $whereArray = array('processing_center'=>$product_mapped_with, 'branch_id' => $lead_data['branch_id']);
         $routed_id = $this->Lead->check_mapping($whereArray);
         if (!is_array($routed_id)) {
@@ -350,7 +350,6 @@ class Api extends REST_Controller
             returnJson($result);
         }
         if($lead_id != false){
-        $product_name=$product_mapped_with[0]['title'];
             //send sms
         $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
         send_sms($lead_data['contact_no'],$sms);
@@ -363,15 +362,17 @@ class Api extends REST_Controller
             $limit = '1';
             $table = Tbl_LoginLog;
             $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
-            $device_id = $device_values[0]['device_token'];
-            $device_type = $device_values[0]['device_type'];
-            if((!empty($device_type) || $device_type != NULL) &&
-                ($device_id != NULL || !empty($device_id))){
+            if(!empty($device_values)){
+                $device_id = $device_values[0]['device_token'];
+                $device_type = $device_values[0]['device_type'];
+                if((!empty($device_type) || $device_type != NULL) &&
+                    ($device_id != NULL || !empty($device_id))){
 
-                $title = 'Lead added successfully.';
-                $push_message = 'Lead added successfully for '.ucwords($product_name);
-                //Push notification
-                sendPushNotification($device_id,$device_type,$push_message,$title);
+                    $title = 'Lead added successfully.';
+                    $push_message = 'Lead added successfully for '.ucwords($product_name);
+                    //Push notification
+                    sendPushNotification($device_id,$device_type,$push_message,$title);
+                }
             }
 
         //Save notification
