@@ -1111,4 +1111,40 @@ class Leads extends CI_Controller
         }
     }
 
+    function sendPushNotification($message='test',$title=NULL)
+    {
+        //$d_type = ($device_type==0)? "appNameAndroid" : "appNameIOS";
+        // $collection = PushNotification::app($d_type)->to($device_id)->send($message);
+        // return $response = $collection->pushManager->getAdapter()->getResponse();
+
+        $url = 'https://fcm.googleapis.com/fcm/send';
+//    $server_key = 'AAAAJTxIDRs:APA91bGmPFIAFGn7ZMj1XX__Vw-ONFXBbUwsJp_F3qCBalPyYMhCWcRiNtj7l7PzuGKuwSyG950X8s1kYFMHQIVcyXhH-ylwcYBZzaPnpTGxKfB1yOeAVTEkyp69_jNc25QNroxb_b-Z';
+        $server_key = FCMKEY;
+        $to = 'dk4G4C4Nr9A:APA91bGl3riHhTQiSV1Ymii-JATKT1CoW1R9fLKQwQoHpB4CMXq6Afwy7d7RHTTBJyMbMXC77CIXNgqEXTW5Az5y8IvoW3EofjcvBOSyIRmkoqjTYQQHALO925QF32cIRqq8exipmdCG';
+        $notification_title = ($title==NULL) ? 'Notification' : $title;
+        $data = array('body'=>$message, 'title' => $notification_title, "icon" => "myicon","notification_type"=>"action");
+
+        $fields = json_encode(array('to' => $to, 'data' => $data));
+        $headers = array(
+            'Content-Type:application/json',
+            'Authorization:key='.$server_key
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        $result = curl_exec($ch);
+
+        if ($result === FALSE) {
+            // die('FCM Send Error: ' . curl_error($ch));
+        }
+        curl_close($ch);
+        return $result;
+    }
+
 }
