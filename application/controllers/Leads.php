@@ -65,7 +65,7 @@ class Leads extends CI_Controller
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<span class = "help-block">', '</span>');
             //$this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
-            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alphaNumeric');
+            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|al');
             $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
             $this->form_validation->set_rules('lead_ticket_range', 'Range.', 'required|numeric');
             $this->form_validation->set_rules('product_category_id', 'Product Category', 'required');
@@ -115,7 +115,7 @@ class Leads extends CI_Controller
 
                 }
                 $action = 'list';
-                $select = array('map_with');
+                $select = array('map_with','title');
                 $table = Tbl_Products;
                 $where = array('id'=>$lead_data['product_id']);
                 $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
@@ -131,9 +131,10 @@ class Leads extends CI_Controller
                 $lead_data['lead_name'] = $this->input->post('customer_name');
                 $lead_id = $this->Lead->add_leads($lead_data);
                 if($lead_id != false){
+                    $product_name=$product_mapped_with[0]['title'];
                     //send sms
-                    $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
-                    send_sms($this->input->post('contact_no'),$message);
+                    $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
+                    send_sms($this->input->post('contact_no'),$sms);
 
                     $select = array('device_token','device_type');
                     $emp_id = $this->session->userdata('admin_id');
@@ -147,9 +148,10 @@ class Leads extends CI_Controller
                     if((!empty($device_type) || $device_type != NULL) &&
                         ($device_id != NULL || !empty($device_id))){
 
-                        $message = 'Lead added successfully.';
+                        $title = 'Lead added successfully';
+                        $push_message = 'Lead added successfully for '.ucwords($product_name);
                         //Push notification
-                        sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
+                        sendPushNotification($device_id,$push_message,$title);
                     }
                     //Save notification
                     $this->insert_notification($lead_data);

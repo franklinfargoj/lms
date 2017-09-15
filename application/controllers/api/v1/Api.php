@@ -330,7 +330,7 @@ class Api extends REST_Controller
         $lead_data['lead_name'] = $this->input->post('customer_name');
         $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
         $action = 'list';
-        $select = array('map_with');
+        $select = array('map_with','title');
         $table = Tbl_Products;
         $where = array('id'=>$lead_data['product_id']);
         $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
@@ -350,9 +350,10 @@ class Api extends REST_Controller
             returnJson($result);
         }
         if($lead_id != false){
+        $product_name=$product_mapped_with[0]['title'];
             //send sms
-        $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
-        send_sms($lead_data['contact_no'],$message);
+        $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
+        send_sms($lead_data['contact_no'],$sms);
 
         //Push notification
             $select = array('device_token','device_type');
@@ -367,9 +368,10 @@ class Api extends REST_Controller
             if((!empty($device_type) || $device_type != NULL) &&
                 ($device_id != NULL || !empty($device_id))){
 
-                $message = 'Lead added successfully.';
+                $title = 'Lead added successfully.';
+                $push_message = 'Lead added successfully for '.ucwords($product_name);
                 //Push notification
-                sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
+                sendPushNotification($device_id,$device_type,$push_message,$title);
             }
 
         //Save notification
