@@ -356,7 +356,7 @@ class Api extends REST_Controller
 
         //Push notification
             $select = array('device_token','device_type');
-            $emp_id = $this->session->userdata('admin_id');
+            $emp_id = $params['created_by'];
             $where = array('employee_id'=>$emp_id);
             $order_by = 'id desc';
             $limit = '1';
