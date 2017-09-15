@@ -334,8 +334,8 @@ class Api extends REST_Controller
         $table = Tbl_Products;
         $where = array('id'=>$lead_data['product_id']);
         $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+        $product_name=$product_mapped_with[0]['title'];
         $product_mapped_with=$product_mapped_with[0]['map_with'];
-
         $whereArray = array('processing_center'=>$product_mapped_with, 'branch_id' => $lead_data['branch_id']);
         $routed_id = $this->Lead->check_mapping($whereArray);
         if (!is_array($routed_id)) {
@@ -350,29 +350,30 @@ class Api extends REST_Controller
             returnJson($result);
         }
         if($lead_id != false){
-        $product_name=$product_mapped_with[0]['title'];
             //send sms
         $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
         send_sms($lead_data['contact_no'],$sms);
 
         //Push notification
-//            $select = array('device_token','device_type');
-//            $emp_id = $params['created_by'];
-//            $where = array('employee_id'=>$emp_id);
-//            $order_by = 'id desc';
-//            $limit = '1';
-//            $table = Tbl_LoginLog;
-//            $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
-//            $device_id = $device_values[0]['device_token'];
-//            $device_type = $device_values[0]['device_type'];
-//            if((!empty($device_type) || $device_type != NULL) &&
-//                ($device_id != NULL || !empty($device_id))){
-//
-//                $title = 'Lead added successfully.';
-//                $push_message = 'Lead added successfully for '.ucwords($product_name);
-//                //Push notification
-//                sendPushNotification($device_id,$device_type,$push_message,$title);
-//            }
+            $select = array('device_token','device_type');
+            $emp_id = $params['created_by'];
+            $where = array('employee_id'=>$emp_id);
+            $order_by = 'id desc';
+            $limit = '1';
+            $table = Tbl_LoginLog;
+            $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
+            if(!empty($device_values)){
+                $device_id = $device_values[0]['device_token'];
+                $device_type = $device_values[0]['device_type'];
+                if((!empty($device_type) || $device_type != NULL) &&
+                    ($device_id != NULL || !empty($device_id))){
+
+                    $title = 'Lead added successfully.';
+                    $push_message = 'Lead added successfully for '.ucwords($product_name);
+                    //Push notification
+                    sendPushNotification($device_id,$device_type,$push_message,$title);
+                }
+            }
 
         //Save notification
         $this->insert_notification($lead_data);
@@ -2406,7 +2407,20 @@ class Api extends REST_Controller
             $productData = $this->master->view_product($lead_data['product_id']);
 
             $title = 'New lead added';
-            $description = 'Customer Name:  '.ucwords($lead_data['customer_name']).'Phone Number :  '.ucwords($lead_data['contact_no']).'Product Name:  '.ucwords($productData[0]['title']);
+            $description = '<div class="lead-form-left">
+                                <div class="form-control">
+                                    <label>Customer Name:  '.ucwords($lead_data['customer_name']).'</label>
+                                </div>
+                                <div class="form-control">
+                                    <label>Phone Number :  '.ucwords($lead_data['contact_no']).'</label> 
+                                </div>
+                                <div class="form-control">
+                                    <label>Category Name:  '.ucwords($productData[0]['category']).'</label>
+                                </div>
+                                <div class="form-control">
+                                    <label>Product Name:  '.ucwords($productData[0]['title']).'</label>
+                                </div>
+                            </div>';
             $priority = 'Normal';
             $notification_to = $lead_data['created_by'];
             return notification_log($title,$description,$priority,$notification_to);
