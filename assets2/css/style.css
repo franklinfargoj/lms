@@ -423,7 +423,7 @@ padding-bottom: 15px;
 	display: table;
 	color: #b1bac4;
 	font-family: "Montserrat-Regular";
-	font-size: 15px;
+	font-size: 14px;
 }
 .top-navigation{
 	text-align: center;
@@ -440,7 +440,7 @@ padding-bottom: 15px;
 }
 .top-navigation li{
 	display: inline-block;
-    margin-right: 10px;
+    margin-right: 5px;
     padding: 0;
     text-align: center;
     vertical-align: middle;
@@ -452,7 +452,7 @@ padding-bottom: 15px;
     color: #ffffff;
 }
 .top-navigation li + li{
-	margin-left: 10px;
+	margin-left: 5px;
 }
 
 .top-navigation a.active img,.top-navigation a:hover img{
@@ -764,10 +764,11 @@ img#rs {
 p#note{
 	padding-bottom: 20px;
 	    padding-bottom: 20px;
-    font-size: 20px;
+    font-size: 15px;
     text-align: left;
     border-bottom: 1px solid #ccc;
     margin-bottom: 30px;
+    color: gray;
 }
 .range-slider input{
 	line-height: 0;
@@ -805,6 +806,32 @@ a.btn-Download{
     color: gray;
     bottom: 18px;
     text-decoration: underline;
+}
+/*#cal-droped{
+	position: relative;
+}*/
+.cal-drop{
+	position: absolute;
+	width: 130px;
+	display: none;
+}
+.cal-drop li{
+	    width: 130px;
+    display: inline-block;
+    margin-right: 0;
+    margin-left: 0!important;
+}
+.top-navigation ul li.active .cal-drop li >a{
+	width: 96px;
+	padding: 15px 20px;
+	border-bottom: 1px solid #fff;
+}
+input#ticket_range ,input#amount,input#years,input#interest{
+    float: left;
+    margin-top: 0px;
+    height: 12px;
+    padding: 10px;
+    line-height: 14px;
 }
 /*-------------*/
 .lead-table thead{

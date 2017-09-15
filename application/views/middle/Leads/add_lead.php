@@ -192,7 +192,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <?php echo form_error('is_own_branch'); ?>
                     </div>
                     <div id="state" class="form-control">
-                        <label>State:<?php echo $this->session->userdata('state_id');?></label>
+                        <label>State:<span style="color:red;">*</span></label>
                         <?php echo form_dropdown('state_id', $data_state,$input['state_id'],'disabled') ?>
                         <?php echo form_error('state_id'); ?>
                     </div>

@@ -76,12 +76,24 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
-				<li class="<?php echo (($controller == 'dashboard') && ($method == 'emi_calculator')) ? 'active' : ''?>">
-					<a href="<?php echo site_url('dashboard/emi_calculator')?>">
-						Calculator
+				<li class="<?php echo (($controller == 'dashboard') && ($method == 'emi_calculator')) ? 'active' : ''?>" id="cal-droped">
+					<a href="<?php echo site_url('dashboard/emi_calculator')?>" >
+						Calculator 	&#9662;
 					</a>
+					<ul class="cal-drop">
+						<li>
+						<a href="<?php echo site_url('dashboard/fd_calculator')?>">
+							Fd Calculator
+						</a>
+						</li>
+	                    <li>
+							<a href="<?php echo site_url('dashboard/rd_calculator')?>">
+							Rd Calculator
+							</a>
+						</li>
+					</ul>
 				</li>
-                <li class="<?php echo (($controller == 'dashboard') && ($method == 'fd_calculator')) ? 'active' : ''?>">
+                <!-- <li class="<?php echo (($controller == 'dashboard') && ($method == 'fd_calculator')) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard/fd_calculator')?>">
 						Fd Calculator
 					</a>
@@ -90,7 +102,7 @@
 					<a href="<?php echo site_url('dashboard/rd_calculator')?>">
 						Rd Calculator
 					</a>
-				</li>
+				</li> -->
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'product_guide') ? 'active' : ''?>">
@@ -128,3 +140,11 @@
 			</div>
 	</div>
 </div>
+<script type="text/javascript">
+	
+	    $("#cal-droped").hover(function(event){
+	    	// event.preventDefault();
+	        $(".cal-drop").toggle();
+	    });
+
+</script>
