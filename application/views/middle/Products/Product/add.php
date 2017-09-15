@@ -42,6 +42,27 @@
 						?>
 					</div>
                     <div class="form-control">
+						<?php 
+							$attributes = array(
+						        'class' => '',
+						        'style' => ''
+							);
+							echo form_label('Product Name:', 'title', $attributes);
+
+							$data = array(
+						        'type'  => 'text',
+						        'name'  => 'title',
+						        'id'    => 'title',
+						        'class' => '',
+						        'value' => set_value('title')
+							);
+							echo form_input($data);
+							
+							// Assuming that the 'title' field value was incorrect:
+							echo form_error('title', '<span class="help-block">', '</span>');
+						?>
+					</div>
+					<div class="form-control">
 						<?php
 							$attributes = array(
 						        'class' => '',
@@ -64,28 +85,7 @@
 						?>
 					</div>
 					<div class="form-control">
-						<?php 
-							$attributes = array(
-						        'class' => '',
-						        'style' => ''
-							);
-							echo form_label('Product Name:', 'title', $attributes);
-
-							$data = array(
-						        'type'  => 'text',
-						        'name'  => 'title',
-						        'id'    => 'title',
-						        'class' => '',
-						        'value' => set_value('title')
-							);
-							echo form_input($data);
-							
-							// Assuming that the 'title' field value was incorrect:
-							echo form_error('title', '<span class="help-block">', '</span>');
-						?>
-					</div>
-					<div class="form-control">
-						<label>Default Assign</label>
+						<label>Default Assign:</label>
 						<div class="radio-control">
 							<input type="radio" id= "self" name="default_assign" value="self" <?php echo  set_radio('default_assign', 'self'); ?> />
 							<label>Self</label>
@@ -93,17 +93,6 @@
 						<div class="radio-control">
 							<input type="radio" id= "branch" name="default_assign" value="branch" <?php echo  set_radio('default_assign', 'branch', TRUE); ?> />
 							<label>Branch</label>
-						</div>
-					</div>
-					<div class="form-control">
-						<label>Status</label>
-						<div class="radio-control">
-							<input type="radio" id= "active" name="status" value="active" <?php echo  set_radio('status', 'active', TRUE); ?> />
-							<label>Active</label>
-						</div>
-						<div class="radio-control">
-							<input type="radio" id= "inactive" name="status" value="inactive" <?php echo  set_radio('status', 'inactive'); ?> />
-							<label>Inactive</label>
 						</div>
 					</div>
 					<div class="form-control">
@@ -125,7 +114,12 @@
 								'7' =>	'7',
 								'8' =>	'8',
 								'9' =>	'9',
-								'10' =>'10'
+								'10' =>'10',
+								'11' =>'11',
+								'12' =>'12',
+								'13' =>'13',
+								'14' =>'14',
+								'15' =>'15'
 							);
 							$js = array(
 							        'id'       => 'turn_around_time',
@@ -137,6 +131,17 @@
 							// Assuming that the 'category' field value was incorrect:
 							echo form_error('turn_around_time', '<span class="help-block">', '</span>');
 						?>
+					</div>
+					<div class="form-control">
+						<label>Status:</label>
+						<div class="radio-control">
+							<input type="radio" id= "active" name="status" value="active" <?php echo  set_radio('status', 'active', TRUE); ?> />
+							<label>Active</label>
+						</div>
+						<div class="radio-control">
+							<input type="radio" id= "inactive" name="status" value="inactive" <?php echo  set_radio('status', 'inactive'); ?> />
+							<label>Inactive</label>
+						</div>
 					</div>
 					<div class="form-control form-submit clearfix">
 						<a href="javascript:void(0);" class="reset">

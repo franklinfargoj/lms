@@ -15,8 +15,8 @@ class Captcha {
         // echo $this->baseUrl;
         // die;
         $this->basePath = $this->CI_OBJ->input->server('DOCUMENT_ROOT') . '/';
-        $this->captchaFontPath = 'monofont.ttf';
-        //$this->captchaFontPath 	 = $this->baseUrl.'css/fonts/Quicksand_Bold_Oblique-webfont.ttf';
+        //$this->captchaFontPath = 'monofont.ttf';
+        $this->captchaFontPath 	 = $this->baseUrl.'/'.ASSETS.'fonts/Lato-Regular.woff';
     //    echo $this->CI_OBJ->input->server('DOCUMENT_ROOT');die;
         //$chars = "abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $chars = "0123456789";

@@ -604,11 +604,15 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $objSheet->getStyle($excel_alpha[1].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[2].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[3].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[4].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[5].($i))->applyFromArray($text_bold_false);
 
                 $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
                 $objSheet->getCell($excel_alpha[1].$i)->setValue(ucwords($name));
-                $objSheet->getCell($excel_alpha[2].$i)->setValue($value['total_generated']);
-                $objSheet->getCell($excel_alpha[3].$i)->setValue($value['total_converted']);
+                $objSheet->getCell($excel_alpha[2].$i)->setValue($value['total_generated_mtd']);
+                $objSheet->getCell($excel_alpha[3].$i)->setValue($value['total_generated_ytd']);
+                $objSheet->getCell($excel_alpha[4].$i)->setValue($value['total_converted_mtd']);
+                $objSheet->getCell($excel_alpha[5].$i)->setValue($value['total_converted_ytd']);
                 $i++;$j++;
             }
             break;

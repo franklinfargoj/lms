@@ -25,7 +25,7 @@ class Login extends CI_Controller {
      * index
      * Index Page for this controller.
      * @author Ashok Jadhav
-	* @access public
+	 * @access public
      * @param none
      * @return void
      */

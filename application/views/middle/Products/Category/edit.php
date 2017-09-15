@@ -43,7 +43,7 @@
 						?>	
 					</div>
 					<div class="form-control">
-						<label>Status</label>
+						<label>Status:</label>
 						<div class="radio-control">
 							<input type="radio" id= "active" name="status" value="active" <?php 
 							    echo set_value('status', $categoryDetail[0]['status']) == 'active' ? "checked" : ""; 

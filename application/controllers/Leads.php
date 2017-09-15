@@ -769,6 +769,9 @@ class Leads extends CI_Controller
                             //This will add entry into reminder scheduler for status (Interested/Follow up)
                             $this->Lead->add_reminder($remindData);
                         }
+                        if($lead_status == 'Converted'){
+                            $this->points_distrubution($lead_id);
+                        }
                         $this->session->set_flashdata('success','Lead information updated successfully');
                         redirect('leads/leads_list/assigned/ytd');
                     }
@@ -1114,40 +1117,40 @@ class Leads extends CI_Controller
         }
     }
 
-    function sendPushNotification($message='test',$title=NULL)
-    {
-        //$d_type = ($device_type==0)? "appNameAndroid" : "appNameIOS";
-        // $collection = PushNotification::app($d_type)->to($device_id)->send($message);
-        // return $response = $collection->pushManager->getAdapter()->getResponse();
+    private function points_distrubution($lead_id){
 
-        $url = 'https://fcm.googleapis.com/fcm/send';
-//    $server_key = 'AAAAJTxIDRs:APA91bGmPFIAFGn7ZMj1XX__Vw-ONFXBbUwsJp_F3qCBalPyYMhCWcRiNtj7l7PzuGKuwSyG950X8s1kYFMHQIVcyXhH-ylwcYBZzaPnpTGxKfB1yOeAVTEkyp69_jNc25QNroxb_b-Z';
-        $server_key = FCMKEY;
-        $to = 'dk4G4C4Nr9A:APA91bGl3riHhTQiSV1Ymii-JATKT1CoW1R9fLKQwQoHpB4CMXq6Afwy7d7RHTTBJyMbMXC77CIXNgqEXTW5Az5y8IvoW3EofjcvBOSyIRmkoqjTYQQHALO925QF32cIRqq8exipmdCG';
-        $notification_title = ($title==NULL) ? 'Notification' : $title;
-        $data = array('body'=>$message, 'title' => $notification_title, "icon" => "myicon","notification_type"=>"action");
-
-        $fields = json_encode(array('to' => $to, 'data' => $data));
-        $headers = array(
-            'Content-Type:application/json',
-            'Authorization:key='.$server_key
-        );
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        $result = curl_exec($ch);
-
-        if ($result === FALSE) {
-            // die('FCM Send Error: ' . curl_error($ch));
+        $action = 'list';
+        
+        //Get Amount Details
+        $table = Tbl_Amounts.' as a';
+        $select = array('a.*');
+        $where  = array('a.lead_id' => $lead_id);
+        $join = array();
+        $amount_data = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+        if(!empty($amount_data)){
+            $amount = $amount_data[0]['amount'];
+            $table = Tbl_Leads.' as l';
+            $select = array('l.id','l.product_id','l.created_by','la.employee_id','mp.points','pd.generator_contrubution','pd.convertor_contrubution');
+            $where  = array('l.id' => $lead_id,'la.is_deleted' => 0,'la.is_updated' => 1,'la.status' => 'Converted','mp.from_range <=' => $amount,'mp.to_range >=' => $amount,'pd.active' => 1);
+            $join = array();
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+            $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
+            $join[] = array('table' => Tbl_Manage_Points.' as mp','on_condition' => 'mp.product_id = p.id','type' => '');
+            $join[] = array('table' => Tbl_Points_Distributor.' as pd','on_condition' => 'pd.product_id = p.id','type' => '');
+            $leadData = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+            if(!empty($leadData)){
+                $data = array('lead_id' => $leadData[0]['id'],'product_id' => $leadData[0]['product_id']);
+                //Generator Contribution
+                $generator_data = array('employee_id' => $leadData[0]['created_by'],'points' => ($leadData[0]['generator_contrubution'] * $leadData[0]['points'] * 0.01),'role_as' => 'Generator');
+                $generator_data = array_merge($generator_data,$data);
+                //Convertor Contribution
+                $convertor_data = array('employee_id' => $leadData[0]['employee_id'],'points' => ($leadData[0]['convertor_contrubution'] * $leadData[0]['points'] * 0.01),'role_as' => 'Convertor');
+                $convertor_data = array_merge($convertor_data,$data);
+                
+                $this->db->insert(Tbl_Points,$generator_data);
+                $this->db->insert(Tbl_Points,$convertor_data);
+            }
         }
-        curl_close($ch);
-        return $result;
     }
 
 }

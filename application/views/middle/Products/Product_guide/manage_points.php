@@ -1,8 +1,8 @@
 <div class="page-title">
 	<div class="container clearfix">
-		<h3 class="text-center">Manage Points</h3>
+		<h3 class="text-center">Add</h3>
 		<div class="float-right">
-            <span class="lead-num"><a href="<?php echo site_url('product');?>"><span><</span>Back</a></span>
+            <span class="lead-num"><a href="<?php echo site_url('product_guide/view_points/'.encode_id($product[0]['id']));?>"><span><</span>Back</a></span>
         </div>
 	</div>
 </div>
