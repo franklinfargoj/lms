@@ -685,7 +685,7 @@ strong{
 /*add lead*/
 
 /*lead*/
-/*-------ravish---*/
+/*-------ravish-----------------*/
 img#rs {
     margin: 8px 0 0px 10px;
 }
@@ -826,14 +826,29 @@ a.btn-Download{
 	padding: 15px 20px;
 	border-bottom: 1px solid #fff;
 }
-input#ticket_range ,input#amount,input#years,input#interest{
+input#ticket_range ,input#amount,input#years,input#interest,input#password,input#username,input#captext{
     float: left;
     margin-top: 0px;
     height: 12px;
     padding: 10px;
     line-height: 14px;
 }
-/*-------------*/
+input#captext{
+	margin-top: 15px;
+}
+.ravish-form{
+	width: 99%!important;
+	padding: 0 10px;
+}
+.ravish-field{
+	padding: 6px 0!important;
+	width: 99.4%!important;
+}
+.ravish-field2{
+	padding: 6px 0!important;
+	width: 100.4%!important;
+}
+/*----------------------*/
 .lead-table thead{
 	background-color: #00559d;
 }

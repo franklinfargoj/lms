@@ -22,7 +22,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
     <div class="inner-content">
         <div class="container">
             <div class="lead-form">
-                <div class="lead-form-left">
+                <div class="lead-form-left ravish-form">
                     <?php
                     echo form_open('', $form_attributes);
                     ?>
@@ -39,7 +39,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                             <label>No</label>
                         </div>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control ravish-field2">
                         <label>Deposit Term:</label>
                             <?php echo form_input($data_month);?>
                             <?php echo form_input($data_days);?>
@@ -72,6 +72,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
             </div>
         </div>
     </div>
+    <span class="bg-bottom"></span>
 </div>
 <script>
     $.validator.addMethod('minStrict', function (value, el, param) {
