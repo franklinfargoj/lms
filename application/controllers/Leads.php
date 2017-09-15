@@ -65,7 +65,7 @@ class Leads extends CI_Controller
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<span class = "help-block">', '</span>');
             //$this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
-            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|al');
+            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alpha_dash_space');
             $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
             $this->form_validation->set_rules('lead_ticket_range', 'Range.', 'required|numeric');
             $this->form_validation->set_rules('product_category_id', 'Product Category', 'required');
@@ -181,7 +181,7 @@ class Leads extends CI_Controller
     }
 
     ##################################
-    /*Private Functions*/
+    /*public Functions*/
     ##################################
     /*
     * Validation for alphabetical letters
@@ -200,6 +200,16 @@ class Leads extends CI_Controller
             return TRUE;
         }
     }
+
+    public function alpha_dash_space($str)
+    {
+        $check =  ( ! preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+        if(!$check){
+            $this->form_validation->set_message('alpha_dash_space', 'Please enter only alphabets.');
+        }
+        return $check;
+    }
+
 
     private function insert_notification($lead_data){
         if(!empty($lead_data)){
