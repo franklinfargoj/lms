@@ -36,7 +36,7 @@ $lead_status = $this->config->item('lead_status');
         <div class="form">
             <div class="lead-form-left">
                     <div class="form-control">
-                        <label id="cal">Start Date:</label>   
+                        <label id="cal">Start Date:<span style="color:red;">*</span> </label>   
                         <?php 
                             if(isset($start_date)){
                                 $start_date = date('d/m/Y',strtotime($start_date));
@@ -60,7 +60,7 @@ $lead_status = $this->config->item('lead_status');
                                 'class' => '',
                                 'style' => ''
                             );
-                            echo form_label('Product Category:', 'product_category_id', $attributes);
+                            echo form_label('Product Category:<span style="color:red;">*</span> ', 'product_category_id', $attributes);
 
                             if(isset($category_list)){
                                 $options = $category_list;
@@ -83,7 +83,7 @@ $lead_status = $this->config->item('lead_status');
                                 'class' => '',
                                 'style' => ''
                             );
-                            echo form_label('Lead Source:', 'lead_source', $attributes);
+                            echo form_label('Lead Source:<span style="color:red;">*</span> ', 'lead_source', $attributes);
                         ?>
                         <?php 
                             if($lead_sources){
@@ -103,7 +103,7 @@ $lead_status = $this->config->item('lead_status');
             </div>
             <div class="lead-form-right">
                 <div class="form-control endDate">
-                    <label>End Date:</label>   
+                    <label>End Date:<span style="color:red;">*</span> </label>   
                     <?php 
                         if(isset($end_date)){
                             $end_date = date('d/m/Y',strtotime($end_date));
@@ -127,7 +127,7 @@ $lead_status = $this->config->item('lead_status');
                             'class' => '',
                             'style' => ''
                         );
-                        echo form_label('Product:', 'product_id', $attributes);
+                        echo form_label('Product:<span style="color:red;">*</span>', 'product_id', $attributes);
                     ?>
                     <?php 
                         if(isset($product_list)){
@@ -169,8 +169,8 @@ $lead_status = $this->config->item('lead_status');
         </script>
         <div class="lead-top result"  style="display:none;">
             <div class="container clearfix">
-                <div class="float-left">
-                    <span class="total-lead">
+                <div class="float-left top-lead">
+                    <span class="total-lead ">
                         Total Pending Leads
                     </span>
                     <span class="lead-num"> : <?php echo $Total;?></span>
