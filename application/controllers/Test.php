@@ -54,7 +54,8 @@ class Test extends CI_Controller
 
         $url = 'https://fcm.googleapis.com/fcm/send';
 //    $server_key = 'AAAAJTxIDRs:APA91bGmPFIAFGn7ZMj1XX__Vw-ONFXBbUwsJp_F3qCBalPyYMhCWcRiNtj7l7PzuGKuwSyG950X8s1kYFMHQIVcyXhH-ylwcYBZzaPnpTGxKfB1yOeAVTEkyp69_jNc25QNroxb_b-Z';
-        $server_key = FCMKEY;
+        $server_key = 'AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
+
         //$to = $device_id;
         $to = 'dbEu5-lTFtQ:APA91bEfBDObFHTcwSrFcwqYYQZkUY2_ZBY4iYsmfp9QnMtNbO5xAndriCz5zB3P1fAqeYAc7-4a09aHhC8n1x569lSYDDcswHv_2vzvkVDaNDFZnISqzttIRyWnTdZbWmDg82FQnfqp';
         $notification_title = 'Test Title';
