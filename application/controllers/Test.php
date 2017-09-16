@@ -77,7 +77,7 @@ class Test extends CI_Controller
         $result = curl_exec($ch);
 
         if ($result === FALSE) {
-            // die('FCM Send Error: ' . curl_error($ch));
+             die('FCM Send Error: ' . curl_error($ch));
         }
         curl_close($ch);
         return $result;
