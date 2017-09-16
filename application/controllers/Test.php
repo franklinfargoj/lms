@@ -76,7 +76,7 @@ class Test extends CI_Controller
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
         $result = curl_exec($ch);
-
+ echo $result;die;
         if ($result === FALSE) {
              die('FCM Send Error: ' . curl_error($ch));
         }
