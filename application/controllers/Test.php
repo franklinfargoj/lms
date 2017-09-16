@@ -61,7 +61,7 @@ class Test extends CI_Controller
         $notification_title = 'Test Title';
         $data = array('body'=>'hi mukesh', 'title' => $notification_title, "icon" => "myicon","notification_type"=>"action");
 
-        $fields = json_encode(array('to' => $to, 'data' => $data));
+        $fields = json_encode(array('to' => $to, 'data' => array('notificationData'=>$data)));
         $headers = array(
             'Content-Type:application/json',
             'Authorization:key='.$server_key
