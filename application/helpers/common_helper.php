@@ -460,7 +460,7 @@ function sendPushNotification($device_id,$message,$title=NULL)
     );
     echo $fields;
     echo "<br>";
-    echo $headers;
+    echo "<pre>" ;print_r($headers);
     die;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
