@@ -437,33 +437,42 @@ if(!function_exists('send_sms')){
 
 function sendPushNotification($device_id,$message,$title=NULL)
 {
-    $header = array();
-    $header[] = 'Content-type: application/json';
-    $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
+    //$d_type = ($device_type==0)? "appNameAndroid" : "appNameIOS";
+   // $collection = PushNotification::app($d_type)->to($device_id)->send($message);
+   // return $response = $collection->pushManager->getAdapter()->getResponse();
 
-    $payload = [
-        'to' => $device_id,
-        'notification' => [
-            'title' => "Portugal VS Germany",
-            'body' => "1 to 2"
-        ]
-    ];
+    $url = 'https://fcm.googleapis.com/fcm/send';
+//    $server_key = 'AAAAJTxIDRs:APA91bGmPFIAFGn7ZMj1XX__Vw-ONFXBbUwsJp_F3qCBalPyYMhCWcRiNtj7l7PzuGKuwSyG950X8s1kYFMHQIVcyXhH-ylwcYBZzaPnpTGxKfB1yOeAVTEkyp69_jNc25QNroxb_b-Z';
+    $server_key = FCMKEY;
+    $to = $device_id;
+    $notification_title = ($title==NULL) ? 'Notification' : $title;
+    $data = array(
+        'body'=>$message,
+        'title' => $notification_title,
+        "notificationId" => 8,
+        "notification_type"=>"action"
+    );
 
-    $crl = curl_init();
-    curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
-    curl_setopt($crl, CURLOPT_POST,true);
-    curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-    curl_setopt($crl, CURLOPT_POSTFIELDS, json_encode( $payload ) );
+    $fields = json_encode(array('to' => $to, 'data' => array('notificationData'=>$data)));
+    $headers = array(
+        'Content-Type:application/json',
+        'Authorization:key='.$server_key
+    );
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+    $result = curl_exec($ch);
 
-    curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
-
-    $rest = curl_exec($crl);
-    //echo $rest;die;
-    if ($rest === false) {
-        return curl_error($crl);
+    if ($result === FALSE) {
+       // die('FCM Send Error: ' . curl_error($ch));
     }
-    curl_close($crl);
-    return $rest;
+    curl_close($ch);
+    return $result;
 }
 
  function notification_log($title,$description,$priority,$notification_to){
