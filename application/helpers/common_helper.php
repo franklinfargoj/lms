@@ -446,29 +446,34 @@ function sendPushNotification($device_id,$message,$title=NULL)
     $server_key = FCMKEY;
     $to = $device_id;
     $notification_title = ($title==NULL) ? 'Notification' : $title;
-    $data = array('body'=>$message, 'title' => $notification_title, "icon" => "myicon","notification_type"=>"action");
 
-    $fields = json_encode(array('to' => $to, 'data' => $data));
-    $headers = array(
-        'Content-Type:application/json',
-        'Authorization:key='.$server_key
-    );
+    $header = array();
+    $header[] = 'Content-type: application/json';
+    $header[] = 'Authorization: key='.$server_key;
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    $result = curl_exec($ch);
+    $payload = [
+        'to' => $to,
+        'notification' => [
+            'title' => $notification_title,
+            'body' => $message
+        ]
+    ];
 
-    if ($result === FALSE) {
-       // die('FCM Send Error: ' . curl_error($ch));
+    $crl = curl_init();
+    curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($crl, CURLOPT_POST,true);
+    curl_setopt($crl, CURLOPT_URL, $url);
+    curl_setopt($crl, CURLOPT_POSTFIELDS, json_encode( $payload ) );
+
+    curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
+
+    $rest = curl_exec($crl);
+    //echo $rest;die;
+    if ($rest === false) {
+        return curl_error($crl);
     }
-    curl_close($ch);
-    return $result;
+    curl_close($crl);
+    return $rest;
 }
 
  function notification_log($title,$description,$priority,$notification_to){
