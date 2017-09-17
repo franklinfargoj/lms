@@ -446,14 +446,14 @@ function sendPushNotification($device_id,$message,$title=NULL)
         "notification_type"=>"action"
     );
 
-    $fields = json_encode(array('to' => $to, 'data' => array('notificationData'=>$data)));
+    $fields = json_encode(array('data' => array('notificationData'=>$data),'to' => $to));
     $header = array();
     $header[] = 'Content-type: application/json';
     $header[] = 'Authorization: key=' . FCMKEY;
-    echo $fields;
-    echo "<br>";
-    echo "<pre>" ;print_r($header);
-    die;
+//    echo $fields;
+//    echo "<br>";
+//    echo "<pre>" ;print_r($header);
+//    die;
     $crl = curl_init();
     curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
     curl_setopt($crl, CURLOPT_POST,true);
