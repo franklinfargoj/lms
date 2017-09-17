@@ -458,10 +458,10 @@ function sendPushNotification($device_id,$message,$title=NULL)
         'Content-Type:application/json',
         'Authorization:key='.$server_key
     );
-    echo $fields;
-    echo "<br>";
-    echo "<pre>" ;print_r($headers);
-    die;
+//    echo $fields;
+//    echo "<br>";
+//    echo "<pre>" ;print_r($headers);
+//    die;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, true);
