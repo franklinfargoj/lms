@@ -458,7 +458,7 @@ function sendPushNotification($device_id,$message,$title=NULL)
     curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
     curl_setopt($crl, CURLOPT_POST,true);
     curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-    curl_setopt($crl, CURLOPT_POSTFIELDS, json_encode( $fields ) );
+    curl_setopt($crl, CURLOPT_POSTFIELDS, $fields);
 
     curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
 
