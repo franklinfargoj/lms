@@ -442,7 +442,7 @@ function sendPushNotification($device_id,$message,$title=NULL)
     $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
 
     $payload = [
-        'to' => 'dbEu5-lTFtQ:APA91bEfBDObFHTcwSrFcwqYYQZkUY2_ZBY4iYsmfp9QnMtNbO5xAndriCz5zB3P1fAqeYAc7-4a09aHhC8n1x569lSYDDcswHv_2vzvkVDaNDFZnISqzttIRyWnTdZbWmDg82FQnfqp',
+        'to' => $device_id,
         'notification' => [
             'title' => "Portugal VS Germany",
             'body' => "1 to 2"
