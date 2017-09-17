@@ -451,6 +451,7 @@ function sendPushNotification($device_id,$message,$title=NULL)
     $fields = json_encode(array('to' => $to, 'data' => $data));
     $headers = array(
         'Content-Type:application/json',
+        'Content-Length: 0',
         'Authorization:key='.$server_key
     );
 
