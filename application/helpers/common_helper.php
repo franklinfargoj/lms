@@ -454,24 +454,24 @@ function sendPushNotification($device_id,$message,$title=NULL)
     );
 
     $fields = json_encode(array('to' => $to, 'data' => array('notificationData'=>$data)));
-    $headers = array(
-        'Content-Type:application/json',
-        'Content-Length:'.sizeof(json_encode($fields)),
-        'Authorization:key='.$server_key
-    );
+    $header = array();
+    $header[] = 'Content-type: application/json';
+    $header[] = 'Authorization: key=' . FCMKEY;
 //    echo $fields;
 //    echo "<br>";
 //    echo "<pre>" ;print_r($headers);
 //    die;
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    $result = curl_exec($ch);
+    $crl = curl_init();
+    curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($crl, CURLOPT_POST,true);
+    curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+    curl_setopt($crl, CURLOPT_POSTFIELDS, json_encode( $fields ) );
+
+    curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
+// curl_setopt($crl, CURLOPT_SSL_VERIFYHOST, false); should be off on production
+// curl_setopt($crl, CURLOPT_SSL_VERIFYPEER, false); shoule be off on production
+
+    $result = curl_exec($crl);
 echo $result;die;
     if ($result === FALSE) {
        // die('FCM Send Error: ' . curl_error($ch));
