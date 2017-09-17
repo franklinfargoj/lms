@@ -53,35 +53,46 @@ class Test extends CI_Controller
         // return $response = $collection->pushManager->getAdapter()->getResponse();
 
         $url = 'https://fcm.googleapis.com/fcm/send';
-//    $server_key = 'AAAAJTxIDRs:APA91bGmPFIAFGn7ZMj1XX__Vw-ONFXBbUwsJp_F3qCBalPyYMhCWcRiNtj7l7PzuGKuwSyG950X8s1kYFMHQIVcyXhH-ylwcYBZzaPnpTGxKfB1yOeAVTEkyp69_jNc25QNroxb_b-Z';
-        $server_key = 'AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
+////    $server_key = 'AAAAJTxIDRs:APA91bGmPFIAFGn7ZMj1XX__Vw-ONFXBbUwsJp_F3qCBalPyYMhCWcRiNtj7l7PzuGKuwSyG950X8s1kYFMHQIVcyXhH-ylwcYBZzaPnpTGxKfB1yOeAVTEkyp69_jNc25QNroxb_b-Z';
+//        $server_key = 'AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
+//
+//        //$to = $device_id;
+//        $to = 'dbEu5-lTFtQ:APA91bEfBDObFHTcwSrFcwqYYQZkUY2_ZBY4iYsmfp9QnMtNbO5xAndriCz5zB3P1fAqeYAc7-4a09aHhC8n1x569lSYDDcswHv_2vzvkVDaNDFZnISqzttIRyWnTdZbWmDg82FQnfqp';
+//        $notification_title = 'Test Title';
+//        $data = array('body'=>'hi mukesh', 'title' => $notification_title, "icon" => "myicon","notification_type"=>"action");
+//
+//        $fields = json_encode(array('to' => $to, 'data' => array('notificationData'=>$data)));
+//        $headers = array(
+//            'Content-Type:application/json',
+//            'Content-Length: 0',
+//            'Authorization:key='.$server_key
+//        );
+        $header = array();
+        $header[] = 'Content-type: application/json';
+        $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
 
-        //$to = $device_id;
-        $to = 'dbEu5-lTFtQ:APA91bEfBDObFHTcwSrFcwqYYQZkUY2_ZBY4iYsmfp9QnMtNbO5xAndriCz5zB3P1fAqeYAc7-4a09aHhC8n1x569lSYDDcswHv_2vzvkVDaNDFZnISqzttIRyWnTdZbWmDg82FQnfqp';
-        $notification_title = 'Test Title';
-        $data = array('body'=>'hi mukesh', 'title' => $notification_title, "icon" => "myicon","notification_type"=>"action");
+        $payload = [
+            'to' => 'dbEu5-lTFtQ:APA91bEfBDObFHTcwSrFcwqYYQZkUY2_ZBY4iYsmfp9QnMtNbO5xAndriCz5zB3P1fAqeYAc7-4a09aHhC8n1x569lSYDDcswHv_2vzvkVDaNDFZnISqzttIRyWnTdZbWmDg82FQnfqp',
+            'notification' => [
+                'title' => "Portugal VS Germany",
+                'body' => "1 to 2"
+            ]
+        ];
 
-        $fields = json_encode(array('to' => $to, 'data' => array('notificationData'=>$data)));
-        $headers = array(
-            'Content-Type:application/json',
-            'Content-Length: 0',
-            'Authorization:key='.$server_key
-        );
+        $crl = curl_init();
+        curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($crl, CURLOPT_POST,true);
+        curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($crl, CURLOPT_POSTFIELDS, json_encode( $payload ) );
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        $result = curl_exec($ch);
- echo $result;die;
-        if ($result === FALSE) {
-             die('FCM Send Error: ' . curl_error($ch));
+        curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
+
+        $rest = curl_exec($crl);
+        echo $rest;die;
+        if ($rest === false) {
+            return curl_error($crl);
         }
-        curl_close($ch);
-        return $result;
+        curl_close($crl);
+        return $rest;
     }
 }
