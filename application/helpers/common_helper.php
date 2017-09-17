@@ -437,13 +437,6 @@ if(!function_exists('send_sms')){
 
 function sendPushNotification($device_id,$message,$title=NULL)
 {
-    //$d_type = ($device_type==0)? "appNameAndroid" : "appNameIOS";
-   // $collection = PushNotification::app($d_type)->to($device_id)->send($message);
-   // return $response = $collection->pushManager->getAdapter()->getResponse();
-
-    $url = 'https://fcm.googleapis.com/fcm/send';
-//    $server_key = 'AAAAJTxIDRs:APA91bGmPFIAFGn7ZMj1XX__Vw-ONFXBbUwsJp_F3qCBalPyYMhCWcRiNtj7l7PzuGKuwSyG950X8s1kYFMHQIVcyXhH-ylwcYBZzaPnpTGxKfB1yOeAVTEkyp69_jNc25QNroxb_b-Z';
-    $server_key = FCMKEY;
     $to = $device_id;
     $notification_title = ($title==NULL) ? 'Notification' : $title;
     $data = array(
@@ -457,10 +450,10 @@ function sendPushNotification($device_id,$message,$title=NULL)
     $header = array();
     $header[] = 'Content-type: application/json';
     $header[] = 'Authorization: key=' . FCMKEY;
-//    echo $fields;
-//    echo "<br>";
-//    echo "<pre>" ;print_r($headers);
-//    die;
+    echo $fields;
+    echo "<br>";
+    echo "<pre>" ;print_r($header);
+    die;
     $crl = curl_init();
     curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
     curl_setopt($crl, CURLOPT_POST,true);
@@ -468,8 +461,6 @@ function sendPushNotification($device_id,$message,$title=NULL)
     curl_setopt($crl, CURLOPT_POSTFIELDS, json_encode( $fields ) );
 
     curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
-// curl_setopt($crl, CURLOPT_SSL_VERIFYHOST, false); should be off on production
-// curl_setopt($crl, CURLOPT_SSL_VERIFYPEER, false); shoule be off on production
 
     $result = curl_exec($crl);
 echo $result;die;

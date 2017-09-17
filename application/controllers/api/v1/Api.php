@@ -352,7 +352,7 @@ class Api extends REST_Controller
         if($lead_id != false){
             //send sms
         $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
-        send_sms($lead_data['contact_no'],$sms);
+       // send_sms($lead_data['contact_no'],$sms);
 
         //Push notification
             $select = array('device_token','device_type');
