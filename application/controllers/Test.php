@@ -64,6 +64,7 @@ class Test extends CI_Controller
         $fields = json_encode(array('to' => $to, 'data' => array('notificationData'=>$data)));
         $headers = array(
             'Content-Type:application/json',
+            'Content-Length: 0',
             'Authorization:key='.$server_key
         );
 
