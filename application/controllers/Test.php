@@ -72,10 +72,10 @@ class Test extends CI_Controller
         $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
 
         $payload = [
-            'to' => 'dbEu5-lTFtQ:APA91bEfBDObFHTcwSrFcwqYYQZkUY2_ZBY4iYsmfp9QnMtNbO5xAndriCz5zB3P1fAqeYAc7-4a09aHhC8n1x569lSYDDcswHv_2vzvkVDaNDFZnISqzttIRyWnTdZbWmDg82FQnfqp',
+            'to' => 'cVHH367iadc:APA91bHD5Sr2fSDODv3Ygx80chBoUdnsnuZHoLlSWi80GF8vr9bLoXXyTmHME6tMTQzU8W6TZnxgyYWjJTx4eTC_3c1jYYKi7xe0n6EDwX87-v1eg0KMytmebnEWivfqQH9jz0BxKfeO',
             'notification' => [
-                'title' => "Portugal VS Germany",
-                'body' => "1 to 2"
+                'title' => "Dena bank",
+                'body' => "Push notification coming by browser"
             ]
         ];
 
@@ -88,7 +88,7 @@ class Test extends CI_Controller
         curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
 
         $rest = curl_exec($crl);
-        echo $rest;die;
+        //echo $rest;die;
         if ($rest === false) {
             return curl_error($crl);
         }
