@@ -374,7 +374,7 @@ class Api extends REST_Controller
                     sendPushNotification($device_id,$device_type,$push_message,$title);
                 }
             }
-
+            sendPushNotification($device_id,$device_type,$push_message,$title);
         //Save notification
         $this->insert_notification($lead_data);
         }
