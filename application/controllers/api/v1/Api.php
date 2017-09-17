@@ -352,28 +352,28 @@ class Api extends REST_Controller
         if($lead_id != false){
             //send sms
         $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
-       // send_sms($lead_data['contact_no'],$sms);
+        send_sms($lead_data['contact_no'],$sms);
 
         //Push notification
-            $select = array('device_token','device_type');
-            $emp_id = $params['created_by'];
-            $where = array('employee_id'=>$emp_id);
-            $order_by = 'id desc';
-            $limit = '1';
-            $table = Tbl_LoginLog;
-            $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
-            if(!empty($device_values)){
-                $device_id = $device_values[0]['device_token'];
-                $device_type = $device_values[0]['device_type'];
-                if((!empty($device_type) || $device_type != NULL) &&
-                    ($device_id != NULL || !empty($device_id))){
-
-                    $title = 'Lead added successfully.';
-                    $push_message = 'Lead added successfully for '.ucwords($product_name);
-                    //Push notification
-                    sendPushNotification($device_id,$push_message,$title);
-                }
-            }
+//            $select = array('device_token','device_type');
+//            $emp_id = $params['created_by'];
+//            $where = array('employee_id'=>$emp_id);
+//            $order_by = 'id desc';
+//            $limit = '1';
+//            $table = Tbl_LoginLog;
+//            $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
+//            if(!empty($device_values)){
+//                $device_id = $device_values[0]['device_token'];
+//                $device_type = $device_values[0]['device_type'];
+//                if((!empty($device_type) || $device_type != NULL) &&
+//                    ($device_id != NULL || !empty($device_id))){
+//
+//                    $title = 'Lead added successfully.';
+//                    $push_message = 'Lead added successfully for '.ucwords($product_name);
+//                    //Push notification
+//                    sendPushNotification($device_id,$push_message,$title);
+//                }
+//            }
            // sendPushNotification($device_id,$device_type,$push_message,$title);
         //Save notification
         $this->insert_notification($lead_data);
