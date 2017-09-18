@@ -82,6 +82,6 @@
         </div>
         <?php } ?>
     </div>
-</div>    </div>
+</div>    
     <span class="bg-bottom"></span>
 </div>
