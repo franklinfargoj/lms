@@ -1,4 +1,6 @@
 <?php
+
+require_once('./application/libraries/PHPMailer/PHPMailerAutoload.php');
 /**
  * Created by PhpStorm.
  * User: webwerks
@@ -33,46 +35,46 @@ function pe($arr)
     //die;
 }
 
-function sendmail($to, $message, $subject,$company_name,$company_email) {
-    //echo $to;"<br>";
-//    echo $message;"<br>";
-//    //echo $subject;"<br>";
-//   // echo $company_name;"<br>";
-//   // echo $company_email;"<br>";
-//    die;
-    $ci = &get_instance();
-    $ci->load->model('customers_model', 'customer');
-    $smtp_details = $ci->customer->get_smtp_details();
-    foreach($smtp_details as $row){
-        $smtp_arr[] = $row->setting_value;
-    }
+// function sendmail($to, $message, $subject,$company_name,$company_email) {
+//     //echo $to;"<br>";
+// //    echo $message;"<br>";
+// //    //echo $subject;"<br>";
+// //   // echo $company_name;"<br>";
+// //   // echo $company_email;"<br>";
+// //    die;
+//     $ci = &get_instance();
+//     $ci->load->model('customers_model', 'customer');
+//     $smtp_details = $ci->customer->get_smtp_details();
+//     foreach($smtp_details as $row){
+//         $smtp_arr[] = $row->setting_value;
+//     }
 
-    $config = Array(
-        'protocol' => $smtp_arr[0],
-        'smtp_host' => $smtp_arr[1],
-        'smtp_port' => $smtp_arr[2],
-        'smtp_user' => $smtp_arr[4],
-        'smtp_pass' => base64_decode(base64_decode($smtp_arr[3])),
-        'mailtype' => 'html',
-        'charset' => 'utf-8',
-        'wordwrap' => TRUE
-    );
-    $ci = &get_instance();
-    $ci->load->library('email');
-    $ci->email->initialize($config);
-    $ci->email->from($smtp_arr[4], $company_name);
-    $ci->email->to($to);
-    $ci->email->subject($subject);
-    $ci->email->message($message);
-    //return true;
-    if ($ci->email->send()) {
-        return true;
-    } else {
-        return false;
-    }
+//     $config = Array(
+//         'protocol' => $smtp_arr[0],
+//         'smtp_host' => $smtp_arr[1],
+//         'smtp_port' => $smtp_arr[2],
+//         'smtp_user' => $smtp_arr[4],
+//         'smtp_pass' => base64_decode(base64_decode($smtp_arr[3])),
+//         'mailtype' => 'html',
+//         'charset' => 'utf-8',
+//         'wordwrap' => TRUE
+//     );
+//     $ci = &get_instance();
+//     $ci->load->library('email');
+//     $ci->email->initialize($config);
+//     $ci->email->from($smtp_arr[4], $company_name);
+//     $ci->email->to($to);
+//     $ci->email->subject($subject);
+//     $ci->email->message($message);
+//     //return true;
+//     if ($ci->email->send()) {
+//         return true;
+//     } else {
+//         return false;
+//     }
 
 
-}
+// }
 /*Added by Ashok Jadhav on 17 August 2017*/
 
 function is_logged_in() {
@@ -927,4 +929,85 @@ function fix_keys($array) {
     }
 
     return $array;
+}
+
+function sendMail($to = array(),$subject,$message,$attachment_file){
+
+    $CI=& get_instance();
+    $CI->load->database();
+    $config = $CI->db->from(Tbl_Mail)->get()->result();
+
+    $mail = new PHPMailer; //Create a new PHPMailer instance
+
+    $mail->isSMTP(); //Tell PHPMailer to use SMTP
+
+    //Enable SMTP debugging
+    // 0 = off (for production use)
+    // 1 = client messages
+    // 2 = client and server messages
+    $mail->SMTPDebug = 0;
+
+    //Ask for HTML-friendly debug output
+    $mail->Debugoutput = 'html';
+
+    //Set the hostname of the mail server
+    $mail->Host = $config[0]->host;
+    // use
+    // $mail->Host = gethostbyname('smtp.gmail.com');
+    // if your network does not support SMTP over IPv6
+
+    //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
+    $mail->Port = $config[0]->port;
+
+    //Set the encryption system to use - ssl (deprecated) or tls
+    $mail->SMTPSecure = 'ssl';
+
+    //Whether to use SMTP authentication
+    $mail->SMTPAuth = true;
+
+    //Username to use for SMTP authentication - use full email address for gmail
+    $mail->Username = $config[0]->username;
+
+    //Password to use for SMTP authentication
+    $mail->Password = $config[0]->password;
+
+    $mail->SMTPOptions = array(
+      'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+      )
+    );
+
+    //Set who the message is to be sent from
+    $mail->setFrom($config[0]->fromemail, $config[0]->from);
+
+    //Set an alternative reply-to address
+    $mail->addReplyTo($config[0]->fromemail, $config[0]->from);
+
+    //Set who the message is to be sent to
+    $mail->addAddress($to['email'],$to['name']);
+
+    //Set the subject line
+    $mail->Subject = $subject;
+
+    //Read an HTML message body from an external file, convert referenced images to embedded,
+    //convert HTML into a basic plain-text alternative body
+    //$mail->msgHTML('Your New password for MLS Auto Dealers is'.$pwd['password']);
+    $mail->msgHTML($message);
+
+    //Attach an image file
+    if(!empty($attachment_file)){
+        $mail->addAttachment('uploads/excel_list/'.$attachment_file);
+    }
+    //send the message, check for errors
+    if (!$mail->send()) {
+        echo "Mailer Error: " . $mail->ErrorInfo;
+        //exit;
+    } else {
+        echo "sent";
+        unlink('uploads/excel_list/'.$attachment_file);
+        //exit;
+    }
+    exit;
 }
