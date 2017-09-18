@@ -525,7 +525,6 @@ class Leads extends CI_Controller
         if(($lead_source != 'all') && ($lead_source != null)){
             $arrData['lead_source'] = $lead_source;
         }
-
         /*Breadcumb Creation*/
         if($type == 'assigned'){
             if(($status != null) && ($lead_source != null)){
@@ -550,7 +549,7 @@ class Leads extends CI_Controller
         
         //Get session data
         $login_user = get_session();
-        $arrData = $this->view($login_user,$arrData,$param,'');
+        $arrData = $this->view($login_user,$arrData,$param);
         return load_view('Leads/view',$arrData);
     }
 
@@ -736,6 +735,11 @@ class Leads extends CI_Controller
                                 } else {
                                     $lead_status_data['status'] = $leads_data['status'];
                                 }
+                                $title = 'Lead assigned';
+                                $description = 'Lead assigned';
+                                $priority = 'Normal';
+                                $notification_to = $lead_status_data['employee_id'];
+                                notification_log($title,$description,$priority,$notification_to);
                             }
                             /*****************************************************************/
 
@@ -845,7 +849,7 @@ class Leads extends CI_Controller
 
     /*Private Functions*/
 
-    private function view($login_user,$arrData,$param = null,$url=''){
+    private function view($login_user,$arrData,$param = null){
         $type = $arrData['type'];
         $till = $arrData['till'];
         //Parameters buiding for sending to list function.

@@ -1255,6 +1255,11 @@ class Api extends REST_Controller
                                 $lead_status_data['status'] = $leads_data['status'];
                             }
                             $result4['status'] = 'reroute';
+                            $title = 'Lead assigned';
+                            $description = 'Lead assigned';
+                            $priority = 'Normal';
+                            $notification_to = $params['reroute_to'];
+                            notification_log($title,$description,$priority,$notification_to);
                         } else {
                             $res = array('result' => False,
                                 'data' => array('Reroute to parameter missing.'));
@@ -1553,7 +1558,15 @@ class Api extends REST_Controller
                 $assign_data['lead_id'] = $value;
                 $insertData[] = $assign_data;
             }
-            $this->db->insert_batch(Tbl_LeadAssign, $insertData);
+            $insertData = $this->db->insert_batch(Tbl_LeadAssign, $insertData);
+            if($insertData){
+                //Add Notification
+                $title="New Lead Assigned";
+                $description="New Lead Assigned to you by Branch Manager";
+                $notification_to = $params['employee_id'];
+                $priority="Normal";
+                notification_log($title,$description,$priority,$notification_to);
+            }
             $res = array('result' => True,
                 'data' => 'Leads assigned successfully');
             returnJson($res);

@@ -42,12 +42,13 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                     </span>
                     <span class="lead-num"> : <?php echo count($leads);?></span>
                 </div>
-
+                <?php if(count($leads) >0){?>
                 <div class="float-right">
-                    <a href="<?php echo base_url('leads/export_excel_listing/'.$param1.$param2.$param3.$param4.$param5);?>">
-                        <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
-                    </a>
-                </div>
+                <a href="<?php echo base_url('leads/export_excel_listing/'.$param1.$param2.$param3.$param4.$param5);?>">
+                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
+                </a>
+                <?php } ?>
+            </div>
             </div>
             <div class="over">
             <table id="sample_3" class="display lead-table">
