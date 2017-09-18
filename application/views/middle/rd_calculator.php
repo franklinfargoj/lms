@@ -26,8 +26,9 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                     <?php
                     echo form_open('', $form_attributes);
                     ?>
+                    <p id="note"><span style="color:red;">*</span> These fields are required</p>
                     <div class="form-control">
-                        <label>Senior Citizen: </label>
+                        <label>Senior Citizen: <span style="color:red;">*</span> </label>
                         <div class="radio-control">
                             <input type="radio" id="senior" name="citizen"
                                    value="1" <?php echo set_radio('citizen', '1', TRUE); ?>/>
