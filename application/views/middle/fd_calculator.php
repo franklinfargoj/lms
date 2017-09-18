@@ -38,10 +38,9 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                             <label>No</label>
                         </div>
                     </div>
-                    <div class="form-control ravish-field2">
-                        <label>Deposit Term:</label>
-                            <?php echo form_input($data_month);?>
-                            <?php echo form_input($data_days);?>
+                    <div class="form-control">
+                        <label>Principal (Rs.):</label>
+                        <?php echo form_input($data_amount);?>
                     </div>
                     <div class="form-control">
                         <label>Rate of Interest:</label>
