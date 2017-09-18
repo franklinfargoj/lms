@@ -122,16 +122,34 @@
 						Reports &#9662;
 					</a>
 					<ul class="cal-drop1">
-						<li>
-						<a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">
-							Pendancy leads
-						</a>
+						<li class="<?php echo ($controller == 'usage') ? 'active' : ''?>" id="cal-droped3">
+							<a href="#">
+							Usage &#9656;
+							</a>
+							<ul class="cal-drop3">
+								<li>
+									<a href="<?php echo site_url('reports/index/usage')?>">
+									Usage report
+									</a>
+								</li>
+								<li>
+									<a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">
+										Pendancy leads
+									</a>
+								</li>
+							</ul>
 						</li>
+					
 						<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>" id="cal-droped2">
-						<a href="<?php echo site_url('reports/index/leads_type_reports')?>">
-							&#9666; Leads type
+						<a href="#">
+						 Performance &#9656;
 						</a>
 							<ul class="cal-drop2">
+								<li>
+									<a href="<?php echo site_url('reports/index/leads_type_reports')?>">
+									 Leads type 
+									</a>
+								</li>
 								 <li>
 									<a href="<?php echo site_url('reports/index/leads_generated')?>">
 									Leads generated
@@ -164,16 +182,19 @@
 							Leads generated vs converted
 							</a>
 						</li> -->
-						<li>
-							<a href="<?php echo site_url('reports/index/leads_classification')?>">
-							Leads classification
+						<li class="<?php echo ($controller == 'leads_classification') ? 'active' : ''?>" id="cal-droped4">
+							<a href="#">
+							classification &#9656;
 							</a>
+							<ul class="cal-drop4">
+								<li>
+									<a href="<?php echo site_url('reports/index/leads_classification')?>">
+									Leads classification
+									</a>
+								</li>
+							</ul>
 						</li>
-						<li>
-							<a href="<?php echo site_url('reports/index/usage')?>">
-							Usage
-							</a>
-						</li>
+						
 					</ul>
 				</li>
 				<?php }?>
@@ -201,9 +222,9 @@
 </div>
 <script type="text/javascript">
 	
-	    $("#cal-droped").hover(function(){
+	    $("#cal-droped ").hover(function(){
 	    	
-	        $(".cal-drop").toggle();
+	        $(".cal-drop ").toggle();
 	    });
 
 	   	$("#cal-droped1").hover(function(){
@@ -213,6 +234,14 @@
 	    $("#cal-droped2").hover(function(){
 	    	// event.preventDefault();
 	        $(".cal-drop2").toggle();
+	    }); 
+	    $("#cal-droped3").hover(function(){
+	    	// event.preventDefault();
+	        $(".cal-drop3").toggle();
+	    });
+	    $("#cal-droped4").hover(function(){
+	    	// event.preventDefault();
+	        $(".cal-drop4").toggle();
 	    }); 	
 
 </script>
