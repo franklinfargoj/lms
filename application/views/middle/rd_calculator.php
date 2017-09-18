@@ -22,7 +22,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
     <div class="inner-content">
         <div class="container">
             <div class="lead-form">
-                <div class="lead-form-left">
+                <div class="lead-form-left ravish-form">
                     <?php
                     echo form_open('', $form_attributes);
                     ?>
@@ -39,7 +39,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                             <label>No</label>
                         </div>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control ravish-field">
                         <label>My Initial Amount (Rs):</label>
                         <?php echo form_input($data_amount);?>
                     </div>
@@ -92,6 +92,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
             </div>
         </div>
     </div>
+    <span class="bg-bottom"></span>
 </div>
 <script src = "<?php echo base_url().ASSETS;?>/js/calculator.js"></script>
 <script>

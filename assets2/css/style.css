@@ -423,7 +423,8 @@ padding-bottom: 15px;
 	display: table;
 	color: #b1bac4;
 	font-family: "Montserrat-Regular";
-	font-size: 15px;
+	font-size: 14px;
+	padding: 45px 12px;
 }
 .top-navigation{
 	text-align: center;
@@ -440,19 +441,20 @@ padding-bottom: 15px;
 }
 .top-navigation li{
 	display: inline-block;
-    margin-right: 10px;
-    padding: 0;
+    /*margin-right: 5px;*/
+    padding:0px;
     text-align: center;
     vertical-align: middle;
 }
 
-.top-navigation ul li.active a{
+.top-navigation ul li.active a,.top-navigation ul li:hover a{
 	background-color: #014986;
-    padding: 45px 17px;
+    padding: 45px 12px;
     color: #ffffff;
 }
+
 .top-navigation li + li{
-	margin-left: 10px;
+	/*margin-left: 5px;*/
 }
 
 .top-navigation a.active img,.top-navigation a:hover img{
@@ -685,7 +687,7 @@ strong{
 /*add lead*/
 
 /*lead*/
-/*-------ravish---*/
+/*-------ravish---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 img#rs {
     margin: 8px 0 0px 10px;
 }
@@ -764,10 +766,11 @@ img#rs {
 p#note{
 	padding-bottom: 20px;
 	    padding-bottom: 20px;
-    font-size: 20px;
+    font-size: 15px;
     text-align: left;
     border-bottom: 1px solid #ccc;
     margin-bottom: 30px;
+    color: gray;
 }
 .range-slider input{
 	line-height: 0;
@@ -806,7 +809,57 @@ a.btn-Download{
     bottom: 18px;
     text-decoration: underline;
 }
-/*-------------*/
+/*#cal-droped{
+	position: relative;
+}*/
+.cal-drop,.cal-drop1{
+	position: absolute;
+	width: 130px;
+	display: none;
+	z-index: 1;
+	}
+.cal-drop li, .cal-drop1 li{
+	width: 130px;
+    display: inline-block;
+    margin-right: 0;
+    margin-left: 0!important;
+}
+
+.top-navigation ul li .cal-drop li >a,.top-navigation ul li .cal-drop1 li >a{
+	width:103px;
+	padding: 15px 20px;
+	border-bottom: 1px solid #fff;
+}
+.top-navigation ul li .cal-drop1 li >a{
+	width: 150px;
+}
+input#ticket_range ,input#amount,input#years,input#interest,input#password,input#username,input#captext{
+    float: left;
+    margin-top: 0px;
+    height: 12px;
+    padding: 10px;
+    line-height: 14px;
+}
+input#captext{
+	margin-top: 15px;
+}
+.ravish-form{
+	width: 99%!important;
+	padding: 0 10px;
+}
+.ravish-field{
+	padding: 6px 0!important;
+	width: 99.4%!important;
+}
+.ravish-field2{
+	padding: 6px 0!important;
+	width: 100.4%!important;
+}
+.top-lead{
+	position: relative;
+	top: -15px;
+}
+/*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{
 	background-color: #00559d;
 }

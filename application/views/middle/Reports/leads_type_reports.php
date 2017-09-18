@@ -32,7 +32,7 @@ $lead_type = $this->config->item('lead_type');
     <span class="bg-top"></span>
     <div class="lead-form-left">
         <div class="form-control">
-            <label>Start Date:</label>   
+            <label>Start Date:<span style="color:red;">*</span></label>   
             <?php 
                 if(isset($start_date)){
                     $start_date = date('d-m-Y',strtotime($start_date));
@@ -56,7 +56,7 @@ $lead_type = $this->config->item('lead_type');
                     'class' => '',
                     'style' => ''
                 );
-                echo form_label('Product Category:', 'product_category_id', $attributes);
+                echo form_label('Product Category:<span style="color:red;">*</span>', 'product_category_id', $attributes);
 
                 if(isset($category_list)){
                     $options = $category_list;
@@ -79,7 +79,7 @@ $lead_type = $this->config->item('lead_type');
                     'class' => '',
                     'style' => ''
                 );
-                echo form_label('Lead Source:', 'lead_source', $attributes);
+                echo form_label('Lead Source:<span style="color:red;">*</span>', 'lead_source', $attributes);
             ?>
             <?php 
                 if($lead_sources){
@@ -99,7 +99,7 @@ $lead_type = $this->config->item('lead_type');
     </div>
     <div class="lead-form-right">
         <div class="form-control endDate">
-            <label>End Date:</label>   
+            <label>End Date:<span style="color:red;">*</span></label>   
             <?php 
                 if(isset($end_date)){
                     $end_date = date('d-m-Y',strtotime($end_date));
@@ -123,7 +123,7 @@ $lead_type = $this->config->item('lead_type');
                     'class' => '',
                     'style' => ''
                 );
-                echo form_label('Product:', 'product_id', $attributes);
+                echo form_label('Product:<span style="color:red;">*</span>', 'product_id', $attributes);
             ?>
             <?php 
                 if(isset($product_list)){

@@ -76,12 +76,29 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
-				<li class="<?php echo (($controller == 'dashboard') && ($method == 'emi_calculator')) ? 'active' : ''?>">
-					<a href="<?php echo site_url('dashboard/emi_calculator')?>">
-						Calculator
+				<li class="<?php echo (($controller == 'dashboard') && ($method == 'emi_calculator' || $method == 'fd_calculator' || $method == 'rd_calculator')) ? 'active' : ''?>" id="cal-droped">
+					<a href="#" >
+						Calculator 	&#9662;
 					</a>
+					<ul class="cal-drop">
+						<li>
+						<a href="<?php echo site_url('dashboard/emi_calculator')?>">
+							EMI Calculator
+						</a>
+						</li>
+						<li>
+						<a href="<?php echo site_url('dashboard/fd_calculator')?>">
+							Fd Calculator
+						</a>
+						</li>
+	                    <li>
+							<a href="<?php echo site_url('dashboard/rd_calculator')?>">
+							Rd Calculator
+							</a>
+						</li>
+					</ul>
 				</li>
-                <li class="<?php echo (($controller == 'dashboard') && ($method == 'fd_calculator')) ? 'active' : ''?>">
+                <!-- <li class="<?php echo (($controller == 'dashboard') && ($method == 'fd_calculator')) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard/fd_calculator')?>">
 						FD Calculator
 					</a>
@@ -90,7 +107,7 @@
 					<a href="<?php echo site_url('dashboard/rd_calculator')?>">
 						Rd Calculator
 					</a>
-				</li>
+				</li> -->
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'product_guide') ? 'active' : ''?>">
@@ -100,10 +117,47 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','GM'))) {?>
-				<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>">
-					<a href="<?php echo site_url('reports/view')?>">
-						Reports
+				<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>" id="cal-droped1">
+					<a href="#">
+						Reports &#9662;
 					</a>
+					<ul class="cal-drop1">
+						<li>
+						<a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">
+							Pendancy leads
+						</a>
+						</li>
+						<li>
+						<a href="<?php echo site_url('reports/index/leads_type_reports')?>">
+							Leads type
+						</a>
+						</li>
+	                    <li>
+							<a href="<?php echo site_url('reports/index/leads_generated')?>">
+							Leads generated
+							</a>
+						</li>
+						<li>
+							<a href="<?php echo site_url('reports/index/leads_assigned')?>">
+							Leads assigned
+							</a>
+						</li>
+						<li>
+							<a href="<?php echo site_url('reports/index/leads_generated_vs_converted')?>">
+							Leads generated vs converted
+							</a>
+						</li>
+						<li>
+							<a href="<?php echo site_url('reports/index/leads_classification')?>">
+							Leads classification
+							</a>
+						</li>
+						<li>
+							<a href="<?php echo site_url('reports/index/usage')?>">
+							Usage
+							</a>
+						</li>
+					</ul>
 				</li>
 				<?php }?>
 			</ul>
@@ -128,3 +182,16 @@
 			</div>
 	</div>
 </div>
+<script type="text/javascript">
+	
+	    $("#cal-droped").hover(function(event){
+	    	// event.preventDefault();
+	        $(".cal-drop").toggle();
+	    });
+
+	   	$("#cal-droped1").hover(function(event){
+	    	// event.preventDefault();
+	        $(".cal-drop1").toggle();
+	    }); 	
+
+</script>

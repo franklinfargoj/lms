@@ -36,7 +36,7 @@ $lead_status = $this->config->item('lead_status');
     <div class="form">
     <div class="lead-form-left" id="l-width">
         <div class="form-control">
-            <label>Start Date:</label>   
+            <label>Start Date:<span style="color:red;">*</span></label>   
             <?php 
                 if(isset($start_date)){
                     $start_date = date('d-m-Y',strtotime($start_date));
@@ -58,7 +58,7 @@ $lead_status = $this->config->item('lead_status');
     </div>
     <div class="lead-form-right" id="r-width">
         <div class="form-control endDate">
-            <label>End Date:</label>   
+            <label>End Date:<span style="color:red;">*</span></label>   
             <?php 
                 if(isset($end_date)){
                     $end_date = date('d-m-Y',strtotime($end_date));
