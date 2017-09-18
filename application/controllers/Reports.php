@@ -453,7 +453,7 @@ class Reports extends CI_Controller
                 $index = $value->branch_id;
                 if(!in_array($value->branch_id,array_keys($arrData['leads']))){
                     $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+                    $arrData['leads'][$index]['lead_identification'] = array();
                 }
                 $arrData['leads'][$index]['branch_name'] = $value->branch_name;
                 $arrData['leads'][$index]['branch_id'] = $value->branch_id;
@@ -466,7 +466,7 @@ class Reports extends CI_Controller
                 $index = $value->zone_id;
                 if(!in_array($value->zone_id,array_keys($arrData['leads']))){
                     $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+                    $arrData['leads'][$index]['lead_identification'] = array();
                 }
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
