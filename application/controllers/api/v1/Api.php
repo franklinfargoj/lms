@@ -1929,6 +1929,7 @@ class Api extends REST_Controller
     public function assigned_leads_status_post()
     {
         $result = array();
+        $response = array();
         $params = $this->input->post();
         if (isset($params) && !empty($params) && isset($params['id']) && !empty($params['id'])
             && isset($params['lead_source']) && !empty($params['lead_source'])
@@ -1946,7 +1947,7 @@ class Api extends REST_Controller
             $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
 
             //User Level conditions
-            if (!empty($designation_type) && $designation_type == 'RM') {
+            if (!empty($designation_type) && $designation_type == 'GM') {
                 $where['la.zone_id'] = $id;
             }
             if (!empty($designation_type) && $designation_type == 'ZM') {
@@ -1977,10 +1978,11 @@ class Api extends REST_Controller
                     $result['Month'] = $this->Lead->get_leads($action, $table, '', $month_where, $join, '', '');
                     $result['Year'] = $this->Lead->get_leads($action, $table, '', $year_where, $join, '', '');
                     $result['status'] = $value;
+                    $response[] = $result;
                 }
             }
             $res = array('result' => True,
-                'data' => array($result));
+                'data' => $response);
             returnJson($res);
         }
         $res = array('result' => False,
