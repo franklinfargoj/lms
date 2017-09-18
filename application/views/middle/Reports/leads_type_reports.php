@@ -30,7 +30,10 @@ $lead_type = $this->config->item('lead_type');
 ?>
 <div class="lead-form">
     <span class="bg-top"></span>
-    <div class="lead-form-left">
+    <div class="inner-content">
+    <div class="container">
+    <div class="form">
+    <div class="lead-form-left" id="l-width">
         <div class="form-control">
             <label>Start Date:<span style="color:red;">*</span></label>   
             <?php 
@@ -97,7 +100,7 @@ $lead_type = $this->config->item('lead_type');
             ?>
         </div>
     </div>
-    <div class="lead-form-right">
+    <div class="lead-form-right" id="r-width">
         <div class="form-control endDate">
             <label>End Date:<span style="color:red;">*</span></label>   
             <?php 
@@ -147,7 +150,7 @@ $lead_type = $this->config->item('lead_type');
                 }
             ?>
         </div>
-    </div>
+    
     <div class="form-control form-submit clearfix">
         <a href="javascript:void(0);" class="float-right">
             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
@@ -155,7 +158,10 @@ $lead_type = $this->config->item('lead_type');
             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
         </a>
     </div>
-</div>
+    </div>
+    </div>
+    </div>
+
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){
@@ -173,10 +179,11 @@ $lead_type = $this->config->item('lead_type');
             <span class="lead-num"> : <?php echo $Total;?></span>
         </div>
         <div class="float-right">
-            <a href="javascript:void(0);" class="export_to_excel">
-                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
+            <a href="javascript:void(0);" class="export_to_excel btn-Download">
+                Export to Excel 
             </a>
-            <a href="javascript:void(0);" class="export_national">
+            &nbsp;|
+            <a href="javascript:void(0);" class="export_national btn-Download">
                 Download Bank Data
             </a>
         </div>
@@ -187,6 +194,7 @@ $lead_type = $this->config->item('lead_type');
     <div class="page-content">
         <div class="inner-content">
             <div class="container">
+                
                 <table id="sample_3" class="display lead-table">
                     <thead>
                         <tr>
@@ -353,7 +361,8 @@ $lead_type = $this->config->item('lead_type');
                 </table>
             </div>
         </div>
-        <span class="bg-bottom"></span>
+        </div>
+        <span class="bg-bottom " id="bg-w"></span>
     </div>
 </div>
 <?php
