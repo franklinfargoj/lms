@@ -32,13 +32,17 @@
                     <th style="text-align:left;"><input type="text" name="customername" placeholder="Search Employee Name"></th>
                     <th><!-- <input type="text" name="customername" placeholder="Search Generated Leads"> --></th>
                     <th><!-- <input type="text" name="customername" placeholder="Search Converted Leads"> --></th>
+                    <th><!-- <input type="text" name="customername" placeholder="Search Generated Leads"> --></th>
+                    <th><!-- <input type="text" name="customername" placeholder="Search Converted Leads"> --></th>
                     <th></th>
                 </tr>
                 <tr>
                     <th style="text-align:center">Sr. No</th>
                     <th  style="text-align:left;">Employee Name</th>
                     <th style="text-align:center">Generated Leads (This Month)</th>
+                    <th style="text-align:center">Generated Leads (This Year)</th>
                     <th style="text-align:center">Converted Leads (This Month)</th>
+                    <th style="text-align:center">Converted Leads (This Year)</th>
                     <th  style="text-align:left;">Action</th>
                 </tr>
 
@@ -56,10 +60,16 @@
                             <?php echo ucwords($value['created_by_name']);?>
                         </td>
                         <td style="text-align:center">
-                            <?php echo $value['total_generated'];?>
+                            <?php echo $value['total_generated_mtd'];?>
                         </td>
                         <td style="text-align:center">
-                            <?php echo $value['total_converted'];?>
+                            <?php echo $value['total_generated_ytd'];?>
+                        </td>
+                        <td style="text-align:center">
+                            <?php echo $value['total_converted_mtd'];?>
+                        </td>
+                        <td style="text-align:center">
+                            <?php echo $value['total_converted_ytd'];?>
                         </td>
                         <td>
                             <a href="<?php echo site_url('dashboard/leads_status/generated/'.encode_id($value['created_by']));?>">View</a>
@@ -81,7 +91,7 @@
 
     jQuery(document).ready(function() {
         var table = $('#sample_3');
-        var columns = [4];
+        var columns = [6];
 
         //Initialize datatable configuration
         initTable(table,columns);

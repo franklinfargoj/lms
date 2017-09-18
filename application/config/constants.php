@@ -112,6 +112,9 @@ define('Tbl_district', 'db_district');
 define('Tbl_zone', 'db_zone');
 define('Tbl_Manage_Points', 'db_manage_points');
 define('Tbl_Points_Distributor', 'db_points_distrubution');
+define('Tbl_Points', 'db_points');
+define('Tbl_Amounts', 'db_amount_details');
+
 
 
 //define('HRMS_API_URL_AUTH', 'https://172.25.3.26:8445/PSIGW/RESTListeningConnector/DBK_LMS_AUTH.v1/?');

@@ -35,7 +35,7 @@
             <label>Start Date:</label>   
             <?php 
                 if(isset($start_date)){
-                    $start_date = date('d/m/Y',strtotime($start_date));
+                    $start_date = date('d-m-Y',strtotime($start_date));
                 }else{
                     $start_date = '';
                 }
@@ -102,7 +102,7 @@
             <label>End Date:</label>   
             <?php 
                 if(isset($end_date)){
-                    $end_date = date('d/m/Y',strtotime($end_date));
+                    $end_date = date('d-m-Y',strtotime($end_date));
                 }else{
                     $end_date = '';
                 }

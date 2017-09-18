@@ -27,7 +27,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Title', 'title', $attributes);
+                                echo form_label('Title:', 'title', $attributes);
 
                                 $data = array(
                                     'type'  => 'text',
@@ -48,7 +48,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Description', 'description_text', $attributes);
+                                echo form_label('Description:', 'description_text', $attributes);
                             ?>
                         
                             <textarea name="description_text" rows="7" cols="80" style="width: 810px; height: 200px">
@@ -57,7 +57,7 @@
                             <?php echo form_error('description_text', '<span class="help-block">', '</span>');?>
                         </div>
                         <div class="form-control">
-                            <label>Status</label>
+                            <label>Status:</label>
                             <div class="radio-control">
                                 <input type="radio" id= "active" name="status" value="active" <?php echo  set_radio('status', 'active', TRUE); ?> />
                                 <label>Active</label>

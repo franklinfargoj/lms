@@ -355,26 +355,26 @@ class Api extends REST_Controller
         send_sms($lead_data['contact_no'],$sms);
 
         //Push notification
-            $select = array('device_token','device_type');
-            $emp_id = $params['created_by'];
-            $where = array('employee_id'=>$emp_id);
-            $order_by = 'id desc';
-            $limit = '1';
-            $table = Tbl_LoginLog;
-            $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
-            if(!empty($device_values)){
-                $device_id = $device_values[0]['device_token'];
-                $device_type = $device_values[0]['device_type'];
-                if((!empty($device_type) || $device_type != NULL) &&
-                    ($device_id != NULL || !empty($device_id))){
-
-                    $title = 'Lead added successfully.';
-                    $push_message = 'Lead added successfully for '.ucwords($product_name);
-                    //Push notification
-                    sendPushNotification($device_id,$device_type,$push_message,$title);
-                }
-            }
-
+//            $select = array('device_token','device_type');
+//            $emp_id = $params['created_by'];
+//            $where = array('employee_id'=>$emp_id);
+//            $order_by = 'id desc';
+//            $limit = '1';
+//            $table = Tbl_LoginLog;
+//            $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
+//            if(!empty($device_values)){
+//                $device_id = $device_values[0]['device_token'];
+//                $device_type = $device_values[0]['device_type'];
+//                if((!empty($device_type) || $device_type != NULL) &&
+//                    ($device_id != NULL || !empty($device_id))){
+//
+//                    $title = 'Lead added successfully.';
+//                    $push_message = 'Lead added successfully for '.ucwords($product_name);
+//                    //Push notification
+//                    sendPushNotification($device_id,$push_message,$title);
+//                }
+//            }
+           // sendPushNotification($device_id,$device_type,$push_message,$title);
         //Save notification
         $this->insert_notification($lead_data);
         }
@@ -1671,7 +1671,7 @@ class Api extends REST_Controller
                     $table = Tbl_LeadAssign;
 
                     //Year till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
                     $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
                 }
 
@@ -1692,7 +1692,7 @@ class Api extends REST_Controller
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'], Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . Tbl_Leads . '.created_on) <=' => Elapsed_day);
+                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'], Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
                 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
                 $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             }

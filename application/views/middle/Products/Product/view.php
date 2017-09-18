@@ -87,7 +87,7 @@
                                     Delete
                                 </a> 
                                 <span>|</span> 
-                                <a class="" href="<?php echo site_url('product_guide/manage_points/'. encode_id($value['id']));?>">
+                                <a class="" href="<?php echo site_url('product_guide/view_points/'. encode_id($value['id']));?>">
                                     Manage Points
                                 </a>
                                 <span>|</span> 
