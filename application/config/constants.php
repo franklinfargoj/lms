@@ -112,6 +112,9 @@ define('Tbl_district', 'db_district');
 define('Tbl_zone', 'db_zone');
 define('Tbl_Manage_Points', 'db_manage_points');
 define('Tbl_Points_Distributor', 'db_points_distrubution');
+define('Tbl_Points', 'db_points');
+define('Tbl_Amounts', 'db_amount_details');
+
 
 
 //define('HRMS_API_URL_AUTH', 'https://172.25.3.26:8445/PSIGW/RESTListeningConnector/DBK_LMS_AUTH.v1/?');
@@ -120,7 +123,8 @@ define('HRMS_API_URL_AUTH', 'http://staging.php-dev.in:8844/DENABANK/lms/api/v1/
 define('HRMS_API_URL_GET_RECORD', 'http://staging.php-dev.in:8844/DENABANK/lms/api/v1/authenticate/get_records');
 define('Elapsed_day', 90);
 
-
+define('FCMKEY','AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP
+');
 
 define('EXCEL_ALPHA', serialize(array(
     '0'=>'A',

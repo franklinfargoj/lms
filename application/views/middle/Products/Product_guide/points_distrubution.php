@@ -29,12 +29,13 @@
 							);
 							echo form_label('Lead Generator Contribution (%):', 'generator_contrubution', $attributes);
 
+
 							$data = array(
 						        'type'  => 'text',
 						        'name'  => 'generator_contrubution',
 						        'id'    => 'generator_contrubution',
 						        'class' => 'inputs',
-						        'value' => set_value('generator_contrubution'),
+						        'value' => isset($points_distrubution[0]['generator_contrubution']) ? $points_distrubution[0]['generator_contrubution'] : set_value('generator_contrubution'),
 						        'min' => 0,
 						        'max' => 100
 							);
@@ -57,7 +58,7 @@
 						        'name'  => 'convertor_contrubution',
 						        'id'    => 'convertor_contrubution',
 						        'class' => 'inputs',
-						        'value' => set_value('convertor_contrubution'),
+						        'value' => isset($points_distrubution[0]['convertor_contrubution']) ? $points_distrubution[0]['convertor_contrubution'] : set_value('convertor_contrubution'),
 						        'readonly'=>'true'
 						        
 							);

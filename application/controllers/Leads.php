@@ -65,7 +65,7 @@ class Leads extends CI_Controller
         if ($this->input->post("Submit") == "Submit") {
             $this->form_validation->set_error_delimiters('<span class = "help-block">', '</span>');
             //$this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
-            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alphaNumeric');
+            $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alpha_dash_space');
             $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
             $this->form_validation->set_rules('lead_ticket_range', 'Range.', 'required|numeric');
             $this->form_validation->set_rules('product_category_id', 'Product Category', 'required');
@@ -115,10 +115,11 @@ class Leads extends CI_Controller
 
                 }
                 $action = 'list';
-                $select = array('map_with');
+                $select = array('map_with','title');
                 $table = Tbl_Products;
                 $where = array('id'=>$lead_data['product_id']);
                 $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+                $product_name = $product_mapped_with[0]['title'];
                 $product_mapped_with=$product_mapped_with[0]['map_with'];
                 $lead_data['department_name'] = $this->session->userdata('department_name');
                 $lead_data['department_id'] = $this->session->userdata('department_id');
@@ -131,13 +132,30 @@ class Leads extends CI_Controller
                 $lead_data['lead_name'] = $this->input->post('customer_name');
                 $lead_id = $this->Lead->add_leads($lead_data);
                 if($lead_id != false){
+
                     //send sms
-                    $message = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
-                    send_sms($this->input->post('contact_no'),$message);
+                    $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
+                    send_sms($this->input->post('contact_no'),$sms);
 
-                    //Push notification
-                    //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
+                    $select = array('device_token','device_type');
+                    $emp_id = $this->session->userdata('admin_id');
+                    $where = array('employee_id'=>$emp_id,'device_token !='=>NULL,'device_type !='=>NULL);
+                    $order_by = 'id desc';
+                    $limit = '1';
+                    $table = Tbl_LoginLog;
+                    $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
+                    if(!empty($device_values)){
+                        $device_id = $device_values[0]['device_token'];
+                        $device_type = $device_values[0]['device_type'];
+                        if((!empty($device_type) || $device_type != NULL) &&
+                            ($device_id != NULL || !empty($device_id))){
 
+                            $title = 'Lead added successfully';
+                            $push_message = 'Lead added successfully for '.ucwords($product_name);
+                            //Push notification
+                            sendPushNotification($device_id,$push_message,$title);
+                        }
+                    }
                     //Save notification
                     $this->insert_notification($lead_data);
                 }
@@ -166,7 +184,7 @@ class Leads extends CI_Controller
     }
 
     ##################################
-    /*Private Functions*/
+    /*public Functions*/
     ##################################
     /*
     * Validation for alphabetical letters
@@ -185,6 +203,16 @@ class Leads extends CI_Controller
             return TRUE;
         }
     }
+
+    public function alpha_dash_space($str)
+    {
+        $check =  ( ! preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+        if(!$check){
+            $this->form_validation->set_message('alpha_dash_space', 'Please enter only alphabets.');
+        }
+        return $check;
+    }
+
 
     private function insert_notification($lead_data){
         if(!empty($lead_data)){
@@ -487,7 +515,6 @@ class Leads extends CI_Controller
         //Fixed Parameters
         $arrData['type'] = $type;
         $arrData['till'] = $till;
-        
         if(($status != 'all') && ($status != null)){
             $lead_status = $this->config->item('lead_status');
             $arrData['status'] = $status;
@@ -523,7 +550,7 @@ class Leads extends CI_Controller
         
         //Get session data
         $login_user = get_session();
-        $arrData = $this->view($login_user,$arrData);
+        $arrData = $this->view($login_user,$arrData,$param,'');
         return load_view('Leads/view',$arrData);
     }
 
@@ -741,6 +768,9 @@ class Leads extends CI_Controller
                             //This will add entry into reminder scheduler for status (Interested/Follow up)
                             $this->Lead->add_reminder($remindData);
                         }
+                        if($lead_status == 'Converted'){
+                            $this->points_distrubution($lead_id);
+                        }
                         $this->session->set_flashdata('success','Lead information updated successfully');
                         redirect('leads/leads_list/assigned/ytd');
                     }
@@ -815,11 +845,9 @@ class Leads extends CI_Controller
 
     /*Private Functions*/
 
-    private function view($login_user,$arrData){
-
-        $type = $arrData['type']; 
+    private function view($login_user,$arrData,$param = null,$url=''){
+        $type = $arrData['type'];
         $till = $arrData['till'];
-
         //Parameters buiding for sending to list function.
         $action = 'list';
         $table = Tbl_Leads.' as l';
@@ -833,7 +861,11 @@ class Leads extends CI_Controller
             if($till == 'ytd'){
                 $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(l.created_on)' => date('Y')); //Year till date filter
             }
-            if(!empty($arrData['param'])){
+            if(!empty($param)){
+                $arrData['param'] = $param;
+                if(($param != 'all') && ($param != null) && $this->uri->segment(2) !='export_excel_listing'){
+                    $arrData['param'] = decode_id($param);
+                }
                 if($login_user['designation_name'] == 'EM'){
                     $where['l.created_by']  =   $login_user['hrms_id']; //Employee wise filter
                 }
@@ -948,15 +980,30 @@ class Leads extends CI_Controller
      * @paramas none
      * @return  void
      */
-    public function export_excel_listing($type,$till,$status = null,$lead_source = null)
+    public function export_excel_listing($type,$till,$status = null,$lead_source = null,$param=null)
     {
+        $params = '';
         if($type == 'assigned'){
             $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
                 'Status','Followup Date','Lead Identified As','Lead Source');
+            if(!empty($param)){
+                $arrData['param'] = decode_id($param);
+            }
         }
         if($type == 'generated'){
+            if($lead_source!= null){
+                $params = decode_id($lead_source);
+            }
+            if(($status != 'all') && ($status != null)){
+                $arrData['status'] = $status;
+            }
+            $arrData['type'] = $type;
+            $arrData['till'] = $till;
             $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
                 'Lead Identified As','Lead Source');
+            $login_user = get_session();
+            $data = $this->view($login_user,$arrData,$params);
+            export_excel($header_value,$data,$type);
         }
 
         if($type == 'unassigned'){
@@ -978,7 +1025,7 @@ class Leads extends CI_Controller
         }
         //Get session data
         $login_user = get_session();
-        $data = $this->view($login_user,$arrData);
+        $data = $this->view($login_user,$arrData,$params);
         export_excel($header_value,$data,$type);
     }
 
@@ -1083,6 +1130,42 @@ class Leads extends CI_Controller
             $data['html'] = $html;
             $data['html2'] = $html2;
             echo json_encode($data);
+        }
+    }
+
+    private function points_distrubution($lead_id){
+
+        $action = 'list';
+        
+        //Get Amount Details
+        $table = Tbl_Amounts.' as a';
+        $select = array('a.*');
+        $where  = array('a.lead_id' => $lead_id);
+        $join = array();
+        $amount_data = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+        if(!empty($amount_data)){
+            $amount = $amount_data[0]['amount'];
+            $table = Tbl_Leads.' as l';
+            $select = array('l.id','l.product_id','l.created_by','la.employee_id','mp.points','pd.generator_contrubution','pd.convertor_contrubution');
+            $where  = array('l.id' => $lead_id,'la.is_deleted' => 0,'la.is_updated' => 1,'la.status' => 'Converted','mp.from_range <=' => $amount,'mp.to_range >=' => $amount,'pd.active' => 1);
+            $join = array();
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+            $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
+            $join[] = array('table' => Tbl_Manage_Points.' as mp','on_condition' => 'mp.product_id = p.id','type' => '');
+            $join[] = array('table' => Tbl_Points_Distributor.' as pd','on_condition' => 'pd.product_id = p.id','type' => '');
+            $leadData = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+            if(!empty($leadData)){
+                $data = array('lead_id' => $leadData[0]['id'],'product_id' => $leadData[0]['product_id']);
+                //Generator Contribution
+                $generator_data = array('employee_id' => $leadData[0]['created_by'],'points' => ($leadData[0]['generator_contrubution'] * $leadData[0]['points'] * 0.01),'role_as' => 'Generator');
+                $generator_data = array_merge($generator_data,$data);
+                //Convertor Contribution
+                $convertor_data = array('employee_id' => $leadData[0]['employee_id'],'points' => ($leadData[0]['convertor_contrubution'] * $leadData[0]['points'] * 0.01),'role_as' => 'Convertor');
+                $convertor_data = array_merge($convertor_data,$data);
+                
+                $this->db->insert(Tbl_Points,$generator_data);
+                $this->db->insert(Tbl_Points,$convertor_data);
+            }
         }
     }
 

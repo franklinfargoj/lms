@@ -28,7 +28,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Title', 'title', $attributes);
+                                echo form_label('Title:', 'title', $attributes);
 
                                 $options = $titleList;
                                 $js = array(
@@ -53,7 +53,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Description', 'description_text', $attributes);
+                                echo form_label('Description:', 'description_text', $attributes);
                             ?>
                             <textarea id="description_text" name = "description_text" class="textarea" placeholder="Enter text ..." style="width: 810px; height: 200px">
                                 <?php echo set_value('description_text')?>

@@ -34,7 +34,7 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-				<li class="<?php echo (($controller == 'product') || ($controller == 'product_guide' && ($method == 'index' || $method == 'add'))) ? 'active' : ''?>">
+				<li class="<?php echo (($controller == 'product') || ($controller == 'product_guide' && (in_array($method,array('index','add','manage_points','view_points','points_distrubution'))))) ? 'active' : ''?>">
 					<a href="<?php echo site_url('product')?>">
 						Products
 					</a>
@@ -100,7 +100,7 @@
 				</li>
                 <!-- <li class="<?php echo (($controller == 'dashboard') && ($method == 'fd_calculator')) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard/fd_calculator')?>">
-						Fd Calculator
+						FD Calculator
 					</a>
 				</li>
                 <li class="<?php echo (($controller == 'dashboard') && ($method == 'rd_calculator')) ? 'active' : ''?>">

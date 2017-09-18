@@ -323,6 +323,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         $.validator.addMethod("regx", function (value, element, regexpr) {
             return regexpr.test(value);
         });
+        $.validator.addMethod("lettersonly", function(value, element) {
+            return this.optional(element) || /^[a-z\s]+$/i.test(value);
+        }, "Only alphabetical characters");
 
         $("#addlead").validate({
 
@@ -332,7 +335,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 },*/
                 customer_name: {
                     required: true,
-                    regx: /^[a-zA-Z0-9\-\s]+$/
+                    lettersonly: true
                 },
                 lead_name: {
                     required: true,
@@ -377,7 +380,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 },*/
                 customer_name: {
                     required: "Please enter customer name",
-                    regx: "Special characters are not allowed"
+                    lettersonly: "Only alphabets are allowed."
                 },
                 lead_name: {
                     required: "Please enter lead name",

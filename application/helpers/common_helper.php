@@ -435,34 +435,35 @@ if(!function_exists('send_sms')){
     }
 }
 
-function sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL)
+function sendPushNotification($device_id,$message,$title=NULL)
 {
-    //$d_type = ($device_type==0)? "appNameAndroid" : "appNameIOS";
-   // $collection = PushNotification::app($d_type)->to($device_id)->send($message);
-   // return $response = $collection->pushManager->getAdapter()->getResponse();
-   
-    $url = 'https://fcm.googleapis.com/fcm/send';
-    $server_key = 'AAAAJTxIDRs:APA91bGmPFIAFGn7ZMj1XX__Vw-ONFXBbUwsJp_F3qCBalPyYMhCWcRiNtj7l7PzuGKuwSyG950X8s1kYFMHQIVcyXhH-ylwcYBZzaPnpTGxKfB1yOeAVTEkyp69_jNc25QNroxb_b-Z';
     $to = $device_id;
     $notification_title = ($title==NULL) ? 'Notification' : $title;
-    $data = array('body'=>$message, 'title' => $notification_title, "icon" => "myicon","notification_type"=>"action");
-
-    $fields = json_encode(array('to' => $to, 'data' => $data));
-    $headers = array(
-        'Content-Type:application/json',
-        'Authorization:key='.$server_key
+    $data = array(
+        'body'=>$message,
+        'title' => $notification_title,
+        "notificationId" => 8,
+        "notification_type"=>"action"
     );
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    $result = curl_exec($ch);
+    $fields = json_encode(array('data' => array('notificationData'=>$data),'to' => $to));
+    $header = array();
+    $header[] = 'Content-type: application/json';
+    $header[] = 'Authorization: key=' . FCMKEY;
+//    echo $fields;
+//    echo "<br>";
+//    echo "<pre>" ;print_r($header);
+//    die;
+    $crl = curl_init();
+    curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($crl, CURLOPT_POST,true);
+    curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+    curl_setopt($crl, CURLOPT_POSTFIELDS, $fields);
 
+    curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
+
+    $result = curl_exec($crl);
+echo $result;die;
     if ($result === FALSE) {
        // die('FCM Send Error: ' . curl_error($ch));
     }
@@ -603,11 +604,15 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $objSheet->getStyle($excel_alpha[1].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[2].($i))->applyFromArray($text_bold_false);
                 $objSheet->getStyle($excel_alpha[3].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[4].($i))->applyFromArray($text_bold_false);
+                $objSheet->getStyle($excel_alpha[5].($i))->applyFromArray($text_bold_false);
 
                 $objSheet->getCell($excel_alpha[0].$i)->setValue($j);
                 $objSheet->getCell($excel_alpha[1].$i)->setValue(ucwords($name));
-                $objSheet->getCell($excel_alpha[2].$i)->setValue($value['total_generated']);
-                $objSheet->getCell($excel_alpha[3].$i)->setValue($value['total_converted']);
+                $objSheet->getCell($excel_alpha[2].$i)->setValue($value['total_generated_mtd']);
+                $objSheet->getCell($excel_alpha[3].$i)->setValue($value['total_generated_ytd']);
+                $objSheet->getCell($excel_alpha[4].$i)->setValue($value['total_converted_mtd']);
+                $objSheet->getCell($excel_alpha[5].$i)->setValue($value['total_converted_ytd']);
                 $i++;$j++;
             }
             break;

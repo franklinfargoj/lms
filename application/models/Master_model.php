@@ -227,9 +227,9 @@ class Master_model extends CI_Model{
 		return $this->view($select,$where,Tbl_Points_Distributor,$join = array(),$order_by = array());
 	}
 
-	public function view_points($where = array()){
+	public function view_points($where = array(),$order_by = array()){
 		$select = array('id','product_id','from_range','to_range','points');
-		return $this->view($select,$where,Tbl_Manage_Points,$join = array(),$order_by = array());
+		return $this->view($select,$where,Tbl_Manage_Points,$join = array(),$order_by);
 	}
 
 
