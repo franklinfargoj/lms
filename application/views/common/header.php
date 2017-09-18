@@ -127,12 +127,29 @@
 							Pendancy leads
 						</a>
 						</li>
-						<li>
+						<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>" id="cal-droped2">
 						<a href="<?php echo site_url('reports/index/leads_type_reports')?>">
-							Leads type
+							&#9666; Leads type
 						</a>
+							<ul class="cal-drop2">
+								 <li>
+									<a href="<?php echo site_url('reports/index/leads_generated')?>">
+									Leads generated
+									</a>
+								</li>
+								<li>
+									<a href="<?php echo site_url('reports/index/leads_assigned')?>">
+									Leads assigned
+									</a>
+								</li>
+								<li>
+									<a href="<?php echo site_url('reports/index/leads_generated_vs_converted')?>">
+									Leads generated vs converted
+									</a>
+								</li>
+							</ul>
 						</li>
-	                    <li>
+	                   <!--  <li>
 							<a href="<?php echo site_url('reports/index/leads_generated')?>">
 							Leads generated
 							</a>
@@ -146,7 +163,7 @@
 							<a href="<?php echo site_url('reports/index/leads_generated_vs_converted')?>">
 							Leads generated vs converted
 							</a>
-						</li>
+						</li> -->
 						<li>
 							<a href="<?php echo site_url('reports/index/leads_classification')?>">
 							Leads classification
@@ -184,14 +201,18 @@
 </div>
 <script type="text/javascript">
 	
-	    $("#cal-droped").hover(function(event){
-	    	// event.preventDefault();
+	    $("#cal-droped").hover(function(){
+	    	
 	        $(".cal-drop").toggle();
 	    });
 
-	   	$("#cal-droped1").hover(function(event){
-	    	// event.preventDefault();
+	   	$("#cal-droped1").hover(function(){
+	    	
 	        $(".cal-drop1").toggle();
+	    }); 
+	    $("#cal-droped2").hover(function(){
+	    	// event.preventDefault();
+	        $(".cal-drop2").toggle();
 	    }); 	
 
 </script>
