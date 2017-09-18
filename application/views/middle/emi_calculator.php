@@ -20,8 +20,9 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
                     <?php
                     echo form_open('', $form_attributes);
                     ?>
+                    <p id="note"><span style="color:red;">*</span> These fields are required</p>
 							<div class="form-control range-slider">
-									<label>Loan Amount</label>
+									<label>Loan Amount:<span style="color:red;">*</span></label>
                                     <input type="text" id="amount" name="amount">
                                    <!--  <label class="value">&#x20B9;</label> -->
                                     <img class="value" src="<?php echo base_url().ASSETS;?>images/rupees.png" alt="rupees">
@@ -42,7 +43,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 								
 							</div>
 							<div class="form-control range-slider">
-								<label>Loan Tenure</label>
+								<label>Loan Tenure:<span style="color:red;">*</span></label>
                                 <input id ="years"type="text" name="years">
                                 <label class="value">Years</label>
 									<div id="slider2" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
@@ -61,7 +62,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 
 							</div>
 							<div class="form-control range-slider">
-									<label>Interest Rate</label>
+									<label>Interest Rate:<span style="color:red;">*</span></label>
                                     <input id="interest" type="text" name="interest">
                                     <label class="value">%</label>
 									<div id="slider3" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">

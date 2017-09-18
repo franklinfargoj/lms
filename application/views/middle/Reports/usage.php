@@ -32,14 +32,16 @@ $lead_status = $this->config->item('lead_status');
 <div class="lead-form">
     <span class="bg-top"></span>
     <div class="inner-content">
+
      <div class="container">
     <div class="form">
+    <p id="note"><span style="color:red;">*</span> These fields are required</p>
     <div class="lead-form-left" id="l-width">
         <div class="form-control">
             <label>Start Date:<span style="color:red;">*</span></label>   
             <?php 
                 if(isset($start_date)){
-                    $start_date = date('d-m-Y',strtotime($start_date));
+                    $start_date = date('d/m/Y',strtotime($start_date));
                 }else{
                     $start_date = '';
                 }
@@ -61,7 +63,7 @@ $lead_status = $this->config->item('lead_status');
             <label>End Date:<span style="color:red;">*</span></label>   
             <?php 
                 if(isset($end_date)){
-                    $end_date = date('d-m-Y',strtotime($end_date));
+                    $end_date = date('d/m/Y',strtotime($end_date));
                 }else{
                     $end_date = '';
                 }
@@ -165,7 +167,7 @@ $lead_status = $this->config->item('lead_status');
                             <?php }?>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody></tbody>
                     <?php 
                         $i = 0;
                         foreach ($leads as $key => $value) {

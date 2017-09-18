@@ -20,6 +20,7 @@
                         );
                         echo form_open(site_url().'product_guide/search', $attributes);
                     ?>
+                    <p id="note"><span style="color:red;">*</span> These fields are required</p>
     				<div class="lead-form-left">
     					<div class="form-control">
     						<?php 
@@ -27,7 +28,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Product Category:', 'product_category_id', $attributes);
+                                echo form_label('Product Category: <span style="color:red;">*</span> ', 'product_category_id', $attributes);
 
     						    if(isset($category_list)){
                                     $options = $category_list;
@@ -52,7 +53,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Product:', 'product_id', $attributes);
+                                echo form_label('Product: <span style="color:red;">*</span> ', 'product_id', $attributes);
                             ?>
                             <?php 
                                 if(isset($product_list)){
