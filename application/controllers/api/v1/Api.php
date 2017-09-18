@@ -602,19 +602,17 @@ class Api extends REST_Controller
                     $table = Tbl_LeadAssign;
                     $action = 'count';
                     $employee_id = $params['id'];
-                    $total_status=0;$result = array();
                     if (!empty($status)) {
                         $i = 0;
                         foreach ($status as $key => $value) {
                             $whereArray = array(Tbl_Leads . '.created_by' => $employee_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
                             $result[$i]['Year'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
-                            $total_status = $total_status + $result[$i]['Year'];
+
                             $whereArray = array(Tbl_Leads . '.created_by' => $employee_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'), Tbl_LeadAssign . '.is_updated' => 1);
                             $result[$i]['Month'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
                             $result[$i]['status'] = $value;
                             $i++;
                         }
-                        $result['total_lead_count'] = $total_status;
                     }
                     $res = array('result' => True,
                         'data' => $result);
@@ -624,19 +622,18 @@ class Api extends REST_Controller
                     $table = Tbl_LeadAssign;
                     $action = 'count';
                     $branch_id = $params['id'];
-                    $total_status=0;$result = array();
+
                     if (!empty($status)) {
                         $i = 0;
                         foreach ($status as $key => $value) {
                             $whereArray = array(Tbl_Leads . '.branch_id' => $branch_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
                             $result[$i]['Year'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
-                            $total_status = $total_status + $result[$i]['Year'];
+
                             $whereArray = array(Tbl_Leads . '.branch_id' => $branch_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'), Tbl_LeadAssign . '.is_updated' => 1);
                             $result[$i]['Month'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
                             $result[$i]['status'] = $value;
                             $i++;
                         }
-                        $result['total_lead_count'] = $total_status;
                     }
                     $res = array('result' => True,
                         'data' => $result);
@@ -646,19 +643,18 @@ class Api extends REST_Controller
                     $table = Tbl_LeadAssign;
                     $action = 'count';
                     $zone_id = $params['id'];
-                    $total_status=0;$result = array();
+
                     if (!empty($status)) {
                         $i = 0;
                         foreach ($status as $key => $value) {
                             $whereArray = array(Tbl_Leads . '.zone_id' => $zone_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
                             $result[$i]['Year'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
-                            $total_status = $total_status + $result[$i]['Year'];
+
                             $whereArray = array(Tbl_Leads . '.zone_id' => $zone_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'), Tbl_LeadAssign . '.is_updated' => 1);
                             $result[$i]['Month'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
                             $result[$i]['status'] = $value;
                             $i++;
                         }
-                        $result['total_lead_count'] = $total_status;
                     }
                     $res = array('result' => True,
                         'data' => $result);
@@ -672,7 +668,6 @@ class Api extends REST_Controller
         );
         returnJson($error);
     }
-
     public function masters_get()
     {
 
