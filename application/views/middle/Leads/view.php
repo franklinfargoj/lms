@@ -27,6 +27,7 @@ $param1 = isset($type) ? $type.'/' : '';
 $param2 = isset($till) ? $till.'/' : '';
 $param3 = isset($status) ? $status.'/' : '';
 $param4 = isset($lead_source) ? $lead_source.'/' : '';
+$param5 = isset($param) ? encode_id($param).'/' : '';
 ?>
 
 <div class="page-content">
@@ -43,7 +44,7 @@ $param4 = isset($lead_source) ? $lead_source.'/' : '';
                 </div>
 
                 <div class="float-right">
-                    <a href="<?php echo base_url('leads/export_excel_listing/'.$param1.$param2.$param3.$param4);?>">
+                    <a href="<?php echo base_url('leads/export_excel_listing/'.$param1.$param2.$param3.$param4.$param5);?>">
                         <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
                     </a>
                 </div>

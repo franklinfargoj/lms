@@ -515,7 +515,6 @@ class Leads extends CI_Controller
         //Fixed Parameters
         $arrData['type'] = $type;
         $arrData['till'] = $till;
-        
         if(($status != 'all') && ($status != null)){
             $lead_status = $this->config->item('lead_status');
             $arrData['status'] = $status;
@@ -551,7 +550,7 @@ class Leads extends CI_Controller
         
         //Get session data
         $login_user = get_session();
-        $arrData = $this->view($login_user,$arrData);
+        $arrData = $this->view($login_user,$arrData,$param,'');
         return load_view('Leads/view',$arrData);
     }
 
@@ -846,11 +845,9 @@ class Leads extends CI_Controller
 
     /*Private Functions*/
 
-    private function view($login_user,$arrData){
-
-        $type = $arrData['type']; 
+    private function view($login_user,$arrData,$param = null,$url=''){
+        $type = $arrData['type'];
         $till = $arrData['till'];
-
         //Parameters buiding for sending to list function.
         $action = 'list';
         $table = Tbl_Leads.' as l';
@@ -864,7 +861,11 @@ class Leads extends CI_Controller
             if($till == 'ytd'){
                 $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(l.created_on)' => date('Y')); //Year till date filter
             }
-            if(!empty($arrData['param'])){
+            if(!empty($param)){
+                $arrData['param'] = $param;
+                if(($param != 'all') && ($param != null) && $this->uri->segment(2) !='export_excel_listing'){
+                    $arrData['param'] = decode_id($param);
+                }
                 if($login_user['designation_name'] == 'EM'){
                     $where['l.created_by']  =   $login_user['hrms_id']; //Employee wise filter
                 }
@@ -979,15 +980,30 @@ class Leads extends CI_Controller
      * @paramas none
      * @return  void
      */
-    public function export_excel_listing($type,$till,$status = null,$lead_source = null)
+    public function export_excel_listing($type,$till,$status = null,$lead_source = null,$param=null)
     {
+        $params = '';
         if($type == 'assigned'){
             $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
                 'Status','Followup Date','Lead Identified As','Lead Source');
+            if(!empty($param)){
+                $arrData['param'] = decode_id($param);
+            }
         }
         if($type == 'generated'){
+            if($lead_source!= null){
+                $params = decode_id($lead_source);
+            }
+            if(($status != 'all') && ($status != null)){
+                $arrData['status'] = $status;
+            }
+            $arrData['type'] = $type;
+            $arrData['till'] = $till;
             $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
                 'Lead Identified As','Lead Source');
+            $login_user = get_session();
+            $data = $this->view($login_user,$arrData,$params);
+            export_excel($header_value,$data,$type);
         }
 
         if($type == 'unassigned'){
@@ -1009,7 +1025,7 @@ class Leads extends CI_Controller
         }
         //Get session data
         $login_user = get_session();
-        $data = $this->view($login_user,$arrData);
+        $data = $this->view($login_user,$arrData,$params);
         export_excel($header_value,$data,$type);
     }
 
