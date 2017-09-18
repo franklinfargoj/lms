@@ -215,7 +215,7 @@ function rd_calculator() {
                 var r = 0.55;
             }
             var n = 12;
-            var cal = (1 + (0.05 /12));
+            var cal = (1 + (r / 12));
             var power = (12 * t);
             var maturity = p*Math.pow(cal,power);
             $('#maturity').val(maturity.toFixed(2));
