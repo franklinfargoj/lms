@@ -469,7 +469,7 @@ echo $result;die;
     if ($result === FALSE) {
        // die('FCM Send Error: ' . curl_error($ch));
     }
-    curl_close($ch);
+    curl_close($crl);
     return $result;
 }
 

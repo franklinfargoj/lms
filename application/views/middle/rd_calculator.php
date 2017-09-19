@@ -11,6 +11,7 @@ $data_days = array('name'=>'days','id'=>'days','placeholder'=>'Days');
 $data_amount = array('name'=>'amount','id'=>'amount');
 $data_term = array('name'=>'term','id'=>'term','value'=>'');
 $data_maturity = array('name'=>'maturity','id'=>'maturity');
+$data_interest = array('name'=>'interest','id'=>'interest');
 ?>
 <div class="page-title">
     <div class="container clearfix">
@@ -43,6 +44,10 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                     <div class="form-control ravish-field">
                         <label>My Initial Amount (Rs):<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_amount);?>
+                    </div>
+                    <div class="form-control ravish-field">
+                        <label>Rate Of interest:<span style="color:red;">*</span> </label>
+                        <?php echo form_input($data_interest);?>
                     </div>
                     <div class="form-control">
                         <label>Date Of Opening:<span style="color:red;">*</span> </label>
@@ -98,6 +103,5 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
 <script src = "<?php echo base_url().ASSETS;?>/js/calculator.js"></script>
 <script>
     var rS = <?php echo rateOfInterestSenior;?>;
-    var rJ = <?php echo rateOfInterest;?>;
-    rd_calculator(rS,rJ);
+    rd_calculator(rS);
 </script>

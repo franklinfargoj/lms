@@ -196,6 +196,8 @@ define('EXCEL_ALPHA', serialize(array(
 )));
 
 define('rateOfInterest','0.05');
-define('rateOfInterestSenior','0.55');
-define('minEmi','5000');
-define('maxEmi','5000000');
+define('rateOfInterestSenior','0.5');
+define('minEmi','0');
+define('maxEmi','20000000');
+define('add_lead_min','5000');
+define('add_lead_max','5000000');

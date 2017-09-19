@@ -30,15 +30,15 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
                                     <div id="slider1div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 66%;"></span>
 								</div>
 								<div class="step">
-									<span class="tick" style="left: 0%;">|<br><span class="marker"><5000</span></span>
-									<span class="tick" style="left: 12.5%;">|<br><span class="marker">6.25L</span></span>
-									<span class="tick" style="left:25%;">|<br><span class="marker">12.5L</span></span>
-									<span class="tick" style="left:37.5%;">|<br><span class="marker">18.75L</span></span>
-									<span class="tick" style="left:50%;">|<br><span class="marker">25L</span></span>
-									<span class="tick" style="left:62.5%;">|<br><span class="marker">31.25L</span></span>
-									<span class="tick" style="left:75%">|<br><span class="marker">37.5L</span></span>
-									<span class="tick" style="left:87.5%;">|<br><span class="marker">43.75L</span></span>
-									<span class="tick" style="left:100%;">|<br><span class="marker">>50L</span></span>
+									<span class="tick" style="left: 0%;">|<br><span class="marker">0</span></span>
+									<span class="tick" style="left: 12.5%;">|<br><span class="marker">25L</span></span>
+									<span class="tick" style="left:25%;">|<br><span class="marker">50L</span></span>
+									<span class="tick" style="left:37.5%;">|<br><span class="marker">75L</span></span>
+									<span class="tick" style="left:50%;">|<br><span class="marker">100L</span></span>
+									<span class="tick" style="left:62.5%;">|<br><span class="marker">125L</span></span>
+									<span class="tick" style="left:75%">|<br><span class="marker">150L</span></span>
+									<span class="tick" style="left:87.5%;">|<br><span class="marker">175L</span></span>
+									<span class="tick" style="left:100%;">|<br><span class="marker">>200L</span></span>
 								</div>
 								
 							</div>

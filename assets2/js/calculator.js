@@ -10,7 +10,8 @@ $.validator.addMethod('minStrict', function (value, el, param) {
 $.validator.addMethod("noDecimal", function(value, element) {
     return !(value % 1);
 }, "No decimal numbers");
-function fd_calculator() {
+
+function fd_calculator(rS) {
     $("#fd_calculate").validate({
         rules:{
             interest:{
@@ -101,7 +102,7 @@ function fd_calculator() {
 
                 var interestVal = $('#interest').val();
                 if($("#senior").is(':checked')) {
-                    var interestVal = parseInt(interestVal) + .5;
+                    var interestVal = parseInt(interestVal) + parseFloat(rS);
                 }
                 var tenureVal = $('#tenure').val();
 
@@ -128,7 +129,7 @@ function fd_calculator() {
     });
 }
 
-function rd_calculator() {
+function rd_calculator(rS) {
     var now = new Date();
     var day = ("0" + now.getDate()).slice(-2);
     var month = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -183,6 +184,11 @@ function rd_calculator() {
                 minStrict:0,
                 number:true
             },
+            interest:{
+                required:true,
+                minStrict:0,
+                number:true
+            },
             term:{
                 required:true,
                 minStrict:0,
@@ -200,6 +206,11 @@ function rd_calculator() {
                 number: "Only numbers allowed",
                 minStrict:"Please enter amount more than 0"
             },
+            interest: {
+                required: "Please enter interest",
+                number: "Only numbers allowed",
+                minStrict:"Please enter amount more than 0"
+            },
             term: {
                 required: "Please enter term",
                 number: "Only numbers allowed",
@@ -210,35 +221,35 @@ function rd_calculator() {
 
             var p = $('#amount').val();
             var t = $('#term').val();
-            var r = 0.05;
+            var r = $('#interest').val();
             if($("#senior").is(':checked')) {
-                var r = 0.55;
+                var r = parseFloat(r) + parseFloat(rS);
             }
             var n = 12;
-            var cal = (1 + (r / 12));
-            var power = (12 * t);
+            var cal = (1 + ((r/100) / n));
+            var power = (n * t);
             var maturity = p*Math.pow(cal,power);
             $('#maturity').val(maturity.toFixed(2));
         }
     });
 }
 
-function emi_calculator() {
-    $(document).ready(function(){
+function emi_calculator(min, max) {
+        var min = parseInt(min, 10);
+        var max = parseInt(max, 10);
         var slider1 = $("#slider1");
         var amount = $("#amount");
         var div = $('#slider1div');
-
         slider1.slider({
-            orientation:"horizontal",
-            max: 20000000,
-            min: 0,
-            step:100000,
+            orientation: "horizontal",
+            max: max,
+            min: min,
+            step: 100000,
             animate: true,
             values: [0],
             slide: function (event, ui) {
                 amount.val(ui.values[0]);
-                var width = (ui.values[0]/20000000) * 100 + '%';
+                var width = (ui.values[0] / parseInt(max)) * 100 + '%';
                 div.width(width);
             }
         });
@@ -246,11 +257,11 @@ function emi_calculator() {
         amount.val(value);
 
         amount.keyup(function () {
-            if($.isNumeric(amount.val())) {
+            if ($.isNumeric(amount.val())) {
                 slider1.slider('values', 0, amount.val());
                 var width = '100%';
-                if (amount.val() <= 20000000)
-                    width = (amount.val() / 20000000) * 100 + '%';
+                if (amount.val() <= parseInt(max))
+                    width = (amount.val() / parseInt(max)) * 100 + '%';
                 div.width(width);
             }
         });
@@ -260,15 +271,15 @@ function emi_calculator() {
         var div2 = $('#slider2div');
 
         slider2.slider({
-            step:.5,
-            orientation:"horizontal",
+            step: .5,
+            orientation: "horizontal",
             max: 30,
             min: 0,
             animate: true,
             values: [0],
             slide: function (event, ui) {
                 year.val(ui.values[0]);
-                var width = (ui.values[0]/30) * 100 + '%';
+                var width = (ui.values[0] / 30) * 100 + '%';
                 div2.width(width);
             }
         });
@@ -277,7 +288,7 @@ function emi_calculator() {
         year.val(value2);
 
         year.keyup(function () {
-            if($.isNumeric(year.val())) {
+            if ($.isNumeric(year.val())) {
                 slider2.slider('values', 0, year.val());
                 var width = '100%';
                 if (year.val() <= 30)
@@ -291,15 +302,15 @@ function emi_calculator() {
         var div3 = $('#slider3div');
 
         slider3.slider({
-            step:.25,
-            orientation:"horizontal",
+            step: .25,
+            orientation: "horizontal",
             max: 20,
             min: 5,
             animate: true,
             values: [5],
             slide: function (event, ui) {
                 interest.val(ui.values[0]);
-                var width = (ui.values[0]-5)/15 * 100  + '%';
+                var width = (ui.values[0] - 5) / 15 * 100 + '%';
                 div3.width(width);
             }
         });
@@ -308,93 +319,89 @@ function emi_calculator() {
         interest.val(value3);
 
         interest.keyup(function () {
-            if($.isNumeric(interest.val())) {
+            if ($.isNumeric(interest.val())) {
                 slider3.slider('values', 0, interest.val());
                 var width = '100%';
                 if (interest.val() <= 20)
-                    var width = (interest.val()-5)/15 * 100  + '%';
+                    var width = (interest.val() - 5) / 15 * 100 + '%';
                 div3.width(width);
             }
         });
         $("#emi").validate({
-            rules:{
-                interest:{
-                    required:true,
-                    number:true,
-                    minStrict:0,
-                    max:20
+            rules: {
+                interest: {
+                    required: true,
+                    number: true,
+                    minStrict: 0,
+                    max: 20
                 },
-                years:{
-                    required:true,
-                    number:true,
-                    max:30,
-                    minStrict:0,
+                years: {
+                    required: true,
+                    number: true,
+                    max: 30,
+                    minStrict: 0,
                 },
-                amount:{
-                    required:true,
-                    number:true,
-                    max:20000000,
-                    minStrict:0,
+                amount: {
+                    required: true,
+                    number: true,
+                    max: 20000000,
+                    minStrict: 0,
                 }
             },
-            messages:{
+            messages: {
                 interest: {
                     required: "Please enter interest",
                     number: "Only numbers allowed",
-                    max:"Please Enter a value less than or equal to 20",
-                    minStrict:"Please enter interest more than 0"
+                    max: "Please Enter a value less than or equal to 20",
+                    minStrict: "Please enter interest more than 0"
                 },
                 years: {
                     required: "Please enter year",
                     number: "Only numbers allowed",
-                    max:"Please Enter a value less than or equal to 30",
-                    minStrict:"Please enter year more than 0"
+                    max: "Please Enter a value less than or equal to 30",
+                    minStrict: "Please enter year more than 0"
                 },
                 amount: {
                     required: "Please enter amount",
                     number: "Only numbers allowed",
-                    max:"Please Enter a value less than or equal to 200L",
-                    minStrict:"Please enter amount more than 0"
+                    max: "Please Enter a value less than or equal to 200L",
+                    minStrict: "Please enter amount more than 0"
                 }
             },
-            submitHandler: function(form) {
-                if($('#emi').valid()){
+            submitHandler: function (form) {
+                if ($('#emi').valid()) {
                     var P = $("#amount").val();
                     var IN = $("#interest").val();
-                    var R = IN /(12 * 100);
+                    var R = IN / (12 * 100);
                     var N = $("#years").val();
-                    var X = Math.pow((1+R),N);
-                    var Y = Math.pow((1+R),N-1);
+                    var X = Math.pow((1 + R), N);
+                    var Y = Math.pow((1 + R), N - 1);
                     var EMI = (P * R * X) / Y;
 
                     $('#your_emi').html(EMI.toFixed(2));
                 }
             }
         });
+        $(function () {
 
-
-
-    });
-    $( function() {
-
-        // setup master volume
-        $(".ui-slider").slider({
-            value: 70,
-            orientation: "horizontal",
-            range: "min",
-            animate: true
-        });
-
-        // setup graphic EQ
-        $( "#eq > span" ).each(function() {
-            // read initial values from markup and remove that
-            var value = parseInt( $( this ).text(), 20 );
-            $( this ).empty().slider({
-                value: value,
+            // setup master volume
+            $(".ui-slider").slider({
+                value: 70,
+                orientation: "horizontal",
                 range: "min",
-                animate: true,
-                orientation: "vertical"
+                animate: true
+            });
+
+            // setup graphic EQ
+            $("#eq > span").each(function () {
+                // read initial values from markup and remove that
+                var value = parseInt($(this).text(), 20);
+                $(this).empty().slider({
+                    value: value,
+                    range: "min",
+                    animate: true,
+                    orientation: "vertical"
+                });
             });
         });
-    } );
-}
+    }
