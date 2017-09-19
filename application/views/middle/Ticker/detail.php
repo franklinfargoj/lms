@@ -1,16 +1,17 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">Tickers</h3>
-        <div class="float-right">
-            <span class="lead-num"><a href="<?php echo site_url('ticker');?>"><span><</span>Back</a></span>
-        </div>
-    </div>
+            </div>
 </div>
 <div class="page-content">
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
-            <div id="accordion" class="faq-accordion">
+        <div class="float-right">
+            <span class="lead-num"><a href="<?php echo site_url('ticker');?>"><span><</span>Back</a></span>
+        </div>
+
+            <div id="accordion" class="faq-accordion faq-a">
                 <?php 
                     if($tickerDetail){
                         
