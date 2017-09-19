@@ -43,11 +43,11 @@ $data_submit = array(
                 echo form_open_multipart($url, $form_attributes);
                 ?>
                     <div class="form-control">
-                        <label>Lead Source:</label>
+                        <label>Lead Source:<span style="color:red;">*</span></label>
                         <?php echo form_dropdown('lead_source', $source_options) ?>
                     </div>
                     <div class="form-control">
-                        <label>Select File:</label>
+                        <label>Select File:<span style="color:red;">*</span></label>
                         <?php echo form_input($data_input);?>
                         <div class="valid-msg"><span>*</span>Only xlx | xlxs</div>
                     </div>

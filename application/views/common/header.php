@@ -224,7 +224,7 @@
 	
 	    $("#cal-droped ").hover(function(){
 	    	
-	        $(".cal-drop ").toggle();
+	        $(".cal-drop").toggle();
 	    });
 
 	   	$("#cal-droped1").hover(function(){
@@ -243,5 +243,4 @@
 	    	// event.preventDefault();
 	        $(".cal-drop4").toggle();
 	    }); 	
-
 </script>
