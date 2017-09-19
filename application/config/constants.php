@@ -194,3 +194,8 @@ define('EXCEL_ALPHA', serialize(array(
     '62'=>'BK',
     '63'=>'BL',
 )));
+
+define('rateOfInterest','0.05');
+define('rateOfInterestSenior','0.55');
+define('minEmi','5000');
+define('maxEmi','5000000');

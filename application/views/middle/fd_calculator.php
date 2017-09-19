@@ -94,5 +94,6 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
 </div>
 <script src = "<?php echo base_url().ASSETS;?>/js/calculator.js"></script>
 <script>
-    fd_calculator();
+    var rS = <?php echo rateOfInterestSenior;?>;
+    fd_calculator(rS);
 </script>
