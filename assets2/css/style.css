@@ -692,21 +692,21 @@ strong{
 img#rs {
     margin: 8px 0 0px 10px;
 }
-.abbas {
+.form-style {
     text-decoration: none;
     border: 3px solid #01559d;
     padding: 3px 12px;
     color: #01559d;
     margin-right: 0;
 }
-.abbas:hover{
+.form-style:hover{
 	background: #01559d;
 	color: #fff;
 }
 
 .top-m{margin-top: 40px;}
 .l-top{margin-bottom: 12px!important;}
-.abbas1 {
+ .form-style1 {
     margin: 0 13px;
     font-size: 18px;
 }
@@ -739,7 +739,7 @@ img#rs {
     right: 180px;
     padding-bottom: 10px;
 }
-#btnravish{
+#btn-r{
 	margin-top: -18px;
 }
 .form label.error {
@@ -858,11 +858,11 @@ input#ticket_range ,input#amount,input#years,input#interest,input#password,input
 input#captext{
 	margin-top: 15px;
 }
-.ravish-form{
+.r-form{
 	width: 99%!important;
 	padding: 0 10px;
 }
-.ravish-field{
+.r-field{
 	padding: 6px 0!important;
 	width: 99.4%!important;
 }
