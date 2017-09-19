@@ -1,15 +1,16 @@
 <div class="page-title">
 	<div class="container clearfix">
 		<h3 class="text-center">Add Product Category</h3>
-		<div class="float-right">
-            <span class="lead-num"><a href="<?php echo site_url('product_category');?>"><span><</span>Back</a></span>
-        </div>
+		
 	</div>
 </div>
 <div class="page-content">
 	<span class="bg-top"></span>
 	<div class="inner-content">
 		<div class="container">
+			<div class="float-right">
+            	<span class="lead-num"><a href="<?php echo site_url('product_category');?>"><span><</span>Back</a></span>
+        	</div>
 			<div class="product-category">
 				<!-- <form> -->
 				<?php
@@ -27,7 +28,7 @@
 						        'class' => '',
 						        'style' => ''
 							);
-							echo form_label('Category Name:', 'title', $attributes);
+							echo form_label('Category Name:<span style="color:red;">*</span>', 'title', $attributes);
 
 							$data = array(
 						        'type'  => 'text',
@@ -43,7 +44,7 @@
 						?>	
 					</div>
 					<div class="form-control">
-						<label>Status:</label>
+						<label>Status:<span style="color:red;">*</span></label>
 						<div class="radio-control">
 							<input type="radio" id= "active" name="status" value="active" <?php echo  set_radio('status', 'active', TRUE); ?> />
 							<label>Active</label>
