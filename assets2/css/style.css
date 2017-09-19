@@ -1020,6 +1020,7 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
     width: 215px;
     line-height: 30px;
     margin-bottom: 5px;
+    border:1px solid;
 }
 .upload-form .form-control span {
     color: #e22528;
