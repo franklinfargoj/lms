@@ -220,7 +220,8 @@ function rd_calculator(rS) {
         submitHandler: function(form) {
 
             var p = $('#amount').val();
-            var t = $('#term').val();
+            var term = $('#term').val();
+            var t = term/12;
             var r = $('#interest').val();
             if($("#senior").is(':checked')) {
                 var r = parseFloat(r) + parseFloat(rS);
