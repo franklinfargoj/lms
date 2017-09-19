@@ -84,9 +84,9 @@ $data_submit = array(
             <thead>
             <tr class="top-header">
                 <th></th>
-                <th><input type="text" name="customername" placeholder="Search File"></th>
+                <th style="text-align:left"><input type="text" name="customername" placeholder="Search File"></th>
                 <th></th>
-                <th><input type="text" name="customername" placeholder="Search Status"></th>
+                <th style="text-align:left"><input type="text" name="customername" placeholder="Search Status"></th>
                 <th><?php
                         $options = $lead_source;
                         echo form_dropdown('lead_source', $options ,'',array());
@@ -96,11 +96,11 @@ $data_submit = array(
             </tr>
             <tr>
                 <th align="center">Sr. No</th>
-                <th>File</th>
-                <th>Date and Time</th>
-                <th>Status</th>
-                <th>Lead Source</th>
-                <th>Download</th>
+                <th style="text-align:left">File</th>
+                <th style="text-align:left">Date and Time</th>
+                <th style="text-align:left">Status</th>
+                <th style="text-align:left">Lead Source</th>
+                <th style="text-align:left">Download</th>
             </tr>
             </thead>
         <tbody>
