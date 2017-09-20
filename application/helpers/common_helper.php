@@ -454,7 +454,7 @@ function sendPushNotification($emp_id,$message,$title,$lead_id)
             ($device_id != NULL || !empty($device_id))){
             $header = array();
             $header[] = 'Content-type: application/json';
-            $header[] = 'Authorization: key='.FCMKEY;
+            $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
 
             $data = array(
                 'body'=>$message,
