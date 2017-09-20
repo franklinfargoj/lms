@@ -158,6 +158,11 @@ class Leads extends CI_Controller
                     $lead_assign['created_by']=$login_user['hrms_id'];
                     $lead_assign['created_by_name']=$login_user['full_name'];
                     $this->Lead->insert_assign($lead_assign);
+                    //Push notification
+                    $emp_id = $login_user['hrms_id'];
+                    $title = 'New Lead Assigned';
+                    $push_message = "New Lead Assigned to you";
+                    sendPushNotification($emp_id,$push_message,$title,$lead_id);
                 }
                 $this->session->set_flashdata('success', "Lead Added Successfully");
                 redirect(base_url('Leads/add'), 'refresh');
