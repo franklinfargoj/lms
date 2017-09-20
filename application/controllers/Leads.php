@@ -139,7 +139,7 @@ class Leads extends CI_Controller
 
                     //Push notification
                     $emp_id = $login_user['hrms_id'];
-                    $title = 'Lead Added Successfully.';
+                    $title = 'Lead Added Successfully';
                     $push_message = 'Lead added successfully for '.ucwords($product_name);
                     sendPushNotification($emp_id,$push_message,$title);
                     //Save notification
