@@ -154,11 +154,14 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                             <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
                         </div>
                         
-                        <div class="step">
-                            <span class="float-left">5000</span>
-                            <span class="float-right">1 Crore & above</span>
+                        <div class="step" style="position: relative">
+                            <span class="float-left" style="left: 0%;">5000</span>
+                            <span class="float-left" style="left: 25%; position: absolute">12.5L</span></span>
+                            <span class="float-left" style="left: 50%; position: absolute">25L</span></span>
+                            <span class="float-left" style="left: 75%; position: absolute">37.5L</span></span>
+                            <span class="float-left" style="left: 100%; position: absolute">50L</span>
                         </div>
-                       
+
                     </div>
 
                 </div>
@@ -241,18 +244,26 @@ $remark_extra = 'style="rows:4 ; cols:80"';
             var sliderElement = $("#master");
             var range = $('#ticket_range');
             var div = $('.ui-slider-range');
+            var maxlead = "<?php echo add_lead_max;?>";
+            var max = parseFloat(maxlead);
+
+            var minlead = "<?php echo add_lead_min;?>";
+            var min = parseFloat(minlead);
             // setup master volume
             sliderElement.slider({
                 step:5000,
                 orientation: "horizontal",
-                max: 10000000,
-                min: 5000,
+                max: max,
+                min: min,
+                scale:[5000,100000,500000],
+                showLabels:true,
+                snap:true,
                 animate: true,
-                values: [5000],
+                values: [min],
                 slide: function (event, ui) {
                     range.val(ui.values[0]);
                     console.log(ui.values[0]);
-                    var width = (ui.values[0]-5000)/(10000000) * 100 + '%';
+                    var width = (ui.values[0]-min)/(max) * 100 + '%';
                     div.width(width);
                 }
             });
@@ -263,8 +274,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 if($.isNumeric(range.val())) {
                     sliderElement.slider('values', 0, range.val());
                     var width = '100%';
-                    if (range.val() <= 10000000)
-                        width = (range.val() / 10000000) * 100 + '%';
+                    if (range.val() <= max)
+                        width = (range.val() / max) * 100 + '%';
                     div.width(width);
                 }
             });

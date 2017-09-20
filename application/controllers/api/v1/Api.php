@@ -1564,7 +1564,7 @@ class Api extends REST_Controller
             if($insertData){
                 //Add Notification
                 $title="New Lead Assigned";
-                $description="New Lead Assigned to you by Branch Manager";
+                $description="New Lead Assigned to you by Branch Manager ".ucwords($params['full_name']);
                 $notification_to = $params['employee_id'];
                 $priority="Normal";
                 notification_log($title,$description,$priority,$notification_to);
