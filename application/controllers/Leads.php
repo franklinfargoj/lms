@@ -162,7 +162,7 @@ class Leads extends CI_Controller
                     $emp_id = $login_user['hrms_id'];
                     $title = 'New Lead Assigned';
                     $push_message = "New Lead Assigned to you";
-                    sendPushNotification($emp_id,$push_message,$title,$lead_id);
+                    sendPushNotification($emp_id,$push_message,$title,time());
                 }
                 $this->session->set_flashdata('success', "Lead Added Successfully");
                 redirect(base_url('Leads/add'), 'refresh');
@@ -946,10 +946,13 @@ class Leads extends CI_Controller
             if($insertData){
                 //Add Notification
                 $title="New Lead Assigned";
-                $description="New Lead Assigned to you by Branch Manager";
+                $description="New Lead Assigned to you by Branch Manager ".ucwords($login_user['full_name']);
                 $notification_to = $employee_id;
                 $priority="Normal";
                 notification_log($title,$description,$priority,$notification_to);
+                //push notification
+                $emp_id = $employee_id;
+                sendPushNotification($emp_id,$description,$title,time());
             }
         }
     }
