@@ -124,6 +124,8 @@ define('Tbl_Mail', 'db_mailsetting');
 define('HRMS_API_URL_AUTH', 'http://staging.php-dev.in:8844/DENABANK/lms/api/v1/authenticate/check_authentication');
 define('HRMS_API_URL_GET_RECORD', 'http://staging.php-dev.in:8844/DENABANK/lms/api/v1/authenticate/get_records');
 define('Elapsed_day', 90);
+define('Elapsed_day_converted', 7);
+
 
 define('FCMKEY','AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP
 ');
