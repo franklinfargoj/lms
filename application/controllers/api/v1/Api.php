@@ -358,7 +358,7 @@ class Api extends REST_Controller
             $emp_id = $params['created_by'];
             $title = 'Lead Added Successfully.';
             $push_message = 'Lead added successfully for '.ucwords($product_name);
-            sendPushNotification($emp_id,$push_message,$title,$lead_id);
+            sendPushNotification($emp_id,$push_message,$title);
 
         //Save notification
         $this->insert_notification($lead_data);
@@ -1116,7 +1116,7 @@ class Api extends REST_Controller
                 notification_log($title, $description, $priority, $notification_to);
                 //push notification
                 $emp_id = $params['employee_id'];
-                sendPushNotification($emp_id,$description,$title,$params['lead_id']);
+                sendPushNotification($emp_id,$description,$title);
 
                 $res = array('result' => True,
                     'data' => 'Lead Assigned Successfully');
@@ -1557,7 +1557,7 @@ class Api extends REST_Controller
                 notification_log($title,$description,$priority,$notification_to);
                 //push notification
                 $emp_id = $params['employee_id'];
-                sendPushNotification($emp_id,$description,$title,$params['lead_id']);
+                sendPushNotification($emp_id,$description,$title);
             }
             $res = array('result' => True,
                 'data' => 'Leads assigned successfully');

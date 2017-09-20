@@ -141,7 +141,7 @@ class Leads extends CI_Controller
                     $emp_id = $login_user['hrms_id'];
                     $title = 'Lead Added Successfully.';
                     $push_message = 'Lead added successfully for '.ucwords($product_name);
-                    sendPushNotification($emp_id,$push_message,$title,$lead_id);
+                    sendPushNotification($emp_id,$push_message,$title);
                     //Save notification
                     $this->insert_notification($lead_data);
                 }
@@ -162,7 +162,7 @@ class Leads extends CI_Controller
                     $emp_id = $login_user['hrms_id'];
                     $title = 'New Lead Assigned';
                     $push_message = "New Lead Assigned to you";
-                    sendPushNotification($emp_id,$push_message,$title,time());
+                    sendPushNotification($emp_id,$push_message,$title);
                 }
                 $this->session->set_flashdata('success', "Lead Added Successfully");
                 redirect(base_url('Leads/add'), 'refresh');
@@ -952,7 +952,7 @@ class Leads extends CI_Controller
                 notification_log($title,$description,$priority,$notification_to);
                 //push notification
                 $emp_id = $employee_id;
-                sendPushNotification($emp_id,$description,$title,time());
+                sendPushNotification($emp_id,$description,$title);
             }
         }
     }

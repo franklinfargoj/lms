@@ -437,7 +437,7 @@ if(!function_exists('send_sms')){
     }
 }
 
-function sendPushNotification($emp_id,$message,$title,$lead_id)
+function sendPushNotification($emp_id,$message,$title)
 {
     $CI =& get_instance();
     $CI->load->model('Lead');
@@ -460,7 +460,7 @@ function sendPushNotification($emp_id,$message,$title,$lead_id)
                 'body'=>$message,
                 'title' => $title,
                 "notification_type" => "message",
-                'notificationId' => $lead_id,
+                'notificationId' => time(),
                 "message"=>$message
             );
 
