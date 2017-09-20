@@ -374,9 +374,9 @@ class Api extends REST_Controller
                     sendPushNotification($device_id,$push_message,$title);
                 }
             }
-            $title = 'Lead added successfully.';
-            $push_message = 'Lead added successfully for '.ucwords($product_name);
-            sendPushNotification($device_id,$device_type,$push_message,$title);
+//            $title = 'Lead added successfully.';
+//            $push_message = 'Lead added successfully for '.ucwords($product_name);
+//            sendPushNotification($device_id,$device_type,$push_message,$title);
         //Save notification
         $this->insert_notification($lead_data);
         }
