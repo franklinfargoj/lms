@@ -30,6 +30,31 @@ class Api extends REST_Controller
         $this->load->model('Master_model');
         $this->load->model('Faq_model', 'faq');
         $this->load->model('Notification_model', 'notification');
+        if($this->input->post()){
+            $params = $this->input->post();
+        }else{
+            $params = $this->input->get();
+        }
+        if(!empty($params) && !isset($params['password'])){
+            if(isset($params['authorisation_key']) && $params['authorisation_key'] !=NULL &&
+                isset($params['hrms_id']) && $params['hrms_id'] !=NULL){
+                $response = array('result'=>False,
+                    'data'=>array('Wrong authorisation key.'));
+                $check_response = check_authorisation($params['authorisation_key'],$params['hrms_id']);
+                if(!$check_response)
+                    returnJson($response);
+            }else{
+                $response = array('result'=>False,
+                    'data'=>array('authorisation key or hrms id missing.'));
+                returnJson($response);
+            }
+        }else{
+            if(!isset($params['password'])){
+                $response = array('result'=>False,
+                    'data'=>array('authorisation key or hrms id missing.'));
+                returnJson($response);
+            }
+        }
     }
 
 
@@ -1605,12 +1630,15 @@ class Api extends REST_Controller
             // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
             $records_response = call_external_url(HRMS_API_URL_GET_RECORD . '/' . $auth->DBK_LMS_AUTH->username);
             $records = json_decode($records_response);
+            $authorisation_key = random_number();
             $data = array('device_token' => $device_token,
                 'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
                 'branch_id' => $records->dbk_lms_emp_record1->deptid,
                 'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
-                'device_type' => $device_type
+                'device_type' => $device_type,
+                'authorisation_key'=>$authorisation_key
             );
+
             $this->Login_model->insert_login_log($data); // login log
 
             $result['basic_info'] = array(
@@ -1723,7 +1751,7 @@ class Api extends REST_Controller
             }
             $result = array(
                 "result" => True,
-                "data" => ['count' => $leads, 'basic_info' => $result['basic_info']]
+                "data" => ['count' => $leads, 'basic_info' => $result['basic_info'],'authorisation_key'=>$authorisation_key]
             );
             returnJson($result);
         } else {
