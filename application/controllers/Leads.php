@@ -137,25 +137,11 @@ class Leads extends CI_Controller
                     $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
                     send_sms($this->input->post('contact_no'),$sms);
 
-//                    $select = array('device_token','device_type');
-//                    $emp_id = $this->session->userdata('admin_id');
-//                    $where = array('employee_id'=>$emp_id,'device_token !='=>NULL,'device_type !='=>NULL);
-//                    $order_by = 'id desc';
-//                    $limit = '1';
-//                    $table = Tbl_LoginLog;
-//                    $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
-//                    if(!empty($device_values)){
-//                        $device_id = $device_values[0]['device_token'];
-//                        $device_type = $device_values[0]['device_type'];
-//                        if((!empty($device_type) || $device_type != NULL) &&
-//                            ($device_id != NULL || !empty($device_id))){
-//
-//                            $title = 'Lead added successfully';
-//                            $push_message = 'Lead added successfully for '.ucwords($product_name);
-//                            //Push notification
-//                            sendPushNotification($device_id,$push_message,$title);
-//                        }
-//                    }
+                    //Push notification
+                    $emp_id = $login_user['hrms_id'];
+                    $title = 'Lead Added Successfully.';
+                    $push_message = 'Lead added successfully for '.ucwords($product_name);
+                    sendPushNotification($emp_id,$push_message,$title,$lead_id);
                     //Save notification
                     $this->insert_notification($lead_data);
                 }
