@@ -33,7 +33,7 @@ class Cron extends CI_Controller
         //For GENERAL MANAGER
         $general_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending' => array());
         $gm = $general_manager;
-        $zone_list = $this->Lead->get_employee_dump(array('zone_id','zone_name'),array('designation' => 'ZD'),array(),'employee_dump');
+        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','zone_id','zone_name'),array('designation' => 'ZD'),array(),'employee_dump');
     
         $general_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'ZM'));
         $general_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'ZM'));
@@ -80,44 +80,48 @@ class Cron extends CI_Controller
      * 
      */
     public function zm_consolidated_mail(){
-        $final = array();
-        //FOR ZONAL MANAGER
-        $zonal_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending' => array());
-        $gm = $zonal_manager;
-        $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('designation' => 'BR'),array(),'employee_dump');
-        
-        $zonal_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'BM'));
-        $zonal_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'BM'));
-        $zonal_manager['unassigned'] = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'BM'));
-        $zonal_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'BM'));
-        
-        $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
-        $total = array();
-        foreach (array_keys($gm) as $key => $value) {
-            $total[$value] = array_column($zonal_manager, $value,'branch_id'); 
-        }
-        $unique_branch_ids = array_unique(array_column($zonal_manager, 'branch_id'));
-        foreach ($branch_list as $key => $value) {
-            if(!in_array($value->branch_id,$unique_branch_ids)){
-                $final['zonal_manager'][$value->branch_id]['generated'] = 0;
-                $final['zonal_manager'][$value->branch_id]['converted'] = 0;
-                $final['zonal_manager'][$value->branch_id]['unassigned'] = 0;
-                $final['zonal_manager'][$value->branch_id]['pending'] = 0;
-            }else{
-                $final['zonal_manager'][$value->branch_id]['generated'] = isset($total['generated'][$value->branch_id]) ? $total['generated'][$value->branch_id] : 0;
-                $final['zonal_manager'][$value->branch_id]['converted'] = isset($total['converted'][$value->branch_id]) ? $total['converted'][$value->branch_id] : 0;
-                $final['zonal_manager'][$value->branch_id]['unassigned'] = isset($total['unassigned'][$value->branch_id]) ? $total['unassigned'][$value->branch_id] : 0;
-                $final['zonal_manager'][$value->branch_id]['pending'] = isset($total['pending'][$value->branch_id]) ? $total['pending'][$value->branch_id] : 0;
-            }
-            $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
-            $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
-        }
-        //FOR ZONAL MANAGER
-        $attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
-        $to = array('email' => 'ashok.jadhav@wwindia.com','name' => 'Ashok Jadhav');
         $subject = 'Zonal Manager Consolidated Format';
-        $message = 'Please Find an attachment';
-        sendMail($to,$subject,$message,$attachment_file);
+        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','zone_id','zone_name'),array('designation' => 'ZD'),array(),'employee_dump');
+        foreach ($zone_list as $k => $v) {
+            $final = array();
+            //FOR ZONAL MANAGER
+            $zonal_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending' => array());
+            $gm = $zonal_manager;
+            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('designation' => 'BR','zone_id' => $v->zone_id),array(),'employee_dump');
+            
+            $zonal_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['unassigned'] = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'BM','zone_id' => $v->zone_id));
+            
+            $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+            $total = array();
+            foreach (array_keys($gm) as $key => $value) {
+                $total[$value] = array_column($zonal_manager, $value,'branch_id'); 
+            }
+            $unique_branch_ids = array_unique(array_column($zonal_manager, 'branch_id'));
+            foreach ($branch_list as $key => $value) {
+                if(!in_array($value->branch_id,$unique_branch_ids)){
+                    $final['zonal_manager'][$value->branch_id]['generated'] = 0;
+                    $final['zonal_manager'][$value->branch_id]['converted'] = 0;
+                    $final['zonal_manager'][$value->branch_id]['unassigned'] = 0;
+                    $final['zonal_manager'][$value->branch_id]['pending'] = 0;
+                }else{
+                    $final['zonal_manager'][$value->branch_id]['generated'] = isset($total['generated'][$value->branch_id]) ? $total['generated'][$value->branch_id] : 0;
+                    $final['zonal_manager'][$value->branch_id]['converted'] = isset($total['converted'][$value->branch_id]) ? $total['converted'][$value->branch_id] : 0;
+                    $final['zonal_manager'][$value->branch_id]['unassigned'] = isset($total['unassigned'][$value->branch_id]) ? $total['unassigned'][$value->branch_id] : 0;
+                    $final['zonal_manager'][$value->branch_id]['pending'] = isset($total['pending'][$value->branch_id]) ? $total['pending'][$value->branch_id] : 0;
+                }
+                $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
+                $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
+            }
+            //FOR ZONAL MANAGER
+            $attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
+            $to = array('email' => $v->email_id,'name' => $v->name);
+            
+            $message = 'Please Find an attachment';
+            sendMail($to,$subject,$message,$attachment_file);
+        }
     }       
 
     /*
@@ -130,45 +134,49 @@ class Cron extends CI_Controller
      * 
      */
     public function bm_consolidated_mail(){
-        $final = array();
-        //FOR EMPLOYEE
-        $branch_manager = array('generated' => array(),'converted' => array(),'pending_before' => array(),'pending' => array());
-        $gm = $branch_manager;
-        $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('designation' => 'HD'),array(),'employee_dump');
-        
-        $branch_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'EM'));
-        $branch_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'EM'));
-        $branch_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'EM'));
-        $branch_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'EM'));
-        
-        $branch_manager = call_user_func_array('array_merge', $branch_manager);
-        
-        $total = array();
-        foreach (array_keys($gm) as $key => $value) {
-            $total[$value] = array_column($branch_manager, $value,'hrms_id'); 
-        }
-        $unique_hrms_ids = array_unique(array_column($branch_manager, 'hrms_id'));
-        foreach ($employee_list as $key => $value) {
-            if(!in_array($value->hrms_id,$unique_hrms_ids)){
-                $final['branch_manager'][$value->hrms_id]['generated'] = 0;
-                $final['branch_manager'][$value->hrms_id]['converted'] = 0;
-                $final['branch_manager'][$value->hrms_id]['pending_before'] = 0;
-                $final['branch_manager'][$value->hrms_id]['pending'] = 0;
-            }else{
-                $final['branch_manager'][$value->hrms_id]['generated'] = isset($total['generated'][$value->hrms_id]) ? $total['generated'][$value->hrms_id] : 0;
-                $final['branch_manager'][$value->hrms_id]['converted'] = isset($total['converted'][$value->hrms_id]) ? $total['converted'][$value->hrms_id] : 0;
-                $final['branch_manager'][$value->hrms_id]['pending_before'] = isset($total['pending_before'][$value->hrms_id]) ? $total['unassigned'][$value->hrms_id] : 0;
-                $final['branch_manager'][$value->hrms_id]['pending'] = isset($total['pending'][$value->hrms_id]) ? $total['pending'][$value->hrms_id] : 0;
-            }
-            $final['branch_manager'][$value->hrms_id]['hrms_id'] = $value->hrms_id;
-            $final['branch_manager'][$value->hrms_id]['employee_name'] = $value->name;
-        }
-        //FOR EMPLOYEE
-        $attachment_file = $this->export_to_excel('bm_consolidated_mail',$final['branch_manager']);
-        $to = array('email' => 'ashok.jadhav@wwindia.com','name' => 'Ashok Jadhav');
         $subject = 'Branch Manager Consolidated Format';
-        $message = 'Please Find an attachment';
-        sendMail($to,$subject,$message,$attachment_file);
+        $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','branch_id','branch_name'),array('designation' => 'BR'),array(),'employee_dump');
+        foreach ($branch_list as $k => $v) {
+            $final = array();
+            //FOR EMPLOYEE
+            $branch_manager = array('generated' => array(),'converted' => array(),'pending_before' => array(),'pending' => array());
+            $gm = $branch_manager;
+            $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('designation' => 'HD','branch_id' => $v->branch_id),array(),'employee_dump');
+            
+            $branch_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'EM','branch_id' => $v->branch_id));
+            $branch_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'EM','branch_id' => $v->branch_id));
+            $branch_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'EM','branch_id' => $v->branch_id));
+            $branch_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'EM','branch_id' => $v->branch_id));
+            
+            $branch_manager = call_user_func_array('array_merge', $branch_manager);
+            
+            $total = array();
+            foreach (array_keys($gm) as $key => $value) {
+                $total[$value] = array_column($branch_manager, $value,'hrms_id'); 
+            }
+            $unique_hrms_ids = array_unique(array_column($branch_manager, 'hrms_id'));
+            foreach ($employee_list as $key => $value) {
+                if(!in_array($value->hrms_id,$unique_hrms_ids)){
+                    $final['branch_manager'][$value->hrms_id]['generated'] = 0;
+                    $final['branch_manager'][$value->hrms_id]['converted'] = 0;
+                    $final['branch_manager'][$value->hrms_id]['pending_before'] = 0;
+                    $final['branch_manager'][$value->hrms_id]['pending'] = 0;
+                }else{
+                    $final['branch_manager'][$value->hrms_id]['generated'] = isset($total['generated'][$value->hrms_id]) ? $total['generated'][$value->hrms_id] : 0;
+                    $final['branch_manager'][$value->hrms_id]['converted'] = isset($total['converted'][$value->hrms_id]) ? $total['converted'][$value->hrms_id] : 0;
+                    $final['branch_manager'][$value->hrms_id]['pending_before'] = isset($total['pending_before'][$value->hrms_id]) ? $total['pending_before'][$value->hrms_id] : 0;
+                    $final['branch_manager'][$value->hrms_id]['pending'] = isset($total['pending'][$value->hrms_id]) ? $total['pending'][$value->hrms_id] : 0;
+                }
+                $final['branch_manager'][$value->hrms_id]['hrms_id'] = $value->hrms_id;
+                $final['branch_manager'][$value->hrms_id]['employee_name'] = $value->name;
+            }
+            //FOR EMPLOYEE
+            $attachment_file = $this->export_to_excel('bm_consolidated_mail',$final['branch_manager']);
+            $to = array('email' => $v->email_id,'name' => $v->name);
+            
+            $message = 'Please Find an attachment';
+            sendMail($to,$subject,$message,$attachment_file);
+        }
     }
 
     /*
@@ -181,34 +189,51 @@ class Cron extends CI_Controller
      * 
      */
     public function bm_inactive_leads(){
-        $final = array();
-        //FOR ZONAL MANAGER
-        $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('designation' => 'HD'),array(),'employee_dump');
-        
-        $branch_manager['inactive']  = $this->get_leads(array('type'=>'inactive','till'=>'days','days_count'=>2,'user_type'=>'EM'));
-        $branch_manager = call_user_func_array('array_merge', $branch_manager);
-        
-        $total['inactive'] = array_column($branch_manager,'inactive','hrms_id'); 
-        $unique_hrms_ids = array_unique(array_column($branch_manager, 'hrms_id'));
-        foreach ($employee_list as $key => $value) {
-            if(!in_array($value->hrms_id,$unique_hrms_ids)){
-                $final['branch_manager'][$value->hrms_id]['inactive'] = 0;
-            }else{
-                $final['branch_manager'][$value->hrms_id]['inactive'] = isset($total['inactive'][$value->hrms_id]) ? $total['inactive'][$value->hrms_id] : 0;
+        //Branch list for sending mail
+        $subject = 'Branch Manager Inacvtive Leads';
+        $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','branch_id','branch_name'),array('designation' => 'BR'),array(),'employee_dump');
+        foreach ($branch_list as $k => $v) {
+            $final = array();
+            //FOR BRANCH MANAGER
+            $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('designation' => 'HD','branch_id' => $v->branch_id),array(),'employee_dump');
+            
+            $branch_manager['inactive']  = $this->get_leads(array('type'=>'inactive','till'=>'days','days_count'=>2,'user_type'=>'EM','branch_id' => $v->branch_id));
+            $branch_manager = call_user_func_array('array_merge', $branch_manager);
+            
+            $total['inactive'] = array_column($branch_manager,'inactive','hrms_id'); 
+            $unique_hrms_ids = array_unique(array_column($branch_manager, 'hrms_id'));
+            $total_count = 0;
+            foreach ($employee_list as $key => $value) {
+                if(!in_array($value->hrms_id,$unique_hrms_ids)){
+                    $final['branch_manager'][$value->hrms_id]['inactive'] = 0;
+                }else{
+                    $final['branch_manager'][$value->hrms_id]['inactive'] = isset($total['inactive'][$value->hrms_id]) ? $total['inactive'][$value->hrms_id] : 0;
+                    $total_count += $final['branch_manager'][$value->hrms_id]['inactive'];
+                }
+                $final['branch_manager'][$value->hrms_id]['hrms_id'] = $value->hrms_id;
+                $final['branch_manager'][$value->hrms_id]['employee_name'] = $value->name;
             }
-            $final['branch_manager'][$value->hrms_id]['hrms_id'] = $value->hrms_id;
-            $final['branch_manager'][$value->hrms_id]['employee_name'] = $value->name;
+            //FOR BRANCH MANAGER
+
+            //Notification Code
+            $title = 'Total no. of inactive leads for the Branch';
+            $description = 'Total no. of inactive leads : '.$total_count;
+            $priority = 'Normal';
+            $notification_to = $v->hrms_id;    
+            notification_log($title,$description,$priority,$notification_to);
+            //Notification Code
+
+            //Mail Code
+            $attachment_file = $this->export_to_excel('bm_inactive_leads',$final['branch_manager']);
+            $to = array('email' => $v->email_id,'name' => $v->name);
+            $message = 'Please Find an attachment';
+            sendMail($to,$subject,$message,$attachment_file);
+            //Mail Code
         }
-        //FOR ZONAL MANAGER
-        $attachment_file = $this->export_to_excel('bm_inactive_leads',$final['branch_manager']);
-        $to = array('email' => 'ashok.jadhav@wwindia.com','name' => 'Ashok Jadhav');
-        $subject = 'Branch Manager Inactive Leads';
-        $message = 'Please Find an attachment';
-        sendMail($to,$subject,$message,$attachment_file);
     }
     /*
-     * bm_inactive_leads
-     * Employee wise  Inacvtive leads count
+     * zm_inactive_leads
+     * Branch wise  Inacvtive leads count
      * @author Ashok Jadhav (AJ)
      * @access public
      * @param none
@@ -216,30 +241,100 @@ class Cron extends CI_Controller
      * 
      */
     public function zm_inactive_leads(){
-        $final = array();
-        //FOR 
-        $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('designation' => 'BR'),array(),'employee_dump');
-        
-        $zonal_manager['inactive']  = $this->get_leads(array('type'=>'inactive','till'=>'TAT','user_type'=>'BM'));
-        $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
-        
-        $total['inactive'] = array_column($zonal_manager,'inactive','branch_id'); 
-        $unique_hrms_ids = array_unique(array_column($zonal_manager, 'branch_id'));
-        foreach ($branch_list as $key => $value) {
-            if(!in_array($value->branch_id,$unique_hrms_ids)){
-                $final['zonal_manager'][$value->branch_id]['inactive'] = 0;
-            }else{
-                $final['zonal_manager'][$value->branch_id]['inactive'] = isset($total['inactive'][$value->branch_id]) ? $total['inactive'][$value->branch_id] : 0;
+        //zone list for sending mail
+        $subject = 'Zone Manager Inacvtive Leads';
+        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','zone_id','zone_name'),array('designation' => 'ZD'),array(),'employee_dump');
+        foreach ($zone_list as $k => $v) {
+            $final = array();
+            //FOR ZONE MANAGER
+            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('designation' => 'BR','zone_id' => $v->zone_id),array(),'employee_dump');
+            
+            $zonal_manager['inactive']  = $this->get_leads(array('type'=>'inactive','till'=>'TAT','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+            
+            $total['inactive'] = array_column($zonal_manager,'inactive','branch_id'); 
+            $unique_branch_ids = array_unique(array_column($zonal_manager, 'branch_id'));
+            $total_count = 0;
+            foreach ($branch_list as $key => $value) {
+                if(!in_array($value->branch_id,$unique_branch_ids)){
+                    $final['zonal_manager'][$value->branch_id]['inactive'] = 0;
+                }else{
+                    $final['zonal_manager'][$value->branch_id]['inactive'] = isset($total['inactive'][$value->branch_id]) ? $total['inactive'][$value->branch_id] : 0;
+                    $total_count += $final['zonal_manager'][$value->branch_id]['inactive'];
+                }
+                $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
+                $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
             }
-            $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
-            $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
+            //FOR ZONE MANAGER
+
+            //Notification Code
+            $title = 'Total no. of inactive leads for the Zone';
+            $description = 'Total no. of inactive leads : '.$total_count;
+            $priority = 'Normal';
+            $notification_to = $v->hrms_id;    
+            notification_log($title,$description,$priority,$notification_to);
+            //Notification Code
+
+            //Mail Code
+            $attachment_file = $this->export_to_excel('zm_inactive_leads',$final['zonal_manager']);
+            $to = array('email' => $v->email_id,'name' => $v->name);
+            $message = 'Please Find an attachment';
+            sendMail($to,$subject,$message,$attachment_file);
+            //Mail code
         }
-        //FOR EMPLOYEE
-        $attachment_file = $this->export_to_excel('zm_inactive_leads',$final['zonal_manager']);
-        $to = array('email' => 'ashok.jadhav@wwindia.com','name' => 'Ashok Jadhav');
-        $subject = 'Zone Manager Inactive Leads';
-        $message = 'Please Find an attachment';
-        sendMail($to,$subject,$message,$attachment_file);
+    }
+
+    /*
+     * zm_unassigned_leadszm_unassigned_leads
+     * Branch wise  Unassigned leads count
+     * @author Ashok Jadhav (AJ)
+     * @access public
+     * @param none
+     * @return void
+     * 
+     */
+    public function zm_unassigned_leads(){
+        //zone list for sending mail
+        $subject = 'Zone Manager Unassigned Leads';
+        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','zone_id','zone_name'),array('designation' => 'ZD'),array(),'employee_dump');
+        foreach ($zone_list as $k => $v) {
+            $final = array();
+            //FOR ZONE MANAGER
+            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('designation' => 'BR','zone_id' => $v->zone_id),array(),'employee_dump');
+            
+            $zonal_manager['unassigned']  = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+            
+            $total['unassigned'] = array_column($zonal_manager,'unassigned','branch_id'); 
+            $unique_hrms_ids = array_unique(array_column($zonal_manager, 'branch_id'));
+            $total_count = 0;
+            foreach ($branch_list as $key => $value) {
+                if(!in_array($value->branch_id,$unique_hrms_ids)){
+                    $final['zonal_manager'][$value->branch_id]['unassigned'] = 0;
+                }else{
+                    $final['zonal_manager'][$value->branch_id]['unassigned'] = isset($total['unassigned'][$value->branch_id]) ? $total['unassigned'][$value->branch_id] : 0;
+                    $total_count += $final['zonal_manager'][$value->branch_id]['unassigned'];
+                }
+                $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
+                $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
+            }
+            //FOR ZONE MANAGER
+
+            //Notification Code
+            $title = 'Total no. of unassigned leads for the Zone';
+            $description = 'Total no. of unassigned leads : '.$total_count;
+            $priority = 'Normal';
+            $notification_to = $v->hrms_id;    
+            notification_log($title,$description,$priority,$notification_to);
+            //Notification Code
+
+            //Mail Code
+            $attachment_file = $this->export_to_excel('zm_unassigned_leads',$final['zonal_manager']);
+            $to = array('email' => $v->email_id,'name' => $v->name);
+            $message = 'Please Find an attachment';
+            sendMail($to,$subject,$message,$attachment_file);
+            //Mail Code
+        }
     }
 
 
@@ -256,6 +351,13 @@ class Cron extends CI_Controller
         $type = $data['type'];
         $till = $data['till'];
         $user_type = $data['user_type'];
+        if(isset($data['zone_id'])){
+            $zone_id = $data['zone_id'];
+        }
+        if(isset($data['branch_id'])){
+            $branch_id = $data['branch_id'];
+        }
+
 
         //Parameters buiding for sending to list function.
         $action = 'list';
@@ -272,9 +374,11 @@ class Cron extends CI_Controller
                 $group_by = array('l.zone_id');
             }elseif($user_type == 'BM'){
                 $select[] = 'l.branch_id';
+                $where['l.zone_id'] = $zone_id;
                 $group_by = array('l.branch_id');
             }elseif($user_type == 'EM'){
                 $select[] = 'l.created_by as hrms_id';
+                $where['l.branch_id'] = $branch_id;
                 $group_by = array('l.created_by');
             }
         }elseif($type == 'unassigned'){
@@ -287,6 +391,7 @@ class Cron extends CI_Controller
                 $group_by = array('l.zone_id');
             }elseif($user_type == 'BM'){
                 $select[] = 'l.branch_id';
+                $where['l.zone_id'] = $zone_id;
                 $group_by = array('l.branch_id');
             }
         }else{
@@ -327,9 +432,11 @@ class Cron extends CI_Controller
                 $group_by = array('la.zone_id');
             }elseif($user_type == 'BM'){
                 $select[] = 'la.branch_id';
+                $where['la.zone_id'] = $zone_id;
                 $group_by = array('la.branch_id');
             }elseif($user_type == 'EM'){
                 $select[] = 'la.employee_id as hrms_id';
+                $where['la.branch_id'] = $branch_id;
                 $group_by = array('la.employee_id');
             }
         }
@@ -358,10 +465,13 @@ class Cron extends CI_Controller
             $header_value = array('HRMS Id','Employee Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
             case 'bm_inactive_leads':
-            $header_value = array('HRMS Id','Employee Name','Inactive Leads');
+            $header_value = array('HRMS Id','Employee Name','Total Inactive Leads');
                 break;
             case 'zm_inactive_leads':
-            $header_value = array('Branch Id','Branch Name','Inactive Leads');
+            $header_value = array('Branch Id','Branch Name','Total Inactive Leads');
+                break;
+            case 'zm_unassigned_leads':
+            $header_value = array('Branch Id','Branch Name','Total Unassigned Leads');
                 break;
         }
         return $this->create_excel($action,$header_value,$arrData);
@@ -443,7 +553,7 @@ class Cron extends CI_Controller
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['zone_id']));
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['zone_name']));
             }
-            if(in_array($action,array('zm_consolidated_mail','zm_inactive_leads'))){
+            if(in_array($action,array('zm_consolidated_mail','zm_inactive_leads','zm_unassigned_leads'))){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_id']));
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']));
             }
@@ -463,6 +573,9 @@ class Cron extends CI_Controller
             }
             if(in_array($action,array('bm_inactive_leads','zm_inactive_leads'))){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['inactive']));   
+            }
+            if(in_array($action,array('zm_unassigned_leads'))){
+                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['unassigned']));   
             }
             $i++;$j++;
         }
