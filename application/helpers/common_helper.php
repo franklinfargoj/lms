@@ -460,8 +460,8 @@ function sendPushNotification($device_id,$message,$title)
     curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
 
     $rest = curl_exec($crl);
-    echo json_encode( $payload );
-    echo $rest;die;
+//    echo json_encode( $payload );
+//    echo $rest;die;
     if ($rest === false) {
         return curl_error($crl);
     }
