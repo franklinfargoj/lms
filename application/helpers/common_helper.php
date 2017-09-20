@@ -442,7 +442,7 @@ function sendPushNotification($emp_id,$message,$title,$lead_id)
     $CI =& get_instance();
     $CI->load->model('Lead');
     $select = array('device_token','device_type');
-    $where = array('employee_id'=>$emp_id,'device_token !'=> '');
+    $where = array('employee1_id'=>$emp_id,'device_token !'=> '');
     $order_by = 'id desc';
     $limit = '1';
     $table = Tbl_LoginLog;
