@@ -375,6 +375,9 @@ class Api extends REST_Controller
             $lead_assign['created_by'] = $params['created_by'];
             $lead_assign['created_by_name'] = $params['created_by_name'];
             $this->Lead->insert_assign($lead_assign);
+            $title = 'New Lead Assigned';
+            $push_message = "New Lead Assigned to you";
+            sendPushNotification($emp_id,$push_message,$title);
         }
 
         //send sms
