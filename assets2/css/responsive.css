@@ -48,7 +48,7 @@
     	width: 68%;
     }
     .header{
-    	padding: 25px 0;
+    	padding: 25px 0 0 0;
     }
     .main-content .lead-section{
     	padding: 0 20px;
@@ -57,13 +57,21 @@
     .lead-count{
         width: 155px;
     }
+    .top-navigation ul li a{
+        padding: 27px 4px;
+        font-size: 14px;
+    }
 
-    .top-navigation ul li.active a {
-    padding: 27px 33px;
+    .top-navigation ul li.active a,.top-navigation ul li:hover a {
+    padding: 27px 4px;
+    }
+    .top-navigation ul li .cal-drop1 li >a{
+        right: 111px;
+        position: relative;
     }
 
     .header .top-navigation{
-        margin: 15px 0;
+        margin: 15px 0 0 0;
         width: 100%;
     }
 

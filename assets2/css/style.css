@@ -692,21 +692,21 @@ strong{
 img#rs {
     margin: 8px 0 0px 10px;
 }
-.abbas {
+.form-style {
     text-decoration: none;
     border: 3px solid #01559d;
     padding: 3px 12px;
     color: #01559d;
     margin-right: 0;
 }
-.abbas:hover{
+.form-style:hover{
 	background: #01559d;
 	color: #fff;
 }
 
 .top-m{margin-top: 40px;}
 .l-top{margin-bottom: 12px!important;}
-.abbas1 {
+ .form-style1 {
     margin: 0 13px;
     font-size: 18px;
 }
@@ -739,7 +739,7 @@ img#rs {
     right: 180px;
     padding-bottom: 10px;
 }
-#btnravish{
+#btn-r{
 	margin-top: -18px;
 }
 .form label.error {
@@ -819,14 +819,28 @@ a.btn-Download{
 	display: none;
 	z-index: 1;
 	}
-.cal-drop li, .cal-drop1 li{
+	.cal-drop2,.cal-drop3,.cal-drop4{
+	position: absolute;
+	right:-190px;
+	top: 45px;
+	width: 130px;
+	display: none;
+	z-index: 1;
+	}
+	.cal-drop3{
+		top: 0;
+	}
+	.cal-drop4{
+		top:90px;
+	}
+.cal-drop li, .cal-drop1 li,.cal-drop2 li,.cal-drop3 li,.cal-drop4 li{
 	width: 130px;
     display: inline-block;
     margin-right: 0;
     margin-left: 0!important;
 }
 
-.top-navigation ul li .cal-drop li >a,.top-navigation ul li .cal-drop1 li >a{
+.top-navigation ul li .cal-drop li >a,.top-navigation ul li .cal-drop1 li >a,.top-navigation ul li .cal-drop2 li >a,.top-navigation ul li .cal-drop3 li >a,.top-navigation ul li .cal-drop4 li >a{
 	width:103px;
 	padding: 15px 20px;
 	border-bottom: 1px solid #fff;
@@ -844,11 +858,11 @@ input#ticket_range ,input#amount,input#years,input#interest,input#password,input
 input#captext{
 	margin-top: 15px;
 }
-.ravish-form{
+.r-form{
 	width: 99%!important;
 	padding: 0 10px;
 }
-.ravish-field{
+.r-field{
 	padding: 6px 0!important;
 	width: 99.4%!important;
 }
@@ -867,6 +881,15 @@ select#tenurePeriod {
     width: 80px;
     height: 30px;
     padding: 5px;
+}
+#tenure-error {
+    position: absolute;
+    display: inline;
+    margin-left: 85px;
+    width: auto;
+}
+.faq-a{
+	margin-top: 50px;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{
@@ -1000,6 +1023,7 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
     width: 215px;
     line-height: 30px;
     margin-bottom: 5px;
+    border:1px solid;
 }
 .upload-form .form-control span {
     color: #e22528;
@@ -1041,7 +1065,8 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 }
 .valid-msg{color: #737373;
     font-family: "Montserrat-Regular";
-    font-size: 13px;}
+    font-size: 13px;    clear: both;
+    display: block;}
 .log-in a{color: #ffffff;}
 .unassigned-content .inner-content{width: 99.4%;}
 .unassigned-content .bg-top, .unassigned-content .bg-bottom{

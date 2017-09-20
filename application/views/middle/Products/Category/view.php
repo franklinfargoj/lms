@@ -26,8 +26,8 @@
                 <thead>
                     <tr class="top-header">
                         <th></th>
-                        <th><input type="text" name="customername" placeholder="Search Title"></th>
-                        <th>
+                        <th style="text-align:left"><input type="text" name="customername" placeholder="Search Title"></th>
+                        <th style="text-align:left">
                             <select name="status">
                                 <option value="">Select status</option>
                                 <option value="active">active</option>
@@ -38,9 +38,9 @@
                     </tr>
                     <tr>
                         <th align="center">Sr. No.</th>
-                        <th>Title</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th style="text-align:left">Title</th>
+                        <th style="text-align:left">Status</th>
+                        <th style="text-align:left">Action</th>
                     </tr>
                 </thead>
                     <tbody>
@@ -52,17 +52,17 @@
                             <td align="center">
                                  <?php echo ++$i;?>
                             </td>
-                            <td>
+                            <td align="left">
                                  <?php echo ucwords($value['title']);?>
                             </td>
-                            <td>
+                            <td align="left">
                                 <?php echo ucwords($value['status']);?>
                                 <!-- <label class="switch switch-flat">
                                     <input class="switch-input" id="<?php echo $value['id'];?>" type="checkbox" />
                                     <span class="switch-label" data-on="Active" data-off="Inactive"></span> <span class="switch-handle"></span>
                                 </label> -->
                             </td>
-                            <td>
+                            <td align="left">
                                 <a class="" href="<?php echo site_url('product_category/edit/'. encode_id($value['id']));?>">
                                     Edit
                                 </a>
