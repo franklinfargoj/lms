@@ -437,31 +437,43 @@ if(!function_exists('send_sms')){
     }
 }
 
-function sendPushNotification($device_id,$message,$title)
+function sendPushNotification($device_id,$message,$title,$lead_id)
 {
     $header = array();
     $header[] = 'Content-type: application/json';
     $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
 
-    $payload = [
-        'to' => $device_id,
-        'notification' => [
-            'title' => $title,
-            'body' => $message
-        ]
-    ];
+//    $payload = [
+//        'to' => $device_id,
+//        'notification' => [
+//            'notification_type' => "action",
+//            'notificationId' => 8,
+//            'title' => $title,
+//            'body' => $message
+//        ]
+//    ];
+
+    $data = array(
+        'body'=>$message,
+        'title' => $title,
+        "notification_type" => "message",
+        'notificationId' => $lead_id,
+        "message"=>$message
+    );
+
+    $fields = json_encode(array('to' => $device_id, 'data' => array('notificationData'=>$data)));
 
     $crl = curl_init();
     curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
     curl_setopt($crl, CURLOPT_POST,true);
     curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-    curl_setopt($crl, CURLOPT_POSTFIELDS, json_encode( $payload ) );
+    curl_setopt($crl, CURLOPT_POSTFIELDS, $fields );
 
     curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
 
     $rest = curl_exec($crl);
-//    echo json_encode( $payload );
-//    echo $rest;die;
+   echo $fields;
+    echo $rest;die;
     if ($rest === false) {
         return curl_error($crl);
     }
