@@ -137,25 +137,25 @@ class Leads extends CI_Controller
                     $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
                     send_sms($this->input->post('contact_no'),$sms);
 
-                    $select = array('device_token','device_type');
-                    $emp_id = $this->session->userdata('admin_id');
-                    $where = array('employee_id'=>$emp_id,'device_token !='=>NULL,'device_type !='=>NULL);
-                    $order_by = 'id desc';
-                    $limit = '1';
-                    $table = Tbl_LoginLog;
-                    $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
-                    if(!empty($device_values)){
-                        $device_id = $device_values[0]['device_token'];
-                        $device_type = $device_values[0]['device_type'];
-                        if((!empty($device_type) || $device_type != NULL) &&
-                            ($device_id != NULL || !empty($device_id))){
-
-                            $title = 'Lead added successfully';
-                            $push_message = 'Lead added successfully for '.ucwords($product_name);
-                            //Push notification
-                            sendPushNotification($device_id,$push_message,$title);
-                        }
-                    }
+//                    $select = array('device_token','device_type');
+//                    $emp_id = $this->session->userdata('admin_id');
+//                    $where = array('employee_id'=>$emp_id,'device_token !='=>NULL,'device_type !='=>NULL);
+//                    $order_by = 'id desc';
+//                    $limit = '1';
+//                    $table = Tbl_LoginLog;
+//                    $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
+//                    if(!empty($device_values)){
+//                        $device_id = $device_values[0]['device_token'];
+//                        $device_type = $device_values[0]['device_type'];
+//                        if((!empty($device_type) || $device_type != NULL) &&
+//                            ($device_id != NULL || !empty($device_id))){
+//
+//                            $title = 'Lead added successfully';
+//                            $push_message = 'Lead added successfully for '.ucwords($product_name);
+//                            //Push notification
+//                            sendPushNotification($device_id,$push_message,$title);
+//                        }
+//                    }
                     //Save notification
                     $this->insert_notification($lead_data);
                 }
@@ -220,20 +220,7 @@ class Leads extends CI_Controller
             $productData = $this->master->view_product($lead_data['product_id']);
 
             $title = 'New lead added';
-            $description = '<div class="lead-form-left">
-                                <div class="form-control">
-                                    <label>Customer Name:  '.ucwords($lead_data['customer_name']).'</label>
-                                </div>
-                                <div class="form-control">
-                                    <label>Phone Number :  '.ucwords($lead_data['contact_no']).'</label> 
-                                </div>
-                                <div class="form-control">
-                                    <label>Category Name:  '.ucwords($productData[0]['category']).'</label>
-                                </div>
-                                <div class="form-control">
-                                    <label>Product Name:  '.ucwords($productData[0]['title']).'</label>
-                                </div>
-                            </div>';   
+            $description = 'Lead For '.ucwords($lead_data['customer_name']).' submitted sucessfully';
             $priority = 'Normal';
             $notification_to = $lead_data['created_by'];    
             return notification_log($title,$description,$priority,$notification_to);
@@ -525,7 +512,6 @@ class Leads extends CI_Controller
         if(($lead_source != 'all') && ($lead_source != null)){
             $arrData['lead_source'] = $lead_source;
         }
-
         /*Breadcumb Creation*/
         if($type == 'assigned'){
             if(($status != null) && ($lead_source != null)){
@@ -550,7 +536,7 @@ class Leads extends CI_Controller
         
         //Get session data
         $login_user = get_session();
-        $arrData = $this->view($login_user,$arrData,$param,'');
+        $arrData = $this->view($login_user,$arrData,$param);
         return load_view('Leads/view',$arrData);
     }
 
@@ -736,6 +722,11 @@ class Leads extends CI_Controller
                                 } else {
                                     $lead_status_data['status'] = $leads_data['status'];
                                 }
+                                $title = 'Lead assigned';
+                                $description = 'Lead assigned';
+                                $priority = 'Normal';
+                                $notification_to = $lead_status_data['employee_id'];
+                                notification_log($title,$description,$priority,$notification_to);
                             }
                             /*****************************************************************/
 
@@ -845,7 +836,7 @@ class Leads extends CI_Controller
 
     /*Private Functions*/
 
-    private function view($login_user,$arrData,$param = null,$url=''){
+    private function view($login_user,$arrData,$param = null){
         $type = $arrData['type'];
         $till = $arrData['till'];
         //Parameters buiding for sending to list function.

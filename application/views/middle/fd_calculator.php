@@ -25,8 +25,9 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                     <?php
                     echo form_open('', $form_attributes);
                     ?>
+                    <p id="note"><span style="color:red;">*</span> These fields are required</p>
                     <div class="form-control">
-                        <label>Senior Citizen:</label>
+                        <label>Senior Citizen:<span style="color:red;">*</span> </label>
                         <div class="radio-control">
                             <input type="radio" id="senior" name="citizen"
                                    value="1" <?php echo set_radio('citizen', '1', TRUE); ?>/>
@@ -39,15 +40,15 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                         </div>
                     </div>
                     <div class="form-control">
-                        <label>Principal (Rs.):</label>
+                        <label>Principal (Rs.):<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_amount);?>
                     </div>
                     <div class="form-control">
-                        <label>Rate of Interest:</label>
+                        <label>Rate of Interest:<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_interest);?>
                     </div>
                     <div class="form-control">
-                        <label>Period:</label>
+                        <label>Period:<span style="color:red;">*</span> </label>
                             <?php
                                 $data_period[''] = 'Select';
                                 $data_period['1'] = 'year(s)';
@@ -58,7 +59,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                             <?php echo form_dropdown('tenurePeriod',$data_period,'','id=tenurePeriod')?>
                     </div>
                     <div class="form-control">
-                        <label>Frequency:</label>
+                        <label>Frequency:<span style="color:red;">*</span> </label>
                         <?php
                         $data_fd[''] = 'Select Frequency';
                         $data_fd['0'] = 'Simple Interest';
@@ -82,7 +83,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                     </div>
                     <?php echo form_close(); ?>
                     <div class="form-control">
-                        <label>Maturity Value is</label>
+                        <label>Maturity Value is:</label>
                         <?php echo form_input($data_maturity);?>
                     </div>
                 </div>

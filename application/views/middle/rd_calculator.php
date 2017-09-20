@@ -26,8 +26,9 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                     <?php
                     echo form_open('', $form_attributes);
                     ?>
+                    <p id="note"><span style="color:red;">*</span> These fields are required</p>
                     <div class="form-control">
-                        <label>Senior Citizen:</label>
+                        <label>Senior Citizen: <span style="color:red;">*</span> </label>
                         <div class="radio-control">
                             <input type="radio" id="senior" name="citizen"
                                    value="1" <?php echo set_radio('citizen', '1', TRUE); ?>/>
@@ -40,11 +41,11 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                         </div>
                     </div>
                     <div class="form-control ravish-field">
-                        <label>My Initial Amount (Rs):</label>
+                        <label>My Initial Amount (Rs):<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_amount);?>
                     </div>
                     <div class="form-control">
-                        <label>Date Of Opening:</label>
+                        <label>Date Of Opening:<span style="color:red;">*</span> </label>
                         <?php
                         $data = array(
                             'type'  => 'text',
@@ -57,11 +58,11 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                         echo form_input($data);?>
                     </div>
                     <div class="form-control">
-                        <label>For A Term (In Months)</label>
+                        <label>For A Term (In Months)<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_term);?>
                     </div>
                     <div class="form-control">
-                        <label>Due Date of RD:</label>
+                        <label>Due Date of RD:<span style="color:red;">*</span> </label>
                         <?php
                         $data = array(
                             'type'  => 'text',
@@ -85,7 +86,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                     </div>
                     <?php echo form_close(); ?>
                     <div class="form-control">
-                        <label>Maturity Value is</label>
+                        <label>Maturity Value is:</label>
                         <?php echo form_input($data_maturity);?>
                     </div>
                 </div>

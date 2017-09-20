@@ -1255,6 +1255,11 @@ class Api extends REST_Controller
                                 $lead_status_data['status'] = $leads_data['status'];
                             }
                             $result4['status'] = 'reroute';
+                            $title = 'Lead assigned';
+                            $description = 'Lead assigned';
+                            $priority = 'Normal';
+                            $notification_to = $params['reroute_to'];
+                            notification_log($title,$description,$priority,$notification_to);
                         } else {
                             $res = array('result' => False,
                                 'data' => array('Reroute to parameter missing.'));
@@ -1553,7 +1558,15 @@ class Api extends REST_Controller
                 $assign_data['lead_id'] = $value;
                 $insertData[] = $assign_data;
             }
-            $this->db->insert_batch(Tbl_LeadAssign, $insertData);
+            $insertData = $this->db->insert_batch(Tbl_LeadAssign, $insertData);
+            if($insertData){
+                //Add Notification
+                $title="New Lead Assigned";
+                $description="New Lead Assigned to you by Branch Manager";
+                $notification_to = $params['employee_id'];
+                $priority="Normal";
+                notification_log($title,$description,$priority,$notification_to);
+            }
             $res = array('result' => True,
                 'data' => 'Leads assigned successfully');
             returnJson($res);
@@ -2068,7 +2081,7 @@ class Api extends REST_Controller
                     $table = Tbl_LeadAssign;
 
                     //Year till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
                     $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
                 }
 
@@ -2408,20 +2421,7 @@ class Api extends REST_Controller
             $productData = $this->master->view_product($lead_data['product_id']);
 
             $title = 'New lead added';
-            $description = '<div class="lead-form-left">
-                                <div class="form-control">
-                                    <label>Customer Name:  '.ucwords($lead_data['customer_name']).'</label>
-                                </div>
-                                <div class="form-control">
-                                    <label>Phone Number :  '.ucwords($lead_data['contact_no']).'</label> 
-                                </div>
-                                <div class="form-control">
-                                    <label>Category Name:  '.ucwords($productData[0]['category']).'</label>
-                                </div>
-                                <div class="form-control">
-                                    <label>Product Name:  '.ucwords($productData[0]['title']).'</label>
-                                </div>
-                            </div>';
+            $description = 'Lead For '.ucwords($lead_data['customer_name']).' submitted sucessfully';
             $priority = 'Normal';
             $notification_to = $lead_data['created_by'];
             return notification_log($title,$description,$priority,$notification_to);
