@@ -1555,6 +1555,9 @@ class Api extends REST_Controller
                 $notification_to = $params['employee_id'];
                 $priority="Normal";
                 notification_log($title,$description,$priority,$notification_to);
+                //push notification
+                $emp_id = $params['employee_id'];
+                sendPushNotification($emp_id,$description,$title,$params['lead_id']);
             }
             $res = array('result' => True,
                 'data' => 'Leads assigned successfully');
