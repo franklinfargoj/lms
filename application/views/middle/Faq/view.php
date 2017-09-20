@@ -29,8 +29,8 @@
                 <thead>
                     <tr class="top-header">
                         <th></th>
-                        <th><input type="text" name="customername" placeholder="Search Question"></th>
-                        <th>
+                        <th style="text-align:left"><input type="text" name="customername" placeholder="Search Question"></th>
+                        <th style="text-align:left">
                             <select name="status">
                                 <option value="">Select status</option>
                                 <option value="Active">Active</option>
@@ -42,10 +42,10 @@
                     </tr>
                     <tr>
                         <th align="center">Sr. No.</th>
-                        <th>Question</th>
-                        <th>Status</th>
-                        <th>Description</th>
-                        <th>Action</th>
+                        <th style="text-align:left">Question</th>
+                        <th style="text-align:left">Status</th>
+                        <th style="text-align:left">Description</th>
+                        <th style="text-align:left">Action</th>
                     </tr>
                 </thead>
                     <tbody>

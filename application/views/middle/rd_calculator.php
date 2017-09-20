@@ -23,7 +23,7 @@ $data_interest = array('name'=>'interest','id'=>'interest');
     <div class="inner-content">
         <div class="container">
             <div class="lead-form">
-                <div class="lead-form-left ravish-form">
+                <div class="lead-form-left r-form">
                     <?php
                     echo form_open('', $form_attributes);
                     ?>
@@ -41,7 +41,7 @@ $data_interest = array('name'=>'interest','id'=>'interest');
                             <label>No</label>
                         </div>
                     </div>
-                    <div class="form-control ravish-field">
+                    <div class="form-control r-field">
                         <label>My Initial Amount (Rs):<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_amount);?>
                     </div>

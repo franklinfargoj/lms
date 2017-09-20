@@ -154,11 +154,14 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                             <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
                         </div>
                         
-                        <div class="step">
-                            <span class="float-left"><5000</span>
-                            <span class="float-right">50 Lakhs & above</span>
+                        <div class="step" style="position: relative">
+                            <span class="float-left" style="left: 0%;">5000</span>
+                            <span class="float-left" style="left: 25%; position: absolute">12.5L</span></span>
+                            <span class="float-left" style="left: 50%; position: absolute">25L</span></span>
+                            <span class="float-left" style="left: 75%; position: absolute">37.5L</span></span>
+                            <span class="float-left" style="left: 100%; position: absolute">50L</span>
                         </div>
-                       
+
                     </div>
 
                 </div>
@@ -252,6 +255,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 orientation: "horizontal",
                 max: max,
                 min: min,
+                scale:[5000,100000,500000],
+                showLabels:true,
+                snap:true,
                 animate: true,
                 values: [min],
                 slide: function (event, ui) {

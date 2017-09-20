@@ -21,7 +21,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
     <div class="inner-content">
         <div class="container">
             <div class="lead-form">
-                <div class="lead-form-left ravish-form">
+                <div class="lead-form-left r-form">
                     <?php
                     echo form_open('', $form_attributes);
                     ?>

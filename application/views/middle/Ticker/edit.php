@@ -1,15 +1,16 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">Edit Ticker</h3>
-        <div class="float-right">
-            <span class="lead-num"><a href="<?php echo site_url('ticker');?>"><span><</span>Back</a></span>
-        </div>
+        
     </div>
 </div>
 <div class="page-content">
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
+            <div class="float-right">
+            <span class="lead-num"><a href="<?php echo site_url('ticker');?>"><span><</span>Back</a></span>
+        </div>
                 <div class="product-category">
                     <!-- <form> -->
                     <?php
@@ -27,7 +28,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Title', 'title', $attributes);
+                                echo form_label('Title:<span style="color:red;">*</span>', 'title', $attributes);
 
                                 $data = array(
                                     'type'  => 'text',
@@ -49,7 +50,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Description', 'description_text', $attributes);
+                                echo form_label('Description:<span style="color:red;">*</span>', 'description_text', $attributes);
                             ?>
                             <textarea name = "description_text" rows="7" cols="80" style="width: 810px; height: 200px">
                                 <?php echo $tickerDetail[0]['description_text'];?>
@@ -58,7 +59,7 @@
                             <?php echo form_error('description_text', '<span class="help-block">', '</span>');?>
                         </div>
                         <div class="form-control">
-                            <label>Status</label>
+                            <label>Status:<span style="color:red;">*</span></label>
                             <div class="radio-control">
                                 <input type="radio" id= "active" name="status" value="active" <?php 
                                     echo set_value('status', $tickerDetail[0]['status']) == 'active' ? "checked" : ""; 

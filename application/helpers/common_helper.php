@@ -437,40 +437,67 @@ if(!function_exists('send_sms')){
     }
 }
 
-function sendPushNotification($device_id,$message,$title=NULL)
+function sendPushNotification($device_id,$message,$title)
 {
-    $to = $device_id;
-    $notification_title = ($title==NULL) ? 'Notification' : $title;
-    $data = array(
-        'body'=>$message,
-        'title' => $notification_title,
-        "notificationId" => 8,
-        "notification_type"=>"action"
-    );
-
-    $fields = json_encode(array('data' => array('notificationData'=>$data),'to' => $to));
     $header = array();
     $header[] = 'Content-type: application/json';
-    $header[] = 'Authorization: key=' . FCMKEY;
-//    echo $fields;
-//    echo "<br>";
-//    echo "<pre>" ;print_r($header);
-//    die;
+    $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
+
+    $payload = [
+        'to' => 'fDNebtSRNB4:APA91bFxBzve9cfwCQ3dUqVbDHt-yNsw_ZbFB6dnrP-pYhAXEH7zdnUQLQojS8DV85MT347Dm76dLkyIiHIFweKffs9qXY4iYRW4ZCyRBYzNzkKfq2UbnWmE5FTJjY6PcylwxvNhkGcC',
+        'notification' => [
+            'title' => $title,
+            'body' => $message
+        ]
+    ];
+
     $crl = curl_init();
     curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
     curl_setopt($crl, CURLOPT_POST,true);
     curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-    curl_setopt($crl, CURLOPT_POSTFIELDS, $fields);
+    curl_setopt($crl, CURLOPT_POSTFIELDS, json_encode( $payload ) );
 
     curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
 
-    $result = curl_exec($crl);
-echo $result;die;
-    if ($result === FALSE) {
-       // die('FCM Send Error: ' . curl_error($ch));
+    $rest = curl_exec($crl);
+    //echo $rest;die;
+    if ($rest === false) {
+        return curl_error($crl);
     }
     curl_close($crl);
-    return $result;
+    return $rest;
+//    $to = $device_id;
+//    $notification_title = ($title==NULL) ? 'Notification' : $title;
+//    $data = array(
+//        'body'=>$message,
+//        'title' => $notification_title,
+//        "notificationId" => 8,
+//        "notification_type"=>"action"
+//    );
+//
+//    $fields = json_encode(array('data' => array('notificationData'=>$data),'to' => $to));
+//    $header = array();
+//    $header[] = 'Content-type: application/json';
+//    $header[] = 'Authorization: key=' . FCMKEY;
+////    echo $fields;
+////    echo "<br>";
+////    echo "<pre>" ;print_r($header);
+////    die;
+//    $crl = curl_init();
+//    curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
+//    curl_setopt($crl, CURLOPT_POST,true);
+//    curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+//    curl_setopt($crl, CURLOPT_POSTFIELDS, $fields);
+//
+//    curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
+//
+//    $result = curl_exec($crl);
+//echo $result;die;
+//    if ($result === FALSE) {
+//       // die('FCM Send Error: ' . curl_error($ch));
+//    }
+//    curl_close($ch);
+//    return $result;
 }
 
  function notification_log($title,$description,$priority,$notification_to){
