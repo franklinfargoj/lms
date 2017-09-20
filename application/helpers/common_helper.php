@@ -444,7 +444,7 @@ function sendPushNotification($device_id,$message,$title)
     $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
 
     $payload = [
-        'to' => 'fDNebtSRNB4:APA91bFxBzve9cfwCQ3dUqVbDHt-yNsw_ZbFB6dnrP-pYhAXEH7zdnUQLQojS8DV85MT347Dm76dLkyIiHIFweKffs9qXY4iYRW4ZCyRBYzNzkKfq2UbnWmE5FTJjY6PcylwxvNhkGcC',
+        'to' => $device_id,
         'notification' => [
             'title' => $title,
             'body' => $message
@@ -460,6 +460,7 @@ function sendPushNotification($device_id,$message,$title)
     curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
 
     $rest = curl_exec($crl);
+    echo $payload;
     echo $rest;die;
     if ($rest === false) {
         return curl_error($crl);
