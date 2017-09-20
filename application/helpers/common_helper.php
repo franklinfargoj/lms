@@ -472,8 +472,8 @@ function sendPushNotification($device_id,$message,$title,$lead_id)
     curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
 
     $rest = curl_exec($crl);
-   echo $fields;
-    echo $rest;die;
+//   echo $fields;
+//    echo $rest;die;
     if ($rest === false) {
         return curl_error($crl);
     }
