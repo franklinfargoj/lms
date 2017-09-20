@@ -207,7 +207,7 @@ $branch_extra = 'id="branch_id"';
 
                         <div class="lead-form-right">
                         <?php if(isset($backUrl)){?>
-                            <a href="<?php echo site_url($backUrl);?>" class="reset float-right form-style"> < Back</a>
+                            <a href="<?php echo site_url($backUrl);?>" class="reset float-right abbas"> < Back</a>
                         <?php }?>
                             <div class="form-control ">
                                 <label>Customer Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['customer_name']);?></span>
@@ -287,11 +287,11 @@ $branch_extra = 'id="branch_id"';
         var category_title = "<?php echo $leads[0]['category_title']?>";  //Current Category
         
         if(lead_status == 'FU'){
-            $('.followUp').show();              //Display follow up fields 
+            $('.followUp').show();              //Display follow up fields
         }
 
         $('#lead_status').change(function(){
-            var option = $(this).val();         
+            var option = $(this).val();
             action(option);
         });
 
@@ -299,7 +299,7 @@ $branch_extra = 'id="branch_id"';
             $(this).datepicker({dateFormat: 'dd-mm-yy',minDate: 0});
 
         });
-        
+
         $('#product_category_id').change(function () {
             var csrf = $("input[name=csrf_dena_bank]").val();
             var category_id = $(this).val();
@@ -334,6 +334,7 @@ $branch_extra = 'id="branch_id"';
             if(option == 'FU'){
                $('.followUp').show();
                $('.accountOpen').hide();
+               $('.datepicker_recurring_start').focus();
             }else if(option == 'AO'){
                 if(category_title != 'fee income'){
                     $('.accountOpen').show();
