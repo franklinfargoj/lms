@@ -30,17 +30,14 @@ class Api extends REST_Controller
         $this->load->model('Master_model');
         $this->load->model('Faq_model', 'faq');
         $this->load->model('Notification_model', 'notification');
-        if($this->input->post()){
-            $params = $this->input->post();
-        }else{
-            $params = $this->input->get();
-        }
-        if(!empty($params) && !isset($params['password'])){
-            if(isset($params['authorisation_key']) && $params['authorisation_key'] !=NULL &&
-                isset($params['hrms_id']) && $params['hrms_id'] !=NULL){
+        $params = $this->input->post();
+        $headers = getallheaders();
+        if(!empty($headers) && !isset($params['password'])){
+            if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
+                isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
                 $response = array('result'=>False,
                     'data'=>array('Wrong authorisation key.'));
-                $check_response = check_authorisation($params['authorisation_key'],$params['hrms_id']);
+                $check_response = check_authorisation($headers['authorisation_key'],$headers['hrms_id']);
                 if(!$check_response)
                     returnJson($response);
             }else{

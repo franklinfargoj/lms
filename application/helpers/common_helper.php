@@ -1040,7 +1040,7 @@ if (!function_exists('check_authorisation')){
         $order_by = 'date_time desc';
         $where = array('employee_id'=>$hrms_id);
         $list = $CI->Lead->lists($table,$select,$where,$join=array(),$group_by=array(),$order_by,$limit=1);
-        if($list[0]['authorisation_key'] == $key){
+        if(!empty($list) && $list[0]['authorisation_key'] == $key){
             return TRUE;
         }return false;
     }
