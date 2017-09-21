@@ -1,15 +1,16 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">Edit FAQ</h3>
-        <div class="float-right">
-            <span class="lead-num"><a href="<?php echo site_url('faq');?>"><span><</span>Back</a></span>
-        </div>
+        
     </div>
 </div>
 <div class="page-content">
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
+            <div class="float-right">
+            <span class="lead-num"><a href="<?php echo site_url('faq');?>"><span><</span>Back</a></span>
+        </div>
                 <div class="product-category">
                     <!-- <form> -->
                     <?php
@@ -27,7 +28,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Question', 'question', $attributes);
+                                echo form_label('Question:<span style="color:red;">*</span>', 'question', $attributes);
 
                                 $data = array(
                                     'type'  => 'text',
@@ -49,7 +50,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Answer', 'answer', $attributes);
+                                echo form_label('Answer:<span style="color:red;">*</span>', 'answer', $attributes);
                             ?>
                         
                             <textarea name="answer" rows="7" cols="80" style="width: 810px; height: 200px">
@@ -58,7 +59,7 @@
                             <?php echo form_error('answer', '<span class="help-block">', '</span>');?>
                         </div>
                         <div class="form-control">
-                            <label>Status</label>
+                            <label>Status:<span style="color:red;">*</span></label>
                             <div class="radio-control">
                                 <input type="radio" id= "active" name="status" value="active" <?php 
                                     echo set_value('status', $faqDetail[0]['status']) == 'active' ? "checked" : ""; 

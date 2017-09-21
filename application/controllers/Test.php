@@ -72,7 +72,7 @@ class Test extends CI_Controller
         $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
 
         $payload = [
-            'to' => 'dbEu5-lTFtQ:APA91bEfBDObFHTcwSrFcwqYYQZkUY2_ZBY4iYsmfp9QnMtNbO5xAndriCz5zB3P1fAqeYAc7-4a09aHhC8n1x569lSYDDcswHv_2vzvkVDaNDFZnISqzttIRyWnTdZbWmDg82FQnfqp',
+            'to' => 'fDNebtSRNB4:APA91bFxBzve9cfwCQ3dUqVbDHt-yNsw_ZbFB6dnrP-pYhAXEH7zdnUQLQojS8DV85MT347Dm76dLkyIiHIFweKffs9qXY4iYRW4ZCyRBYzNzkKfq2UbnWmE5FTJjY6PcylwxvNhkGcC',
             'notification' => [
                 'title' => "Portugal VS Germany",
                 'body' => "1 to 2 3444"

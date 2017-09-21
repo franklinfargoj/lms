@@ -15,10 +15,10 @@
         <div class="container">
             <div class="performance-form-control m-b">
                 <!-- <label for="">Performance</label> -->
-                <div class="performance-radio-control abbas1">
+                <div class="performance-radio-control form-style1">
                     <input type="radio" name="month_year" value="active" checked="" id="month"><label>This Month</label>
                 </div>
-                <div class="performance-radio-control abbas1">
+                <div class="performance-radio-control form-style1">
                     <input type="radio" name="month_year" value="inactive" id="year"><label>This Year</label>
                 </div>
             </div>

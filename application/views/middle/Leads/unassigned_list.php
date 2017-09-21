@@ -63,7 +63,7 @@
                                         echo form_hidden($data1);
                                     ?>
                                 </div>
-                                <div class="form-control form-submit clearfix" id="btnravish">
+                                <div class="form-control form-submit clearfix" id="btn-r">
                                     <a href="javascript:void(0);" class="float-right">
                                             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
                                             <span><input type="submit" class="custom_button" value="Submit" /></span>

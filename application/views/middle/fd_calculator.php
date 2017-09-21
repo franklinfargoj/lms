@@ -21,7 +21,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
     <div class="inner-content">
         <div class="container">
             <div class="lead-form">
-                <div class="lead-form-left ravish-form">
+                <div class="lead-form-left r-form">
                     <?php
                     echo form_open('', $form_attributes);
                     ?>
@@ -94,5 +94,6 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
 </div>
 <script src = "<?php echo base_url().ASSETS;?>/js/calculator.js"></script>
 <script>
-    fd_calculator();
+    var rS = <?php echo rateOfInterestSenior;?>;
+    fd_calculator(rS);
 </script>

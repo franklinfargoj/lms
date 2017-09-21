@@ -38,7 +38,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 									<span class="tick" style="left:62.5%;">|<br><span class="marker">125L</span></span>
 									<span class="tick" style="left:75%">|<br><span class="marker">150L</span></span>
 									<span class="tick" style="left:87.5%;">|<br><span class="marker">175L</span></span>
-									<span class="tick" style="left:100%;">|<br><span class="marker">200L</span></span>
+									<span class="tick" style="left:100%;">|<br><span class="marker">>200L</span></span>
 								</div>
 								
 							</div>
@@ -97,8 +97,12 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 			</div>
             </div>
             <span class="bg-bottom"></span>
-		</div>
+        </div>
 <script src = "<?php echo base_url().ASSETS;?>/js/calculator.js"></script>
 <script>
-    emi_calculator();
+var min = "<?php echo minEmi?>";
+var max = "<?php echo maxEmi?>";
+$(document).ready(function() {
+    emi_calculator(min, max);
+});
 </script>
