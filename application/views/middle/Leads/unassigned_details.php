@@ -82,7 +82,7 @@
 			?>
 		</div>
 	</div>
-	<span class="bg-bottom"></span>
+	<span class="bg-bottom" id="bg-w"></span>
 </div>
 <script type="text/javascript">
 	$("#detail_form").validate({
