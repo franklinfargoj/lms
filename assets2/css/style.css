@@ -1441,8 +1441,8 @@ margin-top: 10px;
     font-weight: bold;
     font-size: 22px;
 }
-#arshi{
-	    background-color: #e1ecf3;
+.bg-color-f{
+	    background-color: #e1ecf3!important;
 }
 .box li{
     width: 48%;
