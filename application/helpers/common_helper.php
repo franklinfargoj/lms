@@ -437,38 +437,53 @@ if(!function_exists('send_sms')){
     }
 }
 
-function sendPushNotification($device_id,$message,$title,$lead_id)
+function sendPushNotification($emp_id,$message,$title)
 {
-    $header = array();
-    $header[] = 'Content-type: application/json';
-    $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
+    $CI =& get_instance();
+    $CI->load->model('Lead');
+    $select = array('device_token','device_type');
+    $where = array('employee_id'=>$emp_id);
+    $order_by = 'id desc';
+    $limit = '1';
+    $table = Tbl_LoginLog;
+    $device_values = $CI->Lead->lists($table,$select,$where,'','',$order_by,$limit);
+    if(!empty($device_values)){
+        $device_id = $device_values[0]['device_token'];
+        $device_type = $device_values[0]['device_type'];
+        if((!empty($device_type) || $device_type != NULL) &&
+            ($device_id != NULL || !empty($device_id))){
+            $header = array();
+            $header[] = 'Content-type: application/json';
+            $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
 
-    $data = array(
-        'body'=>$message,
-        'title' => $title,
-        "notification_type" => "message",
-        'notificationId' => $lead_id,
-        "message"=>$message
-    );
+            $data = array(
+                'body'=>$message,
+                'title' => $title,
+                "notification_type" => "message",
+                'notificationId' => time(),
+                "message"=>$message
+            );
 
-    $fields = json_encode(array('to' => $device_id, 'data' => array('notificationData'=>$data)));
+            $fields = json_encode(array('to' => $device_id, 'data' => array('notificationData'=>$data)));
 
-    $crl = curl_init();
-    curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
-    curl_setopt($crl, CURLOPT_POST,true);
-    curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-    curl_setopt($crl, CURLOPT_POSTFIELDS, $fields );
+            $crl = curl_init();
+            curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($crl, CURLOPT_POST,true);
+            curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($crl, CURLOPT_POSTFIELDS, $fields );
 
-    curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
+            curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
 
-    $rest = curl_exec($crl);
+            $rest = curl_exec($crl);
 //   echo $fields;
 //    echo $rest;die;
-    if ($rest === false) {
-        return curl_error($crl);
+            if ($rest === false) {
+                return curl_error($crl);
+            }
+            curl_close($crl);
+            return $rest;
+        }
     }
-    curl_close($crl);
-    return $rest;
 }
 
  function notification_log($title,$description,$priority,$notification_to){

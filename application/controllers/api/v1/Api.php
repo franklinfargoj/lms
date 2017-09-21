@@ -380,28 +380,11 @@ class Api extends REST_Controller
         send_sms($lead_data['contact_no'],$sms);
 
         //Push notification
-            $select = array('device_token','device_type');
             $emp_id = $params['created_by'];
-            $where = array('employee_id'=>$emp_id);
-            $order_by = 'id desc';
-            $limit = '1';
-            $table = Tbl_LoginLog;
-            $device_values = $this->Lead->lists($table,$select,$where,'','',$order_by,$limit);
-            if(!empty($device_values)){
-                $device_id = $device_values[0]['device_token'];
-                $device_type = $device_values[0]['device_type'];
-                if((!empty($device_type) || $device_type != NULL) &&
-                    ($device_id != NULL || !empty($device_id))){
+            $title = 'Lead Added Successfully';
+            $push_message = 'Lead added successfully for '.ucwords($product_name);
+            sendPushNotification($emp_id,$push_message,$title);
 
-                    $title = 'Lead added successfully.';
-                    $push_message = 'Lead added successfully for '.ucwords($product_name);
-                    //Push notification
-                    sendPushNotification($device_id,$push_message,$title,$lead_id);
-                }
-            }
-//            $title = 'Lead added successfully.';
-//            $push_message = 'Lead added successfully for '.ucwords($product_name);
-//            sendPushNotification($device_id,$device_type,$push_message,$title);
         //Save notification
         $this->insert_notification($lead_data);
         }
@@ -417,6 +400,9 @@ class Api extends REST_Controller
             $lead_assign['created_by'] = $params['created_by'];
             $lead_assign['created_by_name'] = $params['created_by_name'];
             $this->Lead->insert_assign($lead_assign);
+            $title = 'New Lead Assigned';
+            $push_message = "New Lead Assigned to you";
+            sendPushNotification($emp_id,$push_message,$title);
         }
 
         //send sms
@@ -1156,6 +1142,10 @@ class Api extends REST_Controller
                 $notification_to = $params['employee_id'];
                 $priority = "Normal";
                 notification_log($title, $description, $priority, $notification_to);
+                //push notification
+                $emp_id = $params['employee_id'];
+                sendPushNotification($emp_id,$description,$title);
+
                 $res = array('result' => True,
                     'data' => 'Lead Assigned Successfully');
                 returnJson($res);
@@ -1593,6 +1583,9 @@ class Api extends REST_Controller
                 $notification_to = $params['employee_id'];
                 $priority="Normal";
                 notification_log($title,$description,$priority,$notification_to);
+                //push notification
+                $emp_id = $params['employee_id'];
+                sendPushNotification($emp_id,$description,$title);
             }
             $res = array('result' => True,
                 'data' => 'Leads assigned successfully');
