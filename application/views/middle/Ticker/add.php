@@ -11,7 +11,7 @@
         <div class="container">
         <p id="note"><span style="color:red;">*</span> These fields are required</p>
         <div class="float-right">
-            <span class="lead-num"><a href="<?php echo site_url('ticker');?>"><span><</span>Back</a></span>
+            <span class="lead-num"><a href="<?php echo site_url('ticker');?>"><span>&#60;</span>Back</a></span>
         </div>
                 <div class="product-category">
                     <!-- <form> -->
