@@ -41,7 +41,7 @@ $lead_status = $this->config->item('lead_status');
             <label>Start Date:<span style="color:red;">*</span></label>   
             <?php 
                 if(isset($start_date)){
-                    $start_date = date('d/m/Y',strtotime($start_date));
+                    $start_date = date('d-m-Y',strtotime($start_date));
                 }else{
                     $start_date = '';
                 }
@@ -63,7 +63,7 @@ $lead_status = $this->config->item('lead_status');
             <label>End Date:<span style="color:red;">*</span></label>   
             <?php 
                 if(isset($end_date)){
-                    $end_date = date('d/m/Y',strtotime($end_date));
+                    $end_date = date('d-m-Y',strtotime($end_date));
                 }else{
                     $end_date = '';
                 }
@@ -98,31 +98,28 @@ $lead_status = $this->config->item('lead_status');
     $('.loader').show();
 </script>
 <!-- BEGIN LEADS -->
-
-<div class="lead-top result" style="display:none;">
-    <div class="container clearfix">
-        <div class="float-left">
-            <span class="total-lead">
-                Total User Count
-            </span>
-            <span class="lead-num"> : <?php echo $Total;?></span>
-        </div>
-        <div class="float-right">
-            <a href="javascript:void(0);" class="export_to_excel btn-Download">
-                Export to Excel 
-            </a>
-            &nbsp;|
-
-            <a href="javascript:void(0);" class="export_national btn-Download">
-                Download Bank Data
-            </a>
+    <div class="lead-top result" style="display:none;">
+        <div class="container clearfix">
+            <div class="float-left">
+                <span class="total-lead">
+                    Total User Count
+                </span>
+                <span class="lead-num"> : <?php echo $Total;?></span>
+            </div>
+            <div class="float-right">
+                <a href="javascript:void(0);" class="export_to_excel btn-Download">
+                    Export to Excel 
+                </a>
+                &nbsp;|
+                <a href="javascript:void(0);" class="export_national btn-Download">
+                    Download Bank Data
+                </a>
+            </div>
         </div>
     </div>
-</div>
 <?php echo form_close();?>
-<div class="result" style="display:none;">
-    <div class="page-content">
-        
+    <div class="result" style="display:none;">
+        <div class="page-content">
             <div class="container">
                 <table id="sample_3" class="display lead-table">
                     <thead>
@@ -167,7 +164,7 @@ $lead_status = $this->config->item('lead_status');
                             <?php }?>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
                     <?php 
                         $i = 0;
                         foreach ($leads as $key => $value) {
@@ -257,8 +254,8 @@ $lead_status = $this->config->item('lead_status');
                 </table>
             </div>
         </div>
-        </div>
-        <span class="bg-bottom" id="bg-w"></span>
+    </div>
+    <span class="bg-bottom" id="bg-w"></span>
     </div>
 </div>
 <?php
