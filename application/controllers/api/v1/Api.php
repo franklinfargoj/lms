@@ -2005,7 +2005,7 @@ class Api extends REST_Controller
         if (!empty($params) && isset($params['hrms_id']) && !empty($params['hrms_id'])) {
 
             // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-            $records_response = call_external_url(HRMS_API_URL_GET_RECORD . '/' . $params['hrms_id']);
+            $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$params['hrms_id']);
             $records = json_decode($records_response);
 
             $result['basic_info'] = array(
