@@ -193,7 +193,7 @@
                 <table id="sample_3" class="display lead-table">
                     <thead>
                         <tr>
-                            <th align="center">
+                            <th style="text-align:center">
                                 Sr. No.
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -220,10 +220,10 @@
                             <th>
                                 Product Name
                             </th>
-                            <th align="center">
+                            <th style="text-align:center">
                                 Total Leads Generated
                             </th>
-                            <th align="center">
+                            <th style="text-align:center">
                                 Total Leads Converted
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
@@ -239,7 +239,7 @@
                         foreach ($leads as $key => $value) {
                     ?>
                         <tr>
-                            <td align="center">
+                            <td style="text-align:center">
                                 <?php echo ++$i;?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -278,12 +278,12 @@
                                     echo !empty($product) ? ucwords($product) : 'All';
                                 ?>
                             </td>
-                            <td align="center">
+                            <td style="text-align:center">
                                 <?php 
                                     echo isset($value['generated_count']) ? $value['generated_count'] : 0;
                                 ?>
                             </td>
-                            <td align="center">
+                            <td style="text-align:center">
                                 <?php 
                                     echo isset($value['converted_count']) ? $value['converted_count'] : 0;
                                 ?>

@@ -80,16 +80,16 @@
     				</div>
     				<div class="form-control form-submit clearfix">
     					<a href="javascript:void(0);" class="float-right">
-    						<img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+    						<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
     						<span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
-    						<img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+    						<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
     					</a>
     				</div>
     			<!-- </form> -->
     			<?php echo form_close();?>
     		</div>
 
-            <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
+            <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" alt="35" style="display:none;">
             <!-- Tab contents start here -->
             <?php if(isset($searchResult)){?>
                 <?php if(!empty($searchResult)){?>

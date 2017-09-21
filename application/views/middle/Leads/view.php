@@ -105,7 +105,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                         <th style="text-align:left">
                             Product Name
                         </th>
-                        <th align="center">
+                        <th style="text-align:center">
                             Elapsed Days
                         </th>
                         <?php if(!isset($status)){?>
@@ -114,7 +114,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                         </th>
                         <?php }?>
                         <?php if($type == 'assigned'){?>
-                        <th align="center">
+                        <th style="text-align:center">
                             Followup date
                         </th>
                         <?php }?>
@@ -148,7 +148,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                             <td>
                                  <?php echo ucwords($value['title']);?>
                             </td>
-                            <td align="center">
+                            <td style="text-align:center">
                                  <?php
 //                                    $created_date = explode(' ',$value['created_on']);
 //                                    $now = date_create(date('Y-m-d')); // or your date as well
@@ -164,7 +164,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                             </td>
                             <?php }?>
                             <?php if($type == 'assigned'){?>
-                            <td align="center">
+                            <td style="text-align:center">
                                  <?php echo isset($value['remind_on']) ? date('d-m-Y',strtotime($value['remind_on'])) : '';?>
                             </td>
                             <?php }?>

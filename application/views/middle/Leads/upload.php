@@ -97,7 +97,7 @@ $data_submit = array(
                 <th></th>
             </tr>
             <tr>
-                <th align="center">Sr. No</th>
+                <th style="text-align:center">Sr. No</th>
                 <th style="text-align:left">File</th>
                 <th style="text-align:left">Date and Time</th>
                 <th style="text-align:left">Status</th>
@@ -111,7 +111,7 @@ $data_submit = array(
             foreach ($uploaded_logs as $key => $value) {
                 ?>
                 <tr>
-                    <td align="center">
+                    <td style="text-align:center">
                         <?php echo $i+1;?>
                     </td>
                     <td>
