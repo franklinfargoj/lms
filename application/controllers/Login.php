@@ -76,7 +76,7 @@ class Login extends CI_Controller {
                         // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
                         $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$auth->DBK_LMS_AUTH->username);
                         $records = json_decode($records_response);
-                        echo "<pre>";print_r($records);die;
+                       // echo "<pre>";print_r($records);die;
                         $data = array('device_token' => NULL,
                             'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
                             'branch_id' => $records->dbk_lms_emp_record1->deptid,
