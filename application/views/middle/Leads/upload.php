@@ -36,7 +36,9 @@ $data_submit = array(
     <span class="bg-top"></span>
     <div class="inner-content">
     <div class="container">
+    <p id="note"><span style="color:red;">*</span> These fields are required</p>
         <div class="upload-content">
+
             <div class="upload-form">
                 <?php
                 $url = base_url('leads/upload');
