@@ -86,10 +86,10 @@
 				<div class="form-control form-submit clearfix">
 					<!-- <input type="submit" name="submit" value="LOGIN" class="submit-btn"> -->
 					<a href="javascript:void(0);" class="active">
-						<img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+						<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
 						<!-- <span>LOGIN</span> -->
 						<span><input type="submit" name="submit" value="LOGIN" class=""></span>
-						<img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+						<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
 					</a>
 				</div>
 				<div class="form-options clearfix">
@@ -99,7 +99,7 @@
 					      	<input type="checkbox" />
 					      	<div class="control__indicator">
 					      		<div class="check">
-					      			<img src="<?php echo base_url().ASSETS;?>images/tick.png">
+					      			<img src="<?php echo base_url().ASSETS;?>images/tick.png" alt="tick">
 					      		</div>
 					      	</div>
 					    </label>
@@ -109,7 +109,7 @@
 			<!-- </form> -->
 		</div>
 		<div class="bank-logo">
-			<img src="<?php echo base_url().ASSETS;?>images/login-logo.png">
+			<img src="<?php echo base_url().ASSETS;?>images/login-logo.png" alt="login-logo">
 		</div>
 	</div>
 	
@@ -121,7 +121,7 @@
 				<?php 
 					foreach ($tickers as $key => $value) {
 				?>
-					<img src="<?php echo base_url().ASSETS;?>images/small-circle.png"><a href="<?php echo site_url('login/view_tickers/'.encode_id($value['id']));?>"><?php echo $value['title'];?></a>
+					<img src="<?php echo base_url().ASSETS;?>images/small-circle.png" alt="small circle"><a href="<?php echo site_url('login/view_tickers/'.encode_id($value['id']));?>"><?php echo $value['title'];?></a>
 				<?php 		
 					}
 				?>
