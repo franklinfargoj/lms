@@ -900,6 +900,10 @@ select#tenurePeriod {
 input#remind_on {
     padding: 6px 2px;
 }
+form#add_form,form#detail_form,form#addlead,form#emi,form#search_form,form#assign_multiple {
+    border-bottom: 0;
+    margin-bottom: 0;
+}
 /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{
 	background-color: #00559d;
