@@ -70,11 +70,11 @@ class Login extends CI_Controller {
                     $hrms_id = $this->input->post('username');
                     $password = $this->input->post('password');
                     //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
-                    $auth_response = call_external_url(HRMS_API_URL_AUTH.'/'.$hrms_id.'/'.$password);
+                    $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$hrms_id.'&password='.$password);
                     $auth = json_decode($auth_response);
                     if ($auth->DBK_LMS_AUTH->password == 'True') {
                         // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-                        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'/'.$auth->DBK_LMS_AUTH->username);
+                        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$auth->DBK_LMS_AUTH->username);
                         $records = json_decode($records_response);
                         //pe($records);
                         $data = array('device_token' => NULL,
