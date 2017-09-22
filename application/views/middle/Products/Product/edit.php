@@ -1,15 +1,18 @@
 <div class="page-title">
 	<div class="container clearfix">
 		<h3 class="text-center">Edit Product</h3>
-		<div class="float-right">
-            <span class="lead-num"><a href="<?php echo site_url('product');?>"><span><</span>Back</a></span>
-        </div>
+		
 	</div>
 </div>
 <div class="page-content">
 	<span class="bg-top"></span>
 	<div class="inner-content">
 		<div class="container">
+		<p id="note"><span style="color:red;">*</span> These fields are required</p>
+
+		<div class="float-right">
+            <span class="lead-num"><a href="<?php echo site_url('product');?>"><span><</span>Back</a></span>
+        </div>
 			<div class="product-category add-product">
 				<!-- <form> -->
 				<?php
@@ -27,7 +30,7 @@
 						        'class' => '',
 						        'style' => ''
 							);
-							echo form_label('Product category:', 'category_id', $attributes);
+							echo form_label('Product category:<span style="color:red;">*</span>', 'category_id', $attributes);
 
 							//$options = array_merge(array('' => 'Select'),$categorylist);
 							$options = $categorylist;
@@ -47,7 +50,7 @@
                             'class' => '',
                             'style' => ''
                         );
-                        echo form_label('Map With:', 'map_with', $attributes);
+                        echo form_label('Map With:<span style="color:red;">*</span>', 'map_with', $attributes);
                         $map[''] = 'Select';
                         foreach ($this->config->item('map') as $k => $map_value){
                             $map[$k]=$map_value;
@@ -69,7 +72,7 @@
 						        'class' => '',
 						        'style' => ''
 							);
-							echo form_label('Product Name:', 'title', $attributes);
+							echo form_label('Product Name:<span style="color:red;">*</span>', 'title', $attributes);
 
 							$data = array(
 						        'type'  => 'text',
@@ -85,7 +88,7 @@
 						?>
 					</div>
 					<div class="form-control">
-						<label>Default Assign</label>
+						<label>Default Assign:<span style="color:red;">*</span></label>
 						<div class="radio-control">
 							<input type="radio" id= "self" name="default_assign" value="self" <?php 
 							    echo set_value('default_assign', $productDetail[0]['default_assign']) == 'self' ? "checked" : ""; 
@@ -100,7 +103,7 @@
 						</div>
 					</div>
 					<div class="form-control">
-						<label>Status</label>
+						<label>Status:<span style="color:red;">*</span></label>
 						<div class="radio-control">
 							<input type="radio" id= "active" name="status" value="active" <?php 
 							    echo set_value('status', $productDetail[0]['status']) == 'active' ? "checked" : ""; 
@@ -120,7 +123,7 @@
 						        'class' => '',
 						        'style' => ''
 							);
-							echo form_label('Turn Around Time:', 'turn_around_time', $attributes);
+							echo form_label('Turn Around Time:<span style="color:red;">*</span>', 'turn_around_time', $attributes);
 
 							$options = array(
 								'' =>	'select',
