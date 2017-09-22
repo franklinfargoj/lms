@@ -114,4 +114,13 @@
     .dataTables_wrapper{
         padding-bottom: 18px;
     }
+    span.left-toggle {
+        opacity: 0;
+    }
+    span.right-toggle {
+    opacity: 1;
+    }
+    .cal-drop2, .cal-drop3, .cal-drop4{
+        right: 190px;
+    }
 }

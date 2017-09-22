@@ -906,6 +906,12 @@ form#add_form,form#detail_form,form#addlead,form#emi,form#search_form,form#assig
     border-bottom: 0;
     margin-bottom: 0;
 }
+span.right-toggle {
+    opacity: 0;
+}
+.top-navigation ul li a:hover span{
+	background-color:transparent!important;
+}
 /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{
 	background-color: #00559d;
