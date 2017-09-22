@@ -103,4 +103,15 @@
     .ravishbtn{
         margin: 60px auto 0;
     }
+    .float-right {
+        margin-bottom: 20px;
+    }
+    .upload-form .form-control label {
+    width: 114px;}
+    select.error {
+    margin-bottom: 0!important;
+    }
+    .dataTables_wrapper{
+        padding-bottom: 18px;
+    }
 }
