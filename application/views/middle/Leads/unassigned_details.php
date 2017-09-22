@@ -65,9 +65,9 @@
 				<?php if((in_array($this->session->userdata('admin_type'),array('BM'))) && ($lead_source == 'Walk-in')){?>
 					<div class="form-control form-submit clearfix">
 						<a href="javascript:void(0);" class="float-right">
-	                            <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+	                            <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
 	                            <span><input type="submit" class="custom_button" value="Submit" /></span>
-	                            <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+	                            <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
 	                    </a>
 						<a href="javascript:void(0);" class="reset float-right">
 						   Reset
@@ -82,7 +82,7 @@
 			?>
 		</div>
 	</div>
-	<span class="bg-bottom"></span>
+	<span class="bg-bottom" id="bg-w"></span>
 </div>
 <script type="text/javascript">
 	$("#detail_form").validate({

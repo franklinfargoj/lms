@@ -194,7 +194,7 @@ $lead_status = $this->config->item('lead_status');
                 <table id="sample_3" class="display lead-table">
                     <thead>
                         <tr>
-                            <th align="center">
+                            <th style="text-align:center">
                                 Sr. No.
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -221,14 +221,14 @@ $lead_status = $this->config->item('lead_status');
                             <th>
                                 Product Name
                             </th>
-                            <th align="center">
+                            <th style="text-align:center">
                                 Total Generated Leads
                             </th>
                             <?php 
                                 foreach ($lead_status as $key => $value) {
                                     //if(!in_array($key,array('AO','Converted','Closed'))){
                             ?>
-                            <th align="center">
+                            <th style="text-align:center">
                                 <?php
                                     echo $value; 
                                 ?>
@@ -250,7 +250,7 @@ $lead_status = $this->config->item('lead_status');
                         foreach ($leads as $key => $value) {
                     ?>
                         <tr>
-                            <td align="center">
+                            <td style="text-align:center">
                                 <?php echo ++$i;?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -289,7 +289,7 @@ $lead_status = $this->config->item('lead_status');
                                     echo !empty($product) ? ucwords($product) : 'All';
                                 ?>
                             </td>
-                            <td align="center">
+                            <td style="text-align:center">
                                 <?php 
                                     echo $value['total'];
                                 ?>
@@ -299,7 +299,7 @@ $lead_status = $this->config->item('lead_status');
                                 foreach ($lead_status as $k => $v) {
                                     //if(!in_array($k,array('AO','Converted','Closed'))){
                             ?>
-                            <td align="center">
+                            <td style="text-align:center">
                                 <?php
                                 if(in_array($k,array_keys($value['status']))){
                                         echo $value['status'][$k];

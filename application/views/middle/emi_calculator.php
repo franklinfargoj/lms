@@ -44,7 +44,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 							</div>
 							<div class="form-control range-slider">
 								<label>Loan Tenure:<span style="color:red;">*</span></label>
-                                <input id ="years"type="text" name="years">
+                                <input id ="years" type="text" name="years">
                                 <label class="value">Years</label>
 									<div id="slider2" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
                                         <div id="slider2div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
@@ -82,9 +82,9 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 
 						<div class="form-control form-submit clearfix">
 							<a href="#" class="float-right">
-									<img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+									<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
                                 <span><input type="submit" class="custom_button" name="Submit" value="Calculate"></span>
-									<img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+									<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
 							</a><br/>
 							<div class="emi-section">
                                 <label>Your EMI</label>

@@ -119,12 +119,14 @@
 				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>" id="cal-droped1">
 					<a href="#">
-						Reports &#9662;
+					Reports &#9662;
 					</a>
 					<ul class="cal-drop1">
 						<li class="<?php echo ($controller == 'usage') ? 'active' : ''?>" id="cal-droped3">
 							<a href="#">
-							Usage &#9656;
+							
+					<span class="right-toggle">&#9666;</span>Usage <span class="left-toggle"> &#9656;</span>
+
 							</a>
 							<ul class="cal-drop3">
 								<li>
@@ -142,7 +144,8 @@
 					
 						<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>" id="cal-droped2">
 						<a href="#">
-						 Performance &#9656;
+						 
+						<span class="right-toggle">&#9666;</span>Performance<span class="left-toggle"> &#9656;</span>
 						</a>
 							<ul class="cal-drop2">
 								<li>
@@ -184,7 +187,8 @@
 						</li> -->
 						<li class="<?php echo ($controller == 'leads_classification') ? 'active' : ''?>" id="cal-droped4">
 							<a href="#">
-							classification &#9656;
+							
+							<span class="right-toggle">&#9666;</span>classification<span class="left-toggle"> &#9656;</span>
 							</a>
 							<ul class="cal-drop4">
 								<li>

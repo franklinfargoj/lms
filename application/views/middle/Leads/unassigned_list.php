@@ -65,9 +65,9 @@
                                 </div>
                                 <div class="form-control form-submit clearfix" id="btn-r">
                                     <a href="javascript:void(0);" class="float-right">
-                                            <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                            <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
                                             <span><input type="submit" class="custom_button" value="Submit" /></span>
-                                            <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                                            <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
                                     </a>
                                 </div>
                             <?php
