@@ -9,6 +9,8 @@
         <span class="bg-top" id="bg-w"></span>
         <div class="inner-content">
             <div class="container">
+            <p id="note"><span style="color:red;">*</span> These fields are required</p>
+
              <div class="float-right m">
             <span class="lead-num"><a href="<?php echo base_url("product_guide/index/".encode_id($product[0]['id']));?>"><span><</span>Back</a></span>
         </div>
@@ -29,7 +31,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Title:', 'title', $attributes);
+                                echo form_label('Title:<span style="color:red;">*</span>', 'title', $attributes);
 
                                 $options = $titleList;
                                 $js = array(
@@ -54,7 +56,7 @@
                                     'class' => '',
                                     'style' => ''
                                 );
-                                echo form_label('Description:', 'description_text', $attributes);
+                                echo form_label('Description:<span style="color:red;">*</span>', 'description_text', $attributes);
                             ?>
                             <textarea id="description_text" name = "description_text" class="textarea" placeholder="Enter text ..." style="width: 810px; height: 200px">
                                 <?php echo set_value('description_text')?>
