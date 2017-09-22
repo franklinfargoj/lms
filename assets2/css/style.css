@@ -916,6 +916,15 @@ span.right-toggle {
 .float-right.m {
     margin-right: 10px;
 }
+.img-w{
+	width: 48px;
+}
+.bg-c{
+	background-color: #e1ecf3;
+	width: 100%;
+	height: auto;
+	margin-bottom: 0;
+}
 /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{
 	background-color: #00559d;
