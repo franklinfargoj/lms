@@ -33,7 +33,7 @@ class Reports extends CI_Controller
      */
     public function index($action,$view = null,$zone_id = null,$branch_id = null,$export = 'no')
     {
-        $this->make_bread->add('Reports', 'reports/view', 0);
+        $this->make_bread->add('Reports', '', 0);
         $arrData['view'] = $view;
         $arrData['zone_id'] = decode_id($zone_id);
         $arrData['branch_id'] = decode_id($branch_id);
@@ -286,7 +286,6 @@ class Reports extends CI_Controller
         }
         return $arrData;
     }
-
 
     private function leads_type_reports($arrData){
         $login_user = get_session();
@@ -1124,7 +1123,7 @@ class Reports extends CI_Controller
         $table = Tbl_Leads.' as l';
         $where  = array();
         $join = array();
-        $group_by = array('l.lead_ticket_range');
+        /*$group_by = array('l.lead_ticket_range');*/
 
         //If Start date selected
         if(!empty($arrData['start_date'])){
@@ -1235,8 +1234,6 @@ class Reports extends CI_Controller
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'lead_ticket_range DESC');
-        /*pe($this->db->last_query());
-        exit;*/
         $arrData['leads'] = array();
         $arrData['Total'] = 0;    
         foreach ($leads as $key => $value) {

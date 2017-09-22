@@ -60,6 +60,17 @@ class Login extends CI_Controller {
                     $loginData = $this->master->check_login($checkInput);
                     if($loginData){
                         $this->set_session($loginData[0]);
+                        if(!empty($this->input->post('remember_me'))) {
+                            setcookie ("member_login",$this->input->post('username'),time()+ (10 * 365 * 24 * 60 * 60));
+                            setcookie ("member_password",$this->input->post('password'),time()+ (10 * 365 * 24 * 60 * 60));
+                        } else {
+                            if(isset($_COOKIE["member_login"])) {
+                                setcookie ("member_login","");
+                            }
+                            if(isset($_COOKIE["member_password"])) {
+                                setcookie ("member_password","");
+                            }
+                        }
                         $this->session->set_flashdata('success','Login success');
                         redirect('dashboard');
                     }else{
@@ -103,6 +114,17 @@ class Login extends CI_Controller {
                             'list'=>$records->dbk_lms_emp_record1->DBK_LMS_COLL
                         );
                         $this->set_session($result);
+                        if(!empty($this->input->post('remember_me'))) {
+                            setcookie ("member_login",$this->input->post('username'),time()+ (10 * 365 * 24 * 60 * 60));
+                            setcookie ("member_password",$this->input->post('password'),time()+ (10 * 365 * 24 * 60 * 60));
+                        } else {
+                            if(isset($_COOKIE["member_login"])) {
+                                setcookie ("member_login","");
+                            }
+                            if(isset($_COOKIE["member_password"])) {
+                                setcookie ("member_password","");
+                            }
+                        }
                         $this->session->set_flashdata('success','Login success');
                         redirect('dashboard');
                     }else{
@@ -173,7 +195,7 @@ class Login extends CI_Controller {
 
 
     // callback function to check the captcha
-    function check_captcha($input) {//echo $this->session->userdata('captchaWord');die;
+    public function check_captcha($input) {//echo $this->session->userdata('captchaWord');die;
         if ($this->session->userdata('captchaWord') != $input) {
             // set the validation error
             $this->form_validation->set_message('check_captcha', 'The entered Security Code is incorrect.');
@@ -183,7 +205,7 @@ class Login extends CI_Controller {
         }
     }
 
-    function load_captcha($type = 'display')
+    public function load_captcha($type = 'display')
     {
         //Delete Previous captcha image
         $files = glob('captcha/*'); // get all file names
@@ -204,6 +226,24 @@ class Login extends CI_Controller {
             echo $capimage;
         }else{
             return $capimage;
+        }
+    }
+
+    /*
+    * Validation for alphabetical letters
+    * @param array $pwd,$dataArray
+    * @return String
+    */
+    public function alphaNumeric($str)
+    {
+        if ( !preg_match('/^[a-zA-Z0-9\s]+$/i',$str) )
+        {
+            $this->form_validation->set_message('alphaNumeric', 'Password should contains only letters and numbers');
+            return FALSE;
+        }
+        else
+        {
+            return TRUE;
         }
     }
 

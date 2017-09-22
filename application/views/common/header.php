@@ -10,7 +10,9 @@
 <div class="header">
 	<div class="container">
 		<div class="logo">
-			<img src="<?php echo base_url().ASSETS;?>images/logo.png" alt="logo">
+            <a href="<?php echo site_url('dashboard')?>">
+			    <img src="<?php echo base_url().ASSETS;?>images/logo.png" alt="logo">
+            </a>
 		</div>
 		<div class="top-navigation">
 			<ul>
