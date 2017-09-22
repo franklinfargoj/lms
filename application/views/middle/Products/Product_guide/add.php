@@ -6,13 +6,13 @@
 </div>
 <div class="page-content">
     <div class="container">
-        <span class="bg-top" id="bg-w"></span>
+        <span class="bg-top" id="bg-w1"></span>
         <div class="inner-content">
             <div class="container">
             <p id="note"><span style="color:red;">*</span> These fields are required</p>
 
              <div class="float-right m">
-            <span class="lead-num"><a href="<?php echo base_url("product_guide/index/".encode_id($product[0]['id']));?>"><span><</span>Back</a></span>
+            <span class="lead-num"><a href="<?php echo base_url("product_guide/index/".encode_id($product[0]['id']));?>"><span> &#60;</span>Back</a></span>
         </div>
                 <div class="product-category">
                     <!-- <form> -->
