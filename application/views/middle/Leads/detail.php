@@ -1,44 +1,44 @@
 <?php 
-$lead_status = $this->config->item('lead_status');
-$lead_type = $this->config->item('lead_type');
-$color = 'gray';
-if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identification'])){
-    switch ($leads[0]['lead_identification']) {
-        case 'HOT':
-            $color = 'red';
-            break;
-        case 'WARM':
-            $color = 'green';
-            break;
-        case 'COLD':
-            $color = 'blue';
-            break;
+    $lead_status = $this->config->item('lead_status');
+    $lead_type = $this->config->item('lead_type');
+    $color = 'gray';
+    if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identification'])){
+        switch ($leads[0]['lead_identification']) {
+            case 'HOT':
+                $color = 'red';
+                break;
+            case 'WARM':
+                $color = 'green';
+                break;
+            case 'COLD':
+                $color = 'blue';
+                break;
+        }
     }
-}
-$input = get_session();
-$data_state[''] = 'Select State';
-if ($states != '') {
-    foreach ($states as $key => $value) {
-        $data_state[$value['code']] = $value['name'];
+    $input = get_session();
+    $data_state[''] = 'Select State';
+    if ($states != '') {
+        foreach ($states as $key => $value) {
+            $data_state[$value['code']] = $value['name'];
+        }
     }
-}
 
-$data_branch[''] = 'Select Branch';
-if ($branches != '') {
-    foreach ($branches as $key => $value) {
-        $data_branch[$value['code']] = $value['name'];
+    $data_branch[''] = 'Select Branch';
+    if ($branches != '') {
+        foreach ($branches as $key => $value) {
+            $data_branch[$value['code']] = $value['name'];
+        }
     }
-}
 
-$data_district[''] = 'Select District';
-if ($districts != '') {
-    foreach ($districts as $key => $value) {
-        $data_district[$value['code']] = $value['name'];
+    $data_district[''] = 'Select District';
+    if ($districts != '') {
+        foreach ($districts as $key => $value) {
+            $data_district[$value['code']] = $value['name'];
+        }
     }
-}
-$state_extra = 'id="state_id"';
-$district_extra = 'id="district_id"';
-$branch_extra = 'id="branch_id"';
+    $state_extra = 'id="state_id"';
+    $district_extra = 'id="district_id"';
+    $branch_extra = 'id="branch_id"';
 ?>
 <div class="page-title">
     <div class="container clearfix">

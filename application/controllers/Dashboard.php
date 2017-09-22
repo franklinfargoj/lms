@@ -153,8 +153,8 @@ class Dashboard extends CI_Controller {
         }
         foreach ($final as $id => $value) {
 
-            $where_month_Array = array('employee_id' => $value['created_by'],'MONTH(created_on)' => date('m'),'status' => 'converted');
-            $where_year_Array = array('employee_id' => $value['created_by'],'YEAR(created_on)' => date('Y'),'status' => 'converted');
+            $where_month_Array = array('employee_id' => $value['created_by'],'MONTH(created_on)' => date('m'),'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
+            $where_year_Array = array('employee_id' => $value['created_by'],'YEAR(created_on)' => date('Y'),'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
             $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
             $converted_yearly = $this->master->get_converted_lead_bm_zm($where_year_Array);
             if (empty($converted)) {
@@ -215,10 +215,10 @@ class Dashboard extends CI_Controller {
 
             $where_month_Array = array('branch_id' => $value['created_by'],
                 'MONTH(created_on)' => date('m'),
-                'status' => 'converted');
+                'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
             $where_year_Array = array('branch_id' => $value['created_by'],
                 'YEAR(created_on)' => date('Y'),
-                'status' => 'converted');
+                'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
             $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
             $converted_yearly = $this->master->get_converted_lead_bm_zm($where_year_Array);
             if (empty($converted)) {
@@ -278,10 +278,10 @@ class Dashboard extends CI_Controller {
 
             $where_month_Array = array('zone_id' => $value['created_by'],
                 'MONTH(created_on)' => date('m'),
-                'status' => 'converted');
+                'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
             $where_year_Array = array('zone_id' => $value['created_by'],
                 'YEAR(created_on)' => date('Y'),
-                'status' => 'converted');
+                'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
             $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
             $converted_yearly = $this->master->get_converted_lead_bm_zm($where_year_Array);
             if (empty($converted)) {
