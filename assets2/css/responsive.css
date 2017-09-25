@@ -103,4 +103,43 @@
     .ravishbtn{
         margin: 60px auto 0;
     }
+    .float-right {
+        margin-bottom: 20px;
+    }
+    .upload-form .form-control label {
+    width: 114px;}
+    select.error {
+    margin-bottom: 0!important;
+    }
+    .dataTables_wrapper{
+        padding-bottom: 18px;
+    }
+    span.left-toggle {
+        opacity: 0;
+    }
+    span.right-toggle {
+    opacity: 1;
+    }
+    .cal-drop2, .cal-drop3, .cal-drop4{
+        right: 190px;
+    }
+    label#ticket_range-error {
+     float: none; 
+   
+     margin-right: 0px; 
+    vertical-align: top;
+    padding-top: 0;
+    margin-top: 0;
+    clear: both;
+    margin-top: 5px;
+    }
+    input#ticket_range{
+        width: 100px;
+    }
+    img#rs {
+    margin: -1px 0 0px 10px;
+}
+    label#ticket_range-error{
+        width: 198px;
+    }
 }

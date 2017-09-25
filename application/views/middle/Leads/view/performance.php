@@ -36,7 +36,7 @@
                     <div class="box box-m">
                         <img src="<?php echo base_url().ASSETS;?>images/self.png" alt="self">
                         <p>Walk-in</p>
-                        <ul id="arshi">
+                        <ul class="bg-color-f">
                             <li>Lead Assigned <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="walkin_assign"><?php echo isset($month_lead_assigned_walkin) ? $month_lead_assigned_walkin:'';?></span></div></li>
                             <li>Lead Converted <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="walkin_converted"><?php echo isset($month_lead_converted_walkin) ? $month_lead_converted_walkin:'';?></span></div></li>
                         </ul>
@@ -46,7 +46,7 @@
                     <div class="box">
                         <img src="<?php echo base_url().ASSETS;?>images/enquiry.png" alt="self">
                         <p>Enquiry</p>
-                        <ul id="arshi">
+                        <ul class="bg-color-f">
                             <li>Lead Assigned <br><div class="bg-red"> <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"><span id="enquiry_assign" ><?php echo isset($month_lead_assigned_enquiry) ? $month_lead_assigned_enquiry :'';?></span></div></li>
                             <li>Lead Converted <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="enquiry_converted" ><?php echo isset($month_lead_converted_enquiry) ? $month_lead_converted_enquiry:'';?></span></div></li>
                         </ul>
@@ -56,7 +56,7 @@
                     <div class="box box-m">
                         <img src="<?php echo base_url().ASSETS;?>images/tie-up.png" alt="self">
                         <p>Tie Up's</p>
-                        <ul id="arshi">
+                        <ul class="bg-color-f">
                             <li>Lead Assigned <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="tieup_assign"><?php echo isset($month_lead_assigned_tie_ups) ? $month_lead_assigned_tie_ups:'';?></span></div></li>
                             <li>Lead Converted <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="tieup_converted"><?php echo isset($month_lead_converted_tie_ups) ? $month_lead_converted_tie_ups :'';?></span></div></li>
                         </ul>
@@ -66,7 +66,7 @@
                     <div class="box">
                         <img src="<?php echo base_url().ASSETS;?>images/analytics.png" alt="self">
                         <p>Analytics</p>
-                        <ul id="arshi">
+                        <ul class="bg-color-f">
                             <li>Lead Assigned <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="analytics_assign"><?php echo isset($month_lead_assigned_analytics) ? $month_lead_assigned_analytics :'';?></span></div></li>
                             <li>Lead Converted <br><div class="bg-red"> <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"><span id="analytics_converted"><?php echo isset($month_lead_converted_analytics) ? $month_lead_converted_analytics :'';?></span></div></li>
                         </ul>

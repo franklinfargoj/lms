@@ -195,9 +195,9 @@
                                 </div>
                                 <div class="form-control form-submit clearfix accountOpen" style="display:none">
                                     <a href="javascript:void(0);" class="float-right verify_account">
-                                        <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                        <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
                                         <span>Verify</span>
-                                        <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                                        <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
                                     </a>
                                 </div>
 
@@ -207,7 +207,7 @@
 
                         <div class="lead-form-right">
                         <?php if(isset($backUrl)){?>
-                            <a href="<?php echo site_url($backUrl);?>" class="reset float-right form-style"> < Back</a>
+                            <a href="<?php echo site_url($backUrl);?>" class="reset float-right form-style"> &#60; Back</a>
                         <?php }?>
                             <div class="form-control ">
                                 <label>Customer Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['customer_name']);?></span>
@@ -264,9 +264,9 @@
                         <div class="form-control form-submit clearfix">
                             <?php if(($type == 'assigned') && ($leads[0]['status'] != 'Converted')){?>
                                 <a href="javascript:void(0);" class="float-right submit_button">
-                                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
                                     <span><input type="submit" class="custom_button" value="Submit" /></span>
-                                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
                                 </a>
                             <?php }?>
                         </div>

@@ -8,6 +8,7 @@
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
+        
             <div class="float-right">
             <span class="lead-num"><a href="<?php echo site_url('faq');?>"><span><</span>Back</a></span>
         </div>

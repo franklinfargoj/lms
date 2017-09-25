@@ -37,7 +37,7 @@
                         <th></th>
                     </tr>
                     <tr>
-                        <th align="center">Sr. No.</th>
+                        <th style="text-align:center">Sr. No.</th>
                         <th style="text-align:left">Title</th>
                         <th style="text-align:left">Status</th>
                         <th style="text-align:left">Description</th>

@@ -8,8 +8,9 @@
     <span class="bg-top"></span>
        <div class="inner-content">
         <div class="container">
+        <p id="note"><span style="color:red;">*</span> These fields are required</p>
             <div class="float-right">
-                <span class="lead-num"><a href="<?php echo site_url('faq');?>"><span><</span>Back</a></span>
+                <span class="lead-num"><a href="<?php echo site_url('faq');?>"><span>&#60;</span>Back</a></span>
             </div>
                 <div class="product-category">
                     <!-- <form> -->

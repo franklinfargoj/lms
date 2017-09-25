@@ -535,7 +535,7 @@ padding-bottom: 15px;
 	border-top: 1px solid #757575;
 	text-align: center;
 	padding: 15px;
-	font-size: 20px;
+	font-size: 15px;
 	color: #b7b7b7;
 	font-family: "Lato";
 }
@@ -859,8 +859,10 @@ input#captext{
 	margin-top: 15px;
 }
 .r-form{
-	width: 99%!important;
+	
 	padding: 0 10px;
+	margin: 0 auto;
+	display: block!important;
 }
 .r-field{
 	padding: 6px 0!important;
@@ -890,6 +892,25 @@ select#tenurePeriod {
 }
 .faq-a{
 	margin-top: 50px;
+}
+.followUp input#remind_on {
+    position: relative;
+}
+#ui-datepicker-div {
+    top: 65%!important;
+}
+input#remind_on {
+    padding: 6px 2px;
+}
+form#add_form,form#detail_form,form#addlead,form#emi,form#search_form,form#assign_multiple {
+    border-bottom: 0;
+    margin-bottom: 0;
+}
+span.right-toggle {
+    opacity: 0;
+}
+.top-navigation ul li a:hover span{
+	background-color:transparent!important;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{
@@ -1432,8 +1453,8 @@ margin-top: 10px;
     font-weight: bold;
     font-size: 22px;
 }
-#arshi{
-	    background-color: #e1ecf3;
+.bg-color-f{
+	    background-color: #e1ecf3!important;
 }
 .box li{
     width: 48%;

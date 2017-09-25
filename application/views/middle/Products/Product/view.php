@@ -43,7 +43,7 @@
                         <th></th>
                     </tr>
                     <tr>
-                        <th align="center">Sr. No.</th>
+                        <th style="text-align:center">Sr. No.</th>
                         <th>Title</th>
                         <th>Category</th>
                         <th>Status</th>
@@ -57,7 +57,7 @@
                             foreach ($productlist as $key => $value) {
                         ?>  
                         <tr>
-                            <td align="center">
+                            <td style="text-align:center">
                                  <?php echo ++$i;?>
                             </td>
                             <td>

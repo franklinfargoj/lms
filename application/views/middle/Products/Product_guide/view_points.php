@@ -43,7 +43,7 @@
                         <th></th>
                     </tr> -->
                     <tr>
-                        <th align="center">Sr. No.</th>
+                        <th style="text-align:center">Sr. No.</th>
                         <th>Min Range</th>
                         <th>Max Range</th>
                         <th>Points</th>
@@ -55,7 +55,7 @@
                             foreach ($pointsData as $key => $value) {
                         ?>  
                         <tr>
-                            <td align="center">
+                            <td style="text-align:center">
                                  <?php echo ++$i;?>
                             </td>
                             <td>
