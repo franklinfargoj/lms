@@ -5,8 +5,8 @@
     </div>
 </div>
 <div class="page-content">
-    <div class="container">
-        <span class="bg-top" id="bg-w1"></span>
+    <div class="">
+        <span class="bg-top"></span>
         <div class="inner-content">
             <div class="container">
             <p id="note"><span style="color:red;">*</span> These fields are required</p>
@@ -78,7 +78,8 @@
                 </div>
             </div>
         </div>
-        <span class="bg-bottom" id="bg-w"></span>
+        <span class="bg-bottom" id="bg-w
+        "></span>
     </div>
 </div>
 <script src="<?php echo base_url().PLUGINS;?>ckeditor/ckeditor.js"></script>

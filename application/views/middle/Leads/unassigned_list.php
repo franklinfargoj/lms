@@ -1,5 +1,5 @@
 <div class="page-content">
-    <div class="container">
+    <div class="">
         <div class="unassigned-content">
         <div class="page-title">
                     <div class="container clearfix">
