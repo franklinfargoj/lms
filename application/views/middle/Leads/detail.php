@@ -146,8 +146,10 @@
                                         echo form_hidden($data);
                                         $options1['']='Select';
                                         foreach ($lead_status as $key => $value) {
-                                            if((in_array($this->session->userdata('admin_type'),array('EM'))) && (in_array($key,array('Converted','Closed')))){
-                                                continue;
+                                            if($key != $leads[0]['status']){
+                                                if(((in_array($this->session->userdata('admin_type'),array('EM'))) && (in_array($key,array('Converted','Closed')))) || (in_array($key,$previous_status))){
+                                                    continue;
+                                                }
                                             }
                                             $options1[$key] = $value;
                                         }

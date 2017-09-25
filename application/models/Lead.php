@@ -446,4 +446,13 @@ class Lead  extends CI_Model
         }
         return false;
     }
+
+    public function lead_previous_status($lead_id){
+        $status_array = array();
+        $previous_status = $this->db->select('DISTINCT(status) as status')->from(Tbl_LeadAssign)->where(array('is_updated' => 0,'lead_id' =>$lead_id))->get()->result_array();
+        foreach ($previous_status as $status){
+            $status_array[] = $status['status'];
+        }
+        return $status_array;
+    }
 }
