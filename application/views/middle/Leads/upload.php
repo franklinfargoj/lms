@@ -36,7 +36,9 @@ $data_submit = array(
     <span class="bg-top"></span>
     <div class="inner-content">
     <div class="container">
+    <p id="note"><span style="color:red;">*</span> These fields are required</p>
         <div class="upload-content">
+
             <div class="upload-form">
                 <?php
                 $url = base_url('leads/upload');
@@ -95,7 +97,7 @@ $data_submit = array(
                 <th></th>
             </tr>
             <tr>
-                <th align="center">Sr. No</th>
+                <th style="text-align:center">Sr. No</th>
                 <th style="text-align:left">File</th>
                 <th style="text-align:left">Date and Time</th>
                 <th style="text-align:left">Status</th>
@@ -109,7 +111,7 @@ $data_submit = array(
             foreach ($uploaded_logs as $key => $value) {
                 ?>
                 <tr>
-                    <td align="center">
+                    <td style="text-align:center">
                         <?php echo $i+1;?>
                     </td>
                     <td>

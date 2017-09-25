@@ -827,7 +827,7 @@ class Api extends REST_Controller
         switch ($type) {
             case 'BM':
                 $where_month_Array = array('branch_id' => $ids,
-                    'MONTH(created_on)' => date('m'));
+                    'MONTH(created_on)' => date('m'),'is_updated'=>1,'is_deleted'=>0);
                 $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
                 $generated_key_value = array();
                 $final = array();
@@ -852,7 +852,7 @@ class Api extends REST_Controller
 
                     $where_month_Array = array('employee_id' => $value['created_by'],
                         'MONTH(created_on)' => date('m'),
-                        'status' => 'converted');
+                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     if (empty($converted)) {
                         $converted = 0;
@@ -865,7 +865,7 @@ class Api extends REST_Controller
 
             case 'ZM':
                 $where_month_Array = array('zone_id' => $ids,
-                    'MONTH(created_on)' => date('m'));
+                    'MONTH(created_on)' => date('m'),'is_updated'=>1,'is_deleted'=>0);
 
                 $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
                 $generated_key_value = array();
@@ -892,7 +892,7 @@ class Api extends REST_Controller
 
                     $where_month_Array = array('branch_id' => $value['created_by_branch_id'],
                         'MONTH(created_on)' => date('m'),
-                        'status' => 'converted');
+                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     if (empty($converted)) {
                         $converted = 0;
@@ -905,7 +905,7 @@ class Api extends REST_Controller
 
             case 'GM':
                 $where_generated_Array = array('zone_id !=' => NULL,
-                    'MONTH(created_on)' => date('m'));
+                    'MONTH(created_on)' => date('m'),'is_updated'=>1,'is_deleted'=>0);
                 $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_generated_Array);
                 $generated_key_value = array();
                 $final = array();
@@ -931,7 +931,7 @@ class Api extends REST_Controller
 
                     $where_month_Array = array('zone_id' => $value['created_by_zone_id'],
                         'MONTH(created_on)' => date('m'),
-                        'status' => 'converted');
+                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     if (empty($converted)) {
                         $converted = 0;
@@ -1756,9 +1756,9 @@ class Api extends REST_Controller
         switch ($type) {
             case 'BM':
                 $where_month_Array = array('branch_id' => $ids,
-                    'MONTH(created_on)' => date('m'));
+                    'MONTH(created_on)' => date('m'),'is_updated'=>1,'is_deleted'=>0);
                 $where_year_Array = array('branch_id' => $ids,
-                    'YEAR(created_on)' => date('Y'));
+                    'YEAR(created_on)' => date('Y'),'is_updated'=>1,'is_deleted'=>0);
                 $generated['monthly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
                 $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
@@ -1811,10 +1811,10 @@ class Api extends REST_Controller
 
             case 'ZM':
                 $where_month_Array = array('zone_id' => $ids,
-                    'MONTH(created_on)' => date('m'));
+                    'MONTH(created_on)' => date('m'),'is_updated'=>1,'is_deleted'=>0);
 
                 $where_year_Array = array('zone_id' => $ids,
-                    'YEAR(created_on)' => date('Y'));
+                    'YEAR(created_on)' => date('Y'),'is_updated'=>1,'is_deleted'=>0);
                 $generated['monthly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
                 $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
@@ -1847,10 +1847,10 @@ class Api extends REST_Controller
 
                     $where_month_Array = array('branch_id' => $value['created_by'],
                         'MONTH(created_on)' => date('m'),
-                        'status' => 'converted');
+                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
                     $where_year_Array = array('branch_id' => $value['created_by'],
                         'YEAR(created_on)' => date('Y'),
-                        'status' => 'converted');
+                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     $converted_yearly = $this->Lead->get_converted_lead_bm_zm($where_year_Array);
                     if (empty($converted)) {
@@ -1868,9 +1868,9 @@ class Api extends REST_Controller
 
             case 'GM':
                 $where_generated_Array = array('zone_id !=' => NULL,
-                    'MONTH(created_on)' => date('m'));
+                    'MONTH(created_on)' => date('m'),'is_updated'=>1,'is_deleted'=>0);
                 $where_year_Array = array('zone_id !=' => NULL,
-                    'YEAR(created_on)' => date('Y'));
+                    'YEAR(created_on)' => date('Y'),'is_updated'=>1,'is_deleted'=>0);
                 $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_generated_Array);
                 $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
@@ -1903,10 +1903,10 @@ class Api extends REST_Controller
 
                     $where_month_Array = array('zone_id' => $value['created_by'],
                         'MONTH(created_on)' => date('m'),
-                        'status' => 'converted');
+                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
                     $where_year_Array = array('zone_id' => $value['created_by'],
                         'YEAR(created_on)' => date('Y'),
-                        'status' => 'converted');
+                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     $converted_yearly = $this->Lead->get_converted_lead_bm_zm($where_year_Array);
                     if (empty($converted)) {

@@ -37,7 +37,7 @@
                         <th></th>
                     </tr>
                     <tr>
-                        <th align="center">Sr. No.</th>
+                        <th style="text-align:center">Sr. No.</th>
                         <th style="text-align:left">Title</th>
                         <th style="text-align:left">Status</th>
                         <th style="text-align:left">Action</th>
@@ -49,20 +49,20 @@
                             foreach ($categorylist as $key => $value) {
                         ?>  
                         <tr>
-                            <td align="center">
+                            <td style="text-align:center">
                                  <?php echo ++$i;?>
                             </td>
-                            <td align="left">
+                            <td style="text-align:left">
                                  <?php echo ucwords($value['title']);?>
                             </td>
-                            <td align="left">
+                            <td style="text-align:left">
                                 <?php echo ucwords($value['status']);?>
                                 <!-- <label class="switch switch-flat">
                                     <input class="switch-input" id="<?php echo $value['id'];?>" type="checkbox" />
                                     <span class="switch-label" data-on="Active" data-off="Inactive"></span> <span class="switch-handle"></span>
                                 </label> -->
                             </td>
-                            <td align="left">
+                            <td style="text-align:left">
                                 <a class="" href="<?php echo site_url('product_category/edit/'. encode_id($value['id']));?>">
                                     Edit
                                 </a>

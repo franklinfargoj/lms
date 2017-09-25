@@ -155,9 +155,9 @@ $lead_status = $this->config->item('lead_status');
    
     <div class="form-control form-submit clearfix">
         <a href="javascript:void(0);" class="float-right">
-            <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+            <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
             <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
-            <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+            <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
         </a>
     </div>
      </div>
@@ -165,7 +165,7 @@ $lead_status = $this->config->item('lead_status');
      </div>
     <?php echo form_close();?>
   
-<img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
+<img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" alt="35" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){
 ?>
@@ -201,7 +201,7 @@ $lead_status = $this->config->item('lead_status');
                 <table id="sample_3" class="display lead-table">
                     <thead>
                         <tr>
-                            <th align="center">
+                            <th style="text-align:center">
                                 Sr. No.
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -228,14 +228,14 @@ $lead_status = $this->config->item('lead_status');
                             <th>
                                 Product Name
                             </th>
-                            <th align="center">
+                            <th style="text-align:center">
                                 Total Assigned Leads
                             </th>
                             <?php 
                                 foreach ($lead_status as $key => $value) {
                                     //if(!in_array($key,array('AO','Converted','Closed'))){
                             ?>
-                            <th align="center">
+                            <th style="text-align:center">
                                 <?php
                                     echo $value; 
                                 ?>
@@ -257,7 +257,7 @@ $lead_status = $this->config->item('lead_status');
                         foreach ($leads as $key => $value) {
                     ?>
                         <tr>
-                            <td align="center">
+                            <td style="text-align:center">
                                 <?php echo ++$i;?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -296,7 +296,7 @@ $lead_status = $this->config->item('lead_status');
                                     echo !empty($product) ? ucwords($product) : 'All';
                                 ?>
                             </td>
-                            <td align="center">
+                            <td style="text-align:center">
                                 <?php 
                                     echo $value['total'];
                                 ?>
@@ -306,7 +306,7 @@ $lead_status = $this->config->item('lead_status');
                                 foreach ($lead_status as $k => $v) {
                                     //if(!in_array($k,array('AO','Converted','Closed'))){
                             ?>
-                            <td align="center">
+                            <td style="text-align:center">
                                 <?php
                                 if(in_array($k,array_keys($value['status']))){
                                         echo $value['status'][$k];

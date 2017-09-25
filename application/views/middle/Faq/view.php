@@ -41,7 +41,7 @@
                         <th></th>
                     </tr>
                     <tr>
-                        <th align="center">Sr. No.</th>
+                        <th style="text-align:center">Sr. No.</th>
                         <th style="text-align:left">Question</th>
                         <th style="text-align:left">Status</th>
                         <th style="text-align:left">Description</th>
@@ -54,7 +54,7 @@
                             foreach ($faqlist as $key => $value) {
                         ?>  
                         <tr>
-                            <td align="center">
+                            <td style="text-align:center">
                                  <?php echo ++$i;?>
                             </td>
                             <td>

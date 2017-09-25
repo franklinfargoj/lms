@@ -1,44 +1,44 @@
 <?php 
-$lead_status = $this->config->item('lead_status');
-$lead_type = $this->config->item('lead_type');
-$color = 'gray';
-if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identification'])){
-    switch ($leads[0]['lead_identification']) {
-        case 'HOT':
-            $color = 'red';
-            break;
-        case 'WARM':
-            $color = 'green';
-            break;
-        case 'COLD':
-            $color = 'blue';
-            break;
+    $lead_status = $this->config->item('lead_status');
+    $lead_type = $this->config->item('lead_type');
+    $color = 'gray';
+    if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identification'])){
+        switch ($leads[0]['lead_identification']) {
+            case 'HOT':
+                $color = 'red';
+                break;
+            case 'WARM':
+                $color = 'green';
+                break;
+            case 'COLD':
+                $color = 'blue';
+                break;
+        }
     }
-}
-$input = get_session();
-$data_state[''] = 'Select State';
-if ($states != '') {
-    foreach ($states as $key => $value) {
-        $data_state[$value['code']] = $value['name'];
+    $input = get_session();
+    $data_state[''] = 'Select State';
+    if ($states != '') {
+        foreach ($states as $key => $value) {
+            $data_state[$value['code']] = $value['name'];
+        }
     }
-}
 
-$data_branch[''] = 'Select Branch';
-if ($branches != '') {
-    foreach ($branches as $key => $value) {
-        $data_branch[$value['code']] = $value['name'];
+    $data_branch[''] = 'Select Branch';
+    if ($branches != '') {
+        foreach ($branches as $key => $value) {
+            $data_branch[$value['code']] = $value['name'];
+        }
     }
-}
 
-$data_district[''] = 'Select District';
-if ($districts != '') {
-    foreach ($districts as $key => $value) {
-        $data_district[$value['code']] = $value['name'];
+    $data_district[''] = 'Select District';
+    if ($districts != '') {
+        foreach ($districts as $key => $value) {
+            $data_district[$value['code']] = $value['name'];
+        }
     }
-}
-$state_extra = 'id="state_id"';
-$district_extra = 'id="district_id"';
-$branch_extra = 'id="branch_id"';
+    $state_extra = 'id="state_id"';
+    $district_extra = 'id="district_id"';
+    $branch_extra = 'id="branch_id"';
 ?>
 <div class="page-title">
     <div class="container clearfix">
@@ -195,9 +195,9 @@ $branch_extra = 'id="branch_id"';
                                 </div>
                                 <div class="form-control form-submit clearfix accountOpen" style="display:none">
                                     <a href="javascript:void(0);" class="float-right verify_account">
-                                        <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                        <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
                                         <span>Verify</span>
-                                        <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                                        <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
                                     </a>
                                 </div>
 
@@ -207,7 +207,7 @@ $branch_extra = 'id="branch_id"';
 
                         <div class="lead-form-right">
                         <?php if(isset($backUrl)){?>
-                            <a href="<?php echo site_url($backUrl);?>" class="reset float-right abbas"> < Back</a>
+                            <a href="<?php echo site_url($backUrl);?>" class="reset float-right form-style"> &#60; Back</a>
                         <?php }?>
                             <div class="form-control ">
                                 <label>Customer Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['customer_name']);?></span>
@@ -264,9 +264,9 @@ $branch_extra = 'id="branch_id"';
                         <div class="form-control form-submit clearfix">
                             <?php if(($type == 'assigned') && ($leads[0]['status'] != 'Converted')){?>
                                 <a href="javascript:void(0);" class="float-right submit_button">
-                                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
+                                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
                                     <span><input type="submit" class="custom_button" value="Submit" /></span>
-                                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
+                                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
                                 </a>
                             <?php }?>
                         </div>
@@ -287,11 +287,11 @@ $branch_extra = 'id="branch_id"';
         var category_title = "<?php echo $leads[0]['category_title']?>";  //Current Category
         
         if(lead_status == 'FU'){
-            $('.followUp').show();              //Display follow up fields
+            $('.followUp').show();              //Display follow up fields 
         }
 
         $('#lead_status').change(function(){
-            var option = $(this).val();
+            var option = $(this).val();         
             action(option);
         });
 
@@ -299,7 +299,7 @@ $branch_extra = 'id="branch_id"';
             $(this).datepicker({dateFormat: 'dd-mm-yy',minDate: 0});
 
         });
-
+        
         $('#product_category_id').change(function () {
             var csrf = $("input[name=csrf_dena_bank]").val();
             var category_id = $(this).val();

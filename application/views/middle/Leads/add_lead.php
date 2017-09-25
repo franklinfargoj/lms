@@ -148,7 +148,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <?php echo form_error('product_id'); ?>
                     </div>
                     <div class="form-control range-slider">
-                        <label>Ticket Size:<span style="color:red;">*</span> </label>
+                        <label style="vertical-align: top;">Ticket Size:<span style="color:red;">*</span> </label>
                          <?php echo form_input($data_ticket_range)?><img src="../assets2/images/rupees.png" alt="rupees" id="rs">
                         <div id="master">
                             <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
@@ -169,8 +169,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
 
                 <div class="lead-form-right">
                     <div class="form-control">
-                        
-                        <?php 
+
+                        <?php
                             if(in_array($this->session->userdata('admin_type'),array('RM','ZM'))){
                                 $checked = TRUE;
                                 $style = "style='display:none'";
@@ -255,14 +255,10 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 orientation: "horizontal",
                 max: max,
                 min: min,
-                scale:[5000,100000,500000],
-                showLabels:true,
-                snap:true,
                 animate: true,
                 values: [min],
                 slide: function (event, ui) {
                     range.val(ui.values[0]);
-                    console.log(ui.values[0]);
                     var width = (ui.values[0]-min)/(max) * 100 + '%';
                     div.width(width);
                 }

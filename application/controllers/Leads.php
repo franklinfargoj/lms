@@ -362,15 +362,18 @@ class Leads extends CI_Controller
 
                     if(in_array(strtolower(trim($prod_title)),$all_product)){
 
-                        $whereArray = array('title'=>strtolower(trim($prod_title)));
-                        $prod_id = $this->Lead->fetch_product_id($whereArray);
-                        $mapping_whereArray = array('product_id'=>$prod_id['product_id'],'branch_id'=>$value['branch_id']);
-                        $routed_id = $this->Lead->check_mapping($mapping_whereArray);
-                        if(!is_array($routed_id)){
-                            $value['reroute_from_branch_id'] = $value['branch_id'];
-                            $value['branch_id'] = $routed_id;
+                        if(($lead_source == 'Analytics' && $this->config->item('lead_analytics') == 1) ||
+                            ($lead_source != 'Analytics'))
+                        {
+                            $whereArray = array('title' => strtolower(trim($prod_title)));
+                            $prod_id = $this->Lead->fetch_product_id($whereArray);
+                            $mapping_whereArray = array('product_id' => $prod_id['product_id'], 'branch_id' => $value['branch_id']);
+                            $routed_id = $this->Lead->check_mapping($mapping_whereArray);
+                            if (!is_array($routed_id)){
+                                $value['reroute_from_branch_id'] = $value['branch_id'];
+                                $value['branch_id'] = $routed_id;
+                            }
                         }
-
                         $is_own_branch = '1';
                         $is_existing_customer = '0';
                         if($value['is_existing_customer'] == 'y'){
@@ -837,11 +840,12 @@ class Leads extends CI_Controller
         $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
         if($type == 'generated'){
             $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on','DATEDIFF(CURDATE( ),l.created_on) as elapsed_day');
+            $where = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
-                $where = array('la.is_deleted' => 0,'la.is_updated' => 1,'MONTH(l.created_on)' => date('m')); //Month till date filter
+                $where['MONTH(l.created_on)'] = date('m'); //Month till date filter
             }
             if($till == 'ytd'){
-                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(l.created_on)' => date('Y')); //Year till date filter
+                $where['YEAR(l.created_on)'] = date('Y'); //Year till date filter
             }
             if(!empty($param)){
                 $arrData['param'] = $param;
@@ -871,12 +875,14 @@ class Leads extends CI_Controller
         }
         if($type == 'assigned'){
             $select = array('l.id','l.customer_name','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
+            $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
-                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'MONTH(la.created_on)' => date('m'),'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
+                $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
             }
             if($till == 'ytd'){
-                $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'YEAR(la.created_on)' => date('Y'),'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
+                $where['YEAR(la.created_on)'] = date('Y'); //Year till date filter
             }
+            $where["DATEDIFF(CURDATE(),la.created_on) <= CASE WHEN la.status = 'Converted' THEN ".Elapsed_day_converted." ELSE ".Elapsed_day." END"] = NULL;
             if(!empty($arrData['param'])){
                 if($login_user['designation_name'] == 'EM'){
                     $where['la.employee_id']  =   $login_user['hrms_id']; //Employee wise filter
@@ -910,8 +916,6 @@ class Leads extends CI_Controller
         }
         $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
         $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
-        /*pe($this->db->last_query());
-        exit;*/
         $arrData['lead_sources'] = $this->Lead->get_enum(Tbl_Leads,'lead_source');
         return $arrData;
     }

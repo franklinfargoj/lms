@@ -5,9 +5,9 @@ class Reports extends CI_Controller
 
 
     /*
-     * construct
+     * __construct
      * constructor method
-     * @author Gourav Thatoi
+     * @author Ashok Jadhav (AJ)
      * @access private
      * @param none
      * @return void
@@ -22,6 +22,15 @@ class Reports extends CI_Controller
         $this->load->model('Master_model','Master');
     }
 
+    /*
+     * index
+     * Commen function to call for each search and initial page load.
+     * @author Ashok Jadhav (AJ)
+     * @access public
+     * @param $action,$view,$zone_id,$branch_id,$export = 'no'
+     * @return void
+     * 
+     */
     public function index($action,$view = null,$zone_id = null,$branch_id = null,$export = 'no')
     {
         $this->make_bread->add('Reports', 'reports/view', 0);
