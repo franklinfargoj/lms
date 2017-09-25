@@ -1763,9 +1763,9 @@ class Api extends REST_Controller
         switch ($type) {
             case 'BM':
                 $where_month_Array = array('branch_id' => $ids,
-                    'MONTH(created_on)' => date('m'),'is_updated'=>1,'is_deleted'=>0);
+                    'MONTH(created_on)' => date('m'));
                 $where_year_Array = array('branch_id' => $ids,
-                    'YEAR(created_on)' => date('Y'),'is_updated'=>1,'is_deleted'=>0);
+                    'YEAR(created_on)' => date('Y'));
                 $generated['monthly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
                 $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
@@ -1818,10 +1818,10 @@ class Api extends REST_Controller
 
             case 'ZM':
                 $where_month_Array = array('zone_id' => $ids,
-                    'MONTH(created_on)' => date('m'),'is_updated'=>1,'is_deleted'=>0);
+                    'MONTH(created_on)' => date('m'));
 
                 $where_year_Array = array('zone_id' => $ids,
-                    'YEAR(created_on)' => date('Y'),'is_updated'=>1,'is_deleted'=>0);
+                    'YEAR(created_on)' => date('Y'));
                 $generated['monthly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
                 $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
@@ -1875,9 +1875,9 @@ class Api extends REST_Controller
 
             case 'GM':
                 $where_generated_Array = array('zone_id !=' => NULL,
-                    'MONTH(created_on)' => date('m'),'is_updated'=>1,'is_deleted'=>0);
+                    'MONTH(created_on)' => date('m'));
                 $where_year_Array = array('zone_id !=' => NULL,
-                    'YEAR(created_on)' => date('Y'),'is_updated'=>1,'is_deleted'=>0);
+                    'YEAR(created_on)' => date('Y'));
                 $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_generated_Array);
                 $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
