@@ -567,3 +567,4 @@ $config['map'] = array(
     'MSME'=>'MSME',
     'CBB'=>'CBB');
 $config['lead_analytics'] = '1';
+$config['authorised_methods'] = array('masters','faq','tickers');
