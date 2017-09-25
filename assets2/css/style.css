@@ -255,7 +255,7 @@ body{
 	outline: none;
 	color: #8a8b8e;
 	font-size: 14px;
-	padding: 0 5px;
+	padding: 0 2px;
 }
 .form-control{
 	margin-bottom: 15px;
@@ -758,7 +758,7 @@ img#rs {
     right: 170px;
     top: 23px;
 }
-#bg-w{margin: -4px;}
+#bg-w,#bg-w1{margin: -4px;}
 /*table#sample_3 {
     margin-left: -19px;
 }*/
@@ -902,15 +902,28 @@ select#tenurePeriod {
 input#remind_on {
     padding: 6px 2px;
 }
-form#add_form,form#detail_form,form#addlead,form#emi,form#search_form,form#assign_multiple {
+form#add_form,form#detail_form,form#addlead,form#emi,form#search_form,form#assign_multiple,form#edit_form {
     border-bottom: 0;
     margin-bottom: 0;
 }
 span.right-toggle {
     opacity: 0;
+    -ms-filter: "alpha(opacity=0)";
 }
 .top-navigation ul li a:hover span{
 	background-color:transparent!important;
+}
+.float-right.m {
+    margin-right: 10px;
+}
+.img-w{
+	width: 48px;
+}
+.bg-c{
+	background-color: #e1ecf3;
+	width: 100%;
+	height: auto;
+	margin-bottom: 0;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{

@@ -2,15 +2,16 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center"><?php echo ucwords($product[0]['title']);?> Description</h3>
-        <div class="float-right">
-            <span class="lead-num"><a href="<?php echo base_url('product_guide/add/'. encode_id($product[0]['id']));?>">Add</a></span>
-        </div>
+        
     </div>
 </div>
 <div class="page-content">
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
+        <div class="float-right">
+            <span class="lead-num"><a href="<?php echo base_url('product_guide/add/'. encode_id($product[0]['id']));?>">Add</a></span>
+        </div>
             <?php if($productguidelist){?>
                 <div id="tabs" class="product-guide-tab">
                     <ul>

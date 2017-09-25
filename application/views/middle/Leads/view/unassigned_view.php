@@ -19,8 +19,8 @@
             <div class="box box-m">
                 <img src="<?php echo base_url().ASSETS;?>images/self.png" alt="self">
                 <p>Walk-in</p>
-                <div class="bg-red">
-                <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red">
+                <div class="bg-red bg-c">
+                <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
                 <?php $walkin = 0;
                 if($unassigned_leads_count['Walk-in'] != 0)
@@ -35,8 +35,8 @@
             <div class="box">
                 <img src="<?php echo base_url().ASSETS;?>images/enquiry.png" alt="self">
                 <p>Enquiry</p>
-                <div class="bg-red">
-                <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red">
+                <div class="bg-red bg-c">
+                <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"  class="img-w">
                 <ul>
                     <?php $enquiry = 0;
                     if($unassigned_leads_count['Enquiry'] != 0)
@@ -51,8 +51,8 @@
             <div class="box box-m">
                 <img src="<?php echo base_url().ASSETS;?>images/tie-up.png" alt="self">
                 <p>Tie Up's</p>
-                <div class="bg-red">
-                <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red">
+                <div class="bg-red bg-c">
+                <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
                     <?php $tieups = 0;
                     if($unassigned_leads_count['Tie Ups'] != 0)
@@ -67,8 +67,8 @@
             <div class="box">
                 <img src="<?php echo base_url().ASSETS;?>images/analytics.png" alt="self">
                 <p>Analytics</p>
-                <div class="bg-red">
-                <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red">
+                <div class="bg-red bg-c">
+                <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
                     <?php $analytics = 0;
                     if($unassigned_leads_count['Analytics'] != 0)
