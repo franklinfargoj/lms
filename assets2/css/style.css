@@ -741,6 +741,7 @@ img#rs {
 }
 #btn-r{
 	margin-top: -18px;
+	margin-bottom: 0;
 }
 .form label.error {
     float: left;
