@@ -878,10 +878,10 @@ input#captext{
 	top: -15px;
 }
 input#tenure {
-    width: 10%;
+    width: 14%;
 }
 select#tenurePeriod {
-    width: 80px;
+    width: 90px;
     height: 30px;
     padding: 5px;
 }
