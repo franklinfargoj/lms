@@ -955,7 +955,7 @@ class Leads extends CI_Controller
                 $priority="Normal";
                 notification_log($title,$description,$priority,$notification_to);
                 //push notification
-                $emp_id = $employee_id;
+                $emp_id = $explode_employee[0];
                 sendPushNotification($emp_id,$description,$title);
             }
         }

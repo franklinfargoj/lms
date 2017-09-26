@@ -582,4 +582,60 @@ class Cron extends CI_Controller
         $objWriter->save('uploads/excel_list/'.$file_name);
         return $file_name;
     }
+
+    public function getAllDetails(){
+        $url = 'http://103.224.110.52/master.php';
+        $result = call_external_url($url);
+        $result = json_decode($result,true);
+        $final_zone = array();$final_state = array();$final_dist = array();$final_branch = array();
+        if(!empty($result)){
+            foreach ($result['branch_details']['zone'] as $key=> $val){
+                $state1 = array();$dist1 = array();
+                $zone['code'] = $val['zone_id'];
+                $zone['name'] = $val['zone_name'];
+                $final_zone[] = $zone;
+                if(isset($val['state']['id'])){
+                    $state1[] = $val['state'];
+                }else{
+                    $state1 = $val['state'];
+                }
+                foreach ($state1 as $sk =>$state){
+                    $states = array();
+                    $states['code'] = $state['id'];
+                    $states['name'] = $state['name'];
+                    $states['zone_code'] =  $zone['code'];
+                    $final_state[] = $states;
+                    if(isset($state['districts']['id'])){
+                        $dist1[] = $state['districts'];
+                    }else{
+                        $dist1 = $state['districts'];
+                    }
+                    foreach ($dist1 as $dk => $dist){
+                        $district = array();$branch1 = array();
+                        $district['code'] = $dist['id'];
+                        $district['name'] = $dist['name'];
+                        $district['state_code'] =    $states['code'];
+                        $final_dist[] = $district;
+                        if(isset($dist['branches']['id'])){
+                            $branch1[] = $dist['branches'];
+                        }else{
+                            $branch1 = $dist['branches'];
+                        }
+                        foreach ($branch1 as $bk => $branch){
+                            $branches = array();
+                            $branches['code'] = $branch['id'];
+                            $branches['name'] = $branch['name'];
+                            $branches['district_code'] = $district['code'];
+                            $final_branch[] = $branches;
+                        }
+                    }
+                }
+            }
+            $this->db->insert_batch(Tbl_zone,$final_zone);
+            $this->db->insert_batch(Tbl_state,$final_state);
+            $this->db->insert_batch(Tbl_district,$final_dist);
+            $this->db->insert_batch(Tbl_branch,$final_branch);
+        }
+
+    }
 }
