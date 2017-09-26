@@ -336,6 +336,7 @@
             if(option == 'FU'){
                $('.followUp').show();
                $('.accountOpen').hide();
+               $('.datepicker_recurring_start').focus();
             }else if(option == 'AO'){
                 if(category_title != 'fee income'){
                     $('.accountOpen').show();

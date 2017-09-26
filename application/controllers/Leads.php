@@ -362,15 +362,18 @@ class Leads extends CI_Controller
 
                     if(in_array(strtolower(trim($prod_title)),$all_product)){
 
-                        $whereArray = array('title'=>strtolower(trim($prod_title)));
-                        $prod_id = $this->Lead->fetch_product_id($whereArray);
-                        $mapping_whereArray = array('product_id'=>$prod_id['product_id'],'branch_id'=>$value['branch_id']);
-                        $routed_id = $this->Lead->check_mapping($mapping_whereArray);
-                        if(!is_array($routed_id)){
-                            $value['reroute_from_branch_id'] = $value['branch_id'];
-                            $value['branch_id'] = $routed_id;
+                        if(($lead_source == 'Analytics' && $this->config->item('lead_analytics') == 1) ||
+                            ($lead_source != 'Analytics'))
+                        {
+                            $whereArray = array('title' => strtolower(trim($prod_title)));
+                            $prod_id = $this->Lead->fetch_product_id($whereArray);
+                            $mapping_whereArray = array('product_id' => $prod_id['product_id'], 'branch_id' => $value['branch_id']);
+                            $routed_id = $this->Lead->check_mapping($mapping_whereArray);
+                            if (!is_array($routed_id)){
+                                $value['reroute_from_branch_id'] = $value['branch_id'];
+                                $value['branch_id'] = $routed_id;
+                            }
                         }
-
                         $is_own_branch = '1';
                         $is_existing_customer = '0';
                         if($value['is_existing_customer'] == 'y'){

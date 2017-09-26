@@ -116,9 +116,11 @@
     }
     span.left-toggle {
         opacity: 0;
+        -ms-filter: "alpha(opacity=0)";
     }
     span.right-toggle {
     opacity: 1;
+    -ms-filter: "alpha(opacity=100)";
     }
     .cal-drop2, .cal-drop3, .cal-drop4{
         right: 190px;

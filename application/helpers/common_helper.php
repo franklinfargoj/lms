@@ -1024,3 +1024,24 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
     }
     exit;
 }
+
+if (!function_exists('random_number')){
+    function random_number(){
+        return mt_rand();
+    }
+}
+
+if (!function_exists('check_authorisation')){
+    function check_authorisation($key,$hrms_id){
+        $CI = get_instance();
+        $CI->load->model('Lead');
+        $select = 'authorisation_key';
+        $table = Tbl_LoginLog;
+        $order_by = 'date_time desc';
+        $where = array('employee_id'=>$hrms_id);
+        $list = $CI->Lead->lists($table,$select,$where,$join=array(),$group_by=array(),$order_by,$limit=1);
+        if(!empty($list) && $list[0]['authorisation_key'] == $key){
+            return TRUE;
+        }return false;
+    }
+}
