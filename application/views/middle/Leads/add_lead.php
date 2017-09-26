@@ -32,19 +32,8 @@ if(isset($states) && !empty($states)){
 }
 
 $data_branch[''] = 'Select Branch';
-
-/*if(isset($branches) && !empty($branches)){
-    foreach ($branches as $branch_key => $branch){
-        $data_branch[$branch['code']] = $branch['name'];
-    }
-}*/
-
 $data_district[''] = 'Select District';
-/*if(isset($districts) && !empty($districts)){
-    foreach ($districts as $district_key => $district){
-        $data_district[$district['code']] = $district['name'];
-    }
-}*/
+
 $data_department_name = array('name' => 'department_name',
     'id' => 'department_name',
     'value' => set_value('department_name', '')
@@ -77,9 +66,6 @@ $customer_options['1'] = 'Existing';
 
 
 $options = $category;
-/*foreach ($category as $key => $value) {
-    $options[$value['id']] = $value['title'];
-}*/
 
 $product_options[''] = 'Select';
 if ($products != '') {
@@ -119,20 +105,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 ?>
                 <p id="note"><span style="color:red;">*</span> These fields are required</p>
                 <div class="lead-form-left">
-                    <!--<div class="form-control">
-                        <label>Customer Type</label>
-                        <div class="radio-control">
-                            <input type="radio" name="is_existing_customer"
-                                   value="1" <?php /*echo set_radio('is_existing_customer', '1', TRUE); */?> />
-                            <label>New</label>
-                        </div>
-                        <div class="radio-control">
-                            <input type="radio" name="is_existing_customer"
-                                   value="0" <?php /*echo set_radio('is_existing_customer', '0'); */?> />
-                            <label>Existing</label>
-                        </div>
-                    </div>-->
-    <!--                --><?php //echo form_error('is_existing_customer'); ?>
                     
                     <div class="form-control">
                         <label>Customer Name:<span style="color:red;">*</span> </label>
@@ -216,12 +188,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <?php echo form_dropdown('branch_id', $data_branch, $input['branch_id'],'disabled,id="branch_id"') ?>
                         <?php echo form_error('branch_id'); ?>
                     </div>
-
-                    <!--<div id="identification" class="form-control">
-                        <label>Lead Identification:</label>
-                        <?php /*echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) */?>
-                    </div>
-                    --><?php /*echo form_error('lead_identification'); */?>
 
                     <div class="form-control">
                         <label>Remark/Notes:<span style="color:red;">*</span> </label>
@@ -328,9 +294,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         $("#addlead").validate({
 
             rules: {
-                /*is_existing_customer: {
-                    required: true
-                },*/
                 customer_name: {
                     required: true,
                     lettersonly: true
@@ -351,9 +314,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 product_id: {
                     required: true
                 },
-                /*lead_identification: {
-                    required: true
-                },*/
                 lead_ticket_range: {
                     required: true,
                     number:true,
@@ -373,9 +333,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 }
             },
             messages: {
-                /*is_existing_customer: {
-                    required: "Please select customer"
-                },*/
                 customer_name: {
                     required: "Please enter customer name",
                     lettersonly: "Only alphabets are allowed."
@@ -411,9 +368,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 branch_id: {
                     required: "Please select branch"
                 },
-                /*lead_identification: {
-                    required: "Please select lead identification"
-                },*/
                 remark: {
                     required: "Please enter remark"
                 }
