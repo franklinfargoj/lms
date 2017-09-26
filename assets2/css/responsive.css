@@ -127,7 +127,6 @@
     }
     label#ticket_range-error {
      float: none; 
-   
      margin-right: 0px; 
     vertical-align: top;
     padding-top: 0;
@@ -140,7 +139,7 @@
     }
     img#rs {
     margin: -1px 0 0px 10px;
-}
+    }
     label#ticket_range-error{
         width: 198px;
     }
