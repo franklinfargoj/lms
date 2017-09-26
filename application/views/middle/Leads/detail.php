@@ -136,8 +136,13 @@
                                     </span>
                                 </div>
                                 <div class="form-control">
-                                    <label>Lead Status:</label>   
                                     <?php
+                                        if(in_array($this->session->userdata('admin_type'),array('EM')) && in_array($leads[0]['status'],array('AO','NI'))){}
+                                        else {
+                                            ?>
+                                            <label>Lead Status:</label>
+                                    <?php
+                                        }
                                         $data = array(
                                             'lead_id' => encode_id($leads[0]['id']),
                                             'lead_type'    => 'assigned',
@@ -157,7 +162,10 @@
                                                 'id'       => 'lead_status',
                                                 'class'    => 'form-control'
                                         );
-                                        echo form_dropdown('lead_status', $options1 , $leads[0]['status'],$js);
+                                        if(in_array($this->session->userdata('admin_type'),array('EM')) && in_array($leads[0]['status'],array('AO','NI'))){}
+                                        else{
+                                            echo form_dropdown('lead_status', $options1 , $leads[0]['status'],$js);
+                                        }
                                     ?>
                                 </div>
                                 <div class="form-control followUp" style="display:none">

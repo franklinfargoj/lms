@@ -677,7 +677,7 @@ class Leads extends CI_Controller
                     $leads_data = $leadsAssign[0];
 
                     $response1['status'] = 'success';
-                    if(($leads_data['status'] != $lead_status) || (isset($employee_id) && !empty($employee_id))){
+                    if(((!empty($lead_status)) && ($leads_data['status'] != $lead_status)) || (isset($employee_id) && !empty($employee_id))){
                         if ($response1['status'] == 'success') {
                             //Set current entry as old (set is_updated = 0)
                             $lead_old_data = array('is_updated' => 0);
