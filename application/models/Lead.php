@@ -430,6 +430,7 @@ class Lead  extends CI_Model
                 $this->db->where($where);
             }
             $this->db->group_by($group_by);
+            $this->db->order_by('id','ASC');
             $Q = $this->db->get();
             return $Q->result();
     }
