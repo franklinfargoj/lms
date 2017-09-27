@@ -115,6 +115,7 @@ define('Tbl_Points_Distributor', 'db_points_distrubution');
 define('Tbl_Points', 'db_points');
 define('Tbl_Amounts', 'db_amount_details');
 define('Tbl_Mail', 'db_mailsetting');
+define('Tbl_cbs', 'db_response_from_cbs');
 
 
 

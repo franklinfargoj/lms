@@ -479,6 +479,8 @@ class Leads extends CI_Controller
 
         $arrData['unassigned_leads'] = $this->Lead->unassigned_leads('',$id);
         $arrData['lead_source'] = ucwords($lead_source);
+        $l_source = encode_id($lead_source);
+        $arrData['backUrl'] = 'leads/unassigned_leads_list/'.$l_source;
 
         $middle = "Leads/unassigned_details";
         load_view($middle,$arrData);
@@ -752,6 +754,15 @@ class Leads extends CI_Controller
                             );
                             //This will add entry into reminder scheduler for status (Interested/Follow up)
                             $this->Lead->add_reminder($remindData);
+                        }
+                        if($lead_status == 'AO'){
+                            $responseData = array(
+                                'lead_id' => $lead_id,
+                                'account_no'=>$this->input->post('accountNo'),
+                                'response_data' => $this->input->post('response_data')
+                            );
+                            //This will add entry into cbs response for status (Account Opened)
+                            $this->Lead->insert_lead_data($responseData,Tbl_cbs);
                         }
                         if($lead_status == 'Converted'){
                             $this->points_distrubution($lead_id);
@@ -1212,6 +1223,16 @@ class Leads extends CI_Controller
             $data['state'] = $html;
             $data['district'] = $html2;
             echo json_encode($data);
+    }
+
+    public function verify_account(){
+        if($this->input->post('acc_no') != '')
+        {
+            $acc_no = $this->input->post('acc_no');
+            $url = 'http://103.224.110.52/client.php?account_no='.$acc_no;
+            $response = call_external_url($url);
+            echo $response;
+        }
     }
 
 }

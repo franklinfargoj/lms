@@ -56,6 +56,9 @@
 
 
 				<div class="lead-form-right">
+                    <?php if(isset($backUrl)){?>
+                        <a href="<?php echo site_url($backUrl);?>" class="reset float-right form-style"> &#60; Back</a>
+                    <?php }?>
 					<div class="form-control">
 						<label>Customer Name:</label> <span class="detail-label"><?php echo ucwords($unassigned_leads[0]['customer_name']);?></span>
 					</div>

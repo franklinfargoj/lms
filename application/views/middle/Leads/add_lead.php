@@ -150,7 +150,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <div class="form-control">
 
                         <?php
-                            if(in_array($this->session->userdata('admin_type'),array('RM','ZM'))){
+                            if(in_array($this->session->userdata('admin_type'),array('GM','ZM')) ||
+                                ($this->session->userdata('dept_type_id') == 'HD' &&
+                                in_array($this->session->userdata('admin_type'),array('EM','BM')))){
                                 $checked = TRUE;
                                 $style = "style='display:none'";
                             }else{

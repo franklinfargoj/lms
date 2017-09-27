@@ -54,6 +54,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
             <table id="sample_3" class="display lead-table">
                 <thead>
                     <tr class="top-header">
+                        <th></th>
                         <th><input type="text" name="customername" value=""></th>
                         <th><input type="text" name="productname" value=""></th>
                         <th><input type="text" name="finaccno" value="" size="2"></th>
@@ -101,6 +102,9 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                     <tr>
 
                         <th style="text-align:left">
+                            Sr.No
+                        </th>
+                        <th style="text-align:left">
                             Customer Name
                         </th>
                         <th style="text-align:left">
@@ -138,11 +142,14 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                     <tbody>
                     <?php 
                         if($leads){
-                        $i = 0;
+                        $i = 1;
                         foreach ($leads as $key => $value) {
                     ?>  
                         <tr>
 
+                            <td>
+                                 <?php echo $i;?>
+                            </td>
                             <td>
                                  <?php echo ucwords($value['customer_name']);?>
                             </td>
@@ -199,7 +206,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                             </td>
                         </tr>   
                     <?php   
-                        }
+                       $i++; }
                     }?>
                 </tbody>
             </table>
