@@ -888,7 +888,7 @@ select#tenurePeriod {
 #tenure-error {
     position: absolute;
     display: inline;
-    margin-left: 85px;
+    margin-left: 100px;
     width: auto;
 }
 .faq-a{
