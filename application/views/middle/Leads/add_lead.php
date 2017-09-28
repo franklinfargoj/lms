@@ -204,7 +204,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
                         <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                     </a>
-                    <a href="javascript:void(0);" class="reset float-right">
+                    <a href="javascript:void(0);" class="reset float-right" id="reset">
                         Reset
                     </a>
                 </div>
@@ -350,8 +350,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 },
                 contact_no: {
                     required: "Please enter phone number",
-                    maxlength: 'Please enter no more than 10 digits',
-                    minlength: 'Please enter no less than 10 digits'
+                    number:"Phone number should be numeric",
+                    maxlength: 'Phone number is not 10 digits',
+                    minlength: 'Phone number is not 10 digits'
 
 
                 },
@@ -457,6 +458,12 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 }
             });
         }
-
+        $('#reset').click(function () {
+            var div = $('.ui-slider-range');
+            var sliderElement = $("#master");
+            sliderElement.slider('values', 0, 0);
+            var width = '0%';
+            div.width(width);
+        });
     });
 </script>

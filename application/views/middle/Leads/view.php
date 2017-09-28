@@ -227,13 +227,13 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
         var lead_source = "<?php echo $source ?>";
         switch(type) {
             case 'generated':
-                columns = [5];
+                columns = [0,6];
                 break;
             case 'assigned':
             if(lead_source == 'empty'){
-                columns = [7];
+                columns = [0,8];
             }else{
-                columns = [5];
+                columns = [0,6];
             }
             break;
         }
