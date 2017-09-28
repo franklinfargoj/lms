@@ -1,5 +1,5 @@
 <div class="page-content">
-    <div class="">
+    <div class="container">
         <div class="unassigned-content">
         <div class="page-title">
                     <div class="container clearfix">
@@ -103,10 +103,10 @@
                         ?>
                         </th>
                         <th style="text-align:center">Sr. No</th>
-                        <th style="text-align:left">Customer Name</th>
-                        <th style="text-align:left">Product Name</th>
+                        <th>Customer Name</th>
+                        <th>Product Name</th>
                         <th style="text-align:center">Elapsed Days</th>
-                        <th style="text-align:left">Details</th>
+                        <th>Details</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -116,7 +116,7 @@
                             foreach ($unassigned_leads as $key => $value) {
                     ?>
                             <tr>
-                                <td  style="text-align:center">
+                                <td >
                                 <?php 
                                     $data = array(
                                         'name'          => 'lead_ids[]',
