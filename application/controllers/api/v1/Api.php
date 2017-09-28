@@ -385,8 +385,8 @@ class Api extends REST_Controller
 
         //Push notification
             $emp_id = $params['created_by'];
-            $title = 'Lead Added Successfully';
-            $push_message = 'Lead added successfully for '.ucwords($product_name);
+            $title = 'Lead Submitted Successfully';
+            $push_message = 'Lead Submitted Successfully for '.ucwords($product_name);
             sendPushNotification($emp_id,$push_message,$title);
 
         //Save notification
@@ -415,7 +415,7 @@ class Api extends REST_Controller
 
         //Push notification
         //sendNotificationSingleClient($device_id,$device_type,$message,$title=NULL);
-        $success_message = array('Lead added Successfully.');
+        $success_message = array('Lead Submitted Successfully.');
         $result = array('result' => True,
             'data' => $success_message,
             'unique id' => $unique_id);

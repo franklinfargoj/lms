@@ -350,8 +350,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 },
                 contact_no: {
                     required: "Please enter phone number",
-                    maxlength: 'Please enter no more than 10 digits',
-                    minlength: 'Please enter no less than 10 digits'
+                    number:"Phone number should be numeric",
+                    maxlength: 'Phone number is not 10 digits',
+                    minlength: 'Phone number is not 10 digits'
 
 
                 },
