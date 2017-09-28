@@ -741,6 +741,7 @@ img#rs {
 }
 #btn-r{
 	margin-top: -18px;
+	margin-bottom: 0;
 }
 .form label.error {
     float: left;
@@ -877,17 +878,17 @@ input#captext{
 	top: -15px;
 }
 input#tenure {
-    width: 10%;
+    width: 14%;
 }
 select#tenurePeriod {
-    width: 80px;
+    width: 90px;
     height: 30px;
     padding: 5px;
 }
 #tenure-error {
     position: absolute;
     display: inline;
-    margin-left: 85px;
+    margin-left: 100px;
     width: auto;
 }
 .faq-a{
@@ -925,7 +926,10 @@ span.right-toggle {
 	height: auto;
 	margin-bottom: 0;
 }
-/*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+.margin-b{
+	margin-bottom: 12px;
+}
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{
 	background-color: #00559d;
 }
@@ -1139,7 +1143,7 @@ margin-top: 10px;
     height: auto;
     line-height: 0;
     margin-right: 5px;
-}
+}1
 .ui-accordion-content{
 	padding: 15px 30px 25px 20px;
 	line-height: 25px;

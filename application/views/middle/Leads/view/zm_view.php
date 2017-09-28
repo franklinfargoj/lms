@@ -8,25 +8,27 @@
         <h3 class="text-center">Zonal Manager</h3>
     </div>
 </div>
-<div class="lead-top">
+<!-- <div class="lead-top">
     <div class="container clearfix">
-        <div class="float-left">
+        <div class="float-left"> -->
             <!--            <span class="total-lead">-->
             <!--                Total-->
             <!--            </span>-->
             <!--            <span class="lead-num"> : --><?php //echo count($leads);?><!--</span>-->
-        </div>
-        <div class="float-right">
-            <a href="<?php echo base_url('dashboard/home_excel');?>">
-                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
-            </a>
-        </div>
+       <!--  </div>
+        
     </div>
-</div>
+</div> -->
 <div class="page-content">
 <span class="bg-top"></span>
     <div class="inner-content">
+
     <div class="container">
+    <div class="float-right">
+            <a href="<?php echo base_url('dashboard/home_excel');?>">
+                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn" class="margin-b">
+            </a>
+        </div>
         <table class="display lead-table dataTable no-footer" id="sample_3">
             <thead>
             <tr class="top-header">
@@ -97,7 +99,6 @@
 
         //Initialize datatable configuration
         initTable(table,columns);
-
     });
 
 </script>
