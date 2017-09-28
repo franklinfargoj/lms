@@ -1,5 +1,7 @@
 <?php
-$lead_type = $this->config->item('lead_type');
+    $parameter = '';
+    $source = 'empty';
+    $lead_type = $this->config->item('lead_type');
 ?>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
@@ -189,18 +191,16 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                             </td>
                             <td>
                                 <?php 
-                                $parameter = '';
-                                $source = 'empty';
-                                if(isset($status) && !empty($status)){
-                                    $parameter .= '/'.$status; 
-                                }
-                                if(isset($param) && !empty($param)){
-                                    $parameter .= '/'.encode_id($param); 
-                                }
-                                if(isset($lead_source) && !empty($lead_source)){
-                                    $parameter .= '/'.$lead_source; 
-                                    $source = $lead_source;
-                                }
+                                    if(isset($status) && !empty($status)){
+                                        $parameter .= '/'.$status; 
+                                    }
+                                    if(isset($param) && !empty($param)){
+                                        $parameter .= '/'.encode_id($param); 
+                                    }
+                                    if(isset($lead_source) && !empty($lead_source)){
+                                        $parameter .= '/'.$lead_source; 
+                                        $source = $lead_source;
+                                    }
                                 ?>
                                 <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']).$parameter)?>">View</a>
                             </td>

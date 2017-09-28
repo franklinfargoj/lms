@@ -43,7 +43,7 @@
 							        'name'  => 'username',
 							        'id'    => 'username',
 							        'class' => '',
-							        'value'  => 'HRMS ID',
+							        'value'  => isset($_COOKIE["member_login"]) ? $_COOKIE["member_login"] : 'HRMS ID',
 							        'autocomplete' => 'off'
 							        
 								);
@@ -71,7 +71,7 @@
 							        'name'  => 'password',
 							        'id'    => 'password',
 							        'class' => '',
-							        'value'  => 'Password',
+							        'value'  => isset($_COOKIE["member_password"]) ? $_COOKIE["member_password"] : 'Password',
 							        'autocomplete' => 'off'
 							    );
 								echo form_input($data);
@@ -96,7 +96,7 @@
 					<a href="<?php echo site_url('login/view_faqs')?>" class="float-right">FAQ's</a>
 					<div class="float-left">
 						<label class="control control--checkbox">Remember me ?
-					      	<input type="checkbox" />
+					      	<input type="checkbox" id="remember_me" name="remember_me" <?php if(isset($_COOKIE["member_login"])) { ?> checked <?php } ?>/>
 					      	<div class="control__indicator">
 					      		<div class="check">
 					      			<img src="<?php echo base_url().ASSETS;?>images/tick.png" alt="tick">

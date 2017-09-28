@@ -617,9 +617,10 @@ class Leads extends CI_Controller
                 $arrData['lead_identification'] = $this->Lead->get_enum(Tbl_Leads,'lead_identification');
                 $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
                 $arrData['category_list'] = dropdown($category_list,'Select');
+                $arrData['previous_status'] = $this->Lead->lead_previous_status($lead_id);
             }
             $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
-            
+
         }
         return load_view($middle = "Leads/detail",$arrData);
     }
@@ -678,12 +679,10 @@ class Leads extends CI_Controller
                     $leads_data = $leadsAssign[0];
 
                     $response1['status'] = 'success';
-                    if(($leads_data['status'] != $lead_status) || (isset($employee_id) && !empty($employee_id))){
-                        //Set current entry as old (set is_updated = 0)
-                        $lead_status_data = array('is_updated' => 0);
-                        $response1 = $this->Lead->update_lead_data($where, $lead_status_data, Tbl_LeadAssign);
-
+                    if(((!empty($lead_status)) && ($leads_data['status'] != $lead_status)) || (isset($employee_id) && !empty($employee_id))){
                         if ($response1['status'] == 'success') {
+                            //Set current entry as old (set is_updated = 0)
+                            $lead_old_data = array('is_updated' => 0);
 
                             //Create new entry in table Lead Assign with changed status.
 
@@ -710,6 +709,7 @@ class Leads extends CI_Controller
                              * Reroute Lead
                              *****************************************************************/
                             if (isset($employee_id) && !empty($employee_id)) {
+                                $lead_old_data['is_deleted'] = 1;
                                 $explode_employee = explode('-', $employee_id);
                                 $lead_status_data['employee_id'] = $explode_employee[0];
                                 $lead_status_data['employee_name'] = $explode_employee[1];
@@ -725,6 +725,7 @@ class Leads extends CI_Controller
                                 notification_log($title,$description,$priority,$notification_to);
                             }
                             /*****************************************************************/
+                            $this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
 
                             $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
                         }

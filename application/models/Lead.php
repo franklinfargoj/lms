@@ -430,6 +430,7 @@ class Lead  extends CI_Model
                 $this->db->where($where);
             }
             $this->db->group_by($group_by);
+            $this->db->order_by('id','ASC');
             $Q = $this->db->get();
             return $Q->result();
     }
@@ -445,5 +446,14 @@ class Lead  extends CI_Model
             return $result;
         }
         return false;
+    }
+
+    public function lead_previous_status($lead_id){
+        $status_array = array();
+        $previous_status = $this->db->select('DISTINCT(status) as status')->from(Tbl_LeadAssign)->where(array('is_updated' => 0,'lead_id' =>$lead_id))->get()->result_array();
+        foreach ($previous_status as $status){
+            $status_array[] = $status['status'];
+        }
+        return $status_array;
     }
 }

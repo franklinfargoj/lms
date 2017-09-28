@@ -8,8 +8,13 @@ $lead_status = $this->config->item('lead_status');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Usage Report
+            Usage
         </h3>
+        <div class="float-right">
+            <a href="<?php echo site_url('charts/index/usage')?>" class="btn-Download">
+                Chart View
+            </a>
+        </div>
     </div>
 </div>
 <?php 

@@ -33,7 +33,7 @@ class Reports extends CI_Controller
      */
     public function index($action,$view = null,$zone_id = null,$branch_id = null,$export = 'no')
     {
-        $this->make_bread->add('Reports', 'reports/view', 0);
+        $this->make_bread->add('Reports', '', 0);
         $arrData['view'] = $view;
         $arrData['zone_id'] = decode_id($zone_id);
         $arrData['branch_id'] = decode_id($branch_id);
@@ -131,7 +131,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Pendancy Leads Report', 'reports/index/pendancy_leads_reports', 0);
+            $this->make_bread->add('Pendancy Leads', 'reports/index/pendancy_leads_reports', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -142,11 +142,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Pendancy Leads Report', 'reports/index/pendancy_leads_reports', 0);
+            $this->make_bread->add('Pendancy Leads', 'reports/index/pendancy_leads_reports', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Pendancy Leads Report', '', 0);
+            $this->make_bread->add('Pendancy Leads', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -217,76 +217,63 @@ class Reports extends CI_Controller
         //pe($this->db->last_query());
         $arrData['leads'] = array();
         $arrData['Total'] = 0;
-        foreach ($leads as $key => $value) {
-            //Employee Login
-            if($viewName == 'EM'){
-                $index = $value['employee_id'];
-                $arrData['leads'][$index]['employee_id'] = $value['employee_id'];
-            }
-
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value['branch_id'];
-                $arrData['leads'][$index]['branch_id'] = $value['branch_id'];
-            }
-
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value['zone_id'];
-                $arrData['leads'][$index]['zone_id'] = $value['zone_id'];
-            }
-            
-            if(isset($arrData['leads'][$index]['total'])){
-                $arrData['leads'][$index]['total'] += $value['count'];
-            }else{
-                $arrData['leads'][$index]['total'] = $value['count'];
-            }
-            $arrData['Total'] += $value['count'];    
-            $arrData['leads'][$index]['status'][$value['status']] = $value['count'];
-        }
-        $arrData['viewName'] = $viewName;
-        foreach ($list as $key => $value) {
-            if($viewName == 'EM'){
-                $index = $value->employee_id;
-                if(!in_array($value->employee_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+        if($list){
+            $Lead['userId'] = array();
+            foreach ($leads as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value['employee_id'];
+                    $Lead['userId'][] = $value['employee_id'];
                 }
-                $arrData['leads'][$index]['employee_id'] = $value->employee_id;
-                $arrData['leads'][$index]['employee_name'] = $value->employee_name;
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
 
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value->branch_id;
-                if(!in_array($value->branch_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value['branch_id'];
+                    $Lead['userId'][] = $value['branch_id'];
                 }
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
 
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value->zone_id;
-                if(!in_array($value->zone_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value['zone_id'];
+                    $Lead['userId'][] = $value['zone_id'];
+                }
+                $Lead[$index]['status'][$value['status']] = $value['count'];
+            }
+            $arrData['viewName'] = $viewName;
+            foreach ($list as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value->employee_id;
+                    $arrData['leads'][$index]['employee_id'] = $value->employee_id;
+                    $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value->branch_id;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value->zone_id;
                 }
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                if(!in_array($index,$Lead['userId'])){
+                    $arrData['leads'][$index]['total'] = 0;
+                    $arrData['leads'][$index]['status'] = array();
+                }else{
+                    $arrData['leads'][$index]['total'] = array_sum($Lead[$index]['status']);
+                    $arrData['leads'][$index]['status'] = $Lead[$index]['status'];
+                }
+                $arrData['Total'] += $arrData['leads'][$index]['total'];
             }
         }
         return $arrData;
     }
-
 
     private function leads_type_reports($arrData){
         $login_user = get_session();
@@ -328,7 +315,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Leads Type Report', 'reports/index/leads_type_reports', 0);
+            $this->make_bread->add('Leads Identification', 'reports/index/leads_type_reports', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -339,11 +326,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Type Report', 'reports/index/leads_type_reports', 0);
+            $this->make_bread->add('Leads Identification', 'reports/index/leads_type_reports', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Leads Type Report', '', 0);
+            $this->make_bread->add('Leads Identification', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -413,72 +400,58 @@ class Reports extends CI_Controller
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
         $arrData['leads'] = array();
-        $arrData['Total'] = 0;    
-        foreach ($leads as $key => $value) {
-            //Employee Login
-            if($viewName == 'EM'){
-                $index = $value['employee_id'];
-                $arrData['leads'][$index]['employee_id'] = $value['employee_id'];
-            }
-
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value['branch_id'];
-                $arrData['leads'][$index]['branch_id'] = $value['branch_id'];
-            }
-
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value['zone_id'];
-                $arrData['leads'][$index]['zone_id'] = $value['zone_id'];
-            }
-            
-            if(isset($arrData['leads'][$index]['total'])){
-                $arrData['leads'][$index]['total'] += $value['count'];
-            }else{
-                $arrData['leads'][$index]['total'] = $value['count'];    
-            }
-            $arrData['Total'] += $value['count'];    
-            $arrData['leads'][$index]['lead_identification'][$value['lead_identification']] = $value['count'];
-        }
-        $arrData['viewName'] = $viewName;
-        foreach ($list as $key => $value) {
-            if($viewName == 'EM'){
-                $index = $value->employee_id;
-                if(!in_array($value->employee_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['lead_identification'] = array();
+        $arrData['Total'] = 0;
+        if($list){
+            $Lead['userId'] = array();
+            foreach ($leads as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value['employee_id'];
+                    $Lead['userId'][] = $value['employee_id'];
                 }
-                $arrData['leads'][$index]['employee_id'] = $value->employee_id;
-                $arrData['leads'][$index]['employee_name'] = $value->employee_name;
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
-
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value->branch_id;
-                if(!in_array($value->branch_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['lead_identification'] = array();
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value['branch_id'];
+                    $Lead['userId'][] = $value['branch_id'];
                 }
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value['zone_id'];
+                    $Lead['userId'][] = $value['zone_id'];
+                }
+                $Lead[$index]['lead_identification'][$value['lead_identification']] = $value['count'];
             }
+            $arrData['viewName'] = $viewName;
+            foreach ($list as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value->employee_id;
+                    $arrData['leads'][$index]['employee_id'] = $value->employee_id;
+                    $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value->branch_id;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
 
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value->zone_id;
-                if(!in_array($value->zone_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['lead_identification'] = array();
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value->zone_id;
                 }
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                if(!in_array($index,$Lead['userId'])){
+                    $arrData['leads'][$index]['total'] = 0;
+                    $arrData['leads'][$index]['lead_identification'] = array();
+                }else{
+                    $arrData['leads'][$index]['total'] = array_sum($Lead[$index]['lead_identification']);
+                    $arrData['leads'][$index]['lead_identification'] = $Lead[$index]['lead_identification'];
+                }
+                $arrData['Total'] += $arrData['leads'][$index]['total'];
             }
         }
         return $arrData;
@@ -524,7 +497,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Leads Generated Report', 'reports/index/leads_generated', 0);
+            $this->make_bread->add('Leads Generated', 'reports/index/leads_generated', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -535,11 +508,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Generated Report', 'reports/index/leads_generated', 0);
+            $this->make_bread->add('Leads Generated', 'reports/index/leads_generated', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Leads Generated Report', '', 0);
+            $this->make_bread->add('Leads Generated', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -609,74 +582,61 @@ class Reports extends CI_Controller
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
         $arrData['leads'] = array();
-        $arrData['Total'] = 0;    
-        foreach ($leads as $key => $value) {
-            //Employee Login
-            if($viewName == 'EM'){
-                $index = $value['employee_id'];
-                $arrData['leads'][$index]['employee_id'] = $value['employee_id'];
-            }
-
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value['branch_id'];
-                $arrData['leads'][$index]['branch_id'] = $value['branch_id'];
-            }
-
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value['zone_id'];
-                $arrData['leads'][$index]['zone_id'] = $value['zone_id'];
-            }
-            
-            if(isset($arrData['leads'][$index]['total'])){
-                $arrData['leads'][$index]['total'] += $value['count'];
-            }else{
-                $arrData['leads'][$index]['total'] = $value['count'];    
-            }
-            $arrData['Total'] += $value['count'];    
-            $arrData['leads'][$index]['status'][$value['status']] = $value['count'];
-        }
-        $arrData['viewName'] = $viewName;
-        //pe($arrData);
-
-        foreach ($list as $key => $value) {
-            if($viewName == 'EM'){
-                $index = $value->employee_id;
-                if(!in_array($value->employee_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+        $arrData['Total'] = 0;
+        if($list){
+            $Lead['userId'] = array();
+            foreach ($leads as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value['employee_id'];
+                    $Lead['userId'][] = $value['employee_id'];
                 }
-                $arrData['leads'][$index]['employee_id'] = $value->employee_id;
-                $arrData['leads'][$index]['employee_name'] = $value->employee_name;
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
 
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value->branch_id;
-                if(!in_array($value->branch_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value['branch_id'];
+                    $Lead['userId'][] = $value['branch_id'];
                 }
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
 
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value->zone_id;
-                if(!in_array($value->zone_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value['zone_id'];
+                    $Lead['userId'][] = $value['zone_id'];
+                }
+
+                $Lead[$index]['status'][$value['status']] = $value['count'];
+            }
+            $arrData['viewName'] = $viewName;
+            foreach ($list as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value->employee_id;
+                    $arrData['leads'][$index]['employee_id'] = $value->employee_id;
+                    $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value->branch_id;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value->zone_id;
                 }
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                if(!in_array($index,$Lead['userId'])){
+                    $arrData['leads'][$index]['total'] = 0;
+                    $arrData['leads'][$index]['status'] = array();
+                }else{
+                    $arrData['leads'][$index]['total'] = array_sum($Lead[$index]['status']);
+                    $arrData['leads'][$index]['status'] = $Lead[$index]['status'];
+                }
+                $arrData['Total'] += $arrData['leads'][$index]['total'];
             }
         }
         return $arrData;
@@ -722,7 +682,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Leads Assigned Report',  'reports/index/leads_assigned', 0);
+            $this->make_bread->add('Leads Assigned',  'reports/index/leads_assigned', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -733,11 +693,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Assigned Report',  'reports/index/leads_assigned', 0);
+            $this->make_bread->add('Leads Assigned',  'reports/index/leads_assigned', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Leads Assigned Report', '', 0);
+            $this->make_bread->add('Leads Assigned', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -809,72 +769,60 @@ class Reports extends CI_Controller
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
         $arrData['leads'] = array();
-        $arrData['Total'] = 0;    
-        foreach ($leads as $key => $value) {
-            //Employee Login
-            if($viewName == 'EM'){
-                $index = $value['employee_id'];
-                $arrData['leads'][$index]['employee_id'] = $value['employee_id'];
-            }
-
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value['branch_id'];
-                $arrData['leads'][$index]['branch_id'] = $value['branch_id'];
-            }
-
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value['zone_id'];
-                $arrData['leads'][$index]['zone_id'] = $value['zone_id'];
-            }
-            
-            if(isset($arrData['leads'][$index]['total'])){
-                $arrData['leads'][$index]['total'] += $value['count'];
-            }else{
-                $arrData['leads'][$index]['total'] = $value['count'];    
-            }
-            $arrData['Total'] += $value['count'];    
-            $arrData['leads'][$index]['status'][$value['status']] = $value['count'];
-        }
-        $arrData['viewName'] = $viewName;
-        foreach ($list as $key => $value) {
-            if($viewName == 'EM'){
-                $index = $value->employee_id;
-                if(!in_array($value->employee_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+        $arrData['Total'] = 0;
+        if($list){
+            $Lead['userId'] = array();
+            foreach ($leads as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value['employee_id'];
+                    $Lead['userId'][] = $value['employee_id'];
                 }
-                $arrData['leads'][$index]['employee_id'] = $value->employee_id;
-                $arrData['leads'][$index]['employee_name'] = $value->employee_name;
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
 
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value->branch_id;
-                if(!in_array($value->branch_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value['branch_id'];
+                    $Lead['userId'][] = $value['branch_id'];
                 }
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
 
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value->zone_id;
-                if(!in_array($value->zone_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value['zone_id'];
+                    $Lead['userId'][] = $value['zone_id'];
+                }
+                $Lead[$index]['status'][$value['status']] = $value['count'];
+            }
+            $arrData['viewName'] = $viewName;
+            foreach ($list as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value->employee_id;
+                    $arrData['leads'][$index]['employee_id'] = $value->employee_id;
+                    $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value->branch_id;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value->zone_id;
                 }
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                if(!in_array($index,$Lead['userId'])){
+                    $arrData['leads'][$index]['total'] = 0;
+                    $arrData['leads'][$index]['status'] = array();
+                }else{
+                    $arrData['leads'][$index]['total'] = array_sum($Lead[$index]['status']);
+                    $arrData['leads'][$index]['status'] = $Lead[$index]['status'];
+                }
+                $arrData['Total'] += $arrData['leads'][$index]['total'];
             }
         }
         return $arrData;
@@ -1019,7 +967,7 @@ class Reports extends CI_Controller
         $login_user = get_session();
         $viewName = $arrData['viewName'];
         if($arrData['view'] == 'employee'){
-            $this->make_bread->add('Leads Generated Vs Converted Report', 'reports/index/leads_generated_vs_converted', 0);
+            $this->make_bread->add('Leads Generated Vs Converted', 'reports/index/leads_generated_vs_converted', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -1029,90 +977,84 @@ class Reports extends CI_Controller
             }
             $this->make_bread->add('Employee View', '', 0);
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Generated Vs Converted Report', 'reports/index/leads_generated_vs_converted', 0);
+            $this->make_bread->add('Leads Generated Vs Converted', 'reports/index/leads_generated_vs_converted', 0);
             $this->make_bread->add('Branch View', '', 0);
         }else{
-            $this->make_bread->add('Leads Generated Vs Converted Report', '', 0);
+            $this->make_bread->add('Leads Generated Vs Converted', '', 0);
         }
         $arrData['G_Total'] = $arrData['C_Total'] = 0;    
         $arrData['leads'] = array();
         $leads = array_merge($arrData['generated'],$arrData['converted']);
-        foreach ($leads as $key => $value) {
-            //Employee Login
-            if($viewName == 'EM'){
-                $index = $value['employee_id'];
-                $arrData['leads'][$index]['employee_id'] = $value['employee_id'];
-            }
-
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value['branch_id'];
-                $arrData['leads'][$index]['branch_id'] = $value['branch_id'];
-            }
-
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value['zone_id'];
-                $arrData['leads'][$index]['zone_id'] = $value['zone_id'];
-            }
-            
-            if(isset($value['generated_count'])){
-                if(isset($arrData['leads'][$index]['generated_count'])){
-                    $arrData['leads'][$index]['generated_count'] += $value['generated_count'];
-                }else{
-                    $arrData['leads'][$index]['generated_count'] = $value['generated_count'];    
+        if($arrData['list']){
+            $Lead['userId'] = array();
+            foreach ($leads as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value['employee_id'];
+                    $Lead['userId'][] = $value['employee_id'];
                 }
-                $arrData['G_Total'] += $value['generated_count'];
-            }
-            if(isset($value['converted_count'])){
-                if(isset($arrData['leads'][$index]['converted_count'])){
-                    $arrData['leads'][$index]['converted_count'] += $value['converted_count'];
-                }else{
-                    $arrData['leads'][$index]['converted_count'] = $value['converted_count'];    
+
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value['branch_id'];
+                    $Lead['userId'][] = $value['branch_id'];
                 }
-                $arrData['C_Total'] += $value['converted_count'];    
+
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value['zone_id'];
+                    $Lead['userId'][] = $value['zone_id'];
+                }
+
+                if(isset($value['generated_count'])){
+                    if(isset($Lead[$index]['generated_count'])){
+                        $Lead[$index]['generated_count'] += $value['generated_count'];
+
+                    }else{
+                        $Lead[$index]['generated_count'] = $value['generated_count'];
+                    }
+                }
+                if(isset($value['converted_count'])){
+                    if(isset($Lead[$index]['converted_count'])){
+                        $Lead[$index]['converted_count'] += $value['converted_count'];
+                    }else{
+                        $Lead[$index]['converted_count'] = $value['converted_count'];
+                    }
+                }
             }
-        }
-        foreach ($arrData['list'] as $key => $value) {
-            if($viewName == 'EM'){
-                $index = $value->employee_id;
-                if(!in_array($value->employee_id,array_keys($arrData['leads']))){
+            foreach ($arrData['list'] as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value->employee_id;
+                    $arrData['leads'][$index]['employee_id'] = $value->employee_id;
+                    $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value->branch_id;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value->zone_id;
+                }
+                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
+                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                if(!in_array($index,$Lead['userId'])){
                     $arrData['leads'][$index]['generated_count'] = 0;
                     $arrData['leads'][$index]['converted_count'] = 0;
+                }else{
+                    $arrData['leads'][$index]['generated_count'] = isset($Lead[$index]['generated_count']) ? $Lead[$index]['generated_count'] : 0;
+                    $arrData['leads'][$index]['converted_count'] = isset($Lead[$index]['converted_count']) ? $Lead[$index]['converted_count'] : 0;
                 }
-                $arrData['leads'][$index]['employee_id'] = $value->employee_id;
-                $arrData['leads'][$index]['employee_name'] = $value->employee_name;
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
-
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value->branch_id;
-                if(!in_array($value->branch_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
-                }
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
-
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value->zone_id;
-                if(!in_array($value->zone_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
-                }
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                $arrData['G_Total'] += $arrData['leads'][$index]['generated_count'];
+                $arrData['C_Total'] += $arrData['leads'][$index]['converted_count'];
             }
         }
-
         return $arrData;
     }
 
@@ -1124,7 +1066,7 @@ class Reports extends CI_Controller
         $table = Tbl_Leads.' as l';
         $where  = array();
         $join = array();
-        $group_by = array('l.lead_ticket_range');
+        /*$group_by = array('l.lead_ticket_range');*/
 
         //If Start date selected
         if(!empty($arrData['start_date'])){
@@ -1154,7 +1096,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Leads Classifcation Report', 'reports/index/leads_classification', 0);
+            $this->make_bread->add('Leads Classifcation', 'reports/index/leads_classification', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -1165,11 +1107,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Classifcation Report', 'reports/index/leads_classification', 0);
+            $this->make_bread->add('Leads Classifcation', 'reports/index/leads_classification', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Leads Classifcation Report','', 0);
+            $this->make_bread->add('Leads Classifcation','', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -1235,69 +1177,59 @@ class Reports extends CI_Controller
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'lead_ticket_range DESC');
-        /*pe($this->db->last_query());
-        exit;*/
         $arrData['leads'] = array();
-        $arrData['Total'] = 0;    
-        foreach ($leads as $key => $value) {
-            //Employee Login
-            if($viewName == 'EM'){
-                $index = $value['employee_id'];
-                $arrData['leads'][$index]['employee_id'] = $value['employee_id'];
-            }
+        $arrData['Total'] = 0;
+        if($list){
+            $Lead['userId'] = array();
+            foreach ($leads as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value['employee_id'];
+                    $Lead['userId'][] = $value['employee_id'];
+                }
 
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value['branch_id'];
-                $arrData['leads'][$index]['branch_id'] = $value['branch_id'];
-            }
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value['branch_id'];
+                    $Lead['userId'][] = $value['branch_id'];
+                }
 
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value['zone_id'];
-                $arrData['leads'][$index]['zone_id'] = $value['zone_id'];
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value['zone_id'];
+                    $Lead['userId'][] = $value['zone_id'];
+                }
+                $Lead[$index]['ticket'] = $value['lead_ticket_range'];
             }
-            $arrData['Total'] += $value['lead_ticket_range'];    
-            $arrData['leads'][$index]['ticket'] = $value['lead_ticket_range'];
-        }
-        $arrData['viewName'] = $viewName;
-        foreach ($list as $key => $value) {
-            if($viewName == 'EM'){
-                $index = $value->employee_id;
-                if(!in_array($value->employee_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
+            $arrData['viewName'] = $viewName;
+            foreach ($list as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value->employee_id;
+                    $arrData['leads'][$index]['employee_id'] = $value->employee_id;
+                    $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value->branch_id;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value->zone_id;
+                }
+                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
+                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                if(!in_array($index,$Lead['userId'])){
                     $arrData['leads'][$index]['ticket'] = 0;
+                }else{
+                    $arrData['leads'][$index]['ticket'] = $Lead[$index]['ticket'];
                 }
-                $arrData['leads'][$index]['employee_id'] = $value->employee_id;
-                $arrData['leads'][$index]['employee_name'] = $value->employee_name;
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
-
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value->branch_id;
-                if(!in_array($value->branch_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
-                }
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-            }
-
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value->zone_id;
-                if(!in_array($value->zone_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
-                }
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+                $arrData['Total'] += $arrData['leads'][$index]['ticket'];
             }
         }
         return $arrData;
@@ -1323,7 +1255,7 @@ class Reports extends CI_Controller
         }
         
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Usage Report', 'reports/index/usage', 0);
+            $this->make_bread->add('Usage', 'reports/index/usage', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -1334,11 +1266,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Usage Report', 'reports/index/usage', 0);
+            $this->make_bread->add('Usage', 'reports/index/usage', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Usage Report', '', 0);
+            $this->make_bread->add('Usage', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -1405,77 +1337,84 @@ class Reports extends CI_Controller
 
         $TABLE  = 'employee_dump';
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
-        //pe($list);
+        /*pe($this->db->last_query());
+        exit;*/
+
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
+
         $arrData['leads'] = array();
         $arrData['Total'] = 0;   
-        //pe($leads); 
-        foreach ($leads as $key => $value) {
-            //Employee Login
-            if($viewName == 'EM'){
-                $index = $value['employee_id'];
-                $arrData['leads'][$index]['employee_id'] = $value['employee_id'];
-            }
-
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value['branch_id'];
-                $arrData['leads'][$index]['branch_id'] = $value['branch_id'];
-            }
-
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value['zone_id'];
-                $arrData['leads'][$index]['zone_id'] = $value['zone_id'];
-            }
-            $arrData['leads'][$index]['total'] = $value['count'];
-        }
-        $arrData['viewName'] = $viewName;
-        foreach ($list as $key => $value) {
-            if($viewName == 'EM'){
-                $index = $value->employee_id;
-                if(!in_array($value->employee_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
+        if($list){
+            $Lead['userId'] = array();
+            foreach ($leads as $key => $value) {
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value['employee_id'];
+                    $Lead['userId'][] = $value['employee_id'];
                 }
-                $arrData['leads'][$index]['employee_id'] = $value->employee_id;
-                $arrData['leads'][$index]['employee_name'] = $value->employee_name;
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value['branch_id'];
+                    $Lead['userId'][] = $value['branch_id'];
+                }
+
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value['zone_id'];
+                    $Lead['userId'][] = $value['zone_id'];
+                }
+                $Lead[$index]['total'] = $value['count'];
+            }
+            $arrData['viewName'] = $viewName;
+            foreach ($list as $key => $value) {
+                if($viewName == 'EM'){
+                    $index = $value->employee_id;
+                    $arrData['leads'][$index]['employee_id'] = $value->employee_id;
+                    $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                    if(!in_array($index,$Lead['userId'])){
+                        $arrData['leads'][$index]['total'] = 0;
+                    }else{
+                        $arrData['leads'][$index]['total'] = $Lead[$index]['total'];
+                    }
+                    $arrData['Total'] = count($list);
+                }
+
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value->branch_id;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                    if(!in_array($index,$Lead['userId'])){
+                        $arrData['leads'][$index]['total'] = 0;
+                    }else{
+                        $arrData['leads'][$index]['total'] = $Lead[$index]['total'];
+                    }
+                    if(isset($value->total_user)){
+                        $arrData['leads'][$index]['total_user'] = $value->total_user;
+                        $arrData['Total'] += $value->total_user;
+                        $arrData['leads'][$index]['not_logged_in'] = ($arrData['leads'][$index]['total_user'] - $arrData['leads'][$index]['total']);
+                    }
+                }
+
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value->zone_id;
+                    if(!in_array($index,$Lead['userId'])){
+                        $arrData['leads'][$index]['total'] = 0;
+                    }else{
+                        $arrData['leads'][$index]['total'] = $Lead[$index]['total'];
+                    }
+                    if(isset($value->total_user)){
+                        $arrData['leads'][$index]['total_user'] = $value->total_user;
+                        $arrData['Total'] += $value->total_user;
+                        $arrData['leads'][$index]['not_logged_in'] = ($arrData['leads'][$index]['total_user'] - $arrData['leads'][$index]['total']);
+                    }
+                }
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-                $arrData['Total'] = count($list);    
-            }
-
-            //Branch Manager Login
-            if($viewName == 'BM'){
-                $index = $value->branch_id;
-                if(!in_array($value->branch_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                }
-                $arrData['leads'][$index]['branch_name'] = $value->branch_name;
-                $arrData['leads'][$index]['branch_id'] = $value->branch_id;
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-                if(isset($value->total_user)){
-                    $arrData['leads'][$index]['total_user'] = $value->total_user;
-                    $arrData['Total'] += $value->total_user;    
-                    $arrData['leads'][$index]['not_logged_in'] = ($arrData['leads'][$index]['total_user'] - $arrData['leads'][$index]['total']);
-                }
-            }
-
-            //Zone Manager Login
-            if($viewName == 'ZM'){
-                $index = $value->zone_id;
-                if(!in_array($value->zone_id,array_keys($arrData['leads']))){
-                    $arrData['leads'][$index]['total'] = 0;
-                }
-                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
-                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-                if(isset($value->total_user)){
-                    $arrData['leads'][$index]['total_user'] = $value->total_user;
-                    $arrData['Total'] += $value->total_user;    
-                    $arrData['leads'][$index]['not_logged_in'] = ($arrData['leads'][$index]['total_user'] - $arrData['leads'][$index]['total']);
-                }
             }
         }
         return $arrData;

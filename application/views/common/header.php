@@ -126,7 +126,7 @@
 					<ul class="cal-drop1">
 						<li class="<?php echo ($controller == 'usage') ? 'active' : ''?>" id="cal-droped3">
 							<a href="#">
-							
+
 					<span class="right-toggle">&#9666;</span>Usage <span class="left-toggle"> &#9656;</span>
 
 							</a>
@@ -248,5 +248,5 @@
 	    $("#cal-droped4").hover(function(){
 	    	// event.preventDefault();
 	        $(".cal-drop4").toggle();
-	    }); 	
+	    });
 </script>

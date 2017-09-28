@@ -609,8 +609,8 @@ class Dashboard extends CI_Controller {
                 export_excel($header_value,$data);
                 break;
             case 'ZM':
-                $header_value = array('Sr.No','Branch Name','Generated Leads(This Month)',
-                    'Converted Leads(This Month)');
+                $header_value = array('Sr.No','Branch Name','Generated Leads(This Month)','Generated Leads(This Year)',
+                    'Converted Leads(This Month)','Converted Leads(This Year)');
                 $id = $login_user['zone_id'];
                 $data = $this->zm_view($id);
                 export_excel($header_value,$data);

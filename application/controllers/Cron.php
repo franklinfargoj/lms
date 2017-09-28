@@ -20,7 +20,7 @@ class Cron extends CI_Controller
 
     /*
      * gm_consolidated_mail
-     * Zonewise leads generated,converted,unassigned and pending count 
+     * Zone wise leads generated,converted,unassigned and pending count
      * @author Ashok Jadhav (AJ)
      * @access public
      * @param none
@@ -72,7 +72,7 @@ class Cron extends CI_Controller
 
      /*
      * zm_consolidated_mail
-     * Branchwise leads generated,converted,unassigned and pending count 
+     * Branch wise leads generated,converted,unassigned and pending count
      * @author Ashok Jadhav (AJ)
      * @access public
      * @param none
@@ -181,7 +181,7 @@ class Cron extends CI_Controller
 
     /*
      * bm_inactive_leads
-     * Employee wise  Inacvtive leads count
+     * Employee wise  Inactive leads count
      * @author Ashok Jadhav (AJ)
      * @access public
      * @param none
@@ -233,7 +233,7 @@ class Cron extends CI_Controller
     }
     /*
      * zm_inactive_leads
-     * Branch wise  Inacvtive leads count
+     * Branch wise  Inactive leads count
      * @author Ashok Jadhav (AJ)
      * @access public
      * @param none
@@ -285,7 +285,7 @@ class Cron extends CI_Controller
     }
 
     /*
-     * zm_unassigned_leadszm_unassigned_leads
+     * zm_unassigned_leads
      * Branch wise  Unassigned leads count
      * @author Ashok Jadhav (AJ)
      * @access public
