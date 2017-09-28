@@ -1,10 +1,10 @@
 
-@media only screen and (min-width:1023px) and (max-width:1200px){
+@media only screen and (min-width:1023px) and (max-width:1300px){
 	.header .logo{
 		width: 25%;
 	}
 	.header .top-navigation{
-		width: 100%;
+		width: 100% ;
 	}
 	.header .right-nav{
 		width: 18%;

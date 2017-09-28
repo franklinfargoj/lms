@@ -133,7 +133,7 @@
 							<ul class="cal-drop3">
 								<li>
 									<a href="<?php echo site_url('reports/index/usage')?>">
-									Usage report
+									Usage Report
 									</a>
 								</li>
 								<li>
@@ -216,7 +216,7 @@
 					</a>
 				</div>
 				<div class="logged-in">
-					<img src="<?php echo base_url().ASSETS;?>images/pic.png" alt="pic">
+					<img src="<?php echo base_url().ASSETS;?>images/username.png" alt="pic">
 					<div>
 					<span class="name">Hi, <?php echo $this->session->userdata('admin_name');?> !!</span>
 						<span class="name">(<?php echo $this->session->userdata('admin_type');?>)</span>
