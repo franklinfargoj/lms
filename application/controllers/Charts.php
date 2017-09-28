@@ -402,7 +402,7 @@ class Charts extends CI_Controller
 
                 if(isset($value->total_user)){
                     $arrData['Total'] += $value->total_user;
-                    $arrData['not_logged_in'][] = ($value->total_user - isset($zone['logged_in'][$index]) ? $zone['logged_in'][$index] : 0);
+                    $arrData['not_logged_in'][] = ($value->total_user -  isset($zone['logged_in'][$index]) ? $zone['logged_in'][$index] : 0);
                 }
             }
         }
