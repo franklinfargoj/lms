@@ -115,7 +115,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                         <?php }?>
                         <?php if($type == 'assigned'){?>
                         <th style="text-align:center">
-                            Followup date
+                            Followup Date
                         </th>
                         <?php }?>
                         <th style="text-align:left">
