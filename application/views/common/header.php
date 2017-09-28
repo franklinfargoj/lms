@@ -131,7 +131,7 @@
 							<ul class="cal-drop3">
 								<li>
 									<a href="<?php echo site_url('reports/index/usage')?>">
-									Usage report
+									Usage Report
 									</a>
 								</li>
 								<li>
