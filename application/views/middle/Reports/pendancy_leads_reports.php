@@ -34,7 +34,7 @@ $lead_status = $this->config->item('lead_status');
     <div class="inner-content">
         <div class="container ">
         <div class="form">
-        <p id="note"><span style="color:red;">* </span> These fields are required</p>
+        <p id="note"><span style="color:red;"> * </span> These fields are required</p>
             <div class="lead-form-left">
                     <div class="form-control">
                         <label id="cal">Start Date:<span style="color:red;">*</span> </label>   
