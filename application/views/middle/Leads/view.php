@@ -51,8 +51,8 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                 </a>
                 <?php } ?>
             </div>
-            </div>
-            <div class="over">
+            
+            
             <table id="sample_3" class="display lead-table">
                 <thead>
                     <tr class="top-header">
@@ -210,8 +210,8 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                     }?>
                 </tbody>
             </table>
+        
         </div>
-
     </div>
     </div>
     <span class="bg-bottom"></span>
