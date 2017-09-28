@@ -633,6 +633,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
             break;
         case 'assigned':
             $lead_status = $CI->config->item('lead_status');
+            $lead_type = $CI->config->item('lead_type');
             foreach ($data['leads'] as $key => $value){
                 foreach ($header_value as $k => $v){
                     $objSheet->getStyle($excel_alpha[$k].$i)
@@ -674,7 +675,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
                 $objSheet->getCell($excel_alpha[3].$i)->setValue($elapse_date);
                 $objSheet->getCell($excel_alpha[4].$i)->setValue(ucwords($lead_status[$value['status']]));
                 $objSheet->getCell($excel_alpha[5].$i)->setValue($follow_up_date);
-                $objSheet->getCell($excel_alpha[6].$i)->setValue($value['lead_identification']);
+                $objSheet->getCell($excel_alpha[6].$i)->setValue(ucwords($lead_type[$value['lead_identification']]));
                 $objSheet->getCell($excel_alpha[7].$i)->setValue(ucwords($value['lead_source']));
                 $i++;$j++;
             }

@@ -16,7 +16,7 @@ class Dashboard extends CI_Controller {
 	{
 		// Initialization of class
 		parent::__construct();
-//          is_logged_in();     //check login
+          is_logged_in();     //check login
           $this->load->model('Lead','master');
           
 	}
@@ -122,7 +122,6 @@ class Dashboard extends CI_Controller {
         $generated['yearly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_year_Array);
         $generated_key_value = array();
         $generated_key_value_year = array();
-        $final = array();
         foreach ($generated['monthly_generated_leads'] as $k => $v) {
             $generated_key_value[$v['created_by']] = $v['total'];
         }
@@ -180,11 +179,8 @@ class Dashboard extends CI_Controller {
         $where_year_Array = array('zone_id' => $zone_id,'YEAR(created_on)' => date('Y'));
         $generated['monthly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_month_Array);
         $generated['yearly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_year_Array);
-        /*pe($generated);
-        exit;*/
         $generated_key_value = array();
         $generated_key_value_year = array();
-        $final = array();
         foreach ($generated['monthly_generated_leads'] as $k => $v) {
             $generated_key_value[$v['branch_id']] = $v['total'];
         }

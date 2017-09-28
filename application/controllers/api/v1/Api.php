@@ -1180,13 +1180,14 @@ class Api extends REST_Controller
             $result['status'] = 'error';
             $result2['status'] = 'error';
             $result4['status'] = 'error';
+            $response1['status'] = '';
             $action = 'list';
             $join[] = array('table' => Tbl_Leads . ' as l', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
             $table = Tbl_LeadAssign . ' as la';
             $select = array('la.*', 'l.lead_identification');
             $where = array('la.lead_id' => $params['lead_id'], 'la.is_updated' => 1);
             $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
-            $leads = $leadsAssign[0];
+            $leads = isset($leadsAssign[0]) ? $leadsAssign[0]:'';
             if (empty($leadsAssign)) {
                 $res = array('result' => False,
                     'data' => array('No assigned lead found.'));
@@ -1332,6 +1333,31 @@ class Api extends REST_Controller
                     } else {
                         $res = array('result' => False,
                             'data' => array('Invalid Request For Following Status'));
+                        returnJson($res);
+                    }
+                }
+                if ($params['status'] == 'AO') {
+                    if (isset($params['account_no']) && !empty($params['account_no'])) {
+                        if(strlen($params['account_no']) != 12){
+                            $res = array('result' => False,
+                                'data' => array('Invalid Request For Account Opened'));
+                            returnJson($res);
+                        }
+
+                        $url = 'http://103.224.110.52/client.php?account_no='.$params['account_no'];
+                        $api_res = call_external_url($url);
+                        $api_res = strip_tags($api_res);
+                        $api_res = json_decode($api_res,true);
+                        $responseData = array(
+                            'lead_id' => $params['lead_id'],
+                            'account_no'=>$params['account_no'],
+                            'response_data' => $api_res['data']
+                        );
+                        //This will add entry into cbs response for status (Account Opened)
+                        $this->Lead->insert_lead_data($responseData,Tbl_cbs);
+                    } else {
+                        $res = array('result' => False,
+                            'data' => array('Invalid Request For Account Opened'));
                         returnJson($res);
                     }
                 }

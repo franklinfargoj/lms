@@ -165,7 +165,7 @@ class Leads extends CI_Controller
                     sendPushNotification($emp_id,$push_message,$title);
                 }
                 $this->session->set_flashdata('success', "Lead Added Successfully");
-                redirect(base_url('Leads/add'), 'refresh');
+                redirect(base_url('leads/add'), 'refresh');
             }
         } else {
             $middle = 'Leads/add_lead';
@@ -479,6 +479,8 @@ class Leads extends CI_Controller
 
         $arrData['unassigned_leads'] = $this->Lead->unassigned_leads('',$id);
         $arrData['lead_source'] = ucwords($lead_source);
+        $l_source = encode_id($lead_source);
+        $arrData['backUrl'] = 'leads/unassigned_leads_list/'.$l_source;
 
         $middle = "Leads/unassigned_details";
         load_view($middle,$arrData);
@@ -752,6 +754,15 @@ class Leads extends CI_Controller
                             );
                             //This will add entry into reminder scheduler for status (Interested/Follow up)
                             $this->Lead->add_reminder($remindData);
+                        }
+                        if($lead_status == 'AO'){
+                            $responseData = array(
+                                'lead_id' => $lead_id,
+                                'account_no'=>$this->input->post('accountNo'),
+                                'response_data' => $this->input->post('response_data')
+                            );
+                            //This will add entry into cbs response for status (Account Opened)
+                            $this->Lead->insert_lead_data($responseData,Tbl_cbs);
                         }
                         if($lead_status == 'Converted'){
                             $this->points_distrubution($lead_id);
@@ -1034,7 +1045,7 @@ class Leads extends CI_Controller
             $whereArray = array('state_code'=> $state_id);
             $action='list';$table=Tbl_district;$select=array('code','name');
             $districts = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
-            $district_extra = 'id="district_id"';
+            $district_extra = 'id="district_id"';$branch_extra = 'id="branch_id"';
             if (!empty($districts)) {
                 $options[''] = $select_label;
                 foreach ($districts as $key => $value) {
@@ -1042,12 +1053,20 @@ class Leads extends CI_Controller
                 }
                 $html = '<label>District:</label>';
                 $html .= form_dropdown('district_id', $options, '', $district_extra);
+                $options_branch[''] = 'Select Branch';
+                $html1 = '<label>Branch:</label>';
+                $html1 .= form_dropdown('branch_id', $options_branch, '', $branch_extra);
             } else {
                 $options[''] = $select_label;
                 $html = '<label>District:</label>';
                 $html .= form_dropdown('district_id', $options, '', $district_extra);
+                $options_branch[''] = 'Select Branch';
+                $html1 = '<label>Branch:</label>';
+                $html1 .= form_dropdown('branch_id', $options_branch, '', $branch_extra);
             }
-            echo $html;
+            $data['district'] = $html;
+            $data['branch'] = $html1;
+            echo json_encode($data);
         }
     }
     /*
@@ -1079,30 +1098,46 @@ class Leads extends CI_Controller
                 $html = '<label>Branch:</label>';
                 $html .= form_dropdown('branch_id', $options, '', $branch_extra);
             }
-            echo $html;
+            echo json_encode($html);
         }
     }
     public function is_own_branch(){
         if ($this->input->post()) {
-            $district_code = $this->input->post("district_code");
-            $branch_code = $this->input->post("branch_code");
+            $district_code = $this->input->post("district_id");
+            $state_code = $this->input->post("state_id");
+            $branch_code = $this->input->post("branch_id");
             $action='list';$table=Tbl_branch;$select=array('code','name');
             $branches = $this->Lead->get_leads($action,$table,$select,'','','','');
             $table = Tbl_district;
             $districts = $this->Lead->get_leads($action,$table,$select,'','','','');
+            $table = Tbl_state;
+            $states = $this->Lead->get_leads($action,$table,$select,'','','','');
             $branch_extra = 'id="branch_id"';
             $district_extra = 'id="district_id"';
+            $state_extra = 'id="state_id"';
+            if (!empty($states)) {
+                $options[''] = 'Select State';
+                foreach ($states as $key => $value) {
+                    $options[$value['code']] = ucwords($value['name']);
+                }
+                $html = '<label>State:</label>';
+                $html .= form_dropdown('state_id', $options, $state_code, $state_extra);
+            } else {
+                $options[''] = 'Select State';
+                $html = '<label>State:</label>';
+                $html .= form_dropdown('state_id', $options, '', $branch_extra);
+            }
             if (!empty($branches)) {
                 $options[''] = 'Select Branch';
                 foreach ($branches as $key => $value) {
                     $options[$value['code']] = ucwords($value['name']);
                 }
-                $html = '<label>Branch:</label>';
-                $html .= form_dropdown('branch_id', $options, $branch_code, $branch_extra);
+                $html1 = '<label>Branch:</label>';
+                $html1 .= form_dropdown('branch_id', $options, $branch_code, $branch_extra);
             } else {
                 $options[''] = 'Select Branch';
-                $html = '<label>Branch:</label>';
-                $html .= form_dropdown('branch_id', $options, '', $branch_extra);
+                $html1 = '<label>Branch:</label>';
+                $html1 .= form_dropdown('branch_id', $options, '', $branch_extra);
             }
             if (!empty($districts)) {
                 $dist_options[''] = 'Select District';
@@ -1116,8 +1151,9 @@ class Leads extends CI_Controller
                 $html2 = '<label>District:</label>';
                 $html2 .= form_dropdown('district_id', $dist_options, '', $district_extra);
             }
-            $data['html'] = $html;
-            $data['html2'] = $html2;
+            $data['branch'] = $html1;
+            $data['state'] = $html;
+            $data['district'] = $html2;
             echo json_encode($data);
         }
     }
@@ -1155,6 +1191,47 @@ class Leads extends CI_Controller
                 $this->db->insert(Tbl_Points,$generator_data);
                 $this->db->insert(Tbl_Points,$convertor_data);
             }
+        }
+    }
+
+    public function is_other_branch(){
+        $state_extra = 'id="state_id"';
+        $branch_extra = 'id="branch_id"';
+        $district_extra = 'id="district_id"';
+            $table = Tbl_state;
+            $action='list';$select=array('code','name');
+            $states = $this->Lead->get_leads($action,$table,$select,'','','','');
+            if (!empty($states)) {
+                $options[''] = 'Select State';
+                foreach ($states as $key => $value) {
+                    $options[$value['code']] = ucwords($value['name']);
+                }
+                $html = '<label>State:</label>';
+                $html .= form_dropdown('state_id', $options,'', $state_extra);
+            }else {
+                $options[''] = 'Select State';
+                $html = '<label>State:</label>';
+                $html .= form_dropdown('state_id', $options, '', $state_extra);
+            }
+            $branch_options[''] = 'Select Branch';
+            $html1 = '<label>Branch:</label>';
+            $html1 .= form_dropdown('branch_id', $branch_options, '', $branch_extra);
+            $dist_options[''] = 'Select District';
+            $html2 = '<label>District:</label>';
+            $html2 .= form_dropdown('district_id', $dist_options, '', $district_extra);
+            $data['branch'] = $html1;
+            $data['state'] = $html;
+            $data['district'] = $html2;
+            echo json_encode($data);
+    }
+
+    public function verify_account(){
+        if($this->input->post('acc_no') != '')
+        {
+            $acc_no = $this->input->post('acc_no');
+            $url = 'http://103.224.110.52/client.php?account_no='.$acc_no;
+            $response = call_external_url($url);
+            echo $response;
         }
     }
 

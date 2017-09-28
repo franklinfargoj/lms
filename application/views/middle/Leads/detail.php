@@ -43,7 +43,7 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">Lead Detail</h3>
-        
+
     </div>
 </div>
 <div class="page-content">
@@ -53,7 +53,7 @@
             <?php if($leads){?>
                 <div class="lead-form">
                     <!-- <form> -->
-                    <?php 
+                    <?php
                         //Form
                         $attributes = array(
                             'role' => 'form',
@@ -69,7 +69,7 @@
                                 <label>Lead ID:</label> <span class="detail-label"><?php echo ucwords($leads[0]['id']);?></span>
                             </div>
                             <div class="form-control">
-                                <label>Lead Identified as :</label> 
+                                <label>Lead Identified as :</label>
                                 <span class="detail-label" style="color:<?php echo $color;?>">
                                     <?php echo !empty($leads[0]['lead_identification']) ? ucwords($lead_type[$leads[0]['lead_identification']]) : '';?>
                                 </span>
@@ -83,7 +83,7 @@
                             <div class="form-control">
                                 <label>Lead Status:</label> <span class="detail-label"><?php echo isset($leads[0]['status']) ? $lead_status[$leads[0]['status']] : 'NA';?></span>
                             </div>
-                           
+
                             <div class="form-control">
                                 <label>Assign To:</label> <span class="detail-label"><?php echo ucwords($leads[0]['employee_name']);?></span>
                             </div>
@@ -91,7 +91,7 @@
                                 <!-- <div class="form-control">
                                     <label>Interest in other product</label>
                                     <div class="radio-control">
-                                         <?php 
+                                         <?php
                                             $data = array(
                                                 'name'          => 'interested',
                                                 'id'            => 'interested',
@@ -105,22 +105,22 @@
                                     </div>
                                 </div>
                                 <div class="form-control interested-info" style="display:none;">
-                                    <label>Category:</label>   
-                                    <?php 
+                                    <label>Category:</label>
+                                    <?php
                                         if(isset($category_list)){
                                             $options = $category_list;
                                             $js = array(
                                                     'id'       => 'product_category_id',
                                                     'class'    => 'form-control'
                                             );
-                                            echo form_dropdown('product_category_id', $options , '',$js);    
+                                            echo form_dropdown('product_category_id', $options , '',$js);
                                         }
                                     ?>
                                 </div> -->
                                 <div class="form-control">
-                                    <label>Lead Identified as :</label> 
+                                    <label>Lead Identified as :</label>
                                     <span class="detail-label">
-                                        <?php 
+                                        <?php
                                             if(isset($lead_identification)){
                                                 $options2['']='Select';
                                                 foreach ($lead_type as $key => $value) {
@@ -130,13 +130,13 @@
                                                         'id'       => 'lead_identification',
                                                         'class'    => 'form-control'
                                                 );
-                                                echo form_dropdown('lead_identification', $options2 , $leads[0]['lead_identification'],$js);    
+                                                echo form_dropdown('lead_identification', $options2 , $leads[0]['lead_identification'],$js);
                                             }
                                         ?>
                                     </span>
                                 </div>
                                 <div class="form-control">
-                                    <label>Lead Status:</label>   
+                                    <label>Lead Status:</label>
                                     <?php
                                         $data = array(
                                             'lead_id' => encode_id($leads[0]['id']),
@@ -159,8 +159,8 @@
                                     ?>
                                 </div>
                                 <div class="form-control followUp" style="display:none">
-                                    <label>Remind On:</label>   
-                                    <?php 
+                                    <label>Remind On:</label>
+                                    <?php
                                         if(!empty($leads[0]['remind_on'])){
                                             $value = date('d-m-Y',strtotime($leads[0]['remind_on']));
                                         }else{
@@ -177,18 +177,17 @@
                                         ?>
                                 </div>
                                 <div class="form-control followUp" style="display:none">
-                                    <label>Discussed Points:</label>   
+                                    <label>Discussed Points:</label>
                                     <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
                                 </div>
                                 <div class="form-control accountOpen" style="display:none">
-                                    <label>Verify Account</label>   
-                                    <?php 
+                                    <label>Verify Account</label>
+                                    <?php
                                         $data = array(
                                             'type'  => 'text',
                                             'name'  => 'accountNo',
                                             'id'    => 'accountNo',
-                                            'class' => '',
-                                            'value' => ''
+                                            'class' => ''
                                         );
                                         echo form_input($data);
                                         ?>
@@ -200,7 +199,7 @@
                                         <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
                                     </a>
                                 </div>
-
+                                <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" alt="35" style="display:none;">
                             <?php }?>
                         </div>
 
@@ -250,7 +249,7 @@
                                     <?php echo form_error('branch_id'); ?>
                                 </div>
                                 <div class="form-control" id="reroute">
-                                    <label>Reroute To:</label>   
+                                    <label>Reroute To:</label>
                                     <select name="reroute_to">
                                         <option value="">Select Employee</option>
                                         <?php $result = get_details($this->session->userdata('admin_id'));?>
@@ -271,8 +270,16 @@
                             <?php }?>
                         </div>
                     <!-- </form> -->
-                    <?php 
-                        echo form_close();
+                    <?php
+                    $attr = array(
+                        'type'  => 'text',
+                        'name'  => 'response_data',
+                        'id'    => 'response_data',
+                        'value' => '',
+                        'style'=>'display:none'
+                    );
+                    echo form_input($attr);
+                    echo form_close();
                     ?>
                 </div>
             <?php }?>
@@ -285,13 +292,13 @@
     $(document).ready(function(){
         var lead_status = "<?php echo $leads[0]['status']?>";  //Current Lead status
         var category_title = "<?php echo $leads[0]['category_title']?>";  //Current Category
-        
+
         if(lead_status == 'FU'){
-            $('.followUp').show();              //Display follow up fields 
+            $('.followUp').show();              //Display follow up fields
         }
 
         $('#lead_status').change(function(){
-            var option = $(this).val();         
+            var option = $(this).val();
             action(option);
         });
 
@@ -299,7 +306,7 @@
             $(this).datepicker({dateFormat: 'dd-mm-yy',minDate: 0});
 
         });
-        
+
         $('#product_category_id').change(function () {
             var csrf = $("input[name=csrf_dena_bank]").val();
             var category_id = $(this).val();
@@ -330,6 +337,7 @@
         });
 
         var action = function(option){
+            $('#accountNo').removeAttrs('readonly');
             $('.submit_button').show();
             if(option == 'FU'){
                $('.followUp').show();
@@ -338,6 +346,8 @@
             }else if(option == 'AO'){
                 if(category_title != 'fee income'){
                     $('.accountOpen').show();
+                    $('.verify_account').show();
+                    $('#accountNo').removeAttrs('readonly');
                     $('.submit_button').hide();
                 }
                 $('.followUp').hide();
@@ -477,10 +487,43 @@
             }
         });
     });
+
+    $('.verify_account').click(function () {
+        var acc_no = $('#accountNo').val();
+        if(acc_no.length === 0 || acc_no.length != 12){
+            alert('Please Enter 12digit Account number.');
+        }else{
+            $('.loader').show();
+            $.ajax({
+                type: "POST",
+                url: base_url + "leads/verify_account",
+                data: {
+                    '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                    acc_no: acc_no
+                }
+            }).success(function(resp){
+                    var regex = /(<([^>]+)>)/ig;
+                    var body = resp;
+                    var result = body.replace(regex, "");
+                    var response = JSON.parse(result);
+                        if(response['status'] == 'True'){
+                            $('.loader').hide();
+                            alert('Success');
+                            $('.verify_account').hide();
+                            $('#accountNo').attr('readonly','true');
+                            $('.submit_button').show();
+                            $('#response_data').val(response['data']);
+                        }else{
+                            $('.loader').hide();
+                            alert('Verification Failed');
+                        }
+            });
+        }
+
+    });
 </script>
 
 
 
 
-    
-    
+
