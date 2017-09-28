@@ -477,9 +477,3 @@ $branch_extra = 'id="branch_id"';
         });
     });
 </script>
-
-
-
-
-    
-    

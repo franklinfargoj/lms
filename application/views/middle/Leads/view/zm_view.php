@@ -99,7 +99,6 @@
 
         //Initialize datatable configuration
         initTable(table,columns);
-
     });
 
 </script>
