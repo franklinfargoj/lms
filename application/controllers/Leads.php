@@ -51,13 +51,16 @@ class Leads extends CI_Controller
         $arrData['products'] = '';
 
         $action = 'list';$table=Tbl_state;$select=array('code','name');
-        $arrData['states'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+        $where = array('code !='=>'');
+        $arrData['states'] = $this->Lead->get_leads($action,$table,$select,$where,'','','');
 
         $action = 'list';$table=Tbl_district;$select=array('code','name');
-        $arrData['districts'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+        $where = array('code !='=>'');
+        $arrData['districts'] = $this->Lead->get_leads($action,$table,$select,$where,'','','');
 
         $action = 'list';$table=Tbl_branch;$select=array('code','name');
-        $arrData['branches'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+        $where = array('code !='=>'');
+        $arrData['branches'] = $this->Lead->get_leads($action,$table,$select,$where,'','','');
 
 
         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
@@ -1047,7 +1050,7 @@ class Leads extends CI_Controller
         if ($this->input->post()) {
             $state_id = $this->input->post("state_code");
             $select_label = $this->input->post("select_label");
-            $whereArray = array('state_code'=> $state_id);
+            $whereArray = array('state_code'=> $state_id,'code !=' =>'');
             $action='list';$table=Tbl_district;$select=array('code','name');
             $districts = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
             $district_extra = 'id="district_id"';$branch_extra = 'id="branch_id"';
@@ -1087,7 +1090,7 @@ class Leads extends CI_Controller
         if ($this->input->post()) {
             $district_code = $this->input->post("district_code");
             $select_label = $this->input->post("select_label");
-            $whereArray = array('district_code'=> $district_code);
+            $whereArray = array('district_code'=> $district_code,'code !=' =>'');
             $action='list';$table=Tbl_branch;$select=array('code','name');
             $branches = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
             $branch_extra = 'id="branch_id"';

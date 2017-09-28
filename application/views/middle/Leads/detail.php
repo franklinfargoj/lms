@@ -476,7 +476,9 @@
             }
         }).success(function (resp) {
             if(resp){
-                $("#district_id").html(resp);
+                var res = JSON.parse(resp);
+                $("#district_id").html(res['district']);
+                $("#branch_id").html(res['branch']);
             }
         });
     });
@@ -493,8 +495,8 @@
             }
         }).success(function (resp) {
             if(resp){
-                console.log(resp);
-                $("#branch_id").html(resp);
+                var res = JSON.parse(resp);
+                $("#branch_id").html(res);
             }
         });
     });

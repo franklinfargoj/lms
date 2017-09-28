@@ -281,7 +281,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 }
             }).success(function (resp) {
                 if (resp) {
-                    $("#product_select").html(resp);
+                    $("#product_select").html(JSON.parse(resp));
                 }
             });
         });
