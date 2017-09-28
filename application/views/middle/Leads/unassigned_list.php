@@ -116,7 +116,7 @@
                             foreach ($unassigned_leads as $key => $value) {
                     ?>
                             <tr>
-                                <td >
+                                <td  style="text-align:center">
                                 <?php 
                                     $data = array(
                                         'name'          => 'lead_ids[]',
