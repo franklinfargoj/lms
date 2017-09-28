@@ -372,7 +372,7 @@ class Charts extends CI_Controller
         $GROUP_BY = array('zone_id');
         $TABLE  = 'employee_dump';
         $LIST = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
-
+        //pe($LIST);
         //Build Input Parameter
         $action = 'list';
         $select = array('COUNT(DISTINCT(l.employee_id)) as count','l.zone_id');
@@ -381,7 +381,7 @@ class Charts extends CI_Controller
         $join = array();
         $group_by = array('l.zone_id');
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
-
+        /*pe($this->db->last_query());*/
         $arrData['Total'] = 0;
         if($LIST){
             foreach ($leads as $key => $value) {
@@ -389,6 +389,8 @@ class Charts extends CI_Controller
                 $zone['ids'][] = $value['zone_id'];
                 $zone['logged_in'][$value['zone_id']] = $value['count'];
             }
+            /*pe($zone);
+            exit;*/
             foreach ($LIST as $key => $value) {
                 $index = $value->zone_id;
                 $arrData['zone_id'][] = $value->zone_id;
@@ -402,7 +404,8 @@ class Charts extends CI_Controller
 
                 if(isset($value->total_user)){
                     $arrData['Total'] += $value->total_user;
-                    $arrData['not_logged_in'][] = ($value->total_user -  isset($zone['logged_in'][$index]) ? $zone['logged_in'][$index] : 0);
+                    
+                    $arrData['not_logged_in'][] = ($value->total_user - (isset($zone['logged_in'][$index]) ? $zone['logged_in'][$index] : 0));
                 }
             }
         }
