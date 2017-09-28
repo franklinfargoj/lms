@@ -7,7 +7,7 @@
             Usage
         </h3>
         <div class="float-right">
-            <a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>" class="btn-Download">
+            <a href="<?php echo site_url('reports/index/usage')?>" class="btn-Download">
                 Grid View
             </a>
         </div>

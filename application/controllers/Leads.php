@@ -898,7 +898,7 @@ class Leads extends CI_Controller
             if($till == 'ytd'){
                 $where['YEAR(la.created_on)'] = date('Y'); //Year till date filter
             }
-            $where["DATEDIFF(CURDATE(),la.created_on) <= CASE WHEN la.status = 'Converted' THEN ".Elapsed_day_converted." ELSE ".Elapsed_day." END"] = NULL;
+            $where["DATEDIFF(CURDATE(),la.created_on) <= CASE WHEN la.status = 'Converted' THEN ".Elapsed_day_converted." WHEN la.status = 'NI' THEN ".Elapsed_day_NI." ELSE ".Elapsed_day." END"] = NULL;
             if(!empty($arrData['param'])){
                 if($login_user['designation_name'] == 'EM'){
                     $where['la.employee_id']  =   $login_user['hrms_id']; //Employee wise filter

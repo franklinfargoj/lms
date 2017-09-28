@@ -1,10 +1,10 @@
 
-@media only screen and (min-width:1023px) and (max-width:1200px){
+@media only screen and (min-width:1023px) and (max-width:1300px){
 	.header .logo{
 		width: 25%;
 	}
 	.header .top-navigation{
-		width: 100%;
+		width: 100% ;
 	}
 	.header .right-nav{
 		width: 18%;
@@ -127,7 +127,6 @@
     }
     label#ticket_range-error {
      float: none; 
-   
      margin-right: 0px; 
     vertical-align: top;
     padding-top: 0;
@@ -140,8 +139,9 @@
     }
     img#rs {
     margin: -1px 0 0px 10px;
-}
+    }
     label#ticket_range-error{
         width: 198px;
     }
+    
 }

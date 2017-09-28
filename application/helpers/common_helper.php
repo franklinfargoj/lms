@@ -404,8 +404,10 @@ function dropdown($data,$select_option){
     if($select_option != ''){
         $result[''] = $select_option;
     }
-    foreach ($data as $key => $value) {
-        $result[$value['id']] =  ucwords($value['title']);  
+    if($data){
+        foreach ($data as $key => $value) {
+            $result[$value['id']] =  ucwords($value['title']);
+        }
     }
     return $result;
 }

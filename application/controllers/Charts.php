@@ -24,7 +24,7 @@ class Charts extends CI_Controller
 
     /*
      * index
-     * Commen function to call for each search and initial page load.
+     * Common function which make call to requested function.
      * @author Ashok Jadhav (AJ)
      * @access public
      * @param $action,$view,$zone_id,$branch_id,$export = 'no'
@@ -402,7 +402,7 @@ class Charts extends CI_Controller
 
                 if(isset($value->total_user)){
                     $arrData['Total'] += $value->total_user;
-                    $arrData['not_logged_in'][] = ($value->total_user - $zone['logged_in'][$index]);
+                    $arrData['not_logged_in'][] = ($value->total_user -  isset($zone['logged_in'][$index]) ? $zone['logged_in'][$index] : 0);
                 }
             }
         }

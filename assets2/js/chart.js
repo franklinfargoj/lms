@@ -21,6 +21,7 @@ Highcharts.createElement('link', {
 Highcharts.wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
    proceed.call(this);
    this.container.style.background = 'url(https://www.highcharts.com/samples/graphics/sand.png)';
+
 });
 
 
@@ -33,6 +34,8 @@ Highcharts.theme = {
          fontFamily: 'Signika, serif'
       }
    },
+   credits:{enabled:false},
+    exporting: { enabled: false },
    title: {
       style: {
          color: 'black',
