@@ -1046,3 +1046,12 @@ if (!function_exists('check_authorisation')){
         }return false;
     }
 }
+if (!function_exists('verify_account')){
+    function verify_account($acc_no){
+        if($acc_no !=''){
+            $url = FINACLE_ACCOUNT_RECORD.$acc_no;
+            $response = call_external_url($url);
+            return $response;
+        }
+    }
+}

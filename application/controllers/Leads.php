@@ -134,7 +134,7 @@ class Leads extends CI_Controller
                 if($lead_id != false){
 
                     //send sms
-                    $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
+                    $sms = 'Thanks for showing interest in '.ucwords($product_name).' with Dena Bank. We will contact you shortly.';
                     send_sms($this->input->post('contact_no'),$sms);
 
                     //Push notification
@@ -759,11 +759,15 @@ class Leads extends CI_Controller
                         if($lead_status == 'AO'){
                             $responseData = array(
                                 'lead_id' => $lead_id,
-                                'account_no'=>$this->input->post('accountNo'),
+                                'account_no'=>trim($this->input->post('accountNo')),
                                 'response_data' => $this->input->post('response_data')
                             );
                             //This will add entry into cbs response for status (Account Opened)
                             $this->Lead->insert_lead_data($responseData,Tbl_cbs);
+                            $table = Tbl_Leads;
+                            $where = array('id'=>$lead_id);
+                            $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
+                            $this->Lead->update_lead_data($where,$data,$table);
                         }
                         if($lead_status == 'Converted'){
                             $this->points_distrubution($lead_id);
@@ -1227,11 +1231,9 @@ class Leads extends CI_Controller
     }
 
     public function verify_account(){
-        if($this->input->post('acc_no') != '')
-        {
+        if($this->input->post('acc_no') != ''){
             $acc_no = $this->input->post('acc_no');
-            $url = 'http://103.224.110.52/client.php?account_no='.$acc_no;
-            $response = call_external_url($url);
+            $response = verify_account($acc_no);
             echo $response;
         }
     }

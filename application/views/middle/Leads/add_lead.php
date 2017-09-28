@@ -204,7 +204,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
                         <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                     </a>
-                    <a href="javascript:void(0);" class="reset float-right">
+                    <a href="javascript:void(0);" class="reset float-right" id="reset">
                         Reset
                     </a>
                 </div>
@@ -457,6 +457,12 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 }
             });
         }
-
+        $('#reset').click(function () {
+            var div = $('.ui-slider-range');
+            var sliderElement = $("#master");
+            sliderElement.slider('values', 0, 0);
+            var width = '0%';
+            div.width(width);
+        });
     });
 </script>

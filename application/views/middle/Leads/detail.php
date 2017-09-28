@@ -500,7 +500,7 @@
     });
 
     $('.verify_account').click(function () {
-        var acc_no = $('#accountNo').val();
+        var acc_no = $.trim($('#accountNo').val());
         if(acc_no.length === 0 || acc_no.length != 12){
             alert('Please Enter 12 digit Account number.');
         }else{

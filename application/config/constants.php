@@ -129,7 +129,7 @@ define('HRMS_API_URL_GET_RECORD', 'http://103.224.110.52/lms/hrms_records.php?')
 define('HRMS_BRANCH_RECORD', 'http://103.224.110.52/master.php');
 define('Elapsed_day', 90);
 define('Elapsed_day_converted', 7);
-
+define('FINACLE_ACCOUNT_RECORD', 'http://103.224.110.52/client.php?account_no=');
 
 define('FCMKEY','AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP
 ');
