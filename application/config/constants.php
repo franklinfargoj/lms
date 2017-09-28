@@ -127,8 +127,9 @@ define('Tbl_cbs', 'db_response_from_cbs');
 define('HRMS_API_URL_AUTH', 'http://103.224.110.52/lms/hrms_auth.php?');
 define('HRMS_API_URL_GET_RECORD', 'http://103.224.110.52/lms/hrms_records.php?');
 define('HRMS_BRANCH_RECORD', 'http://103.224.110.52/master.php');
-define('Elapsed_day', 90);
-define('Elapsed_day_converted', 7);
+define('Elapsed_day_converted', 7); //Elapsed Days for converted
+define('Elapsed_day_NI', 7); //Elapsed Days for Not Interested
+define('Elapsed_day', 90); //Elapsed Days for remaining all
 
 
 define('FCMKEY','AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP
