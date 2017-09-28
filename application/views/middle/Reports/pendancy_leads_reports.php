@@ -8,8 +8,13 @@ $lead_status = $this->config->item('lead_status');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Pendancy Leads Report
+            Pendancy Leads
         </h3>
+        <div class="float-right">
+            <a href="<?php echo site_url('charts/index/pendancy_leads_reports')?>" class="btn-Download">
+                Chart View
+            </a>
+        </div>
     </div>
 </div>
 <?php 

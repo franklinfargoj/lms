@@ -1,6 +1,18 @@
 <script src="<?php echo base_url().ASSETS;?>/js/highcharts.js"></script>
 <script src="<?php echo base_url().ASSETS;?>/js/exporting.js"></script>
 <script src = "<?php echo base_url().ASSETS;?>/js/chart.js"></script>
+<div class="page-title">
+    <div class="container clearfix">
+        <h3 class="text-center">
+            Leads Assigned
+        </h3>
+        <div class="float-right">
+            <a href="<?php echo site_url('reports/index/leads_assigned')?>" class="btn-Download">
+                Grid View
+            </a>
+        </div>
+    </div>
+</div>
 <div id="container" style="min-width: 310px; height: auto; margin: 0 auto"></div>
 <?php
 $lead_status = $this->config->item('lead_status');

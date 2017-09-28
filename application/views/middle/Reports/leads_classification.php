@@ -8,8 +8,13 @@ $lead_status = $this->config->item('lead_status');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Classification Report
+            Leads Classification
         </h3>
+        <div class="float-right">
+            <a href="<?php echo site_url('charts/index/leads_classification')?>" class="btn-Download">
+                Chart View
+            </a>
+        </div>
     </div>
 </div>
 <?php 

@@ -9,6 +9,11 @@ $lead_type = $this->config->item('lead_type');
         <h3 class="text-center">
             Leads Type Report
         </h3>
+        <div class="float-right">
+            <a href="<?php echo site_url('charts/index/leads_type_reports')?>" class="btn-Download">
+                Chart View
+            </a>
+        </div>
     </div>
 </div>
 <?php 

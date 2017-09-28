@@ -37,7 +37,8 @@
 						        'class' => 'inputs',
 						        'value' => isset($points_distrubution[0]['generator_contrubution']) ? $points_distrubution[0]['generator_contrubution'] : set_value('generator_contrubution'),
 						        'min' => 0,
-						        'max' => 100
+						        'max' => 100,
+                                'maxlength' => 5
 							);
 							echo form_input($data);
 
@@ -125,7 +126,7 @@
     $('body').on('blur','#generator_contrubution',function(){
     	var generator = $('#generator_contrubution').val();
     	if(generator != '' && generator <= 100){
-    		var convertor = (100 - parseInt(generator,10));
+    		var convertor = (100 - parseFloat(generator));
     		$('#convertor_contrubution').val(convertor);
     	}
     });

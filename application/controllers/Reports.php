@@ -131,7 +131,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Pendancy Leads Report', 'reports/index/pendancy_leads_reports', 0);
+            $this->make_bread->add('Pendancy Leads', 'reports/index/pendancy_leads_reports', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -142,11 +142,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Pendancy Leads Report', 'reports/index/pendancy_leads_reports', 0);
+            $this->make_bread->add('Pendancy Leads', 'reports/index/pendancy_leads_reports', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Pendancy Leads Report', '', 0);
+            $this->make_bread->add('Pendancy Leads', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -315,7 +315,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Leads Type Report', 'reports/index/leads_type_reports', 0);
+            $this->make_bread->add('Leads Identification', 'reports/index/leads_type_reports', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -326,11 +326,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Type Report', 'reports/index/leads_type_reports', 0);
+            $this->make_bread->add('Leads Identification', 'reports/index/leads_type_reports', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Leads Type Report', '', 0);
+            $this->make_bread->add('Leads Identification', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -497,7 +497,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Leads Generated Report', 'reports/index/leads_generated', 0);
+            $this->make_bread->add('Leads Generated', 'reports/index/leads_generated', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -508,11 +508,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Generated Report', 'reports/index/leads_generated', 0);
+            $this->make_bread->add('Leads Generated', 'reports/index/leads_generated', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Leads Generated Report', '', 0);
+            $this->make_bread->add('Leads Generated', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -682,7 +682,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Leads Assigned Report',  'reports/index/leads_assigned', 0);
+            $this->make_bread->add('Leads Assigned',  'reports/index/leads_assigned', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -693,11 +693,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Assigned Report',  'reports/index/leads_assigned', 0);
+            $this->make_bread->add('Leads Assigned',  'reports/index/leads_assigned', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Leads Assigned Report', '', 0);
+            $this->make_bread->add('Leads Assigned', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -967,7 +967,7 @@ class Reports extends CI_Controller
         $login_user = get_session();
         $viewName = $arrData['viewName'];
         if($arrData['view'] == 'employee'){
-            $this->make_bread->add('Leads Generated Vs Converted Report', 'reports/index/leads_generated_vs_converted', 0);
+            $this->make_bread->add('Leads Generated Vs Converted', 'reports/index/leads_generated_vs_converted', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -977,10 +977,10 @@ class Reports extends CI_Controller
             }
             $this->make_bread->add('Employee View', '', 0);
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Generated Vs Converted Report', 'reports/index/leads_generated_vs_converted', 0);
+            $this->make_bread->add('Leads Generated Vs Converted', 'reports/index/leads_generated_vs_converted', 0);
             $this->make_bread->add('Branch View', '', 0);
         }else{
-            $this->make_bread->add('Leads Generated Vs Converted Report', '', 0);
+            $this->make_bread->add('Leads Generated Vs Converted', '', 0);
         }
         $arrData['G_Total'] = $arrData['C_Total'] = 0;    
         $arrData['leads'] = array();
@@ -1096,7 +1096,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Leads Classifcation Report', 'reports/index/leads_classification', 0);
+            $this->make_bread->add('Leads Classifcation', 'reports/index/leads_classification', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -1107,11 +1107,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Classifcation Report', 'reports/index/leads_classification', 0);
+            $this->make_bread->add('Leads Classifcation', 'reports/index/leads_classification', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Leads Classifcation Report','', 0);
+            $this->make_bread->add('Leads Classifcation','', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
@@ -1255,7 +1255,7 @@ class Reports extends CI_Controller
         }
         
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Usage Report', 'reports/index/usage', 0);
+            $this->make_bread->add('Usage', 'reports/index/usage', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -1266,11 +1266,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Usage Report', 'reports/index/usage', 0);
+            $this->make_bread->add('Usage', 'reports/index/usage', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Usage Report', '', 0);
+            $this->make_bread->add('Usage', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
