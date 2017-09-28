@@ -17,7 +17,7 @@ function fd_calculator(rS) {
             interest:{
                 required:true,
                 number:true,
-                minStrict:0,
+                minStrict:0
             },
             tenure:{
                 required:true,
