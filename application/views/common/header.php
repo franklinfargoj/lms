@@ -216,10 +216,10 @@
 					</a>
 				</div>
 				<div class="logged-in">
-					<img src="<?php echo base_url().ASSETS;?>images/username.png" alt="pic">
+					<img src="<?php echo base_url().ASSETS;?>images/username.png" alt="pic" class="man-login">
 					<div>
-					<span class="name">Hi, <?php echo $this->session->userdata('admin_name');?> !!</span>
-						<span class="name">(<?php echo $this->session->userdata('admin_type');?>)</span>
+					<span class="name  responsive-login">Hi, <?php echo $this->session->userdata('admin_name');?> !!</span>
+						<span class="name responsive-login1">(<?php echo $this->session->userdata('admin_type');?>)</span>
 					<a href="<?php echo site_url('login/logOut');?>">Logout</a>
 					</div>
 				</div>
@@ -249,4 +249,7 @@
 	    	// event.preventDefault();
 	        $(".cal-drop4").toggle();
 	    });
+	    // $(".man-login").click(function(){
+	    // 	$(".responsive-login").toggle();
+	    // });
 </script>
