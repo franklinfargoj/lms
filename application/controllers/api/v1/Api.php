@@ -640,7 +640,7 @@ class Api extends REST_Controller
                         $unassigned_leads_count_year = $this->Lead->unassigned_status_count($select, $table, $join, $whereYear, $group_by);
                         $result[$i]['Year'] = $unassigned_leads_count_year[0]['total'];
                         $result[$i]['Month'] = $unassigned_leads_count_month[0]['total'];
-                        $result[$i]['status'] = 'unassigned_leads';
+                        $result[$i]['status'] = 'Unassigned Leads';
                     }
                     $res = array('result' => True,
                         'data' => $result);
