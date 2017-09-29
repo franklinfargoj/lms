@@ -1036,7 +1036,7 @@ if (!function_exists('random_number')){
 
 if (!function_exists('check_authorisation')){
     function check_authorisation($key,$hrms_id){
-        $CI = get_instance();
+        $CI = & get_instance();
         $CI->load->model('Lead');
         $select = 'authorisation_key';
         $table = Tbl_LoginLog;
@@ -1053,6 +1053,19 @@ if (!function_exists('verify_account')){
         if($acc_no !=''){
             $url = FINACLE_ACCOUNT_RECORD.$acc_no;
             $response = call_external_url($url);
+            return $response;
+        }
+    }
+}
+if (!function_exists('isTaken')){
+    function isTaken($title='',$table='',$where=''){
+        if($title !='' && $table !='' && $where !=''){
+            $action = 'count';
+            $select = '';
+            $join = $group_by = $order_by = array();
+            $CI = & get_instance();
+            $CI->load->model('Lead');
+            $response = $CI->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by);
             return $response;
         }
     }

@@ -291,7 +291,6 @@ class Leads extends CI_Controller
 
                     $excelData = fetch_range_excel_data($file['full_path'], 'A2:J', $keys);
                     $validation = $this->validate_leads_data($excelData,$lead_source);
-
                     if (!empty($validation['insert_array'])) {
                         $insert_count = $this->Lead->insert_uploaded_data('db_leads', $validation['insert_array']);
 
@@ -309,7 +308,7 @@ class Leads extends CI_Controller
                         $this->Lead->uploaded_log('uploaded_leads_log', $data);
                         $download_url = base_url('uploads/errorlog/'.$target_file);
                         $msg = notify('<span style="color: green">'.$validation['total_inserted'] . ' rows inserted sucessfully.</span> Error occured in ' . $validation['total_error_rows'] . ' rows.Please refer log file <a href="'.$download_url.'">here</a>.', 'danger');
-                        $this->session->set_flashdata('message', $msg);
+                        $this->session->set_flashdata('error', $msg);
                         redirect(base_url('leads/upload'), 'refresh');
                     }
                     $data = array(
@@ -320,7 +319,7 @@ class Leads extends CI_Controller
 //                    unlink($file['full_path']);
                     $this->Lead->uploaded_log('uploaded_leads_log', $data);
                     $msg = notify('File Uploaded Successfully.' . $validation['total_inserted'] . ' rows inserted. ', 'success');
-                    $this->session->set_flashdata('message', $msg);
+                    $this->session->set_flashdata('success', $msg);
                     redirect(base_url('leads/upload'), 'refresh');
 
                 }
