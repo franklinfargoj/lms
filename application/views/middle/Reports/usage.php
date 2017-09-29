@@ -143,9 +143,15 @@ $lead_status = $this->config->item('lead_status');
                             </th>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
-                            <th>
-                                Employee Name
-                            </th>
+                                <th>
+                                    HRMS ID
+                                </th>
+                                <th>
+                                    Employee Name
+                                </th>
+                                <th>
+                                    Designation
+                                </th>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
                             <th align="center">
@@ -193,11 +199,21 @@ $lead_status = $this->config->item('lead_status');
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
-                            <td>
-                                <?php 
+                                <td>
+                                    <?php
+                                    echo isset($value['employee_id']) ? $value['employee_id'] : '';
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
                                     echo isset($value['employee_name']) ? $value['employee_name'] : '';
-                                ?>
-                            </td>
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    echo isset($value['designation']) ? $value['designation'] : '';
+                                    ?>
+                                </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
                                 <td align="center">

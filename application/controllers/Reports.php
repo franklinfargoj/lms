@@ -171,7 +171,7 @@ class Reports extends CI_Controller
             $group_by[]  =  'la.employee_id';
 
             //Get Listing for employees
-            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name','designation');
             if(isset($where['la.zone_id'])){
                 $WHERE['zone_id'] = $where['la.zone_id'];
             }
@@ -246,6 +246,7 @@ class Reports extends CI_Controller
                     $index = $value->employee_id;
                     $arrData['leads'][$index]['employee_id'] = $value->employee_id;
                     $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['designation'] = $value->designation;
                     $arrData['leads'][$index]['branch_name'] = $value->branch_name;
                     $arrData['leads'][$index]['branch_id'] = $value->branch_id;
                 }
@@ -355,7 +356,7 @@ class Reports extends CI_Controller
             $group_by[]  =  'l.created_by';
 
             //Get Listing for employees
-            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name','designation');
             if(isset($where['l.zone_id'])){
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
@@ -428,6 +429,7 @@ class Reports extends CI_Controller
                     $index = $value->employee_id;
                     $arrData['leads'][$index]['employee_id'] = $value->employee_id;
                     $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['designation'] = $value->designation;
                     $arrData['leads'][$index]['branch_name'] = $value->branch_name;
                     $arrData['leads'][$index]['branch_id'] = $value->branch_id;
                 }
@@ -537,7 +539,7 @@ class Reports extends CI_Controller
             $group_by[]  =  'l.created_by';
 
             //Get Listing for employees
-            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name','designation');
             if(isset($where['l.zone_id'])){
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
@@ -613,6 +615,7 @@ class Reports extends CI_Controller
                     $index = $value->employee_id;
                     $arrData['leads'][$index]['employee_id'] = $value->employee_id;
                     $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['designation'] = $value->designation;
                     $arrData['leads'][$index]['branch_name'] = $value->branch_name;
                     $arrData['leads'][$index]['branch_id'] = $value->branch_id;
                 }
@@ -722,7 +725,7 @@ class Reports extends CI_Controller
             $group_by[]  =  'la.employee_id';
 
             //Get Listing for employees
-            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name','designation');
             if(isset($where['la.zone_id'])){
                 $WHERE['zone_id'] = $where['la.zone_id'];
             }
@@ -799,6 +802,7 @@ class Reports extends CI_Controller
                     $index = $value->employee_id;
                     $arrData['leads'][$index]['employee_id'] = $value->employee_id;
                     $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['designation'] = $value->designation;
                     $arrData['leads'][$index]['branch_name'] = $value->branch_name;
                     $arrData['leads'][$index]['branch_id'] = $value->branch_id;
                 }
@@ -912,7 +916,7 @@ class Reports extends CI_Controller
             }
 
             //Get Listing for employees
-            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name','designation');
             if(isset($where[$alias.'.zone_id'])){
                 $WHERE['zone_id'] = $where[$alias.'.zone_id'];
             }
@@ -1028,6 +1032,7 @@ class Reports extends CI_Controller
                     $index = $value->employee_id;
                     $arrData['leads'][$index]['employee_id'] = $value->employee_id;
                     $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['designation'] = $value->designation;
                     $arrData['leads'][$index]['branch_name'] = $value->branch_name;
                     $arrData['leads'][$index]['branch_id'] = $value->branch_id;
                 }
@@ -1135,7 +1140,7 @@ class Reports extends CI_Controller
             $group_by[]  =  'l.created_by';
 
             //Get Listing for employees
-            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name','designation');
             if(isset($where['l.zone_id'])){
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
@@ -1208,6 +1213,7 @@ class Reports extends CI_Controller
                     $index = $value->employee_id;
                     $arrData['leads'][$index]['employee_id'] = $value->employee_id;
                     $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['designation'] = $value->designation;
                     $arrData['leads'][$index]['branch_name'] = $value->branch_name;
                     $arrData['leads'][$index]['branch_id'] = $value->branch_id;
                 }
@@ -1295,7 +1301,7 @@ class Reports extends CI_Controller
             $group_by[]  =  'l.employee_id';
 
             //Get Listing for employees
-            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name','designation');
             if(isset($where['l.zone_id'])){
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
@@ -1372,6 +1378,7 @@ class Reports extends CI_Controller
                     $index = $value->employee_id;
                     $arrData['leads'][$index]['employee_id'] = $value->employee_id;
                     $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['designation'] = $value->designation;
                     $arrData['leads'][$index]['branch_name'] = $value->branch_name;
                     $arrData['leads'][$index]['branch_id'] = $value->branch_id;
                     if(!in_array($index,$Lead['userId'])){
@@ -1425,7 +1432,7 @@ class Reports extends CI_Controller
         /*pe($arrData);
         exit;*/
         if($arrData['viewName'] == 'EM'){
-            $header_value = array('Sr.No','Zone','Branch','Employee Name','Source Type','Category Name','Product Name');
+            $header_value = array('Sr.No','Zone','Branch','HRMS ID','Employee Name','Designation','Source Type','Category Name','Product Name');
         }else if($arrData['viewName'] == 'BM'){
             $header_value = array('Sr.No','Zone','Branch','Source Type','Category Name','Product Name');   
         }else{
@@ -1536,7 +1543,9 @@ class Reports extends CI_Controller
             $col = 1;
             if($data['viewName'] == 'EM'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']));
+                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['employee_id']));
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['employee_name']));
+                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['designation']));
             }
             if($data['viewName'] == 'BM'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']));

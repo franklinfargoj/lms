@@ -19,7 +19,6 @@ class Charts extends CI_Controller
         parent::__construct();
         is_logged_in();
         $this->load->model('Lead');
-        $this->load->model('Master_model','Master');
     }
 
     /*
@@ -389,8 +388,6 @@ class Charts extends CI_Controller
                 $zone['ids'][] = $value['zone_id'];
                 $zone['logged_in'][$value['zone_id']] = $value['count'];
             }
-            /*pe($zone);
-            exit;*/
             foreach ($LIST as $key => $value) {
                 $index = $value->zone_id;
                 $arrData['zone_id'][] = $value->zone_id;
@@ -404,7 +401,7 @@ class Charts extends CI_Controller
 
                 if(isset($value->total_user)){
                     $arrData['Total'] += $value->total_user;
-                    
+
                     $arrData['not_logged_in'][] = ($value->total_user - (isset($zone['logged_in'][$index]) ? $zone['logged_in'][$index] : 0));
                 }
             }
