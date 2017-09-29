@@ -122,6 +122,9 @@
             }
         }
     });
+    $('body').on('click','.reset',function(){
+        CKEDITOR.instances['answer'].setData('');
+    });
 
 </script>
 

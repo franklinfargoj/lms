@@ -92,7 +92,6 @@
             uiColor: '#01559d'
         });  
     });
-
  	$.validator.addMethod("regx", function(value, element, regexpr) {
         return regexpr.test(value);
     });
@@ -116,7 +115,9 @@
             }
         }
     });
-
+    $('body').on('click','.reset',function(){
+        CKEDITOR.instances['description_text'].setData('');
+    });
 </script>
 
 
