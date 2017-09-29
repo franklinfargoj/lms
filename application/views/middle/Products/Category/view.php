@@ -28,10 +28,10 @@
                         <th></th>
                         <th style="text-align:left"><input type="text" name="customername" placeholder="Search Title"></th>
                         <th style="text-align:left">
-                            <select name="status">
+                            <select name="">
                                 <option value="">Select status</option>
-                                <option value="active">active</option>
-                                <option value="inactive">inactive</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
                             </select>
                         </th>
                         <th></th>

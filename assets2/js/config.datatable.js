@@ -30,6 +30,7 @@ var initTable = function (table,columns) {
             }else{
                 term = "^"+this.value+"$";
             }
+            console.log(term);
             oTable.column($(this).parent().index() + ':visible').search(term,true, false).draw();
             
         });

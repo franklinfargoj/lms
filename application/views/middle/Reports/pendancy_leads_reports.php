@@ -39,7 +39,7 @@ $lead_status = $this->config->item('lead_status');
     <div class="inner-content">
         <div class="container ">
         <div class="form">
-        <p id="note"><span style="color:red;"> * </span> These fields are required</p>
+        <p id="note"><span style="color:red;">*</span> These fields are required</p>
             <div class="lead-form-left">
                     <div class="form-control">
                         <label id="cal">Start Date:<span style="color:red;">*</span> </label>   
@@ -215,12 +215,18 @@ $lead_status = $this->config->item('lead_status');
                                 </th>
                                 <?php }?>
                                 <?php if(in_array($viewName,array('EM'))){?>
-                                <th>
-                                    Employee Name
-                                </th>
+                                    <th>
+                                        HRMS ID
+                                    </th>
+                                    <th>
+                                        Employee Name
+                                    </th>
+                                    <th>
+                                        Designation
+                                    </th>
                                 <?php }?>
                                 <th>
-                                    Source Type 
+                                    Source Type
                                 </th>
                                 <th>
                                     Category Name
@@ -231,13 +237,13 @@ $lead_status = $this->config->item('lead_status');
                                 <th>
                                     Total Pending Leads
                                 </th>
-                                <?php 
+                                <?php
                                     foreach ($lead_status as $key => $value) {
                                         if(!in_array($key,array('AO','Converted','Closed'))){
                                 ?>
                                 <th>
                                     <?php
-                                        echo $value; 
+                                        echo $value;
                                     ?>
                                 </th>
                                 <?php
@@ -252,7 +258,7 @@ $lead_status = $this->config->item('lead_status');
                             </tr>
                         </thead>
                         <tbody>
-                        <?php 
+                        <?php
                             $i = 0;
                             foreach ($leads as $key => $value) {
                         ?>
@@ -269,39 +275,49 @@ $lead_status = $this->config->item('lead_status');
                                 <?php }?>
                                 <?php if(in_array($viewName,array('BM','EM'))){?>
                                 <td>
-                                    <?php 
+                                    <?php
                                         echo isset($value['branch_name']) ? $value['branch_name'] : '';
                                     ?>
                                 </td>
                                 <?php }?>
                                 <?php if(in_array($viewName,array('EM'))){?>
-                                <td>
-                                    <?php 
-                                        echo isset($value['employee_name']) ? $value['employee_name'] : '';
-                                    ?>
-                                </td>
+                                    <td>
+                                        <?php
+                                            echo isset($value['employee_id']) ? $value['employee_id'] : '';
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                            echo isset($value['employee_name']) ? $value['employee_name'] : '';
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                            echo isset($value['designation']) ? $value['designation'] : '';
+                                        ?>
+                                    </td>
                                 <?php }?>
                                 <td>
-                                    <?php 
+                                    <?php
                                         echo !empty($lead_source) ? ucwords($lead_source) : 'All';
                                     ?>
                                 </td>
                                 <td>
-                                    <?php 
+                                    <?php
                                         echo !empty($category) ? ucwords($category) : 'All';
                                     ?>
                                 </td>
                                 <td>
-                                    <?php 
+                                    <?php
                                         echo !empty($product) ? ucwords($product) : 'All';
                                     ?>
                                 </td>
                                 <td>
-                                    <?php 
+                                    <?php
                                         echo $value['total'];
                                     ?>
                                 </td>
-                                <?php 
+                                <?php
                                 //pe($value['status']);
                                     foreach ($lead_status as $k => $v) {
                                         if(!in_array($k,array('AO','Converted','Closed'))){
@@ -325,11 +341,11 @@ $lead_status = $this->config->item('lead_status');
                                         $param .= '/'.encode_id($value['zone_id']);
                                     }
                                     if(isset($value['branch_id'])){
-                                        $param .= '/'.encode_id($value['branch_id']);   
+                                        $param .= '/'.encode_id($value['branch_id']);
                                     }
                                 ?>
                                 <td>
-                                    <?php 
+                                    <?php
                                         if(in_array($viewName,array('ZM'))){
                                             if($view == 'branch' || $view == 'employee'){
                                             }else{
@@ -337,19 +353,19 @@ $lead_status = $this->config->item('lead_status');
                                         <a class="" href="<?php echo site_url('reports/index/pendancy_leads_reports/branch'.$param)?>">
                                             Branch View
                                         </a>
-                                        <span>/</span> 
+                                        <span>/</span>
                                     <?php
                                             }
                                          }
                                     ?>
-                                    <?php 
+                                    <?php
                                         if(in_array($viewName,array('ZM','BM'))){
                                             if($view == 'employee'){
                                             }else{
                                     ?>
                                         <a class="" href="<?php echo site_url('reports/index/pendancy_leads_reports/employee'.$param)?>">
                                             Employee View
-                                        </a> 
+                                        </a>
                                     <?php
                                             }
                                          }
