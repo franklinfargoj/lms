@@ -122,7 +122,9 @@
             }
         }
     });
-
+    $('body').on('click','.reset',function(){
+        CKEDITOR.instances['description_text'].setData('');
+    });
 </script>
 
 

@@ -634,9 +634,13 @@ class Api extends REST_Controller
                         $table = Tbl_Leads;
                         $join = array(Tbl_LeadAssign.' as la', 'la.lead_id = '.Tbl_Leads.'.id ', 'left');
                         $group_by = array('db_leads.lead_source');
-                        $where = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL, 'YEAR(' . $table . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . $table . '.created_on) <=' => Elapsed_day);
-                        $unassigned_leads_count = $this->Lead->unassigned_status_count($select, $table, $join, $where, $group_by);
-                        $result['unassigned_leads_count'] = $unassigned_leads_count[0]['total'];
+                        $whereYear = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL, 'YEAR(' . $table . '.created_on)' => date('Y'));
+                        $whereMonth = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL, 'MONTH(' . $table . '.created_on)' => date('m'));
+                        $unassigned_leads_count_month = $this->Lead->unassigned_status_count($select, $table, $join, $whereMonth, $group_by);
+                        $unassigned_leads_count_year = $this->Lead->unassigned_status_count($select, $table, $join, $whereYear, $group_by);
+                        $result[$i]['Year'] = $unassigned_leads_count_year[0]['total'];
+                        $result[$i]['Month'] = $unassigned_leads_count_month[0]['total'];
+                        $result[$i]['status'] = 'unassigned_leads';
                     }
                     $res = array('result' => True,
                         'data' => $result);
