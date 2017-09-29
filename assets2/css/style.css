@@ -659,7 +659,7 @@ strong{
 }
 .radio-control label{display: inline-block;}
 .lead-form .form-control textarea{ border: 1px solid #d3d3d3; width: 99%;}
-.lead-form .form-control label{vertical-align:middle;}
+/*.lead-form .form-control label{vertical-align:middle;}*/
 .ui-slider-horizontal{width: 100%; display: inline-block;margin-top: 22px;}
 .range-slider input{width: 25%; display: inline-block;  margin-top: -20px;}
 .ui-widget-header{background-color: #ed4c4c;}
