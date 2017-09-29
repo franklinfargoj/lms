@@ -1,6 +1,6 @@
-<script src="<?php echo base_url().ASSETS;?>/js/highcharts.js"></script>
-<script src="<?php echo base_url().ASSETS;?>/js/exporting.js"></script>
-<script src = "<?php echo base_url().ASSETS;?>/js/chart.js"></script>
+<script src="<?php echo base_url().PLUGINS;?>highcharts/js/highcharts.js"></script>
+<script src="<?php echo base_url().PLUGINS;?>highcharts/js/exporting.js"></script>
+<script src = "<?php echo base_url().PLUGINS;?>highcharts/js/chart.js"></script>
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
@@ -25,6 +25,7 @@ foreach ($lead_type as $key => $value){
 }
 ?>
 <script type="application/javascript">
+    //console.log($.type(<?php echo json_encode($data,JSON_NUMERIC_CHECK)?>));
     Highcharts.chart('container', {
         chart: {
             type: 'column'

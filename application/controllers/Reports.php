@@ -281,11 +281,11 @@ class Reports extends CI_Controller
         $lead_type = array_keys($this->config->item('lead_type'));
         //Build Input Parameter
         $action = 'list';
-        $select = array('COUNT(la.lead_id) as count','l.lead_identification');
+        $select = array('COUNT(l.id) as count','l.lead_identification');
         $table = Tbl_Leads.' as l';
-        $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'l.lead_identification IN ("'.str_replace(',','","',implode(',',$lead_type)).'")' => NULL);
+        $where  = array(/*'la.is_deleted' => 0,'la.is_updated' => 1,*/'l.lead_identification IN ("'.str_replace(',','","',implode(',',$lead_type)).'")' => NULL);
         $join = array();
-        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+        //$join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         $group_by = array('l.lead_identification');
 
         //If Start date selected
@@ -582,7 +582,8 @@ class Reports extends CI_Controller
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
-        //pe($this->db->last_query());
+        /*pe($this->db->last_query());
+        exit;*/
         $arrData['leads'] = array();
         $arrData['Total'] = 0;
         if($list){
