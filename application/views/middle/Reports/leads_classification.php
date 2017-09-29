@@ -235,6 +235,9 @@ $lead_status = $this->config->item('lead_status');
                             <th style="text-align:center">
                                 Ticket Size (Rs)
                             </th>
+                            <th style="text-align:center">
+                                Amount (Rs)
+                            </th>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
                                 Action
@@ -300,6 +303,11 @@ $lead_status = $this->config->item('lead_status');
                             <td style="text-align:center">
                                 <?php 
                                     echo isset($value['ticket']) ? $value['ticket'] : '';
+                                ?>
+                            </td>
+                            <td style="text-align:center">
+                                <?php
+                                echo isset($value['amount']) ? $value['amount'] : '';
                                 ?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM'))){

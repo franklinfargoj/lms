@@ -19,6 +19,10 @@
             <a href="<?php echo site_url('reports/index/leads_type_reports')?>" class="btn-Download">
                 Grid View
             </a>
+            <span> | </span>
+            <a href="<?php echo site_url('charts/index/leads_type_reports')?>" class="btn-Download">
+                Chart View
+            </a>
         </div>
     </div>
 </div>
