@@ -1068,10 +1068,11 @@ class Reports extends CI_Controller
         $login_user = get_session();
         //Build Input Parameter
         $action = 'list';
-        $select = array('SUM(l.lead_ticket_range) as lead_ticket_range');
+        $select = array('SUM(l.lead_ticket_range) as lead_ticket_range,SUM(rfc.amount) as amount');
         $table = Tbl_Leads.' as l';
         $where  = array();
         $join = array();
+        $join[] = array('table' => Tbl_cbs.' as rfc','on_condition' => 'rfc.lead_id = l.id','type' => 'left');
         /*$group_by = array('l.lead_ticket_range');*/
 
         //If Start date selected
@@ -1183,6 +1184,7 @@ class Reports extends CI_Controller
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'lead_ticket_range DESC');
+
         $arrData['leads'] = array();
         $arrData['Total'] = 0;
         if($list){
@@ -1206,6 +1208,7 @@ class Reports extends CI_Controller
                     $Lead['userId'][] = $value['zone_id'];
                 }
                 $Lead[$index]['ticket'] = $value['lead_ticket_range'];
+                $Lead[$index]['amount'] = $value['amount'];
             }
             $arrData['viewName'] = $viewName;
             foreach ($list as $key => $value) {
@@ -1233,8 +1236,10 @@ class Reports extends CI_Controller
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
                 if(!in_array($index,$Lead['userId'])){
                     $arrData['leads'][$index]['ticket'] = 0;
+                    $arrData['leads'][$index]['amount'] = 0;
                 }else{
                     $arrData['leads'][$index]['ticket'] = $Lead[$index]['ticket'];
+                    $arrData['leads'][$index]['amount'] = isset($Lead[$index]['amount']) ? $Lead[$index]['amount'] : 0;
                 }
                 $arrData['Total'] += $arrData['leads'][$index]['ticket'];
             }
