@@ -900,7 +900,7 @@ select#tenurePeriod {
     position: relative;
 }
 #ui-datepicker-div {
-    top: 36% !important;
+    top: 44%!important;
 }
 input#remind_on {
     padding: 6px 2px;

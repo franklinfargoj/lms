@@ -220,7 +220,7 @@ $lead_status = $this->config->item('lead_status');
                                 </th>
                                 <?php }?>
                                 <th>
-                                    Source Type
+                                    Source Type 
                                 </th>
                                 <th>
                                     Category Name
@@ -366,14 +366,15 @@ $lead_status = $this->config->item('lead_status');
             
             </div>
             </div>
+
             
-            <span class="bg-bottom" id="bg-w"></span>
      
     
 <?php
     }else{?>
     <span class="no_result">No records found</span>
 <?php }?>
+
 </div>
 <!-- END LEADS-->
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
@@ -411,3 +412,4 @@ $lead_status = $this->config->item('lead_status');
     });
 </script>
 <script src="<?php echo base_url().ASSETS;?>js/reports.js"></script>
+<span class="bg-bottom" id="bg-w"></span>
