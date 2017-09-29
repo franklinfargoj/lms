@@ -149,8 +149,11 @@
 @media only screen and (min-width:1200px) and (max-width:1370px) {
     .header .logo{width: 18%;}
     .header .top-navigation{width: 69%;}
-    .logged-in .name.responsive-login{display: none;position: relative;top: -62px;left: 45px;}
+    .logged-in .name.responsive-login{display:block;position: relative;top: -25px;left: 45px;}
+    .logged-in .name.responsive-login1{display: none;}
     .logged-in img{float: none;}
-    .header .right-nav .notification{float: right;}
-    .logged-in a{position: absolute;right: 15px;}
+    .header .right-nav .notification{float: right;    position: relative;    top: 5px;
+    right: 11px;}
+    .logged-in >img{display: none;}
+    .logged-in a{position: absolute;right: 15px;top: 35px;}
 }
