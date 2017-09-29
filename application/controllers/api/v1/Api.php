@@ -2308,12 +2308,12 @@ class Api extends REST_Controller
                     $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                     $leads_data = $leadsAssign[0];
                     $id = $leads_data['id'];
-                    $leads_data['reroute_from_branch_id'] = $leads_data['branch_id'];
-                    $leads_data['state_id'] = $params['state_id'];
-                    $leads_data['branch_id'] = $params['branch_id'];
-                    $leads_data['district_id'] = $params['district_id'];
-                    unset($leads_data['id']);
-                    $this->Lead->insert_lead_data($leads_data, Tbl_Leads);
+                    $update_lead_data['reroute_from_branch_id'] = $leads_data['branch_id'];
+                    $update_lead_data['state_id'] = $params['state_id'];
+                    $update_lead_data['branch_id'] = $params['branch_id'];
+                    $update_lead_data['district_id'] = $params['district_id'];
+                    $whereUpdate = array('id'=>$id);
+                    $this->Lead->update($whereUpdate,Tbl_Leads,$update_lead_data);
                     $whereUpdate = array('lead_id' => $id);
                     $table = Tbl_LeadAssign;
                     $data = array('is_updated' => 0);
