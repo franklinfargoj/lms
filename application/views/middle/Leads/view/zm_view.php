@@ -77,7 +77,7 @@
                         </td>
                         <td>
                             <a href="<?php echo site_url('dashboard/leads_status/generated/'.encode_id($value['created_by']))?>">View</a>
-                            <span>/</span> 
+                            <span>|</span> 
                             <a href="<?php echo base_url('dashboard/leads_performance/'.encode_id($value['created_by']));?>">Performance</a>
                         </td>
                     </tr>
