@@ -365,14 +365,14 @@ $lead_status = $this->config->item('lead_status');
             </div>
         </div>
         </div>
-        <span class="bg-bottom" id="bg-w"></span>
+        
     </div>
 </div>
 <?php
     }else{?>
     <span class="no_result">No records found</span>
 <?php }?>
-
+<span class="bg-bottom" id="bg-w"></span>
 <!-- END LEADS-->
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>
