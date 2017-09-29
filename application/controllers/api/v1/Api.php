@@ -630,16 +630,16 @@ class Api extends REST_Controller
                             $result[$i]['status'] = $value;
                             $i++;
                         }
-                        $select = array('COUNT(db_leads.lead_source) as total');
+                        $action = 'count';
+                        $select = array();
                         $table = Tbl_Leads;
-                        $join = array(Tbl_LeadAssign.' as la', 'la.lead_id = '.Tbl_Leads.'.id ', 'left');
-                        $group_by = array('db_leads.lead_source');
+                        $join_assign[] = array('table' =>Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = '.Tbl_Leads.'.id ','type' => 'left');
                         $whereYear = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL, 'YEAR(' . $table . '.created_on)' => date('Y'));
                         $whereMonth = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL, 'MONTH(' . $table . '.created_on)' => date('m'));
-                        $unassigned_leads_count_month = $this->Lead->unassigned_status_count($select, $table, $join, $whereMonth, $group_by);
-                        $unassigned_leads_count_year = $this->Lead->unassigned_status_count($select, $table, $join, $whereYear, $group_by);
-                        $result[$i]['Year'] = $unassigned_leads_count_year[0]['total'];
-                        $result[$i]['Month'] = $unassigned_leads_count_month[0]['total'];
+                        $unassigned_leads_count_month = $this->Lead->get_leads($action,$table,$select,$whereMonth,$join_assign,$group_by = array(),$order_by = array());
+                        $unassigned_leads_count_year = $this->Lead->get_leads($action,$table,$select,$whereYear,$join_assign,$group_by = array(),$order_by = array());
+                        $result[$i]['Year'] = $unassigned_leads_count_year;
+                        $result[$i]['Month'] = $unassigned_leads_count_month;
                         $result[$i]['status'] = 'Unassigned Leads';
                     }
                     $res = array('result' => True,
