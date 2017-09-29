@@ -220,7 +220,7 @@ $lead_status = $this->config->item('lead_status');
                                 </th>
                                 <?php }?>
                                 <th>
-                                    Source Type
+                                    Source Type 
                                 </th>
                                 <th>
                                     Category Name
