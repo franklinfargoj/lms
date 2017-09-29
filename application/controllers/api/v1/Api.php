@@ -630,6 +630,13 @@ class Api extends REST_Controller
                             $result[$i]['status'] = $value;
                             $i++;
                         }
+                        $select = array('COUNT(db_leads.lead_source) as total');
+                        $table = Tbl_Leads;
+                        $join = array(Tbl_LeadAssign.' as la', 'la.lead_id = '.Tbl_Leads.'.id ', 'left');
+                        $group_by = array('db_leads.lead_source');
+                        $where = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL, 'YEAR(' . $table . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . $table . '.created_on) <=' => Elapsed_day);
+                        $unassigned_leads_count = $this->Lead->unassigned_status_count($select, $table, $join, $where, $group_by);
+                        $result['unassigned_leads_count'] = $unassigned_leads_count[0]['total'];
                     }
                     $res = array('result' => True,
                         'data' => $result);
