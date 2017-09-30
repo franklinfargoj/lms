@@ -1070,3 +1070,62 @@ if (!function_exists('isTaken')){
         }
     }
 }
+
+if (!function_exists('cbs')){
+    function cbs($account_no){
+
+        $messageId = "1200";
+        // Primariy Bitmap Start
+        $primaryBitmap = chr(bindec("10110000"));
+        $primaryBitmap = $primaryBitmap.chr(bindec("00110000"));
+        $primaryBitmap = $primaryBitmap.chr(bindec("10000001"));
+        $primaryBitmap = $primaryBitmap.chr(bindec("00000001"));
+        $primaryBitmap = $primaryBitmap.chr(bindec("01000000"));
+        $primaryBitmap = $primaryBitmap.chr(bindec("10100000"));
+        $primaryBitmap = $primaryBitmap.chr(bindec("10000000"));
+        $primaryBitmap = $primaryBitmap.chr(0);
+        // Primary Bitmap End
+        // Secondary Bitmap Start
+        $secBitmap = chr(0);
+        $secBitmap = $secBitmap.chr(0);
+        $secBitmap = $secBitmap.chr(0);
+        $secBitmap = $secBitmap.chr(0);
+        $secBitmap = $secBitmap.chr(bindec("00000100"));
+        $secBitmap = $secBitmap.chr(0);
+        $secBitmap = $secBitmap.chr(0);
+        $secBitmap = $secBitmap.chr(bindec("00100000"));
+        // Secondary Bitmap End
+        $field_3='820000';
+        $field_4='0000000000000000';
+        $field_11='000000000000';
+        $field_12=date('YmdHis');
+        $field_17=date('Ymd');
+        $field_24='200';
+        $field_32='03018';
+        $field_34='09000000000';
+        $field_41='LMS             ';
+        $field_43='08BANKAWAY';
+        $field_49='INR';
+        $field_102='31018        0000    '.$account_no;
+        $field_123='003LMS';
+
+        $message = $messageId.$primaryBitmap.$secBitmap.$field_3.$field_4.$field_11.$field_12.$field_17.$field_24.$field_32.$field_34.$field_41.$field_43.$field_49.$field_102.$field_123;
+
+        $host    = "172.25.3.130";
+        $port    = 23000;
+
+        // create socket
+        $socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");
+        // connect to server
+        $result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");
+        // send message to server
+        socket_write($socket, $message, strlen($message)) or die("Could not send data to server\n");
+        // get server response
+        $result = socket_read ($socket, 2048) or die("Could not read server response\n");
+        echo "Reply From Server  :".$result;
+        // close socket
+        socket_close($socket);
+    }
+}
+
+
