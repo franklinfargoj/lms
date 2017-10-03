@@ -173,7 +173,14 @@
                                                 'id'       => 'lead_status',
                                                 'class'    => 'form-control'
                                         );
-                                        if(in_array($this->session->userdata('admin_type'),array('EM','BM')) && in_array($leads[0]['status'],array('AO','NI','Closed','Converted'))){}
+                                    $data_status = array(
+                                        'name'        => 'lead_status',
+                                        'type'       => 'hidden',
+                                        'value'       => $leads[0]['status']
+                                    );
+                                    if(in_array($this->session->userdata('admin_type'),array('EM','BM')) && in_array($leads[0]['status'],array('AO','NI','Closed','Converted'))){
+                                            echo form_input($data_status);
+                                        }
                                         else{
                                             echo form_dropdown('lead_status', $options1 , $leads[0]['status'],$js);
                                         }

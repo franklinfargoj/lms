@@ -1673,12 +1673,11 @@ class Api extends REST_Controller
             );
 
             $this->Login_model->insert_login_log($data); // login log
-            $fullname = trim($records->dbk_lms_emp_record1->name);
-            $fullname = explode('.',$fullname);
-            if($fullname[0] == '.'){
-                $fullname1 = $fullname[1];
+            $fullname = array_map('trim', explode('.', $records->dbk_lms_emp_record1->name));
+            if($fullname[0] == ''){
+                $fullname1 = trim($fullname[1]);
             }else{
-                $fullname1 = trim($records->dbk_lms_emp_record1->name);
+                $fullname1 = trim($fullname[0]);
             }
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,

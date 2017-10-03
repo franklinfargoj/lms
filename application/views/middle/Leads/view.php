@@ -168,7 +168,8 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                                   echo $value['elapsed_day'];
                                 ?>
                             </td>
-                            <?php if(!isset($status)){?>
+                            <?php if(!isset($status)){
+                                echo $value['status'];?>
                             <td>
                                  <?php echo ucwords($lead_status[$value['status']]);?>
                             </td>
