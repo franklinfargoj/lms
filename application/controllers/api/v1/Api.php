@@ -1678,7 +1678,7 @@ class Api extends REST_Controller
             if($fullname[0] == '.'){
                 $fullname1 = $fullname[1];
             }else{
-                $fullname1 = trim($records->dbk_lms_emp_record1->name);
+                $fullname1 = $fullname[0];
             }
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
