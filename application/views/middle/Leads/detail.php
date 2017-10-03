@@ -146,7 +146,7 @@
                                 </div>
                                 <div class="form-control">
                                     <?php
-                                        if(in_array($this->session->userdata('admin_type'),array('EM')) && in_array($leads[0]['status'],array('AO','NI'))){}
+                                        if(in_array($this->session->userdata('admin_type'),array('EM')) && in_array($leads[0]['status'],array('AO','NI','Closed'))){}
                                         else {
                                             ?>
                                             <label>Lead Status:</label>
