@@ -56,7 +56,7 @@ foreach ($lead_type as $key => $value){
         "neckHeight": "30%",
         "balloonText": "[[title]]:<b>[[value]]</b>",
         "export": {
-            "enabled": true
+            "enabled": false
         }
     } );
 </script>
