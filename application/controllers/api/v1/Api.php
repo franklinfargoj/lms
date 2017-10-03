@@ -1673,12 +1673,11 @@ class Api extends REST_Controller
             );
 
             $this->Login_model->insert_login_log($data); // login log
-            $fullname = trim($records->dbk_lms_emp_record1->name);
-            $fullname = explode(' ',$fullname);
-            if($fullname[0] == '.'){
-                $fullname1 = $fullname[1];
+            $fullname = array_map('trim', explode('.', $records->dbk_lms_emp_record1->name));
+            if($fullname[0] == ''){
+                $fullname1 = trim($fullname[1]);
             }else{
-                $fullname1 = $fullname[0];
+                $fullname1 = trim($fullname[0]);
             }
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
@@ -2081,12 +2080,11 @@ class Api extends REST_Controller
             // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
             $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$params['hrms_id']);
             $records = json_decode($records_response);
-            $fullname = trim($records->dbk_lms_emp_record1->name);
-            $fullname = explode(' ',$fullname);
-            if($fullname[0] == '.'){
-                $fullname1 = $fullname[1];
+            $fullname = array_map('trim', explode('.', $records->dbk_lms_emp_record1->name));
+            if($fullname[0] == ''){
+                $fullname1 = trim($fullname[1]);
             }else{
-                $fullname1 = $fullname[0];
+                $fullname1 = trim($fullname[0]);
             }
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,

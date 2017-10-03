@@ -762,7 +762,6 @@ class Leads extends CI_Controller
                             }
                             /*****************************************************************/
                             $this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
-
                             $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
                         }
                     }
@@ -1271,6 +1270,24 @@ class Leads extends CI_Controller
             $acc_no = $this->input->post('acc_no');
             $response = verify_account($acc_no);
             echo $response;
+        }
+    }
+    public function lead_life_cycle($lead_id=''){
+        if(!empty($lead_id)){
+//            $lead_id = decode_id($lead_id);
+            $this->make_bread->add('Lead Life Cycle', '', 0);
+            $arrData['breadcrumb'] = $this->make_bread->output();
+            $action = 'list';
+            $table = Tbl_Leads.' as l';
+            $select = array('l.id','la.employee_id','la.employee_name','la.created_by_name','la.created_on AS assigned_on',
+                'l.created_on AS generated_on','l.reroute_from_branch_id','l.branch_id','la.status');
+            $where = array('l.id'=>$lead_id);
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+            $order_by = 'la.created_on ASC';
+            $arrData['lead_data'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by);
+            $middle = 'Leads/life_cycle';
+            return load_view($middle,$arrData);
+
         }
     }
 
