@@ -62,10 +62,6 @@
                             </td>
                             <td>
                                 <?php echo ucwords($value['status']);?>
-                                <!-- <label class="switch switch-flat">
-                                    <input class="switch-input" id="<?php echo $value['id'];?>" type="checkbox" />
-                                    <span class="switch-label" data-on="Active" data-off="Inactive"></span> <span class="switch-handle"></span>
-                                </label> -->
                             </td>
                             <td>
                                 <a class="" href="<?php echo site_url('faq/view/'.encode_id($value['id']))?>">

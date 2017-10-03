@@ -16,6 +16,9 @@ class Product extends CI_Controller {
 	{
 		parent::__construct(); // Initialization of class
           is_logged_in();     //check login
+        if ($this->session->userdata('admin_type') != 'Super Admin'){
+            redirect('dashboard');
+        }
           $this->load->model('Master_model','master');
 	}
 

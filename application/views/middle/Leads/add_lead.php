@@ -32,8 +32,19 @@ if(isset($states) && !empty($states)){
 }
 
 $data_branch[''] = 'Select Branch';
-$data_district[''] = 'Select District';
 
+/*if(isset($branches) && !empty($branches)){
+    foreach ($branches as $branch_key => $branch){
+        $data_branch[$branch['code']] = $branch['name'];
+    }
+}*/
+
+$data_district[''] = 'Select District';
+/*if(isset($districts) && !empty($districts)){
+    foreach ($districts as $district_key => $district){
+        $data_district[$district['code']] = $district['name'];
+    }
+}*/
 $data_department_name = array('name' => 'department_name',
     'id' => 'department_name',
     'value' => set_value('department_name', '')
@@ -66,6 +77,9 @@ $customer_options['1'] = 'Existing';
 
 
 $options = $category;
+/*foreach ($category as $key => $value) {
+    $options[$value['id']] = $value['title'];
+}*/
 
 $product_options[''] = 'Select';
 if ($products != '') {
@@ -74,7 +88,7 @@ if ($products != '') {
     }
 }
 $input = get_session();
-$data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'text','value'=>'0');
+$data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'text','value'=>'');
 $lead_id_options[''] = 'Select Lead Identification';
 $lead_id_options['HOT'] = 'HOT';
 $lead_id_options['WARM'] = 'WARM';
@@ -105,7 +119,21 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 ?>
                 <p id="note"><span style="color:red;">*</span> These fields are required</p>
                 <div class="lead-form-left">
-                    
+                    <!--<div class="form-control">
+                        <label>Customer Type</label>
+                        <div class="radio-control">
+                            <input type="radio" name="is_existing_customer"
+                                   value="1" <?php /*echo set_radio('is_existing_customer', '1', TRUE); */?> />
+                            <label>New</label>
+                        </div>
+                        <div class="radio-control">
+                            <input type="radio" name="is_existing_customer"
+                                   value="0" <?php /*echo set_radio('is_existing_customer', '0'); */?> />
+                            <label>Existing</label>
+                        </div>
+                    </div>-->
+                    <!--                --><?php //echo form_error('is_existing_customer'); ?>
+
                     <div class="form-control">
                         <label>Customer Name:<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_customer);?>
@@ -128,11 +156,11 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     </div>
                     <div class="form-control range-slider">
                         <label style="vertical-align: top;">Ticket Size:<span style="color:red;">*</span> </label>
-                         <?php echo form_input($data_ticket_range)?><img src="../assets2/images/rupees.png" alt="rupees" id="rs">
+                        <?php echo form_input($data_ticket_range)?><img src="../assets2/images/rupees.png" alt="rupees" id="rs">
                         <div id="master">
                             <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
                         </div>
-                        
+
                         <div class="step" style="position: relative">
                             <span class="float-left" style="left: 0%;">5000</span>
                             <span class="float-left" style="left: 25%; position: absolute">12.5L</span></span>
@@ -150,23 +178,21 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <div class="form-control">
 
                         <?php
-                            if(in_array($this->session->userdata('admin_type'),array('GM','ZM')) ||
-                                ($this->session->userdata('dept_type_id') == 'HD' &&
-                                in_array($this->session->userdata('admin_type'),array('EM','BM')))){
-                                $checked = TRUE;
-                                $style = "style='display:none'";
-                            }else{
-                                $checked = FALSE;
-                                $style = "";
-                        ?>
+                        if(in_array($this->session->userdata('admin_type'),array('RM','ZM'))){
+                            $checked = TRUE;
+                            $style = "style='display:none'";
+                        }else{
+                            $checked = FALSE;
+                            $style = "";
+                            ?>
                             <label>Branch Type:<span style="color:red;">*</span> </label>
                             <div class="radio-control">
                                 <input type="radio" id="is_own_branch" name="is_own_branch"
                                        value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
                                 <label>Own Branch</label>
                             </div>
-                        <?php
-                            }
+                            <?php
+                        }
                         ?>
                         <div class="radio-control" <?php echo $style;?>>
                             <input type="radio" name="is_own_branch" id="is_other_branch"
@@ -191,6 +217,12 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <?php echo form_error('branch_id'); ?>
                     </div>
 
+                    <!--<div id="identification" class="form-control">
+                        <label>Lead Identification:</label>
+                        <?php /*echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) */?>
+                    </div>
+                    --><?php /*echo form_error('lead_identification'); */?>
+
                     <div class="form-control">
                         <label>Remark/Notes:<span style="color:red;">*</span> </label>
                         <?php echo form_textarea($data_remark, '', $remark_extra);?>
@@ -204,7 +236,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
                         <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                     </a>
-                    <a href="javascript:void(0);" class="reset float-right" id="reset">
+                    <a href="javascript:void(0);" class="reset float-right">
                         Reset
                     </a>
                 </div>
@@ -216,44 +248,44 @@ $remark_extra = 'style="rows:4 ; cols:80"';
 </div>
 <script>
     $(document).ready(function(){
-            var base_url = "<?php echo base_url();?>";
-            var sliderElement = $("#master");
-            var range = $('#ticket_range');
-            var div = $('.ui-slider-range');
-            var maxlead = "<?php echo add_lead_max;?>";
-            var max = parseFloat(maxlead);
+        var base_url = "<?php echo base_url();?>";
+        var sliderElement = $("#master");
+        var range = $('#ticket_range');
+        var div = $('.ui-slider-range');
+        var maxlead = "<?php echo add_lead_max;?>";
+        var max = parseFloat(maxlead);
 
-            var minlead = "<?php echo add_lead_min;?>";
-            var min = parseFloat(minlead);
-            // setup master volume
-            sliderElement.slider({
-                step:5000,
-                orientation: "horizontal",
-                max: max,
-                min: min,
-                animate: true,
-                values: [min],
-                slide: function (event, ui) {
-                    range.val(ui.values[0]);
-                    var width = (ui.values[0]-min)/(max) * 100 + '%';
-                    div.width(width);
-                }
-            });
-            var value = sliderElement.slider('values', 0);
-            range.val('0');
+        var minlead = "<?php echo add_lead_min;?>";
+        var min = parseFloat(minlead);
+        // setup master volume
+        sliderElement.slider({
+            step:5000,
+            orientation: "horizontal",
+            max: max,
+            min: min,
+            animate: true,
+            values: [min],
+            slide: function (event, ui) {
+                range.val(ui.values[0]);
+                var width = (ui.values[0]-min)/(max) * 100 + '%';
+                div.width(width);
+            }
+        });
+        var value = sliderElement.slider('values', 0);
+        range.val(value);
 
-            range.keyup(function () {
-                if($.isNumeric(range.val())) {
-                    sliderElement.slider('values', 0, range.val());
-                    var width = '100%';
-                    if (range.val() <= max)
-                        width = (range.val() / max) * 100 + '%';
-                    div.width(width);
-                }
-            });
+        range.keyup(function () {
+            if($.isNumeric(range.val())) {
+                sliderElement.slider('values', 0, range.val());
+                var width = '100%';
+                if (range.val() <= max)
+                    width = (range.val() / max) * 100 + '%';
+                div.width(width);
+            }
+        });
 
         if ($('#is_other_branch').is(':checked')) {
-           other_branch();
+            other_branch();
         }
 
         $('#is_other_branch').click(function () {
@@ -281,7 +313,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 }
             }).success(function (resp) {
                 if (resp) {
-                    $("#product_select").html(JSON.parse(resp));
+                    $("#product_select").html(resp);
                 }
             });
         });
@@ -296,6 +328,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         $("#addlead").validate({
 
             rules: {
+                /*is_existing_customer: {
+                    required: true
+                },*/
                 customer_name: {
                     required: true,
                     lettersonly: true
@@ -316,6 +351,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 product_id: {
                     required: true
                 },
+                /*lead_identification: {
+                    required: true
+                },*/
                 lead_ticket_range: {
                     required: true,
                     number:true,
@@ -335,6 +373,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 }
             },
             messages: {
+                /*is_existing_customer: {
+                    required: "Please select customer"
+                },*/
                 customer_name: {
                     required: "Please enter customer name",
                     lettersonly: "Only alphabets are allowed."
@@ -350,9 +391,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 },
                 contact_no: {
                     required: "Please enter phone number",
-                    number:"Phone number should be numeric",
-                    maxlength: 'Phone number is not 10 digits',
-                    minlength: 'Phone number is not 10 digits'
+                    maxlength: 'Please enter no more than 10 digits',
+                    minlength: 'Please enter no less than 10 digits'
 
 
                 },
@@ -371,6 +411,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 branch_id: {
                     required: "Please select branch"
                 },
+                /*lead_identification: {
+                    required: "Please select lead identification"
+                },*/
                 remark: {
                     required: "Please enter remark"
                 }
@@ -458,12 +501,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 }
             });
         }
-        $('#reset').click(function () {
-            var div = $('.ui-slider-range');
-            var sliderElement = $("#master");
-            sliderElement.slider('values', 0, 0);
-            var width = '0%';
-            div.width(width);
-        });
+
     });
 </script>
