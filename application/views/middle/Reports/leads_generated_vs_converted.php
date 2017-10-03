@@ -190,7 +190,7 @@
              <a href="javascript:void(0);" class="export_to_excel btn-Download">
                 Export to Excel 
             </a>
-            &nbsp;|
+            &nbsp;&nbsp;|&nbsp;&nbsp;
             <a href="javascript:void(0);" class="export_national btn-Download">
                     Download Bank Data 
                 </a>&nbsp;&nbsp;&nbsp;
@@ -368,7 +368,7 @@
     }else{?>
     <span class="no_result">No records found</span>
 <?php }?>
-<span class="bg-bottom" id="bg-w"></span>
+<span class="bg-bottom" ></span>
 <!-- END LEADS-->
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>

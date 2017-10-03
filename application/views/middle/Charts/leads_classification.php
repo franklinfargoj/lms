@@ -13,7 +13,10 @@
         </div>
     </div>
 </div>
+<span class="bg-top"></span>
+<div class="inner-content">
 <div id="container" style="min-width: 310px; height: auto; margin: 0 auto"></div>
+</div>
 <script type="application/javascript">
     Highcharts.chart('container', {
         chart: {

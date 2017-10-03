@@ -17,7 +17,9 @@
         </div>
     </div>
 </div>
-<div id="container" style="min-width: 310px; height: auto; margin: 0 auto"></div>
+<span class="bg-top"></span>
+<div class="inner-content">
+<div id="container" style="min-width: 310px; height: auto; margin: 0 auto" class="report-chart"></div>
 <?php
 $lead_type = $this->config->item('lead_type');
 $data = array();
@@ -28,6 +30,9 @@ foreach ($lead_type as $key => $value){
     $i++;
 }
 ?>
+</div>
+<span class="bg-bottom"></span>
+
 <script type="application/javascript">
     //console.log($.type(<?php echo json_encode($data,JSON_NUMERIC_CHECK)?>));
     Highcharts.chart('container', {

@@ -13,6 +13,8 @@
         </div>
     </div>
 </div>
+<span class="bg-top"></span>
+<div class="inner-content">
 <div id="container" style="min-width: 310px; height: auto; margin: 0 auto"></div>
 <?php
 $lead_status = $this->config->item('lead_status');
@@ -26,6 +28,8 @@ foreach ($lead_status as $key => $value){
     }
 }
 ?>
+</div>
+<span class="bg-bottom"></span>
 <script type="application/javascript">
     Highcharts.chart('container', {
         chart: {

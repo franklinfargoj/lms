@@ -26,6 +26,9 @@
         </div>
     </div>
 </div>
+<div class="page-content">
+<span class="bg-top"></span>
+<div class="inner-content">
 <div id="chartdiv"></div>
 <?php
 $lead_type = $this->config->item('lead_type');
@@ -37,6 +40,8 @@ foreach ($lead_type as $key => $value){
     $i++;
 }
 ?>
+</div>
+<span class="bg-bottom"></span>
 <script type="application/javascript">
     console.log(<?php echo json_encode((array)$data,JSON_NUMERIC_CHECK)?>);
     var chart = AmCharts.makeChart( "chartdiv", {

@@ -900,7 +900,7 @@ select#tenurePeriod {
     position: relative;
 }
 #ui-datepicker-div {
-    top:44%!important;
+    top:38%!important;
 }
 input#remind_on {
     padding: 6px 2px;
@@ -930,6 +930,14 @@ span.right-toggle {
 }
 .margin-b{
 	margin-bottom: 12px;
+}
+#chartdiv {
+    width: 1382px!important;
+    margin: 0 auto;
+    padding-top: 12px;
+}
+div#container {
+    width: 1382px!important;
 }
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{
