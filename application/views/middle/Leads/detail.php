@@ -124,9 +124,9 @@
                                         <?php
                                             if(isset($lead_identification)){
                                                 $status_array = array('AO','Closed','Converted','NI');
+                                                $admin = array('EM','BM');
                                                 if(isset($leads[0]['status']) && in_array($leads[0]['status'],$status_array)
-                                                && $this->session->userdata('admin_type') == 'EM'){
-
+                                                && in_array($this->session->userdata('admin_type'),$admin)){
                                                 }else{
                                                     echo "<label>Lead Identified as :</label>";
                                                     echo "<span class='detail-label'>";
@@ -146,7 +146,7 @@
                                 </div>
                                 <div class="form-control">
                                     <?php
-                                        if(in_array($this->session->userdata('admin_type'),array('EM')) && in_array($leads[0]['status'],array('AO','NI','Closed'))){}
+                                        if(in_array($this->session->userdata('admin_type'),array('EM','BM')) && in_array($leads[0]['status'],array('AO','NI','Closed','Converted'))){}
                                         else {
                                             ?>
                                             <label>Lead Status:</label>
@@ -159,19 +159,21 @@
                                         );
                                         echo form_hidden($data);
                                         $options1['']='Select';
-                                        foreach ($lead_status as $key => $value) {
-                                            if($key != $leads[0]['status']){
-                                                if(((in_array($this->session->userdata('admin_type'),array('EM'))) && (in_array($key,array('Converted','Closed')))) || (in_array($key,$previous_status))){
-                                                    continue;
+                                        if(!empty($lead_status)){
+                                            foreach ($lead_status as $key => $value) {
+                                                if($key != $leads[0]['status']){
+                                                    if(((in_array($this->session->userdata('admin_type'),array('EM'))) && (in_array($key,array('Converted','Closed')))) || (in_array($key,$previous_status))){
+                                                        continue;
+                                                    }
                                                 }
+                                                $options1[$key] = $value;
                                             }
-                                            $options1[$key] = $value;
                                         }
                                         $js = array(
                                                 'id'       => 'lead_status',
                                                 'class'    => 'form-control'
                                         );
-                                        if(in_array($this->session->userdata('admin_type'),array('EM')) && in_array($leads[0]['status'],array('AO','NI'))){}
+                                        if(in_array($this->session->userdata('admin_type'),array('EM','BM')) && in_array($leads[0]['status'],array('AO','NI','Closed','Converted'))){}
                                         else{
                                             echo form_dropdown('lead_status', $options1 , $leads[0]['status'],$js);
                                         }
@@ -238,7 +240,14 @@
                                 <label>Remark/Notes</label>
                                 <p class="remark-notes"><?php echo isset($leads[0]['remark']) ? $leads[0]['remark'] : 'NA';?></p>
                             </div>
-                            <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM'))) && ($leads[0]['status'] != 'Converted')){?>
+                            <?php
+                            $exclude_status_bm = array('Converted','Closed');
+                            $exclude_status_em = array('Converted','Closed','AO','NI');
+                            if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')) &&
+                                !in_array($leads[0]['status'],$exclude_status_bm))
+                                || (in_array($this->session->userdata('admin_type'),array('EM')) &&
+                                !in_array($leads[0]['status'],$exclude_status_em))
+                            ){?>
                             <div class="form-control">
                                 <label>Reroute:</label>
                                 <div class="radio-control">
@@ -281,7 +290,14 @@
                             <?php }?>
                         </div>
                         <div class="form-control form-submit clearfix">
-                            <?php if(($type == 'assigned') && ($leads[0]['status'] != 'Converted')){?>
+                            <?php
+                            $exclude_status_bm = array('Converted','Closed');
+                            $exclude_status_em = array('Converted','Closed','AO','NI');
+
+                            if(($type == 'assigned') &&
+                                    ($this->session->userdata('admin_type') == 'EM' && !in_array($leads[0]['status'],$exclude_status_em)) ||
+                                    ($this->session->userdata('admin_type') == 'BM' && !in_array($leads[0]['status'],$exclude_status_bm))){
+                                ?>
                                 <a href="javascript:void(0);" class="float-right submit_button">
                                     <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
                                     <span><input type="submit" class="custom_button" value="Submit" /></span>
