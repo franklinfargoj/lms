@@ -93,7 +93,7 @@
 					</a>
 				</div>
 				<div class="form-options clearfix">
-					<a href="<?php echo site_url('login/view_faqs')?>" class="float-right">FAQ's</a>
+					<a href="<?php echo site_url('login/view_faqs')?>" class="float-right">FAQ</a>
 					<div class="float-left">
 						<label class="control control--checkbox">Remember me ?
 					      	<input type="checkbox" id="remember_me" name="remember_me" <?php if(isset($_COOKIE["member_login"])) { ?> checked <?php } ?>/>
