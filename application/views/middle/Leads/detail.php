@@ -1,5 +1,6 @@
-<?php 
-    $lead_status = $this->config->item('lead_status');
+<?php
+//    $lead_status = $this->config->item('lead_status');
+    $all_lead_status = $this->config->item('lead_status');
     $lead_type = $this->config->item('lead_type');
     $color = 'gray';
     if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identification'])){
@@ -81,7 +82,9 @@
                                 <label>Product Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['product_title']);?></span>
                             </div>
                             <div class="form-control">
-                                <label>Lead Status:</label> <span class="detail-label"><?php echo isset($leads[0]['status']) ? $lead_status[$leads[0]['status']] : 'NA';?></span>
+                                <label>Lead Status:</label> <span class="detail-label">
+                                    <?php $account_no = $leads[0]['opened_account_no'] ? " (".$leads[0]['opened_account_no'].")" :'';
+                                    echo isset($leads[0]['status']) ? $all_lead_status[$leads[0]['status']].$account_no : 'NA';?></span>
                             </div>
                            
                             <div class="form-control">
@@ -91,7 +94,7 @@
                                 <!-- <div class="form-control">
                                     <label>Interest in other product</label>
                                     <div class="radio-control">
-                                         <?php 
+                                         <?php
                                             $data = array(
                                                 'name'          => 'interested',
                                                 'id'            => 'interested',
@@ -105,8 +108,8 @@
                                     </div>
                                 </div>
                                 <div class="form-control interested-info" style="display:none;">
-                                    <label>Category:</label>   
-                                    <?php 
+                                    <label>Category:</label>
+                                    <?php
                                         if(isset($category_list)){
                                             $options = $category_list;
                                             $js = array(
@@ -118,22 +121,28 @@
                                     ?>
                                 </div> -->
                                 <div class="form-control">
-                                    <label>Lead Identified as :</label> 
-                                    <span class="detail-label">
-                                        <?php 
+                                        <?php
                                             if(isset($lead_identification)){
-                                                $options2['']='Select';
-                                                foreach ($lead_type as $key => $value) {
-                                                    $options2[$key] = ucwords($value);
-                                                }
-                                                $js = array(
+                                                $status_array = array('AO','Closed','Converted','NI');
+                                                if(isset($leads[0]['status']) && in_array($leads[0]['status'],$status_array)
+                                                && $this->session->userdata('admin_type') == 'EM'){
+
+                                                }else{
+                                                    echo "<label>Lead Identified as :</label>";
+                                                    echo "<span class='detail-label'>";
+                                                    $options2['']='Select';
+                                                    foreach ($lead_type as $key => $value) {
+                                                        $options2[$key] = ucwords($value);
+                                                    }
+                                                    $js = array(
                                                         'id'       => 'lead_identification',
                                                         'class'    => 'form-control'
-                                                );
-                                                echo form_dropdown('lead_identification', $options2 , $leads[0]['lead_identification'],$js);    
+                                                    );
+                                                    echo form_dropdown('lead_identification', $options2 , $leads[0]['lead_identification'],$js);
+                                                    echo "</span>";
+                                                }
                                             }
                                         ?>
-                                    </span>
                                 </div>
                                 <div class="form-control">
                                     <?php
