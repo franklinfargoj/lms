@@ -1674,7 +1674,7 @@ class Api extends REST_Controller
 
             $this->Login_model->insert_login_log($data); // login log
             $fullname = trim($records->dbk_lms_emp_record1->name);
-            $fullname = explode('.',$fullname);
+            $fullname = explode(' ',$fullname);
             if($fullname[0] == '.'){
                 $fullname1 = $fullname[1];
             }else{
