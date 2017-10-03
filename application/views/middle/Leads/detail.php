@@ -476,7 +476,9 @@
             }
         }).success(function (resp) {
             if(resp){
-                $("#district_id").html(resp);
+                var res = JSON.parse(resp);
+                $("#district_id").html(res['district']);
+                $("#branch_id").html(res['branch']);
             }
         });
     });
@@ -493,14 +495,14 @@
             }
         }).success(function (resp) {
             if(resp){
-                console.log(resp);
-                $("#branch_id").html(resp);
+                var res = JSON.parse(resp);
+                $("#branch_id").html(res);
             }
         });
     });
 
     $('.verify_account').click(function () {
-        var acc_no = $('#accountNo').val();
+        var acc_no = $.trim($('#accountNo').val());
         if(acc_no.length === 0 || acc_no.length != 12){
             alert('Please Enter 12 digit Account number.');
         }else{

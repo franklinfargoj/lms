@@ -10,11 +10,6 @@ $lead_status = $this->config->item('lead_status');
         <h3 class="text-center">
             Leads Classification
         </h3>
-        <div class="float-right">
-            <a href="<?php echo site_url('charts/index/leads_classification')?>" class="btn-Download">
-                Chart View
-            </a>
-        </div>
     </div>
 </div>
 <?php 
@@ -218,9 +213,15 @@ $lead_status = $this->config->item('lead_status');
                             </th>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
-                            <th>
-                                Employee Name
-                            </th>
+                                <th>
+                                    HRMS ID
+                                </th>
+                                <th>
+                                    Employee Name
+                                </th>
+                                <th>
+                                    Designation
+                                </th>
                             <?php }?>
                             <th>
                                 Source Type
@@ -233,6 +234,9 @@ $lead_status = $this->config->item('lead_status');
                             </th>
                             <th style="text-align:center">
                                 Ticket Size (Rs)
+                            </th>
+                            <th style="text-align:center">
+                                Amount (Rs)
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
@@ -265,11 +269,21 @@ $lead_status = $this->config->item('lead_status');
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
-                            <td>
-                                <?php 
+                                <td>
+                                    <?php
+                                    echo isset($value['employee_id']) ? $value['employee_id'] : '';
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
                                     echo isset($value['employee_name']) ? $value['employee_name'] : '';
-                                ?>
-                            </td>
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    echo isset($value['designation']) ? $value['designation'] : '';
+                                    ?>
+                                </td>
                             <?php }?>
                             <td>
                                 <?php 
@@ -289,6 +303,11 @@ $lead_status = $this->config->item('lead_status');
                             <td style="text-align:center">
                                 <?php 
                                     echo isset($value['ticket']) ? $value['ticket'] : '';
+                                ?>
+                            </td>
+                            <td style="text-align:center">
+                                <?php
+                                echo isset($value['amount']) ? $value['amount'] : '';
                                 ?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM'))){

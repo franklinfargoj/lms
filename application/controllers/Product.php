@@ -57,7 +57,7 @@ class Product extends CI_Controller {
           
           $arrData['categorylist'] = $this->getCategoryList();
           if($this->input->post()){
-               $this->form_validation->set_rules('title','Product name', 'trim|required|callback_alphaNumeric|is_unique['.Tbl_Products.'.title]');
+               $this->form_validation->set_rules('title','Product name', 'trim|required|callback_alphaNumeric|callback_isTaken');
                $this->form_validation->set_rules('category_id','Product Category', 'required');
                $this->form_validation->set_message('is_unique', '%s is already taken');
                $this->form_validation->set_rules('turn_around_time','Turn around time', 'trim|required');
@@ -120,7 +120,7 @@ class Product extends CI_Controller {
                $this->form_validation->set_rules('category_id','Product Category', 'trim|required');
                $this->form_validation->set_rules('map_with','Map With', 'required');
                if(strtolower($this->input->post('title')) != $arrData['productDetail'][0]['title']){
-                    $is_unique = '|is_unique['.Tbl_Products.'.title]';
+                   $is_unique = '|callback_isTaken';
                }else{
                     $is_unique = '';
                }
@@ -221,4 +221,23 @@ class Product extends CI_Controller {
           }
           return $categorylist;
      }
+
+    /*
+     * isTaken
+     * Checks title unique or not
+     * @author Gourav Thatoi
+     * @access public
+     * @param none
+     * @return boolean
+     */
+    public function isTaken($title){
+        $table = Tbl_Products;
+        $where = array('title'=>strtolower($title),'is_deleted'=>0);
+        $is_taken = isTaken($title,$table,$where);
+        if($is_taken > 0){
+            $this->form_validation->set_message('isTaken', '%s is already taken');
+            return FALSE;
+        }
+        return TRUE;
+    }
 }

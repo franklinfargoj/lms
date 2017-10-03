@@ -55,8 +55,7 @@ class Product_category extends CI_Controller {
           /*Create Breadcumb*/
 
           if($this->input->post()){
-               $this->form_validation->set_rules('title','Product category name','trim|required|callback_alphaNumeric|is_unique['.Tbl_Category.'.title]');
-               $this->form_validation->set_message('is_unique', '%s is already taken');
+               $this->form_validation->set_rules('title','Product category name','trim|required|callback_alphaNumeric|callback_isTaken');
                if ($this->form_validation->run() == FALSE)
                {    $arrData['has_error'] = 'has-error';
                     return load_view("Products/Category/add",$arrData);
@@ -107,8 +106,8 @@ class Product_category extends CI_Controller {
           }
           if($this->input->post()){
                if(strtolower($this->input->post('title')) != $arrData['categoryDetail'][0]['title']){
-                    $is_unique = '|is_unique['.Tbl_Category.'.title]';
-                    $this->form_validation->set_message('is_unique', '%s is already taken');
+                    $is_unique = '|callback_isTaken';
+
                }else{
                     $is_unique = '';
                }
@@ -206,5 +205,24 @@ class Product_category extends CI_Controller {
           {
                return TRUE;
           }
+     }
+
+    /*
+    * isTaken
+    * Checks title unique or not
+    * @author Gourav Thatoi
+    * @access public
+    * @param none
+    * @return boolean
+    */
+     public function isTaken($title){
+         $table = Tbl_Category;
+         $where = array('title'=>strtolower($title),'is_deleted'=>0);
+         $is_taken = isTaken($title,$table,$where);
+         if($is_taken > 0){
+             $this->form_validation->set_message('isTaken', '%s is already taken');
+             return FALSE;
+         }
+         return TRUE;
      }
 }

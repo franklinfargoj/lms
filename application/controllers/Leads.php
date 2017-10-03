@@ -41,6 +41,9 @@ class Leads extends CI_Controller
      */
     public function add()
     {
+        if($this->session->userdata('admin_type') == 'Super admin'){
+            redirect('/dashboard');
+        }
         /*Create Breadcumb*/
           $this->make_bread->add('Add Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
@@ -51,13 +54,16 @@ class Leads extends CI_Controller
         $arrData['products'] = '';
 
         $action = 'list';$table=Tbl_state;$select=array('code','name');
-        $arrData['states'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+        $where = array('code !='=>'');
+        $arrData['states'] = $this->Lead->get_leads($action,$table,$select,$where,'','','');
 
         $action = 'list';$table=Tbl_district;$select=array('code','name');
-        $arrData['districts'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+        $where = array('code !='=>'');
+        $arrData['districts'] = $this->Lead->get_leads($action,$table,$select,$where,'','','');
 
         $action = 'list';$table=Tbl_branch;$select=array('code','name');
-        $arrData['branches'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+        $where = array('code !='=>'');
+        $arrData['branches'] = $this->Lead->get_leads($action,$table,$select,$where,'','','');
 
 
         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
@@ -134,13 +140,13 @@ class Leads extends CI_Controller
                 if($lead_id != false){
 
                     //send sms
-                    $sms = 'Thanks for showing interest with Dena Bank. We will contact you shortly.';
+                    $sms = 'Thanks for showing interest in '.ucwords($product_name).' with Dena Bank. We will contact you shortly.';
                     send_sms($this->input->post('contact_no'),$sms);
 
                     //Push notification
                     $emp_id = $login_user['hrms_id'];
-                    $title = 'Lead Added Successfully';
-                    $push_message = 'Lead added successfully for '.ucwords($product_name);
+                    $title = 'Lead Submitted Successfully';
+                    $push_message = 'Lead Submitted Successfully '.ucwords($product_name);
                     sendPushNotification($emp_id,$push_message,$title);
                     //Save notification
                     $this->insert_notification($lead_data);
@@ -164,7 +170,7 @@ class Leads extends CI_Controller
                     $push_message = "New Lead Assigned to you";
                     sendPushNotification($emp_id,$push_message,$title);
                 }
-                $this->session->set_flashdata('success', "Lead Added Successfully");
+                $this->session->set_flashdata('success', "Lead Submitted Successfully");
                 redirect(base_url('leads/add'), 'refresh');
             }
         } else {
@@ -288,7 +294,6 @@ class Leads extends CI_Controller
 
                     $excelData = fetch_range_excel_data($file['full_path'], 'A2:J', $keys);
                     $validation = $this->validate_leads_data($excelData,$lead_source);
-
                     if (!empty($validation['insert_array'])) {
                         $insert_count = $this->Lead->insert_uploaded_data('db_leads', $validation['insert_array']);
 
@@ -306,7 +311,7 @@ class Leads extends CI_Controller
                         $this->Lead->uploaded_log('uploaded_leads_log', $data);
                         $download_url = base_url('uploads/errorlog/'.$target_file);
                         $msg = notify('<span style="color: green">'.$validation['total_inserted'] . ' rows inserted sucessfully.</span> Error occured in ' . $validation['total_error_rows'] . ' rows.Please refer log file <a href="'.$download_url.'">here</a>.', 'danger');
-                        $this->session->set_flashdata('message', $msg);
+                        $this->session->set_flashdata('error', $msg);
                         redirect(base_url('leads/upload'), 'refresh');
                     }
                     $data = array(
@@ -317,7 +322,7 @@ class Leads extends CI_Controller
 //                    unlink($file['full_path']);
                     $this->Lead->uploaded_log('uploaded_leads_log', $data);
                     $msg = notify('File Uploaded Successfully.' . $validation['total_inserted'] . ' rows inserted. ', 'success');
-                    $this->session->set_flashdata('message', $msg);
+                    $this->session->set_flashdata('success', $msg);
                     redirect(base_url('leads/upload'), 'refresh');
 
                 }
@@ -655,12 +660,12 @@ class Leads extends CI_Controller
                         $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                         $leads_data = $leadsAssign[0];
                         $id = $leads_data['id'];
-                        $leads_data['reroute_from_branch_id'] = $leads_data['branch_id'];
-                        $leads_data['state_id'] = $this->input->post('state_id');
-                        $leads_data['branch_id'] = $this->input->post('branch_id');
-                        $leads_data['district_id'] = $this->input->post('district_id');
-                        unset($leads_data['id']);
-                        $this->Lead->insert_lead_data($leads_data,Tbl_Leads);
+                        $update_lead_data['reroute_from_branch_id'] = $leads_data['branch_id'];
+                        $update_lead_data['state_id'] = $this->input->post('state_id');
+                        $update_lead_data['branch_id'] = $this->input->post('branch_id');
+                        $update_lead_data['district_id'] = $this->input->post('district_id');
+                        $whereUpdate = array('id'=>$id);
+                        $this->Lead->update($whereUpdate,Tbl_Leads,$update_lead_data);
                         $whereUpdate = array('lead_id'=>$id);
                         $table = Tbl_LeadAssign;
                         $data = array('is_updated'=>0);
@@ -759,11 +764,15 @@ class Leads extends CI_Controller
                         if($lead_status == 'AO'){
                             $responseData = array(
                                 'lead_id' => $lead_id,
-                                'account_no'=>$this->input->post('accountNo'),
+                                'account_no'=>trim($this->input->post('accountNo')),
                                 'response_data' => $this->input->post('response_data')
                             );
                             //This will add entry into cbs response for status (Account Opened)
                             $this->Lead->insert_lead_data($responseData,Tbl_cbs);
+                            $table = Tbl_Leads;
+                            $where = array('id'=>$lead_id);
+                            $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
+                            $this->Lead->update_lead_data($where,$data,$table);
                         }
                         if($lead_status == 'Converted'){
                             $this->points_distrubution($lead_id);
@@ -1043,7 +1052,7 @@ class Leads extends CI_Controller
         if ($this->input->post()) {
             $state_id = $this->input->post("state_code");
             $select_label = $this->input->post("select_label");
-            $whereArray = array('state_code'=> $state_id);
+            $whereArray = array('state_code'=> $state_id,'code !=' =>'');
             $action='list';$table=Tbl_district;$select=array('code','name');
             $districts = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
             $district_extra = 'id="district_id"';$branch_extra = 'id="branch_id"';
@@ -1083,7 +1092,7 @@ class Leads extends CI_Controller
         if ($this->input->post()) {
             $district_code = $this->input->post("district_code");
             $select_label = $this->input->post("select_label");
-            $whereArray = array('district_code'=> $district_code);
+            $whereArray = array('district_code'=> $district_code,'code !=' =>'');
             $action='list';$table=Tbl_branch;$select=array('code','name');
             $branches = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
             $branch_extra = 'id="branch_id"';
@@ -1227,11 +1236,9 @@ class Leads extends CI_Controller
     }
 
     public function verify_account(){
-        if($this->input->post('acc_no') != '')
-        {
+        if($this->input->post('acc_no') != ''){
             $acc_no = $this->input->post('acc_no');
-            $url = 'http://103.224.110.52/client.php?account_no='.$acc_no;
-            $response = call_external_url($url);
+            $response = verify_account($acc_no);
             echo $response;
         }
     }

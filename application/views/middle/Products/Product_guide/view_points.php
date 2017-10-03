@@ -19,6 +19,7 @@
                 </div>
                 <div class="float-right">
                     <span class="lead-num"><a href="<?php echo site_url('product_guide/manage_points/'.encode_id($product[0]['id']));?>">Add</a></span>
+                    <span class="lead-num"><a href="<?php echo site_url('product');?>">Back</a></span>
                 </div>
             </div>
             <table id="sample_3" class="display lead-table">

@@ -19,7 +19,6 @@ class Charts extends CI_Controller
         parent::__construct();
         is_logged_in();
         $this->load->model('Lead');
-        $this->load->model('Master_model','Master');
     }
 
     /*
@@ -31,7 +30,7 @@ class Charts extends CI_Controller
      * @return void
      *
      */
-    public function index($action,$view = null,$zone_id = null,$branch_id = null,$export = 'no')
+    public function index($action,$chart_type = null)
     {
         $this->make_bread->add('Charts', '', 0);
         /*$d = new DateTime('first day of this month');
@@ -42,15 +41,16 @@ class Charts extends CI_Controller
             $arrData = $this->$action('converted',$arrData);
             $arrData = $this->combine($arrData);
         }else{
-            $arrData = $this->$action();
+            $arrData = $this->$action($chart_type);
         }
         $arrData['breadcrumb'] = $this->make_bread->output();
-        /*pe($arrData);
-        exit;*/
+        if($chart_type == 'funnel'){
+            $action = $action.'_'.$chart_type;
+        }
         return load_view('Charts/'.$action,$arrData);
     }
 
-    private function pendancy_leads_reports(){
+    private function pendancy_leads_reports($chart_type){
         $this->make_bread->add('Pendancy Leads', '', 0);
         $lead_status = array_keys($this->config->item('lead_status'));
 
@@ -103,7 +103,7 @@ class Charts extends CI_Controller
         return $arrData;
     }
 
-    private function leads_type_reports(){
+    private function leads_type_reports($chart_type){
         $this->make_bread->add('Leads Identification', '', 0);
         $lead_type = array_keys($this->config->item('lead_type'));
 
@@ -117,11 +117,14 @@ class Charts extends CI_Controller
 
         //Build Input Parameter
         $action = 'list';
-        $select = array('l.zone_id','COUNT(la.lead_id) as count','l.lead_identification');
+        $select = array('l.zone_id','COUNT(l.id) as count','l.lead_identification');
         $table = Tbl_Leads.' as l';
-        $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'l.lead_identification IN ("'.str_replace(',','","',implode(',',$lead_type)).'")' => NULL);
+        $where  = array('l.lead_identification IN ("'.str_replace(',','","',implode(',',$lead_type)).'")' => NULL);
+        if($chart_type == 'funnel'){
+            $where['DATE_FORMAT(l.created_on,"%Y")'] = date('Y');
+        }
         $join = array();
-        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+        //$join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         $group_by = array('l.zone_id','l.lead_identification');
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
 
@@ -150,7 +153,7 @@ class Charts extends CI_Controller
         return $arrData;
     }
 
-    private function leads_generated(){
+    private function leads_generated($chart_type){
         $this->make_bread->add('Leads Generated', '', 0);
         $lead_status = array_keys($this->config->item('lead_status'));
         //Get Listing for branch
@@ -198,7 +201,7 @@ class Charts extends CI_Controller
         return $arrData;
     }
 
-    private function leads_assigned(){
+    private function leads_assigned($chart_type){
         $this->make_bread->add('Leads Assigned', '', 0);
         $lead_status = array_keys($this->config->item('lead_status'));
         //Get Listing for ZOne
@@ -322,7 +325,7 @@ class Charts extends CI_Controller
         return $arrData;
     }
 
-    private function leads_classification(){
+    private function leads_classification($chart_type){
         $this->make_bread->add('Leads Classification', '', 0);
         //Get Listing for branch
         $SELECT = array('zone_id','zone_name');
@@ -362,7 +365,7 @@ class Charts extends CI_Controller
         return $arrData;
     }
 
-    private function usage(){
+    private function usage($chart_type){
         $this->make_bread->add('Usage', '', 0);
 
         //Get Listing for Zone
@@ -372,7 +375,7 @@ class Charts extends CI_Controller
         $GROUP_BY = array('zone_id');
         $TABLE  = 'employee_dump';
         $LIST = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
-
+        //pe($LIST);
         //Build Input Parameter
         $action = 'list';
         $select = array('COUNT(DISTINCT(l.employee_id)) as count','l.zone_id');
@@ -381,7 +384,7 @@ class Charts extends CI_Controller
         $join = array();
         $group_by = array('l.zone_id');
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
-
+        /*pe($this->db->last_query());*/
         $arrData['Total'] = 0;
         if($LIST){
             foreach ($leads as $key => $value) {
@@ -402,7 +405,8 @@ class Charts extends CI_Controller
 
                 if(isset($value->total_user)){
                     $arrData['Total'] += $value->total_user;
-                    $arrData['not_logged_in'][] = ($value->total_user - isset($zone['logged_in'][$index]) ? $zone['logged_in'][$index] : 0);
+
+                    $arrData['not_logged_in'][] = ($value->total_user - (isset($zone['logged_in'][$index]) ? $zone['logged_in'][$index] : 0));
                 }
             }
         }

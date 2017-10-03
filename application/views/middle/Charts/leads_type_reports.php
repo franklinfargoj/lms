@@ -1,6 +1,6 @@
-<script src="<?php echo base_url().ASSETS;?>/js/highcharts.js"></script>
-<script src="<?php echo base_url().ASSETS;?>/js/exporting.js"></script>
-<script src = "<?php echo base_url().ASSETS;?>/js/chart.js"></script>
+<script src="<?php echo base_url().PLUGINS;?>highcharts/js/highcharts.js"></script>
+<script src="<?php echo base_url().PLUGINS;?>highcharts/js/exporting.js"></script>
+<script src = "<?php echo base_url().PLUGINS;?>highcharts/js/chart.js"></script>
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
@@ -9,6 +9,10 @@
         <div class="float-right">
             <a href="<?php echo site_url('reports/index/leads_type_reports')?>" class="btn-Download">
                 Grid View
+            </a>
+            <span> | </span>
+            <a href="<?php echo site_url('charts/index/leads_type_reports/funnel')?>" class="btn-Download">
+                Funnel View
             </a>
         </div>
     </div>
@@ -25,6 +29,7 @@ foreach ($lead_type as $key => $value){
 }
 ?>
 <script type="application/javascript">
+    //console.log($.type(<?php echo json_encode($data,JSON_NUMERIC_CHECK)?>));
     Highcharts.chart('container', {
         chart: {
             type: 'column'
