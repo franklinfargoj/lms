@@ -2081,7 +2081,13 @@ class Api extends REST_Controller
             // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
             $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$params['hrms_id']);
             $records = json_decode($records_response);
-
+            $fullname = trim($records->dbk_lms_emp_record1->name);
+            $fullname = explode(' ',$fullname);
+            if($fullname[0] == '.'){
+                $fullname1 = $fullname[1];
+            }else{
+                $fullname1 = $fullname[0];
+            }
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
                 'dept_id' => $records->dbk_lms_emp_record1->deptid,
@@ -2091,7 +2097,7 @@ class Api extends REST_Controller
                 'district_id' => $records->dbk_lms_emp_record1->district,
                 'state_id' => $records->dbk_lms_emp_record1->state,
                 'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
-                'full_name' => $records->dbk_lms_emp_record1->name,
+                'full_name' => $fullname1,
                 'supervisor_id' => $records->dbk_lms_emp_record1->supervisor,
                 'designation_id' => $records->dbk_lms_emp_record1->designation_id,
                 'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
