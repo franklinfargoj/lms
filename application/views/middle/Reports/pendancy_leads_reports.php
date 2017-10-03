@@ -185,7 +185,7 @@ $lead_status = $this->config->item('lead_status');
                     <a href="javascript:void(0);" class="export_to_excel btn-Download">
                         Export to Excel 
                     </a>
-                    &nbsp;|
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
                     <a href="javascript:void(0);" class="export_national btn-Download">
                         Download Bank Data
                     </a>
@@ -392,6 +392,8 @@ $lead_status = $this->config->item('lead_status');
 <?php }?>
 
 </div>
+</div>
+<span class="bg-bottom" id="bg-w"></span>
 <!-- END LEADS-->
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>
@@ -428,4 +430,3 @@ $lead_status = $this->config->item('lead_status');
     });
 </script>
 <script src="<?php echo base_url().ASSETS;?>js/reports.js"></script>
-<span class="bg-bottom" id="bg-w"></span>

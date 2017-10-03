@@ -13,6 +13,7 @@
         </div>
     </div>
 </div>
+
 <div id="container" style="min-width: 310px; height: auto; margin: 0 auto"></div>
 <script type="application/javascript">
     Highcharts.chart('container', {
