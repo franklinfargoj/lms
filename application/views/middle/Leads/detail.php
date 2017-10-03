@@ -180,7 +180,7 @@
                                     ?>
                                 </div>
                                 <div class="form-control followUp" style="display:none">
-                                    <label>Remind On:</label>   
+                                    <label>Next Followup Date:</label>
                                     <?php 
                                         if(!empty($leads[0]['remind_on'])){
                                             $value = date('d-m-Y',strtotime($leads[0]['remind_on']));
@@ -198,7 +198,7 @@
                                         ?>
                                 </div>
                                 <div class="form-control followUp" style="display:none">
-                                    <label>Discussed Points:</label>   
+                                    <label>Followup Remark:</label>
                                     <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
                                 </div>
                                 <div class="form-control accountOpen" style="display:none">
@@ -242,11 +242,8 @@
                             </div>
                             <?php
                             $exclude_status_bm = array('Converted','Closed');
-                            $exclude_status_em = array('Converted','Closed','AO','NI');
                             if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')) &&
                                 !in_array($leads[0]['status'],$exclude_status_bm))
-                                || (in_array($this->session->userdata('admin_type'),array('EM')) &&
-                                !in_array($leads[0]['status'],$exclude_status_em))
                             ){?>
                             <div class="form-control">
                                 <label>Reroute:</label>
