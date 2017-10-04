@@ -1307,7 +1307,7 @@ class Leads extends CI_Controller
                     set_time_limit(0);
                     ini_set('memory_limit', '-1');
                     $keys = ['hrms_id', 'name', 'designation_id','designation', 'email_id','contact_no', 'branch_id', 'branch_name',
-                            'district_id', 'state_id', 'zone_id', 'zone_name','supervisor_id'];
+                        'zone_id', 'zone_name','district_id', 'state_id', 'supervisor_id'];
 
                     $excelData = fetch_range_excel_data($file['full_path'], 'A2:K', $keys);
                     $this->Lead->insert_uploaded_data(Tbl_emp_dump,$excelData);
