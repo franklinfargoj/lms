@@ -63,6 +63,14 @@
 					</a>
 				</li>
 				<?php }?>
+
+                <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+				<li class="<?php echo ($controller == 'leads' && $method == 'upload_employee') ? 'active' : ''?>">
+					<a href="<?php echo site_url('leads/upload_employee')?>">
+						Employee Upload
+					</a>
+				</li>
+				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('BM'))) {?>
 				<li class="<?php echo (($controller == 'leads') && (in_array($method,array('unassigned_leads','unassigned_leads_list','unassigned_leads_details')))) ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/unassigned_leads')?>">
