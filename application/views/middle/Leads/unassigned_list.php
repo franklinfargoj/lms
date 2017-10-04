@@ -1,6 +1,6 @@
-<div class="page-content">
-    <div class="">
-        <div class="unassigned-content">
+
+    
+       
         <div class="page-title">
                     <div class="container clearfix">
                         <h3 class="text-center">
@@ -10,6 +10,7 @@
                         </h3>
                     </div>
                 </div>
+        <div class="page-content">        
         <span class="bg-top"></span>
         <div class="inner-content">
             <div class="container">
@@ -167,8 +168,7 @@
         </div>
         <span class="bg-bottom"></span>
         </div>
-    </div>
-</div>
+
 <script src="<?php echo base_url() . ASSETS; ?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url() . ASSETS; ?>js/config.datatable.js"></script>
 
