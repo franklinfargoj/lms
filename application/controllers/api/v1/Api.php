@@ -817,7 +817,8 @@ class Api extends REST_Controller
         $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
 
         $join[] = array('table' => Tbl_Reminder . ' as r', 'on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"', 'type' => 'left');
-        $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+        $order_by = 'la.created_on desc';
+        $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by);
         return $arrData;
     }
 
@@ -1014,7 +1015,6 @@ class Api extends REST_Controller
             $lead_source = $params['lead_source'];
             $branch_id = $params['branch_id'];
             $unassigned_leads = $this->Lead->unassigned_leads_api($lead_source, $branch_id);
-            //$unassigned_leads[0]['product_title'] = ucwords($unassigned_leads[0]['product_title']);
             $res = array('result' => True,
                 'data' => $unassigned_leads);
             returnJson($res);
@@ -1057,7 +1057,8 @@ class Api extends REST_Controller
             /*$join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');*/
 
             $join[] = array('table' => Tbl_Reminder . ' as r', 'on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"', 'type' => 'left');
-            $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+            $order_by = 'la.created_on desc';
+            $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by);
             $res = array('result' => True,
                 'data' => $arrData['leads']);
             returnJson($res);
