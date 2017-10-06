@@ -146,7 +146,8 @@
                                 </div>
                                 <div class="form-control">
                                     <?php
-                                        if(in_array($this->session->userdata('admin_type'),array('EM','BM')) && in_array($leads[0]['status'],array('AO','NI','Closed','Converted'))){}
+                                    if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
+                                        || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))){}
                                         else {
                                             ?>
                                             <label>Lead Status:</label>
@@ -178,7 +179,8 @@
                                         'type'       => 'hidden',
                                         'value'       => $leads[0]['status']
                                     );
-                                    if(in_array($this->session->userdata('admin_type'),array('EM','BM')) && in_array($leads[0]['status'],array('AO','NI','Closed','Converted'))){
+                                    if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
+                                        || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))){
                                             echo form_input($data_status);
                                         }
                                         else{
@@ -248,7 +250,7 @@
                                 <p class="remark-notes"><?php echo isset($leads[0]['remark']) ? $leads[0]['remark'] : 'NA';?></p>
                             </div>
                             <?php
-                            $exclude_status_bm = array('Converted','Closed');
+                            $exclude_status_bm = array('Converted','Closed','AO');
                             if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')) &&
                                 !in_array($leads[0]['status'],$exclude_status_bm))
                             ){?>

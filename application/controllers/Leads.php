@@ -644,7 +644,11 @@ class Leads extends CI_Controller
                 }
                 if($arrData['leads'][0]['status'] == 'AO'){
                     $ao_status = $all_status;
-                    unset($ao_status['NC'],$ao_status['DC'],$ao_status['AO'],$ao_status['CBC'],$ao_status['FU'],$ao_status['NI']);
+                    if($login_user['designation_name'] == 'EM'){
+                        unset($ao_status['NC'],$ao_status['DC'],$ao_status['AO'],$ao_status['CBC'],$ao_status['FU'],$ao_status['NI']);
+                    }else{
+                        unset($ao_status['AO'],$ao_status['CBC'],$ao_status['FU'],$ao_status['NI']);
+                    }
                     $arrData['lead_status'] = $ao_status;
                 }
                 if($arrData['leads'][0]['status'] == 'CBC'){
