@@ -2346,6 +2346,41 @@ class Api extends REST_Controller
                                 );
                                 //This will add entry into reminder scheduler for status (Interested/Follow up)
                                 $result3 = $this->Lead->add_reminder($remindData);
+                                $action = 'list';
+                                $table = Tbl_Leads;
+                                $select = array(Tbl_Leads . '.*');
+                                $where = array(Tbl_Leads . '.id' => $params['lead_id']);
+                                $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+                                $leads_info = $leadsAssigned[0];
+
+                                if($leads_info['lead_source'] == 'Analytics'){
+
+                                    if($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL){
+
+                                        $action = 'list';
+                                        $select = array('map_with');
+                                        $table = Tbl_Products;
+                                        $where = array('id'=>$leads_info['product_id']);
+                                        $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+                                        $product_mapped_with=$product_mapped_with[0]['map_with'];
+                                        $whereArray = array('processing_center'=>$product_mapped_with,'branch_id'=>$leads_data['branch_id']);
+                                        $routed_id = $this->Lead->check_mapping($whereArray);
+                                        $branch_id = $leads_data['branch_id'];
+                                        if(!is_array($routed_id)){
+                                            $update_data['reroute_from_branch_id'] = $branch_id;
+                                            $update_data['branch_id'] = $routed_id;
+                                            $where = array('id'=>$params['lead_id']);
+                                            $table = Tbl_Leads;
+                                            $this->Lead->update_lead_data($where,$update_data,$table);
+                                            $whereUpdate = array('lead_id'=>$params['lead_id']);
+                                            $table = Tbl_LeadAssign;
+                                            $data = array('is_updated'=>0);
+                                            $this->Lead->update($whereUpdate,$table,$data);
+                                        }
+
+                                    }
+
+                                }
                             } else {
                                 $res = array('result' => False,
                                     'data' => array('Invalid Request For Follow up Status'));
@@ -2547,7 +2582,7 @@ class Api extends REST_Controller
         $action = 'list';
 
         //Get Amount Details
-        $table = Tbl_cbs.' as a';
+        $table = Tbl_Amounts.' as a';
         $select = array('a.*');
         $where  = array('a.lead_id' => $lead_id);
         $join = array();

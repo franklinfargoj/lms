@@ -766,50 +766,92 @@ class Leads extends CI_Controller
                             $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
                         }
                     }
-                }
-                    /*****************************************************************
-                                    Update Lead Identification
-                    *****************************************************************/
+                        /*****************************************************************
+                        Update Lead Identification
+                         *****************************************************************/
                         $where = array('id' => $lead_id);
                         $lead_identification_data = array(
                             'lead_identification' => $lead_identification
                         );
                         $response2 = $this->Lead->update_lead_data($where,$lead_identification_data,Tbl_Leads);
-                    /*****************************************************************/
+                        /*****************************************************************/
 
-                    
-                    if(($response1['status'] == 'error') || ($response2['status'] == 'error')){
-                         $this->session->set_flashdata('error','Failed to update lead information');
-                         redirect('leads/leads_list/assigned/ytd');
-                    }else{
-                        if($lead_status == 'FU'){
-                            $remindData = array(
-                                'lead_id' => $lead_id,
-                                'remind_on' => date('y-m-d-H-i-s',strtotime($this->input->post('remind_on'))),
-                                'remind_to' => $this->input->post('remind_to'),
-                                'reminder_text' => $this->input->post('reminder_text') 
-                            );
-                            //This will add entry into reminder scheduler for status (Interested/Follow up)
-                            $this->Lead->add_reminder($remindData);
+
+                        if(($response1['status'] == 'error') || ($response2['status'] == 'error')){
+                            $this->session->set_flashdata('error','Failed to update lead information');
+                            redirect('leads/leads_list/assigned/ytd');
+                        }else{
+                            if($lead_status == 'FU'){
+                                $remindData = array(
+                                    'lead_id' => $lead_id,
+                                    'remind_on' => date('y-m-d-H-i-s',strtotime($this->input->post('remind_on'))),
+                                    'remind_to' => $this->input->post('remind_to'),
+                                    'reminder_text' => $this->input->post('reminder_text')
+                                );
+                                //This will add entry into reminder scheduler for status (Interested/Follow up)
+                                $this->Lead->add_reminder($remindData);
+
+                                $action = 'list';
+                                $table = Tbl_Leads;
+                                $select = array(Tbl_Leads . '.*');
+                                $where = array(Tbl_Leads . '.id' => $lead_id);
+                                $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+                                $leads_info = $leadsAssigned[0];
+
+                                if($leads_info['lead_source'] == 'Analytics'){
+
+                                    if($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL){
+
+                                        $action = 'list';
+                                        $select = array('map_with');
+                                        $table = Tbl_Products;
+                                        $where = array('id'=>$leads_info['product_id']);
+                                        $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+                                        $product_mapped_with=$product_mapped_with[0]['map_with'];
+                                        $whereArray = array('processing_center'=>$product_mapped_with,'branch_id'=>$leads_data['branch_id']);
+                                        $routed_id = $this->Lead->check_mapping($whereArray);
+                                        if($this->input->post('is_own_branch') != '0'){
+                                            $branch_id = $leads_data['branch_id'];
+                                        }else{
+                                            $branch_id = $this->input->post('branch_id');
+                                        }
+
+                                        if(!is_array($routed_id)){
+                                            $update_data['reroute_from_branch_id'] = $branch_id;
+                                            $update_data['branch_id'] = $routed_id;
+                                            $where = array('id'=>$lead_id);
+                                            $table = Tbl_Leads;
+                                            $this->Lead->update_lead_data($where,$update_data,$table);
+                                            $whereUpdate = array('lead_id'=>$lead_id);
+                                            $table = Tbl_LeadAssign;
+                                            $data = array('is_updated'=>0);
+                                            $this->Lead->update($whereUpdate,$table,$data);
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+                            if($lead_status == 'AO'){
+                                $responseData = array(
+                                    'lead_id' => $lead_id,
+                                    'account_no'=>trim($this->input->post('accountNo')),
+                                    'response_data' => $this->input->post('response_data')
+                                );
+                                //This will add entry into cbs response for status (Account Opened)
+                                $this->Lead->insert_lead_data($responseData,Tbl_cbs);
+                                $table = Tbl_Leads;
+                                $where = array('id'=>$lead_id);
+                                $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
+                                $this->Lead->update_lead_data($where,$data,$table);
+                            }
+                            if($lead_status == 'Converted'){
+                                $this->points_distrubution($lead_id);
+                            }
+                            $this->session->set_flashdata('success','Lead information updated successfully');
+                            redirect('leads/leads_list/assigned/ytd');
                         }
-                        if($lead_status == 'AO'){
-                            $responseData = array(
-                                'lead_id' => $lead_id,
-                                'account_no'=>trim($this->input->post('accountNo')),
-                                'response_data' => $this->input->post('response_data')
-                            );
-                            //This will add entry into cbs response for status (Account Opened)
-                            $this->Lead->insert_lead_data($responseData,Tbl_cbs);
-                            $table = Tbl_Leads;
-                            $where = array('id'=>$lead_id);
-                            $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
-                            $this->Lead->update_lead_data($where,$data,$table);
-                        }
-                        if($lead_status == 'Converted'){
-                            $this->points_distrubution($lead_id);
-                        }
-                        $this->session->set_flashdata('success','Lead information updated successfully');
-                        redirect('leads/leads_list/assigned/ytd');
                     }
                 }
             /*****************************************************************/
