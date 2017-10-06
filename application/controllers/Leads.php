@@ -295,7 +295,7 @@ class Leads extends CI_Controller
                     $excelData = fetch_range_excel_data($file['full_path'], 'A2:J', $keys);
                     $validation = $this->validate_leads_data($excelData,$lead_source);
                     if (!empty($validation['insert_array'])) {
-                        $insert_count = $this->Lead->insert_uploaded_data('db_leads', $validation['insert_array']);
+                        $insert_count = $this->Lead->insert_uploaded_data(Tbl_Leads, $validation['insert_array']);
 
                     }
                     if ($validation['type'] == 'error') {
@@ -351,7 +351,7 @@ class Leads extends CI_Controller
         foreach ($excelData as $key => $value){
 
             $prod_cat_title = preg_replace('!\s+!', ' ', $value['product_category_id']);
-            $whereArray = array('title'=>strtolower(trim($prod_cat_title)));
+            $whereArray = array('title'=>ucwords(strtolower(trim($prod_cat_title))));
             $prod_category_id = $this->Lead->fetch_product_category_id($whereArray);
             if($prod_category_id == false){
                 $error[$key] = 'Category does not exist.';
@@ -364,18 +364,19 @@ class Leads extends CI_Controller
                     $all_product = $this->Lead->all_products_under_category($prod_category_id);
                     $prod_title = preg_replace('!\s+!', ' ', $value['product_id']);
 
-                    if(in_array(strtolower(trim($prod_title)),$all_product)){
-
+                    if(in_array(ucwords(strtolower(trim($prod_title))),$all_product)){
+                        $whereArray = array('title' => ucwords(strtolower(trim($prod_title))),'status'=>'active');
+                        $prod_id = $this->Lead->fetch_product_id($whereArray);
                         if(($lead_source == 'Analytics' && $this->config->item('lead_analytics') == 1) ||
                             ($lead_source != 'Analytics'))
                         {
-                            $whereArray = array('title' => strtolower(trim($prod_title)));
-                            $prod_id = $this->Lead->fetch_product_id($whereArray);
-                            $mapping_whereArray = array('product_id' => $prod_id['product_id'], 'branch_id' => $value['branch_id']);
+                            $mapping_whereArray = array('processing_center' => $prod_id['map_with'], 'branch_id' => $value['branch_id']);
                             $routed_id = $this->Lead->check_mapping($mapping_whereArray);
                             if (!is_array($routed_id)){
                                 $value['reroute_from_branch_id'] = $value['branch_id'];
                                 $value['branch_id'] = $routed_id;
+                            }else{
+                                $value['reroute_from_branch_id'] = NULL;
                             }
                         }
                         $is_own_branch = '1';
@@ -389,7 +390,7 @@ class Leads extends CI_Controller
                         $value['is_own_branch'] = $is_own_branch;
                         $value['is_existing_customer'] = $is_existing_customer;
                         $value['product_category_id']=$prod_category_id;
-                        $value['product_id']=$prod_id['product_id'];
+                        $value['product_id']=$prod_id['id'];
                         $value['lead_name']=$value['customer_name'];
                         $value['lead_source']=$lead_source;
                         $insert_array[] = $value;

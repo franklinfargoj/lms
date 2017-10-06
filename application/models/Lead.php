@@ -54,13 +54,12 @@ class Lead  extends CI_Model
 	}
 	
 	public function fetch_product_id($whereArray = array() ){
-        $this->db->select('id,category_id');
+        $this->db->select('id,category_id,map_with');
         $this->db->from('db_master_products');
         $this->db->where($whereArray);
         $resultArray = $this->db->get()->result_array();
         if (count($resultArray) > 0) {
-            $result = array('product_id'=>$resultArray[0]['id'],'category_id'=>$resultArray[0]['category_id']);
-            return $result;
+            return $resultArray[0];
         }
         return false;
 	}
@@ -82,6 +81,7 @@ class Lead  extends CI_Model
         $this->db->select('db_master_products.title');
         $this->db->from('db_master_products');
         $this->db->where('db_master_product_category.id',$cat_id);
+        $this->db->where('db_master_products.status','active');
         $this->db->join('db_master_product_category', 'db_master_product_category.id = db_master_products.category_id');
         $query = $this->db->get()->result_array();
         if (count($query) > 0) {
