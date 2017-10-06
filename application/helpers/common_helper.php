@@ -172,7 +172,7 @@ if(!function_exists('upload_excel')){
     function upload_excel($upload_path,$file_name){
         $CI = & get_instance();
 
-        $config['allowed_types'] = "*";
+        $config['allowed_types'] = "xls|xlsx";
         $config['upload_path'] = $upload_path;
         $config['file_name'] = time().$_FILES['filename']['name'];
 
