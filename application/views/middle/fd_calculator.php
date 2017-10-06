@@ -13,7 +13,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
 ?>
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center">FD calculator</h3>
+        <h3 class="text-center">FD Calculator</h3>
     </div>
 </div>
 <div class="page-content">

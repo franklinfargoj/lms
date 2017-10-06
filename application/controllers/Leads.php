@@ -435,6 +435,7 @@ class Leads extends CI_Controller
         $unassigned_leads = $this->Lead->unassigned_leads($lead_source,'');
         $arrData['unassigned_leads'] = $unassigned_leads;
         $arrData['lead_source'] = $lead_source;
+        $arrData['type'] = 'unassigned';
         $middle = "Leads/unassigned_list";
         load_view($middle,$arrData);
     }
@@ -886,7 +887,7 @@ class Leads extends CI_Controller
         $join = array();
         $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
         if($type == 'generated'){
-            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on','DATEDIFF(CURDATE( ),l.created_on) as elapsed_day');
+            $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on','DATEDIFF(CURDATE( ),l.created_on) as elapsed_day');
             $where = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
                 $where['MONTH(l.created_on)'] = date('m'); //Month till date filter
@@ -921,7 +922,7 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         }
         if($type == 'assigned'){
-            $select = array('l.id','l.customer_name','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
+            $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
                 $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
@@ -1021,7 +1022,7 @@ class Leads extends CI_Controller
     {
         $params = '';
         if($type == 'assigned'){
-            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
+            $header_value = array('Sr.No','Customer Name','Contact No','Product Name','Elapsed Days',
                 'Status','Followup Date','Lead Identified As','Lead Source');
             if(!empty($param)){
                 $arrData['param'] = decode_id($param);
@@ -1036,7 +1037,7 @@ class Leads extends CI_Controller
             }
             $arrData['type'] = $type;
             $arrData['till'] = $till;
-            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
+            $header_value = array('Sr.No','Customer Name','Contact No','Product Name','Elapsed Days',
                 'Lead Identified As','Lead Source');
             $login_user = get_session();
             $data = $this->view($login_user,$arrData,$params);
@@ -1044,7 +1045,7 @@ class Leads extends CI_Controller
         }
 
         if($type == 'unassigned'){
-            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days','Lead Source');
+            $header_value = array('Sr.No','Customer Name','Contact No','Product Name','Elapsed Days','Lead Source');
             $lead_source = decode_id($till);
             $data = $this->Lead->unassigned_leads($lead_source,'');
             export_excel($header_value,$data,$type,$lead_source);

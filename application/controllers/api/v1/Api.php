@@ -1795,7 +1795,7 @@ class Api extends REST_Controller
             returnJson($result);
         } else {
             $err['result'] = false;
-            $err['data'] = "Invalid Login Credential.Please Enter Again OR Contact Administrator";
+            $err['data'] = "Invalid login details.Kindly contact HRMS Admin.";
             returnJson($err);
         }
     }
@@ -2400,6 +2400,13 @@ class Api extends REST_Controller
                             returnJson($res);
                         }
                     }
+                    /****************************************************************
+                     * Point distribution When status is converted
+                     *****************************************************************/
+                    if($params['status'] == 'Converted'){
+                        $this->points_distrubution($params['lead_id']);
+                    }
+
                     /*****************************************************************
                      * Update Lead Identification
                      *****************************************************************/
@@ -2534,5 +2541,42 @@ class Api extends REST_Controller
             'data' => array('Invalid Request'));
         returnJson($res);
     }
+
+    private function points_distrubution($lead_id){
+
+        $action = 'list';
+
+        //Get Amount Details
+        $table = Tbl_Amounts.' as a';
+        $select = array('a.*');
+        $where  = array('a.lead_id' => $lead_id);
+        $join = array();
+        $amount_data = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+        if(!empty($amount_data)){
+            $amount = $amount_data[0]['amount'];
+            $table = Tbl_Leads.' as l';
+            $select = array('l.id','l.product_id','l.created_by','la.employee_id','mp.points','pd.generator_contrubution','pd.convertor_contrubution');
+            $where  = array('l.id' => $lead_id,'la.is_deleted' => 0,'la.is_updated' => 1,'la.status' => 'Converted','mp.from_range <=' => $amount,'mp.to_range >=' => $amount,'pd.active' => 1);
+            $join = array();
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+            $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
+            $join[] = array('table' => Tbl_Manage_Points.' as mp','on_condition' => 'mp.product_id = p.id','type' => '');
+            $join[] = array('table' => Tbl_Points_Distributor.' as pd','on_condition' => 'pd.product_id = p.id','type' => '');
+            $leadData = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+            if(!empty($leadData)){
+                $data = array('lead_id' => $leadData[0]['id'],'product_id' => $leadData[0]['product_id']);
+                //Generator Contribution
+                $generator_data = array('employee_id' => $leadData[0]['created_by'],'points' => ($leadData[0]['generator_contrubution'] * $leadData[0]['points'] * 0.01),'role_as' => 'Generator');
+                $generator_data = array_merge($generator_data,$data);
+                //Convertor Contribution
+                $convertor_data = array('employee_id' => $leadData[0]['employee_id'],'points' => ($leadData[0]['convertor_contrubution'] * $leadData[0]['points'] * 0.01),'role_as' => 'Convertor');
+                $convertor_data = array_merge($convertor_data,$data);
+
+                $this->db->insert(Tbl_Points,$generator_data);
+                $this->db->insert(Tbl_Points,$convertor_data);
+            }
+        }
+    }
+
 
 }
