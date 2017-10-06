@@ -267,6 +267,10 @@ class Leads extends CI_Controller
 
     public function upload($param = '')
     {
+        $admin = ucwords(strtolower($this->session->userdata('admin_type')));
+        if ($admin != 'Super Admin'){
+            redirect('dashboard');
+        }
         /*Create Breadcumb*/
           $this->make_bread->add('Leads Upload', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
@@ -1329,9 +1333,10 @@ class Leads extends CI_Controller
             $select = array('l.id','la.employee_id','la.employee_name','la.created_by_name','la.created_on AS assigned_on',
                 'l.created_on AS generated_on','l.reroute_from_branch_id','l.branch_id','l.created_by_name as generated','la.status');
             $where = array('l.id'=>$lead_id);
-            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             $order_by = 'la.created_on ASC';
             $arrData['lead_data'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by);
+//            pe($arrData['lead_data']);die;
             $middle = 'Leads/life_cycle';
             return load_view($middle,$arrData);
 
@@ -1339,6 +1344,10 @@ class Leads extends CI_Controller
     }
 
     public function upload_employee(){
+        $admin = ucwords(strtolower($this->session->userdata('admin_type')));
+        if ($admin != 'Super Admin'){
+            redirect('dashboard');
+        }
         /*Create Breadcumb*/
         $this->make_bread->add('Employee Upload', '', 0);
         $arrData['breadcrumb'] = $this->make_bread->output();
