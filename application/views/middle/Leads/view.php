@@ -57,9 +57,9 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                 <thead>
                     <tr class="top-header">
                         <th></th>
-                        <th><input type="text" name="customername" value=""></th>
-                        <th><input type="text" name="productname" value=""></th>
-                        <th><input type="text" name="finaccno" value="" size="2"></th>
+                        <th><input type="text" name="customername" placeholder="Customer Name" value=""></th>
+                        <th><input type="text" name="productname" placeholder="Product Name" value=""></th>
+                        <th><input type="text" name="finaccno" placeholder="Day" value="" size="2"></th>
                         <?php if(!isset($status)){?>
                          <th>
                             <?php
@@ -73,7 +73,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                         </th>
                         <?php }?>
                         <?php if($type == 'assigned'){?>
-                        <th><input type="text" name="conversiondate" value=""></th>
+                        <th><input type="text" name="conversiondate" placeholder="Followup Date" value=""></th>
                         <?php }?>
                         <th>
                             <?php
