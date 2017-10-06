@@ -128,7 +128,7 @@ class Login extends CI_Controller {
                         $this->session->set_flashdata('success','Login success');
                         redirect('dashboard');
                     }else{
-                        $this->session->set_flashdata('error','Invalid Login Credential.Please Enter Again OR Contact Administrator');
+                        $this->session->set_flashdata('error','Invalid login details.Kindly contact HRMS Admin.');
                         redirect('login');
                     }
                 }

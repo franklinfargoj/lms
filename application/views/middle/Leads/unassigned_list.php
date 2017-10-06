@@ -1,3 +1,8 @@
+<?php
+$param1 = isset($type) ? $type.'/' : '';
+$param2 = isset($lead_source) ? encode_id($lead_source).'/' : '';
+?>
+
 <div class="page-content">
     <div class="">
         <div class="unassigned-content">
@@ -74,9 +79,9 @@
                                     }   
                                 //}
                             ?>
-                            <!-- <a href="">
-                                <img src="<?php echo base_url().ASSETS;?>images/excel-btn.png" alt="btn">
-                            </a> -->
+<!--                             <a href="--><?php //echo base_url('leads/export_excel_listing/'.$param1.$param2);?><!--">-->
+<!--                                <img src="--><?php //echo base_url().ASSETS;?><!--images/excel-btn.png" alt="btn">-->
+<!--                            </a>-->
                         </div>
                     </div>
                 </div>
