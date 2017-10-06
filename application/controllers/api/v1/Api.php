@@ -2335,17 +2335,35 @@ class Api extends REST_Controller
                 }else{
                     if (($leads_data['status'] != $params['status'])) {
 
+                        //Set current entry as old (set is_updated = 0)
+                        $lead_status_data = array('is_updated' => 0);
+                        $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
+
+                        if ($response1['status'] == 'success') {
+                            //Create new entry in table Lead Assign with changed status.
+
+                            /****************************************************************
+                             * Update Lead Status
+                             *****************************************************************/
+                            $lead_status_data = array(
+                                'lead_id' => $leads_data['lead_id'],
+                                'employee_id' => $leads_data['employee_id'],
+                                'employee_name' => $leads_data['employee_name'],
+                                'branch_id' => $leads_data['branch_id'],
+                                'district_id' => $leads_data['district_id'],
+                                'state_id' => $leads_data['state_id'],
+                                'zone_id' => $leads_data['zone_id'],
+                                'status' => $params['status'],
+                                'is_updated' => 1,
+                                'created_on' => date('y-m-d-H-i-s'),
+                                'created_by' => $leads_data['created_by'],
+                                'created_by_name' => $leads_data['created_by_name']
+                            );
+                            $result1 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+
+                        }
+
                         if ($params['status'] == 'FU') {
-                            if (isset($params['remind_on']) && !empty($params['remind_on']) &&
-                                isset($params['reminder_text']) && !empty($params['reminder_text'])) {
-                                $remindData = array(
-                                    'lead_id' => $params['lead_id'],
-                                    'remind_on' => date('y-m-d-H-i-s', strtotime($params['remind_on'])),
-                                    'remind_to' => $leads_data['employee_id'],
-                                    'reminder_text' => $params['reminder_text']
-                                );
-                                //This will add entry into reminder scheduler for status (Interested/Follow up)
-                                $result3 = $this->Lead->add_reminder($remindData);
                                 $action = 'list';
                                 $table = Tbl_Leads;
                                 $select = array(Tbl_Leads . '.*');
@@ -2381,38 +2399,6 @@ class Api extends REST_Controller
                                     }
 
                                 }
-                            } else {
-                                $res = array('result' => False,
-                                    'data' => array('Invalid Request For Follow up Status'));
-                                returnJson($res);
-                            }
-                        }
-                        //Set current entry as old (set is_updated = 0)
-                        $lead_status_data = array('is_updated' => 0);
-                        $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
-
-                        if ($response1['status'] == 'success') {
-                            //Create new entry in table Lead Assign with changed status.
-
-                            /****************************************************************
-                             * Update Lead Status
-                             *****************************************************************/
-                            $lead_status_data = array(
-                                'lead_id' => $leads_data['lead_id'],
-                                'employee_id' => $leads_data['employee_id'],
-                                'employee_name' => $leads_data['employee_name'],
-                                'branch_id' => $leads_data['branch_id'],
-                                'district_id' => $leads_data['district_id'],
-                                'state_id' => $leads_data['state_id'],
-                                'zone_id' => $leads_data['zone_id'],
-                                'status' => $params['status'],
-                                'is_updated' => 1,
-                                'created_on' => date('y-m-d-H-i-s'),
-                                'created_by' => $leads_data['created_by'],
-                                'created_by_name' => $leads_data['created_by_name']
-                            );
-                            $result1 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
-
                         }
                     }
                     /****************************************************************
