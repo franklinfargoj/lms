@@ -567,5 +567,5 @@ $config['map'] = array(
     'RAPC'=>'RAPC',
     'MSME'=>'MSME',
     'CBB'=>'CBB');
-$config['lead_analytics'] = '1';
+$config['lead_analytics'] = '0';// 1 for RAPC,0 for Branch
 $config['authorised_methods'] = array('masters','faq','tickers');
