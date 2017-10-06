@@ -32,33 +32,33 @@ class Api extends REST_Controller
         $this->load->model('Notification_model', 'notification');
         $method = $this->router->method;
         $authorised_methods = $this->config->item('authorised_methods');
-        if(in_array($method,$authorised_methods)){
-            return true;
-        }else{
-            $params = $this->input->post();
-            $headers = getallheaders();
-
-            if(!empty($headers) && !isset($params['password'])){
-                if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
-                    isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
-                    $response = array('result'=>False,
-                        'data'=>array('Wrong authorisation key.'));
-                    $check_response = check_authorisation($headers['authorisation_key'],$headers['hrms_id']);
-                    if(!$check_response)
-                        returnJson($response);
-                }else{
-                    $response = array('result'=>False,
-                        'data'=>array('authorisation key or hrms id missing.'));
-                    returnJson($response);
-                }
-            }else{
-                if(!isset($params['password'])){
-                    $response = array('result'=>False,
-                        'data'=>array('authorisation key or hrms id missing.'));
-                    returnJson($response);
-                }
-            }
-        }
+//        if(in_array($method,$authorised_methods)){
+//            return true;
+//        }else{
+//            $params = $this->input->post();
+//            $headers = getallheaders();
+//
+//            if(!empty($headers) && !isset($params['password'])){
+//                if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
+//                    isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
+//                    $response = array('result'=>False,
+//                        'data'=>array('Wrong authorisation key.'));
+//                    $check_response = check_authorisation($headers['authorisation_key'],$headers['hrms_id']);
+//                    if(!$check_response)
+//                        returnJson($response);
+//                }else{
+//                    $response = array('result'=>False,
+//                        'data'=>array('authorisation key or hrms id missing.'));
+//                    returnJson($response);
+//                }
+//            }else{
+//                if(!isset($params['password'])){
+//                    $response = array('result'=>False,
+//                        'data'=>array('authorisation key or hrms id missing.'));
+//                    returnJson($response);
+//                }
+//            }
+//        }
     }
 
 
