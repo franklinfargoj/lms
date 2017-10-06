@@ -32,33 +32,33 @@ class Api extends REST_Controller
         $this->load->model('Notification_model', 'notification');
         $method = $this->router->method;
         $authorised_methods = $this->config->item('authorised_methods');
-        if(in_array($method,$authorised_methods)){
-            return true;
-        }else{
-            $params = $this->input->post();
-            $headers = getallheaders();
-
-            if(!empty($headers) && !isset($params['password'])){
-                if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
-                    isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
-                    $response = array('result'=>False,
-                        'data'=>array('Wrong authorisation key.'));
-                    $check_response = check_authorisation($headers['authorisation_key'],$headers['hrms_id']);
-                    if(!$check_response)
-                        returnJson($response);
-                }else{
-                    $response = array('result'=>False,
-                        'data'=>array('authorisation key or hrms id missing.'));
-                    returnJson($response);
-                }
-            }else{
-                if(!isset($params['password'])){
-                    $response = array('result'=>False,
-                        'data'=>array('authorisation key or hrms id missing.'));
-                    returnJson($response);
-                }
-            }
-        }
+//        if(in_array($method,$authorised_methods)){
+//            return true;
+//        }else{
+//            $params = $this->input->post();
+//            $headers = getallheaders();
+//
+//            if(!empty($headers) && !isset($params['password'])){
+//                if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
+//                    isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
+//                    $response = array('result'=>False,
+//                        'data'=>array('Wrong authorisation key.'));
+//                    $check_response = check_authorisation($headers['authorisation_key'],$headers['hrms_id']);
+//                    if(!$check_response)
+//                        returnJson($response);
+//                }else{
+//                    $response = array('result'=>False,
+//                        'data'=>array('authorisation key or hrms id missing.'));
+//                    returnJson($response);
+//                }
+//            }else{
+//                if(!isset($params['password'])){
+//                    $response = array('result'=>False,
+//                        'data'=>array('authorisation key or hrms id missing.'));
+//                    returnJson($response);
+//                }
+//            }
+//        }
     }
 
 
@@ -2335,17 +2335,35 @@ class Api extends REST_Controller
                 }else{
                     if (($leads_data['status'] != $params['status'])) {
 
+                        //Set current entry as old (set is_updated = 0)
+                        $lead_status_data = array('is_updated' => 0);
+                        $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
+
+                        if ($response1['status'] == 'success') {
+                            //Create new entry in table Lead Assign with changed status.
+
+                            /****************************************************************
+                             * Update Lead Status
+                             *****************************************************************/
+                            $lead_status_data = array(
+                                'lead_id' => $leads_data['lead_id'],
+                                'employee_id' => $leads_data['employee_id'],
+                                'employee_name' => $leads_data['employee_name'],
+                                'branch_id' => $leads_data['branch_id'],
+                                'district_id' => $leads_data['district_id'],
+                                'state_id' => $leads_data['state_id'],
+                                'zone_id' => $leads_data['zone_id'],
+                                'status' => $params['status'],
+                                'is_updated' => 1,
+                                'created_on' => date('y-m-d-H-i-s'),
+                                'created_by' => $leads_data['created_by'],
+                                'created_by_name' => $leads_data['created_by_name']
+                            );
+                            $result1 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+
+                        }
+
                         if ($params['status'] == 'FU') {
-                            if (isset($params['remind_on']) && !empty($params['remind_on']) &&
-                                isset($params['reminder_text']) && !empty($params['reminder_text'])) {
-                                $remindData = array(
-                                    'lead_id' => $params['lead_id'],
-                                    'remind_on' => date('y-m-d-H-i-s', strtotime($params['remind_on'])),
-                                    'remind_to' => $leads_data['employee_id'],
-                                    'reminder_text' => $params['reminder_text']
-                                );
-                                //This will add entry into reminder scheduler for status (Interested/Follow up)
-                                $result3 = $this->Lead->add_reminder($remindData);
                                 $action = 'list';
                                 $table = Tbl_Leads;
                                 $select = array(Tbl_Leads . '.*');
@@ -2381,38 +2399,6 @@ class Api extends REST_Controller
                                     }
 
                                 }
-                            } else {
-                                $res = array('result' => False,
-                                    'data' => array('Invalid Request For Follow up Status'));
-                                returnJson($res);
-                            }
-                        }
-                        //Set current entry as old (set is_updated = 0)
-                        $lead_status_data = array('is_updated' => 0);
-                        $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
-
-                        if ($response1['status'] == 'success') {
-                            //Create new entry in table Lead Assign with changed status.
-
-                            /****************************************************************
-                             * Update Lead Status
-                             *****************************************************************/
-                            $lead_status_data = array(
-                                'lead_id' => $leads_data['lead_id'],
-                                'employee_id' => $leads_data['employee_id'],
-                                'employee_name' => $leads_data['employee_name'],
-                                'branch_id' => $leads_data['branch_id'],
-                                'district_id' => $leads_data['district_id'],
-                                'state_id' => $leads_data['state_id'],
-                                'zone_id' => $leads_data['zone_id'],
-                                'status' => $params['status'],
-                                'is_updated' => 1,
-                                'created_on' => date('y-m-d-H-i-s'),
-                                'created_by' => $leads_data['created_by'],
-                                'created_by_name' => $leads_data['created_by_name']
-                            );
-                            $result1 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
-
                         }
                     }
                     /****************************************************************
