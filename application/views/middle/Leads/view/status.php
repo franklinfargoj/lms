@@ -20,7 +20,6 @@
         <table class="upload-table lead-table" id="sample_3">
             <thead>
             <tr class="top-header">
-                <th></th>
                 <th style="text-align:left">
                     <?php
                         $options['']='Select Status';
@@ -34,7 +33,6 @@
                 <th><!-- <input type="text" name="customername" placeholder="Search YTD"> --></th>
             </tr>
             <tr>
-                <th style="text-align:center">Sr No</th>
                 <th style="text-align:left">Status</th>
                 <th style="text-align:center">This Month</th>
                 <th style="text-align:center">This Year</th>
@@ -43,8 +41,7 @@
             <tbody>
             <?php 
             if(!empty($status)){
-                $i = 0;
-                foreach ($status as $key => $value){ 
+                foreach ($status as $key => $value){
                     $param = '';
                     if(isset($employee_id) && !empty($employee_id)){
                         $param = '/'.encode_id($employee_id);
@@ -58,7 +55,6 @@
                     }
                 ?>
                 <tr>
-                    <td style="text-align:center"><?php echo $i+1; ?></td>
                     <td><?php echo $value; ?></td>
                     <?php
                         switch ($key) {
@@ -100,7 +96,6 @@
                     <td style="text-align:center"><a href="<?php echo site_url('leads/leads_list/'.$type.'/ytd/'.$key.$param);?>" ><?php echo $Year; ?></a></td>
                 </tr>
             <?php
-            $i++; 
                 }
             }
             ?>

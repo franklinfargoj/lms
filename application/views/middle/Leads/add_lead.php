@@ -32,19 +32,8 @@ if(isset($states) && !empty($states)){
 }
 
 $data_branch[''] = 'Select Branch';
-
-/*if(isset($branches) && !empty($branches)){
-    foreach ($branches as $branch_key => $branch){
-        $data_branch[$branch['code']] = $branch['name'];
-    }
-}*/
-
 $data_district[''] = 'Select District';
-/*if(isset($districts) && !empty($districts)){
-    foreach ($districts as $district_key => $district){
-        $data_district[$district['code']] = $district['name'];
-    }
-}*/
+
 $data_department_name = array('name' => 'department_name',
     'id' => 'department_name',
     'value' => set_value('department_name', '')
@@ -77,9 +66,6 @@ $customer_options['1'] = 'Existing';
 
 
 $options = $category;
-/*foreach ($category as $key => $value) {
-    $options[$value['id']] = $value['title'];
-}*/
 
 $product_options[''] = 'Select';
 if ($products != '') {
@@ -119,20 +105,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 ?>
                 <p id="note"><span style="color:red;">*</span> These fields are required</p>
                 <div class="lead-form-left">
-                    <!--<div class="form-control">
-                        <label>Customer Type</label>
-                        <div class="radio-control">
-                            <input type="radio" name="is_existing_customer"
-                                   value="1" <?php /*echo set_radio('is_existing_customer', '1', TRUE); */?> />
-                            <label>New</label>
-                        </div>
-                        <div class="radio-control">
-                            <input type="radio" name="is_existing_customer"
-                                   value="0" <?php /*echo set_radio('is_existing_customer', '0'); */?> />
-                            <label>Existing</label>
-                        </div>
-                    </div>-->
-                    <!--                --><?php //echo form_error('is_existing_customer'); ?>
 
                     <div class="form-control">
                         <label>Customer Name:<span style="color:red;">*</span> </label>
@@ -162,11 +134,11 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         </div>
 
                         <div class="step" style="position: relative">
-                            <span class="float-left" style="left: 0%;">5000</span>
-                            <span class="float-left" style="left: 25%; position: absolute">12.5L</span></span>
-                            <span class="float-left" style="left: 50%; position: absolute">25L</span></span>
-                            <span class="float-left" style="left: 75%; position: absolute">37.5L</span></span>
-                            <span class="float-left" style="left: 100%; position: absolute">50L</span>
+                            <span class="float-left" style="left: 0%;">0</span>
+                            <span class="float-left" style="left: 25%; position: absolute">25000</span></span>
+                            <span class="float-left" style="left: 50%; position: absolute">1L</span></span>
+                            <span class="float-left" style="left: 75%; position: absolute">10L</span></span>
+                            <span class="float-left" style="left: 100%; position: absolute">50L+</span>
                         </div>
 
                     </div>
@@ -178,7 +150,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <div class="form-control">
 
                         <?php
-                        if(in_array($this->session->userdata('admin_type'),array('RM','ZM'))){
+                        if(in_array($this->session->userdata('admin_type'),array('GM','ZM')) ||
+                            ($this->session->userdata('dept_type_id') == 'HD' &&
+                                in_array($this->session->userdata('admin_type'),array('EM','BM')))){
                             $checked = TRUE;
                             $style = "style='display:none'";
                         }else{
@@ -217,12 +191,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <?php echo form_error('branch_id'); ?>
                     </div>
 
-                    <!--<div id="identification" class="form-control">
-                        <label>Lead Identification:</label>
-                        <?php /*echo form_dropdown('lead_identification', $lead_id_options, set_value('lead_identification'), $extra) */?>
-                    </div>
-                    --><?php /*echo form_error('lead_identification'); */?>
-
                     <div class="form-control">
                         <label>Remark/Notes:<span style="color:red;">*</span> </label>
                         <?php echo form_textarea($data_remark, '', $remark_extra);?>
@@ -236,7 +204,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
                         <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
                     </a>
-                    <a href="javascript:void(0);" class="reset float-right">
+                    <a href="javascript:void(0);" class="reset float-right" id="reset">
                         Reset
                     </a>
                 </div>
@@ -259,16 +227,15 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         var min = parseFloat(minlead);
         // setup master volume
         sliderElement.slider({
-            step:5000,
             orientation: "horizontal",
+            step:50000,
             max: max,
             min: min,
             animate: true,
             values: [min],
             slide: function (event, ui) {
-                range.val(ui.values[0]);
-                var width = (ui.values[0]-min)/(max) * 100 + '%';
-                div.width(width);
+                var step = sliderElement.slider('option', 'step');
+                get_width_value(ui.values[0],1);
             }
         });
         var value = sliderElement.slider('values', 0);
@@ -277,10 +244,22 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         range.keyup(function () {
             if($.isNumeric(range.val())) {
                 sliderElement.slider('values', 0, range.val());
-                var width = '100%';
-                if (range.val() <= max)
-                    width = (range.val() / max) * 100 + '%';
-                div.width(width);
+                if(range.val() <= 25000 ){
+                    var newVal = range.val() * 50;
+                }
+                if(range.val() > 25000 && range.val() <= 100000 ){
+                    var existingVal = 1250000;
+                    var newVal = (existingVal + range.val() * 12.5);
+                }
+               if(range.val() > 100000 && range.val() <= 1000000 ){
+                   var existingVal = 2500000; 
+                   var newVal = (existingVal + range.val() * 1.25);
+               }
+               if(range.val() > 1000000){
+                   var existingVal = 3750000; 
+                   var newVal = (existingVal + range.val() * .25);
+               }
+                get_width_value(newVal,0);
             }
         });
 
@@ -328,9 +307,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         $("#addlead").validate({
 
             rules: {
-                /*is_existing_customer: {
-                    required: true
-                },*/
                 customer_name: {
                     required: true,
                     lettersonly: true
@@ -351,13 +327,10 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 product_id: {
                     required: true
                 },
-                /*lead_identification: {
-                    required: true
-                },*/
                 lead_ticket_range: {
                     required: true,
                     number:true,
-                    min:5000,
+                    min:1,
                 },
                 state_id: {
                     required: true
@@ -373,9 +346,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 }
             },
             messages: {
-                /*is_existing_customer: {
-                    required: "Please select customer"
-                },*/
                 customer_name: {
                     required: "Please enter customer name",
                     lettersonly: "Only alphabets are allowed."
@@ -387,12 +357,12 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 lead_ticket_range: {
                     required: "Please select ticket range",
                     number: "Only numbers allowed",
-                    min:"Please Enter a value greater than or equal to 5000"
+                    min:"Please Enter a value greater than 0"
                 },
                 contact_no: {
                     required: "Please enter phone number",
-                    maxlength: 'Please enter no more than 10 digits',
-                    minlength: 'Please enter no less than 10 digits'
+                    maxlength: 'Phone number is not 10 digits',
+                    minlength: 'Phone number is not 10 digits'
 
 
                 },
@@ -433,8 +403,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     district_id:district,
                     branch_id:branch,
                     select_label:'Select'
-                }
-            }).success(function (resp) {
+                
+}            }).success(function (resp) {
                 if (resp) {
 
                     var res = JSON.parse(resp);
@@ -502,5 +472,93 @@ $remark_extra = 'style="rows:4 ; cols:80"';
             });
         }
 
+        $('#reset').click(function () {
+            var div = $('.ui-slider-range');
+            var sliderElement = $("#master");
+            sliderElement.slider('values', 0, 0);
+            var width = '0%';
+            div.width(width);
+        });
+
+        function get_width_value(value,is_from_input){
+            if(value == 1166666.669){
+                value = 1200000;
+            }
+            if(value<=1250000)
+            {
+                var newVal = (value / 50);
+                var width = (newVal / 25000) * 25 + '%';
+                if(is_from_input){
+                    range.val(Math.round(newVal));
+                    if(value == 1250000){
+                        sliderElement.slider('option', 'step', 83333.3335);
+                    }else{
+                        sliderElement.slider('option', 'step', 50000);
+                    }
+                }else{
+                    sliderElement.slider('values', 0, value);
+                }
+                div.width(width);
+            }
+            if(value>1250000 && value<=2500000)
+            {
+                if(value == 2361111.11584){
+                    value =  2416666;
+                }
+                var newVal = (value / 25);
+                var width = (newVal / 100000) * 50 + '%';
+                if(is_from_input){
+                    var numWidth = (newVal / 100000) * 50;
+                    var newWidth = numWidth - 25;
+                    var total = 75000;
+                    var val = 25000 + (total * newWidth) / 25;
+                    range.val(Math.round(val));
+                    sliderElement.slider('option', 'step', 83333.3335);
+                }
+                else{
+                    sliderElement.slider('values', 0, value);
+                }
+                div.width(width);
+
+            }
+            if(value>2500000 && value<=3750000)
+            {
+                if(value == 3593750){
+                    value = 3611111;
+                }
+                var newVal = (value / 3.75);
+                var width = (newVal / 1000000) * 75 + '%';
+                if(is_from_input){
+                    var numWidth = (newVal / 1000000) * 75;
+                    var newWidth = numWidth - 50;
+                    var total = 900000;
+                    var val = 100000 + (total * newWidth) / 25;
+                    range.val(Math.round(val));
+                    if(value == 3750000){
+                        sliderElement.slider('option','step',156250);
+                    }else{
+                        sliderElement.slider('option','step',138888.889167);
+                    }
+                }else{
+                    sliderElement.slider('values', 0, value);
+                }
+                div.width(width);
+            }
+            if(value>3750000)
+            {
+                var width = (value / 5000000) * 100 + '%';
+                if(is_from_input){
+                    var numWidth = (value / 5000000) * 100;
+                    var newWidth = numWidth - 75;
+                    var total = 4000000;
+                    var val = 1000000 + (total * newWidth) / 25;
+                    range.val(Math.round(val));
+                   sliderElement.slider('option','step',156250);
+                }else{
+                    sliderElement.slider('values', 0, value);
+                }
+                div.width(width);
+            }
+        }
     });
 </script>

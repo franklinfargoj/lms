@@ -116,6 +116,7 @@ define('Tbl_Points', 'db_points');
 define('Tbl_Amounts', 'db_amount_details');
 define('Tbl_Mail', 'db_mailsetting');
 define('Tbl_cbs', 'db_response_from_cbs');
+define('Tbl_emp_dump', 'employee_dump');
 
 
 
@@ -206,5 +207,5 @@ define('rateOfInterest','0.05');
 define('rateOfInterestSenior','0.5');
 define('minEmi','0');
 define('maxEmi','20000000');
-define('add_lead_min','5000');
+define('add_lead_min','0');
 define('add_lead_max','5000000');

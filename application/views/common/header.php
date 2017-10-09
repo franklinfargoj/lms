@@ -63,6 +63,14 @@
 					</a>
 				</li>
 				<?php }?>
+
+                <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+				<li class="<?php echo ($controller == 'leads' && $method == 'upload_employee') ? 'active' : ''?>">
+					<a href="<?php echo site_url('leads/upload_employee')?>">
+						Employee Upload
+					</a>
+				</li>
+				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('BM'))) {?>
 				<li class="<?php echo (($controller == 'leads') && (in_array($method,array('unassigned_leads','unassigned_leads_list','unassigned_leads_details')))) ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/unassigned_leads')?>">
@@ -138,7 +146,7 @@
 								</li>
 								<li>
 									<a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">
-										Pendancy leads
+										Pendancy Leads
 									</a>
 								</li>
 							</ul>
@@ -152,22 +160,22 @@
 							<ul class="cal-drop2">
 								<li>
 									<a href="<?php echo site_url('reports/index/leads_type_reports')?>">
-									 Leads type 
+									 Leads Type
 									</a>
 								</li>
 								 <li>
 									<a href="<?php echo site_url('reports/index/leads_generated')?>">
-									Leads generated
+									Leads Generated
 									</a>
 								</li>
 								<li>
 									<a href="<?php echo site_url('reports/index/leads_assigned')?>">
-									Leads assigned
+									Leads Assigned
 									</a>
 								</li>
 								<li>
 									<a href="<?php echo site_url('reports/index/leads_generated_vs_converted')?>">
-									Leads generated vs converted
+									Leads Generated vs Converted
 									</a>
 								</li>
 							</ul>
@@ -195,7 +203,7 @@
 							<ul class="cal-drop4">
 								<li>
 									<a href="<?php echo site_url('reports/index/leads_classification')?>">
-									Leads classification
+									Leads Classification
 									</a>
 								</li>
 							</ul>

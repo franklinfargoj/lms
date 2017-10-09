@@ -1,4 +1,4 @@
-jQuery(document).ready(function() { 
+jQuery(document).ready(function() {
     $("#start_date, #end_date").datepicker({
         dateFormat: 'dd-mm-yy',
         maxDate: 0
@@ -36,7 +36,8 @@ jQuery(document).ready(function() {
             var startDate = $('#start_date').datepicker("getDate"),
             endDate = $('#end_date').datepicker("getDate");
             if (startDate && endDate && startDate > endDate) {
-                alert("Start date is greater than the end date.");
+                console.log("here");
+                $('#start_date').after('<label id="end_date-error" class="error" for="end_date">Start date is greater than the end date.</label>');
                 $('#start_date').datepicker("setDate", endDate);
                 return false;
             }else{

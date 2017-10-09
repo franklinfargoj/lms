@@ -32,33 +32,33 @@ class Api extends REST_Controller
         $this->load->model('Notification_model', 'notification');
         $method = $this->router->method;
         $authorised_methods = $this->config->item('authorised_methods');
-        if(in_array($method,$authorised_methods)){
-            return true;
-        }else{
-            $params = $this->input->post();
-            $headers = getallheaders();
-
-            if(!empty($headers) && !isset($params['password'])){
-                if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
-                    isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
-                    $response = array('result'=>False,
-                        'data'=>array('Wrong authorisation key.'));
-                    $check_response = check_authorisation($headers['authorisation_key'],$headers['hrms_id']);
-                    if(!$check_response)
-                        returnJson($response);
-                }else{
-                    $response = array('result'=>False,
-                        'data'=>array('authorisation key or hrms id missing.'));
-                    returnJson($response);
-                }
-            }else{
-                if(!isset($params['password'])){
-                    $response = array('result'=>False,
-                        'data'=>array('authorisation key or hrms id missing.'));
-                    returnJson($response);
-                }
-            }
-        }
+//        if(in_array($method,$authorised_methods)){
+//            return true;
+//        }else{
+//            $params = $this->input->post();
+//            $headers = getallheaders();
+//
+//            if(!empty($headers) && !isset($params['password'])){
+//                if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
+//                    isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
+//                    $response = array('result'=>False,
+//                        'data'=>array('Wrong authorisation key.'));
+//                    $check_response = check_authorisation($headers['authorisation_key'],$headers['hrms_id']);
+//                    if(!$check_response)
+//                        returnJson($response);
+//                }else{
+//                    $response = array('result'=>False,
+//                        'data'=>array('authorisation key or hrms id missing.'));
+//                    returnJson($response);
+//                }
+//            }else{
+//                if(!isset($params['password'])){
+//                    $response = array('result'=>False,
+//                        'data'=>array('authorisation key or hrms id missing.'));
+//                    returnJson($response);
+//                }
+//            }
+//        }
     }
 
 
@@ -817,7 +817,8 @@ class Api extends REST_Controller
         $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
 
         $join[] = array('table' => Tbl_Reminder . ' as r', 'on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"', 'type' => 'left');
-        $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+        $order_by = 'la.created_on desc';
+        $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by);
         return $arrData;
     }
 
@@ -1014,7 +1015,6 @@ class Api extends REST_Controller
             $lead_source = $params['lead_source'];
             $branch_id = $params['branch_id'];
             $unassigned_leads = $this->Lead->unassigned_leads_api($lead_source, $branch_id);
-            //$unassigned_leads[0]['product_title'] = ucwords($unassigned_leads[0]['product_title']);
             $res = array('result' => True,
                 'data' => $unassigned_leads);
             returnJson($res);
@@ -1057,7 +1057,8 @@ class Api extends REST_Controller
             /*$join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');*/
 
             $join[] = array('table' => Tbl_Reminder . ' as r', 'on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"', 'type' => 'left');
-            $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+            $order_by = 'la.created_on desc';
+            $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by);
             $res = array('result' => True,
                 'data' => $arrData['leads']);
             returnJson($res);
@@ -1673,7 +1674,12 @@ class Api extends REST_Controller
             );
 
             $this->Login_model->insert_login_log($data); // login log
-
+            $fullname = array_map('trim', explode('.', $records->dbk_lms_emp_record1->name));
+            if($fullname[0] == ''){
+                $fullname1 = trim($fullname[1]);
+            }else{
+                $fullname1 = trim($fullname[0]);
+            }
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
                 'dept_id' => $records->dbk_lms_emp_record1->deptid,
@@ -1683,7 +1689,7 @@ class Api extends REST_Controller
                 'district_id' => $records->dbk_lms_emp_record1->district,
                 'state_id' => $records->dbk_lms_emp_record1->state,
                 'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
-                'full_name' => $records->dbk_lms_emp_record1->name,
+                'full_name' => $fullname1,
                 'supervisor_id' => $records->dbk_lms_emp_record1->supervisor,
                 'designation_id' => $records->dbk_lms_emp_record1->designation_id,
                 'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
@@ -1789,7 +1795,7 @@ class Api extends REST_Controller
             returnJson($result);
         } else {
             $err['result'] = false;
-            $err['data'] = "Invalid Login Credential.Please Enter Again OR Contact Administrator";
+            $err['data'] = "Invalid login details.Kindly contact HRMS Admin.";
             returnJson($err);
         }
     }
@@ -2075,7 +2081,12 @@ class Api extends REST_Controller
             // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
             $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$params['hrms_id']);
             $records = json_decode($records_response);
-
+            $fullname = array_map('trim', explode('.', $records->dbk_lms_emp_record1->name));
+            if($fullname[0] == ''){
+                $fullname1 = trim($fullname[1]);
+            }else{
+                $fullname1 = trim($fullname[0]);
+            }
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
                 'dept_id' => $records->dbk_lms_emp_record1->deptid,
@@ -2085,7 +2096,7 @@ class Api extends REST_Controller
                 'district_id' => $records->dbk_lms_emp_record1->district,
                 'state_id' => $records->dbk_lms_emp_record1->state,
                 'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
-                'full_name' => $records->dbk_lms_emp_record1->name,
+                'full_name' => $fullname1,
                 'supervisor_id' => $records->dbk_lms_emp_record1->supervisor,
                 'designation_id' => $records->dbk_lms_emp_record1->designation_id,
                 'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
@@ -2324,23 +2335,6 @@ class Api extends REST_Controller
                 }else{
                     if (($leads_data['status'] != $params['status'])) {
 
-                        if ($params['status'] == 'FU') {
-                            if (isset($params['remind_on']) && !empty($params['remind_on']) &&
-                                isset($params['reminder_text']) && !empty($params['reminder_text'])) {
-                                $remindData = array(
-                                    'lead_id' => $params['lead_id'],
-                                    'remind_on' => date('y-m-d-H-i-s', strtotime($params['remind_on'])),
-                                    'remind_to' => $leads_data['employee_id'],
-                                    'reminder_text' => $params['reminder_text']
-                                );
-                                //This will add entry into reminder scheduler for status (Interested/Follow up)
-                                $result3 = $this->Lead->add_reminder($remindData);
-                            } else {
-                                $res = array('result' => False,
-                                    'data' => array('Invalid Request For Follow up Status'));
-                                returnJson($res);
-                            }
-                        }
                         //Set current entry as old (set is_updated = 0)
                         $lead_status_data = array('is_updated' => 0);
                         $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
@@ -2368,6 +2362,44 @@ class Api extends REST_Controller
                             $result1 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
 
                         }
+
+                        if ($params['status'] == 'FU') {
+                                $action = 'list';
+                                $table = Tbl_Leads;
+                                $select = array(Tbl_Leads . '.*');
+                                $where = array(Tbl_Leads . '.id' => $params['lead_id']);
+                                $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+                                $leads_info = $leadsAssigned[0];
+
+                                if($leads_info['lead_source'] == 'Analytics'){
+
+                                    if($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL){
+
+                                        $action = 'list';
+                                        $select = array('map_with');
+                                        $table = Tbl_Products;
+                                        $where = array('id'=>$leads_info['product_id']);
+                                        $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+                                        $product_mapped_with=$product_mapped_with[0]['map_with'];
+                                        $whereArray = array('processing_center'=>$product_mapped_with,'branch_id'=>$leads_data['branch_id']);
+                                        $routed_id = $this->Lead->check_mapping($whereArray);
+                                        $branch_id = $leads_data['branch_id'];
+                                        if(!is_array($routed_id)){
+                                            $update_data['reroute_from_branch_id'] = $branch_id;
+                                            $update_data['branch_id'] = $routed_id;
+                                            $where = array('id'=>$params['lead_id']);
+                                            $table = Tbl_Leads;
+                                            $this->Lead->update_lead_data($where,$update_data,$table);
+                                            $whereUpdate = array('lead_id'=>$params['lead_id']);
+                                            $table = Tbl_LeadAssign;
+                                            $data = array('is_updated'=>0);
+                                            $this->Lead->update($whereUpdate,$table,$data);
+                                        }
+
+                                    }
+
+                                }
+                        }
                     }
                     /****************************************************************
                      * Reminder set for follow up status
@@ -2389,6 +2421,13 @@ class Api extends REST_Controller
                             returnJson($res);
                         }
                     }
+                    /****************************************************************
+                     * Point distribution When status is converted
+                     *****************************************************************/
+                    if($params['status'] == 'Converted'){
+                        $this->points_distrubution($params['lead_id']);
+                    }
+
                     /*****************************************************************
                      * Update Lead Identification
                      *****************************************************************/
@@ -2523,5 +2562,42 @@ class Api extends REST_Controller
             'data' => array('Invalid Request'));
         returnJson($res);
     }
+
+    private function points_distrubution($lead_id){
+
+        $action = 'list';
+
+        //Get Amount Details
+        $table = Tbl_Amounts.' as a';
+        $select = array('a.*');
+        $where  = array('a.lead_id' => $lead_id);
+        $join = array();
+        $amount_data = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+        if(!empty($amount_data)){
+            $amount = $amount_data[0]['amount'];
+            $table = Tbl_Leads.' as l';
+            $select = array('l.id','l.product_id','l.created_by','la.employee_id','mp.points','pd.generator_contrubution','pd.convertor_contrubution');
+            $where  = array('l.id' => $lead_id,'la.is_deleted' => 0,'la.is_updated' => 1,'la.status' => 'Converted','mp.from_range <=' => $amount,'mp.to_range >=' => $amount,'pd.active' => 1);
+            $join = array();
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+            $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
+            $join[] = array('table' => Tbl_Manage_Points.' as mp','on_condition' => 'mp.product_id = p.id','type' => '');
+            $join[] = array('table' => Tbl_Points_Distributor.' as pd','on_condition' => 'pd.product_id = p.id','type' => '');
+            $leadData = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+            if(!empty($leadData)){
+                $data = array('lead_id' => $leadData[0]['id'],'product_id' => $leadData[0]['product_id']);
+                //Generator Contribution
+                $generator_data = array('employee_id' => $leadData[0]['created_by'],'points' => ($leadData[0]['generator_contrubution'] * $leadData[0]['points'] * 0.01),'role_as' => 'Generator');
+                $generator_data = array_merge($generator_data,$data);
+                //Convertor Contribution
+                $convertor_data = array('employee_id' => $leadData[0]['employee_id'],'points' => ($leadData[0]['convertor_contrubution'] * $leadData[0]['points'] * 0.01),'role_as' => 'Convertor');
+                $convertor_data = array_merge($convertor_data,$data);
+
+                $this->db->insert(Tbl_Points,$generator_data);
+                $this->db->insert(Tbl_Points,$convertor_data);
+            }
+        }
+    }
+
 
 }

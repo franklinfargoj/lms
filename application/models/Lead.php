@@ -54,13 +54,12 @@ class Lead  extends CI_Model
 	}
 	
 	public function fetch_product_id($whereArray = array() ){
-        $this->db->select('id,category_id');
+        $this->db->select('id,category_id,map_with');
         $this->db->from('db_master_products');
         $this->db->where($whereArray);
         $resultArray = $this->db->get()->result_array();
         if (count($resultArray) > 0) {
-            $result = array('product_id'=>$resultArray[0]['id'],'category_id'=>$resultArray[0]['category_id']);
-            return $result;
+            return $resultArray[0];
         }
         return false;
 	}
@@ -82,6 +81,7 @@ class Lead  extends CI_Model
         $this->db->select('db_master_products.title');
         $this->db->from('db_master_products');
         $this->db->where('db_master_product_category.id',$cat_id);
+        $this->db->where('db_master_products.status','active');
         $this->db->join('db_master_product_category', 'db_master_product_category.id = db_master_products.category_id');
         $query = $this->db->get()->result_array();
         if (count($query) > 0) {
@@ -108,6 +108,7 @@ class Lead  extends CI_Model
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');
         $this->db->where('db_lead_assign.lead_id',NULL);
         $this->db->where('db_leads.branch_id',$login_user['branch_id']);
+        $this->db->order_by('db_leads.created_on','desc');
         if(!empty($lead_status)){
             $this->db->where('db_leads.lead_source',$lead_status);
         }
@@ -412,6 +413,7 @@ class Lead  extends CI_Model
         $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');
         $this->db->where('db_lead_assign.lead_id',NULL);
+        $this->db->order_by('db_leads.created_on','desc');
         if(!empty($lead_status)){
             $this->db->where('db_leads.lead_source',$lead_status);
         }

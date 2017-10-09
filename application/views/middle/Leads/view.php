@@ -36,11 +36,11 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
-        
+
             <div class="lead-top clearfix">
                 <div class="float-left">
                     <span class="total-lead">
-                        Total Leads 
+                        Total Leads
                     </span>
                     <span class="lead-num"> : <?php echo count($leads);?></span>
                 </div>
@@ -51,15 +51,15 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                 </a>
                 <?php } ?>
             </div>
-            
-            
+
+
             <table id="sample_3" class="display lead-table">
                 <thead>
                     <tr class="top-header">
                         <th></th>
-                        <th><input type="text" name="customername" value=""></th>
-                        <th><input type="text" name="productname" value=""></th>
-                        <th><input type="text" name="finaccno" value="" size="2"></th>
+                        <th><input type="text" name="customername" placeholder="Customer Name" value=""></th>
+                        <th><input type="text" name="productname" placeholder="Product Name" value=""></th>
+                        <th><input type="text" name="finaccno" placeholder="Day" value="" size="2"></th>
                         <?php if(!isset($status)){?>
                          <th>
                             <?php
@@ -73,7 +73,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                         </th>
                         <?php }?>
                         <?php if($type == 'assigned'){?>
-                        <th><input type="text" name="conversiondate" value=""></th>
+                        <th><input type="text" name="conversiondate" placeholder="Followup Date" value=""></th>
                         <?php }?>
                         <th>
                             <?php
@@ -142,11 +142,11 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                     </tr>
                 </thead>
                     <tbody>
-                    <?php 
+                    <?php
                         if($leads){
                         $i = 1;
                         foreach ($leads as $key => $value) {
-                    ?>  
+                    ?>
                         <tr>
 
                             <td>
@@ -160,11 +160,6 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                             </td>
                             <td style="text-align:center">
                                  <?php
-//                                    $created_date = explode(' ',$value['created_on']);
-//                                    $now = date_create(date('Y-m-d')); // or your date as well
-//                                    $generated_date = date_create($created_date[0]);
-//                                    $datediff = date_diff($now,$generated_date);
-//                                    echo $datediff->format("%a");
                                   echo $value['elapsed_day'];
                                 ?>
                             </td>
@@ -190,27 +185,27 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                                  <?php echo ucwords($value['lead_source']);?>
                             </td>
                             <td>
-                                <?php 
+                                <?php
                                     if(isset($status) && !empty($status)){
-                                        $parameter .= '/'.$status; 
+                                        $parameter .= '/'.$status;
                                     }
                                     if(isset($param) && !empty($param)){
-                                        $parameter .= '/'.encode_id($param); 
+                                        $parameter .= '/'.encode_id($param);
                                     }
                                     if(isset($lead_source) && !empty($lead_source)){
-                                        $parameter .= '/'.$lead_source; 
+                                        $parameter .= '/'.$lead_source;
                                         $source = $lead_source;
                                     }
                                 ?>
                                 <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']).$parameter)?>">View</a>
                             </td>
-                        </tr>   
-                    <?php   
+                        </tr>
+                    <?php
                        $i++; }
                     }?>
                 </tbody>
             </table>
-        
+
         </div>
     </div>
     </div>

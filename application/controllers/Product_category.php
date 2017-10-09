@@ -16,6 +16,10 @@ class Product_category extends CI_Controller {
 	{
 		parent::__construct(); // Initialization of class
           is_logged_in();     //check login
+          $admin = ucwords(strtolower($this->session->userdata('admin_type')));
+            if ($admin != 'Super Admin'){
+                redirect('dashboard');
+            }
           $this->load->model('Master_model','master');
 	}
 

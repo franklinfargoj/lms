@@ -265,8 +265,12 @@ class Leads extends CI_Controller
      * @return void
      */
 
-    public function upload()
+    public function upload($param = '')
     {
+        $admin = ucwords(strtolower($this->session->userdata('admin_type')));
+        if ($admin != 'Super Admin'){
+            redirect('dashboard');
+        }
         /*Create Breadcumb*/
           $this->make_bread->add('Leads Upload', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
@@ -295,7 +299,7 @@ class Leads extends CI_Controller
                     $excelData = fetch_range_excel_data($file['full_path'], 'A2:J', $keys);
                     $validation = $this->validate_leads_data($excelData,$lead_source);
                     if (!empty($validation['insert_array'])) {
-                        $insert_count = $this->Lead->insert_uploaded_data('db_leads', $validation['insert_array']);
+                        $insert_count = $this->Lead->insert_uploaded_data(Tbl_Leads, $validation['insert_array']);
 
                     }
                     if ($validation['type'] == 'error') {
@@ -319,7 +323,6 @@ class Leads extends CI_Controller
                         'status' => 'success',
                         'lead_source'=>$lead_source
                     );
-//                    unlink($file['full_path']);
                     $this->Lead->uploaded_log('uploaded_leads_log', $data);
                     $msg = notify('File Uploaded Successfully.' . $validation['total_inserted'] . ' rows inserted. ', 'success');
                     $this->session->set_flashdata('success', $msg);
@@ -352,7 +355,7 @@ class Leads extends CI_Controller
         foreach ($excelData as $key => $value){
 
             $prod_cat_title = preg_replace('!\s+!', ' ', $value['product_category_id']);
-            $whereArray = array('title'=>strtolower(trim($prod_cat_title)));
+            $whereArray = array('title'=>ucwords(strtolower(trim($prod_cat_title))));
             $prod_category_id = $this->Lead->fetch_product_category_id($whereArray);
             if($prod_category_id == false){
                 $error[$key] = 'Category does not exist.';
@@ -365,18 +368,19 @@ class Leads extends CI_Controller
                     $all_product = $this->Lead->all_products_under_category($prod_category_id);
                     $prod_title = preg_replace('!\s+!', ' ', $value['product_id']);
 
-                    if(in_array(strtolower(trim($prod_title)),$all_product)){
-
+                    if(in_array(ucwords(strtolower(trim($prod_title))),$all_product)){
+                        $whereArray = array('title' => ucwords(strtolower(trim($prod_title))),'status'=>'active');
+                        $prod_id = $this->Lead->fetch_product_id($whereArray);
                         if(($lead_source == 'Analytics' && $this->config->item('lead_analytics') == 1) ||
                             ($lead_source != 'Analytics'))
                         {
-                            $whereArray = array('title' => strtolower(trim($prod_title)));
-                            $prod_id = $this->Lead->fetch_product_id($whereArray);
-                            $mapping_whereArray = array('product_id' => $prod_id['product_id'], 'branch_id' => $value['branch_id']);
+                            $mapping_whereArray = array('processing_center' => $prod_id['map_with'], 'branch_id' => $value['branch_id']);
                             $routed_id = $this->Lead->check_mapping($mapping_whereArray);
                             if (!is_array($routed_id)){
                                 $value['reroute_from_branch_id'] = $value['branch_id'];
                                 $value['branch_id'] = $routed_id;
+                            }else{
+                                $value['reroute_from_branch_id'] = NULL;
                             }
                         }
                         $is_own_branch = '1';
@@ -390,7 +394,7 @@ class Leads extends CI_Controller
                         $value['is_own_branch'] = $is_own_branch;
                         $value['is_existing_customer'] = $is_existing_customer;
                         $value['product_category_id']=$prod_category_id;
-                        $value['product_id']=$prod_id['product_id'];
+                        $value['product_id']=$prod_id['id'];
                         $value['lead_name']=$value['customer_name'];
                         $value['lead_source']=$lead_source;
                         $insert_array[] = $value;
@@ -436,6 +440,7 @@ class Leads extends CI_Controller
         $unassigned_leads = $this->Lead->unassigned_leads($lead_source,'');
         $arrData['unassigned_leads'] = $unassigned_leads;
         $arrData['lead_source'] = $lead_source;
+        $arrData['type'] = 'unassigned';
         $middle = "Leads/unassigned_list";
         load_view($middle,$arrData);
     }
@@ -531,10 +536,7 @@ class Leads extends CI_Controller
             $this->make_bread->add(ucwords($lead_status[$status]),'', 0);   
         }
         $arrData['breadcrumb'] = $this->make_bread->output();
-        /*Breadcumb Creation*/
-        /*pe($arrData);
-        exit;*/
-        
+
         //Get session data
         $login_user = get_session();
         $arrData = $this->view($login_user,$arrData,$param);
@@ -647,7 +649,11 @@ class Leads extends CI_Controller
                 }
                 if($arrData['leads'][0]['status'] == 'AO'){
                     $ao_status = $all_status;
-                    unset($ao_status['NC'],$ao_status['DC'],$ao_status['AO'],$ao_status['CBC'],$ao_status['FU'],$ao_status['NI']);
+                    if($login_user['designation_name'] == 'EM'){
+                        unset($ao_status['NC'],$ao_status['DC'],$ao_status['AO'],$ao_status['CBC'],$ao_status['FU'],$ao_status['NI']);
+                    }else{
+                        unset($ao_status['AO'],$ao_status['CBC'],$ao_status['FU'],$ao_status['NI']);
+                    }
                     $arrData['lead_status'] = $ao_status;
                 }
                 if($arrData['leads'][0]['status'] == 'CBC'){
@@ -758,58 +764,101 @@ class Leads extends CI_Controller
                                 $description = 'Lead assigned';
                                 $priority = 'Normal';
                                 $notification_to = $lead_status_data['employee_id'];
-                                notification_log($title,$description,$priority,$notification_to);
+                                notification_log($title, $description, $priority, $notification_to);
                             }
                             /*****************************************************************/
                             $this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
-
                             $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+
+                            if ($lead_status == 'FU') {
+                                $action = 'list';
+                                $table = Tbl_Leads;
+                                $select = array(Tbl_Leads . '.*');
+                                $where = array(Tbl_Leads . '.id' => $lead_id);
+                                $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+                                $leads_info = $leadsAssigned[0];
+
+                                if ($leads_info['lead_source'] == 'Analytics') {
+
+                                    if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
+
+                                        $action = 'list';
+                                        $select = array('map_with');
+                                        $table = Tbl_Products;
+                                        $where = array('id' => $leads_info['product_id']);
+                                        $product_mapped_with = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+                                        $product_mapped_with = $product_mapped_with[0]['map_with'];
+                                        $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_data['branch_id']);
+                                        $routed_id = $this->Lead->check_mapping($whereArray);
+                                        if ($this->input->post('is_own_branch') != '0') {
+                                            $branch_id = $leads_data['branch_id'];
+                                        } else {
+                                            $branch_id = $this->input->post('branch_id');
+                                        }
+
+                                        if (!is_array($routed_id)) {
+                                            $update_data['reroute_from_branch_id'] = $branch_id;
+                                            $update_data['branch_id'] = $routed_id;
+                                            $where = array('id' => $lead_id);
+                                            $table = Tbl_Leads;
+                                            $this->Lead->update_lead_data($where, $update_data, $table);
+                                            $whereUpdate = array('lead_id' => $lead_id);
+                                            $table = Tbl_LeadAssign;
+                                            $data = array('is_updated' => 0);
+                                            $this->Lead->update($whereUpdate, $table, $data);
+                                        }
+
+                                    }
+
+                                }
+                            }
                         }
                     }
-                }
-                    /*****************************************************************
-                                    Update Lead Identification
-                    *****************************************************************/
+                        /*****************************************************************
+                        Update Lead Identification
+                         *****************************************************************/
                         $where = array('id' => $lead_id);
                         $lead_identification_data = array(
                             'lead_identification' => $lead_identification
                         );
                         $response2 = $this->Lead->update_lead_data($where,$lead_identification_data,Tbl_Leads);
-                    /*****************************************************************/
+                        /*****************************************************************/
 
-                    
-                    if(($response1['status'] == 'error') || ($response2['status'] == 'error')){
-                         $this->session->set_flashdata('error','Failed to update lead information');
-                         redirect('leads/leads_list/assigned/ytd');
-                    }else{
-                        if($lead_status == 'FU'){
-                            $remindData = array(
-                                'lead_id' => $lead_id,
-                                'remind_on' => date('y-m-d-H-i-s',strtotime($this->input->post('remind_on'))),
-                                'remind_to' => $this->input->post('remind_to'),
-                                'reminder_text' => $this->input->post('reminder_text') 
-                            );
-                            //This will add entry into reminder scheduler for status (Interested/Follow up)
-                            $this->Lead->add_reminder($remindData);
+
+                        if(($response1['status'] == 'error') || ($response2['status'] == 'error')){
+                            $this->session->set_flashdata('error','Failed to update lead information');
+                            redirect('leads/leads_list/assigned/ytd');
+                        }else{
+                            if($lead_status == 'FU'){
+                                $remindData = array(
+                                    'lead_id' => $lead_id,
+                                    'remind_on' => date('y-m-d-H-i-s',strtotime($this->input->post('remind_on'))),
+                                    'remind_to' => $this->input->post('remind_to'),
+                                    'reminder_text' => $this->input->post('reminder_text')
+                                );
+                                //This will add entry into reminder scheduler for status (Interested/Follow up)
+                                $this->Lead->add_reminder($remindData);
+
+                            }
+                            if($lead_status == 'AO'){
+                                $responseData = array(
+                                    'lead_id' => $lead_id,
+                                    'account_no'=>trim($this->input->post('accountNo')),
+                                    'response_data' => $this->input->post('response_data')
+                                );
+                                //This will add entry into cbs response for status (Account Opened)
+                                $this->Lead->insert_lead_data($responseData,Tbl_cbs);
+                                $table = Tbl_Leads;
+                                $where = array('id'=>$lead_id);
+                                $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
+                                $this->Lead->update_lead_data($where,$data,$table);
+                            }
+                            if($lead_status == 'Converted'){
+                                $this->points_distrubution($lead_id);
+                            }
+                            $this->session->set_flashdata('success','Lead information updated successfully');
+                            redirect('leads/leads_list/assigned/ytd');
                         }
-                        if($lead_status == 'AO'){
-                            $responseData = array(
-                                'lead_id' => $lead_id,
-                                'account_no'=>trim($this->input->post('accountNo')),
-                                'response_data' => $this->input->post('response_data')
-                            );
-                            //This will add entry into cbs response for status (Account Opened)
-                            $this->Lead->insert_lead_data($responseData,Tbl_cbs);
-                            $table = Tbl_Leads;
-                            $where = array('id'=>$lead_id);
-                            $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
-                            $this->Lead->update_lead_data($where,$data,$table);
-                        }
-                        if($lead_status == 'Converted'){
-                            $this->points_distrubution($lead_id);
-                        }
-                        $this->session->set_flashdata('success','Lead information updated successfully');
-                        redirect('leads/leads_list/assigned/ytd');
                     }
                 }
             /*****************************************************************/
@@ -891,7 +940,7 @@ class Leads extends CI_Controller
         $join = array();
         $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
         if($type == 'generated'){
-            $select = array('l.id','l.customer_name','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on','DATEDIFF(CURDATE( ),l.created_on) as elapsed_day');
+            $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on','DATEDIFF(CURDATE( ),l.created_on) as elapsed_day');
             $where = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
                 $where['MONTH(l.created_on)'] = date('m'); //Month till date filter
@@ -926,7 +975,7 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         }
         if($type == 'assigned'){
-            $select = array('l.id','l.customer_name','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
+            $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
                 $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
@@ -966,8 +1015,9 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
 
         }
+        $order_by = "la.created_on DESC";
         $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
-        $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+        $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by);
         $arrData['lead_sources'] = $this->Lead->get_enum(Tbl_Leads,'lead_source');
         return $arrData;
     }
@@ -1025,7 +1075,7 @@ class Leads extends CI_Controller
     {
         $params = '';
         if($type == 'assigned'){
-            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
+            $header_value = array('Sr.No','Customer Name','Contact No','Product Name','Elapsed Days',
                 'Status','Followup Date','Lead Identified As','Lead Source');
             if(!empty($param)){
                 $arrData['param'] = decode_id($param);
@@ -1040,7 +1090,7 @@ class Leads extends CI_Controller
             }
             $arrData['type'] = $type;
             $arrData['till'] = $till;
-            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days',
+            $header_value = array('Sr.No','Customer Name','Contact No','Product Name','Elapsed Days',
                 'Lead Identified As','Lead Source');
             $login_user = get_session();
             $data = $this->view($login_user,$arrData,$params);
@@ -1048,7 +1098,7 @@ class Leads extends CI_Controller
         }
 
         if($type == 'unassigned'){
-            $header_value = array('Sr.No','Customer Name','Product Name','Elapsed Days','Lead Source');
+            $header_value = array('Sr.No','Customer Name','Contact No','Product Name','Elapsed Days','Lead Source');
             $lead_source = decode_id($till);
             $data = $this->Lead->unassigned_leads($lead_source,'');
             export_excel($header_value,$data,$type,$lead_source);
@@ -1204,7 +1254,7 @@ class Leads extends CI_Controller
         $action = 'list';
         
         //Get Amount Details
-        $table = Tbl_Amounts.' as a';
+        $table = Tbl_cbs.' as a';
         $select = array('a.*');
         $where  = array('a.lead_id' => $lead_id);
         $join = array();
@@ -1272,6 +1322,65 @@ class Leads extends CI_Controller
             $response = verify_account($acc_no);
             echo $response;
         }
+    }
+    public function lead_life_cycle($lead_id=''){
+        if(!empty($lead_id)){
+//            $lead_id = decode_id($lead_id);
+            $this->make_bread->add('Lead Life Cycle', '', 0);
+            $arrData['breadcrumb'] = $this->make_bread->output();
+            $action = 'list';
+            $table = Tbl_Leads.' as l';
+            $select = array('l.id','la.employee_id','la.employee_name','la.created_by_name','la.created_on AS assigned_on',
+                'l.created_on AS generated_on','l.reroute_from_branch_id','l.branch_id','l.created_by_name as generated','la.status');
+            $where = array('l.id'=>$lead_id);
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
+            $order_by = 'la.created_on ASC';
+            $arrData['lead_data'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by);
+//            pe($arrData['lead_data']);die;
+            $middle = 'Leads/life_cycle';
+            return load_view($middle,$arrData);
+
+        }
+    }
+
+    public function upload_employee(){
+        $admin = ucwords(strtolower($this->session->userdata('admin_type')));
+        if ($admin != 'Super Admin'){
+            redirect('dashboard');
+        }
+        /*Create Breadcumb*/
+        $this->make_bread->add('Employee Upload', '', 0);
+        $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+        if($this->input->post('Submit')) {
+            if (isset($_FILES['filename']) && !empty($_FILES['filename']['tmp_name'])) {
+                make_upload_directory('./uploads');
+                $file = upload_excel('./uploads', 'filename');
+                if (!is_array($file)) {
+                    $msg = notify($file, $type = "danger");
+                    $this->session->set_flashdata('error', $msg);
+                    redirect('leads/upload_employee');
+                } else {
+                    set_time_limit(0);
+                    ini_set('memory_limit', '-1');
+                    $keys = ['hrms_id', 'name', 'designation_id','designation', 'email_id','contact_no', 'branch_id', 'branch_name',
+                        'zone_id', 'zone_name','district_id', 'state_id', 'supervisor_id'];
+
+                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:K', $keys);
+                    $this->Lead->insert_uploaded_data(Tbl_emp_dump,$excelData);
+                    $msg = notify('File Uploaded Successfully.','success');
+                    $this->session->set_flashdata('success', $msg);
+                    redirect(base_url('leads/upload_employee'), 'refresh');
+
+                }
+            }
+            $msg = notify("Please upload a file",'danger');
+            $this->session->set_flashdata('message', $msg);
+            redirect('leads/upload_employee');
+        }
+
+        $middle = "employee_upload";
+        load_view($middle,$arrData);
     }
 
 }
