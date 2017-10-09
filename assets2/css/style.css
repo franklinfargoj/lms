@@ -1460,7 +1460,8 @@ margin-top: 10px;
 /*lead performance*/
 .box-content{
   width: 582px;
-    margin: 0 auto;     
+    margin: 0 auto;
+    margin-top: 40px;     
 }
 .box-content .form-control{
 	border-bottom: 0 none;
@@ -1474,7 +1475,7 @@ margin-top: 10px;
     width: 265px;
     display: inline-block;
     text-align: left;
-    margin-bottom: 45px;
+    margin-bottom: 25px;
 }
 .performance-box-top{    
 	background-image: url(../images/performance-box-top.jpg);
@@ -1488,7 +1489,7 @@ background-size: 100% auto;}
     display: block;
     height: 14px;
 background-size: 100% auto;}
-.box-m {margin-right: 40px;}
+.box-m {margin-right: 25px;}
 .box-m1{background-color: #3168a8;}
 .Pbox-img{width: 80px;margin: 0!important;padding-left: 12px;}
 .box img{
