@@ -718,6 +718,16 @@ img#rs {
     width: 48px;
     margin: 0 auto;
     margin-bottom: 35px;
+    display: inline-block;
+}
+.bg-red1{
+	float: right;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    right: 12px;
+}
+.bg-red1 img{
+	margin:0!important;
 }
 
  .bg-red ul{
@@ -923,10 +933,16 @@ span.right-toggle {
 	width: 48px;
 }
 .bg-c{
-	background-color: #e1ecf3;
+	background-color: #024593!important;
 	width: 100%;
 	height: auto;
 	margin-bottom: 0;
+	text-align: center;
+}
+.bg-c p{
+	display: inline-block;
+	font-size: 20px;
+	padding: 15px 0 0 15px;
 }
 .margin-b{
 	margin-bottom: 12px;
@@ -1457,39 +1473,67 @@ margin-top: 10px;
 .box{
     width: 265px;
     display: inline-block;
-    text-align: center;
-    border: 1px solid #d7d7d7;
+    text-align: left;
     margin-bottom: 45px;
 }
+.performance-box-top{    
+	background-image: url(../images/performance-box-top.jpg);
+    background-repeat: no-repeat;
+    display: block;
+    height: 14px;
+background-size: 100% auto;}
+.performance-box-bottom{
+	background-image: url(../images/performance-box-bottom.jpg);
+    background-repeat: no-repeat;
+    display: block;
+    height: 14px;
+background-size: 100% auto;}
 .box-m {margin-right: 40px;}
+.box-m1{background-color: #3168a8;}
+.Pbox-img{width: 80px;margin: 0!important;padding-left: 12px;}
 .box img{
     margin: 15px auto;
 }
-.box p{
-    color: #333333;
-    font-size: 18px;
+.form-style2 {
+    font-size: 16px;
+    font-weight: 100;
+    padding-top: 5px;
+    /*padding-bottom: 5px;
+    background: #3168a8;
+    padding: 10px 0;*/
+}
+.box h4{
+    color: #fff;
+    font-size: 27px;
     font-weight: bold;
-    margin-bottom: 15px;
+    display: inline-block;
+    padding: 22px 30px 0;
+    vertical-align: top;
 }
 .box ul{
-    width: 100%;
+    width:100%;
     background: none;
     display: block;
     padding: 12px 0 0;
     color: #fff;
     font-weight: bold;
     font-size: 22px;
+    text-align: center;
 }
 .bg-color-f{
 	    background-color: #e1ecf3!important;
 }
 .box li{
-    width: 48%;
+    width:100%;
     display: inline-block;
     font-size: 13px;
-    color: #333333;
+    color: #fff;
     letter-spacing: 0.5px;
-        line-height: 30px;
+    text-align: left;
+    border-bottom: 1px solid #3168a8;
+}
+    .box li:first-child{
+    
 }
 .box span{
     font-size: 18px;
