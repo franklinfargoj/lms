@@ -6,43 +6,44 @@ if ($lead_data) {
     foreach ($lead_data as $k => $value) {
         $fullname = array_map('trim', explode('.', $value['employee_name']));
         if ($fullname[0] == '') {
-            $fullname1 = trim($fullname[1]);
+            $fullname1 = isset($fullname[1]) ? trim($fullname[1]) : '';
         } else {
             $fullname1 = trim($fullname[0]);
         }
         $created_by_name = array_map('trim', explode('.', $value['created_by_name']));
         if ($created_by_name[0] == '') {
-            $created_by_name1 = trim($created_by_name[1]);
+            $created_by_name1 = isset($created_by_name[1]) ? trim($created_by_name[1]) : '';
         } else {
             $created_by_name1 = trim($created_by_name[0]);
         }
         $generated_by_name = array_map('trim', explode('.', $value['generated']));
         if ($generated_by_name[0] == '') {
-            $generated_by_name1 = trim($generated_by_name[1]);
+            $generated_by_name1 = isset($generated_by_name[1]) ? trim($generated_by_name[1]) : '';
         } else {
             $generated_by_name1 = trim($generated_by_name[0]);
         }
         $assigned_to = array_map('trim', explode('.', $value['employee_name']));
         if ($assigned_to[0] == '') {
-            $assigned_to1 = trim($assigned_to[1]);
+            $assigned_to1 = isset($assigned_to[1]) ? trim($assigned_to[1]) :'';
         } else {
             $assigned_to1 = trim($assigned_to[0]);
         }
         if ($k == 0) {
-            $data[$k][] = $lead_status[$value['status']];
+            $data[$k][] = isset($value['status']) ? $lead_status[$value['status']] : '';
             $data[$k][] = date('d-m-Y', strtotime($value['generated_on']));
         } else {
             $data[$k][] = $lead_status[$value['status']];
             $data[$k][] = date('d-m-Y', strtotime($value['assigned_on']));
         }
-
-        if (false !== $key = array_search($lead_status[$value['status']], $statuses)) {
-            $keys[$key] = $key;
-            $assigned_by[$key] = $created_by_name1;
-            $generated_by[$key] = $generated_by_name1;
-            $assigned_to[$key] = $assigned_to1;
+        if($value['status'] != ''){
+            if (false !== $key = array_search($lead_status[$value['status']], $statuses)) {
+                $keys[$key] = $key;
+                $assigned_by[$key] = $created_by_name1;
+                $generated_by[$key] = $generated_by_name1;
+                $assigned_to[$key] = $assigned_to1;
+            }
         }
-        $data[$k][] = $key;
+        $data[$k][] = isset($key) ? $key : '';
     }
 }
 ?>
@@ -59,23 +60,23 @@ if ($lead_data) {
                 <?php
                 if (!empty($lead_data)) {
                     foreach ($lead_data as $key => $value) {
-                        $fullname = array_map('trim', explode('.', $value['employee_name']));
-                        $generated = array_map('trim', explode('.', $value['generated']));
-                        if ($fullname[0] == '') {
-                            $fullname1 = trim($fullname[1]);
+                        $fullname = $value['employee_name'] ? array_map('trim', explode('.', $value['employee_name'])) :'';
+                        $generated = $value['generated'] ? array_map('trim', explode('.', $value['generated'])):'';
+                        if (isset($fullname[0]) && $fullname[0] == '') {
+                            $fullname1 = isset($fullname[1]) ? trim($fullname[1]) : '';
                         } else {
-                            $fullname1 = trim($fullname[0]);
+                            $fullname1 = isset($fullname[0]) ? trim($fullname[0]) :'';
                         }
-                        if ($generated[0] == '') {
-                            $generated1 = trim($generated[1]);
+                        if (isset($generated[0]) && $generated[0] == '') {
+                            $generated1 = isset($generated[1]) ? trim($generated[1]):'';
                         } else {
-                            $generated1 = trim($generated[0]);
+                            $generated1 = isset($generated[0]) ? trim($generated[0]) :'';
                         }
-                        $created_by_name = array_map('trim', explode('.', $value['created_by_name']));
-                        if ($created_by_name[0] == '') {
-                            $created_by_name1 = trim($created_by_name[1]);
+                        $created_by_name = $value['created_by_name'] ? array_map('trim', explode('.', $value['created_by_name'])) : '';
+                        if (isset($created_by_name[0]) && $created_by_name[0] == '') {
+                            $created_by_name1 = isset($created_by_name[1]) ? trim($created_by_name[1]) : '';
                         } else {
-                            $created_by_name1 = trim($created_by_name[0]);
+                            $created_by_name1 = isset($created_by_name[0]) ? trim($created_by_name[0]) : '';
                         }
                         if (($key + 1) % 2 != 0) {
                             ?>
@@ -176,12 +177,12 @@ if ($lead_data) {
                         mm = '0' + mm
                     }
                     var datenew = dd + '-' + mm + '-' + yyyy;
-                    var assigned_by = <?php echo json_encode($assigned_by);?>;
-                    var generated_by = <?php echo json_encode($generated_by);?>;
-                    var assigned_to = <?php echo json_encode($assigned_to);?>;
-                    var status = <?php echo json_encode($statuses);?>;
+                    var assigned_by = <?php echo isset($assigned_by) ? json_encode($assigned_by) : json_encode(array());?>;
+                    var generated_by = <?php echo isset($generated_by) ? json_encode($generated_by) : json_encode(array());?>;
+                    var assigned_to = <?php echo isset($assigned_to) ? json_encode($assigned_to) : json_encode(array());?>;
+                    var status = <?php echo isset($statuses) ? json_encode($statuses) :json_encode(array());?>;
                     if(this.point.index == 0){
-                        return 'Status: <b>' + status[this.point.y] + '</b><br> Date : <b>' + datenew+'</b><br> Generated By : <b>'+
+                        return 'Status: <b>' + status[0] + '</b><br> Date : <b>' + datenew+'</b><br> Generated By : <b>'+
                             generated_by[this.point.y]+'</b><br> Assigned By : <b>'+assigned_by[this.point.y]+'</b><br> Assigned To : <b>'
                             + assigned_to[this.point.y]+'</b>';
                     }else{

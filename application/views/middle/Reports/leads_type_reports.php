@@ -9,6 +9,7 @@ $lead_type = $this->config->item('lead_type');
         <h3 class="text-center">
             Leads Type Report
         </h3>
+        <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
         <div class="float-right">
             <a href="<?php echo site_url('charts/index/leads_type_reports')?>" class="btn-Download">
                 Chart View
@@ -18,6 +19,7 @@ $lead_type = $this->config->item('lead_type');
                 Funnel View
             </a>
         </div>
+        <?php }?>
     </div>
 </div>
 <?php 

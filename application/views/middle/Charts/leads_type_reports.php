@@ -6,6 +6,7 @@
         <h3 class="text-center">
             Leads Identification
         </h3>
+        <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
         <div class="float-right">
             <a href="<?php echo site_url('reports/index/leads_type_reports')?>" class="btn-Download">
                 Grid View
@@ -15,6 +16,7 @@
                 Funnel View
             </a>
         </div>
+        <?php }?>
     </div>
 </div>
 <span class="bg-top"></span>
