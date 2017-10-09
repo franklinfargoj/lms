@@ -1562,10 +1562,17 @@ background-size: 100% auto;}
     margin-bottom: 20px;	
 }
 .notifi-accordion .high.n-clr{
-    background-color: #2dcc70 !important;
+    background-color: #0058a2  !important;
     color: #fff;
     margin-bottom: 20px;
+
+    padding: 10px 15px;
 }
+.notify{
+	border: 1px solid #0058a2;
+	margin-bottom: 25px;
+}
+
 .high .h-bg{
     background: #fff;
     color: #ee4b4c;
@@ -1624,6 +1631,7 @@ background-size: 100% auto;}
 }
 .notifi-accordion p{
 	margin-bottom: 10px;
+	padding: 0 15px;
 }
 .notifi-accordion a{
 	color: #484848;
@@ -1632,7 +1640,9 @@ background-size: 100% auto;}
     font-family: "Montserrat-Regular";
     font-weight: 500;
 }
-
+div#accordion{
+	margin-top: 30px;
+}
 .bg-top{
 	background-image: url("../images/bg-top-new.png");
     background-position: center top;

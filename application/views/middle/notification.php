@@ -13,14 +13,14 @@
                 foreach ($unread as $key => $value) {
                     $class = lcfirst(substr($value['priority'],0,1));
             ?>
-                
+            <div class="notify">    
                 <h3 class="high <?php echo $class;?>-clr" id="title-<?php echo $value['id']?>">
                     <?php echo $value['title'];?>
                 </h3>  
                 <div id="desc-<?php echo $value['id']?>">
                     <p><?php echo $value['description_text'];?></p>
                 </div>
-                
+            </div>    
             <?php 
                 }
             }
