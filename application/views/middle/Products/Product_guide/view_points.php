@@ -5,7 +5,7 @@
 <!-- BEGIN PRODUCT -->
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center"><?php echo ucwords($product[0]['title']);?> >> Manage Points</h3>
+        <h3 class="text-center">Points</h3>
     </div>
 </div>
 <div class="page-content">
@@ -48,13 +48,14 @@
                         <th>Min Range</th>
                         <th>Max Range</th>
                         <th>Points</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                     <tbody>
                         <?php if($pointsData){
                             $i = 0;
                             foreach ($pointsData as $key => $value) {
-                        ?>  
+                        ?>
                         <tr>
                             <td style="text-align:center">
                                  <?php echo ++$i;?>
@@ -67,6 +68,11 @@
                             </td>
                             <td>
                                 <?php echo $value['points'];?>
+                            </td>
+                            <td>
+                                <a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('product_guide/delete_points/'. encode_id($value['id']).'/'.encode_id($value['product_id']))?>">
+                                    Delete
+                                </a>
                             </td>
                         </tr>   
                         <?php   
@@ -88,5 +94,12 @@
 
         //Initialize datatable configuration
         initTable(table,columns);
+        $('.delete').click(function(){
+            var url = $(this).data('url');
+            var result = confirm("Are you sure want to delete?");
+            if(result == true){
+                window.location.href = url;
+            }
+        });
     });
 </script>

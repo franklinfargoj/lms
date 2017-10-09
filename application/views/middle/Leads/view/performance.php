@@ -41,7 +41,7 @@
                             <li><p>Lead Assigned </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="walkin_assign"><?php echo isset($month_lead_assigned_walkin) ? $month_lead_assigned_walkin:'';?></span></div></li>
                             <li><p>Lead Converted </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="walkin_converted"><?php echo isset($month_lead_converted_walkin) ? $month_lead_converted_walkin:'';?></span></div></li>
                             <div class="form-style2">
-                                <input type="radio" name="month_year" value="active" checked="" id="month"><label>This Month</label>
+                                <label>This Month</label>
                             </div>
                         </ul>
 
@@ -57,7 +57,7 @@
                             <li><p>Lead Assigned </p><div class="bg-red bg-red1"> <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"><span id="enquiry_assign" ><?php echo isset($month_lead_assigned_enquiry) ? $month_lead_assigned_enquiry :'';?></span></div></li>
                             <li><p>Lead Converted</p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="enquiry_converted" ><?php echo isset($month_lead_converted_enquiry) ? $month_lead_converted_enquiry:'';?></span></div></li>
                             <div class="form-style2">
-                                <input type="radio" name="month_year" value="active" checked="" id="month"><label>This Month</label>
+                                <label>This Month</label>
                             </div>
                         </ul>
 
@@ -73,7 +73,7 @@
                             <li><p>Lead Assigned </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="tieup_assign"><?php echo isset($month_lead_assigned_tie_ups) ? $month_lead_assigned_tie_ups:'';?></span></div></li>
                             <li><p>Lead Converted </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="tieup_converted"><?php echo isset($month_lead_converted_tie_ups) ? $month_lead_converted_tie_ups :'';?></span></div></li>
                             <div class="form-style2">
-                                <input type="radio" name="month_year" value="active" checked="" id="month"><label>This Month</label>
+                                <label>This Month</label>
                             </div>
                         </ul>
                         <div class="performance-box-bottom"></div>
@@ -88,7 +88,7 @@
                             <li><p>Lead Assigned </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="analytics_assign"><?php echo isset($month_lead_assigned_analytics) ? $month_lead_assigned_analytics :'';?></span></div></li>
                             <li><p>Lead Converted </p><div class="bg-red bg-red1"> <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"><span id="analytics_converted"><?php echo isset($month_lead_converted_analytics) ? $month_lead_converted_analytics :'';?></span></div></li>
                             <div class="form-style2">
-                                <input type="radio" name="month_year" value="active" checked="" id="month"><label>This Month</label>
+                                <label>This Month</label>
                             </div>
                         </ul>
                         <div class="performance-box-bottom"></div>
@@ -125,6 +125,8 @@
 
             $('#analytics_assign').html(analytics_assign);
             $('#analytics_converted').html(analytics_converted);
+
+            $('.form-style2').html('<label>This Year</label>');
         })
 
         $('#month').click(function () {
@@ -151,6 +153,7 @@
 
             $('#analytics_assign').html(analytics_assign);
             $('#analytics_converted').html(analytics_converted);
+            $('.form-style2').html('<label>This Month</label>');
         })
     })
 </script>

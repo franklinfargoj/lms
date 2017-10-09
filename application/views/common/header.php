@@ -198,7 +198,7 @@
 						<li class="<?php echo ($controller == 'leads_classification') ? 'active' : ''?>" id="cal-droped4">
 							<a href="#">
 							
-							<span class="right-toggle">&#9666;</span>classification<span class="left-toggle"> &#9656;</span>
+							<span class="right-toggle">&#9666;</span>Classification<span class="left-toggle"> &#9656;</span>
 							</a>
 							<ul class="cal-drop4">
 								<li>
