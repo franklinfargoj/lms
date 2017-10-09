@@ -221,16 +221,21 @@ function rd_calculator(rS) {
 
             var p = $('#amount').val();
             var term = $('#term').val();
-            var t = term/12;
             var r = $('#interest').val();
             if($("#senior").is(':checked')) {
-                var r = parseFloat(r) + parseFloat(rS);
+                 r = parseFloat(r) + parseFloat(rS);
             }
-            var n = 12;
-            var cal = (1 + ((r/100) / n));
-            var power = (n * t);
-            var maturity = p*Math.pow(cal,power);
-            $('#maturity').val(maturity.toFixed(2));
+                var MonthlyAmount= p;
+                var AnnualInterestRate = r;
+                var Quarters=Math.floor(term/3);
+                var MonthPayment=MonthlyAmount*((Math.pow(AnnualInterestRate/400+1,Quarters)-1)*(1200/AnnualInterestRate+2));
+            var FracMonths=term-Quarters*3;
+            if (FracMonths!=0)
+                {
+                    alert("Months should be in multiple of one or more complete quarter(s)!!")
+                    MonthPayment=0
+                }
+            $('#maturity').val(Math.round(MonthPayment));
         }
     });
 }

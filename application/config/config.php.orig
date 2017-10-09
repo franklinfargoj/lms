@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].':8844/DENABANK/lms';
+$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].'/lms';
 
 /*
 |--------------------------------------------------------------------------
@@ -567,5 +567,9 @@ $config['map'] = array(
     'RAPC'=>'RAPC',
     'MSME'=>'MSME',
     'CBB'=>'CBB');
+<<<<<<< Updated upstream
+$config['lead_analytics'] = '0';// 1 for RAPC,0 for Branch
+=======
 $config['lead_analytics'] = '1'; // 1 for RAPC , 0 for branch
+>>>>>>> Stashed changes
 $config['authorised_methods'] = array('masters','faq','tickers');
