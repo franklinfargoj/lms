@@ -15,7 +15,7 @@ $data_interest = array('name'=>'interest','id'=>'interest');
 ?>
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center">RD calculator</h3>
+        <h3 class="text-center">RD Calculator</h3>
     </div>
 </div>
 <div class="page-content">

@@ -284,7 +284,7 @@ class Master_model extends CI_Model{
 			$this->db->order_by($table.'.id','DESC');
 		}
 		$query = $this->db->get();
-		//pe($this->db->last_query())
+//		pe($this->db->last_query());die;
 		return $query->result_array();
 	}
 
@@ -306,4 +306,10 @@ class Master_model extends CI_Model{
 	    }
 	    return $enums;
 	}
+
+	public function delete_points($prod_id){
+        $where[] = $prod_id;
+        $data['is_deleted'] = '1';
+        return $this->soft_delete($where,Tbl_Manage_Points,$data);
+    }
 }

@@ -271,13 +271,15 @@ class Product_guide extends CI_Controller {
                          $this->session->set_flashdata('error','Min range should be less than max range'); 
                         redirect('product_guide/manage_points/'.encode_id($productId));
                     }
-                    $where = array('product_id' => $productId);
+                    $where = array('product_id' => $productId,'is_deleted !='=>'1');
                     $valid = $this->master->view_points($where);
                     if($valid){
-                         if(($insert['from_range'] <= $valid[0]['to_range']) || ($insert['from_range'] > ($valid[0]['to_range'] + 1))){
-                             $this->session->set_flashdata('error','Please enter range above ('.$valid[0]['from_range'].' - '.$valid[0]['to_range'].') starting from '.($valid[0]['to_range'] + 1)); 
-                             redirect('product_guide/manage_points/'.encode_id($productId));
-                         }
+                        foreach ($valid as $key => $valid_value){
+                            if(($insert['from_range'] <= $valid[0]['to_range']) || ($insert['from_range'] > ($valid[0]['to_range'] + 1))){
+                                $this->session->set_flashdata('error','Please enter range above ('.$valid[0]['from_range'].' - '.$valid[0]['to_range'].') starting from '.($valid[0]['to_range'] + 1));
+                                redirect('product_guide/manage_points/'.encode_id($productId));
+                            }
+                        }
                     }
                     $response = $this->master->add_points($insert);
                     if($response['status'] == 'error'){
@@ -360,9 +362,21 @@ class Product_guide extends CI_Controller {
           $arrData['breadcrumb'] = $this->make_bread->output();
           /*Create Breadcumb*/
 
-          $where = array('product_id' => $productId);
+          $where = array('product_id' => $productId,'is_deleted !='=>'1');
           $arrData['pointsData'] = $this->master->view_points($where);
 
           return load_view("Products/Product_guide/view_points",$arrData);
+     }
+
+     public function delete_points($id,$product_id){
+         if(!$id){
+             $this->session->set_flashdata('error','Invalid access');
+             redirect('product_guide/view_points');
+         }
+         $response = $this->master->delete_points(decode_id($id));
+         if($response){
+            $this->view_points($product_id);
+         }
+
      }
 }

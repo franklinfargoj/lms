@@ -256,8 +256,12 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                    var newVal = (existingVal + range.val() * 1.25);
                }
                if(range.val() > 1000000){
-                   var existingVal = 3750000; 
-                   var newVal = (existingVal + range.val() * .25);
+                   var existingVal = 3750000;
+                   if(range.val()<=5000000){
+                       var newVal = (existingVal + range.val() * .25);
+                   }else{
+                       var newVal = 5000000;
+                   }
                }
                 get_width_value(newVal,0);
             }
