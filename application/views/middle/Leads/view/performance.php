@@ -33,43 +33,65 @@
             ?>
             <div class="box-content">
                 <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/Walk-in')?>">
-                    <div class="box box-m">
-                        <img src="<?php echo base_url().ASSETS;?>images/self.png" alt="self">
-                        <p>Walk-in</p>
-                        <ul class="bg-color-f">
-                            <li>Lead Assigned <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="walkin_assign"><?php echo isset($month_lead_assigned_walkin) ? $month_lead_assigned_walkin:'';?></span></div></li>
-                            <li>Lead Converted <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="walkin_converted"><?php echo isset($month_lead_converted_walkin) ? $month_lead_converted_walkin:'';?></span></div></li>
+                    <div class="box box-m box-m1">
+                    <div class="performance-box-top"></div>
+                        <img src="<?php echo base_url().ASSETS;?>images/man-box.jpg" alt="self" class="Pbox-img">
+                        <h4>Walk-in</h4>
+                        <ul class="bg-c">
+                            <li><p>Lead Assigned </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="walkin_assign"><?php echo isset($month_lead_assigned_walkin) ? $month_lead_assigned_walkin:'';?></span></div></li>
+                            <li><p>Lead Converted </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="walkin_converted"><?php echo isset($month_lead_converted_walkin) ? $month_lead_converted_walkin:'';?></span></div></li>
+                            <div class="form-style2">
+                                <input type="radio" name="month_year" value="active" checked="" id="month"><label>This Month</label>
+                            </div>
                         </ul>
+
+                        <div class="performance-box-bottom"></div>
                     </div>
                 </a>
                 <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/Enquiry')?>">
-                    <div class="box">
-                        <img src="<?php echo base_url().ASSETS;?>images/enquiry.png" alt="self">
-                        <p>Enquiry</p>
-                        <ul class="bg-color-f">
-                            <li>Lead Assigned <br><div class="bg-red"> <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"><span id="enquiry_assign" ><?php echo isset($month_lead_assigned_enquiry) ? $month_lead_assigned_enquiry :'';?></span></div></li>
-                            <li>Lead Converted <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="enquiry_converted" ><?php echo isset($month_lead_converted_enquiry) ? $month_lead_converted_enquiry:'';?></span></div></li>
+                    <div class="box box-m1">
+                    <div class="performance-box-top"></div>
+                        <img src="<?php echo base_url().ASSETS;?>images/man2-box.jpg" alt="self" class="Pbox-img">
+                        <h4>Enquiry</h4>
+                        <ul class="bg-c">
+                            <li><p>Lead Assigned </p><div class="bg-red bg-red1"> <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"><span id="enquiry_assign" ><?php echo isset($month_lead_assigned_enquiry) ? $month_lead_assigned_enquiry :'';?></span></div></li>
+                            <li><p>Lead Converted</p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="enquiry_converted" ><?php echo isset($month_lead_converted_enquiry) ? $month_lead_converted_enquiry:'';?></span></div></li>
+                            <div class="form-style2">
+                                <input type="radio" name="month_year" value="active" checked="" id="month"><label>This Month</label>
+                            </div>
                         </ul>
+
+                        <div class="performance-box-bottom"></div>
                     </div>
                  </a>
                 <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/Tie Ups')?>">
-                    <div class="box box-m">
-                        <img src="<?php echo base_url().ASSETS;?>images/tie-up.png" alt="self">
-                        <p>Tie Up's</p>
-                        <ul class="bg-color-f">
-                            <li>Lead Assigned <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="tieup_assign"><?php echo isset($month_lead_assigned_tie_ups) ? $month_lead_assigned_tie_ups:'';?></span></div></li>
-                            <li>Lead Converted <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="tieup_converted"><?php echo isset($month_lead_converted_tie_ups) ? $month_lead_converted_tie_ups :'';?></span></div></li>
+                    <div class="box box-m box-m1">
+                    <div class="performance-box-top"></div>
+                        <img src="<?php echo base_url().ASSETS;?>images/hand-box.jpg" alt="self" class="Pbox-img">
+                        <h4>Tie Up</h4>
+                        <ul class="bg-c">
+                            <li><p>Lead Assigned </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="tieup_assign"><?php echo isset($month_lead_assigned_tie_ups) ? $month_lead_assigned_tie_ups:'';?></span></div></li>
+                            <li><p>Lead Converted </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="tieup_converted"><?php echo isset($month_lead_converted_tie_ups) ? $month_lead_converted_tie_ups :'';?></span></div></li>
+                            <div class="form-style2">
+                                <input type="radio" name="month_year" value="active" checked="" id="month"><label>This Month</label>
+                            </div>
                         </ul>
+                        <div class="performance-box-bottom"></div>
                     </div>
                  </a>
                 <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/Analytics')?>">
-                    <div class="box">
-                        <img src="<?php echo base_url().ASSETS;?>images/analytics.png" alt="self">
-                        <p>Analytics</p>
-                        <ul class="bg-color-f">
-                            <li>Lead Assigned <br><div class="bg-red"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="analytics_assign"><?php echo isset($month_lead_assigned_analytics) ? $month_lead_assigned_analytics :'';?></span></div></li>
-                            <li>Lead Converted <br><div class="bg-red"> <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"><span id="analytics_converted"><?php echo isset($month_lead_converted_analytics) ? $month_lead_converted_analytics :'';?></span></div></li>
+                    <div class="box box-m1">
+                    <div class="performance-box-top"></div>
+                        <img src="<?php echo base_url().ASSETS;?>images/board-box.jpg" alt="self" class="Pbox-img">
+                        <h4>Analytics</h4>
+                        <ul class="bg-c">
+                            <li><p>Lead Assigned </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="analytics_assign"><?php echo isset($month_lead_assigned_analytics) ? $month_lead_assigned_analytics :'';?></span></div></li>
+                            <li><p>Lead Converted </p><div class="bg-red bg-red1"> <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"><span id="analytics_converted"><?php echo isset($month_lead_converted_analytics) ? $month_lead_converted_analytics :'';?></span></div></li>
+                            <div class="form-style2">
+                                <input type="radio" name="month_year" value="active" checked="" id="month"><label>This Month</label>
+                            </div>
                         </ul>
+                        <div class="performance-box-bottom"></div>
                     </div>
                  </a>
             </div>

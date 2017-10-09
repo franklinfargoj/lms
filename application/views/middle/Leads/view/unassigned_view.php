@@ -16,9 +16,11 @@
         if(isset($unassigned_leads_count) && !empty($unassigned_leads_count)){?>
         <div class="box-content">
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[0]))?>">
-            <div class="box box-m">
-                <img src="<?php echo base_url().ASSETS;?>images/self.png" alt="self">
-                <p>Walk-in</p>
+            
+            <div class="box box-m  box-m1">
+            <div class="performance-box-top"></div>
+                <img src="<?php echo base_url().ASSETS;?>images/man-box.jpg" alt="self" class="Pbox-img">
+                <h4>Walk-in</h4>
                 <div class="bg-red bg-c">
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
@@ -29,12 +31,15 @@
                 ?>
                 </ul>
                 </div>
+            <div class="performance-box-bottom"></div>    
             </div>
+            
             </a>
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[1]))?>">
-            <div class="box">
-                <img src="<?php echo base_url().ASSETS;?>images/enquiry.png" alt="self">
-                <p>Enquiry</p>
+            <div class="box box-m1">
+            <div class="performance-box-top"></div>
+                <img src="<?php echo base_url().ASSETS;?>images/man2-box.jpg" alt="self" class="Pbox-img">
+                <h4>Enquiry</h4>
                 <div class="bg-red bg-c">
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"  class="img-w">
                 <ul>
@@ -45,12 +50,14 @@
                     ?>
                 </ul>
                 </div>
+                <div class="performance-box-bottom"></div> 
             </div>
             </a>
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[2]));?>">
-            <div class="box box-m">
-                <img src="<?php echo base_url().ASSETS;?>images/tie-up.png" alt="self">
-                <p>Tie Up's</p>
+            <div class="box box-m box-m1">
+            <div class="performance-box-top"></div>
+                <img src="<?php echo base_url().ASSETS;?>images/hand-box.jpg" alt="self" class="Pbox-img">
+                <h4>Tie Up</h4>
                 <div class="bg-red bg-c">
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
@@ -61,12 +68,14 @@
                     ?>
                 </ul>
                 </div>
+                <div class="performance-box-bottom"></div> 
             </div>
             </a>
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[3]))?>">
-            <div class="box">
-                <img src="<?php echo base_url().ASSETS;?>images/analytics.png" alt="self">
-                <p>Analytics</p>
+            <div class="box box-m1">
+            <div class="performance-box-top"></div>
+                <img src="<?php echo base_url().ASSETS;?>images/board-box.jpg" alt="self" class="Pbox-img">
+                <h4>Analytics</h4>
                 <div class="bg-red bg-c">
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
@@ -77,6 +86,7 @@
                     ?>
                 </ul>
                 </div>
+                <div class="performance-box-bottom"></div> 
             </div>
             </a>
         </div>
