@@ -16,7 +16,7 @@
     .lead-form .lead-form-right{
         width: 47%;
     }
-    .emi-content{width: 100%;}
+    .emi-content{width: 95%;}
       .header .right-nav{
         position: absolute;
         width: 39%;
@@ -26,6 +26,9 @@
        .bg-top{width: 100%;}
     .bg-bottom{width: 100%;}
     .inner-content{width: 99.4%;}
+    #r-width{
+        width: 44%;
+    }
 }
 
 @media only screen and (min-width:768px) and (max-width:1023px) {
