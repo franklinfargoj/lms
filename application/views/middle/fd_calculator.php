@@ -44,7 +44,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                         <?php echo form_input($data_amount);?>
                     </div>
                     <div class="form-control">
-                        <label>Rate of Interest:<span style="color:red;">*</span> </label>
+                        <label class="l-width">Rate of Interest:<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_interest);?>
                         <span class="is_senior">+ 0.5</span>
                     </div>
@@ -52,9 +52,9 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                         <label>Period:<span style="color:red;">*</span> </label>
                             <?php
                                 $data_period[''] = 'Select';
-                                $data_period['1'] = 'year(s)';
-                                $data_period['12'] = 'month(s)';
-                                $data_period['365'] = 'day(s)';
+                                $data_period['1'] = 'Year(s)';
+                                $data_period['12'] = 'Month(s)';
+                                $data_period['365'] = 'Day(s)';
                             ?>
                             <?php echo form_input($data_number);?>
                             <?php echo form_dropdown('tenurePeriod',$data_period,'','id=tenurePeriod')?>

@@ -868,6 +868,10 @@ input#ticket_range ,input#amount,input#years,input#interest,input#password,input
 	padding: 8px 6px;
 	line-height: 14px;
 }
+input#interest {
+    width: 70px;
+    margin-right: 10px;
+}
 input#captext{
 	margin-top: 15px;
 }
