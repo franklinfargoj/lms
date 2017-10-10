@@ -2326,6 +2326,8 @@ class Api extends REST_Controller
                     $update_lead_data['state_id'] = $params['state_id'];
                     $update_lead_data['branch_id'] = $params['branch_id'];
                     $update_lead_data['district_id'] = $params['district_id'];
+                    $date = date('Y-m-d H:i:s');
+                    $update_lead_data['modified_on'] = $date;
                     $whereUpdate = array('id'=>$id);
                     $this->Lead->update($whereUpdate,Tbl_Leads,$update_lead_data);
                     $whereUpdate = array('lead_id' => $id);
