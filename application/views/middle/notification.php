@@ -15,7 +15,7 @@
             ?>
             <div class="notify">    
                 <h3 class="high <?php echo $class;?>-clr" id="title-<?php echo $value['id']?>">
-                    <?php echo $value['title'];?>
+                    <?php echo ucwords(strtolower($value['title']));?>
                 </h3>  
                 <div id="desc-<?php echo $value['id']?>">
                     <p><?php echo $value['description_text'];?></p>

@@ -30,12 +30,12 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                         <label>Senior Citizen:<span style="color:red;">*</span> </label>
                         <div class="radio-control">
                             <input type="radio" id="senior" name="citizen"
-                                   value="1" <?php echo set_radio('citizen', '1', TRUE); ?>/>
+                                   value="1" <?php echo set_radio('citizen', '1'); ?>/>
                             <label>Yes</label>
                         </div>
                         <div class="radio-control">
                             <input type="radio" name="citizen" id="junior"
-                                   value="0" <?php echo set_radio('citizen', '0'); ?>/>
+                                   value="0" <?php echo set_radio('citizen', '0', TRUE); ?>/>
                             <label>No</label>
                         </div>
                     </div>
@@ -46,6 +46,7 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                     <div class="form-control">
                         <label>Rate of Interest:<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_interest);?>
+                        <span class="is_senior">+ 0.5</span>
                     </div>
                     <div class="form-control">
                         <label>Period:<span style="color:red;">*</span> </label>

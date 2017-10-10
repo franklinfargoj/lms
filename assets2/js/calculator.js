@@ -1,5 +1,15 @@
 
 
+$('.is_senior').css("display","none");
+$('#senior').click(function () {
+    $('.is_senior').css("display","inline");
+
+});
+$('#junior').click(function () {
+    $('.is_senior').css("display","none");
+
+});
+
 $(".reset").click(function () {
     $('#maturity').val('');
 });
@@ -223,6 +233,7 @@ function rd_calculator(rS) {
             var term = $('#term').val();
             var r = $('#interest').val();
             if($("#senior").is(':checked')) {
+                $('#is_senior').show();
                  r = parseFloat(r) + parseFloat(rS);
             }
                 var MonthlyAmount= p;
