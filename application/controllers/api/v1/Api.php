@@ -1994,8 +1994,8 @@ class Api extends REST_Controller
             $this->Lead->update($whereArray,$table,$update_data);
             $result['unread'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by='');
 
-            $read_where = array('notification_to' => $hrms_id, 'is_read' => 1);
-            $result['read'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by='');
+//            $read_where = array('notification_to' => $hrms_id, 'is_read' => 1);
+//            $result['read'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by='');
 
             $res = array('result' => True,
                 'data' => $result);
