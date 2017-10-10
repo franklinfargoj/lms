@@ -583,7 +583,7 @@ class Cron extends CI_Controller
         return $file_name;
     }
 
-    public function getAllDetails(){
+    public function masters(){
         $url = HRMS_BRANCH_RECORD;
         $result = call_external_url($url);
         $result = json_decode($result,true);
@@ -631,10 +631,49 @@ class Cron extends CI_Controller
                     }
                 }
             }
+            foreach ($final_zone as $key => $value){
+                $action = 'count';
+                $table = Tbl_zone;
+                $where = array('code'=>$value['code']);
+                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
+                if($count > 0){
+                    unset($final_zone[$key]);
+                }
+            }
+            foreach ($final_state as $key => $value){
+                $action = 'count';
+                $table = Tbl_state;
+                $where = array('code'=>$value['code']);
+                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
+                if($count > 0){
+                    unset($final_state[$key]);
+                }
+            }
+            foreach ($final_dist as $key => $value){
+                $action = 'count';
+                $table = Tbl_district;
+                $where = array('code'=>$value['code']);
+                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
+                if($count > 0){
+                    unset($final_dist[$key]);
+                }
+            }
+            foreach ($final_branch as $key => $value){
+                $action = 'count';
+                $table = Tbl_branch;
+                $where = array('code'=>$value['code']);
+                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
+                if($count > 0){
+                    unset($final_branch[$key]);
+                }
+            }
             $this->db->insert_batch(Tbl_zone,$final_zone);
             $this->db->insert_batch(Tbl_state,$final_state);
             $this->db->insert_batch(Tbl_district,$final_dist);
             $this->db->insert_batch(Tbl_branch,$final_branch);
+
+            $this->session->set_flashdata('success','Successfully Inserated');
+            redirect('dashboard','refresh');
         }
 
     }
