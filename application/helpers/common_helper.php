@@ -1132,6 +1132,16 @@ if (!function_exists('cbs')){
         // close socket
         socket_close($socket);
     }
+
+}
+if (!function_exists('sortBySubkey')){
+function sortBySubkey(&$array, $subkey, $sortType = SORT_ASC) {
+    foreach ($array as $subarray) {
+        $keys[] = $subarray[$subkey];
+    }
+    array_multisort($keys, $sortType, $array);
+    return $array;
+    }
 }
 
 

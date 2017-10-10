@@ -198,6 +198,9 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                                     }
                                 ?>
                                 <a href="<?php echo site_url('leads/details/'.$type.'/'.$till.'/'.encode_id($value['id']).$parameter)?>">View</a>
+                                <?php if($this->session->userdata('admin_type') != 'EM'){?>
+                                <a href="<?php echo site_url('leads/lead_life_cycle/'.encode_id($value['id']))?>">Life Cycle</a>
+                                <?php }?>
                             </td>
                         </tr>
                     <?php

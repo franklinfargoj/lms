@@ -701,6 +701,8 @@ class Leads extends CI_Controller
                         $update_lead_data['state_id'] = $this->input->post('state_id');
                         $update_lead_data['branch_id'] = $this->input->post('branch_id');
                         $update_lead_data['district_id'] = $this->input->post('district_id');
+                        $date = date('Y-m-d H:i:s');
+                        $update_lead_data['modified_on'] = $date;
                         $whereUpdate = array('id'=>$id);
                         $this->Lead->update($whereUpdate,Tbl_Leads,$update_lead_data);
                         $whereUpdate = array('lead_id'=>$id);
@@ -1327,26 +1329,6 @@ class Leads extends CI_Controller
             echo $response;
         }
     }
-    public function lead_life_cycle($lead_id=''){
-        if(!empty($lead_id)){
-//            $lead_id = decode_id($lead_id);
-            $this->make_bread->add('Lead Life Cycle', '', 0);
-            $arrData['breadcrumb'] = $this->make_bread->output();
-            $action = 'list';
-            $table = Tbl_Leads.' as l';
-            $select = array('l.id','la.employee_id','la.employee_name','la.created_by_name','la.created_on AS assigned_on',
-                'l.created_on AS generated_on','l.reroute_from_branch_id','l.branch_id','l.created_by_name as generated','la.status','la.is_updated as reAssignedTo');
-            $where = array('l.id'=>$lead_id,'la.is_updated'=>1);
-            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
-            $order_by = 'la.created_on ASC';
-            $arrData['lead_data'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by);
-//            pe($arrData['lead_data']);die;
-            $middle = 'Leads/life_cycle';
-            return load_view($middle,$arrData);
-
-        }
-    }
-
     public function upload_employee(){
         $admin = ucwords(strtolower($this->session->userdata('admin_type')));
         if ($admin != 'Super Admin'){
@@ -1386,5 +1368,44 @@ class Leads extends CI_Controller
         $middle = "employee_upload";
         load_view($middle,$arrData);
     }
+
+    public function lead_life_cycle($id=''){
+        if($id){
+            $lead_id = decode_id($id);
+            $final_result = array();
+            $this->make_bread->add('Lead Life Cycle', '', 0);
+            $arrData['breadcrumb'] = $this->make_bread->output();
+            $action = 'list';
+            $select = array('l.id','l.created_on AS generated_on','l.reroute_from_branch_id','l.modified_on','l.branch_id','l.created_by_name as generated');
+            $table = Tbl_Leads.' as l';
+            $where = array('id'=>$lead_id);
+            $result = $this->Lead->get_leads($action,$table,$select,$where,$join=array(),$group_by=array(),$order_by=array());
+            if($result[0]['reroute_from_branch_id'] !=''){
+                $final_result[] = array('id'=>$result[0]['id'],'generated'=>$result[0]['generated'],'generated_on'=>$result[0]['generated_on'],
+                    'date'=>$result[0]['generated_on'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id']);
+                $final_result[] = array('id'=>$result[0]['id'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
+                    'reroute_to_branch_id'=>$result[0]['branch_id'],'modified_on'=>$result[0]['modified_on'],'date'=>$result[0]['modified_on']);
+            }else{
+                $final_result = $result;
+                $final_result[0]['date'] = $result[0]['generated_on'];
+
+            }
+
+            $select = array('la.employee_id','la.employee_name','la.created_by_name','la.created_on AS date','la.status');
+            $table = Tbl_LeadAssign.' as la';
+            $where = array('lead_id'=>$lead_id);
+            $order_by = 'date ASC';
+            $assign_result = $this->Lead->get_leads($action,$table,$select,$where,$join=array(),$group_by=array(),$order_by);
+            if(!empty($assign_result)){
+                $final_result = array_merge($final_result,$assign_result);
+            }
+            $final_result = sortBySubkey($final_result,'date');
+            $arrData['lead_data'] = $final_result;
+            $middle = 'Leads/life_cycle';
+            return load_view($middle,$arrData);
+
+        }
+    }
+
 
 }

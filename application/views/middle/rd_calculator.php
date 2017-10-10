@@ -32,12 +32,12 @@ $data_interest = array('name'=>'interest','id'=>'interest');
                         <label>Senior Citizen: <span style="color:red;">*</span> </label>
                         <div class="radio-control">
                             <input type="radio" id="senior" name="citizen"
-                                   value="1" <?php echo set_radio('citizen', '1', TRUE); ?>/>
+                                   value="1" <?php echo set_radio('citizen', '1'); ?>/>
                             <label>Yes</label>
                         </div>
                         <div class="radio-control">
                             <input type="radio" name="citizen" id="junior"
-                                   value="0" <?php echo set_radio('citizen', '0'); ?>/>
+                                   value="0" <?php echo set_radio('citizen', '0', TRUE); ?>/>
                             <label>No</label>
                         </div>
                     </div>
@@ -48,6 +48,7 @@ $data_interest = array('name'=>'interest','id'=>'interest');
                     <div class="form-control ravish-field">
                         <label>Rate Of interest:<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_interest);?>
+                        <span class="is_senior">+ 0.5</span>
                     </div>
                     <div class="form-control">
                         <label>Date Of Opening:<span style="color:red;">*</span> </label>
@@ -102,6 +103,8 @@ $data_interest = array('name'=>'interest','id'=>'interest');
 </div>
 <script src = "<?php echo base_url().ASSETS;?>/js/calculator.js"></script>
 <script>
-    var rS = <?php echo rateOfInterestSenior;?>;
-    rd_calculator(rS);
+    $(document).ready(function () {
+        var rS = <?php echo rateOfInterestSenior;?>;
+        rd_calculator(rS);
+    });
 </script>
