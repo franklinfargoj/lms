@@ -1376,7 +1376,7 @@ class Leads extends CI_Controller
             $this->make_bread->add('Lead Life Cycle', '', 0);
             $arrData['breadcrumb'] = $this->make_bread->output();
             $action = 'list';
-            $select = array('l.id','l.created_on AS generated_on','l.reroute_from_branch_id','l.modified_on','l.branch_id','l.created_by_name as generated');
+            $select = array('l.id','l.lead_name','l.lead_source','l.contact_no','l.created_on AS generated_on','l.reroute_from_branch_id','l.modified_on','l.branch_id','l.created_by_name as generated');
             $table = Tbl_Leads.' as l';
             $where = array('id'=>$lead_id);
             $result = $this->Lead->get_leads($action,$table,$select,$where,$join=array(),$group_by=array(),$order_by=array());
@@ -1400,6 +1400,7 @@ class Leads extends CI_Controller
                 $final_result = array_merge($final_result,$assign_result);
             }
             $final_result = sortBySubkey($final_result,'date');
+//            pe($final_result);die;
             $arrData['lead_data'] = $final_result;
             $middle = 'Leads/life_cycle';
             return load_view($middle,$arrData);

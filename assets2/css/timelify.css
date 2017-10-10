@@ -89,8 +89,7 @@
           border-right: 1em solid transparent; }
       .timeline .timeline-items .timeline-item.inverted {
         position: relative;
-        left: 54%;
-        text-align: right; }
+        left: 54%;}
         .timeline .timeline-items .timeline-item.inverted::before {
           content: '';
           width: 0;
