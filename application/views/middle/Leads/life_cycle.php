@@ -3,15 +3,24 @@ $assigned_to = 0;
 ?>
 <link rel="stylesheet" href="<?php echo base_url('assets2/css/animate.min.css');?>">
 <link rel="stylesheet" href="<?php echo base_url('assets2/css/timelify.css');?>">
+<div class="page-title">
+    <div class="container clearfix">
+        <h3 class="text-center">Lead Life Cycle</h3>
+    </div>
+</div>
+<span class="bg-top"></span>
+    <div class="inner-content">
 <div class="container">
+            <span class="life-c">
+                Lead Id : <?php echo $lead_data[0]['id'];?> &nbsp;&nbsp;|&nbsp;&nbsp;
+                Customer Name : <?php echo ucwords(strtolower($lead_data[0]['lead_name']));?> &nbsp;&nbsp;|&nbsp;&nbsp;
+                Contact No : <?php echo ucwords(strtolower($lead_data[0]['contact_no']));?> &nbsp;&nbsp;|&nbsp;&nbsp;
+                Lead Source : <?php echo ucwords(strtolower($lead_data[0]['lead_source']));?>
+            </span>
     <div class="timeline">
         <?php if(!empty($lead_data)){?>
             <br>
-                Lead Id : <?php echo $lead_data[0]['id'];?>
-                Customer Name : <?php echo ucwords(strtolower($lead_data[0]['lead_name']));?>
-                Contact No : <?php echo ucwords(strtolower($lead_data[0]['contact_no']));?>
-                Lead Source : <?php echo ucwords(strtolower($lead_data[0]['lead_source']));?>
-            </span>
+
            <?php if (isset($lead_data[0])){?>
             <ul class="timeline-items">
             <li class="is-hidden timeline-item inverted"> <!-- Normal block, positionned to the left -->
@@ -84,6 +93,8 @@ $assigned_to = 0;
             }} ?>
     </div>
 </div>
+</div>
+<span class="bg-bottom"></span>
 <script src="<?php echo base_url('assets2/js/jquery.timelify.js');?>"></script>
 <script>
     $('.timeline').timelify({
