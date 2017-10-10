@@ -1555,14 +1555,16 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 	margin-bottom: 20px;
 }
 .notifi-accordion .high.l-clr{
-	background-color: #127bd5 !important;
-	color: #fff;
-	margin-bottom: 20px;
+    background-color: #127bd5!important;
+    color: #fff;
+    margin-bottom: 20px;	
 }
 .notifi-accordion .high.n-clr{
-	background-color: #2dcc70 !important;
-	color: #fff;
-	margin-bottom: 20px;
+    background-color: #0058a2!important;
+    color: #fff;
+    margin-bottom: 20px;
+
+    padding: 10px 15px;
 }
 .high .h-bg{
 	background: #fff;
