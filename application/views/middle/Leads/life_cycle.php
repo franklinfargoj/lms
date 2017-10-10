@@ -1,14 +1,18 @@
 <?php $statuses = $this->config->item('lead_status');
 $assigned_to = 0;
 ?>
-<!--<link rel="stylesheet" href="--><?php //echo base_url('assets2/css/lifecycle.css');?><!--">-->
 <link rel="stylesheet" href="<?php echo base_url('assets2/css/animate.min.css');?>">
 <link rel="stylesheet" href="<?php echo base_url('assets2/css/timelify.css');?>">
 <div class="container">
     <div class="timeline">
-        <?php if(!empty($lead_data)){
-            // pe($lead_data);die;
-           if (isset($lead_data[0])){?>
+        <?php if(!empty($lead_data)){?>
+            <br>
+                Lead Id : <?php echo $lead_data[0]['id'];?><br><br>
+                Customer Name : <?php echo $lead_data[0]['lead_name'];?><br><br>
+                Contact No : <?php echo $lead_data[0]['contact_no'];?><br><br>
+                Lead Source : <?php echo $lead_data[0]['lead_source'];?><br>
+            </span>
+           <?php if (isset($lead_data[0])){?>
             <ul class="timeline-items">
             <li class="is-hidden timeline-item inverted"> <!-- Normal block, positionned to the left -->
                 <h3>Lead Generated</h3>
