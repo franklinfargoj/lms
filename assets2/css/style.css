@@ -1549,6 +1549,13 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 }
 /*lead performance*/
 /*notification*/
+div#accordion {
+    margin-top: 35px;
+}
+.notify{
+	border: 1px solid #0058a2;
+	margin-bottom: 25px;
+}
 .notifi-accordion .high.h-clr{
 	background-color: #ee4b4c !important;
 	color: #fff;
@@ -1624,6 +1631,7 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 }
 .notifi-accordion p{
 	margin-bottom: 10px;
+	    padding: 0 15px 10px;
 }
 .notifi-accordion a{
 	color: #484848;
