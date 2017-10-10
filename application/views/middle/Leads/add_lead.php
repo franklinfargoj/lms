@@ -264,6 +264,10 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                    }
                }
                 get_width_value(newVal,0);
+            }else{
+                sliderElement.slider('values', 0, 0);
+                var newVal = 0;
+                get_width_value(newVal,0);
             }
         });
 
