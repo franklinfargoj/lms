@@ -959,6 +959,11 @@ span.right-toggle {
 div#container {
 	width: 1382px!important;
 }
+span.life-c {
+    position: relative;
+    top: 15px;
+    padding: 0 8px;
+}
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{
 	background-color: #00559d;
