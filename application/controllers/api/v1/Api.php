@@ -94,11 +94,11 @@ class Api extends REST_Controller
         $table = Tbl_Notification . ' as n';
         $select = array('n.*');
         $unread_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 0);
-        $order_by = "n.priority ASC";
-        $leads['unread_notification'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by);
+//        $order_by = "n.priority ASC";
+        $leads['unread_notification'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by='');
 
         $read_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 1);
-        $leads['read_notification'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by);
+        $leads['read_notification'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by='');
         if (isset($result['status']) && $result['status'] == 'success') {
 
             $data = array('device_token' => $device_token,
@@ -1704,11 +1704,11 @@ class Api extends REST_Controller
             $table = Tbl_Notification . ' as n';
             $select = array('n.*');
             $unread_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 0);
-            $order_by = "n.priority ASC";
-            $leads['unread_notification'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by);
+//            $order_by = "n.priority ASC";
+            $leads['unread_notification'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by='');
 
             $read_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 1);
-            $leads['read_notification'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by);
+            $leads['read_notification'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by='');
 
             // employee
             if ($result['basic_info']['designation'] == 'EM') {
@@ -1985,14 +1985,17 @@ class Api extends REST_Controller
         if (isset($params['hrms_id']) && !empty($params['hrms_id'])) {
             $action = 'list';
             $hrms_id = $params['hrms_id'];
-            $table = Tbl_Notification . ' as n';
-            $select = array('n.*');
-            $unread_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 0);
-            $order_by = "n.priority ASC";
-            $result['unread'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by);
+            $table = Tbl_Notification;
+            $select = array('*');
+            $unread_where = array('notification_to' => $hrms_id, 'is_read' => 0);
+            $update_data = array('is_read'=>1);
+            $whereArray = array('notification_to'=>$hrms_id,'is_read'=>0);
 
-            $read_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 1);
-            $result['read'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by);
+            $this->Lead->update($whereArray,$table,$update_data);
+            $result['unread'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by='');
+
+            $read_where = array('notification_to' => $hrms_id, 'is_read' => 1);
+            $result['read'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by='');
 
             $res = array('result' => True,
                 'data' => $result);
@@ -2111,11 +2114,11 @@ class Api extends REST_Controller
             $table = Tbl_Notification . ' as n';
             $select = array('n.*');
             $unread_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 0);
-            $order_by = "n.priority ASC";
-            $leads['unread_notification'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by);
+//            $order_by = "n.priority ASC";
+            $leads['unread_notification'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by='');
 
             $read_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 1);
-            $leads['read_notification'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by);
+            $leads['read_notification'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by='');
 
             // employee
             if ($result['basic_info']['designation'] == 'EM') {

@@ -707,6 +707,8 @@ class Leads extends CI_Controller
                         $table = Tbl_LeadAssign;
                         $data = array('is_updated'=>0);
                         $this->Lead->update($whereUpdate,$table,$data);
+                        $this->session->set_flashdata('success','Lead information updated successfully');
+                        redirect('leads/leads_list/assigned/ytd','refresh');
                     }
                     else{
 
@@ -723,6 +725,7 @@ class Leads extends CI_Controller
                     $response1['status'] = 'success';
                     if(((!empty($lead_status)) && ($leads_data['status'] != $lead_status)) || (isset($employee_id) && !empty($employee_id))){
                         if ($response1['status'] == 'success') {
+
                             //Set current entry as old (set is_updated = 0)
                             $lead_old_data = array('is_updated' => 0);
 
@@ -755,9 +758,10 @@ class Leads extends CI_Controller
                                 $explode_employee = explode('-', $employee_id);
                                 $lead_status_data['employee_id'] = $explode_employee[0];
                                 $lead_status_data['employee_name'] = $explode_employee[1];
-                                if ($leads_data['status'] != $lead_status) {
+                                if ($leads_data['status'] != $lead_status && $lead_status !='' && !empty($lead_status)) {
                                     $lead_status_data['status'] = $lead_status;
-                                } else {
+                                }
+                                else {
                                     $lead_status_data['status'] = $leads_data['status'];
                                 }
                                 $title = 'Lead assigned';
@@ -1331,8 +1335,8 @@ class Leads extends CI_Controller
             $action = 'list';
             $table = Tbl_Leads.' as l';
             $select = array('l.id','la.employee_id','la.employee_name','la.created_by_name','la.created_on AS assigned_on',
-                'l.created_on AS generated_on','l.reroute_from_branch_id','l.branch_id','l.created_by_name as generated','la.status');
-            $where = array('l.id'=>$lead_id);
+                'l.created_on AS generated_on','l.reroute_from_branch_id','l.branch_id','l.created_by_name as generated','la.status','la.is_updated as reAssignedTo');
+            $where = array('l.id'=>$lead_id,'la.is_updated'=>1);
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             $order_by = 'la.created_on ASC';
             $arrData['lead_data'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by);
