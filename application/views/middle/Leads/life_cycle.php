@@ -24,7 +24,8 @@ $assigned_to = 0;
                 </p>
                 <hr>
                 <span>
-                    <?php echo "Date : ".date('d-M-Y',strtotime($lead_data[0]['generated_on']));?>
+                    <?php echo $lead_data[0]['generated_on'] ? "Date : ".date('d-M-Y',strtotime($lead_data[0]['generated_on'])) : "Date : NA"; ?>
+
                 </span>
             </li>
             </ul>
@@ -48,7 +49,7 @@ $assigned_to = 0;
                             </p>
                             <hr>
                             <span><?php
-                                echo "Date : ".date('d-M-Y',strtotime($lead_value['date']));
+                                echo $lead_value['date'] ? "Date : ".date('d-M-Y',strtotime($lead_value['date'])) : "Date : NA";
                                 ?>
                             </span>
                         </li>
@@ -76,7 +77,7 @@ $assigned_to = 0;
                             </p>
                             <hr>
                             <span><?php
-                                echo "Date : ".date('d-M-Y',strtotime($lead_value['date']));
+                                echo $lead_value['date'] ? "Date : ".date('d-M-Y',strtotime($lead_value['date'])) : "Date : NA";
                                 ?></span>
                         </li>
                     </ul>
