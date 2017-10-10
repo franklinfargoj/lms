@@ -7,10 +7,10 @@ $assigned_to = 0;
     <div class="timeline">
         <?php if(!empty($lead_data)){?>
             <br>
-                Lead Id : <?php echo $lead_data[0]['id'];?><br><br>
-                Customer Name : <?php echo $lead_data[0]['lead_name'];?><br><br>
-                Contact No : <?php echo $lead_data[0]['contact_no'];?><br><br>
-                Lead Source : <?php echo $lead_data[0]['lead_source'];?><br>
+                Lead Id : <?php echo $lead_data[0]['id'];?>
+                Customer Name : <?php echo ucwords(strtolower($lead_data[0]['lead_name']));?>
+                Contact No : <?php echo ucwords(strtolower($lead_data[0]['contact_no']));?>
+                Lead Source : <?php echo ucwords(strtolower($lead_data[0]['lead_source']));?>
             </span>
            <?php if (isset($lead_data[0])){?>
             <ul class="timeline-items">
@@ -68,7 +68,6 @@ $assigned_to = 0;
                                 if($assigned_to == 0){
                                     echo $lead_value['employee_name'] ? "Assigned To : ".ucwords(strtolower($lead_value['employee_name'])).'<br><br>' : 'Assigned To : NA<br><br>';
                                     echo $lead_value['created_by_name'] ? "Assigned By : ".ucwords(strtolower($lead_value['created_by_name'])).'<br><br>' : 'Assigned By : NA<br><br>';
-                                    echo $lead_value['employee_name'] ? "Status Updated By : ".ucwords(strtolower($lead_value['employee_name'])) : 'Status Updated By : NA<br><br>';
                                 }else{
                                     echo $lead_value['employee_name'] ? "Status Updated By : ".ucwords(strtolower($lead_value['employee_name'])) : 'Status Updated By : NA<br><br>';
                                 }
