@@ -557,14 +557,14 @@ class Leads extends CI_Controller
         $arrData['till'] = $till;
         $lead_status = $this->config->item('lead_status');
         $table=Tbl_state;
+        $where=array('name !='=>'','code !='=>'');
+        $order_by = 'name ASC';
+        $arrData['states'] = allMasters($table,$where,'',$order_by);
+        $table=Tbl_district;
+        $arrData['districts'] = allMasters($table,$where,'',$order_by);
 
-        $arrData['states'] = allMasters($table);
-
-        $action = 'list';$table=Tbl_district;$select=array('code','name');
-        $arrData['districts'] = $this->Lead->get_leads($action,$table,$select,'','','','');
-
-        $action = 'list';$table=Tbl_branch;$select=array('code','name');
-        $arrData['branches'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+        $table=Tbl_branch;
+        $arrData['branches'] = allMasters($table,$where,'',$order_by);
         if($type == 'assigned'){
             if(($status != null) && ($lead_source != null)){
                 //Breadcumb creation for Lead Performance Source wise
@@ -1140,9 +1140,10 @@ class Leads extends CI_Controller
         if ($this->input->post()) {
             $state_id = $this->input->post("state_code");
             $select_label = $this->input->post("select_label");
-            $whereArray = array('state_code'=> $state_id,'code !=' =>'');
+            $whereArray = array('state_code'=> $state_id,'code !=' =>'','name !='=>'');
             $table=Tbl_district;
-            $districts = allMasters($table,$whereArray);
+            $order_by = 'name ASC';
+            $districts = allMasters($table,$whereArray,'',$order_by);
             $district_extra = 'id="district_id"';$branch_extra = 'id="branch_id"';
             if (!empty($districts)) {
                 $options[''] = $select_label;
@@ -1180,9 +1181,10 @@ class Leads extends CI_Controller
         if ($this->input->post()) {
             $district_code = $this->input->post("district_code");
             $select_label = $this->input->post("select_label");
-            $whereArray = array('district_code'=> $district_code,'code !=' =>'');
+            $whereArray = array('district_code'=> $district_code,'code !=' =>'','name !='=>'');
+            $order_by = 'name ASC';
             $table=Tbl_branch;
-            $branches = allMasters($table,$whereArray);
+            $branches = allMasters($table,$whereArray,'',$order_by);
             $branch_extra = 'id="branch_id"';
             if (!empty($branches)) {
                 $options[''] = $select_label;
