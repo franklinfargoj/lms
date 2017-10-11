@@ -425,6 +425,10 @@ body{
 	font-family: "Montserrat-Regular";
 	font-size: 14px;
 	padding: 45px 12px;
+	box-sizing:unset;
+	-ms-box-sizing:unset;
+	-moz-box-sizing:unset;
+	-webkit-box-sizing:unset;
 }
 .top-navigation{
 	text-align: center;
