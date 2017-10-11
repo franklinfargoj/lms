@@ -556,8 +556,9 @@ class Leads extends CI_Controller
         $arrData['type'] = $type;
         $arrData['till'] = $till;
         $lead_status = $this->config->item('lead_status');
-        $action = 'list';$table=Tbl_state;$select=array('code','name');
-        $arrData['states'] = $this->Lead->get_leads($action,$table,$select,'','','','');
+        $table=Tbl_state;
+
+        $arrData['states'] = allMasters($table);
 
         $action = 'list';$table=Tbl_district;$select=array('code','name');
         $arrData['districts'] = $this->Lead->get_leads($action,$table,$select,'','','','');
@@ -1140,8 +1141,8 @@ class Leads extends CI_Controller
             $state_id = $this->input->post("state_code");
             $select_label = $this->input->post("select_label");
             $whereArray = array('state_code'=> $state_id,'code !=' =>'');
-            $action='list';$table=Tbl_district;$select=array('code','name');
-            $districts = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
+            $table=Tbl_district;
+            $districts = allMasters($table,$whereArray);
             $district_extra = 'id="district_id"';$branch_extra = 'id="branch_id"';
             if (!empty($districts)) {
                 $options[''] = $select_label;
@@ -1180,8 +1181,8 @@ class Leads extends CI_Controller
             $district_code = $this->input->post("district_code");
             $select_label = $this->input->post("select_label");
             $whereArray = array('district_code'=> $district_code,'code !=' =>'');
-            $action='list';$table=Tbl_branch;$select=array('code','name');
-            $branches = $this->Lead->get_leads($action,$table,$select,$whereArray,'','','');
+            $table=Tbl_branch;
+            $branches = allMasters($table,$whereArray);
             $branch_extra = 'id="branch_id"';
             if (!empty($branches)) {
                 $options[''] = $select_label;
@@ -1296,8 +1297,7 @@ class Leads extends CI_Controller
         $branch_extra = 'id="branch_id"';
         $district_extra = 'id="district_id"';
             $table = Tbl_state;
-            $action='list';$select=array('code','name');
-            $states = $this->Lead->get_leads($action,$table,$select,'','','','');
+            $states = allMasters($table);
             if (!empty($states)) {
                 $options[''] = 'Select State';
                 foreach ($states as $key => $value) {

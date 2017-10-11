@@ -668,11 +668,6 @@ class Cron extends CI_Controller
                 }
             }
             if(count($final_zone) > 0){
-                $final_zone = sortBySubkey($final_zone,'name');
-                $final_state = sortBySubkey($final_state,'name');
-                $final_dist = sortBySubkey($final_dist,'name');
-                $final_branch = sortBySubkey($final_branch,'name');
-
                 $this->db->insert_batch(Tbl_zone,$final_zone);
                 $this->db->insert_batch(Tbl_state,$final_state);
                 $this->db->insert_batch(Tbl_district,$final_dist);
