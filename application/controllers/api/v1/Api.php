@@ -702,22 +702,26 @@ class Api extends REST_Controller
         $lead_status['branch_details'] = array();
         //get zone and state list
         $action = 'list';
-        $select = array('z.code as z_code', 'z.name as z_name', Tbl_state . '.name as s_name', Tbl_state . '.code as s_code');
+        $select = array('TRIM(z.code) as z_code', 'TRIM(z.name) as z_name', 'TRIM('.Tbl_state . '.name) as s_name', 'TRIM('.Tbl_state . '.code) as s_code');
+        $where = array('z.name !='=>'',Tbl_state.'.name !='=>'');
+        $orderBy = 'z.name ASC';
         $table = Tbl_zone . ' as z';
         $join[] = array('table' => Tbl_state, 'on_condition' => Tbl_state . '.zone_code = z.code', 'type' => 'left');
-        $zone_state = $this->Lead->get_leads($action, $table, $select, '', $join, '', '');
+        $zone_state = $this->Lead->get_leads($action, $table, $select, $where, $join, '', $orderBy);
         //
         $final_details = array();$respone = array();
         foreach ($zone_state as $key => $state_zone) {
             $table = Tbl_district . ' as d';
-            $select = array('code As id', 'name');
-            $where = array('state_code' => $state_zone['s_code']);
-            $districts = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $select = array('TRIM(code) AS id', 'TRIM(name) AS name');
+            $where = array('state_code' => $state_zone['s_code'],'name !='=>'');
+            $orderBy = 'name ASC';
+            $districts = $this->Lead->get_leads($action, $table, $select, $where, '', '', $orderBy);
             foreach ($districts as $dist_key => $all_dist) {
                 $table = Tbl_branch . ' as b';
-                $select = array('code As id', 'name');
-                $where = array('district_code' => $all_dist['id']);
-                $branches = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+                $select = array('TRIM(code) AS id', 'TRIM(name) AS name');
+                $where = array('district_code' => $all_dist['id'],'name !='=>'');
+                $orderBy = 'name ASC';
+                $branches = $this->Lead->get_leads($action, $table, $select, $where, '', '', $orderBy);
                 $districts[$dist_key]['branches'] = $branches;
             }
             $final_details['zone_id'] = $state_zone['z_code'];

@@ -1145,24 +1145,17 @@ function sortBySubkey(&$array, $subkey, $sortType = SORT_ASC) {
 }
 
 if(!function_exists('allMasters')){
-    function allMasters($table,$whereArray=''){
+    function allMasters($table,$whereArray='',$selectArray='',$order_by=''){
         $CI = & get_instance();
         $CI->load->model('Lead');
-        $updated_data = array();
-        $action='list';$select=array('code','name');
-        $data = $CI->Lead->get_leads($action,$table,$select,$whereArray,'','','');
-        if (!empty($data)) {
-            foreach ($data as $key => $value){
-                if(($value['code'] != '' || !empty($value['code'])) &&
-                    ($value['name'] != '' || !empty($value['name']))){
-
-                    $updated_data[$key]['code'] = $value['code'];
-                    $updated_data[$key]['name'] = trim($value['name']);
-                }
-            }
-            $updated_data = sortBySubkey($updated_data, 'name');
+        $action='list';
+        $select=array('TRIM(`code`) as code','TRIM(`name`) as name');
+        if($selectArray !=''){
+            $select = $selectArray;
         }
-        return $updated_data;
+        $data = $CI->Lead->get_leads($action,$table,$select,$whereArray,'','',$order_by);
+
+        return $data;
     }
 }
 
