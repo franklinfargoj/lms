@@ -1,6 +1,6 @@
 <?php
 $controller =  $this->router->fetch_class();
-	if($controller != 'dashboard'){
+//	if($controller != 'dashboard'){
 		if($this->session->flashdata('success')) {?>
 			<!-- <span style="color:green"></span> -->
 			<div class="success_message"><?php echo $this->session->flashdata('success');?></div>
@@ -9,6 +9,6 @@ $controller =  $this->router->fetch_class();
 			<!-- <span style="color:red"></span> -->
 			<div class="error_message"><?php echo $this->session->flashdata('error');?></div>
 		<?php 
-		}
+//		}
 	}
 ?>

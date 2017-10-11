@@ -667,13 +667,23 @@ class Cron extends CI_Controller
                     unset($final_branch[$key]);
                 }
             }
-            $this->db->insert_batch(Tbl_zone,$final_zone);
-            $this->db->insert_batch(Tbl_state,$final_state);
-            $this->db->insert_batch(Tbl_district,$final_dist);
-            $this->db->insert_batch(Tbl_branch,$final_branch);
+            if(count($final_zone) > 0){
+                $final_zone = sortBySubkey($final_zone,'name');
+                $final_state = sortBySubkey($final_state,'name');
+                $final_dist = sortBySubkey($final_dist,'name');
+                $final_branch = sortBySubkey($final_branch,'name');
 
-            $this->session->set_flashdata('success','Successfully Inserated');
-            redirect('dashboard','refresh');
+                $this->db->insert_batch(Tbl_zone,$final_zone);
+                $this->db->insert_batch(Tbl_state,$final_state);
+                $this->db->insert_batch(Tbl_district,$final_dist);
+                $this->db->insert_batch(Tbl_branch,$final_branch);
+                $this->session->set_flashdata('success','Successfully Inserated');
+                redirect('dashboard','refresh');
+            }else{
+                $this->session->set_flashdata('success','All Duplicate entries found.');
+                redirect('dashboard','refresh');
+            }
+
         }
 
     }
