@@ -698,7 +698,7 @@ class Cron extends CI_Controller
         if(!empty($result)){
             foreach ($result as $key => $value){
                 foreach ($columns as $k => $column){
-                    $insert[$key][$column] = $value[$column];
+                    $insert[$key][$column] = trim($value[$column]);
                 }
             }
             if(!empty($insert)){
