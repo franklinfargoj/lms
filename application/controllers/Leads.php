@@ -53,9 +53,11 @@ class Leads extends CI_Controller
         $arrData['product_selected'] = '';
         $arrData['products'] = '';
 
-        $action = 'list';$table=Tbl_state;$select=array('code','name');
-        $where = array('code !='=>'');
-        $arrData['states'] = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+        $action = 'list';$table=Tbl_state;
+        $select=array('TRIM(code) as code','TRIM(name) as name');
+        $orderby = 'name ASC';
+        $where=array('name !='=>'','code !='=>'');
+        $arrData['states'] = $this->Lead->get_leads($action,$table,$select,$where,'','',$orderby);
 
         $action = 'list';$table=Tbl_district;$select=array('code','name');
         $where = array('code !='=>'');
@@ -1206,8 +1208,10 @@ class Leads extends CI_Controller
             $district_code = $this->input->post("district_id");
             $state_code = $this->input->post("state_id");
             $branch_code = $this->input->post("branch_id");
-            $action='list';$table=Tbl_branch;$select=array('code','name');
-            $branches = $this->Lead->get_leads($action,$table,$select,'','','','');
+            $action='list';$table=Tbl_branch;$select=array('TRIM(code) as code','TRIM(name) as name');
+            $orderby = 'name ASC';
+            $where=array('name !='=>'','code !='=>'');
+            $branches = $this->Lead->get_leads($action,$table,$select,$where,'','',$orderby);
             $table = Tbl_district;
             $districts = $this->Lead->get_leads($action,$table,$select,'','','','');
             $table = Tbl_state;
@@ -1299,7 +1303,9 @@ class Leads extends CI_Controller
         $branch_extra = 'id="branch_id"';
         $district_extra = 'id="district_id"';
             $table = Tbl_state;
-            $states = allMasters($table);
+            $where=array('name !='=>'','code !='=>'');
+            $order_by = 'name ASC';
+            $states = allMasters($table,$where,'',$order_by);
             if (!empty($states)) {
                 $options[''] = 'Select State';
                 foreach ($states as $key => $value) {

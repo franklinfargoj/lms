@@ -640,14 +640,18 @@ class Cron extends CI_Controller
                     unset($final_zone[$key]);
                 }
             }
+            $available_states = array();
             foreach ($final_state as $key => $value){
+
                 $action = 'count';
                 $table = Tbl_state;
                 $where = array('code'=>$value['code']);
                 $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
-                if($count > 0){
+                if($count > 0 || in_array($value['code'],$available_states)){
                     unset($final_state[$key]);
                 }
+                if(isset($value['code']) && !empty($value['code']))
+                $available_states[$key] = $value['code'];
             }
             foreach ($final_dist as $key => $value){
                 $action = 'count';
