@@ -686,4 +686,53 @@ class Cron extends CI_Controller
         }
 
     }
+
+
+    public function employee_dump(){
+//        $url = ;
+//        $result = call_external_url($url);
+//        $result = json_decode($result,true);
+        $columns = ['hrms_id', 'name', 'designation_id','designation', 'email_id','contact_no', 'branch_id', 'branch_name',
+            'zone_id', 'zone_name','district_id', 'state_id', 'supervisor_id'];
+        $insert = array();
+        if(!empty($result)){
+            foreach ($result as $key => $value){
+                foreach ($columns as $k => $column){
+                    $insert[$key][$column] = $value[$column];
+                }
+            }
+            if(!empty($insert)){
+                $this->db->insert_batch(Tbl_emp_dump,$insert);
+                redirect('dashboard','refresh');
+            }
+        }
+    }
+
+    public function upload_rapc_mapping(){
+        if($this->input->post('Submit')) {
+            if (isset($_FILES['filename']) && !empty($_FILES['filename']['tmp_name'])) {
+                make_upload_directory('./uploads');
+                $file = upload_excel('./uploads', 'filename');
+                if (!is_array($file)) {
+                    $msg = notify($file, $type = "danger");
+                    $this->session->set_flashdata('error', $msg);
+                    redirect('leads/upload_employee');
+                } else {
+                    set_time_limit(0);
+                    ini_set('memory_limit', '-1');
+                    $keys = ['processing_center','branch_id','other_processing_center_id'];
+
+                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:C', $keys);
+                    $this->Lead->insert_uploaded_data(Tbl_processing_center,$excelData);
+                    $msg = notify('File Uploaded Successfully.','success');
+                    $this->session->set_flashdata('success', $msg);
+                    redirect(base_url('leads/upload_employee'), 'refresh');
+
+                }
+            }
+            $msg = notify("Please upload a file",'danger');
+            $this->session->set_flashdata('message', $msg);
+            redirect('leads/upload_employee');
+        }
+    }
 }
