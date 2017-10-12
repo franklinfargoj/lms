@@ -704,7 +704,7 @@ class Api extends REST_Controller
         $action = 'list';
         $select = array('TRIM(z.code) as z_code', 'TRIM(z.name) as z_name', 'TRIM('.Tbl_state . '.name) as s_name', 'TRIM('.Tbl_state . '.code) as s_code');
         $where = array('z.name !='=>'',Tbl_state.'.name !='=>'');
-        $orderBy = 'z.name ASC';
+        $orderBy = Tbl_state.'.name ASC';
         $table = Tbl_zone . ' as z';
         $join[] = array('table' => Tbl_state, 'on_condition' => Tbl_state . '.zone_code = z.code', 'type' => 'left');
         $zone_state = $this->Lead->get_leads($action, $table, $select, $where, $join, '', $orderBy);
