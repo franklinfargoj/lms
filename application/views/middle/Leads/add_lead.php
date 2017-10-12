@@ -561,7 +561,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     var total = 4000000;
                     var val = 1000000 + (total * newWidth) / 25;
                     range.val(Math.round(val));
-                   sliderElement.slider('option','step',156250);
+                   sliderElement.slider('option','step',62500);
                 }else{
                     sliderElement.slider('values', 0, value);
                 }
