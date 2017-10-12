@@ -14,7 +14,7 @@
         <?php 
         $status = array('Walk-in','Enquiry','Tie Ups','Analytics');
         if(isset($unassigned_leads_count) && !empty($unassigned_leads_count)){?>
-        <div class="box-content">
+        <div class="box-content box-unasign-top">
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[0]))?>">
             
             <div class="box box-m  box-m1">
