@@ -425,6 +425,10 @@ body{
 	font-family: "Montserrat-Regular";
 	font-size: 14px;
 	padding: 45px 12px;
+	box-sizing:unset;
+	-ms-box-sizing:unset;
+	-moz-box-sizing:unset;
+	-webkit-box-sizing:unset;
 }
 .top-navigation{
 	text-align: center;
@@ -1483,7 +1487,7 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 	width: 265px;
 	display: inline-block;
 	text-align: left;
-	margin-bottom: 45px;
+	margin-bottom: 15px;
 }
 .performance-box-top{
 	background-image: url(../images/performance-box-top.jpg);
@@ -1497,8 +1501,9 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 	display: block;
 	height: 14px;
 	background-size: 100% auto;}
-.box-m {margin-right: 40px;}
+.box-m {    margin: 0 15px 0 25px;}
 .box-m1{background-color: #3168a8;}
+.box-unasign-top{margin-top: 40px;}
 .Pbox-img{width: 80px;margin: 0!important;padding-left: 12px;}
 .box img{
 	margin: 15px auto;
