@@ -2572,6 +2572,7 @@ class Api extends REST_Controller
                     'amount' => substr($split_cbs_resp[0], 3),
                     'customer_name' => $split_cbs_resp[1],
                     'customer_contact_no' => $split_cbs_resp[2],
+                    'email_id' => $split_cbs_resp[3],
                 );
                 //This will add entry into cbs response for status (Account Opened)
                 $this->Lead->insert_lead_data($responseData,Tbl_cbs);
