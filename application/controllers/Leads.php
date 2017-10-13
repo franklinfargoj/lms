@@ -876,7 +876,7 @@ class Leads extends CI_Controller
                                     'lead_id' => $lead_id,
                                     'account_no'=>trim($this->input->post('accountNo')),
                                     'response_data' => $this->input->post('response_data'),
-                                    'amount' => $split_cbs_resp[0],
+                                    'amount' => substr($split_cbs_resp[0], 3),
                                     'customer_name' => $split_cbs_resp[1],
                                     'customer_contact_no' => $split_cbs_resp[2],
                                 );

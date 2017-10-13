@@ -2563,10 +2563,15 @@ class Api extends REST_Controller
             $api_res = json_decode($api_res,true);
             if($api_res['status'] != 'False'){
                 $acc_no = $params['account_no'];
+                $cbs_res = $api_res['data'];
+                $split_cbs_resp = explode('~',$cbs_res);
                 $responseData = array(
                     'lead_id' => $params['lead_id'],
                     'account_no'=>$acc_no,
-                    'response_data' => $api_res['data']
+                    'response_data' => $api_res['data'],
+                    'amount' => substr($split_cbs_resp[0], 3),
+                    'customer_name' => $split_cbs_resp[1],
+                    'customer_contact_no' => $split_cbs_resp[2],
                 );
                 //This will add entry into cbs response for status (Account Opened)
                 $this->Lead->insert_lead_data($responseData,Tbl_cbs);
