@@ -870,10 +870,15 @@ class Leads extends CI_Controller
 
                             }
                             if($lead_status == 'AO'){
+                                $cbs_res = $this->input->post('response_data');
+                                $split_cbs_resp = explode('~',$cbs_res);
                                 $responseData = array(
                                     'lead_id' => $lead_id,
                                     'account_no'=>trim($this->input->post('accountNo')),
-                                    'response_data' => $this->input->post('response_data')
+                                    'response_data' => $this->input->post('response_data'),
+                                    'amount' => $split_cbs_resp[0],
+                                    'customer_name' => $split_cbs_resp[1],
+                                    'customer_contact_no' => $split_cbs_resp[2],
                                 );
                                 //This will add entry into cbs response for status (Account Opened)
                                 $this->Lead->insert_lead_data($responseData,Tbl_cbs);
