@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].':8844/DENABANK/lms';
+$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].'/lms';
 
 /*
 |--------------------------------------------------------------------------
@@ -534,16 +534,14 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-
 $config['lead_status'] = array(
-	'NC' => 'Not Contacted',
-	'FU' => 'Interested/Follow up' ,
-	'DC' => 'Documets Collected',
-	'AO' => 'Account Opened',
-	'Converted' => 'Converted',
-	'NI' => 'Drop/Not Interested',
-	'CBC' => 'Cannot be Contacted',
-	'Closed' => 'Closed'
+    'NC' => 'Not Contacted',
+    'FU' => 'Interested' ,
+    'DC' => 'Documets Collected',
+    'AO' => 'Account Opened',
+    'Converted' => 'Converted',
+    'NI' => 'Drop/Not Interested',
+    'Closed' => 'Reject'
 );
 
 $config['lead_type'] = array(
@@ -558,10 +556,11 @@ $config['escalation_days_diff'] = array(
     '8days'=>'-9days');
 
 $config['lead_source'] = array(
-    'walkin'=>'Walk-in',
-    'tie_ups'=>'Tie Ups',
-    'enquiry'=>'Enquiry',
+    'walkin'=>'Branch Generated',
+    'tie_ups'=>'Others',
+    'enquiry'=>'Website,IVR',
     'analytics'=>'Analytics');
+
 $config['map'] = array(
     'BRANCH'=>'BRANCH',
     'RAPC'=>'RAPC',

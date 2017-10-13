@@ -570,22 +570,22 @@ class Leads extends CI_Controller
         if($type == 'assigned'){
             if(($status != null) && ($lead_source != null)){
                 //Breadcumb creation for Lead Performance Source wise
-                $this->make_bread->add('Lead Performance', 'dashboard/leads_performance/'.$type.'/'.$param, 0);   
-                $this->make_bread->add($lead_source, 'dashboard/leads_status/'.$type.'/'.$param.'/'.$lead_source, 0);   
-                $this->make_bread->add(ucwords($lead_status[$status]),'leads/leads_list/'.$type.'/'.$till.'/'.$status.'/'.$param.'/'.$lead_source, 0);   
+                $this->make_bread->add('Lead Performance', 'dashboard/leads_performance/'.$type.'/'.$param, 0);
+                $this->make_bread->add($lead_source, 'dashboard/leads_status/'.$type.'/'.$param.'/'.$lead_source, 0);
+                $this->make_bread->add(ucwords($lead_status[$status]),'leads/leads_list/'.$type.'/'.$till.'/'.$status.'/'.$param.'/'.$lead_source, 0);
                 $arrData['backUrl'] = 'leads/leads_list/'.$type.'/'.$till.'/'.$status.'/'.$param.'/'.$lead_source;
             }else{
                 //Breadcumb creation for Assigned List
                 $this->make_bread->add(ucwords($type).' Leads', 'leads/leads_list/'.$type.'/'.$till, 0);
-                $arrData['backUrl'] = 'leads/leads_list/'.$type.'/'.$till;   
+                $arrData['backUrl'] = 'leads/leads_list/'.$type.'/'.$till;
             }
         }
 
         if(($type == 'generated') && ($status != null)){
             //Breadcumb creation for Generated Leads Status wise
-            $this->make_bread->add(ucwords($type).' Leads', 'dashboard/leads_status/'.$type.'/'.$param, 0);   
-            $this->make_bread->add(ucwords($lead_status[$status]),'leads/leads_list/'.$type.'/'.$till.'/'.$status.'/'.$param, 0);  
-            $arrData['backUrl'] = 'leads/leads_list/'.$type.'/'.$till.'/'.$status.'/'.$param; 
+            $this->make_bread->add(ucwords($type).' Leads', 'dashboard/leads_status/'.$type.'/'.$param, 0);
+            $this->make_bread->add(ucwords($lead_status[$status]),'leads/leads_list/'.$type.'/'.$till.'/'.$status.'/'.$param, 0);
+            $arrData['backUrl'] = 'leads/leads_list/'.$type.'/'.$till.'/'.$status.'/'.$param;
         }
         $arrData['breadcrumb'] = $this->make_bread->output();
 
@@ -594,7 +594,7 @@ class Leads extends CI_Controller
         $arrData['breadcrumb'] = $this->make_bread->output();
 
         /*Create Breadcumb*/
-          
+
         $login_user = get_session();
 
         if(isset($login_user['designation_name']) && !empty($login_user['designation_name'])){
@@ -632,37 +632,39 @@ class Leads extends CI_Controller
             $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
             if($type == 'assigned'){
                 $all_status = $this->config->item('lead_status');
-                if($arrData['leads'][0]['status'] == 'NC'){
-                    $nc_status = $all_status;
-                    unset($nc_status['NC'],$nc_status['Converted'],$nc_status['Closed']);
-                    $arrData['lead_status'] = $nc_status;
-                }
-                if($arrData['leads'][0]['status'] == 'NI'){
-                    $arrData['lead_status'] = array('Closed' => 'Closed');
-                }
-                if($arrData['leads'][0]['status'] == 'FU'){
-                    $fu_status = $all_status;
-                    unset($fu_status['NC'],$fu_status['AO'],$fu_status['Converted'],$fu_status['CBC'],$fu_status['FU'],$fu_status['Closed']);
-                    $arrData['lead_status'] = $fu_status;
-                }
-                if($arrData['leads'][0]['status'] == 'DC'){
-                    $dc_status = $all_status;
-                    unset($dc_status['NC'],$dc_status['DC'],$dc_status['Converted'],$dc_status['CBC'],$dc_status['FU'],$dc_status['Closed']);
-                    $arrData['lead_status'] = $dc_status;
-                }
-                if($arrData['leads'][0]['status'] == 'AO'){
-                    $ao_status = $all_status;
-                    if($login_user['designation_name'] == 'EM'){
-                        unset($ao_status['NC'],$ao_status['DC'],$ao_status['AO'],$ao_status['CBC'],$ao_status['FU'],$ao_status['NI']);
-                    }else{
-                        unset($ao_status['AO'],$ao_status['CBC'],$ao_status['FU'],$ao_status['NI']);
+
+                if($this->session->userdata('admin_type') == 'BM'){
+                    $bm_status = $all_status;
+                    unset($bm_status['NC'],$bm_status['AO'],$bm_status['NI'],$bm_status['DC'],$bm_status['FU']);
+                    $arrData['lead_status'] = $bm_status;
+                }else{
+                    if($arrData['leads'][0]['status'] == 'NC'){
+                        $nc_status = $all_status;
+                        unset($nc_status['NC'],$nc_status['Converted'],$nc_status['Closed']);
+                        $arrData['lead_status'] = $nc_status;
                     }
-                    $arrData['lead_status'] = $ao_status;
-                }
-                if($arrData['leads'][0]['status'] == 'CBC'){
-                    $ao_status = $all_status;
-                    unset($ao_status['NC'],$ao_status['AO'],$ao_status['CBC']);
-                    $arrData['lead_status'] = $ao_status;
+                    if($arrData['leads'][0]['status'] == 'NI'){
+                        $arrData['lead_status'] = array('Closed' => 'Reject');
+                    }
+                    if($arrData['leads'][0]['status'] == 'FU'){
+                        $fu_status = $all_status;
+                        unset($fu_status['NC'],$fu_status['AO'],$fu_status['Converted'],$fu_status['FU'],$fu_status['Closed']);
+                        $arrData['lead_status'] = $fu_status;
+                    }
+                    if($arrData['leads'][0]['status'] == 'DC'){
+                        $dc_status = $all_status;
+                        unset($dc_status['NC'],$dc_status['DC'],$dc_status['Converted'],$dc_status['FU'],$dc_status['Closed']);
+                        $arrData['lead_status'] = $dc_status;
+                    }
+                    if($arrData['leads'][0]['status'] == 'AO'){
+                        $ao_status = $all_status;
+                        if($login_user['designation_name'] == 'EM'){
+                            unset($ao_status['NC'],$ao_status['DC'],$ao_status['AO'],$ao_status['FU'],$ao_status['NI']);
+                        }else{
+                            unset($ao_status['AO'],$ao_status['FU'],$ao_status['NI']);
+                        }
+                        $arrData['lead_status'] = $ao_status;
+                    }
                 }
             }
 
@@ -690,8 +692,19 @@ class Leads extends CI_Controller
 
                     $lead_identification = $this->input->post('lead_identification');
                     $lead_status = $this->input->post('lead_status');
+                    $drop_reason = array();
+                    if($lead_status == 'NI'){
+                        $drop_reason = $this->input->post('reason');
+                        if(empty($drop_reason) || $drop_reason == NULL){
+                            $this->form_validation->set_rules('reason','Reason For Drop', 'required');
+                            if ($this->form_validation->run() === FALSE) {
+                                $this->session->set_flashdata('error','Enter Reason For Drop.');
+                                redirect('leads/details/assigned/ytd/'.encode_id($lead_id));
+                            }
+                        }
+                    }
                     $employee_id = $this->input->post('reroute_to');
-                    
+
                     if ($this->input->post('is_own_branch') == '0') {
                         $action = 'list';
                         $table = Tbl_Leads;
@@ -710,7 +723,11 @@ class Leads extends CI_Controller
                         $this->Lead->update($whereUpdate,Tbl_Leads,$update_lead_data);
                         $whereUpdate = array('lead_id'=>$id);
                         $table = Tbl_LeadAssign;
-                        $data = array('is_updated'=>0);
+                        if(empty($drop_reason)){
+                            $data = array('is_updated'=>0);
+                        }else{
+                            $data = array('is_updated'=>0,'reason_for_drop'=>$drop_reason);
+                        }
                         $this->Lead->update($whereUpdate,$table,$data);
                         $this->session->set_flashdata('success','Lead information updated successfully');
                         redirect('leads/leads_list/assigned/ytd','refresh');
@@ -753,6 +770,9 @@ class Leads extends CI_Controller
                                 'created_by' => $login_user['hrms_id'],
                                 'created_by_name' => $login_user['full_name']
                             );
+                            if(!empty($drop_reason)){
+                                $lead_status_data['reason_for_drop'] = $drop_reason;
+                            }
                             /*****************************************************************/
 
                             /****************************************************************
@@ -885,7 +905,7 @@ class Leads extends CI_Controller
             /*****************************************************************/
         }
     }
-    
+
     /**
      * update_lead_product
      * Interested in other product

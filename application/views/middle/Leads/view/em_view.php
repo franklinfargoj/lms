@@ -150,7 +150,7 @@ $lead_type = $this->config->item('lead_type');
                                  <?php echo ++$i;?>
                             </td>
                             <td>
-                                 <?php echo ucwords($value['customer_name']);?>
+                                 <?php echo ucwords(strtolower($value['customer_name']));?>
                             </td>
                             <td>
                                  <?php echo ucwords($value['title']);?>

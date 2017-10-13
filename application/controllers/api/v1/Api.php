@@ -2311,6 +2311,11 @@ class Api extends REST_Controller
             $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
             $leads_data = $leadsAssign[0];
 
+
+            $drop_reason = array();
+            if($params['status'] == 'NI' && isset($params['reason']) && !empty($params['reason'])){
+                $drop_reason = $params['reason'];
+            }
             //=========================== Reroute to other branch
 
                 if ($params['reroute_to_own_branch'] == 0) {
@@ -2339,7 +2344,11 @@ class Api extends REST_Controller
                     $this->Lead->update($whereUpdate,Tbl_Leads,$update_lead_data);
                     $whereUpdate = array('lead_id' => $id);
                     $table = Tbl_LeadAssign;
-                    $data = array('is_updated' => 0);
+                    if(empty($drop_reason)){
+                        $data = array('is_updated'=>0);
+                    }else{
+                        $data = array('is_updated'=>0,'reason_for_drop'=>$drop_reason);
+                    }
                     $this->Lead->update($whereUpdate, $table, $data);
                     $res = array('result' => TRUE,
                         'data' => array('Lead Reroute to Other Branch Successfully'));
@@ -2480,6 +2489,9 @@ class Api extends REST_Controller
                                 'created_by' => $leads_data['created_by'],
                                 'created_by_name' => $leads_data['created_by_name']
                             );
+                            if(!empty($drop_reason)){
+                                $lead_status_data['reason_for_drop'] = $drop_reason;
+                            }
                             $result4 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
 
                         }

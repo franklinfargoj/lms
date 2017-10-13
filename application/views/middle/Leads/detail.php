@@ -121,30 +121,6 @@
                                     ?>
                                 </div> -->
                                 <div class="form-control">
-                                        <?php
-                                            if(isset($lead_identification)){
-                                                $status_array = array('AO','Closed','Converted','NI');
-                                                $admin = array('EM','BM');
-                                                if(isset($leads[0]['status']) && in_array($leads[0]['status'],$status_array)
-                                                && in_array($this->session->userdata('admin_type'),$admin)){
-                                                }else{
-                                                    echo "<label>Lead Identified as :</label>";
-                                                    echo "<span class='detail-label'>";
-                                                    $options2['']='Select';
-                                                    foreach ($lead_type as $key => $value) {
-                                                        $options2[$key] = ucwords($value);
-                                                    }
-                                                    $js = array(
-                                                        'id'       => 'lead_identification',
-                                                        'class'    => 'form-control'
-                                                    );
-                                                    echo form_dropdown('lead_identification', $options2 , $leads[0]['lead_identification'],$js);
-                                                    echo "</span>";
-                                                }
-                                            }
-                                        ?>
-                                </div>
-                                <div class="form-control">
                                     <?php
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
                                         || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))){}
@@ -188,6 +164,20 @@
                                         }
                                     ?>
                                 </div>
+                                <div class="form-control reason" >
+                                    <label>Reason For Drop :</label>
+                                    <?php
+                                    $reason = array(
+                                        'type'  => 'text',
+                                        'name'  => 'reason',
+                                        'id'    => 'reason',
+                                        'class' => '',
+                                        'value' => ''
+                                    );
+                                    echo form_input($reason);
+                                    echo form_error('reason');
+                                    ?>
+                                </div>
                                 <div class="form-control followUp" style="display:none">
                                     <label>Next Followup Date:</label>
                                     <?php 
@@ -206,6 +196,31 @@
                                         echo form_input($data);
                                         ?>
                                 </div>
+                                <div class="form-control lead_identified">
+                                    <?php
+                                    if(isset($lead_identification)){
+                                        $status_array = array('AO','Closed','Converted','NI');
+                                        $admin = array('EM','BM');
+                                        if(isset($leads[0]['status']) && in_array($leads[0]['status'],$status_array)
+                                            && in_array($this->session->userdata('admin_type'),$admin)){
+                                        }else{
+                                            echo "<label>Lead Identified as :</label>";
+                                            echo "<span class='detail-label'>";
+                                            $options2['']='Select';
+                                            foreach ($lead_type as $key => $value) {
+                                                $options2[$key] = ucwords($value);
+                                            }
+                                            $js = array(
+                                                'id'       => 'lead_identification',
+                                                'class'    => 'form-control'
+                                            );
+                                            echo form_dropdown('lead_identification', $options2 , $leads[0]['lead_identification'],$js);
+                                            echo "</span>";
+                                        }
+                                    }
+                                    ?>
+                                </div>
+
                                 <div class="form-control followUp" style="display:none">
                                     <label>Followup Remark:</label>
                                     <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
@@ -334,9 +349,12 @@
     $(document).ready(function(){
         var lead_status = "<?php echo $leads[0]['status']?>";  //Current Lead status
         var category_title = "<?php echo $leads[0]['category_title']?>";  //Current Category
-        
+        $('.reason').hide();
         if(lead_status == 'FU'){
             $('.followUp').show();              //Display follow up fields 
+        }
+        if(lead_status == 'NC'){
+            $('#lead_identification').attr('disabled','disabled');              //Display follow up fields
         }
 
         $('#lead_status').change(function(){
@@ -379,7 +397,12 @@
         });
 
         var action = function(option){
-            $('#accountNo').removeAttrs('readonly');
+            if(option == 'FU' || option == 'AO' || option == 'Converted'|| option == 'DC'){
+                $('.lead_identified').show();
+            }else{
+                $('.lead_identified').hide();
+            }
+
             $('.submit_button').show();
             if(option == 'FU'){
                $('.followUp').show();
@@ -389,13 +412,20 @@
                 if(category_title != 'fee income'){
                     $('.accountOpen').show();
                     $('.verify_account').show();
-                    $('#accountNo').removeAttrs('readonly');
                     $('.submit_button').hide();
+                    $('.reason').hide();
                 }
+                $('.reason').hide();
                 $('.followUp').hide();
-            }else{
+            }else if(option == 'NI'){
                 $('.accountOpen').hide();
                 $('.followUp').hide();
+                $('.reason').show();
+            }
+            else{
+                $('.accountOpen').hide();
+                $('.followUp').hide();
+                $('.reason').hide();
             }
         }
 
@@ -442,6 +472,10 @@
                 branch_id: {
                     required: true
                 }
+//                ,
+//                reason:{
+//                    required:true
+//                }
             },
             messages: {
                 product_category_id: {
@@ -465,6 +499,10 @@
                 branch_id: {
                     required: "Please select branch"
                 }
+//                ,
+//                reason:{
+//                    required:"Please enter reason for drop"
+//                }
             }
         });
     });
@@ -496,7 +534,6 @@
     });
     $('#state_id').change(function () {
         var state_code = $('#state_id').val();
-        console.log(state_code);
         $.ajax({
             method:'POST',
             url: base_url + 'leads/district_list',
@@ -553,8 +590,6 @@
                         if(response['status'] == 'True'){
                             $('.loader').hide();
                             alert('Success');
-                            $('.verify_account').hide();
-                            $('#accountNo').attr('readonly','true');
                             $('.submit_button').show();
                             $('#response_data').val(response['data']);
                         }else{

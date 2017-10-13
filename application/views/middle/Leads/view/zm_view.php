@@ -61,7 +61,7 @@
                             <?php echo ++$i;?>
                         </td>
                         <td>
-                            <?php echo ucwords($value['created_by_name']);?>
+                            <?php echo ucwords(strtolower($value['created_by_name']));?>
                         </td>
                         <td style="text-align:center">
                             <?php echo $value['total_generated_mtd'];?>
