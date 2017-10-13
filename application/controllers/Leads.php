@@ -1005,7 +1005,7 @@ class Leads extends CI_Controller
         }
         if($type == 'assigned'){
             $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
-            $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
+            $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status !='=>'Closed');
             if($till == 'mtd'){
                 $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
             }

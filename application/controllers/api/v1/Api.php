@@ -1052,7 +1052,7 @@ class Api extends REST_Controller
             $join[] = array('table' => Tbl_Products . ' as p', 'on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id', 'type' => '');
 
             $select = array('l.id', 'l.customer_name', 'l.contact_no', 'l.lead_identification', 'la.created_on', 'l.lead_source', 'p.title', 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on', 'DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
-            $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
+            $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day,'la.status !='=>'Closed');
             if ($type == 'EM') {
                 $where['la.employee_id'] = $id;
             }
