@@ -64,7 +64,7 @@
                         <div class="performance-box-bottom"></div>
                     </div>
                  </a>
-                <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/tieups')?>">
+                <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/tie_ups')?>">
                     <div class="box box-m box-m1">
                     <div class="performance-box-top"></div>
                         <img src="<?php echo base_url().ASSETS;?>images/hand-box.jpg" alt="self" class="Pbox-img">
