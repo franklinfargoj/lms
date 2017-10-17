@@ -1518,10 +1518,10 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 }
 .box h4{
 	color: #fff;
-	font-size: 27px;
+	font-size: 18px;
 	font-weight: bold;
 	display: inline-block;
-	padding: 22px 30px 0;
+	padding: 22px 10px 0;
 	vertical-align: top;
 }
 .box ul{
