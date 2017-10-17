@@ -286,6 +286,8 @@ class Lead  extends CI_Model
         if(!empty($where_generated_Array)){
             //for branch manager
             if(array_key_exists('branch_id',$where_generated_Array)){
+                $where_generated_Array['created_by_branch_id']=$where_generated_Array['branch_id'];
+                unset ($where_generated_Array['branch_id']);
                 $this->db->select('created_by, COUNT(created_by) as total , created_by_name');
                 $this->db->group_by('created_by');
                 $this->db->order_by('total','desc');
