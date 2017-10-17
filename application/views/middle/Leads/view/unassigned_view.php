@@ -20,7 +20,7 @@
             <div class="box box-m  box-m1">
             <div class="performance-box-top"></div>
                 <img src="<?php echo base_url().ASSETS;?>images/man-box.jpg" alt="self" class="Pbox-img">
-                <h4>Walk-in</h4>
+                <h4>Branch Generated</h4>
                 <div class="bg-red bg-c">
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
@@ -39,7 +39,7 @@
             <div class="box box-m1">
             <div class="performance-box-top"></div>
                 <img src="<?php echo base_url().ASSETS;?>images/man2-box.jpg" alt="self" class="Pbox-img">
-                <h4>Enquiry</h4>
+                <h4>Website,IVR</h4>
                 <div class="bg-red bg-c">
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"  class="img-w">
                 <ul>
@@ -57,7 +57,7 @@
             <div class="box box-m box-m1">
             <div class="performance-box-top"></div>
                 <img src="<?php echo base_url().ASSETS;?>images/hand-box.jpg" alt="self" class="Pbox-img">
-                <h4>Tie Up</h4>
+                <h4>Others</h4>
                 <div class="bg-red bg-c">
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>

@@ -36,7 +36,7 @@
                     <div class="box box-m box-m1">
                     <div class="performance-box-top"></div>
                         <img src="<?php echo base_url().ASSETS;?>images/man-box.jpg" alt="self" class="Pbox-img">
-                        <h4>Walk-in</h4>
+                        <h4>Branch Generated</h4>
                         <ul class="bg-c">
                             <li><p>Lead Assigned </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="walkin_assign"><?php echo isset($month_lead_assigned_walkin) ? $month_lead_assigned_walkin:'';?></span></div></li>
                             <li><p>Lead Converted </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="walkin_converted"><?php echo isset($month_lead_converted_walkin) ? $month_lead_converted_walkin:'';?></span></div></li>
@@ -52,7 +52,7 @@
                     <div class="box box-m1">
                     <div class="performance-box-top"></div>
                         <img src="<?php echo base_url().ASSETS;?>images/man2-box.jpg" alt="self" class="Pbox-img">
-                        <h4>Enquiry</h4>
+                        <h4>Website,IVR</h4>
                         <ul class="bg-c">
                             <li><p>Lead Assigned </p><div class="bg-red bg-red1"> <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"><span id="enquiry_assign" ><?php echo isset($month_lead_assigned_enquiry) ? $month_lead_assigned_enquiry :'';?></span></div></li>
                             <li><p>Lead Converted</p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="enquiry_converted" ><?php echo isset($month_lead_converted_enquiry) ? $month_lead_converted_enquiry:'';?></span></div></li>
@@ -68,7 +68,7 @@
                     <div class="box box-m box-m1">
                     <div class="performance-box-top"></div>
                         <img src="<?php echo base_url().ASSETS;?>images/hand-box.jpg" alt="self" class="Pbox-img">
-                        <h4>Tie Up</h4>
+                        <h4>Others</h4>
                         <ul class="bg-c">
                             <li><p>Lead Assigned </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="tieup_assign"><?php echo isset($month_lead_assigned_tie_ups) ? $month_lead_assigned_tie_ups:'';?></span></div></li>
                             <li><p>Lead Converted </p><div class="bg-red bg-red1"><img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"> <span id="tieup_converted"><?php echo isset($month_lead_converted_tie_ups) ? $month_lead_converted_tie_ups :'';?></span></div></li>

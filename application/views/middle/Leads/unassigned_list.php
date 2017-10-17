@@ -47,7 +47,7 @@ $param2 = isset($lead_source) ? encode_id($lead_source).'/' : '';
                                     if ($unassigned_leads) {
                             ?>
                                 <div class="form-control" id="finline">
-                                    <label>Assign To : </label>&nbsp;&nbsp;
+                                    <label><strong>Assign To :</strong> </label>&nbsp;&nbsp;
                                     <select name="assign_to">
                                         <option value="">Select Employee</option>
                                     <?php $result = get_details($this->session->userdata('admin_id'));?>
@@ -156,7 +156,8 @@ $param2 = isset($lead_source) ? encode_id($lead_source).'/' : '';
                                     ?>
                                 </td>
                                 <td>
-                                    <a href="<?php echo site_url('leads/unassigned_leads_details/'.encode_id($lead_source).'/'. encode_id($value['id'])); ?>">View</a>
+                                    <a href="<?php echo site_url('leads/lead_life_cycle/'.encode_id($value['id']))?>">Life Cycle</a>
+<!--                                    <span>|</span><a href="--><?php //echo site_url('leads/unassigned_leads_details/'.encode_id($lead_source).'/'. encode_id($value['id'])); ?><!--">View</a>-->
                                 </td>
                             </tr>
                             <?php
