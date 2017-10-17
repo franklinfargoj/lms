@@ -32,7 +32,7 @@
                 }
             ?>
             <div class="box-content">
-                <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/Walk-in')?>">
+                <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/walkin')?>">
                     <div class="box box-m box-m1">
                     <div class="performance-box-top"></div>
                         <img src="<?php echo base_url().ASSETS;?>images/man-box.jpg" alt="self" class="Pbox-img">
@@ -48,7 +48,7 @@
                         <div class="performance-box-bottom"></div>
                     </div>
                 </a>
-                <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/Enquiry')?>">
+                <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/enquiry')?>">
                     <div class="box box-m1">
                     <div class="performance-box-top"></div>
                         <img src="<?php echo base_url().ASSETS;?>images/man2-box.jpg" alt="self" class="Pbox-img">
@@ -64,7 +64,7 @@
                         <div class="performance-box-bottom"></div>
                     </div>
                  </a>
-                <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/Tie Ups')?>">
+                <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/tieups')?>">
                     <div class="box box-m box-m1">
                     <div class="performance-box-top"></div>
                         <img src="<?php echo base_url().ASSETS;?>images/hand-box.jpg" alt="self" class="Pbox-img">
@@ -79,7 +79,7 @@
                         <div class="performance-box-bottom"></div>
                     </div>
                  </a>
-                <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/Analytics')?>">
+                <a href="<?php echo site_url('dashboard/leads_status/assigned'.$param.'/analytics')?>">
                     <div class="box box-m1">
                     <div class="performance-box-top"></div>
                         <img src="<?php echo base_url().ASSETS;?>images/board-box.jpg" alt="self" class="Pbox-img">
