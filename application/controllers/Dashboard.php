@@ -113,7 +113,7 @@ class Dashboard extends CI_Controller {
      */
     private function bm_view($branch_id){
 
-        //for generated lead
+        //for generated leads
         $where_month_Array = array('branch_id' => $branch_id,
             'MONTH(created_on)' => date('m'));
         $where_year_Array = array('branch_id' => $branch_id,
