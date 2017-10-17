@@ -9,10 +9,11 @@ $form_attributes = array('id' => 'upload_lead', 'method' => 'POST');
 $data_input = array('id' => 'file', 'name'=>'filename', 'method' => 'POST' ,'type' => 'file');
 
 $source_options[''] = 'Select Lead Source';
-$source_options['Third Party'] = 'Third Party';
-$source_options['Bank Website'] = 'Bank Website';
-$source_options['Analytics'] = 'Analytics';
-$source_options['Walking'] = 'Walking';
+
+$source_options['enquiry'] = 'Website,IVR';
+$source_options['analytics'] = 'Analytics';
+$source_options['walkin'] = 'Branch Generated';
+$source_options['tie_ups'] = 'Others';
 $class = 'class="form-control"';
 $data_submit = array(
     'name' => 'Submit',
