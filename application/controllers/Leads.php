@@ -468,7 +468,7 @@ class Leads extends CI_Controller
         $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id'],Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
         $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
         $response = array();
-        $keys=array('Walk-in'=>0,'Analytics'=>0,'Tie Ups'=>0,'Enquiry'=>0);
+        $keys=array('walkin'=>0,'analytics'=>0,'tie_ups'=>0,'enquiry'=>0);
        foreach ($arrData['unassigned_leads_count'] as $k => $v){
                 $keys[$v['lead_source']] = $v['total'];
 
@@ -1011,7 +1011,7 @@ class Leads extends CI_Controller
         }
         if($type == 'assigned'){
             $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
-            $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status !='=>'Closed');
+            $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
                 $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
             }

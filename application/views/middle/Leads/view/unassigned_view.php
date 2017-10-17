@@ -12,7 +12,7 @@
     <div class="inner-content">
     <div class="container">
         <?php 
-        $status = array('Walk-in','Enquiry','Tie Ups','Analytics');
+        $status = array('walkin','enquiry','tie_ups','analytics');
         if(isset($unassigned_leads_count) && !empty($unassigned_leads_count)){?>
         <div class="box-content box-unasign-top">
             <a href="<?php echo site_url('leads/unassigned_leads_list/'.encode_id($status[0]))?>">
@@ -25,8 +25,8 @@
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
                 <?php $walkin = 0;
-                if($unassigned_leads_count['Walk-in'] != 0)
-                      $walkin = $unassigned_leads_count['Walk-in'];
+                if($unassigned_leads_count['walkin'] != 0)
+                      $walkin = $unassigned_leads_count['walkin'];
                     echo $walkin;
                 ?>
                 </ul>
@@ -44,8 +44,8 @@
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red"  class="img-w">
                 <ul>
                     <?php $enquiry = 0;
-                    if($unassigned_leads_count['Enquiry'] != 0)
-                        $enquiry = $unassigned_leads_count['Enquiry'];
+                    if($unassigned_leads_count['enquiry'] != 0)
+                        $enquiry = $unassigned_leads_count['enquiry'];
                         echo $enquiry;
                     ?>
                 </ul>
@@ -62,8 +62,8 @@
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
                     <?php $tieups = 0;
-                    if($unassigned_leads_count['Tie Ups'] != 0)
-                        $tieups = $unassigned_leads_count['Tie Ups'];
+                    if($unassigned_leads_count['tie_ups'] != 0)
+                        $tieups = $unassigned_leads_count['tie_ups'];
                     echo $tieups;
                     ?>
                 </ul>
@@ -80,8 +80,8 @@
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
                     <?php $analytics = 0;
-                    if($unassigned_leads_count['Analytics'] != 0)
-                        $analytics = $unassigned_leads_count['Analytics'];
+                    if($unassigned_leads_count['analytics'] != 0)
+                        $analytics = $unassigned_leads_count['analytics'];
                     echo $analytics;
                     ?>
                 </ul>
