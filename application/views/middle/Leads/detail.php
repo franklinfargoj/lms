@@ -69,21 +69,36 @@
                             <div class="form-control">
                                 <label>Lead ID:</label> <span class="detail-label"><?php echo ucwords($leads[0]['id']);?></span>
                             </div>
+                            <div class="form-control ">
+                                <label>Customer Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['customer_name']);?></span>
+                            </div>
                             <div class="form-control">
-                                <label>Lead Identified as :</label> 
+                                <label>Contact:</label> <span class="detail-label"><?php echo $leads[0]['contact_no'];?></span>
+                            </div>
+
+<!--                            <div class="form-control">-->
+<!--                                <label>Category Name:</label> <span class="detail-label">--><?php //echo ucwords($leads[0]['category_title']);?><!--</span>-->
+<!--                            </div>-->
+                            <div class="form-control">
+                                <label>Product:</label> <span class="detail-label"><?php echo ucwords($leads[0]['product_title']);?></span>
+                            </div>
+                            <div class="form-control">
+                                <label>Lead Identified as :</label>
                                 <span class="detail-label" style="color:<?php echo $color;?>">
                                     <?php echo !empty($leads[0]['lead_identification']) ? ucwords($lead_type[$leads[0]['lead_identification']]) : '';?>
                                 </span>
                             </div>
                             <div class="form-control">
-                                <label>Category Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['category_title']);?></span>
-                            </div>
-                            <div class="form-control">
-                                <label>Product Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['product_title']);?></span>
-                            </div>
-                            <div class="form-control">
                                 <label>Lead Status:</label> <span class="detail-label">
                                     <?php $account_no = $leads[0]['opened_account_no'] ? " (".$leads[0]['opened_account_no'].")" :'';
+                                    if($leads[0]['status']=='FU')
+                                    {
+                                        $account_no = " (Next Followup Date :".date('d-m-Y',strtotime($leads[0]['remind_on'])).")";
+                                    }
+                                    if($leads[0]['status']=='NI')
+                                    {
+                                        $account_no = " (Reason :".$leads[0]['reason_for_drop'].")";
+                                    }
                                     echo isset($leads[0]['status']) ? $all_lead_status[$leads[0]['status']].$account_no : 'NA';?></span>
                             </div>
                            
@@ -178,6 +193,7 @@
                                     echo form_error('reason');
                                     ?>
                                 </div>
+                                <?php if($this->session->userdata('admin_type')=='EM'){?>
                                 <div class="form-control followUp" style="display:none">
                                     <label>Next Followup Date:</label>
                                     <?php 
@@ -196,47 +212,24 @@
                                         echo form_input($data);
                                         ?>
                                 </div>
-                                <div class="form-control lead_identified">
-                                    <?php
-                                    if(isset($lead_identification)){
-                                        $status_array = array('AO','Closed','Converted','NI');
-                                        $admin = array('EM','BM');
-                                        if(isset($leads[0]['status']) && in_array($leads[0]['status'],$status_array)
-                                            && in_array($this->session->userdata('admin_type'),$admin)){
-                                        }else{
-                                            echo "<label>Lead Identified as :</label>";
-                                            echo "<span class='detail-label'>";
-                                            $options2['']='Select';
-                                            foreach ($lead_type as $key => $value) {
-                                                $options2[$key] = ucwords($value);
-                                            }
-                                            $js = array(
-                                                'id'       => 'lead_identification',
-                                                'class'    => 'form-control'
-                                            );
-                                            echo form_dropdown('lead_identification', $options2 , $leads[0]['lead_identification'],$js);
-                                            echo "</span>";
-                                        }
-                                    }
-                                    ?>
-                                </div>
+                                    <div class="form-control followUp" style="display:none">
+                                        <label>Followup Remark:</label>
+                                        <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
+                                    </div>
+                                    <?php }?>
 
-                                <div class="form-control followUp" style="display:none">
-                                    <label>Followup Remark:</label>
-                                    <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
-                                </div>
                                 <div class="form-control accountOpen" style="display:none">
-                                    <label>Verify Account</label>   
-                                    <?php 
-                                        $data = array(
-                                            'type'  => 'text',
-                                            'name'  => 'accountNo',
-                                            'id'    => 'accountNo',
-                                            'class' => '',
-                                            'value' => ''
-                                        );
-                                        echo form_input($data);
-                                        ?>
+                                    <label>Verify Account</label>
+                                    <?php
+                                    $data = array(
+                                        'type'  => 'text',
+                                        'name'  => 'accountNo',
+                                        'id'    => 'accountNo',
+                                        'class' => '',
+                                        'value' => ''
+                                    );
+                                    echo form_input($data);
+                                    ?>
                                 </div>
                                 <div class="form-control form-submit clearfix accountOpen" style="display:none">
                                     <a href="javascript:void(0);" class="float-right verify_account">
@@ -244,6 +237,38 @@
                                         <span>Verify</span>
                                         <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
                                     </a>
+                                </div>
+                                <div class="form-control lead_identified">
+                                    <?php
+                                    if($this->session->userdata('admin_type')=='EM'){
+                                        if($leads[0]['lead_identification'] == '') {
+                                            if (isset($lead_identification)) {
+                                                $status_array = array('AO', 'Closed', 'Converted', 'NI');
+                                                $admin = array('EM');
+                                                if (isset($leads[0]['status']) && in_array($leads[0]['status'], $status_array)
+                                                    && in_array($this->session->userdata('admin_type'), $admin)
+                                                ) {
+                                                } else {
+                                                    echo "<label>Lead Identified as :</label>";
+                                                    echo "<span class='detail-label'>";
+                                                    $options2[''] = 'Select';
+                                                    foreach ($lead_type as $key => $value) {
+                                                        $options2[$key] = ucwords($value);
+                                                    }
+                                                    $js = array(
+                                                        'id' => 'lead_identification',
+                                                        'class' => 'form-control'
+                                                    );
+                                                    echo form_dropdown('lead_identification', $options2, $leads[0]['lead_identification'], $js);
+                                                    echo "</span>";
+                                                }
+                                            }
+                                        }else{
+                                            $data_lead_identified_as = array('name'=>'lead_identification','id'=>'lead_identification','type'=>'hidden','value'=>$leads[0]['lead_identification']);
+                                              echo form_input($data_lead_identified_as);
+                                        }
+                                    }
+                                    ?>
                                 </div>
                                 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" alt="35" style="display:none;">
                             <?php }?>
@@ -254,16 +279,6 @@
                         <?php if(isset($backUrl)){?>
                             <a href="<?php echo site_url($backUrl);?>" class="reset float-right form-style"> &#60; Back</a>
                         <?php }?>
-                            <div class="form-control ">
-                                <label>Customer Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['customer_name']);?></span>
-                            </div>
-                            <div class="form-control">
-                                <label>Phone Number:</label> <span class="detail-label"><?php echo $leads[0]['contact_no'];?></span>
-                            </div>
-                            <div class="form-control">
-                                <label>Remark/Notes</label>
-                                <p class="remark-notes"><?php echo isset($leads[0]['remark']) ? $leads[0]['remark'] : 'NA';?></p>
-                            </div>
                             <?php
                             $exclude_status_bm = array('Converted','Closed','AO');
                             if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')) &&

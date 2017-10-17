@@ -74,7 +74,7 @@ if ($products != '') {
     }
 }
 $input = get_session();
-$data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'text','value'=>'');
+$data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'hidden','value'=>'');
 $lead_id_options[''] = 'Select Lead Identification';
 $lead_id_options['HOT'] = 'HOT';
 $lead_id_options['WARM'] = 'WARM';
@@ -128,7 +128,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     </div>
                     <div class="form-control range-slider">
                         <label style="vertical-align: top;">Ticket Size:<span style="color:red;">*</span> </label>
-                        <?php echo form_input($data_ticket_range)?><img src="../assets2/images/rupees.png" alt="rupees" id="rs">
+                        <?php echo form_input($data_ticket_range)?><!--<img src="../assets2/images/rupees.png" alt="rupees" id="rs">-->
                         <div id="master">
                             <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
                         </div>
@@ -192,7 +192,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     </div>
 
                     <div class="form-control">
-                        <label>Remark/Notes:<span style="color:red;">*</span> </label>
+                        <label>Initial Remarks:<span style="color:red;">*</span> </label>
                         <?php echo form_textarea($data_remark, '', $remark_extra);?>
                         <?php echo form_error('remark'); ?>
                     </div>

@@ -830,7 +830,7 @@ a.btn-Download{
 /*#cal-droped{
 	position: relative;
 }*/
-.cal-drop,.cal-drop1{
+.cal-drop,.cal-drop1,.per-drop{
 	position: absolute;
 	width: 130px;
 	display: none;
@@ -850,14 +850,14 @@ a.btn-Download{
 .cal-drop4{
 	top:90px;
 }
-.cal-drop li, .cal-drop1 li,.cal-drop2 li,.cal-drop3 li,.cal-drop4 li{
+.cal-drop li, .cal-drop1 li,.cal-drop2 li,.cal-drop3 li,.cal-drop4 li,.per-drop li{
 	width: 130px;
 	display: inline-block;
 	margin-right: 0;
 	margin-left: 0!important;
 }
 
-.top-navigation ul li .cal-drop li >a,.top-navigation ul li .cal-drop1 li >a,.top-navigation ul li .cal-drop2 li >a,.top-navigation ul li .cal-drop3 li >a,.top-navigation ul li .cal-drop4 li >a{
+.top-navigation ul li .cal-drop li >a,.top-navigation ul li .cal-drop1 li >a,.top-navigation ul li .cal-drop2 li >a,.top-navigation ul li .cal-drop3 li >a,.top-navigation ul li .cal-drop4 li >a,.top-navigation ul li .per-drop li >a{
 	width:103px;
 	padding: 15px 20px;
 	border-bottom: 1px solid #fff;

@@ -16,7 +16,7 @@
 		</div>
 		<div class="top-navigation">
 			<ul>
-				<li class="<?php echo ((($controller == 'dashboard') && (in_array($method,array('index','leads_status','leads_performance')))) || (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && ($param1 == 'generated'))) ? 'active' : ''?>">
+				<li class="<?php echo ((($controller == 'dashboard') && (in_array($method,array('index','leads_performance'))))) ? 'active' : ''?>">
 					<a href="<?php echo site_url('dashboard')?>">
 						Home
 					</a>
@@ -78,7 +78,26 @@
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('EM','BM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('EM'))) {?>
+					<li class="<?php echo (($controller == 'leads' || $controller == 'dashboard') && ($method == 'leads_list' || $method == 'leads_status' || $method == 'details')) ? 'active' : ''?>" id="per-droped">
+						<a href="#" >
+							My Performance 	&#9662;
+						</a>
+						<ul class="per-drop">
+							<li>
+								<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
+									Lead Assigned
+								</a>
+							</li>
+							<li>
+								<a href="<?php echo site_url('dashboard/leads_status/generated')?>">
+									Lead Generated
+								</a>
+							</li>
+						</ul>
+					</li>
+				<?php }?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('BM'))) {?>
 				<li class="<?php echo (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && $param1 == 'assigned') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
 						Assigned Leads
@@ -226,8 +245,8 @@
 				<div class="logged-in">
 					<img src="<?php echo base_url().ASSETS;?>images/username.png" alt="pic" class="man-login">
 					<div>
-					<span class="name  responsive-login">Hi, <?php echo $this->session->userdata('admin_name');?> !!</span>
-						<span class="name responsive-login1">(<?php echo $this->session->userdata('admin_type');?>)</span>
+					<span class="name  responsive-login">Hi, <?php echo ucwords(strtolower($this->session->userdata('admin_name')));?> !!</span>
+<!--						<span class="name responsive-login1">(--><?php //echo $this->session->userdata('admin_type');?><!--)</span>-->
 					<a href="<?php echo site_url('login/logOut');?>">Logout</a>
 					</div>
 				</div>
@@ -257,6 +276,10 @@
 	    	// event.preventDefault();
 	        $(".cal-drop4").toggle();
 	    });
+		$("#per-droped ").hover(function(){
+
+			$(".per-drop").toggle();
+		});
 	    // $(".man-login").click(function(){
 	    // 	$(".responsive-login").toggle();
 	    // });

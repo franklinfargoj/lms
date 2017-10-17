@@ -612,7 +612,7 @@ class Leads extends CI_Controller
             }
             if($type == 'assigned'){
                 //SELECT COLUMNS
-                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','r.remind_on','r.reminder_text');
+                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','r.remind_on','r.reminder_text');
 
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;

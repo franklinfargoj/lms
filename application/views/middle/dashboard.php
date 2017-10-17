@@ -14,7 +14,7 @@
 				<span class="small">YTD</span>
 			</div>
 			<div class="view-content ravishbtn">
-				<a href="<?php echo site_url('dashboard/leads_status/generated')?>">VIEW</a>
+<!--				<a href="--><?php //echo site_url('dashboard/leads_status/generated')?><!--">VIEW</a>-->
 <!--				<a href="--><?php //echo site_url('leads/leads_list/generated/ytd')?><!--">VIEW</a>-->
 			</div>
 		</div>
@@ -32,7 +32,7 @@
 			</div>
 			<div class="view-content ravishbtn">
 <!--				<a href="--><?php //echo site_url('leads/leads_list/converted/ytd')?><!--">VIEW</a>-->
-				<a href="<?php echo site_url('dashboard/leads_performance')?>">VIEW</a>
+<!--				<a href="--><?php //echo site_url('dashboard/leads_performance')?><!--">VIEW</a>-->
 			</div>
 		</div>
 	</div>
