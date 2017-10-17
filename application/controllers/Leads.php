@@ -434,9 +434,10 @@ class Leads extends CI_Controller
 
     public function unassigned_leads_list($lead_source=''){
         $lead_source = decode_id($lead_source);
+        $source = $this->config->item('lead_source');
         /*Create Breadcumb*/
           $this->make_bread->add('Unassigned Leads', 'leads/unassigned_leads', 0);
-          $this->make_bread->add(ucwords($lead_source),'', 0);
+          $this->make_bread->add(ucwords($source[$lead_source]),'', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
         $unassigned_leads = $this->Lead->unassigned_leads($lead_source,'');

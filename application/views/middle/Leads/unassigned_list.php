@@ -1,6 +1,7 @@
 <?php
 $param1 = isset($type) ? $type.'/' : '';
 $param2 = isset($lead_source) ? encode_id($lead_source).'/' : '';
+$source = $this->config->item('lead_source');
 ?>
 
 <div class="page-content">
@@ -10,7 +11,7 @@ $param2 = isset($lead_source) ? encode_id($lead_source).'/' : '';
                     <div class="container clearfix">
                         <h3 class="text-center">
                             <?php 
-                                echo ucwords($lead_source);
+                                echo ucwords($source[$lead_source]);
                             ?>
                         </h3>
                     </div>
