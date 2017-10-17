@@ -253,7 +253,8 @@ body{
 	border:0px;
 	background-color: transparent;
 	outline: none;
-	color: #8a8b8e;
+	/*color: #8a8b8e;*/
+	color: #333333;
 	font-size: 14px;
 	padding: 0 2px;
 }
@@ -645,7 +646,8 @@ strong{
 	/*height: 27px;*/
 	border: 1px solid #d3d3d3;
 	outline: none;
-	color: #8c8c8c;
+	/*color: #8c8c8c;*/
+	color: #333333;
 	background: none;
 	padding: 6px;
 }
