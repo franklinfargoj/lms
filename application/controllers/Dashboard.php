@@ -114,9 +114,9 @@ class Dashboard extends CI_Controller {
     private function bm_view($branch_id){
 
         //for generated lead
-        $where_month_Array = array('branch_id' => $branch_id,
+        $where_month_Array = array('created_by_branch_id' => $branch_id,
             'MONTH(created_on)' => date('m'));
-        $where_year_Array = array('branch_id' => $branch_id,
+        $where_year_Array = array('created_by_branch_id' => $branch_id,
                     'YEAR(created_on)' => date('Y'));
         $generated['monthly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_month_Array);
         $generated['yearly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_year_Array);
