@@ -348,9 +348,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 },
                 branch_id: {
                     required: true
-                },
-                remark: {
-                    required: true
                 }
             },
             messages: {
@@ -392,9 +389,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 /*lead_identification: {
                     required: "Please select lead identification"
                 },*/
-                remark: {
-                    required: "Please enter remark"
-                }
             }
         });
 
