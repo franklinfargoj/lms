@@ -998,7 +998,7 @@ class Leads extends CI_Controller
                 if($login_user['designation_name'] == 'ZM'){
                     $where['l.branch_id'] = $arrData['param']; //Branch wise filter for zone manager
                 }
-                if($login_user['designation_name'] == 'RM'){
+                if($login_user['designation_name'] == 'GM'){
                     $where['l.zone_id'] = $arrData['param']; //Zone wise filter for zone manager
                 }
             }
@@ -1015,11 +1015,15 @@ class Leads extends CI_Controller
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
                 $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
-                $where['la.status !='] = 'Closed';
+                if(empty($arrData['status'])) {
+                    $where['la.status !='] = 'Closed';
+                }
             }
             if($till == 'ytd'){
                 $where['YEAR(la.created_on)'] = date('Y'); //Year till date filter
-                $where['la.status !='] = 'Closed'; //Year till date filter
+                if(empty($arrData['status'])) {
+                    $where['la.status !='] = 'Closed';
+                }
             }
             $where["DATEDIFF(CURDATE(),la.created_on) <= CASE WHEN la.status = 'Converted' THEN ".Elapsed_day_converted." WHEN la.status = 'NI' THEN ".Elapsed_day_NI." ELSE ".Elapsed_day." END"] = NULL;
             if(!empty($arrData['param'])){
@@ -1032,7 +1036,7 @@ class Leads extends CI_Controller
                 if($login_user['designation_name'] == 'ZM'){
                     $where['la.branch_id'] = $arrData['param']; //Branch wise filter for zone manager
                 }
-                if($login_user['designation_name'] == 'RM'){
+                if($login_user['designation_name'] == 'GM'){
                     $where['la.zone_id'] = $arrData['param']; //Zone wise filter for zone manager
                 }
             }else{
