@@ -315,7 +315,7 @@ class Api extends REST_Controller
             'created_by_district_id' => 'Created By District',
             'created_by_zone_id' => 'Created By Zone', 'created_by_branch_id' => 'Created By Branch',
             'latitude' => 'Latitude', 'longitude' => 'Longitude',
-            'remark' => 'Remark', 'unique_id' => 'Unique Id');
+            'unique_id' => 'Unique Id');
         $phone_extra = '';
         $cust_name_extra = '';
         foreach ($params as $k => $value) {
