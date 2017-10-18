@@ -1055,9 +1055,11 @@ class Api extends REST_Controller
             $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
             if ($type == 'EM') {
                 $where['la.employee_id'] = $id;
+                $where['la.status !='] = 'Closed';
             }
             if ($type == 'BM') {
                 $where['la.branch_id'] = $id;
+                $where['la.status !='] = 'Closed';
             }
 
             $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
