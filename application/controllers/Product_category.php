@@ -65,7 +65,7 @@ class Product_category extends CI_Controller {
                     return load_view("Products/Category/add",$arrData);
                }else{
                     $insert = array(
-                         'title' => strtolower($this->input->post('title')),
+                         'title' => ucwords(strtolower($this->input->post('title'))),
                          'status' => strtolower($this->input->post('status')),
                          'created_by' => loginUserId()
                     );
@@ -109,7 +109,7 @@ class Product_category extends CI_Controller {
                redirect('product_category');
           }
           if($this->input->post()){
-               if(strtolower($this->input->post('title')) != $arrData['categoryDetail'][0]['title']){
+               if(ucwords(strtolower($this->input->post('title'))) != $arrData['categoryDetail'][0]['title']){
                     $is_unique = '|callback_isTaken';
 
                }else{
@@ -221,7 +221,7 @@ class Product_category extends CI_Controller {
     */
      public function isTaken($title){
          $table = Tbl_Category;
-         $where = array('title'=>strtolower($title),'is_deleted'=>0);
+         $where = array('title'=>ucwords(strtolower($title)),'is_deleted'=>0);
          $is_taken = isTaken($title,$table,$where);
          if($is_taken > 0){
              $this->form_validation->set_message('isTaken', '%s is already taken');

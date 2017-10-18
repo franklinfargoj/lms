@@ -71,7 +71,7 @@ class Product extends CI_Controller {
                     return load_view("Products/Product/add",$arrData);
                }else{
                     $insert = array(
-                         'title' => strtolower($this->input->post('title')),
+                         'title' => ucwords(strtolower($this->input->post('title'))),
                          'category_id' => $this->input->post('category_id'),
                          'default_assign' => $this->input->post('default_assign'),
                          'status' => strtolower($this->input->post('status')),
@@ -123,7 +123,7 @@ class Product extends CI_Controller {
           if($this->input->post()){
                $this->form_validation->set_rules('category_id','Product Category', 'trim|required');
                $this->form_validation->set_rules('map_with','Map With', 'required');
-               if(strtolower($this->input->post('title')) != $arrData['productDetail'][0]['title']){
+               if(ucwords(strtolower($this->input->post('title'))) != $arrData['productDetail'][0]['title']){
                    $is_unique = '|callback_isTaken';
                }else{
                     $is_unique = '';
@@ -136,7 +136,7 @@ class Product extends CI_Controller {
                }else{
                     $update = array(
                          'category_id' => $this->input->post('category_id'),
-                         'title' => strtolower($this->input->post('title')),
+                         'title' => ucwords(strtolower($this->input->post('title'))),
                          'default_assign' => $this->input->post('default_assign'),
                          'status' => strtolower($this->input->post('status')),
                          'map_with' => $this->input->post('map_with'),
@@ -236,7 +236,7 @@ class Product extends CI_Controller {
      */
     public function isTaken($title){
         $table = Tbl_Products;
-        $where = array('title'=>strtolower($title),'is_deleted'=>0);
+        $where = array('title'=>ucwords(strtolower($title)),'is_deleted'=>0);
         $is_taken = isTaken($title,$table,$where);
         if($is_taken > 0){
             $this->form_validation->set_message('isTaken', '%s is already taken');
