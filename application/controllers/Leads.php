@@ -78,7 +78,7 @@ class Leads extends CI_Controller
             $this->form_validation->set_rules('lead_ticket_range', 'Range.', 'required|numeric');
             $this->form_validation->set_rules('product_category_id', 'Product Category', 'required');
             $this->form_validation->set_rules('product_id', 'Product','required');
-            $this->form_validation->set_rules('remark', 'Remark', 'required');
+            //$this->form_validation->set_rules('remark', 'Remark', 'required');
             $this->form_validation->set_rules('is_own_branch', 'Branch', 'required');
             //$this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
 
