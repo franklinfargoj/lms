@@ -1015,9 +1015,11 @@ class Leads extends CI_Controller
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
                 $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
+                $where['la.status !='] = 'Closed';
             }
             if($till == 'ytd'){
                 $where['YEAR(la.created_on)'] = date('Y'); //Year till date filter
+                $where['la.status !='] = 'Closed'; //Year till date filter
             }
             $where["DATEDIFF(CURDATE(),la.created_on) <= CASE WHEN la.status = 'Converted' THEN ".Elapsed_day_converted." WHEN la.status = 'NI' THEN ".Elapsed_day_NI." ELSE ".Elapsed_day." END"] = NULL;
             if(!empty($arrData['param'])){
