@@ -443,6 +443,7 @@
                 $('.accountOpen').hide();
                 $('.followUp').hide();
                 $('.reason').hide();
+                $('#lead_identification').attr('disabled','disabled');
             }
         }
 
