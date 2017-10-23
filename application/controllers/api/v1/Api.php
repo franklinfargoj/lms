@@ -2724,6 +2724,7 @@ class Api extends REST_Controller
 
     public function generated_conversion_post()
     {
+        $params = $this->input->post();
         if ((isset($params) && !empty($params) && isset($params['hrms_id']) && !empty($params['hrms_id']))) {
             $login_user = get_session();
             $action = 'count';
