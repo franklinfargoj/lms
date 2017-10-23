@@ -423,6 +423,8 @@
                $('.followUp').show();
                $('.accountOpen').hide();
                $('.datepicker_recurring_start').focus();
+                $('#lead_identification').removeAttr('disabled');
+
             }else if(option == 'AO'){
                 if(category_title != 'fee income'){
                     $('.accountOpen').show();
