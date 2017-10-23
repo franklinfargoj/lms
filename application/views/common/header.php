@@ -85,12 +85,12 @@
 						</a>
 						<ul class="per-drop">
 							<li>
-								<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
+								<a href="<?php echo site_url('dashboard/leads_status/assigned')?>">
 									Lead Assigned
 								</a>
 							</li>
 							<li>
-								<a href="<?php echo site_url('dashboard/leads_status/generated')?>">
+								<a href="<?php echo site_url('dashboard/leads_status/generated_conversion')?>">
 									Lead Generated
 								</a>
 							</li>
