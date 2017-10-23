@@ -2722,5 +2722,36 @@ class Api extends REST_Controller
         returnJson($error);
     }
 
+    public function generated_conversion_post()
+    {
+        if ((isset($params) && !empty($params) && isset($params['hrms_id']) && !empty($params['hrms_id']))) {
+            $login_user = get_session();
+            $action = 'count';
+            $select = array();
+            $join = array();
+            //For Generated Leads Count
+            $table = Tbl_Leads;
+
+            //Year till date
+            $where = array(Tbl_Leads . '.created_by' => $params['hrms_id'], 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+            $result['total_generated'] = $this->master->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+
+            //For Converted Leads Count
+            $table = Tbl_LeadAssign;
+            $join[] = array('table' => Tbl_Leads, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
+            //year till date
+            $whereArray = array(Tbl_Leads . '.created_by' => $params['hrms_id'], Tbl_LeadAssign . '.status' => 'Converted', 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
+            $result['total_converted'] = $this->master->get_leads($action, $table, $select, $whereArray, $join, $group_by = array(), $order_by = array());
+            $res = array('result' => True,
+                'data' => $result);
+            returnJson($res);
+        }
+        $error = array(
+            "result" => False,
+            "data" => array("Missing Parameters.")
+        );
+        returnJson($error);
+    }
+
 
 }
