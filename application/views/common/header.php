@@ -90,7 +90,7 @@
 								</a>
 							</li>
 							<li>
-								<a href="<?php echo site_url('dashboard/leads_status/generated_conversion')?>">
+								<a href="<?php echo site_url('dashboard/generated_conversion')?>">
 									Lead Generated
 								</a>
 							</li>

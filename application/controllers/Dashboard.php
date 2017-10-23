@@ -630,4 +630,19 @@ class Dashboard extends CI_Controller {
         $middle = '/rd_calculator';
         load_view($middle,$result);
     }
+
+    public function generated_conversion()
+    {
+        $login_user = get_session();
+        $action = 'count';
+        $select = array();
+        $join = array();
+        //For Generated Leads Count
+        $table = Tbl_Leads;
+
+        //Month till date
+        $where = array(Tbl_Leads.'.created_by' => $login_user['hrms_id'],'MONTH('.Tbl_Leads.'.created_on)' => date('Y'));
+        $generated_leads = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+        echo $generated_leads;
+    }
 }
