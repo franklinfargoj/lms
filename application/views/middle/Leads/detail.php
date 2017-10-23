@@ -426,7 +426,8 @@
                 $('#lead_identification').removeAttr('disabled');
 
             }else if(option == 'AO'){
-                if(category_title != 'fee income'){
+                //alert(category_title);
+                if(category_title != 'Fee Income'){
                     $('.accountOpen').show();
                     $('.verify_account').show();
                     $('.submit_button').hide();
