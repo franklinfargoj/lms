@@ -97,7 +97,7 @@
 						</ul>
 					</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('BM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('BM','EM'))) {?>
 				<li class="<?php echo (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && $param1 == 'assigned') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
 						Assigned Leads
