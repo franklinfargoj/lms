@@ -153,12 +153,24 @@
                                         $options1['']='Select';
                                         if(!empty($lead_status)){
                                             foreach ($lead_status as $key => $value) {
-                                                if($key != $leads[0]['status']){
-                                                    if(((in_array($this->session->userdata('admin_type'),array('EM'))) && (in_array($key,array('Converted','Closed')))) || (in_array($key,$previous_status))){
-                                                        continue;
+                                                if($leads[0]['category_title'] != 'Fee Income') {
+                                                    if ($key != $leads[0]['status']) {
+                                                        if (((in_array($this->session->userdata('admin_type'), array('EM'))) && (in_array($key, array('Converted', 'Closed')))) || (in_array($key, $previous_status))) {
+                                                            continue;
+                                                        }
                                                     }
+                                                    $options1[$key] = $value;
+                                                }else{
+                                                    if($key !='AO'){
+                                                        if ($key != $leads[0]['status']) {
+                                                            if (((in_array($this->session->userdata('admin_type'), array('EM'))) && (in_array($key, array('Converted', 'Closed')))) || (in_array($key, $previous_status))) {
+                                                                continue;
+                                                            }
+                                                        }
+                                                        $options1[$key] = $value;
+                                                    }
+
                                                 }
-                                                $options1[$key] = $value;
                                             }
                                         }
                                         $js = array(
