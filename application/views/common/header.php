@@ -79,7 +79,7 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM'))) {?>
-					<li class="<?php echo (($controller == 'leads' || $controller == 'dashboard') && ($method == 'leads_list' || $method == 'leads_status' || $method == 'details')) ? 'active' : ''?>" id="per-droped">
+					<li class="<?php echo (($controller == 'leads' || $controller == 'dashboard') && ($method == 'leads_list' || $method == 'leads_status' || $method == 'details' || $method == 'generated_conversion')) ? 'active' : ''?>" id="per-droped">
 						<a href="#" >
 							My Performance 	&#9662;
 						</a>
