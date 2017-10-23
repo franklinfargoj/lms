@@ -2631,5 +2631,96 @@ class Api extends REST_Controller
         }
     }
 
+    public function leads_count_by_leads_status_post()
+    {
+        $params = $this->input->post();
+        $status = $this->config->item('lead_status');
+        $join[] = array('table' => Tbl_Leads, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
+        if ((isset($params) && !empty($params) && isset($params['type']) && !empty($params['type']))
+            && ((isset($params['id']) && !empty($params['id'])))) {
+            switch ($params['type']) {
+                case 'BM':
+                case 'EM':
+                    $table = Tbl_LeadAssign;
+                    $action = 'count';
+                    $employee_id = $params['id'];
+                    if (!empty($status)) {
+                        $i = 0;
+                        foreach ($status as $key => $value) {
+                            $whereArray = array(Tbl_LeadAssign . '.employee_id' => $employee_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
+                            $result[$i]['Year'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
+
+                            $whereArray = array(Tbl_LeadAssign . '.employee_id' => $employee_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'), Tbl_LeadAssign . '.is_updated' => 1);
+                            $result[$i]['Month'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
+                            $result[$i]['status'] = $value;
+                            $i++;
+                        }
+//                        $action = 'count';
+//                        $select = array();
+//                        $table = Tbl_Leads;
+//                        $join_assign[] = array('table' =>Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = '.Tbl_Leads.'.id ','type' => 'left');
+//                        $whereYear = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL, 'YEAR(' . $table . '.created_on)' => date('Y'));
+//                        $whereMonth = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL, 'MONTH(' . $table . '.created_on)' => date('m'));
+//                        $unassigned_leads_count_month = $this->Lead->get_leads($action,$table,$select,$whereMonth,$join_assign,$group_by = array(),$order_by = array());
+//                        $unassigned_leads_count_year = $this->Lead->get_leads($action,$table,$select,$whereYear,$join_assign,$group_by = array(),$order_by = array());
+//                        $result[$i]['Year'] = $unassigned_leads_count_year;
+//                        $result[$i]['Month'] = $unassigned_leads_count_month;
+//                        $result[$i]['status'] = 'Unassigned Leads';
+                    }
+                    $res = array('result' => True,
+                        'data' => $result);
+                    returnJson($res);
+                    break;
+                case 'ZM':
+                    $table = Tbl_LeadAssign;
+                    $action = 'count';
+                    $branch_id = $params['id'];
+
+                    if (!empty($status)) {
+                        $i = 0;
+                        foreach ($status as $key => $value) {
+                            $whereArray = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
+                            $result[$i]['Year'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
+
+                            $whereArray = array(Tbl_LeadAssign . '.branch_id' => $branch_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'), Tbl_LeadAssign . '.is_updated' => 1);
+                            $result[$i]['Month'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
+                            $result[$i]['status'] = $value;
+                            $i++;
+                        }
+                    }
+                    $res = array('result' => True,
+                        'data' => $result);
+                    returnJson($res);
+                    break;
+                case 'GM':
+                    $table = Tbl_LeadAssign;
+                    $action = 'count';
+                    $zone_id = $params['id'];
+
+                    if (!empty($status)) {
+                        $i = 0;
+                        foreach ($status as $key => $value) {
+                            $whereArray = array(Tbl_LeadAssign . '.zone_id' => $zone_id, 'status' => $key, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
+                            $result[$i]['Year'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
+
+                            $whereArray = array(Tbl_LeadAssign . '.zone_id' => $zone_id, 'status' => $key, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'), Tbl_LeadAssign . '.is_updated' => 1);
+                            $result[$i]['Month'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
+                            $result[$i]['status'] = $value;
+                            $i++;
+                        }
+                    }
+                    $res = array('result' => True,
+                        'data' => $result);
+                    returnJson($res);
+                    break;
+            }
+        }
+        $error = array(
+            "result" => False,
+            "data" => array("Missing Parameters.")
+        );
+        returnJson($error);
+    }
+
 
 }
