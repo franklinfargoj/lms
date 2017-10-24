@@ -708,7 +708,8 @@ class Api extends REST_Controller
         $table = Tbl_zone . ' as z';
         $join[] = array('table' => Tbl_state, 'on_condition' => Tbl_state . '.zone_code = z.code', 'type' => 'left');
         $zone_state = $this->Lead->get_leads($action, $table, $select, $where, $join, '', $orderBy);
-        $final_details = array();$respone = array();$available_states = array();
+
+        $final_details = array();$respone = array();$available_states = array();$available_dists = array();
         foreach ($zone_state as $key => $state_zone) {
             if(!in_array($state_zone['s_code'],$available_states)){
 
@@ -718,12 +719,15 @@ class Api extends REST_Controller
                 $orderBy = 'name ASC';
                 $districts = $this->Lead->get_leads($action, $table, $select, $where, '', '', $orderBy);
                 foreach ($districts as $dist_key => $all_dist) {
-                    $table = Tbl_branch . ' as b';
-                    $select = array('TRIM(code) AS id', 'TRIM(name) AS name');
-                    $where = array('district_code' => $all_dist['id'],'name !='=>'');
-                    $orderBy = 'name ASC';
-                    $branches = $this->Lead->get_leads($action, $table, $select, $where, '', '', $orderBy);
-                    $districts[$dist_key]['branches'] = $branches;
+                    if(!in_array($all_dist['id'],$available_dists)){
+                        $table = Tbl_branch . ' as b';
+                        $select = array('TRIM(code) AS id', 'TRIM(name) AS name');
+                        $where = array('district_code' => $all_dist['id'],'name !='=>'');
+                        $orderBy = 'name ASC';
+                        $branches = $this->Lead->get_leads($action, $table, $select, $where, '', '', $orderBy);
+                        $districts[$dist_key]['branches'] = $branches;
+                    }
+                    $available_dists[$dist_key] = $all_dist['id'];
                 }
                 $final_details['zone_id'] = $state_zone['z_code'];
                 $final_details['zone_name'] = $state_zone['z_name'];
@@ -1630,21 +1634,33 @@ class Api extends REST_Controller
             );
 
             $leads = explode(',', $params['lead_id']);
-            foreach ($leads as $key => $value) {
-                $assign_data['lead_id'] = $value;
-                $insertData[] = $assign_data;
+            if (is_array($leads)) {
+                $leads_id = $leads;
+            } else {
+                $leads_id[] = $leads;
             }
-            $insertData = $this->db->insert_batch(Tbl_LeadAssign, $insertData);
-            if($insertData){
-                //Add Notification
-                $title="New Lead Assigned";
-                $description="New Lead Assigned to you by Branch Manager ".ucwords($params['full_name']);
-                $notification_to = $params['employee_id'];
-                $priority="Normal";
-                notification_log($title,$description,$priority,$notification_to);
-                //push notification
-                $emp_id = $params['employee_id'];
-                sendPushNotification($emp_id,$description,$title);
+            foreach ($leads_id as $key => $value) {
+                $assign_data['lead_id'] = $value;
+                $insertData = $assign_data;
+                $response = $this->Lead->insert_lead_data($insertData,Tbl_LeadAssign);
+                if($response['status']=='success'){
+
+                    $action = 'list';
+                    $select = array('lead.customer_name','product.title');
+                    $table = Tbl_Leads.' AS lead';
+                    $where = array('lead.id'=>$value);
+                    $join[] = array('table' =>Tbl_Products.' AS product','on_condition'=>'product.id = lead.product_id','type'=>'');
+                    $allData = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by=array(),$order_by=array());
+                    //Add Notification
+                    $title="New Lead Assigned";
+                    $description="Lead for ".ucwords(strtolower($allData[0]['customer_name']))." assigned to you for ".ucwords(strtolower($allData[0]['title']));
+                    $notification_to = $params['employee_id'];
+                    $priority="Normal";
+                    notification_log($title,$description,$priority,$notification_to);
+                    //push notification
+                    $emp_id = $params['employee_id'];
+                    sendPushNotification($emp_id,$description,$title);
+                }
             }
             $res = array('result' => True,
                 'data' => 'Leads assigned successfully');

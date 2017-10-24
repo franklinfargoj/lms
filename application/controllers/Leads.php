@@ -1094,21 +1094,21 @@ class Leads extends CI_Controller
                 $leads[] = $lead_ids;
             }
             foreach ($leads as $key => $value) {
-                $assign_data['lead_id'] = $value;
-                $insertData[] = $assign_data;
-            }
-
-            $insertData = $this->db->insert_batch(Tbl_LeadAssign, $insertData);
-            if($insertData){
-                //Add Notification
-                $title="New Lead Assigned";
-                $description="New Lead Assigned to you by Branch Manager ".ucwords($login_user['full_name']);
-                $notification_to = $employee_id;
-                $priority="Normal";
-                notification_log($title,$description,$priority,$notification_to);
-                //push notification
-                $emp_id = $explode_employee[0];
-                sendPushNotification($emp_id,$description,$title);
+                $dataArray = explode("-",$value);
+                $assign_data['lead_id'] = $dataArray[0];
+                $insertData = $assign_data;
+                $response = $this->Lead->insert_lead_data($insertData,Tbl_LeadAssign);
+                if($response['status']=='success'){
+                    //Add Notification
+                    $title="New Lead Assigned";
+                    $description="Lead for ".ucwords(strtolower($dataArray[1]))." assigned to you for ".ucwords(strtolower($dataArray[2]));
+                    $notification_to = $employee_id;
+                    $priority="Normal";
+                    notification_log($title,$description,$priority,$notification_to);
+                    //push notification
+                    $emp_id = $explode_employee[0];
+                    sendPushNotification($emp_id,$description,$title);
+                }
             }
         }
     }

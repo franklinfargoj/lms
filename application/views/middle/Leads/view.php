@@ -94,7 +94,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                                 if($lead_sources){
                                     $options3['']='Select Source';
                                     foreach ($lead_sources as $key => $value) {
-                                        $options3[$value] = $value;
+                                        $options3[$all_source[$value]] = ucwords(strtolower($all_source[$value]));
                                     }
                                     echo form_dropdown('status', $options3 ,'',array());
                                 }
@@ -130,9 +130,6 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                             Lead Identified As
                         </th>
                         <?php if($type == 'assigned'){?>
-                        <!-- <th>
-                            Intrested Other Product
-                        </th> -->
                         <?php }?>
                          <th style="text-align:left">
                             Lead Source
@@ -183,7 +180,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                             </td> -->
                             <?php }?>
                             <td>
-                                 <?php echo ucwords($all_source[$value['lead_source']]);?>
+                                 <?php echo ucwords(strtolower($all_source[$value['lead_source']]));?>
                             </td>
                             <td>
                                 <?php

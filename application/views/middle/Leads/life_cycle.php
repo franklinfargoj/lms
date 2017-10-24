@@ -1,5 +1,6 @@
 <?php $statuses = $this->config->item('lead_status');
 $assigned_to = 0;
+$all_source = $this->config->item('lead_source');
 ?>
 <link rel="stylesheet" href="<?php echo base_url('assets2/css/animate.min.css');?>">
 <link rel="stylesheet" href="<?php echo base_url('assets2/css/timelify.css');?>">
@@ -15,7 +16,7 @@ $assigned_to = 0;
                 Lead Id : <?php echo $lead_data[0]['id'];?> &nbsp;&nbsp;|&nbsp;&nbsp;
                 Customer Name : <?php echo ucwords(strtolower($lead_data[0]['lead_name']));?> &nbsp;&nbsp;|&nbsp;&nbsp;
                 Contact No : <?php echo ucwords(strtolower($lead_data[0]['contact_no']));?> &nbsp;&nbsp;|&nbsp;&nbsp;
-                Lead Source : <?php echo ucwords(strtolower($lead_data[0]['lead_source']));?>
+                Lead Source : <?php echo ucwords(strtolower($all_source[$lead_data[0]['lead_source']]));?>
             </span>
     <div class="timeline">
         <?php if(!empty($lead_data)){?>

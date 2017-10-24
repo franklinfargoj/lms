@@ -127,7 +127,7 @@ $source = $this->config->item('lead_source');
                                     $data = array(
                                         'name'          => 'lead_ids[]',
                                         'id'            => 'check_all',
-                                        'value'         => $value['id'],
+                                        'value'         => $value['id'].'-'.$value['customer_name'].'-'.$value['product_title'],
                                         'class'         => 'multi_check'
                                     );
                                     echo form_checkbox($data);
