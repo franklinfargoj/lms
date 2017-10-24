@@ -189,6 +189,10 @@
                                         else{
                                             echo form_dropdown('lead_status', $options1 , $leads[0]['status'],$js);
                                         }
+                                        $category_name = array('name'=>'cat_name','type'=>'hidden','value'=>$leads[0]['category_title']);
+                                        echo form_input($category_name);
+                                        $customer_name = array('name'=>'customer_name','type'=>'hidden','value'=>$leads[0]['customer_name']);
+                                        echo form_input($customer_name);
                                     ?>
                                 </div>
                                 <div class="form-control reason" >

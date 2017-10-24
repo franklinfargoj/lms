@@ -899,18 +899,24 @@ class Leads extends CI_Controller
                                 $where = array('id'=>$lead_id);
                                 $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
                                 $this->Lead->update_lead_data($where,$data,$table);
+                            }
+                            if($lead_status == 'Converted'){
+                                $this->points_distrubution($lead_id);
+                            }
 
+
+                            $cat_name = $this->input->post('cat_name');
+                            $customer_name = $this->input->post('customer_name');
+                            $statusNotification = array('AO','NI');
+                            if(in_array($lead_status,$statusNotification) || ($cat_name == 'Fee Income' && $lead_status == 'DC')){
                                 $title="Action Required";
-                                $description="Lead for requires your action";
+                                $description="Lead for ".ucwords(strtolower($customer_name))." requires your action";
                                 $notification_to = $leads_data['created_by'];
                                 $priority="Normal";
                                 notification_log($title,$description,$priority,$notification_to);
                                 //push notification
                                 $emp_id = $leads_data['created_by'];
                                 sendPushNotification($emp_id,$description,$title);
-                            }
-                            if($lead_status == 'Converted'){
-                                $this->points_distrubution($lead_id);
                             }
                             $this->session->set_flashdata('success','Lead information updated successfully');
                             redirect('leads/leads_list/assigned/ytd');
