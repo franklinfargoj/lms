@@ -775,9 +775,12 @@ class Leads extends CI_Controller
                                 'zone_id' => $leads_data['zone_id'],
                                 'status' => $lead_status,
                                 'is_updated' => 1,
-                                'created_on' => date('y-m-d-H-i-s'),
-                                'created_by' => $login_user['hrms_id'],
-                                'created_by_name' => $login_user['full_name']
+                                'created_on' => $leads_data['created_on'],
+                                'created_by' => $leads_data['created_by'],
+                                'created_by_name' => $leads_data['created_by_name'],
+                                'modified_on' => date('y-m-d-H-i-s'),
+                                'modified_by' => $login_user['hrms_id'],
+                                'modified_by_name' => $login_user['full_name']
                             );
                             if(!empty($drop_reason)){
                                 $lead_status_data['reason_for_drop'] = $drop_reason;
@@ -896,6 +899,15 @@ class Leads extends CI_Controller
                                 $where = array('id'=>$lead_id);
                                 $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
                                 $this->Lead->update_lead_data($where,$data,$table);
+
+                                $title="Action Required";
+                                $description="Lead for requires your action";
+                                $notification_to = $leads_data['created_by'];
+                                $priority="Normal";
+                                notification_log($title,$description,$priority,$notification_to);
+                                //push notification
+                                $emp_id = $leads_data['created_by'];
+                                sendPushNotification($emp_id,$description,$title);
                             }
                             if($lead_status == 'Converted'){
                                 $this->points_distrubution($lead_id);

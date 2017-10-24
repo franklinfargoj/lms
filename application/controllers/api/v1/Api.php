@@ -308,7 +308,7 @@ class Api extends REST_Controller
         $error = array();
         $validations = array('customer_name' => 'Customer Name', 'contact_no' => 'Phone No',
             'product_category_id' => 'Product Category', 'product_id' => 'Product', 'lead_ticket_range' => 'Range',
-            'is_own_branch' => 'Own Branch / Other Branch', 'created_by' => 'Created By',
+            'is_own_branch' => 'Own Branch / Other Branch', 'created_by' => 'Created By','created_by_name' => 'Created By Name',
             'state_id' => 'State', 'district_id' => 'District',
             'zone_id' => 'Zone', 'branch_id' => 'Branch', 'department_name' => 'Department Name',
             'department_id' => 'Department Id', 'created_by_state_id' => 'Created By State',
