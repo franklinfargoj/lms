@@ -424,7 +424,7 @@ body{
 	display: table;
 	color: #b1bac4;
 	font-family: "Montserrat-Regular";
-	font-size: 14px;
+	font-size: 12px;
 	padding: 45px 12px;
 	box-sizing:unset;
 	-ms-box-sizing:unset;
@@ -448,11 +448,12 @@ body{
 span.count {
     background: red;
     color: #fff;
-    width: 16px;
+    width: 19px;
     border-radius: 12px;
-    height: 15px;
+    height: 19px;
     position: relative;
     top: -7px;
+    font-size: 8px;
 }
 .top-navigation li a:hover span.count {
     background-color: red!important;
