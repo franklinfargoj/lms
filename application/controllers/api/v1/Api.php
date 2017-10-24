@@ -1068,6 +1068,13 @@ class Api extends REST_Controller
             $join[] = array('table' => Tbl_Reminder . ' as r', 'on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"', 'type' => 'left');
             $order_by = 'la.created_on desc';
             $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by);
+
+            //Set current entry as old (set is_updated = 0)
+            $table2 = Tbl_LeadAssign;
+            $where2 = array(Tbl_LeadAssign . '.employee_id' => $params['id']);
+
+            $lead_status_data2 = array('view_status' => 1);
+            $response1 = $this->Lead->update_lead_data($where2, $lead_status_data2, $table2);
             $res = array('result' => True,
                 'data' => $arrData['leads']);
             returnJson($res);
