@@ -2176,7 +2176,7 @@ class Api extends REST_Controller
                     $table = Tbl_LeadAssign;
 
                     //Year till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
                     $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
                 }
 
