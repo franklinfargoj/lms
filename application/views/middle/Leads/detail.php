@@ -138,7 +138,8 @@
                                 <div class="form-control">
                                     <?php
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
-                                        || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))){}
+                                        || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))
+                                    || ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] == 'DC')){}
                                         else {
                                             ?>
                                             <label>Lead Status:</label>
@@ -183,7 +184,8 @@
                                         'value'       => $leads[0]['status']
                                     );
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
-                                        || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))){
+                                        || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))
+                                        || ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] == 'DC')){
                                             echo form_input($data_status);
                                         }
                                         else{
@@ -259,12 +261,12 @@
                                     if($this->session->userdata('admin_type')=='EM'){
                                         if($leads[0]['lead_identification'] == '') {
                                             if (isset($lead_identification)) {
-                                                $status_array = array('AO', 'Closed', 'Converted', 'NI');
+                                                $status_array = array('AO', 'Closed', 'Converted', 'NI','FU','DC');
                                                 $admin = array('EM');
                                                 if (isset($leads[0]['status']) && in_array($leads[0]['status'], $status_array)
                                                     && in_array($this->session->userdata('admin_type'), $admin)
-                                                ) {
-                                                } else {
+                                                ) {}
+                                                else {
                                                     echo "<label>Lead Identified as :</label>";
                                                     echo "<span class='detail-label'>";
                                                     $options2[''] = 'Select';
