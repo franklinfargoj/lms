@@ -443,7 +443,21 @@ body{
 .top-navigation a span{
 	display: table-cell;
 	vertical-align: middle;
+	
 }
+span.count {
+    background: red;
+    color: #fff;
+    width: 16px;
+    border-radius: 12px;
+    height: 15px;
+    position: relative;
+    top: -7px;
+}
+.top-navigation li a:hover span.count {
+    background-color: red!important;
+}
+
 .top-navigation li{
 	display: inline-block;
 	/*margin-right: 5px;*/
