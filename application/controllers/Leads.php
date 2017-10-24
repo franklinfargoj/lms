@@ -165,6 +165,7 @@ class Leads extends CI_Controller
                     $lead_assign['zone_id']=$login_user['zone_id'];
                     $lead_assign['created_by']=$login_user['hrms_id'];
                     $lead_assign['created_by_name']=$login_user['full_name'];
+                    $lead_assign['created_on']=date('Y-m-d H:i:s');
                     $this->Lead->insert_assign($lead_assign);
                     //Push notification
                     $emp_id = $login_user['hrms_id'];
@@ -523,6 +524,13 @@ class Leads extends CI_Controller
         }
         /*Breadcumb Creation*/
         if($type == 'assigned'){
+            $login_user = get_session();
+            if($login_user['designation_name'] == 'EM'){
+                $table2 = Tbl_LeadAssign;
+                $where2 = array(Tbl_LeadAssign . '.employee_id' => $login_user['hrms_id']);
+                $lead_status_data2 = array('view_status' => 1);
+                $this->Lead->update_lead_data($where2, $lead_status_data2, $table2);
+            }
             if(($status != null) && ($lead_source != null)){
                 //Breadcumb creation for Lead Performance Source wise
                 $this->make_bread->add('Lead Performance', 'dashboard/leads_performance/'.$type.'/'.$param, 0);   
@@ -649,7 +657,7 @@ class Leads extends CI_Controller
                     }
                     if($arrData['leads'][0]['status'] == 'FU'){
                         $fu_status = $all_status;
-                        unset($fu_status['NC'],$fu_status['AO'],$fu_status['Converted'],$fu_status['FU'],$fu_status['Closed']);
+                        unset($fu_status['NC'],$fu_status['Converted'],$fu_status['FU'],$fu_status['Closed']);
                         $arrData['lead_status'] = $fu_status;
                     }
                     if($arrData['leads'][0]['status'] == 'DC'){
@@ -1257,11 +1265,11 @@ class Leads extends CI_Controller
                 foreach ($states as $key => $value) {
                     $options[$value['code']] = ucwords($value['name']);
                 }
-                $html = '<label>State:</label>';
+                $html = '<label>State:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('state_id', $options, $state_code, $state_extra);
             } else {
                 $options[''] = 'Select State';
-                $html = '<label>State:</label>';
+                $html = '<label>State:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('state_id', $options, '', $branch_extra);
             }
             if (!empty($branches)) {
@@ -1269,11 +1277,11 @@ class Leads extends CI_Controller
                 foreach ($branches as $key => $value) {
                     $options[$value['code']] = ucwords($value['name']);
                 }
-                $html1 = '<label>Branch:</label>';
+                $html1 = '<label>Branch:<span style="color:red;">*</span></label>';
                 $html1 .= form_dropdown('branch_id', $options, $branch_code, $branch_extra);
             } else {
                 $options[''] = 'Select Branch';
-                $html1 = '<label>Branch:</label>';
+                $html1 = '<label>Branch:<span style="color:red;">*</span></label>';
                 $html1 .= form_dropdown('branch_id', $options, '', $branch_extra);
             }
             if (!empty($districts)) {
@@ -1281,11 +1289,11 @@ class Leads extends CI_Controller
                 foreach ($districts as $key => $value) {
                     $dist_options[$value['code']] = ucwords($value['name']);
                 }
-                $html2 = '<label>District:</label>';
+                $html2 = '<label>District:<span style="color:red;">*</span></label>';
                 $html2 .= form_dropdown('district_id', $dist_options, $district_code, $district_extra);
             } else {
                 $dist_options[''] = 'Select District';
-                $html2 = '<label>District:</label>';
+                $html2 = '<label>District:<span style="color:red;">*</span></label>';
                 $html2 .= form_dropdown('district_id', $dist_options, '', $district_extra);
             }
             $data['branch'] = $html1;
@@ -1344,18 +1352,18 @@ class Leads extends CI_Controller
                 foreach ($states as $key => $value) {
                     $options[$value['code']] = ucwords($value['name']);
                 }
-                $html = '<label>State:</label>';
+                $html = '<label>State:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('state_id', $options,'', $state_extra);
             }else {
                 $options[''] = 'Select State';
-                $html = '<label>State:</label>';
+                $html = '<label>State:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('state_id', $options, '', $state_extra);
             }
             $branch_options[''] = 'Select Branch';
-            $html1 = '<label>Branch:</label>';
+            $html1 = '<label>Branch:<span style="color:red;">*</span></label>';
             $html1 .= form_dropdown('branch_id', $branch_options, '', $branch_extra);
             $dist_options[''] = 'Select District';
-            $html2 = '<label>District:</label>';
+            $html2 = '<label>District:<span style="color:red;">*</span></label>';
             $html2 .= form_dropdown('district_id', $dist_options, '', $district_extra);
             $data['branch'] = $html1;
             $data['state'] = $html;
@@ -1442,12 +1450,30 @@ class Leads extends CI_Controller
                 $final_result = array_merge($final_result,$assign_result);
             }
             $final_result = sortBySubkey($final_result,'date');
-//            pe($final_result);die;
             $arrData['lead_data'] = $final_result;
             $middle = 'Leads/life_cycle';
             return load_view($middle,$arrData);
 
         }
+    }
+
+
+    public function generated(){
+        /*Create Breadcumb*/
+        $this->make_bread->add('Lead Generated', 'leads/lead_generated', 0);
+        $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+        $login_user = get_session();
+        $user = $login_user['hrms_id'];
+        $action = 'list';
+        $select = array('lead.lead_name','products.title','lead.id');
+        $table = Tbl_Leads.' AS lead';
+        $join[] = array('table' =>Tbl_Products.' AS products','on_condition'=>'products.id = lead.product_id','type'=>'left');
+        $where = array('lead.created_by'=>$user);
+        $order_by = 'lead.created_on DESC';
+        $arrData['generated_leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by=array(),$order_by);
+        $middle = "Leads/view/lead_generated";
+        load_view($middle,$arrData);
     }
 
 

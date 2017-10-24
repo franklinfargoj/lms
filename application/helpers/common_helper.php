@@ -1171,3 +1171,39 @@ if(!function_exists('allMasters')){
 }
 
 
+if(!function_exists('unassignedLeadCount')){
+    function unassignedLeadCount(){
+        $login_user = get_session();
+        $branch_id = $login_user['branch_id'];
+        $CI = & get_instance();
+        $CI->load->model('Lead');
+        $action = 'count';
+        $select = array();
+        $table = Tbl_Leads;
+        $where = array(Tbl_Leads . '.branch_id' => $branch_id, Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+        $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
+        $data = $CI->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
+        return $data;
+
+    }
+}
+
+
+if(!function_exists('assignedLeadCount')){
+    function assignedLeadCount(){
+        $login_user = get_session();
+        $created_id = $login_user['hrms_id'];
+        $CI = & get_instance();
+        $CI->load->model('Lead');
+        $action = 'count';
+        $select = array();
+        $table = Tbl_LeadAssign;
+
+        $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
+        $data = $CI->Lead->get_leads($action, $table, $select, $where, $join=array(), $group_by=array(), $order_by = array());
+        return $data;
+
+    }
+}
+
+

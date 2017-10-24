@@ -75,7 +75,10 @@
 				<li class="<?php echo (($controller == 'leads') && (in_array($method,array('unassigned_leads','unassigned_leads_list','unassigned_leads_details')))) ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/unassigned_leads')?>">
 						Unassigned Leads
-					</a>
+                        <?php if(unassignedLeadCount() > 0){?>
+                            <span class="count"><?php echo unassignedLeadCount();?></span>
+                        <?php }?>
+                    </a>
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('EM'))) {?>
@@ -101,6 +104,9 @@
 				<li class="<?php echo (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && $param1 == 'assigned') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
 						Assigned Leads
+                        <?php if(assignedLeadCount() > 0 && $this->session->userdata('admin_type') == 'EM'){?>
+                            <span class="count"><?php echo assignedLeadCount();?></span>
+                        <?php }?>
 					</a>
 				</li>
 				<?php }?>
@@ -142,6 +148,13 @@
 				<li class="<?php echo ($controller == 'product_guide') ? 'active' : ''?>">
 					<a href="<?php echo site_url('product_guide/view')?>">
 						Product Guide
+					</a>
+				</li>
+				<?php }?>
+                <?php if(in_array($this->session->userdata('admin_type'),array('EM','BM','ZM','GM'))) {?>
+				<li class="<?php echo (($controller == 'leads') && ($method == 'generated')) ? 'active' : ''?>">
+					<a href="<?php echo site_url('leads/generated')?>">
+						Lead Generated
 					</a>
 				</li>
 				<?php }?>
@@ -250,7 +263,7 @@
 					<a href="<?php echo site_url('login/logOut');?>">Logout</a>
 					</div>
 				</div>
-			</div>
+        </div>
 	</div>
 </div>
 <script type="text/javascript">
