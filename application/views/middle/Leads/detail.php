@@ -297,11 +297,13 @@
                                 !in_array($leads[0]['status'],$exclude_status_bm))
                             ){?>
                             <div class="form-control">
-                                <label>Reroute:</label>
+                                <label>Do you want to reassign this lead ?</label>
+                            </div>
+                                <div class="form-control">
                                 <div class="radio-control">
                                     <input type="radio" id="is_own_branch" name="is_own_branch"
-                                           value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
-                                    <label>Own Branch</label>
+                                           value="1" <?php echo set_radio('is_own_branch', '1'); ?> />
+                                    <label>Other Employee</label>
                                 </div>
                                 <div class="radio-control">
                                     <input type="radio" name="is_own_branch" id="is_other_branch"
@@ -311,22 +313,22 @@
                                 <?php echo form_error('is_own_branch'); ?>
                             </div>
                                 <div id="state" class="form-control">
-                                    <label>State:</label>
+<!--                                    <label>State:</label>-->
                                     <?php echo form_dropdown('state_id', $data_state,$input['state_id'],''.$state_extra) ?>
                                     <?php echo form_error('state_id'); ?>
                                 </div>
                                 <div id="district" class="form-control">
-                                    <label>District:</label>
+<!--                                    <label>District:</label>-->
                                     <?php echo form_dropdown('district_id', $data_district,$input['district_id'],''.$district_extra) ?>
                                     <?php echo form_error('district_id'); ?>
                                 </div>
                                 <div id="branch" class="form-control">
-                                    <label>Branch:</label>
+<!--                                    <label>Branch:</label>-->
                                     <?php echo form_dropdown('branch_id', $data_branch,$input['branch_id'],''.$branch_extra) ?>
                                     <?php echo form_error('branch_id'); ?>
                                 </div>
                                 <div class="form-control" id="reroute">
-                                    <label>Reroute To:</label>   
+<!--                                    <label>Reroute To:</label>-->
                                     <select name="reroute_to">
                                         <option value="">Select Employee</option>
                                         <?php $result = get_details($this->session->userdata('admin_id'));?>
@@ -374,6 +376,11 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        $("#state").hide();
+        $("#branch").hide();
+        $("#district").hide();
+        $("#reroute").hide();
+
         var lead_status = "<?php echo $leads[0]['status']?>";  //Current Lead status
         var category_title = "<?php echo $leads[0]['category_title']?>";  //Current Category
         $('.reason').hide();

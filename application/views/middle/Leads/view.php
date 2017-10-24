@@ -2,6 +2,7 @@
     $parameter = '';
     $source = 'empty';
     $lead_type = $this->config->item('lead_type');
+    $all_source = $this->config->item('lead_source');
 ?>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
@@ -182,7 +183,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                             </td> -->
                             <?php }?>
                             <td>
-                                 <?php echo ucwords($value['lead_source']);?>
+                                 <?php echo ucwords($all_source[$value['lead_source']]);?>
                             </td>
                             <td>
                                 <?php

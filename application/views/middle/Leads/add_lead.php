@@ -74,7 +74,7 @@ if ($products != '') {
     }
 }
 $input = get_session();
-$data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'text','value'=>'');
+$data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'text','value'=>'','readonly'=>'readonly');
 $lead_id_options[''] = 'Select Lead Identification';
 $lead_id_options['HOT'] = 'HOT';
 $lead_id_options['WARM'] = 'WARM';
@@ -176,23 +176,17 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <?php echo form_error('is_own_branch'); ?>
                     </div>
                     <div id="state" class="form-control">
-                        <label>State:<span style="color:red;">*</span></label>
-                        <?php echo form_dropdown('state_id', $data_state,$input['state_id'],'disabled,id="state_id"') ?>
                         <?php echo form_error('state_id'); ?>
                     </div>
                     <div id="district" class="form-control">
-                        <label>District:<span style="color:red;">*</span> </label>
-                        <?php echo form_dropdown('district_id', $data_district, $input['district_id'],'disabled,id="district_id"') ?>
                         <?php echo form_error('district_id'); ?>
                     </div>
                     <div id="branch" class="form-control">
-                        <label>Branch:<span style="color:red;">*</span> </label>
-                        <?php echo form_dropdown('branch_id', $data_branch, $input['branch_id'],'disabled,id="branch_id"') ?>
                         <?php echo form_error('branch_id'); ?>
                     </div>
 
                     <div class="form-control">
-                        <label>Initial Remarks:<span style="color:red;">*</span> </label>
+                        <label>Initial Remarks: </label>
                         <?php echo form_textarea($data_remark, '', $remark_extra);?>
                         <?php echo form_error('remark'); ?>
                     </div>
@@ -362,7 +356,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 lead_ticket_range: {
                     required: "Please select ticket range",
                     number: "Only numbers allowed",
-                    min:"Please Enter a value greater than 0"
+                    min:"Ticket size should be greater than 0"
                 },
                 contact_no: {
                     required: "Please enter phone number",
