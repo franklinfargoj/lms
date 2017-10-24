@@ -1841,13 +1841,13 @@ class Api extends REST_Controller
                     if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
-                            'created_by_name' => $val->DESCR30,
+                            'created_by_name' => ucwords(strtolower($val->DESCR30)),
                             'total_generated_mtd' => 0,
                             'total_generated_ytd' => 0);
                     } else {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
-                            'created_by_name' => $val->DESCR30,
+                            'created_by_name' => ucwords(strtolower($val->DESCR30)),
                             'total_generated_mtd' => $generated_key_value[$val->DESCR10],
                             'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
                     }
@@ -1897,13 +1897,13 @@ class Api extends REST_Controller
                     if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
-                            'created_by_name' => $val->DESCR30,
+                            'created_by_name' => ucwords(strtolower($val->DESCR30)),
                             'total_generated_mtd' => 0,
                             'total_generated_ytd' => 0);
                     } else {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
-                            'created_by_name' => $val->DESCR30,
+                            'created_by_name' => ucwords(strtolower($val->DESCR30)),
                             'total_generated_mtd' => $generated_key_value[$val->DESCR10],
                             'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
                     }
@@ -1953,13 +1953,13 @@ class Api extends REST_Controller
                     if (!array_key_exists($val->DESCR10, $generated_key_value)) {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
-                            'created_by_name' => $val->DESCR30,
+                            'created_by_name' => ucwords(strtolower($val->DESCR30)),
                             'total_generated_mtd' => 0,
                             'total_generated_ytd' => 0);
                     } else {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
-                            'created_by_name' => $val->DESCR30,
+                            'created_by_name' => ucwords(strtolower($val->DESCR30)),
                             'total_generated_mtd' => $generated_key_value[$val->DESCR10],
                             'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
                     }
