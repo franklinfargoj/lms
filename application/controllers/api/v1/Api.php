@@ -1694,9 +1694,9 @@ class Api extends REST_Controller
             $this->Login_model->insert_login_log($data); // login log
             $fullname = array_map('trim', explode('.', $records->dbk_lms_emp_record1->name));
             if($fullname[0] == ''){
-                $fullname1 = trim($fullname[1]);
+                $fullname1 = ucwords(strtolower(trim($fullname[1])));
             }else{
-                $fullname1 = trim($fullname[0]);
+                $fullname1 = ucwords(strtolower(trim($fullname[0])));
             }
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
@@ -2104,9 +2104,9 @@ class Api extends REST_Controller
             $records = json_decode($records_response);
             $fullname = array_map('trim', explode('.', $records->dbk_lms_emp_record1->name));
             if($fullname[0] == ''){
-                $fullname1 = trim($fullname[1]);
+                $fullname1 = ucwords(strtolower(trim($fullname[1])));
             }else{
-                $fullname1 = trim($fullname[0]);
+                $fullname1 = ucwords(strtolower(trim($fullname[0])));
             }
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
