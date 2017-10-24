@@ -1102,7 +1102,7 @@ class Leads extends CI_Controller
                     //Add Notification
                     $title="New Lead Assigned";
                     $description="Lead for ".ucwords(strtolower($dataArray[1]))." assigned to you for ".ucwords(strtolower($dataArray[2]));
-                    $notification_to = $employee_id;
+                    $notification_to = $explode_employee[0];
                     $priority="Normal";
                     notification_log($title,$description,$priority,$notification_to);
                     //push notification
