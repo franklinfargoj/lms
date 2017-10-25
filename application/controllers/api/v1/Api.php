@@ -314,7 +314,7 @@ class Api extends REST_Controller
             'department_id' => 'Department Id', 'created_by_state_id' => 'Created By State',
             'created_by_district_id' => 'Created By District',
             'created_by_zone_id' => 'Created By Zone', 'created_by_branch_id' => 'Created By Branch',
-            'latitude' => 'Latitude', 'longitude' => 'Longitude',
+            'latitude' => 'Latitude', 'longitude' => 'Longitude','remark'=>'Remark',
             'unique_id' => 'Unique Id');
         $phone_extra = '';
         $cust_name_extra = '';
@@ -327,7 +327,9 @@ class Api extends REST_Controller
                 if ($k == 'customer_name') {
                     $cust_name_extra = '|callback_alpha_dash_space["Customer Name"]';
                 }
-                $this->form_validation->set_rules($k, '', 'required' . $phone_extra . $cust_name_extra);
+                if($k != 'remark'){
+                    $this->form_validation->set_rules($k, '', 'required' . $phone_extra . $cust_name_extra);
+                }
                 if ($this->form_validation->run() === FALSE) {
                     $error[] = form_error($k);
                 } else {

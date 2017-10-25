@@ -61,15 +61,17 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                     </div>
                     <div class="form-control">
                         <label>Frequency:<span style="color:red;">*</span> </label>
-                        <?php
-                        $data_fd[''] = 'Select Frequency';
-                        $data_fd['0'] = 'Simple Interest';
-                        $data_fd['12'] = 'Monthly';
-                        $data_fd['4'] = 'Quaterly';
-                        $data_fd['2'] = 'Halfyearly';
-                        $data_fd['1'] = 'Annually';
-                        ?>
-                        <?php echo form_dropdown('frequency',$data_fd,'','id=frequency')?>
+                        <div class="radio-control">
+                            <input type="radio" id="sdr" name="frequency" class="frequency"
+                                   value="0" <?php echo set_radio('frequency', '0'); ?>/>
+                            <label>SDR</label>
+                            <label id="frequency-error" class="error" for="frequency"></label>
+                        </div>
+                        <div class="radio-control">
+                            <input type="radio" name="frequency" id="fdr" class="frequency"
+                                   value="4" <?php echo set_radio('frequency', '4'); ?>/>
+                            <label>FDR</label>
+                        </div>
                     </div>
                     <div class="form-control form-submit clearfix">
 

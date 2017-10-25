@@ -118,8 +118,12 @@ function fd_calculator(rS) {
 
                 var tenurePeriodVal = $('#tenurePeriod').val();
 
-                var frequencyVal = $('#frequency').val();
-
+                if($("#sdr").is(':checked')) {
+                    var frequencyVal = $('#sdr').val();
+                }
+                if($("#fdr").is(':checked')) {
+                    var frequencyVal = $('#fdr').val();
+                }
                 //Get computable values
                 principalVal = parseFloat(principalVal);
                 interestVal = parseFloat(interestVal);

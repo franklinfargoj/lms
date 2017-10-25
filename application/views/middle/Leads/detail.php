@@ -138,9 +138,10 @@
                                 <div class="form-control">
                                     <?php
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
-                                        || ($this->session->userdata('admin_type')=='BM' && !in_array($leads[0]['status'],array('NI','AO'))
-                                            && ($this->session->userdata('admin_type')=='BM' && $leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC')))
-                                    {}
+                                    || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
+                                    && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC') ||
+                                        ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC'))
+                                    ))){}
                                         else {
                                             ?>
                                             <label>Lead Status:</label>
@@ -185,13 +186,15 @@
                                         'value'       => $leads[0]['status']
                                     );
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
-                                        || ($this->session->userdata('admin_type')=='BM' && !in_array($leads[0]['status'],array('NI','AO'))
-                                        && ($this->session->userdata('admin_type')=='BM' && $leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC'))){
-                                            echo form_input($data_status);
-                                        }
-                                        else{
+                                        || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
+                                        && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC')
+                                        || ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC'))
+                                            ))){
+                                        echo form_input($data_status);
+                                    }
+                                    else{
                                             echo form_dropdown('lead_status', $options1 , $leads[0]['status'],$js);
-                                        }
+                                    }
                                         $category_name = array('name'=>'cat_name','type'=>'hidden','value'=>$leads[0]['category_title']);
                                         echo form_input($category_name);
                                         $customer_name = array('name'=>'customer_name','type'=>'hidden','value'=>$leads[0]['customer_name']);
