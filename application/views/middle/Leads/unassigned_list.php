@@ -16,6 +16,11 @@ $source = $this->config->item('lead_source');
                         </h3>
                     </div>
                 </div>
+        <?php if ($unassigned_leads) { ?>
+        <div class="float-left">
+            <span class="total-lead" style="color: red">To assign the lead, select the checkbox and select from drop down<span style="color:red;">*</span></span>
+        </div>
+        <?php }?>
         <span class="bg-top"></span>
         <div class="inner-content">
             <div class="container">
@@ -98,7 +103,7 @@ $source = $this->config->item('lead_source');
                     </tr>
                     <tr>
                         <th>
-                        <?php 
+                        <?php
                             $data = array(
                                 'name'          => 'check_all',
                                 'id'            => 'check_all',
@@ -116,14 +121,14 @@ $source = $this->config->item('lead_source');
                     </tr>
                     </thead>
                     <tbody>
-                    <?php 
+                    <?php
                         if ($unassigned_leads) {
                             $i = 0;
                             foreach ($unassigned_leads as $key => $value) {
                     ?>
                             <tr>
                                 <td  style="text-align:center">
-                                <?php 
+                                <?php
                                     $data = array(
                                         'name'          => 'lead_ids[]',
                                         'id'            => 'check_all',
@@ -135,8 +140,8 @@ $source = $this->config->item('lead_source');
                                 ?>
                                 </td>
                                 <td style="text-align:center">
-                                    <?php 
-                                        echo ++$i; 
+                                    <?php
+                                        echo ++$i;
                                     ?>
 
                                 </td>
@@ -167,7 +172,7 @@ $source = $this->config->item('lead_source');
                     ?>
                     </tbody>
                 </table>
-                <?php 
+                <?php
                     echo form_close();
                 ?>
             </div>
