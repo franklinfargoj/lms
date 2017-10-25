@@ -555,6 +555,12 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 }
                 div.width(width);
             }
+
+            if(range.val() > 0){
+                $("#ticket_range-error").hide();
+            }else{
+                $("#ticket_range-error").show();
+            }
         }
     });
 </script>
