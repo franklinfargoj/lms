@@ -5,7 +5,7 @@ $source = $this->config->item('lead_source');
 ?>
 
 <div class="page-content">
-    <div class="">
+    <div class="container">
         <div class="unassigned-content">
         <div class="page-title">
                     <div class="container clearfix">
@@ -17,13 +17,14 @@ $source = $this->config->item('lead_source');
                     </div>
                 </div>
         <?php if ($unassigned_leads) { ?>
-        <div class="float-left">
-            <span class="total-lead" style="color: red">To assign the lead, select the checkbox and select from drop down<span style="color:red;">*</span></span>
-        </div>
+        
         <?php }?>
         <span class="bg-top"></span>
         <div class="inner-content">
             <div class="container">
+            <div class="float-left">
+            <span class="total-lead" style="color: red">To assign the lead, select the checkbox and select from drop down<span style="color:red;">*</span></span>
+        </div>
                 <!-- BEGIN PAGE LEVEL STYLES -->
                 <link href="<?php echo base_url() . ASSETS; ?>css/jquery.dataTables.min.css" rel="stylesheet">
                 <!-- END PAGE LEVEL STYLES -->

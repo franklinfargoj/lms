@@ -434,7 +434,7 @@ body{
 	color: #b1bac4;
 	font-family: "Montserrat-Regular";
 	font-size: 12px;
-	padding: 45px 12px;
+	padding: 45px 7px;
 	box-sizing:unset;
 	-ms-box-sizing:unset;
 	-moz-box-sizing:unset;
@@ -457,9 +457,9 @@ body{
 span.count {
     background: red;
     color: #fff;
-    width: 19px;
+    width: 15px;
     border-radius: 12px;
-    height: 19px;
+    height: 15px;
     position: relative;
     top: -7px;
     font-size: 8px;
@@ -478,7 +478,7 @@ span.count {
 
 .top-navigation ul li.active a,.top-navigation ul li:hover a{
 	background-color: #014986;
-	padding: 45px 12px;
+	padding: 45px 7px;
 	color: #ffffff;
 }
 
@@ -865,7 +865,7 @@ a.btn-Download{
 .cal-drop2,.cal-drop3,.cal-drop4{
 	position: absolute;
 	right:-190px;
-	top: 45px;
+	top: 43px;
 	width: 130px;
 	display: none;
 	z-index: 1;
@@ -874,7 +874,7 @@ a.btn-Download{
 	top: 0;
 }
 .cal-drop4{
-	top:90px;
+	top:86px;
 }
 .cal-drop li, .cal-drop1 li,.cal-drop2 li,.cal-drop3 li,.cal-drop4 li,.per-drop li{
 	width: 130px;
