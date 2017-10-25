@@ -2403,9 +2403,12 @@ class Api extends REST_Controller
                                 'zone_id' => $leads_data['zone_id'],
                                 'status' => $params['status'],
                                 'is_updated' => 1,
-                                'created_on' => date('y-m-d-H-i-s'),
+                                'created_on' => $leads_data['created_on'],
                                 'created_by' => $leads_data['created_by'],
-                                'created_by_name' => $leads_data['created_by_name']
+                                'created_by_name' => $leads_data['created_by_name'],
+                                'modified_on' => date('y-m-d-H-i-s'),
+                                'modified_by' => $leads_data['employee_id'],
+                                'modified_by_name' => $leads_data['employee_name']
                             );
                             $result1 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
 
@@ -2474,6 +2477,20 @@ class Api extends REST_Controller
                      *****************************************************************/
                     if($params['status'] == 'Converted'){
                         $this->points_distrubution($params['lead_id']);
+                    }
+
+                    $cat_name = $params['category_title'];
+                    $customer_name = $params['customer_name'];
+                    $statusNotification = array('AO','NI');
+                    if(in_array($params['status'],$statusNotification) || ($cat_name == 'Fee Income' && $params['status'] == 'DC')){
+                        $title="Action Required";
+                        $description="Lead for ".ucwords(strtolower($customer_name))." requires your action";
+                        $notification_to = $leads_data['created_by'];
+                        $priority="Normal";
+                        notification_log($title,$description,$priority,$notification_to);
+                        //push notification
+                        $emp_id = $leads_data['created_by'];
+                        sendPushNotification($emp_id,$description,$title);
                     }
 
                     /*****************************************************************
@@ -2691,6 +2708,8 @@ class Api extends REST_Controller
 //                        $result[$i]['Year'] = $unassigned_leads_count_year;
 //                        $result[$i]['Month'] = $unassigned_leads_count_month;
 //                        $result[$i]['status'] = 'Unassigned Leads';
+                        $whereArray = array(Tbl_LeadAssign . '.employee_id' => $employee_id,'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
+                        $result['total_assigned'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
                     }
                     $res = array('result' => True,
                         'data' => $result);
@@ -2712,6 +2731,8 @@ class Api extends REST_Controller
                             $result[$i]['status'] = $value;
                             $i++;
                         }
+                        $whereArray = array(Tbl_LeadAssign . '.branch_id' => $branch_id,'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
+                        $result['total_assigned'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
                     }
                     $res = array('result' => True,
                         'data' => $result);
@@ -2733,6 +2754,8 @@ class Api extends REST_Controller
                             $result[$i]['status'] = $value;
                             $i++;
                         }
+                        $whereArray = array(Tbl_LeadAssign . '.zone_id' => $zone_id,'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
+                        $result['total_assigned'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
                     }
                     $res = array('result' => True,
                         'data' => $result);
