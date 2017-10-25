@@ -82,12 +82,14 @@
                             <div class="form-control">
                                 <label>Product:</label> <span class="detail-label"><?php echo ucwords($leads[0]['product_title']);?></span>
                             </div>
+                            <?php if (isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identification'])){ ?>
                             <div class="form-control">
                                 <label>Lead Identified as :</label>
                                 <span class="detail-label" style="color:<?php echo $color;?>">
                                     <?php echo !empty($leads[0]['lead_identification']) ? ucwords($lead_type[$leads[0]['lead_identification']]) : '';?>
                                 </span>
                             </div>
+                            <?php }?>
                             <div class="form-control">
                                 <label>Lead Status:</label> <span class="detail-label">
                                     <?php $account_no = $leads[0]['opened_account_no'] ? " (".$leads[0]['opened_account_no'].")" :'';
@@ -144,7 +146,7 @@
                                     ))){}
                                         else {
                                             ?>
-                                            <label>Lead Status:</label>
+                                            <label>Change Status:</label>
                                     <?php
                                         }
                                         $data = array(
@@ -451,8 +453,9 @@
             if(option == 'FU'){
                $('.followUp').show();
                $('.accountOpen').hide();
-               $('.datepicker_recurring_start').focus();
+//               $('.datepicker_recurring_start').focus();
                 $('#lead_identification').removeAttr('disabled');
+                $('.reason').hide();
 
             }else if(option == 'AO'){
                 //alert(category_title);
@@ -519,11 +522,10 @@
                 },
                 branch_id: {
                     required: true
+                },
+                reason:{
+                    required:true
                 }
-//                ,
-//                reason:{
-//                    required:true
-//                }
             },
             messages: {
                 product_category_id: {
@@ -546,11 +548,10 @@
                 },
                 branch_id: {
                     required: "Please select branch"
+                },
+                reason:{
+                    required:"Please enter reason for drop"
                 }
-//                ,
-//                reason:{
-//                    required:"Please enter reason for drop"
-//                }
             }
         });
     });

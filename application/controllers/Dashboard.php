@@ -566,6 +566,12 @@ class Dashboard extends CI_Controller {
             case 'assigned':
                     $year_where['YEAR(la.created_on)'] = date('Y');
                     $month_where['MONTH(la.created_on)'] = date('m');
+                if(!empty($designation_type) && $designation_type == 'EM'){
+                    $employee_id = $login_user['hrms_id'];
+                    $whereArray = array('la.employee_id' => $employee_id,'YEAR(l.created_on)' => date('Y'),'la.is_updated' => 1);
+                    $result['total_assigned_leads'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
+                }
+
                     if(!empty($status)){
                         foreach ($status as $key => $value) {
                             $where['status'] = $key;
