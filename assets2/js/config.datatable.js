@@ -7,9 +7,10 @@ var initTable = function (table,columns) {
             "orderable": false,
             "targets": columns
         }],
-        "order": [
-            [0, 'asc']
-        ],
+        // "order": [
+        //     [0, 'asc']
+        // ],
+        "order": [],
         "lengthMenu": [
             [5, 15, 20, -1],
             [5, 15, 20, "All"] // change per page values here

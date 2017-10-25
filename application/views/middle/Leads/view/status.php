@@ -13,10 +13,17 @@
     </div>
 </div>
 <div class="page-content">
-<span class="bg-top"></span>
-<div class="inner-content">
-    <div class="container ">
-
+    <span class="bg-top"></span>
+    <div class="inner-content">
+        <div class="container ">
+            <div class="lead-top clearfix">
+                <div class="float-left">
+                    <span class="total-lead">
+                        Total Leads
+                    </span>
+                    <span class="lead-num"> : <?php echo isset($total_assigned_leads) && !empty($total_assigned_leads) ? $total_assigned_leads : 0;?></span>
+                </div>
+            </div>
         <table class="upload-table lead-table" id="sample_3">
             <thead>
             <tr class="top-header">
@@ -110,7 +117,7 @@
 <script type="text/javascript">
     jQuery(document).ready(function() {
         var table = $('#sample_3');
-        var columns = [];
+        var columns = [0];
 
         //Initialize datatable configuration
         initTable(table,columns);

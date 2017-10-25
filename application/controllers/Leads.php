@@ -1051,7 +1051,6 @@ class Leads extends CI_Controller
                     $where['la.status !='] = 'Closed';
                 }
             }
-            $where["DATEDIFF(CURDATE(),la.created_on) <= CASE WHEN la.status = 'Converted' THEN ".Elapsed_day_converted." WHEN la.status = 'NI' THEN ".Elapsed_day_NI." ELSE ".Elapsed_day." END"] = NULL;
             if(!empty($arrData['param'])){
                 if($login_user['designation_name'] == 'EM'){
                     $where['la.employee_id']  =   $login_user['hrms_id']; //Employee wise filter

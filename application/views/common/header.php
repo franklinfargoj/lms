@@ -104,8 +104,9 @@
 				<li class="<?php echo (($controller == 'leads') && (in_array($method,array('leads_list','details'))) && $param1 == 'assigned') ? 'active' : ''?>">
 					<a href="<?php echo site_url('leads/leads_list/assigned/ytd')?>">
 						Assigned Leads
-                        <?php if(assignedLeadCount() > 0 && $this->session->userdata('admin_type') == 'EM'){?>
-                            <span class="count"><?php echo assignedLeadCount();?></span>
+                        <?php $admin = $this->session->userdata('admin_type'); $total_count = assignedLeadCount($admin);
+                        if($total_count > 0){?>
+                            <span class="count"><?php echo $total_count;?></span>
                         <?php }?>
 					</a>
 				</li>
