@@ -138,8 +138,9 @@
                                 <div class="form-control">
                                     <?php
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
-                                        || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))
-                                    || ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] == 'DC')){}
+                                        || ($this->session->userdata('admin_type')=='BM' && !in_array($leads[0]['status'],array('NI','AO'))
+                                            && ($this->session->userdata('admin_type')=='BM' && $leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC')))
+                                    {}
                                         else {
                                             ?>
                                             <label>Lead Status:</label>
@@ -184,8 +185,8 @@
                                         'value'       => $leads[0]['status']
                                     );
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
-                                        || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))
-                                        || ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] == 'DC')){
+                                        || ($this->session->userdata('admin_type')=='BM' && !in_array($leads[0]['status'],array('NI','AO'))
+                                        && ($this->session->userdata('admin_type')=='BM' && $leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC'))){
                                             echo form_input($data_status);
                                         }
                                         else{
