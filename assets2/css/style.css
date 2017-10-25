@@ -184,8 +184,17 @@ body{
 .control--checkbox .control__indicator .check {
 	left: 4px;
 	position: absolute;
-	top: -2px;
+	top: 4px;
 	display: none;
+}
+
+.inner-content.text-s p {
+    text-align: left;
+    padding: 20px 0 25px;
+    border-bottom: 1px solid #c0c0c0;
+    width: 40%;
+    margin: auto;
+    font-size: 16px;
 }
 .control--checkbox.checked .control__indicator .check {
 	display: block;
