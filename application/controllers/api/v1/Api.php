@@ -2213,8 +2213,10 @@ class Api extends REST_Controller
 
                     $leads['generated_converted'] = $final;
                     //for assigned lead
-                    $where_assigned_Array = array('branch_id' => $branch_id, 'is_updated' => 1,
-                        'YEAR(created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
+//                    $where_assigned_Array = array('branch_id' => $branch_id, 'is_updated' => 1,
+//                        'YEAR(created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
+                    $where_assigned_Array = "(status='AO' OR status='NI' AND branch_id =".$branch_id.") 
+                     AND (is_updated = 1 AND is_deleted = 0 AND YEAR(created_on) =".date('Y')." AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
                 }
                 $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
                 $action = 'count';
