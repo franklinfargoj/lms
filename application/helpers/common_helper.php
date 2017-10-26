@@ -1160,7 +1160,7 @@ if(!function_exists('allMasters')){
         $CI = & get_instance();
         $CI->load->model('Lead');
         $action='list';
-        $select=array('TRIM(`code`) as code','TRIM(`name`) as name');
+        $select=array('DISTINCT(TRIM(`name`)) as name','TRIM(`code`) as code');
         if($selectArray !=''){
             $select = $selectArray;
         }
