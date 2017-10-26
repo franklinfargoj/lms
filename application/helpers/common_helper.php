@@ -1208,6 +1208,13 @@ if(!function_exists('assignedLeadCount')){
 }
 
 
+if(!function_exists('get_array')){
+    function get_array(){
+        return $data;
+
+    }
+}
+
 
 
 

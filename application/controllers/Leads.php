@@ -1210,14 +1210,14 @@ class Leads extends CI_Controller
                 foreach ($districts as $key => $value) {
                     $options[$value['code']] = ucwords($value['name']);
                 }
-                $html = '<label>District:</label>';
+                $html = '<label>City:</label>';
                 $html .= form_dropdown('district_id', $options, '', $district_extra);
                 $options_branch[''] = 'Select Branch';
                 $html1 = '<label>Branch:</label>';
                 $html1 .= form_dropdown('branch_id', $options_branch, '', $branch_extra);
             } else {
                 $options[''] = $select_label;
-                $html = '<label>District:</label>';
+                $html = '<label>City:</label>';
                 $html .= form_dropdown('district_id', $options, '', $district_extra);
                 $options_branch[''] = 'Select Branch';
                 $html1 = '<label>Branch:</label>';
@@ -1302,15 +1302,15 @@ class Leads extends CI_Controller
                 $html1 .= form_dropdown('branch_id', $options, '', $branch_extra);
             }
             if (!empty($districts)) {
-                $dist_options[''] = 'Select District';
+                $dist_options[''] = 'Select City';
                 foreach ($districts as $key => $value) {
                     $dist_options[$value['code']] = ucwords($value['name']);
                 }
-                $html2 = '<label>District:<span style="color:red;">*</span></label>';
+                $html2 = '<label>City:<span style="color:red;">*</span></label>';
                 $html2 .= form_dropdown('district_id', $dist_options, $district_code, $district_extra);
             } else {
-                $dist_options[''] = 'Select District';
-                $html2 = '<label>District:<span style="color:red;">*</span></label>';
+                $dist_options[''] = 'Select City';
+                $html2 = '<label>City:<span style="color:red;">*</span></label>';
                 $html2 .= form_dropdown('district_id', $dist_options, '', $district_extra);
             }
             $data['branch'] = $html1;
@@ -1379,8 +1379,8 @@ class Leads extends CI_Controller
             $branch_options[''] = 'Select Branch';
             $html1 = '<label>Branch:<span style="color:red;">*</span></label>';
             $html1 .= form_dropdown('branch_id', $branch_options, '', $branch_extra);
-            $dist_options[''] = 'Select District';
-            $html2 = '<label>District:<span style="color:red;">*</span></label>';
+            $dist_options[''] = 'Select City';
+            $html2 = '<label>City:<span style="color:red;">*</span></label>';
             $html2 .= form_dropdown('district_id', $dist_options, '', $district_extra);
             $data['branch'] = $html1;
             $data['state'] = $html;
