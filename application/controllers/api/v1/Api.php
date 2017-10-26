@@ -2485,7 +2485,7 @@ class Api extends REST_Controller
                      * Point distribution When status is converted
                      *****************************************************************/
                     if($params['status'] == 'Converted'){
-                        $this->points_distrubution($params['lead_id']);
+                        //$this->points_distrubution($params['lead_id']);
                     }
 
                     $cat_name = $params['category_title'];
