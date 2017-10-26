@@ -128,6 +128,7 @@ define('Tbl_emp_dump', 'employee_dump');
 define('HRMS_API_URL_AUTH', 'http://103.224.110.52/lms/hrms_auth.php?');
 define('HRMS_API_URL_GET_RECORD', 'http://103.224.110.52/lms/hrms_records.php?');
 define('HRMS_BRANCH_RECORD', 'http://103.224.110.52/master.php');
+define('HRMS_EMP_DUMP', 'http://103.224.110.52/master_emp.php');
 define('Elapsed_day_converted', 7); //Elapsed Days for converted
 define('Elapsed_day_NI', 7); //Elapsed Days for Not Interested
 define('Elapsed_day', 90); //Elapsed Days for remaining all
