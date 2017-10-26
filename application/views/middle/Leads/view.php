@@ -134,7 +134,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                          <th style="text-align:left">
                             Lead Source
                         </th>
-                       <th style="text-align:left">
+                       <th style="text-align:left; width:140px!important; ">
                             Details
                         </th>
                     </tr>
@@ -237,4 +237,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
         //Initialize datatable configuration
         initTable(table,columns);
     });
+    
+
+    
 </script>
