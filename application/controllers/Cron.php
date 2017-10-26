@@ -689,16 +689,19 @@ class Cron extends CI_Controller
 
 
     public function employee_dump(){
-//        $url = ;
-//        $result = call_external_url($url);
-//        $result = json_decode($result,true);
+        $url = HRMS_EMP_DUMP;
+        $result = call_external_url($url);
+        $result = json_decode($result,true);
         $columns = ['hrms_id', 'name', 'designation_id','designation', 'email_id','contact_no', 'branch_id', 'branch_name',
             'zone_id', 'zone_name','district_id', 'state_id', 'supervisor_id'];
         $insert = array();
         if(!empty($result)){
+            $hrms_keys = ['hrms_id','Name','Designation_Id','designation','Email','Contact_No','Branch_Id',
+                'Branch_Name','Zone_Id','Zone_Name','District','State','Supervisor_HRMS_Id'];
+            $result = $result['dbk_lms_emp_pack']['dbk_lms_emp_all'];
             foreach ($result as $key => $value){
                 foreach ($columns as $k => $column){
-                    $insert[$key][$column] = trim($value[$column]);
+                    $insert[$key][$column] = trim($value[$hrms_keys[$k]]);
                 }
             }
             if(!empty($insert)){
