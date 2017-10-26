@@ -1210,17 +1210,17 @@ class Leads extends CI_Controller
                 foreach ($districts as $key => $value) {
                     $options[$value['code']] = ucwords($value['name']);
                 }
-                $html = '<label>City:</label>';
+                $html = '<label>City:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('district_id', $options, '', $district_extra);
                 $options_branch[''] = 'Select Branch';
-                $html1 = '<label>Branch:</label>';
+                $html1 = '<label>Branch:<span style="color:red;">*</span></label>';
                 $html1 .= form_dropdown('branch_id', $options_branch, '', $branch_extra);
             } else {
                 $options[''] = $select_label;
-                $html = '<label>City:</label>';
+                $html = '<label>City:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('district_id', $options, '', $district_extra);
                 $options_branch[''] = 'Select Branch';
-                $html1 = '<label>Branch:</label>';
+                $html1 = '<label>Branch:<span style="color:red;">*</span></label>';
                 $html1 .= form_dropdown('branch_id', $options_branch, '', $branch_extra);
             }
             $data['district'] = $html;
@@ -1251,11 +1251,11 @@ class Leads extends CI_Controller
                 foreach ($branches as $key => $value) {
                     $options[$value['code']] = ucwords($value['name']);
                 }
-                $html = '<label>Branch:</label>';
+                $html = '<label>Branch:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('branch_id', $options, '', $branch_extra);
             } else {
                 $options[''] = $select_label;
-                $html = '<label>Branch:</label>';
+                $html = '<label>Branch:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('branch_id', $options, '', $branch_extra);
             }
             echo json_encode($html);
