@@ -141,7 +141,7 @@ class Cron extends CI_Controller
             //FOR EMPLOYEE
             $branch_manager = array('generated' => array(),'converted' => array(),'pending_before' => array(),'pending' => array());
             $gm = $branch_manager;
-            $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('designation' => 'HD','branch_id' => $v->branch_id),array(),'employee_dump');
+            $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('branch_id' => $v->branch_id),array(),'employee_dump');
             
             $branch_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'EM','branch_id' => $v->branch_id));
             $branch_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'EM','branch_id' => $v->branch_id));
