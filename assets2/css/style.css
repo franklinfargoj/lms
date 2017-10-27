@@ -943,8 +943,13 @@ select#tenurePeriod {
 .followUp input#remind_on {
 	position: relative;
 }
-#ui-datepicker-div {
-	top:33%!important;
+/*#ui-datepicker-div {
+	top:47%!important;
+	position: fixed!important;
+
+}*/
+.hasDatepicker{
+	position: relative;
 }
 input#remind_on {
 	padding: 6px 2px;
@@ -995,9 +1000,9 @@ span.life-c {
     padding: 0 8px;
 }
 /*datec*/
-
+/*
 .date-c input{position: relative;}
- #ui-datepicker-div{position: absolute;}
+ #ui-datepicker-div{position: absolute;}*/
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .lead-table thead{
 	background-color: #00559d;
