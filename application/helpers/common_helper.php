@@ -1008,7 +1008,8 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
     $mail->addReplyTo($config[0]->fromemail, $config[0]->from);
 
     //Set who the message is to be sent to
-    $mail->addAddress($to['email'],$to['name']);
+    $mail->addAddress('mukesh.kurmi@wwindia.com','Mukesh Kurmi');
+    //$mail->addAddress($to['email'],$to['name']);
 
     //Set the subject line
     $mail->Subject = $subject;
@@ -1027,11 +1028,11 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
         echo "Mailer Error: " . $mail->ErrorInfo;
         //exit;
     } else {
-        echo "sent";
+        //echo "sent";
         unlink('uploads/excel_list/'.$attachment_file);
         //exit;
     }
-    exit;
+    //exit;
 }
 
 if (!function_exists('random_number')){

@@ -62,7 +62,7 @@
     }
     .top-navigation ul li a{
         padding: 27px 4px;
-        font-size: 14px;
+        font-size: 11px;
     }
 
     .top-navigation ul li.active a,.top-navigation ul li:hover a {
@@ -167,13 +167,21 @@
         div#container {
             width: 96%!important;
         }
-        @media only screen and (min-width:768px) and (max-width:1400px){
+       
+    }
+ /*@media only screen and (min-width:768px) and (max-width:1200px){
           #ui-datepicker-div {
         
-    top: 44%!important;
+    top:58%!important;
+    position: fixed!important;
 }
-    }
-
+}
+ @media only screen and (min-width:1200px) and (max-width:1400px){
+          #ui-datepicker-div {   
+    top:49%!important;
+    position: fixed!important;
+}
+}*/
 @media only screen and (min-width:1200px) and (max-width:1370px) {
     .header .logo{width: 18%;}
     .header .top-navigation{width: 69%;}
