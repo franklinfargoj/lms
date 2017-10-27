@@ -1028,11 +1028,11 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
         echo "Mailer Error: " . $mail->ErrorInfo;
         //exit;
     } else {
-        echo "sent";
+        //echo "sent";
         unlink('uploads/excel_list/'.$attachment_file);
         //exit;
     }
-    exit;
+    //exit;
 }
 
 if (!function_exists('random_number')){
