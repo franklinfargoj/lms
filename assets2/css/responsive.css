@@ -176,9 +176,9 @@
 }
 }
  @media only screen and (min-width:1200px) and (max-width:1400px){
-          #ui-datepicker-div {
-        
+          #ui-datepicker-div {   
     top:49%!important;
+    /*sadad*/
 }
 }
 @media only screen and (min-width:1200px) and (max-width:1370px) {

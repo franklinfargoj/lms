@@ -39,12 +39,13 @@ $lead_status = $this->config->item('lead_status');
 <div class="lead-form">
     <span class="bg-top"></span>
     <div class="inner-content">
-
+        
      <div class="container">
     <div class="form">
     <p id="note"><span style="color:red;">*</span> These fields are required</p>
     <div class="lead-form-left" id="l-width">
         <div class="form-control date-c">
+        <!-- <p>sdadasd</p> -->
             <label>Start Date:<span style="color:red;">*</span></label>   
             <?php 
                 if(isset($start_date)){
