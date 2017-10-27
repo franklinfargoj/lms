@@ -1064,18 +1064,19 @@ class Api extends REST_Controller
             if ($type == 'EM') {
                 $where['la.employee_id'] = $id;
                 $where['la.status !='] = 'Closed';
+                $order_by = 'la.created_on desc';
             }
             if ($type == 'BM') {
                 $where['la.branch_id'] = $id;
                 $where['la.status !='] = 'Closed';
                 $where2 = array(Tbl_LeadAssign . '.branch_id' => $id);
+                $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 ELSE 3 END";
             }
 
             $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
             /*$join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');*/
 
             $join[] = array('table' => Tbl_Reminder . ' as r', 'on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"', 'type' => 'left');
-            $order_by = 'la.created_on desc';
             $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by);
 
             if ($type == 'EM') {
