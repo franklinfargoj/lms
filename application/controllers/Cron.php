@@ -170,6 +170,9 @@ class Cron extends CI_Controller
                 $final['branch_manager'][$value->hrms_id]['hrms_id'] = $value->hrms_id;
                 $final['branch_manager'][$value->hrms_id]['employee_name'] = $value->name;
             }
+
+            echo "<pre>";
+            print_r($final['branch_manager']);die;
             //FOR EMPLOYEE
             $attachment_file = $this->export_to_excel('bm_consolidated_mail',$final['branch_manager']);
             $to = array('email' => $v->email_id,'name' => $v->name);
