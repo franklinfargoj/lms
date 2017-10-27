@@ -135,7 +135,7 @@ class Cron extends CI_Controller
      */
     public function bm_consolidated_mail(){
         $subject = 'Branch Manager Consolidated Format';
-        $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','branch_id','branch_name'),array('designation' => 'BR'),array(),'employee_dump');
+        $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','branch_id','branch_name'),array(),array(),'employee_dump');
         foreach ($branch_list as $k => $v) {
             $final = array();
             //FOR EMPLOYEE
