@@ -136,6 +136,7 @@ class Leads extends CI_Controller
                 if(!is_array($routed_id)){
                     $lead_data['reroute_from_branch_id'] = $branch_id;
                     $lead_data['branch_id'] = $routed_id;
+                    $lead_data['modified_on'] = date('Y-m-d H:i:s',time()+30);
                 }
                 $lead_data['lead_name'] = $this->input->post('customer_name');
                 $lead_id = $this->Lead->add_leads($lead_data);
@@ -1449,7 +1450,9 @@ class Leads extends CI_Controller
             if(!empty($result)){
                 if($result[0]['reroute_from_branch_id'] !=''){
                     $final_result[] = array('id'=>$result[0]['id'],'generated'=>$result[0]['generated'],'generated_on'=>$result[0]['generated_on'],
-                        'date'=>$result[0]['generated_on'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id']);
+                        'date'=>$result[0]['generated_on'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
+                        'customer_name'=>$result[0]['customer_name'],'branch_id'=>$result[0]['branch_id'],
+                        'contact_no'=>$result[0]['contact_no'],'lead_source'=>$result[0]['lead_source']);
                     $final_result[] = array('id'=>$result[0]['id'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
                         'reroute_to_branch_id'=>$result[0]['branch_id'],'modified_on'=>$result[0]['modified_on'],
                         'date'=>$result[0]['modified_on'],'status'=>'NC');
@@ -1459,7 +1462,6 @@ class Leads extends CI_Controller
 
                 }
             }
-
             $select = array('la.employee_id','la.employee_name','la.created_by_name','la.created_on AS date','la.status');
             $table = Tbl_LeadAssign.' as la';
             $where = array('lead_id'=>$lead_id);
