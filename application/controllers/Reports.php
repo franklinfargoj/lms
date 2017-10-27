@@ -1412,6 +1412,7 @@ class Reports extends CI_Controller
                     }
                 }
 
+
                 //Zone Manager Login
                 if($viewName == 'ZM'){
                     $index = $value->zone_id;
@@ -1429,6 +1430,15 @@ class Reports extends CI_Controller
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
             }
+            if($this->session->userdata('admin_type') == 'BM'){
+                    array_unshift($arrData['leads'], $arrData['leads'][$this->session->userdata('branch_id')]);
+                    unset($arrData['leads'][$this->session->userdata('branch_id')]);
+            }
+            if($this->session->userdata('admin_type') == 'ZM'){
+                    array_unshift($arrData['leads'], $arrData['leads'][$this->session->userdata('zone_id')]);
+                    unset($arrData['leads'][$this->session->userdata('branch_id')]);
+            }
+
         }
         return $arrData;
     }
