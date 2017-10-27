@@ -172,7 +172,7 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                             <?php }?>
                             <?php if($type == 'assigned'){?>
                             <td style="text-align:center">
-                                 <?php echo isset($value['remind_on']) ? date('d-m-Y',strtotime($value['remind_on'])) : '';?>
+                                 <?php echo isset($value['remind_on']) && $value['status'] == "FU" ? date('d-m-Y',strtotime($value['remind_on'])) : '';?>
                             </td>
                             <?php }?>
                             <td>
