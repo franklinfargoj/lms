@@ -136,6 +136,7 @@ class Leads extends CI_Controller
                 if(!is_array($routed_id)){
                     $lead_data['reroute_from_branch_id'] = $branch_id;
                     $lead_data['branch_id'] = $routed_id;
+                    $lead_data['modified_on'] = date('Y-m-d H:i:s',time()+30);
                 }
                 $lead_data['lead_name'] = $this->input->post('customer_name');
                 $lead_id = $this->Lead->add_leads($lead_data);
@@ -1210,17 +1211,17 @@ class Leads extends CI_Controller
                 foreach ($districts as $key => $value) {
                     $options[$value['code']] = ucwords($value['name']);
                 }
-                $html = '<label>District:</label>';
+                $html = '<label>City:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('district_id', $options, '', $district_extra);
                 $options_branch[''] = 'Select Branch';
-                $html1 = '<label>Branch:</label>';
+                $html1 = '<label>Branch:<span style="color:red;">*</span></label>';
                 $html1 .= form_dropdown('branch_id', $options_branch, '', $branch_extra);
             } else {
                 $options[''] = $select_label;
-                $html = '<label>District:</label>';
+                $html = '<label>City:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('district_id', $options, '', $district_extra);
                 $options_branch[''] = 'Select Branch';
-                $html1 = '<label>Branch:</label>';
+                $html1 = '<label>Branch:<span style="color:red;">*</span></label>';
                 $html1 .= form_dropdown('branch_id', $options_branch, '', $branch_extra);
             }
             $data['district'] = $html;
@@ -1251,11 +1252,11 @@ class Leads extends CI_Controller
                 foreach ($branches as $key => $value) {
                     $options[$value['code']] = ucwords($value['name']);
                 }
-                $html = '<label>Branch:</label>';
+                $html = '<label>Branch:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('branch_id', $options, '', $branch_extra);
             } else {
                 $options[''] = $select_label;
-                $html = '<label>Branch:</label>';
+                $html = '<label>Branch:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('branch_id', $options, '', $branch_extra);
             }
             echo json_encode($html);
@@ -1302,15 +1303,15 @@ class Leads extends CI_Controller
                 $html1 .= form_dropdown('branch_id', $options, '', $branch_extra);
             }
             if (!empty($districts)) {
-                $dist_options[''] = 'Select District';
+                $dist_options[''] = 'Select City';
                 foreach ($districts as $key => $value) {
                     $dist_options[$value['code']] = ucwords($value['name']);
                 }
-                $html2 = '<label>District:<span style="color:red;">*</span></label>';
+                $html2 = '<label>City:<span style="color:red;">*</span></label>';
                 $html2 .= form_dropdown('district_id', $dist_options, $district_code, $district_extra);
             } else {
-                $dist_options[''] = 'Select District';
-                $html2 = '<label>District:<span style="color:red;">*</span></label>';
+                $dist_options[''] = 'Select City';
+                $html2 = '<label>City:<span style="color:red;">*</span></label>';
                 $html2 .= form_dropdown('district_id', $dist_options, '', $district_extra);
             }
             $data['branch'] = $html1;
@@ -1379,8 +1380,8 @@ class Leads extends CI_Controller
             $branch_options[''] = 'Select Branch';
             $html1 = '<label>Branch:<span style="color:red;">*</span></label>';
             $html1 .= form_dropdown('branch_id', $branch_options, '', $branch_extra);
-            $dist_options[''] = 'Select District';
-            $html2 = '<label>District:<span style="color:red;">*</span></label>';
+            $dist_options[''] = 'Select City';
+            $html2 = '<label>City:<span style="color:red;">*</span></label>';
             $html2 .= form_dropdown('district_id', $dist_options, '', $district_extra);
             $data['branch'] = $html1;
             $data['state'] = $html;
@@ -1442,22 +1443,25 @@ class Leads extends CI_Controller
             $this->make_bread->add('Lead Life Cycle', '', 0);
             $arrData['breadcrumb'] = $this->make_bread->output();
             $action = 'list';
-            $select = array('l.id','l.lead_name','l.lead_source','l.contact_no','l.created_on AS generated_on','l.reroute_from_branch_id','l.modified_on','l.branch_id','l.created_by_name as generated');
+            $select = array('l.id','l.customer_name','l.lead_source','l.contact_no','l.created_on AS generated_on','l.reroute_from_branch_id','l.modified_on','l.branch_id','l.created_by_name as generated');
             $table = Tbl_Leads.' as l';
             $where = array('id'=>$lead_id);
             $result = $this->Lead->get_leads($action,$table,$select,$where,$join=array(),$group_by=array(),$order_by=array());
-            if($result[0]['reroute_from_branch_id'] !=''){
-                $final_result[] = array('id'=>$result[0]['id'],'generated'=>$result[0]['generated'],'generated_on'=>$result[0]['generated_on'],
-                    'date'=>$result[0]['generated_on'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id']);
-                $final_result[] = array('id'=>$result[0]['id'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
-                    'reroute_to_branch_id'=>$result[0]['branch_id'],'modified_on'=>$result[0]['modified_on'],
-                    'date'=>$result[0]['modified_on'],'status'=>'NC');
-            }else{
-                $final_result = $result;
-                $final_result[0]['date'] = $result[0]['generated_on'];
+            if(!empty($result)){
+                if($result[0]['reroute_from_branch_id'] !=''){
+                    $final_result[] = array('id'=>$result[0]['id'],'generated'=>$result[0]['generated'],'generated_on'=>$result[0]['generated_on'],
+                        'date'=>$result[0]['generated_on'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
+                        'customer_name'=>$result[0]['customer_name'],'branch_id'=>$result[0]['branch_id'],
+                        'contact_no'=>$result[0]['contact_no'],'lead_source'=>$result[0]['lead_source']);
+                    $final_result[] = array('id'=>$result[0]['id'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
+                        'reroute_to_branch_id'=>$result[0]['branch_id'],'modified_on'=>$result[0]['modified_on'],
+                        'date'=>$result[0]['modified_on'],'status'=>'NC');
+                }else{
+                    $final_result = $result;
+                    $final_result[0]['date'] = $result[0]['generated_on'];
 
+                }
             }
-
             $select = array('la.employee_id','la.employee_name','la.created_by_name','la.created_on AS date','la.status');
             $table = Tbl_LeadAssign.' as la';
             $where = array('lead_id'=>$lead_id);
@@ -1466,7 +1470,9 @@ class Leads extends CI_Controller
             if(!empty($assign_result)){
                 $final_result = array_merge($final_result,$assign_result);
             }
-            $final_result = sortBySubkey($final_result,'date');
+            if(!empty($final_result)){
+                $final_result = sortBySubkey($final_result,'date');
+            }
             $arrData['lead_data'] = $final_result;
             $middle = 'Leads/life_cycle';
             return load_view($middle,$arrData);

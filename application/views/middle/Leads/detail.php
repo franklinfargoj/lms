@@ -31,7 +31,7 @@
         }
     }
 
-    $data_district[''] = 'Select District';
+    $data_district[''] = 'Select City';
     if ($districts != '') {
         foreach ($districts as $key => $value) {
             $data_district[$value['code']] = $value['name'];
@@ -565,7 +565,7 @@
     }
 
     $('#is_other_branch').click(function () {
-        var dist = '<select name="district_id" id = "district_id"><option value="">Select District</option></select>';
+        var dist = '<select name="district_id" id = "district_id"><option value="">Select City</option></select>';
         var branch = '<select name="branch_id" id = "branch_id"><option value="">Select Branch</option></select>';
         $("#state").show();
         $("#branch").show();
@@ -589,7 +589,7 @@
             data:{
                 '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
                 state_code:state_code,
-                select_label:'Select District'
+                select_label:'Select City'
             }
         }).success(function (resp) {
             if(resp){

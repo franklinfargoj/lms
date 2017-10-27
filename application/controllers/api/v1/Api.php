@@ -716,7 +716,7 @@ class Api extends REST_Controller
             if(!in_array($state_zone['s_code'],$available_states)){
 
                 $table = Tbl_district . ' as d';
-                $select = array('TRIM(code) AS id', 'TRIM(name) AS name');
+                $select = array('DISTINCT(TRIM(name)) AS name','TRIM(code) AS id');
                 $where = array('state_code' => $state_zone['s_code'],'name !='=>'');
                 $orderBy = 'name ASC';
                 $districts = $this->Lead->get_leads($action, $table, $select, $where, '', '', $orderBy);
@@ -2651,7 +2651,7 @@ class Api extends REST_Controller
         $action = 'list';
 
         //Get Amount Details
-        $table = Tbl_Amounts.' as a';
+        $table = Tbl_cbs.' as a';
         $select = array('a.*');
         $where  = array('a.lead_id' => $lead_id);
         $join = array();

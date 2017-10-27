@@ -32,7 +32,7 @@ if(isset($states) && !empty($states)){
 }
 
 $data_branch[''] = 'Select Branch';
-$data_district[''] = 'Select District';
+$data_district[''] = 'Select City';
 
 $data_department_name = array('name' => 'department_name',
     'id' => 'department_name',
@@ -421,7 +421,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 data: {
                     '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
                     state_code:state,
-                    select_label:'Select State'
+                    select_label:'Select City'
                 }
             }).success(function (resp) {
                 if (resp) {
@@ -554,6 +554,12 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     sliderElement.slider('values', 0, value);
                 }
                 div.width(width);
+            }
+
+            if(range.val() > 0){
+                $("#ticket_range-error").hide();
+            }else{
+                $("#ticket_range-error").show();
             }
         }
     });
