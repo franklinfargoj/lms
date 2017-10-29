@@ -86,14 +86,17 @@ class Cron extends CI_Controller
 //        print_r($zone_list);die;
         foreach ($zone_list as $k => $v) {
             $final = array();
+            $zonal_manager=array();
+            $branch_list=array();
+
             //FOR ZONAL MANAGER
             $zonal_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending' => array());
             $gm = $zonal_manager;
-            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%','zone_id' => '009846'),array(),'employee_dump');
-            $zonal_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'BM','zone_id' => '009846'));
-            $zonal_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'BM','zone_id' => '009846'));
-            $zonal_manager['unassigned'] = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'BM','zone_id' => '009846'));
-            $zonal_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'BM','zone_id' => '009846'));
+            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%','zone_id' => $v->zone_id),array(),'employee_dump');
+            $zonal_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['unassigned'] = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'BM','zone_id' => $v->zone_id));
             
             $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
             $total = array();
@@ -123,7 +126,6 @@ class Cron extends CI_Controller
 
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
-            die;
         }
     }       
 
