@@ -90,7 +90,6 @@ class Cron extends CI_Controller
             $zonal_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending' => array());
             $gm = $zonal_manager;
             $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%','zone_id' => $v->zone_id),array(),'employee_dump');
-            
             $zonal_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
             $zonal_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
             $zonal_manager['unassigned'] = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
@@ -121,7 +120,7 @@ class Cron extends CI_Controller
             $subject = 'LMS - Reports - '.$v->zone_id;
             $attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
             $to = array('email' => $v->email_id,'name' => $v->name);
-            
+
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
         }
@@ -355,6 +354,7 @@ class Cron extends CI_Controller
     private function get_leads($data){
         $type = $data['type'];
         $till = $data['till'];
+        $zone_id = '';
         $user_type = $data['user_type'];
         if(isset($data['zone_id'])){
             $zone_id = $data['zone_id'];
@@ -376,6 +376,9 @@ class Cron extends CI_Controller
             }
             if($user_type == 'ZM'){
                 $select[] = 'l.zone_id';
+                if($zone_id != ''){
+                    $where['l.zone_id'] = $zone_id;
+                }
                 $group_by = array('l.zone_id');
             }elseif($user_type == 'BM'){
                 $select[] = 'l.branch_id';
@@ -393,6 +396,9 @@ class Cron extends CI_Controller
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             if($user_type == 'ZM'){
                 $select[] = 'l.zone_id';
+                if($zone_id != ''){
+                    $where['l.zone_id'] = $zone_id;
+                }
                 $group_by = array('l.zone_id');
             }elseif($user_type == 'BM'){
                 $select[] = 'l.branch_id';
@@ -434,6 +440,9 @@ class Cron extends CI_Controller
             }
             if($user_type == 'ZM'){
                 $select[] = 'la.zone_id';
+                if($zone_id != ''){
+                    $where['l.zone_id'] = $zone_id;
+                }
                 $group_by = array('la.zone_id');
             }elseif($user_type == 'BM'){
                 $select[] = 'la.branch_id';
