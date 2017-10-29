@@ -81,13 +81,15 @@ class Cron extends CI_Controller
      */
     public function zm_consolidated_mail(){
         $subject = 'Zonal Manager Consolidated Format';
-        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','zone_id','zone_name'),array('designation' => 'ZD'),array(),'employee_dump');
+        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
+//        echo "<pre>";
+//        print_r($zone_list);die;
         foreach ($zone_list as $k => $v) {
             $final = array();
             //FOR ZONAL MANAGER
             $zonal_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending' => array());
             $gm = $zonal_manager;
-            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('designation' => 'BR','zone_id' => $v->zone_id),array(),'employee_dump');
+            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%','zone_id' => $v->zone_id),array(),'employee_dump');
             
             $zonal_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
             $zonal_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
@@ -135,7 +137,9 @@ class Cron extends CI_Controller
      */
     public function bm_consolidated_mail(){
         $subject = 'Branch Manager Consolidated Format';
-        $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','branch_id','branch_name'),array(),array(),'employee_dump');
+        $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%'),array(),'employee_dump');
+//        echo "<pre>";
+//        print_r($branch_list);die;
         foreach ($branch_list as $k => $v) {
             $final = array();
             //FOR EMPLOYEE
