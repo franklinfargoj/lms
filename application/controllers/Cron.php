@@ -65,7 +65,7 @@ class Cron extends CI_Controller
 
         $attachment_file = $this->export_to_excel('gm_consolidated_mail',$final['general_manager']);
         $to = array('email' => 'ashok.jadhav@wwindia.com','name' => 'Ashok Jadhav');
-        $subject = 'General Manager Consolidated Format';
+        $subject = 'LMS - Reports';
         $message = 'Please Find an attachment';
         sendMail($to,$subject,$message,$attachment_file);
     }
@@ -80,7 +80,7 @@ class Cron extends CI_Controller
      * 
      */
     public function zm_consolidated_mail(){
-        $subject = 'Zonal Manager Consolidated Format';
+        $subject = 'LMS - Reports';
         $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($zone_list);die;
@@ -136,7 +136,7 @@ class Cron extends CI_Controller
      * 
      */
     public function bm_consolidated_mail(){
-        $subject = 'Branch Manager Consolidated Format';
+        $subject = 'LMS - Reports';
         $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%'),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($branch_list);die;
