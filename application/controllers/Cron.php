@@ -80,7 +80,7 @@ class Cron extends CI_Controller
      * 
      */
     public function zm_consolidated_mail(){
-        $subject = 'LMS - Reports';
+
         $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($zone_list);die;
@@ -118,6 +118,7 @@ class Cron extends CI_Controller
                 $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
             }
             //FOR ZONAL MANAGER
+            $subject = 'LMS - Reports - '.$v->zone_id;
             $attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
             $to = array('email' => $v->email_id,'name' => $v->name);
             
