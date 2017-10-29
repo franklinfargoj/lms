@@ -97,7 +97,7 @@ class Cron extends CI_Controller
             $zonal_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
             $zonal_manager['unassigned'] = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
             $zonal_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'BM','zone_id' => $v->zone_id));
-            
+
             $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
             $total = array();
             foreach (array_keys($gm) as $key => $value) {
@@ -116,7 +116,7 @@ class Cron extends CI_Controller
                     $final['zonal_manager'][$value->branch_id]['unassigned'] = isset($total['unassigned'][$value->branch_id]) ? $total['unassigned'][$value->branch_id] : 0;
                     $final['zonal_manager'][$value->branch_id]['pending'] = isset($total['pending'][$value->branch_id]) ? $total['pending'][$value->branch_id] : 0;
                 }
-                $final['zonal_manager'][$value->branch_id]['branch_id'] = $v->zone_id;
+                $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
                 $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
             }
             //FOR ZONAL MANAGER
