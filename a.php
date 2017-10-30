@@ -1,1 +1,4 @@
-<?php echo "Test for Git";?>
+<?php
+echo phpinfo();
+
+?>
