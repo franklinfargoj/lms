@@ -211,13 +211,14 @@ class Cron extends CI_Controller
      */
     public function bm_inactive_leads(){
         //Branch list for sending mail
-        $subject = 'Branch Manager Inacvtive Leads';
-        $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','branch_id','branch_name'),array('designation' => 'BR'),array(),'employee_dump');
+        $subject = 'Branch Manager Inactive Leads';
+        $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%'),array(),'employee_dump');
         foreach ($branch_list as $k => $v) {
             $final = array();
             //FOR BRANCH MANAGER
-            $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('designation' => 'HD','branch_id' => $v->branch_id),array(),'employee_dump');
-            
+            $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('branch_id' => '000016'),array(),'employee_dump');
+//            echo "<pre>";
+//            print_r($employee_list);die;
             $branch_manager['inactive']  = $this->get_leads(array('type'=>'inactive','till'=>'days','days_count'=>2,'user_type'=>'EM','branch_id' => $v->branch_id));
             $branch_manager = call_user_func_array('array_merge', $branch_manager);
             
@@ -237,11 +238,11 @@ class Cron extends CI_Controller
             //FOR BRANCH MANAGER
 
             //Notification Code
-            $title = 'Total no. of inactive leads for the Branch';
-            $description = 'Total no. of inactive leads : '.$total_count;
-            $priority = 'Normal';
-            $notification_to = $v->hrms_id;    
-            notification_log($title,$description,$priority,$notification_to);
+//            $title = 'Total no. of inactive leads for the Branch';
+//            $description = 'Total no. of inactive leads : '.$total_count;
+//            $priority = 'Normal';
+//            $notification_to = $v->hrms_id;
+//            notification_log($title,$description,$priority,$notification_to);
             //Notification Code
 
             //Mail Code
