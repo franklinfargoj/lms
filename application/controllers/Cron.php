@@ -28,46 +28,54 @@ class Cron extends CI_Controller
      * 
      */
     public function gm_consolidated_mail()
-    {   
-        $final = array();
-        //For GENERAL MANAGER
-        $general_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending' => array());
-        $gm = $general_manager;
-        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','zone_id','zone_name'),array('designation' => 'ZD'),array(),'employee_dump');
-    
-        $general_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'ZM'));
-        $general_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'ZM'));
-        $general_manager['unassigned'] = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'ZM'));
-        $general_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'ZM'));
+    {
+        $GM_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%GENERAL MANAGER%'),array(),'employee_dump');
+//        echo "<pre>";
+//        print_r($GM_list);die;
+        foreach ($GM_list as $k => $v) {
+            $final = array();
+            //For GENERAL MANAGER
+            $general_manager = array('generated' => array(), 'converted' => array(), 'unassigned' => array(), 'pending' => array());
+            $gm = $general_manager;
+            $zone_list = $this->Lead->get_employee_dump(array('DISTINCT(zone_id)', 'zone_name'), array(), array(), 'employee_dump');
+//            echo "<pre>";
+//        print_r($zone_list);die;
+            $general_manager['generated'] = $this->get_leads(array('type' => 'generated', 'till' => 'mtd', 'user_type' => 'ZM'));
+            $general_manager['converted'] = $this->get_leads(array('type' => 'converted', 'till' => 'mtd', 'user_type' => 'ZM'));
+            $general_manager['unassigned'] = $this->get_leads(array('type' => 'unassigned', 'till' => '', 'user_type' => 'ZM'));
+            $general_manager['pending'] = $this->get_leads(array('type' => 'pending', 'till' => 'TAT', 'user_type' => 'ZM'));
 
-        $general_manager = call_user_func_array('array_merge', $general_manager);
-        $total = array();
-        foreach (array_keys($gm) as $key => $value) {
-            $total[$value] = array_column($general_manager, $value,'zone_id'); 
-        }
-        $unique_zone_ids = array_unique(array_column($general_manager, 'zone_id'));
-        foreach ($zone_list as $key => $value) {
-            if(!in_array($value->zone_id,$unique_zone_ids)){
-                $final['general_manager'][$value->zone_id]['generated'] = 0;
-                $final['general_manager'][$value->zone_id]['converted'] = 0;
-                $final['general_manager'][$value->zone_id]['unassigned'] = 0;
-                $final['general_manager'][$value->zone_id]['pending'] = 0;
-            }else{
-                $final['general_manager'][$value->zone_id]['generated'] = isset($total['generated'][$value->zone_id]) ? $total['generated'][$value->zone_id] : 0;
-                $final['general_manager'][$value->zone_id]['converted'] = isset($total['converted'][$value->zone_id]) ? $total['converted'][$value->zone_id] : 0;
-                $final['general_manager'][$value->zone_id]['unassigned'] = isset($total['unassigned'][$value->zone_id]) ? $total['unassigned'][$value->zone_id] : 0;
-                $final['general_manager'][$value->zone_id]['pending'] = isset($total['pending'][$value->zone_id]) ? $total['pending'][$value->zone_id] : 0;
+            $general_manager = call_user_func_array('array_merge', $general_manager);
+            $total = array();
+            foreach (array_keys($gm) as $key => $value) {
+                $total[$value] = array_column($general_manager, $value, 'zone_id');
             }
-            $final['general_manager'][$value->zone_id]['zone_id'] = $value->zone_id;
-            $final['general_manager'][$value->zone_id]['zone_name'] = $value->zone_name;
-        }
-        //For GENERAL MANAGER
+            $unique_zone_ids = array_unique(array_column($general_manager, 'zone_id'));
+            foreach ($zone_list as $key => $value) {
+                if (!in_array($value->zone_id, $unique_zone_ids)) {
+                    $final['general_manager'][$value->zone_id]['generated'] = 0;
+                    $final['general_manager'][$value->zone_id]['converted'] = 0;
+                    $final['general_manager'][$value->zone_id]['unassigned'] = 0;
+                    $final['general_manager'][$value->zone_id]['pending'] = 0;
+                } else {
+                    $final['general_manager'][$value->zone_id]['generated'] = isset($total['generated'][$value->zone_id]) ? $total['generated'][$value->zone_id] : 0;
+                    $final['general_manager'][$value->zone_id]['converted'] = isset($total['converted'][$value->zone_id]) ? $total['converted'][$value->zone_id] : 0;
+                    $final['general_manager'][$value->zone_id]['unassigned'] = isset($total['unassigned'][$value->zone_id]) ? $total['unassigned'][$value->zone_id] : 0;
+                    $final['general_manager'][$value->zone_id]['pending'] = isset($total['pending'][$value->zone_id]) ? $total['pending'][$value->zone_id] : 0;
+                }
+                $final['general_manager'][$value->zone_id]['zone_id'] = $value->zone_id;
+                $final['general_manager'][$value->zone_id]['zone_name'] = $value->zone_name;
+            }
+//            echo "<pre>";
+//           print_r($final['general_manager']);die;
+            //For GENERAL MANAGER
 
-        $attachment_file = $this->export_to_excel('gm_consolidated_mail',$final['general_manager']);
-        $to = array('email' => 'ashok.jadhav@wwindia.com','name' => 'Ashok Jadhav');
-        $subject = 'LMS - Reports';
-        $message = 'Please Find an attachment';
-        sendMail($to,$subject,$message,$attachment_file);
+            $attachment_file = $this->export_to_excel('gm_consolidated_mail', $final['general_manager']);
+            $to = array('email' => $v->email_id,'name' => $v->name);
+            $subject = 'LMS - Reports';
+            $message = 'Please Find an attachment';
+            sendMail($to, $subject, $message, $attachment_file);
+        }
     }
 
      /*
@@ -119,6 +127,9 @@ class Cron extends CI_Controller
                 $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
                 $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
             }
+//            echo "<pre>";
+//            echo $v->zone_id;
+//            print_r($final['zonal_manager']);
             //FOR ZONAL MANAGER
             $subject = 'LMS - Reports - '.$v->zone_id;
             $attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
