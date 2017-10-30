@@ -251,6 +251,7 @@ class Cron extends CI_Controller
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
             //Mail Code
+            die;
         }
     }
     /*
