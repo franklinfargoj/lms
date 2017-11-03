@@ -10,13 +10,13 @@ $lead_status = $this->config->item('lead_status');
         <h3 class="text-center">
             Leads Classification
         </h3>
-        <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
-            <div class="float-right">
-                <a href="<?php echo site_url('charts/index/leads_classification')?>" class="btn-Download">
-                    Chart View
-                </a>
-            </div>
-        <?php }?>
+<!--        --><?php //if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
+<!--            <div class="float-right">-->
+<!--                <a href="--><?php //echo site_url('charts/index/leads_classification')?><!--" class="btn-Download">-->
+<!--                    Chart View-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        --><?php //}?>
     </div>
 </div>
 <?php 
