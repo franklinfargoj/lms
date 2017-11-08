@@ -150,9 +150,12 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                             <td>
                                  <?php echo $i;?>
                                 <?php $admin = $this->session->userdata('admin_type');
-                                if($admin == 'BM' && in_array($value['status'],array('AO','NI'))){?>
-                                    <img src="<?php echo base_url().ASSETS;?>images/gif-load.gif" alt="logo" style="max-width: 24%">
-                                <?php }?>
+                                if($admin == 'BM' && in_array($value['status'],array('AO'))){?>
+                                    <img src="<?php echo base_url().ASSETS;?>images/like.png" alt="logo" style="max-width: 24%">
+                                <?php }
+                                if($admin == 'BM' && in_array($value['status'],array('NI'))){?>
+                                <img src="<?php echo base_url().ASSETS;?>images/dislike.png" alt="logo" style="max-width: 24%">
+                            <?php }?>
                             </td>
                             <td>
                                  <?php echo ucwords($value['customer_name']);?>
