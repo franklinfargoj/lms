@@ -325,7 +325,7 @@ class Cron extends CI_Controller
      */
     public function zm_unassigned_leads(){
         //zone list for sending mail
-        $subject = 'Zone Manager Unassigned Leads';
+
         $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
         foreach ($zone_list as $k => $v) {
             $final = array();
@@ -359,6 +359,7 @@ class Cron extends CI_Controller
             //Notification Code
 
             //Mail Code
+            $subject = 'Unassigned Leads - '.$v->zone_id;
             $attachment_file = $this->export_to_excel('zm_unassigned_leads',$final['zonal_manager']);
             $to = array('email' => $v->email_id,'name' => $v->name);
             $message = 'Please Find an attachment';
