@@ -332,7 +332,7 @@ class Cron extends CI_Controller
             //FOR ZONE MANAGER
             $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('zone_id' => $v->zone_id),array(),'employee_dump');
             
-            $zonal_manager['unassigned']  = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['unassigned']  = $this->get_leads(array('type'=>'unassigned_noti','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
             $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
             
             $total['unassigned'] = array_column($zonal_manager,'unassigned','branch_id'); 
@@ -429,6 +429,26 @@ class Cron extends CI_Controller
             }elseif($user_type == 'BM'){
                 $select[] = 'l.branch_id';
                 $where['l.zone_id'] = $zone_id;
+                $group_by = array('l.branch_id');
+            }
+        }elseif($type == 'unassigned_noti'){
+            //Unassigned Leads
+            $select = array('COUNT(l.id) as unassigned');
+            $where  = array('la.lead_id' => NULL);
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
+            if($user_type == 'ZM'){
+                $select[] = 'l.zone_id';
+                if($zone_id != ''){
+                    $where['l.zone_id'] = $zone_id;
+                }
+                $day = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -4 day' ) );
+                $where['l.created_on <'] = $day.' 00:00:00';
+                $group_by = array('l.zone_id');
+            }elseif($user_type == 'BM'){
+                $select[] = 'l.branch_id';
+                $where['l.zone_id'] = $zone_id;
+                $day = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -4 day' ) );
+                $where['l.created_on <'] = $day.' 00:00:00';
                 $group_by = array('l.branch_id');
             }
         }else{
