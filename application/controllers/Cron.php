@@ -98,7 +98,7 @@ class Cron extends CI_Controller
             $branch_list=array();
 
             //FOR ZONAL MANAGER
-            $zonal_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending' => array());
+            $zonal_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending_before' => array(),'pending' => array());
             $gm = $zonal_manager;
             $branch_list = $this->Lead->get_employee_dump(array('DISTINCT(branch_id)','branch_name'),array('zone_id' => $v->zone_id),array(),'employee_dump');
 //            echo "<pre>";
