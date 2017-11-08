@@ -556,10 +556,11 @@ $config['escalation_days_diff'] = array(
     '8days'=>'-9days');
 
 $config['lead_source'] = array(
+    'analytics'=>'Analytics',
     'walkin'=>'Branch Generated',
-    'tie_ups'=>'Others',
     'enquiry'=>'Website,IVR',
-    'analytics'=>'Analytics');
+    'tie_ups'=>'Others'
+    );
 
 $config['map'] = array(
     'BRANCH'=>'BRANCH',
