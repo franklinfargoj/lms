@@ -35,7 +35,7 @@ class Cron extends CI_Controller
         foreach ($GM_list as $k => $v) {
             $final = array();
             //For GENERAL MANAGER
-            $general_manager = array('generated' => array(), 'converted' => array(), 'unassigned' => array(), 'pending' => array());
+            $general_manager = array('generated' => array(), 'converted' => array(), 'unassigned' => array(),'pending_before' => array(), 'pending' => array());
             $gm = $general_manager;
             $zone_list = $this->Lead->get_employee_dump(array('DISTINCT(zone_id)', 'zone_name'), array(), array(), 'employee_dump');
 //            echo "<pre>";
@@ -43,6 +43,7 @@ class Cron extends CI_Controller
             $general_manager['generated'] = $this->get_leads(array('type' => 'generated', 'till' => 'mtd', 'user_type' => 'ZM'));
             $general_manager['converted'] = $this->get_leads(array('type' => 'converted', 'till' => 'mtd', 'user_type' => 'ZM'));
             $general_manager['unassigned'] = $this->get_leads(array('type' => 'unassigned', 'till' => '', 'user_type' => 'ZM'));
+            $zonal_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'ZM'));
             $general_manager['pending'] = $this->get_leads(array('type' => 'pending', 'till' => 'TAT', 'user_type' => 'ZM'));
 
             $general_manager = call_user_func_array('array_merge', $general_manager);
@@ -56,11 +57,13 @@ class Cron extends CI_Controller
                     $final['general_manager'][$value->zone_id]['generated'] = 0;
                     $final['general_manager'][$value->zone_id]['converted'] = 0;
                     $final['general_manager'][$value->zone_id]['unassigned'] = 0;
+                    $final['general_manager'][$value->zone_id]['pending_before'] = 0;
                     $final['general_manager'][$value->zone_id]['pending'] = 0;
                 } else {
                     $final['general_manager'][$value->zone_id]['generated'] = isset($total['generated'][$value->zone_id]) ? $total['generated'][$value->zone_id] : 0;
                     $final['general_manager'][$value->zone_id]['converted'] = isset($total['converted'][$value->zone_id]) ? $total['converted'][$value->zone_id] : 0;
                     $final['general_manager'][$value->zone_id]['unassigned'] = isset($total['unassigned'][$value->zone_id]) ? $total['unassigned'][$value->zone_id] : 0;
+                    $final['general_manager'][$value->zone_id]['pending_before'] = isset($total['pending_before'][$value->zone_id]) ? $total['pending_before'][$value->zone_id] : 0;
                     $final['general_manager'][$value->zone_id]['pending'] = isset($total['pending'][$value->zone_id]) ? $total['pending'][$value->zone_id] : 0;
                 }
                 $final['general_manager'][$value->zone_id]['zone_id'] = $value->zone_id;
@@ -493,7 +496,7 @@ class Cron extends CI_Controller
         $export_data = array();
         switch ($action) {
             case 'gm_consolidated_mail':
-                $header_value = array('Zone Id','Zone Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of Unassigned Leads','No. of pending leads post Documentation');
+                $header_value = array('Zone Id','Zone Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
             case 'zm_consolidated_mail':
             $header_value = array('Branch Id','Branch Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
