@@ -249,11 +249,11 @@ class Leads extends CI_Controller
                 foreach ($products as $key => $value) {
                     $options[$value['id']] = ucwords($value['title']);
                 }
-                $html = '<label>Product:</label>';
+                $html = '<label>Product:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('product_id', $options, '', $product_extra);
             } else {
                 $options[''] = $select_label;
-                $html = '<label>Product:</label>';
+                $html = '<label>Product:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('product_id', $options, '', $product_extra);
             }
             echo $html;
