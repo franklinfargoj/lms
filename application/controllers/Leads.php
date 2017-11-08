@@ -249,11 +249,11 @@ class Leads extends CI_Controller
                 foreach ($products as $key => $value) {
                     $options[$value['id']] = ucwords($value['title']);
                 }
-                $html = '<label>Product:</label>';
+                $html = '<label>Product:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('product_id', $options, '', $product_extra);
             } else {
                 $options[''] = $select_label;
-                $html = '<label>Product:</label>';
+                $html = '<label>Product:<span style="color:red;">*</span></label>';
                 $html .= form_dropdown('product_id', $options, '', $product_extra);
             }
             echo $html;
@@ -1036,6 +1036,7 @@ class Leads extends CI_Controller
                 $where['l.lead_source'] = $arrData['lead_source'];
             }
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+            $order_by = "la.created_on DESC";
         }
         if($type == 'assigned'){
             $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
@@ -1081,9 +1082,9 @@ class Leads extends CI_Controller
                 $where['l.lead_source'] = $arrData['lead_source'];
             }
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
-
+            $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 ELSE 3 END";
         }
-        $order_by = "la.created_on DESC";
+
         $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
         $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by);
         $arrData['lead_sources'] = $this->Lead->get_enum(Tbl_Leads,'lead_source');

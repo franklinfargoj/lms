@@ -1,5 +1,6 @@
 <?php
 $lead_type = $this->config->item('lead_type');
+$lead_sources = $this->config->item('lead_source');
 ?>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
@@ -7,7 +8,7 @@ $lead_type = $this->config->item('lead_type');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Type Report
+            Lead Type Report
         </h3>
         <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
         <div class="float-right">
@@ -100,7 +101,7 @@ $lead_type = $this->config->item('lead_type');
                 if($lead_sources){
                     $options3['']='All';
                     foreach ($lead_sources as $key => $value) {
-                        $options3[$value] = $value;
+                        $options3[$key] = $value;
                     }
                     if(isset($lead_source)){
                         $lead_source = $lead_source;
@@ -224,15 +225,15 @@ $lead_type = $this->config->item('lead_type');
                             </th>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
-                                <th>
-                                    HRMS ID
-                                </th>
+<!--                                <th>-->
+<!--                                    HRMS ID-->
+<!--                                </th>-->
                                 <th>
                                     Employee Name
                                 </th>
-                                <th>
-                                    Designation
-                                </th>
+<!--                                <th>-->
+<!--                                    Designation-->
+<!--                                </th>-->
                             <?php }?>
                             <th>
                                 Source Type
@@ -278,37 +279,37 @@ $lead_type = $this->config->item('lead_type');
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['zone_name']) ? $value['zone_name'] : '';
+                                    echo isset($value['zone_name']) ? ucwords(strtolower($value['zone_name'])) : '';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('BM','EM'))){?>
                             <td>
                                 <?php 
-                                    echo isset($value['branch_name']) ? $value['branch_name'] : '';
+                                    echo isset($value['branch_name']) ? ucwords(strtolower($value['branch_name'])) : '';
                                 ?>
                             </td>
                             <?php }?>
                             <?php if(in_array($viewName,array('EM'))){?>
+<!--                                <td>-->
+<!--                                    --><?php
+//                                    echo isset($value['employee_id']) ? $value['employee_id'] : '';
+//                                    ?>
+<!--                                </td>-->
                                 <td>
                                     <?php
-                                    echo isset($value['employee_id']) ? $value['employee_id'] : '';
+                                    echo isset($value['employee_name']) ? ucwords(strtolower($value['employee_name'])) : '';
                                     ?>
                                 </td>
-                                <td>
-                                    <?php
-                                    echo isset($value['employee_name']) ? $value['employee_name'] : '';
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                    echo isset($value['designation']) ? $value['designation'] : '';
-                                    ?>
-                                </td>
+<!--                                <td>-->
+<!--                                    --><?php
+//                                    echo isset($value['designation']) ? $value['designation'] : '';
+//                                    ?>
+<!--                                </td>-->
                             <?php }?>
                             <td>
                                 <?php 
-                                    echo !empty($lead_source) ? ucwords($lead_source) : 'All';
+                                    echo !empty($lead_source) ? ucwords($lead_sources[$lead_source]) : 'All';
                                 ?>
                             </td>
                             <td>

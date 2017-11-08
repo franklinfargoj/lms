@@ -212,7 +212,7 @@ class Reports extends CI_Controller
         }
 
         $TABLE  = 'employee_dump';
-        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
+        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
         $arrData['leads'] = array();
@@ -271,6 +271,13 @@ class Reports extends CI_Controller
                     $arrData['leads'][$index]['status'] = $Lead[$index]['status'];
                 }
                 $arrData['Total'] += $arrData['leads'][$index]['total'];
+            }
+
+            if($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('branch_id')=> $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
+            }
+            if($this->session->userdata('admin_type') == 'ZM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
         return $arrData;
@@ -396,7 +403,7 @@ class Reports extends CI_Controller
             $GROUP_BY = array('zone_id');
         }
         $TABLE  = 'employee_dump';
-        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
+        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
@@ -454,6 +461,12 @@ class Reports extends CI_Controller
                     $arrData['leads'][$index]['lead_identification'] = $Lead[$index]['lead_identification'];
                 }
                 $arrData['Total'] += $arrData['leads'][$index]['total'];
+            }
+            if($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('branch_id')=> $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
+            }
+            if($this->session->userdata('admin_type') == 'ZM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
         return $arrData;
@@ -579,7 +592,7 @@ class Reports extends CI_Controller
         }
 
         $TABLE  = 'employee_dump';
-        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
+        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         /*pe($this->db->last_query());
@@ -641,6 +654,12 @@ class Reports extends CI_Controller
                     $arrData['leads'][$index]['status'] = $Lead[$index]['status'];
                 }
                 $arrData['Total'] += $arrData['leads'][$index]['total'];
+            }
+            if($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('branch_id')=> $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
+            }
+            if($this->session->userdata('admin_type') == 'ZM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
         return $arrData;
@@ -768,7 +787,7 @@ class Reports extends CI_Controller
         }
 
         $TABLE  = 'employee_dump';
-        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
+        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
@@ -828,6 +847,12 @@ class Reports extends CI_Controller
                     $arrData['leads'][$index]['status'] = $Lead[$index]['status'];
                 }
                 $arrData['Total'] += $arrData['leads'][$index]['total'];
+            }
+            if($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('branch_id')=> $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
+            }
+            if($this->session->userdata('admin_type') == 'ZM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
         return $arrData;
@@ -960,7 +985,7 @@ class Reports extends CI_Controller
 
         $TABLE  = 'employee_dump';
         if(!isset($arrData['list'])){
-            $arrData['list'] = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
+            $arrData['list'] = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
         }
 
         $arrData[$type] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
@@ -1059,6 +1084,12 @@ class Reports extends CI_Controller
                 }
                 $arrData['G_Total'] += $arrData['leads'][$index]['generated_count'];
                 $arrData['C_Total'] += $arrData['leads'][$index]['converted_count'];
+            }
+            if($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('branch_id')=> $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
+            }
+            if($this->session->userdata('admin_type') == 'ZM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
         return $arrData;
@@ -1181,7 +1212,7 @@ class Reports extends CI_Controller
         }
 
         $TABLE  = 'employee_dump';
-        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
+        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'lead_ticket_range DESC');
 
@@ -1242,6 +1273,12 @@ class Reports extends CI_Controller
                     $arrData['leads'][$index]['amount'] = isset($Lead[$index]['amount']) ? $Lead[$index]['amount'] : 0;
                 }
                 $arrData['Total'] += $arrData['leads'][$index]['ticket'];
+            }
+            if($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('branch_id')=> $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
+            }
+            if($this->session->userdata('admin_type') == 'ZM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
         return $arrData;
@@ -1348,7 +1385,7 @@ class Reports extends CI_Controller
         }
 
         $TABLE  = 'employee_dump';
-        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
+        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
         /*pe($this->db->last_query());
         exit;*/
 
@@ -1412,6 +1449,7 @@ class Reports extends CI_Controller
                     }
                 }
 
+
                 //Zone Manager Login
                 if($viewName == 'ZM'){
                     $index = $value->zone_id;
@@ -1428,6 +1466,13 @@ class Reports extends CI_Controller
                 }
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+            }
+
+            if($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('branch_id')=> $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
+            }
+            if($this->session->userdata('admin_type') == 'ZM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
         return $arrData;

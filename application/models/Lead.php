@@ -427,14 +427,25 @@ class Lead  extends CI_Model
 
     }
 
-    public function get_employee_dump($select,$where,$group_by,$table){
+    public function get_employee_dump($select,$where,$group_by,$table,$view=''){
             $this->db->select($select,TRUE);
             $this->db->from($table);
             if(!empty($where)){
                 $this->db->where($where);
             }
             $this->db->group_by($group_by);
-            $this->db->order_by('id','ASC');
+            if($view != ''){
+              if($view == 'EM'){
+                  $this->db->order_by('employee_name','ASC');
+              }
+              if($view == 'BM'){
+                  $this->db->order_by('branch_name','ASC');
+              }
+              if($this->session->userdata('admin_type') == 'ZM' || $this->session->userdata('admin_type') == 'GM'){
+                $this->db->order_by('zone_name','ASC');
+              }
+            }
+
             $Q = $this->db->get();
             return $Q->result();
     }

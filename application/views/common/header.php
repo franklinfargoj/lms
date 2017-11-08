@@ -179,7 +179,7 @@
 								</li>
 								<li>
 									<a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">
-										Pendancy Leads
+										Pendency Leads
 									</a>
 								</li>
 							</ul>
@@ -193,7 +193,7 @@
 							<ul class="cal-drop2">
 								<li>
 									<a href="<?php echo site_url('reports/index/leads_type_reports')?>">
-									 Leads Type
+									 Lead Type
 									</a>
 								</li>
 								 <li>
