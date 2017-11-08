@@ -601,10 +601,11 @@ class Cron extends CI_Controller
             if(in_array($action,array('gm_consolidated_mail','zm_consolidated_mail','bm_consolidated_mail'))){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['generated']));
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['converted']));
-                if($action == 'bm_consolidated_mail'){
+                if($action == 'bm_consolidated_mail' ){
                     $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['pending_before']));
                 }else{
                     $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['unassigned']));
+                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['pending_before']));
                 }
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['pending']));
             }
