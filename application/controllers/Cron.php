@@ -127,7 +127,7 @@ class Cron extends CI_Controller
                     $final['zonal_manager'][$value->branch_id]['generated'] = isset($total['generated'][$value->branch_id]) ? $total['generated'][$value->branch_id] : 0;
                     $final['zonal_manager'][$value->branch_id]['converted'] = isset($total['converted'][$value->branch_id]) ? $total['converted'][$value->branch_id] : 0;
                     $final['zonal_manager'][$value->branch_id]['unassigned'] = isset($total['unassigned'][$value->branch_id]) ? $total['unassigned'][$value->branch_id] : 0;
-                    $final['zonal_manager'][$value->hrms_id]['pending_before'] = isset($total['pending_before'][$value->branch_id]) ? $total['pending_before'][$value->branch_id] : 0;
+                    $final['zonal_manager'][$value->branch_id]['pending_before'] = isset($total['pending_before'][$value->branch_id]) ? $total['pending_before'][$value->branch_id] : 0;
                     $final['zonal_manager'][$value->branch_id]['pending'] = isset($total['pending'][$value->branch_id]) ? $total['pending'][$value->branch_id] : 0;
 
 
