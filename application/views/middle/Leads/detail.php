@@ -204,7 +204,7 @@
                                     ?>
                                 </div>
                                 <div class="form-control reason" >
-                                    <label>Reason For Drop :</label>
+                                    <label>Reason For Drop :<span style="color:red;">*</span></label>
                                     <?php
                                     $reason = array(
                                         'type'  => 'text',
@@ -219,7 +219,7 @@
                                 </div>
                                 <?php if($this->session->userdata('admin_type')=='EM'){?>
                                 <div class="form-control followUp" style="display:none">
-                                    <label>Next Followup Date:</label>
+                                    <label>Next Followup Date:<span style="color:red;">*</span></label>
                                     <?php 
                                         if(!empty($leads[0]['remind_on'])){
                                             $value = date('d-m-Y',strtotime($leads[0]['remind_on']));
@@ -237,7 +237,7 @@
                                         ?>
                                 </div>
                                     <div class="form-control followUp" style="display:none">
-                                        <label>Followup Remark:</label>
+                                        <label>Followup Remark:<span style="color:red;">*</span></label>
                                         <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
                                     </div>
                                     <?php }?>
@@ -525,6 +525,9 @@
                 },
                 reason:{
                     required:true
+                },
+                reminder_text:{
+                    required:true
                 }
             },
             messages: {
@@ -551,6 +554,9 @@
                 },
                 reason:{
                     required:"Please enter reason for drop"
+                },
+                reminder_text:{
+                    required:"Please enter Followup remarks"
                 }
             }
         });
