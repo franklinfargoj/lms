@@ -333,7 +333,9 @@ class Cron extends CI_Controller
             $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('zone_id' => $v->zone_id),array(),'employee_dump');
             
             $zonal_manager['unassigned']  = $this->get_leads(array('type'=>'unassigned_noti','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
-            $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+            if(!empty($zonal_manager['unassigned'])) {
+                $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+            }
             
             $total['unassigned'] = array_column($zonal_manager,'unassigned','branch_id'); 
             $unique_hrms_ids = array_unique(array_column($zonal_manager, 'branch_id'));
@@ -361,6 +363,60 @@ class Cron extends CI_Controller
             //Mail Code
             $subject = 'Unassigned Leads - '.$v->zone_id;
             $attachment_file = $this->export_to_excel('zm_unassigned_leads',$final['zonal_manager']);
+            $to = array('email' => $v->email_id,'name' => $v->name);
+            $message = 'Please Find an attachment';
+            sendMail($to,$subject,$message,$attachment_file);
+            //Mail Code
+        }
+    }
+
+    /*
+     * gm_unassigned_leads
+     * Branch wise  Unassigned leads count
+     * @author Ashok Jadhav (AJ)
+     * @access public
+     * @param none
+     * @return void
+     *
+     */
+    public function gm_unassigned_leads(){
+        //zone list for sending mail
+
+
+        $GM_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%GENERAL MANAGER%'),array(),'employee_dump');
+        foreach ($GM_list as $k => $v) {
+            $final = array();
+            //FOR ZONE MANAGER
+            $zone_list = $this->Lead->get_employee_dump(array('DISTINCT(zone_id)', 'zone_name'), array(), array(), 'employee_dump');
+            foreach ($zone_list as $key => $value) {
+            $zonal_manager['unassigned']  = $this->get_leads(array('type'=>'unassigned_noti','till'=>'','user_type'=>'ZM','zone_id' => $value->zone_id));
+                //pe($zonal_manager['unassigned']);
+                if(!empty($zonal_manager['unassigned'])){
+                    $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+                }
+
+
+            $total['unassigned'] = array_column($zonal_manager,'unassigned','zone_id');
+            $total_count = 0;
+                $final['zonal_manager'][$value->zone_id]['unassigned'] = isset($total['unassigned'][$value->zone_id]) ? $total['unassigned'][$value->zone_id] : 0;
+                $total_count += $final['zonal_manager'][$value->zone_id]['unassigned'];
+                $final['zonal_manager'][$value->zone_id]['zone_id'] = $value->zone_id;
+                $final['zonal_manager'][$value->zone_id]['zone_name'] = $value->zone_name;
+            }
+            //pe($final['zonal_manager']);die;
+            //FOR ZONE MANAGER
+
+            //Notification Code
+            $title = 'Total no. of unassigned leads for the Zone';
+            $description = 'Total no. of unassigned leads : '.$total_count;
+            $priority = 'Normal';
+            $notification_to = $v->hrms_id;
+            notification_log($title,$description,$priority,$notification_to);
+            //Notification Code
+
+            //Mail Code
+            $subject = 'Unassigned Leads';
+            $attachment_file = $this->export_to_excel('gm_unassigned_leads',$final['zonal_manager']);
             $to = array('email' => $v->email_id,'name' => $v->name);
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
@@ -534,6 +590,9 @@ class Cron extends CI_Controller
             case 'zm_unassigned_leads':
             $header_value = array('Branch Id','Branch Name','Total Unassigned Leads');
                 break;
+            case 'gm_unassigned_leads':
+                $header_value = array('Zone Id','Zone Name','Total Unassigned Leads');
+                break;
         }
         return $this->create_excel($action,$header_value,$arrData);
     }
@@ -636,7 +695,7 @@ class Cron extends CI_Controller
             if(in_array($action,array('bm_inactive_leads','zm_inactive_leads'))){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['inactive']));   
             }
-            if(in_array($action,array('zm_unassigned_leads'))){
+            if(in_array($action,array('zm_unassigned_leads','gm_unassigned_leads'))){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['unassigned']));   
             }
             $i++;$j++;
