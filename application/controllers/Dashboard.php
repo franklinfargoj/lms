@@ -574,6 +574,10 @@ class Dashboard extends CI_Controller {
                         $whereArrayMonth = array('la.employee_id' => $employee_id,'Month(l.created_on)' => date('m'),'la.is_updated' => 1);
                         $result['total_assigned_leads_month'] = $this->master->get_leads($action, $table, '', $whereArrayMonth, $join, '', '');
                     }
+                    if(!empty($lead_source)){
+                        $whereArrayMonth = array('la.employee_id' => $employee_id,'Month(l.created_on)' => date('m'),'la.is_updated' => 1,'l.lead_source'=>$lead_source);
+                        $result['total_assigned_leads_month'] = $this->master->get_leads($action, $table, '', $whereArrayMonth, $join, '', '');
+                    }
                 }
 
                     if(!empty($status)){
