@@ -568,13 +568,16 @@ class Dashboard extends CI_Controller {
                     $month_where['MONTH(la.created_on)'] = date('m');
                 if(!empty($designation_type) && $designation_type == 'EM'){
                     $employee_id = $login_user['hrms_id'];
-                    $whereArray = array('la.employee_id' => $employee_id,'YEAR(l.created_on)' => date('Y'),'la.is_updated' => 1);
-                    $result['total_assigned_leads'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
+
                     if(empty($lead_source)){
+                        $whereArray = array('la.employee_id' => $employee_id,'YEAR(l.created_on)' => date('Y'),'la.is_updated' => 1);
+                        $result['total_assigned_leads'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
                         $whereArrayMonth = array('la.employee_id' => $employee_id,'Month(l.created_on)' => date('m'),'la.is_updated' => 1);
                         $result['total_assigned_leads_month'] = $this->master->get_leads($action, $table, '', $whereArrayMonth, $join, '', '');
                     }
                     if(!empty($lead_source)){
+                        $whereArray = array('la.employee_id' => $employee_id,'YEAR(l.created_on)' => date('Y'),'la.is_updated' => 1,'l.lead_source'=>$lead_source);
+                        $result['total_assigned_leads'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
                         $whereArrayMonth = array('la.employee_id' => $employee_id,'Month(l.created_on)' => date('m'),'la.is_updated' => 1,'l.lead_source'=>$lead_source);
                         $result['total_assigned_leads_month'] = $this->master->get_leads($action, $table, '', $whereArrayMonth, $join, '', '');
                     }
