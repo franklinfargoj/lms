@@ -17,6 +17,7 @@
     <div class="inner-content">
         <div class="container ">
             <div class="lead-top clearfix">
+                <?php if(isset($total_assigned_leads) && !empty($total_assigned_leads)){?>
                 <div class="float-left">
                     <span class="total-lead">
                         Total Leads :
@@ -25,6 +26,7 @@
                     This Year (<span class="lead-num"><?php echo isset($total_assigned_leads) && !empty($total_assigned_leads) ? $total_assigned_leads : 0;?>)</span>
 
                 </div>
+                <?php }?>
             </div>
         <table class="upload-table lead-table" id="sample_3">
             <thead>
