@@ -23,7 +23,7 @@ $source = $this->config->item('lead_source');
         <div class="inner-content">
             <div class="container">
             <div class="float-left">
-            <span class="total-lead" style="color: red">To assign the lead, select the checkbox and select from drop down<span style="color:red;">*</span></span>
+            <span class="total-lead" style="color: red">To assign the lead, select the checkbox and select employee from drop down<span style="color:red;">*</span></span>
         </div>
                 <!-- BEGIN PAGE LEVEL STYLES -->
                 <link href="<?php echo base_url() . ASSETS; ?>css/jquery.dataTables.min.css" rel="stylesheet">
