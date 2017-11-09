@@ -570,7 +570,7 @@ class Dashboard extends CI_Controller {
                     $employee_id = $login_user['hrms_id'];
                     $whereArray = array('la.employee_id' => $employee_id,'YEAR(l.created_on)' => date('Y'),'la.is_updated' => 1);
                     $result['total_assigned_leads'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
-                    if(!empty($lead_source)){
+                    if(empty($lead_source)){
                         $whereArrayMonth = array('la.employee_id' => $employee_id,'Month(l.created_on)' => date('m'),'la.is_updated' => 1);
                         $result['total_assigned_leads_month'] = $this->master->get_leads($action, $table, '', $whereArrayMonth, $join, '', '');
                     }
