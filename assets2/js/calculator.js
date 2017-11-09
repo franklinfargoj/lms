@@ -394,12 +394,12 @@ function emi_calculator(min, max) {
                     var P = $("#amount").val();
                     var IN = $("#interest").val();
                     var R = IN / (12 * 100);
-                    var N = $("#years").val();
+                    var N = $("#years").val()*12;
                     var X = Math.pow((1 + R), N);
-                    var Y = Math.pow((1 + R), N - 1);
+                    var Y = Math.pow((1 + R), N) - 1;
+                    //Math.pow((1+r),n)-1
                     var EMI = (P * R * X) / Y;
-
-                    $('#your_emi').html(EMI.toFixed(2));
+                    $('#your_emi').html(Math.ceil(EMI));
                 }
             }
         });

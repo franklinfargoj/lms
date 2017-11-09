@@ -63,13 +63,13 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                         <label>Frequency:<span style="color:red;">*</span> </label>
                         <div class="radio-control">
                             <input type="radio" id="sdr" name="frequency" class="frequency"
-                                   value="0" <?php echo set_radio('frequency', '0'); ?>/>
+                                   value="4" <?php echo set_radio('frequency', '0'); ?>/>
                             <label>SDR</label>
                             <label id="frequency-error" class="error" for="frequency"></label>
                         </div>
                         <div class="radio-control">
                             <input type="radio" name="frequency" id="fdr" class="frequency"
-                                   value="4" <?php echo set_radio('frequency', '4'); ?>/>
+                                   value="0" <?php echo set_radio('frequency', '4'); ?>/>
                             <label>FDR</label>
                         </div>
                     </div>
