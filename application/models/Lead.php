@@ -249,8 +249,9 @@ class Lead  extends CI_Model
             $this->db->limit($limit);
         }
         $query = $this->db->get();
-        echo $this->db->last_query();
-        return $query->result_array();
+        if($query !== FALSE && $query->num_rows() > 0) {
+            return $query->result_array();
+        }
     }
 
     public function update($where,$table,$data){

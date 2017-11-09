@@ -1648,11 +1648,10 @@ class Api extends REST_Controller
                 $assign_data['lead_id'] = $value;
                 $insertData = $assign_data;
                 $response = $this->Lead->insert_lead_data($insertData,Tbl_LeadAssign);
-                echo $response['status'];
                 if($response['status']=='success'){
 
                     $action = 'list';
-                    $select = array('lead.customer_name1','product.title');
+                    $select = array('lead.customer_name','product.title');
                     $table = Tbl_Leads.' AS lead';
                     $where = array('lead.id'=>$value);
                     $join[] = array('table' =>Tbl_Products.' AS product','on_condition'=>'product.id = lead.product_id','type'=>'');
