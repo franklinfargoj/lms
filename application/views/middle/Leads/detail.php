@@ -139,6 +139,7 @@
                                 </div> -->
                                 <div class="form-control">
                                     <?php
+
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
                                     || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
                                     && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC') ||
@@ -241,8 +242,13 @@
                                         <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
                                     </div>
                                     <?php }?>
+                                    <?php if($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO'))){?>
+                                        <div class="form-control accountOpen" >
+                                    <?php }else{?>
+                                        <div class="form-control accountOpen" style="display:none">
+                                    <?php }?>
 
-                                <div class="form-control accountOpen" style="display:none">
+
                                     <label>Verify Account</label>
                                     <?php
                                     $data = array(
@@ -255,7 +261,12 @@
                                     echo form_input($data);
                                     ?>
                                 </div>
-                                <div class="form-control form-submit clearfix accountOpen" style="display:none">
+                                <?php if($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO'))){?>
+                                            <div class="form-control form-submit clearfix accountOpen">
+                                    <?php }else{?>
+                                    <div class="form-control form-submit clearfix accountOpen" style="display:none">
+                                        <?php }?>
+
                                     <a href="javascript:void(0);" class="float-right verify_account">
                                         <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
                                         <span>Verify</span>
@@ -354,7 +365,7 @@
                         <div class="form-control form-submit clearfix">
                             <?php
                             $exclude_status_bm = array('Converted','Closed');
-                            $exclude_status_em = array('Converted','Closed','AO','NI');
+                            $exclude_status_em = array('Converted','Closed','NI');
 
                             if(($type == 'assigned') &&
                                     ($this->session->userdata('admin_type') == 'EM' && !in_array($leads[0]['status'],$exclude_status_em)) ||
@@ -388,6 +399,9 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        <?php if($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO'))){?>
+        $('.submit_button').hide();
+        <?php }?>
         $("#state").hide();
         $("#branch").hide();
         $("#district").hide();
