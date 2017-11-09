@@ -1070,7 +1070,7 @@ class Leads extends CI_Controller
                 //All Assigned List (According Login User).
                 if($login_user['designation_name'] == 'EM'){
                     $where['la.employee_id'] = $login_user['hrms_id'];
-                    $order_by = "la.created_on DESC";
+                    $order_by = "la.created_on DESC , la.id DESC";
                 }
                 if($login_user['designation_name'] == 'BM'){
                     $where['la.branch_id'] = $login_user['branch_id'];
