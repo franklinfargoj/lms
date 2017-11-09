@@ -74,7 +74,7 @@ if ($products != '') {
     }
 }
 $input = get_session();
-$data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'text','value'=>'','readonly'=>'readonly');
+$data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'text','value'=>'');
 $lead_id_options[''] = 'Select Lead Identification';
 $lead_id_options['HOT'] = 'HOT';
 $lead_id_options['WARM'] = 'WARM';
