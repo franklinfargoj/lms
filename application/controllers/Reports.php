@@ -82,6 +82,7 @@ class Reports extends CI_Controller
         $arrData['category_list'] = dropdown($category_list,'All');
         $arrData['lead_sources'] = $this->Lead->get_enum(Tbl_Leads,'lead_source');
         $arrData['breadcrumb'] = $this->make_bread->output();
+        $arrData['view'] = $view;
         return load_view('Reports/'.$action,$arrData);
     }
 

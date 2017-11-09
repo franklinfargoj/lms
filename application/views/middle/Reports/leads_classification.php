@@ -183,12 +183,14 @@ $lead_sources = $this->config->item('lead_source');
 
 <div class="lead-top result" style="display:none;">
     <div class="container clearfix">
+        <?php if( $view == 'employee' ||  $view == 'branch'){?>
         <div class="float-left">
             <span class="total-lead">
                 Total Ticket Size (Rs)
             </span>
             <span class="lead-num"> : <?php echo $Total;?></span>
         </div>
+        <?php }?>
         <div class="float-right">
             <a href="javascript:void(0);" class="export_to_excel btn-Download">
                 Export to Excel 
