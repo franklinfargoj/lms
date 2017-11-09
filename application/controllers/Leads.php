@@ -1468,7 +1468,7 @@ class Leads extends CI_Controller
             $select = array('la.employee_id','la.employee_name','la.created_by_name','la.modified_on AS date','la.status');
             $table = Tbl_LeadAssign.' as la';
             $where = array('lead_id'=>$lead_id);
-            $order_by = 'date2 ASC';
+            $order_by = 'date ASC';
             $assign_result = $this->Lead->get_leads($action,$table,$select,$where,$join=array(),$group_by=array(),$order_by);
             if(!empty($assign_result)){
                 $final_result = array_merge($final_result,$assign_result);
