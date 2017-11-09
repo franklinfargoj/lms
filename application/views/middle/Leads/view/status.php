@@ -19,9 +19,11 @@
             <div class="lead-top clearfix">
                 <div class="float-left">
                     <span class="total-lead">
-                        Total Leads
+                        Total Leads :
                     </span>
-                    <span class="lead-num"> : <?php echo isset($total_assigned_leads) && !empty($total_assigned_leads) ? $total_assigned_leads : 0;?></span>
+                    This Month (<span class="lead-num"><?php echo isset($total_assigned_leads_month) && !empty($total_assigned_leads_month) ? $total_assigned_leads_month : 0;?>)</span> /
+                    This Year (<span class="lead-num"><?php echo isset($total_assigned_leads) && !empty($total_assigned_leads) ? $total_assigned_leads : 0;?>)</span>
+
                 </div>
             </div>
         <table class="upload-table lead-table" id="sample_3">
