@@ -315,7 +315,7 @@
                             <a href="<?php echo site_url($backUrl);?>" class="reset float-right form-style"> &#60; Back</a>
                         <?php }?>
                             <?php
-                            $exclude_status_bm = array('Converted','Closed','AO');
+                            $exclude_status_bm = array('Converted','Closed','AO'.'DC','NI');
                             if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')) &&
                                 !in_array($leads[0]['status'],$exclude_status_bm))
                             ){?>
