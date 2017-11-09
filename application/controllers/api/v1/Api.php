@@ -2412,6 +2412,7 @@ class Api extends REST_Controller
                                 'state_id' => $leads_data['state_id'],
                                 'zone_id' => $leads_data['zone_id'],
                                 'status' => $params['status'],
+                                'reason_for_drop' => $params['reason'],
                                 'is_updated' => 1,
                                 'created_on' => $leads_data['created_on'],
                                 'created_by' => $leads_data['created_by'],
