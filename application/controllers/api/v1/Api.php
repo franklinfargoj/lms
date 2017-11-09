@@ -1652,7 +1652,7 @@ class Api extends REST_Controller
                 if($response['status']=='success'){
 
                     $action = 'list';
-                    $select = array('lead.customer_name','product.title');
+                    $select = array('lead.customer_name1','product.title');
                     $table = Tbl_Leads.' AS lead';
                     $where = array('lead.id'=>$value);
                     $join[] = array('table' =>Tbl_Products.' AS product','on_condition'=>'product.id = lead.product_id','type'=>'');
