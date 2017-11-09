@@ -1070,9 +1070,11 @@ class Leads extends CI_Controller
                 //All Assigned List (According Login User).
                 if($login_user['designation_name'] == 'EM'){
                     $where['la.employee_id'] = $login_user['hrms_id'];
+                    $order_by = "la.created_on DESC";
                 }
                 if($login_user['designation_name'] == 'BM'){
                     $where['la.branch_id'] = $login_user['branch_id'];
+                    $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 ELSE 3 END";
                 }
             }
             if(!empty($arrData['status'])){
@@ -1082,7 +1084,7 @@ class Leads extends CI_Controller
                 $where['l.lead_source'] = $arrData['lead_source'];
             }
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
-            $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 ELSE 3 END";
+
         }
 
         $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
