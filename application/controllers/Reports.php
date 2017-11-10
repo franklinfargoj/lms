@@ -62,6 +62,8 @@ class Reports extends CI_Controller
                 $arrData['product_list'] = dropdown($product_list,'All');
             }
             if($export == 'yes'){
+                $lead_sources = $this->config->item('lead_source');
+                $arrData['lead_source'] = $lead_sources[$arrData['lead_source']];
                 $this->export_to_excel($action,$arrData);
             }
         }else{
