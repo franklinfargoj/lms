@@ -420,23 +420,25 @@ class Reports extends CI_Controller
         $arrData['Total'] = 0;
         if($list){
             $Lead['userId'] = array();
-            foreach ($leads as $key => $value) {
-                //Employee Login
-                if($viewName == 'EM'){
-                    $index = $value['employee_id'];
-                    $Lead['userId'][] = $value['employee_id'];
+            if(!empty($leads)) {
+                foreach ($leads as $key => $value) {
+                    //Employee Login
+                    if ($viewName == 'EM') {
+                        $index = $value['employee_id'];
+                        $Lead['userId'][] = $value['employee_id'];
+                    }
+                    //Branch Manager Login
+                    if ($viewName == 'BM') {
+                        $index = $value['branch_id'];
+                        $Lead['userId'][] = $value['branch_id'];
+                    }
+                    //Zone Manager Login
+                    if ($viewName == 'ZM') {
+                        $index = $value['zone_id'];
+                        $Lead['userId'][] = $value['zone_id'];
+                    }
+                    $Lead[$index]['lead_identification'][$value['lead_identification']] = $value['count'];
                 }
-                //Branch Manager Login
-                if($viewName == 'BM'){
-                    $index = $value['branch_id'];
-                    $Lead['userId'][] = $value['branch_id'];
-                }
-                //Zone Manager Login
-                if($viewName == 'ZM'){
-                    $index = $value['zone_id'];
-                    $Lead['userId'][] = $value['zone_id'];
-                }
-                $Lead[$index]['lead_identification'][$value['lead_identification']] = $value['count'];
             }
             $arrData['viewName'] = $viewName;
             foreach ($list as $key => $value) {
