@@ -21,7 +21,7 @@ $lead_status = $this->config->item('lead_status');
 $data = array();
 $i = 0;
 foreach ($lead_status as $key => $value){
-    if(!in_array($key,array("AO","Converted","Closed"))){
+    if(!in_array($key,array("AO","Converted","Closed","NI"))){
         $data[$i]['name'] = $value;
         $data[$i]['data'] = $status[$key];
         $i++;

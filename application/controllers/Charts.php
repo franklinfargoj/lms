@@ -63,12 +63,23 @@ class Charts extends CI_Controller
         $LIST = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE);
 
         //Build Input Parameter
+//        $action = 'list';
+//        $select = array('la.zone_id','COUNT(la.lead_id) as count','la.status');
+//        $table = Tbl_Leads.' as l';
+//        $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status NOT IN ("AO","Converted","Closed")' => NULL);
+//        $join = array();
+//        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         $action = 'list';
-        $select = array('la.zone_id','COUNT(la.lead_id) as count','la.status');
+        $select = array('la.zone_id','COUNT(la.lead_id) as count','la.status','p.turn_around_time');
         $table = Tbl_Leads.' as l';
-        $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status NOT IN ("AO","Converted","Closed")' => NULL);
+        $day = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -2 day' ) ).' 00:00:00';
+        $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status NOT IN ("AO","Converted","Closed","NI")' => NULL);
+        $where["CASE WHEN la.status = 'NC' THEN la.modified_on <'$day' WHEN la.status = 'FU' THEN fr.remind_on < '$day' WHEN la.status = 'DC' THEN p.turn_around_time < DATEDIFF(CURDATE(),la.modified_on) END"]=NULL;
         $join = array();
         $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+        $join[] = array('table' => Tbl_Reminder.' as fr','on_condition' => 'fr.lead_id = l.id','type' => '');
+        $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'p.id = l.product_id','type' => '');
+
         $group_by = array('la.zone_id','la.status');
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         /*pe($this->db->last_query());
@@ -87,13 +98,13 @@ class Charts extends CI_Controller
                 $arrData['zone_name'][] = $value->zone_name;
                 if(!in_array($value->zone_id,$zone['ids'])){
                     foreach ($lead_status as $k => $v){
-                        if(!in_array($v,array("AO","Converted","Closed"))){
+                        if(!in_array($v,array("AO","Converted","Closed","NI"))){
                             $arrData['status'][$v][] = 0;
                         }
                     }
                 }else{
                     foreach ($lead_status as $k => $v){
-                        if(!in_array($v,array("AO","Converted","Closed"))) {
+                        if(!in_array($v,array("AO","Converted","Closed","NI"))) {
                             $arrData['status'][$v][] = isset($zone['status'][$index][$v]) ? $zone['status'][$index][$v] : 0;
                         }
                     }
