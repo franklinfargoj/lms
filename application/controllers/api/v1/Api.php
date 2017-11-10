@@ -1070,7 +1070,7 @@ class Api extends REST_Controller
                 $where['la.branch_id'] = $id;
                 $where['la.status !='] = 'Closed';
                 $where2 = array(Tbl_LeadAssign . '.branch_id' => $id);
-                $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 ELSE 3 END";
+                $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 ELSE 3 END , elapsed_day ASC";
             }
 
             $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
