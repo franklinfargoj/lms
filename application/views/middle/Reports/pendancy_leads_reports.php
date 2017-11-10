@@ -46,8 +46,8 @@ $lead_sources = $this->config->item('lead_source');
         <p id="note"><span style="color:red;">*</span> These fields are required</p>
             <div class="lead-form-left">
 <!--                    <div class="form-control">-->
-<!--                        <label id="cal">Start Date:<span style="color:red;">*</span> </label>   -->
-<!--                        --><?php //
+<!--                        <label id="cal">Start Date:<span style="color:red;">*</span> </label>-->
+<!--                        --><?php
 //                            if(isset($start_date)){
 //                                $start_date = date('d-m-Y',strtotime($start_date));
 //                            }else{
@@ -114,8 +114,8 @@ $lead_sources = $this->config->item('lead_source');
             </div>
             <div class="lead-form-right">
 <!--                <div class="form-control endDate">-->
-<!--                    <label>End Date:<span style="color:red;">*</span> </label>   -->
-<!--                    --><?php //
+<!--                    <label>End Date:<span style="color:red;">*</span> </label>-->
+<!--                    --><?php
 //                        if(isset($end_date)){
 //                            $end_date = date('d-m-Y',strtotime($end_date));
 //                        }else{
@@ -426,9 +426,9 @@ $lead_sources = $this->config->item('lead_source');
                 }
             }).success(function (resp) {
                 if (resp) {
-                    $('.productlist').remove();
-                    var html = '<div class="form-control productlist">'+resp+'</div>';
-                    $( html ).insertAfter( ".endDate" );
+                    $('.productlist').html(resp);
+//                    var html = '<div class="form-control productlist">'+resp+'</div>';
+//                    $( html ).insertAfter( ".endDate" );
                 }
             });
         });
