@@ -97,16 +97,16 @@ class Reports extends CI_Controller
         $login_user = get_session();
         //Build Input Parameter
         $action = 'list';
-        $select = array('COUNT(0a.lead_id) as count','0a.status','p.turn_around_time');
+        $select = array('COUNT(la.lead_id) as count','la.status','p.turn_around_time');
         $table = Tbl_Leads.' as l';
         $day = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -2 day' ) ).' 00:00:00';
-        //$where  = array('la.modified_on <'=>$day.' 00:00:00','la.is_deleted1' => 0,'la.is_updated' => 1,'la.status NOT IN ("AO","Converted","Closed")' => NULL);
-        $where ="0a.is_deleted = 0 AND 0a.is_updated =1 AND CASE WHEN 0a.status = 'NC' THEN 0a.modified_on <'$day' WHEN 0a.status = 'FU' THEN fr.remind_on < '$day' WHEN 0a.status = 'DC' THEN p.turn_around_time < DATEDIFF(CURDATE(),0a.modified_on) END";
+        $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status NOT IN ("AO","Converted","Closed")' => NULL);
+        $where["CASE WHEN la.status = 'NC' THEN la.modified_on <'$day' WHEN la.status = 'FU' THEN fr.remind_on < '$day' WHEN la.status = 'DC' THEN p.turn_around_time < DATEDIFF(CURDATE(),la.modified_on) END"]=NULL;
         $join = array();
-        $join[] = array('table' => Tbl_LeadAssign.' as 0a','on_condition' => '0a.lead_id = l.id','type' => '');
+        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         $join[] = array('table' => Tbl_Reminder.' as fr','on_condition' => 'fr.lead_id = l.id','type' => '');
         $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'p.id = l.product_id','type' => '');
-        $group_by = array('0a.status');
+        $group_by = array('la.status');
 
 //        //If Start date selected
 //        if(!empty($arrData['start_date'])){
@@ -190,14 +190,14 @@ class Reports extends CI_Controller
         //Branch Manager Login
         if($viewName == 'BM'){
             //Get Data for branch
-            $select[] = '0a.branch_id';
-            $where['0a.zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
-            $group_by[] = '0a.branch_id';
+            $select[] = 'la.branch_id';
+            $where['la.zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+            $group_by[] = 'la.branch_id';
 
             //Get Listing for branch
             $SELECT = array('branch_id','branch_name','zone_id','zone_name'); 
-            if(isset($where['0a.zone_id'])){
-                $WHERE['zone_id'] = $where['0a.zone_id'];
+            if(isset($where['la.zone_id'])){
+                $WHERE['zone_id'] = $where['la.zone_id'];
             }
             //$WHERE['designation'] = 'BR';
             $GROUP_BY = array('branch_id');
