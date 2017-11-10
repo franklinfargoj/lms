@@ -1498,7 +1498,7 @@ class Reports extends CI_Controller
         }
         switch ($action) {
             case 'pendancy_leads_reports':
-                $pendancy_leads_col = array('Total Pending Leads','Not Connected','Interested /Follow Up','Documents Collected','Drop/Not Inserted','Cannot be contacted');
+                $pendancy_leads_col = array('Total Pending Leads','Not Connected','Interested','Documents Collected');
                 $header_value = array_merge($header_value,$pendancy_leads_col);
                 break;
             case 'leads_type_reports':
@@ -1506,11 +1506,11 @@ class Reports extends CI_Controller
                 $header_value = array_merge($header_value,$leads_type_col);
                 break;
             case 'leads_generated':
-                $leads_generated_col = array('Total Generated Leads','Not Connected','Interested /Follow Up','Documents Collected','Account Opened','Converted','Drop/Not Inserted','Cannot be contacted','Closed');
+                $leads_generated_col = array('Total Generated Leads','Not Connected','Interested','Documents Collected','Account Opened','Converted','Drop/Not Inserted','Closed');
                 $header_value = array_merge($header_value,$leads_generated_col);
                 break;
             case 'leads_assigned':
-                $leads_assigned_col = array('Total Assigned Leads','Not Connected','Interested /Follow Up','Documents Collected','Account Opened','Converted','Drop/Not Inserted','Cannot be contacted','Closed');
+                $leads_assigned_col = array('Total Assigned Leads','Not Connected','Interested','Documents Collected','Account Opened','Converted','Drop/Not Inserted','Closed');
                 $header_value = array_merge($header_value,$leads_assigned_col);
                 break;
             case 'leads_generated_vs_converted':
