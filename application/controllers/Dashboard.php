@@ -561,7 +561,19 @@ class Dashboard extends CI_Controller {
                             //pe($this->db->last_query());
                             $result[$key]['Year'] = $this->master->get_leads($action, $table, '', $year_where, $join, '', '');
                         }
-                    } 
+                    }
+                        $action1 = 'count';
+                        $select1 = array();
+                        $table1 = Tbl_Leads;
+                        $join_assign1[] = array('table' =>Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = '.Tbl_Leads.'.id ','type' => 'left');
+                        $whereYear1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL, 'YEAR(' . $table1 . '.created_on)' => date('Y'));
+                        $whereMonth1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL, 'MONTH(' . $table1 . '.created_on)' => date('m'));
+                        $unassigned_leads_count_month = $this->master->get_leads($action1,$table1,$select1,$whereMonth1,$join_assign1,$group_by = array(),$order_by = array());
+                        $unassigned_leads_count_year = $this->master->get_leads($action1,$table1,$select1,$whereYear1,$join_assign1,$group_by = array(),$order_by = array());
+                        $result['Unassigned_Leads']['Month'] = $unassigned_leads_count_month;
+                        $result['Unassigned_Leads']['Year'] = $unassigned_leads_count_year;
+
+
                 break;
             case 'assigned':
                     $year_where['YEAR(la.created_on)'] = date('Y');
@@ -600,6 +612,7 @@ class Dashboard extends CI_Controller {
                     }
                 break; 
         }
+       //pe($result);die;
         //pe($this->db->last_query());
         $result['breadcrumb'] = $this->make_bread->output();
         $middle = "Leads/view/status";
