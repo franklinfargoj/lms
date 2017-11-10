@@ -8,7 +8,7 @@
 ?>
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center">Leads Generated</h3>
+        <h3 class="text-center">Leads Generated (This Year)</h3>
     </div>
 </div>
 <div class="page-content">
