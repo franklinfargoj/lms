@@ -2721,10 +2721,13 @@ class Api extends REST_Controller
 //                        $result[$i]['status'] = 'Unassigned Leads';
                         $whereArray = array(Tbl_LeadAssign . '.employee_id' => $employee_id,'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'), Tbl_LeadAssign . '.is_updated' => 1);
                         $total_assigned = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
+                        $whereArrayMonth = array(Tbl_LeadAssign . '.employee_id' => $employee_id,'MONTH(' . Tbl_Leads . '.created_on)' => date('m'), Tbl_LeadAssign . '.is_updated' => 1);
+                        $total_assigned_month = $this->Lead->get_leads($action, $table, '', $whereArrayMonth, $join, '', '');
                     }
                     $res = array('result' => True,
                         'data' => $result,
-                        'total_assigned' =>$total_assigned);
+                        'total_assigned' =>$total_assigned,
+                        'total_assigned_month' =>$total_assigned_month);
                     returnJson($res);
                     break;
                 case 'ZM':
