@@ -1634,7 +1634,7 @@ class Reports extends CI_Controller
                         if(in_array($v1,array_keys($value['status']))){
                             $objSheet->getCell($excel_alpha[++$m].$i)->setValue($value['status'][$v1]);
                         }else{
-                            if(($action == 'pendancy_leads_reports') && (in_array($v1,array('AO','Converted','Closed')))){
+                            if(($action == 'pendancy_leads_reports') && (in_array($v1,array('AO','Converted','Closed','NI')))){
                             }else{
                                 $objSheet->getCell($excel_alpha[++$m].$i)->setValue(0);
                             }
