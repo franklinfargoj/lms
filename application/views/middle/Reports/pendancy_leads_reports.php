@@ -45,25 +45,25 @@ $lead_sources = $this->config->item('lead_source');
         <div class="form">
         <p id="note"><span style="color:red;">*</span> These fields are required</p>
             <div class="lead-form-left">
-                    <div class="form-control">
-                        <label id="cal">Start Date:<span style="color:red;">*</span> </label>   
-                        <?php 
-                            if(isset($start_date)){
-                                $start_date = date('d-m-Y',strtotime($start_date));
-                            }else{
-                                $start_date = '';
-                            }
-                            $data = array(
-                                'type'  => 'text',
-                                'name'  => 'start_date',
-                                'id'    => 'start_date',
-                                'class' => 'datepicker_recurring_start',
-                                'value' => $start_date
-                                
-                            );
-                            echo form_input($data);
-                        ?>
-                    </div>
+<!--                    <div class="form-control">-->
+<!--                        <label id="cal">Start Date:<span style="color:red;">*</span> </label>   -->
+<!--                        --><?php //
+//                            if(isset($start_date)){
+//                                $start_date = date('d-m-Y',strtotime($start_date));
+//                            }else{
+//                                $start_date = '';
+//                            }
+//                            $data = array(
+//                                'type'  => 'text',
+//                                'name'  => 'start_date',
+//                                'id'    => 'start_date',
+//                                'class' => 'datepicker_recurring_start',
+//                                'value' => $start_date
+//
+//                            );
+//                            echo form_input($data);
+//                        ?>
+<!--                    </div>-->
                     <div class="form-control interested-info">
                         <?php 
                             $attributes = array(
@@ -113,25 +113,25 @@ $lead_sources = $this->config->item('lead_source');
                     </div>
             </div>
             <div class="lead-form-right">
-                <div class="form-control endDate">
-                    <label>End Date:<span style="color:red;">*</span> </label>   
-                    <?php 
-                        if(isset($end_date)){
-                            $end_date = date('d-m-Y',strtotime($end_date));
-                        }else{
-                            $end_date = '';
-                        }
-                        $data = array(
-                            'type'  => 'text',
-                            'name'  => 'end_date',
-                            'id'    => 'end_date',
-                            'class' => 'datepicker_recurring_start',
-                            'value' => $end_date
-                            
-                        );
-                        echo form_input($data);
-                    ?>
-                </div>
+<!--                <div class="form-control endDate">-->
+<!--                    <label>End Date:<span style="color:red;">*</span> </label>   -->
+<!--                    --><?php //
+//                        if(isset($end_date)){
+//                            $end_date = date('d-m-Y',strtotime($end_date));
+//                        }else{
+//                            $end_date = '';
+//                        }
+//                        $data = array(
+//                            'type'  => 'text',
+//                            'name'  => 'end_date',
+//                            'id'    => 'end_date',
+//                            'class' => 'datepicker_recurring_start',
+//                            'value' => $end_date
+//
+//                        );
+//                        echo form_input($data);
+//                    ?>
+<!--                </div>-->
                 <div class="form-control productlist">
                     <?php 
                         $attributes = array(
@@ -244,7 +244,7 @@ $lead_sources = $this->config->item('lead_source');
                                 </th>
                                 <?php
                                     foreach ($lead_status as $key => $value) {
-                                        if(!in_array($key,array('AO','Converted','Closed'))){
+                                        if(!in_array($key,array('AO','Converted','Closed','NI'))){
                                 ?>
                                 <th>
                                     <?php
@@ -325,7 +325,7 @@ $lead_sources = $this->config->item('lead_source');
                                 <?php
                                 //pe($value['status']);
                                     foreach ($lead_status as $k => $v) {
-                                        if(!in_array($k,array('AO','Converted','Closed'))){
+                                        if(!in_array($k,array('AO','Converted','Closed','NI'))){
                                 ?>
                                 <td>
                                     <?php
