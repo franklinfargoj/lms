@@ -45,7 +45,8 @@ class Cron extends CI_Controller
             $general_manager['unassigned'] = $this->get_leads(array('type' => 'unassigned', 'till' => '', 'user_type' => 'ZM'));
             $general_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'ZM'));
             $general_manager['pending'] = $this->get_leads(array('type' => 'pending', 'till' => 'TAT', 'user_type' => 'ZM'));
-
+            echo "<pre>";
+        print_r($general_manager);die;
             $general_manager = call_user_func_array('array_merge', $general_manager);
             $total = array();
             foreach (array_keys($gm) as $key => $value) {
