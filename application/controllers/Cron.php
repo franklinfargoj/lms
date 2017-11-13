@@ -37,7 +37,7 @@ class Cron extends CI_Controller
             //For GENERAL MANAGER
             $general_manager = array('generated' => array(), 'converted' => array(), 'unassigned' => array(),'pending_before' => array(), 'pending' => array());
             $gm = $general_manager;
-            $zone_list = $this->Lead->get_employee_dump(array('DISTINCT(zone_id)', 'zone_name'), array(), array(), 'employee_dump');
+            $zone_list = $this->Lead->get_employee_dump(array('DISTINCT(zone_id) as zone_id', 'zone_name'), array(), array(), 'employee_dump');
 //            echo "<pre>";
 //        print_r($zone_list);die;
             $general_manager['generated'] = $this->get_leads(array('type' => 'generated', 'till' => 'mtd', 'user_type' => 'ZM'));
@@ -47,14 +47,21 @@ class Cron extends CI_Controller
             $general_manager['pending'] = $this->get_leads(array('type' => 'pending', 'till' => 'TAT', 'user_type' => 'ZM'));
 //            echo "<pre>";
 //        print_r($general_manager);die;
-//            $general_manager = call_user_func_array('array_merge', $general_manager);
+          //$general_manager = call_user_func_array('array_merge', $general_manager);
+            $general_manager = array_merge($general_manager);
             $total = array();
             foreach (array_keys($gm) as $key => $value) {
+//                echo "<pre>";
+//        print_r($general_manager);
                 $total[$value] = array_column($general_manager, $value, 'zone_id');
             }
-            $unique_zone_ids = array_unique(array_column($general_manager, 'zone_id'));
+            //pe($total);die;
+            $unique_zone_ids = array_unique(array_column($zone_list, 'zone_id'));
+            //pe($unique_zone_ids);die;
             foreach ($zone_list as $key => $value) {
+
                 if (!in_array($value->zone_id, $unique_zone_ids)) {
+                   // echo "k";
                     $final['general_manager'][$value->zone_id]['generated'] = 0;
                     $final['general_manager'][$value->zone_id]['converted'] = 0;
                     $final['general_manager'][$value->zone_id]['unassigned'] = 0;
@@ -114,7 +121,8 @@ class Cron extends CI_Controller
             $zonal_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
             $zonal_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'BM','zone_id' => $v->zone_id));
 
-            $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+            //$zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+            $zonal_manager = array_merge($zonal_manager);
             $total = array();
             foreach (array_keys($gm) as $key => $value) {
                 $total[$value] = array_column($zonal_manager, $value,'branch_id'); 
@@ -206,6 +214,7 @@ class Cron extends CI_Controller
             
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
+
         }
     }
 
@@ -611,6 +620,7 @@ class Cron extends CI_Controller
      * 
      */
     private function create_excel($action,$header_value,$data){
+       // pe($data);die;
         $this->load->library('excel');
         $file_name = time().'data.xls';
         $excel_alpha = unserialize(EXCEL_ALPHA);
