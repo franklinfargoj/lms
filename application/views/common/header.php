@@ -125,12 +125,12 @@
 						</li>
 						<li>
 						<a href="<?php echo site_url('dashboard/fd_calculator')?>">
-							Fd Calculator
+							FD Calculator
 						</a>
 						</li>
 	                    <li>
 							<a href="<?php echo site_url('dashboard/rd_calculator')?>">
-							Rd Calculator
+							RD Calculator
 							</a>
 						</li>
 					</ul>

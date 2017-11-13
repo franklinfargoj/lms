@@ -4,7 +4,7 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Identification
+            Lead Type Report
         </h3>
         <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
         <div class="float-right">

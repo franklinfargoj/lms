@@ -4,7 +4,7 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Assigned
+            Leads Assigned Report
         </h3>
         <div class="float-right">
             <a href="<?php echo site_url('reports/index/leads_assigned')?>" class="btn-Download">

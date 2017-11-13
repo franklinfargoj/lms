@@ -13,7 +13,26 @@ $lead_sources = $this->config->item('lead_source');
         </h3>
         <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
             <div class="float-right">
-                <a href="<?php echo site_url('charts/index/leads_assigned')?>" class="btn-Download">
+                <?php
+                if(!isset($product_category_id) || $product_category_id == ''){
+                    $product_category_id1= 'all';
+                }else{
+                    $product_category_id1 =$product_category_id;
+                }
+                if(!isset($product_id) || $product_id == ''){
+                    $product_id1= 'all';
+                }else{
+                    $product_id1=$product_id;
+                }
+                if(!isset($lead_source) || $lead_source == ''){
+                    $lead_source1= 'all';
+                }else{
+                    $lead_source1=$lead_source;
+                }
+                $chart_param = $start_date.'/'.$end_date.'/'.$product_category_id1.'/'.$product_id1.'/'.$lead_source1;
+                $chart_param=encode_id($chart_param);
+                ?>
+                <a href="<?php echo site_url('charts/index/leads_assigned/'.$chart_param)?>" class="btn-Download">
                     Chart View
                 </a>
             </div>
