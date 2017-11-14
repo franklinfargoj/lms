@@ -1459,10 +1459,10 @@ class Leads extends CI_Controller
                     $final_result[] = array('id'=>$result[0]['id'],'generated'=>$result[0]['generated'],'generated_on'=>$result[0]['generated_on'],
                         'date'=>$result[0]['generated_on'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
                         'customer_name'=>$result[0]['customer_name'],'branch_id'=>$result[0]['branch_id'],
-                        'contact_no'=>$result[0]['contact_no'],'lead_source'=>$result[0]['lead_source']);
+                        'contact_no'=>$result[0]['contact_no'],'lead_source'=>$result[0]['lead_source'],'created_by_branch_id'=>$result[0]['created_by_branch_id']);
                     $final_result[] = array('id'=>$result[0]['id'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
                         'reroute_to_branch_id'=>$result[0]['branch_id'],'modified_on'=>$result[0]['modified_on'],
-                        'date'=>$result[0]['modified_on'],'status'=>'NC');
+                        'date'=>$result[0]['modified_on'],'status'=>'NC','created_by_branch_id'=>$result[0]['created_by_branch_id']);
                 }else{
                     $final_result = $result;
                     $final_result[0]['date'] = $result[0]['generated_on'];
