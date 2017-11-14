@@ -1227,6 +1227,42 @@ if(!function_exists('branchname')){
     }
 }
 
+function convertCurrency($number)
+{
+    // Convert Price to Crores or Lakhs or Thousands
+    $length = strlen($number);
+    $currency = 0;
+
+    if($length == 4 || $length == 5)
+    {
+        // Thousand
+        $number = $number / 1000;
+        $number = round($number,2);
+        $ext = "Thousand";
+        $currency = $number." ".$ext;
+    }
+    elseif($length == 6 || $length == 7)
+    {
+        // Lakhs
+        $number = $number / 100000;
+        $number = round($number,2);
+        $ext = "Lac";
+        $currency = $number." ".$ext;
+
+    }
+    elseif($length == 8 || $length == 9)
+    {
+        // Crores
+        $number = $number / 10000000;
+        $number = round($number,2);
+        $ext = "Cr";
+        $currency = $number.' '.$ext;
+    }
+
+    return $currency;
+}
+
+
 
 
 

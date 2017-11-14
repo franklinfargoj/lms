@@ -187,9 +187,9 @@ $lead_sources = $this->config->item('lead_source');
         <div class="float-left">
             <span class="total-lead">
                 <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
-                    Total Ticket Size (Rs) Of Your Zone
+                    Total Ticket Size (In Lacs) Of Your Zone
                 <?php }else{?>
-                    Total Ticket Size (Rs)
+                    Total Ticket Size (In Lacs)
                 <?php }?>
 
             </span>
@@ -248,10 +248,10 @@ $lead_sources = $this->config->item('lead_source');
                                 Product Name
                             </th>
                             <th style="text-align:center">
-                                Ticket Size (Rs)
+                                Ticket Size (In Lacs)
                             </th>
                             <th style="text-align:center">
-                                Amount (Rs)
+                                Actual Business (In Lacs)
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
@@ -317,12 +317,12 @@ $lead_sources = $this->config->item('lead_source');
                             </td>
                             <td style="text-align:center">
                                 <?php 
-                                    echo isset($value['ticket']) ? $value['ticket'] : '';
+                                    echo isset($value['ticket']) ? convertCurrency($value['ticket']) : '';
                                 ?>
                             </td>
                             <td style="text-align:center">
                                 <?php
-                                echo isset($value['amount']) ? $value['amount'] : '';
+                                echo isset($value['amount']) ? convertCurrency($value['amount']) : '';
                                 ?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM'))){
