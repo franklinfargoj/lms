@@ -187,9 +187,9 @@ $lead_sources = $this->config->item('lead_source');
         <div class="float-left">
             <span class="total-lead">
                 <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
-                    Total Ticket Size (In Lacs) Of Your Zone
+                    Total Ticket Size (Rs) Of Your Zone
                 <?php }else{?>
-                    Total Ticket Size (In Lacs)
+                    Total Ticket Size (Rs)
                 <?php }?>
 
             </span>
@@ -248,10 +248,10 @@ $lead_sources = $this->config->item('lead_source');
                                 Product Name
                             </th>
                             <th style="text-align:center">
-                                Ticket Size (In Lacs)
+                                Ticket Size (Rs)
                             </th>
                             <th style="text-align:center">
-                                Actual Business (In Lacs)
+                                Actual Business (Rs)
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
