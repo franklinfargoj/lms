@@ -177,7 +177,12 @@ $lead_sources = $this->config->item('lead_source');
     <div class="container clearfix">
         <div class="float-left">
             <span class="total-lead">
-                Total Leads
+                <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
+                    Total Leads Of Your Zone
+                <?php }else{?>
+                    Total Leads
+                <?php }?>
+
             </span>
             <span class="lead-num"> : <?php echo $Total;?></span>
         </div>
@@ -207,7 +212,7 @@ $lead_sources = $this->config->item('lead_source');
                         Chart View
                     </a>
                 &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <a href="<?php echo site_url('charts/index/leads_type_reports/funnel')?>" class="btn-Download">
+                    <a href="<?php echo site_url('charts/index/leads_type_reports/'.$chart_param.'/funnel')?>" class="btn-Download">
                         Funnel View
                     </a>
                     &nbsp;&nbsp;|&nbsp;&nbsp;

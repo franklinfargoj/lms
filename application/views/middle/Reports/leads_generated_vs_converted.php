@@ -173,14 +173,23 @@
     <div class="container clearfix">
         <div class="float-left">
             <span class="total-lead">
-                Total Generated Leads
+                <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
+                    Total Generated Leads Of Your Zone
+                <?php }else{?>
+                    Total Generated Leads
+                <?php }?>
+
             </span>
             <span class="lead-num"> : <?php echo $G_Total;?></span>
         </div>
         <div class="float-left">
             <span class="total-lead">
                 &nbsp;&nbsp;|&nbsp;&nbsp;
-                Total Converted Leads
+                <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
+                    Total Converted Leads Of Your Zone
+                <?php }else{?>
+                    Total Converted Leads
+                <?php }?>
             </span>
             <span class="lead-num"> : <?php echo $C_Total;?></span>
         </div>

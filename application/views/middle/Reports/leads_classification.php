@@ -186,7 +186,12 @@ $lead_sources = $this->config->item('lead_source');
         <?php if( $view == 'employee' ||  $view == 'branch'){?>
         <div class="float-left">
             <span class="total-lead">
-                Total Ticket Size (Rs)
+                <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
+                    Total Ticket Size (Rs) Of Your Zone
+                <?php }else{?>
+                    Total Ticket Size (Rs)
+                <?php }?>
+
             </span>
             <span class="lead-num"> : <?php echo $Total;?></span>
         </div>

@@ -177,7 +177,11 @@ $lead_sources = $this->config->item('lead_source');
         <div class="container clearfix">
             <div class="float-left">
                 <span class="total-lead">
-                    Total Generated Leads
+                    <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
+                        Total Generated Leads Of Your Zone
+                    <?php }else{?>
+                        Total Generated Leads
+                    <?php }?>
                 </span>
                 <span class="lead-num"> : <?php echo $Total;?></span>
             </div>

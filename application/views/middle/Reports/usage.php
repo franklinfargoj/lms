@@ -104,7 +104,11 @@ $lead_status = $this->config->item('lead_status');
         <div class="container clearfix">
             <div class="float-left">
                 <span class="total-lead">
-                    Total User Count
+                    <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
+                        Total Users Count Of Your Zone
+                    <?php }else{?>
+                    Total Users Count
+                    <?php }?>
                 </span>
                 <span class="lead-num"> : <?php echo $Total;?></span>
             </div>

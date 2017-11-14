@@ -9,20 +9,19 @@
 <script src="<?php echo base_url().PLUGINS;?>amcharts/js/funnel.js"></script>
 <script src="<?php echo base_url().PLUGINS;?>amcharts/js/export.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url().PLUGINS;?>amcharts/css/export.css" type="text/css" media="all" />
-<!--<script src="https://www.amcharts.com/lib/3/themes/none.js"></script>-->
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Identification
+            Leads Type Report
         </h3>
         <div class="float-right">
             <a href="<?php echo site_url('reports/index/leads_type_reports')?>" class="btn-Download">
                 Grid View
             </a>
-            <span> | </span>
-            <a href="<?php echo site_url('charts/index/leads_type_reports')?>" class="btn-Download">
-                Chart View
-            </a>
+<!--            <span> | </span>-->
+<!--            <a href="--><?php //echo site_url('charts/index/leads_type_reports')?><!--" class="btn-Download">-->
+<!--                Chart View-->
+<!--            </a>-->
         </div>
     </div>
 </div>
@@ -43,7 +42,7 @@ foreach ($lead_type as $key => $value){
 </div>
 <span class="bg-bottom"></span>
 <script type="application/javascript">
-    console.log(<?php echo json_encode((array)$data,JSON_NUMERIC_CHECK)?>);
+//    console.log(<?php //echo json_encode((array)$data,JSON_NUMERIC_CHECK)?>//);
     var chart = AmCharts.makeChart( "chartdiv", {
         "type": "funnel",
         "theme": "none",
