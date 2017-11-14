@@ -5,7 +5,7 @@
 
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center">Zonal Manager</h3>
+        <h3 class="text-center">Zonal Manager / Deputy Zonal Manager</h3>
     </div>
 </div>
 <!-- <div class="lead-top">
