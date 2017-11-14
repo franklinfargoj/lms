@@ -112,8 +112,8 @@
             ?>
             <tr>
                 <td>Unassigned Leads</td>
-                <td style="text-align:center"><a href="<?php echo site_url('leads/leads_list/'.$type.'/mtd/unassigned'.$param);?>" ><?php echo $Unassigned_Leads['Month']; ?></a></td>
-                <td style="text-align:center"><a href="<?php echo site_url('leads/leads_list/'.$type.'/ytd/unassigned'.$param);?>" ><?php echo $Unassigned_Leads['Year']; ?></a></td>
+                <td style="text-align:center"><a href="<?php //echo site_url('leads/leads_list/'.$type.'/mtd/unassigned'.$param);?>" ><?php echo $Unassigned_Leads['Month']; ?></a></td>
+                <td style="text-align:center"><a href="<?php //echo site_url('leads/leads_list/'.$type.'/ytd/unassigned'.$param);?>" ><?php echo $Unassigned_Leads['Year']; ?></a></td>
             </tr>
             </tbody>
         </table>
