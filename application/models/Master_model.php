@@ -312,4 +312,14 @@ class Master_model extends CI_Model{
         $data['is_deleted'] = '1';
         return $this->soft_delete($where,Tbl_Manage_Points,$data);
     }
+
+	public function get_branchname($select,$where){
+
+		$this->db->select($select,TRUE);
+		$this->db->from('db_branch');
+		$this->db->where($where);
+		$query = $this->db->get();
+//		pe($this->db->last_query());die;
+		return $query->result_array();
+	}
 }

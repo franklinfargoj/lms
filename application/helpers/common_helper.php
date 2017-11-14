@@ -1216,6 +1216,17 @@ if(!function_exists('get_array')){
     }
 }
 
+if(!function_exists('branchname')){
+    function branchname($id){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $select=array('name');
+        $where['code'] = $id;
+        $data = $CI->master->get_branchname($select,$where);
+        return $data;
+    }
+}
+
 
 
 
