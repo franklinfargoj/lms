@@ -10,17 +10,7 @@ $lead_status = $this->config->item('lead_status');
         <h3 class="text-center">
             Usage
         </h3>
-        <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
-        <div class="float-right">
-            <?php
-            $chart_param = $start_date.'/'.$end_date;
-            $chart_param=encode_id($chart_param);
-            ?>
-            <a href="<?php echo site_url('charts/index/usage/'.$chart_param)?>" class="btn-Download">
-                Chart View
-            </a>
-        </div>
-        <?php }?>
+
     </div>
 </div>
 <?php 
@@ -119,6 +109,17 @@ $lead_status = $this->config->item('lead_status');
                 <span class="lead-num"> : <?php echo $Total;?></span>
             </div>
             <div class="float-right">
+                <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
+
+                        <?php
+                        $chart_param = $start_date.'/'.$end_date;
+                        $chart_param=encode_id($chart_param);
+                        ?>
+                        <a href="<?php echo site_url('charts/index/usage/'.$chart_param)?>" class="btn-Download">
+                            Chart View
+                        </a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                <?php }?>
                 <a href="javascript:void(0);" class="export_to_excel btn-Download">
                     Export to Excel 
                 </a>

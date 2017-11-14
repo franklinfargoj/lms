@@ -10,36 +10,7 @@ $lead_sources = $this->config->item('lead_source');
         <h3 class="text-center">
             Lead Type Report
         </h3>
-        <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
-        <div class="float-right">
-            <?php
-            if(!isset($product_category_id) || $product_category_id == ''){
-                $product_category_id1= 'all';
-            }else{
-                $product_category_id1 =$product_category_id;
-            }
-            if(!isset($product_id) || $product_id == ''){
-                $product_id1= 'all';
-            }else{
-                $product_id1=$product_id;
-            }
-            if(!isset($lead_source) || $lead_source == ''){
-                $lead_source1= 'all';
-            }else{
-                $lead_source1=$lead_source;
-            }
-            $chart_param = $start_date.'/'.$end_date.'/'.$product_category_id1.'/'.$product_id1.'/'.$lead_source1;
-            $chart_param=encode_id($chart_param);
-            ?>
-            <a href="<?php echo site_url('charts/index/leads_type_reports/'.$chart_param)?>" class="btn-Download">
-                Chart View
-            </a>
-            <span> | </span>
-            <a href="<?php echo site_url('charts/index/leads_type_reports/funnel')?>" class="btn-Download">
-                Funnel View
-            </a>
-        </div>
-        <?php }?>
+
     </div>
 </div>
 <?php 
@@ -211,6 +182,36 @@ $lead_sources = $this->config->item('lead_source');
             <span class="lead-num"> : <?php echo $Total;?></span>
         </div>
         <div class="float-right">
+            <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
+
+                    <?php
+                    if(!isset($product_category_id) || $product_category_id == ''){
+                        $product_category_id1= 'all';
+                    }else{
+                        $product_category_id1 =$product_category_id;
+                    }
+                    if(!isset($product_id) || $product_id == ''){
+                        $product_id1= 'all';
+                    }else{
+                        $product_id1=$product_id;
+                    }
+                    if(!isset($lead_source) || $lead_source == ''){
+                        $lead_source1= 'all';
+                    }else{
+                        $lead_source1=$lead_source;
+                    }
+                    $chart_param = $start_date.'/'.$end_date.'/'.$product_category_id1.'/'.$product_id1.'/'.$lead_source1;
+                    $chart_param=encode_id($chart_param);
+                    ?>
+                    <a href="<?php echo site_url('charts/index/leads_type_reports/'.$chart_param)?>" class="btn-Download">
+                        Chart View
+                    </a>
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a href="<?php echo site_url('charts/index/leads_type_reports/funnel')?>" class="btn-Download">
+                        Funnel View
+                    </a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+            <?php }?>
             <a href="javascript:void(0);" class="export_to_excel btn-Download">
                 Export to Excel 
             </a>
