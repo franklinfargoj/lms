@@ -350,6 +350,7 @@
                                 }
                             ?>
                             <td>
+                                <?php if ($i == 1 || $view == 'branch') {?>
                                 <?php 
                                     if(in_array($viewName,array('ZM'))){
                                         if($view == 'branch' || $view == 'employee'){
@@ -366,15 +367,19 @@
                                 <?php 
                                     if(in_array($viewName,array('ZM','BM'))){
                                         if($view == 'employee'){
-                                        }else{
-                                ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_generated_vs_converted/employee'.$param)?>">
-                                        Employee View
-                                    </a> 
-                                <?php
+                                        }else {
+
+                                                ?>
+                                                <a class=""
+                                                   href="<?php echo site_url('reports/index/leads_generated_vs_converted/employee' . $param) ?>">
+                                                    Employee View
+                                                </a>
+                                                <?php
+
                                         }
                                      }
                                 ?>
+                                <?php }?>
                             </td>
                             <?php }?>
                         </tr>

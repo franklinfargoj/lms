@@ -292,7 +292,7 @@ $lead_sources = $this->config->item('lead_source');
                         $i = 0;
                         foreach ($leads as $key => $value) {
                     ?>
-                        <tr <?php if($i==0){echo 'style="background-color:#00549b99;"';};?>>
+                        <tr <?php //if($i==0){echo 'style="background-color:#00549b99;"';};?>>
                             <td>
                                 <?php echo ++$i;?>
                             </td>
@@ -375,6 +375,7 @@ $lead_sources = $this->config->item('lead_source');
                                 }
                             ?>
                             <td>
+                                <?php if ($i == 1 || $view == 'branch') {?>
                                 <?php 
                                     if(in_array($viewName,array('ZM'))){
                                         if($view == 'branch' || $view == 'employee'){
@@ -391,15 +392,19 @@ $lead_sources = $this->config->item('lead_source');
                                 <?php 
                                     if(in_array($viewName,array('ZM','BM'))){
                                         if($view == 'employee'){
-                                        }else{
-                                ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_type_reports/employee'.$param)?>">
-                                        Employee View
-                                    </a> 
-                                <?php
+                                        }else {
+
+                                                ?>
+                                                <a class=""
+                                                   href="<?php echo site_url('reports/index/leads_type_reports/employee' . $param) ?>">
+                                                    Employee View
+                                                </a>
+                                                <?php
+
                                         }
                                      }
                                 ?>
+                                <?php }?>
                             </td>
                             <?php }?>
                         </tr>

@@ -248,6 +248,7 @@ $lead_status = $this->config->item('lead_status');
                                 }
                             ?>
                             <td>
+                                <?php if ($i == 1 || $view == 'branch') {?>
                                 <?php 
                                     if(in_array($viewName,array('ZM'))){
                                         if($view == 'branch' || $view == 'employee'){
@@ -264,15 +265,19 @@ $lead_status = $this->config->item('lead_status');
                                 <?php 
                                     if(in_array($viewName,array('ZM','BM'))){
                                         if($view == 'employee'){
-                                        }else{
-                                ?>
-                                    <a class="" href="<?php echo site_url('reports/index/usage/employee'.$param)?>">
-                                        Employee View
-                                    </a> 
-                                <?php
-                                        }
+                                        }else {
+
+                                                ?>
+                                                <a class=""
+                                                   href="<?php echo site_url('reports/index/usage/employee' . $param) ?>">
+                                                    Employee View
+                                                </a>
+                                                <?php
+                                            }
+
                                      }
                                 ?>
+                                <?php }?>
                             </td>
                             <?php }?>
                         </tr>
