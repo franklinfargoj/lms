@@ -63,7 +63,7 @@ $all_source = $this->config->item('lead_source');
                                 $Rerout_to_branchname= branchname($lead_value['reroute_to_branch_id']);
                                 $Rerout_to_branchname = $Rerout_to_branchname[0]['name'];
                                 $Rerout_from_branchname= branchname($lead_value['reroute_from_branch_id']);
-                                $Rerout_from_branchname = $Rerout_to_branchname[0]['name'];
+                                $Rerout_from_branchname = $Rerout_from_branchname[0]['name'];
                                 echo $lead_value['reroute_from_branch_id'] ? "Reroute To Branch : ".$Rerout_to_branchname.'<br><br>' : 'Reroute To Branch : NA<br><br>';
                                 echo isset($lead_value['reroute_to_branch_id']) && !empty($lead_value['reroute_to_branch_id']) ? "Reroute From Branch  : ".$Rerout_from_branchname.'<br><br>' : 'Reroute From Branch  : NA<br><br>';
                                 ?>
