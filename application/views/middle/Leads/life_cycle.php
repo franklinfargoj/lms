@@ -1,5 +1,5 @@
 <?php
-pe($lead_data);die;
+//pe($lead_data);die;
 $statuses = $this->config->item('lead_status');
 $assigned_to = 0;
 $all_source = $this->config->item('lead_source');
