@@ -1002,6 +1002,7 @@ class Leads extends CI_Controller
         $table = Tbl_Leads.' as l';
         $join = array();
         $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id','type' => '');
+        $join[] = array('table' => Tbl_Category.' as pc','on_condition' => 'l.product_category_id = pc.id','type' => '');
         if($type == 'generated'){
             $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on','DATEDIFF(CURDATE( ),l.created_on) as elapsed_day');
             $where = array('la.is_deleted' => 0,'la.is_updated' => 1);
@@ -1040,7 +1041,7 @@ class Leads extends CI_Controller
         }
         if($type == 'assigned'){
             $order_by='';
-            $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','la.created_on','l.lead_source','p.title','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
+            $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','la.created_on','l.lead_source','p.title','pc.title as prod_cat','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
                 $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
@@ -1075,7 +1076,7 @@ class Leads extends CI_Controller
                 }
                 if($login_user['designation_name'] == 'BM'){
                     $where['la.branch_id'] = $login_user['branch_id'];
-                    $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 ELSE 3 END , elapsed_day ASC";
+                    $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 WHEN pc.title = 'Fee Income' THEN 3 ELSE 4 END , elapsed_day ASC";
                     //$order_by = "elapsed_day ASC";
                 }
             }

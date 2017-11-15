@@ -1,4 +1,5 @@
 <?php
+//pe($leads);die;
     $parameter = '';
     $source = 'empty';
     $lead_type = $this->config->item('lead_type');
@@ -155,7 +156,10 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
                                 <?php }
                                 if($admin == 'BM' && in_array($value['status'],array('NI'))){?>
                                 <img src="<?php echo base_url().ASSETS;?>images/dislike.gif" alt="logo" style="max-width: 24%">
-                            <?php }?>
+                            <?php }
+                                if($admin == 'BM' && $value['prod_cat']=='Fee Income' && in_array($value['status'],array('DC'))){?>
+                                    <img src="<?php echo base_url().ASSETS;?>images/like.gif" alt="logo" style="max-width: 24%">
+                                <?php }?>
                             </td>
                             <td>
                                  <?php echo ucwords($value['customer_name']);?>
