@@ -53,7 +53,10 @@ class Reports extends CI_Controller
             if($action == 'leads_generated_vs_converted'){
                 $arrData = $this->$action('generated',$arrData);
                 $arrData = $this->$action('converted',$arrData);
+                $arrData = $this->$action('actual_business',$arrData);
+                //pe($arrData);die;
                 $arrData = $this->combine($arrData);
+                //pe($arrData);die;
             }else{
                 $arrData = $this->$action($arrData);
             }
@@ -76,6 +79,7 @@ class Reports extends CI_Controller
             if($action == 'leads_generated_vs_converted'){
                 $arrData = $this->$action('generated',$arrData);
                 $arrData = $this->$action('converted',$arrData);
+                $arrData = $this->$action('actual_business',$arrData);
                 $arrData = $this->combine($arrData);
             }else{
                 $arrData = $this->$action($arrData);
@@ -894,12 +898,19 @@ class Reports extends CI_Controller
             $select = array('COUNT(l.id) as generated_count');
             $where  = array();
             $alias = 'l';
+        }elseif($type == 'actual_business'){
+            $select = array('SUM(rfc.amount) as amount');
+            $where  = array();
+            $join = array();
+            $join[] = array('table' => Tbl_cbs.' as rfc','on_condition' => 'rfc.lead_id = l.id','type' => '');
+            $alias = 'l';
         }else{
             $select = array('COUNT(la.lead_id) as converted_count');
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status' => 'Converted');
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
             $alias = 'la';
         }
+
         $group_by = array();
 
 
@@ -1014,7 +1025,8 @@ class Reports extends CI_Controller
         }
 
         $arrData[$type] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
-        //pe($this->db->last_query());
+       // pe($this->db->last_query());
+       //pe($arrData);die;
         return $arrData;
     }
 
@@ -1039,9 +1051,10 @@ class Reports extends CI_Controller
         }
         $arrData['G_Total'] = $arrData['C_Total'] = 0;    
         $arrData['leads'] = array();
-        if(!empty($arrData['generated']) && !empty($arrData['converted'])) {
-            $leads = array_merge($arrData['generated'], $arrData['converted']);
+        if(!empty($arrData['generated']) && !empty($arrData['converted']) && !empty($arrData['actual_business'])) {
+            $leads = array_merge($arrData['generated'], $arrData['converted'],$arrData['actual_business']);
         }
+        //pe($leads);die;
         if($arrData['list']) {
             $Lead['userId'] = array();
             if (!empty($leads)){
@@ -1079,6 +1092,13 @@ class Reports extends CI_Controller
                             $Lead[$index]['converted_count'] = $value['converted_count'];
                         }
                     }
+                    if (isset($value['amount'])) {
+                        if (isset($Lead[$index]['amount'])) {
+                            $Lead[$index]['actual_business'] += $value['amount'];
+                        } else {
+                            $Lead[$index]['actual_business'] = $value['amount'];
+                        }
+                    }
                 }
         }
             foreach ($arrData['list'] as $key => $value) {
@@ -1107,9 +1127,11 @@ class Reports extends CI_Controller
                 if(!in_array($index,$Lead['userId'])){
                     $arrData['leads'][$index]['generated_count'] = 0;
                     $arrData['leads'][$index]['converted_count'] = 0;
+                    $arrData['leads'][$index]['actual_business'] = 0;
                 }else{
                     $arrData['leads'][$index]['generated_count'] = isset($Lead[$index]['generated_count']) ? $Lead[$index]['generated_count'] : 0;
                     $arrData['leads'][$index]['converted_count'] = isset($Lead[$index]['converted_count']) ? $Lead[$index]['converted_count'] : 0;
+                    $arrData['leads'][$index]['actual_business'] = isset($Lead[$index]['actual_business']) ? $Lead[$index]['actual_business'] : 0;
                 }
                 $arrData['G_Total'] += $arrData['leads'][$index]['generated_count'];
                 $arrData['C_Total'] += $arrData['leads'][$index]['converted_count'];
@@ -1121,6 +1143,7 @@ class Reports extends CI_Controller
                 $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
+        //pe($arrData);die;
         return $arrData;
     }
 

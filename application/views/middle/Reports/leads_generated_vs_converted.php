@@ -277,6 +277,9 @@
                             <th align="center">
                                 Total Leads Converted
                             </th>
+                            <th align="center">
+                                Actual Business (In Lacs)
+                            </th>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
                                 Action
@@ -347,6 +350,11 @@
                             <td align="center">
                                 <?php 
                                     echo isset($value['converted_count']) ? $value['converted_count'] : 0;
+                                ?>
+                            </td>
+                            <td align="center">
+                                <?php
+                                echo isset($value['actual_business']) ? convertCurrency($value['actual_business']) : 0;
                                 ?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM'))){
