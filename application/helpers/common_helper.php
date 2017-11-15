@@ -1198,11 +1198,15 @@ if(!function_exists('assignedLeadCount')){
         $CI->load->model('Lead');
         $action = 'count';
         $select = array();
-        $table = Tbl_LeadAssign;
+        $table = Tbl_LeadAssign ;
         $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
-        if($admin_type == 'BM')
-            $where = "(status='AO' OR status='NI' AND branch_id =".$login_user['branch_id'].") AND (is_updated = 1 AND is_deleted = 0 AND YEAR(created_on) =".date('Y')." AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
-        $data = $CI->Lead->get_leads($action, $table, $select, $where, $join=array(), $group_by=array(), $order_by = array());
+        if($admin_type == 'BM'){
+            $join[] = array('table' => Tbl_Leads.' as l','on_condition' => 'l.id = '.Tbl_LeadAssign.'.lead_id','type' => '');
+            $join[] = array('table' => Tbl_Category.' as pc','on_condition' => 'l.product_category_id = pc.id','type' => '');
+            $where = "(".Tbl_LeadAssign.".status='AO' OR ".Tbl_LeadAssign.".status='NI' OR (".Tbl_LeadAssign.".status = 'DC' AND pc.title = 'Fee Income') AND ".Tbl_LeadAssign.".branch_id =".$login_user['branch_id'].") AND (".Tbl_LeadAssign.".is_updated = 1 AND ".Tbl_LeadAssign.".is_deleted = 0 AND YEAR(".Tbl_LeadAssign.".created_on) =".date('Y')." AND DATEDIFF( CURDATE( ) , ".Tbl_LeadAssign.".created_on) <=".Elapsed_day.")";
+        }
+
+        $data = $CI->Lead->get_leads($action, $table, $select, $where, $join, $group_by=array(), $order_by = array());
         return $data;
 
     }
