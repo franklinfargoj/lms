@@ -300,7 +300,7 @@ class Reports extends CI_Controller
         $lead_type = array_keys($this->config->item('lead_type'));
         //Build Input Parameter
         $action = 'list';
-        $select = array('COUNT(l.id) as count','l.lead_identification');
+        $select = array('COUNT(l.id) as count','l.lead_identification','SUM(l.lead_ticket_range) as lead_ticket_range');
         $table = Tbl_Leads.' as l';
         $where  = array(/*'la.is_deleted' => 0,'la.is_updated' => 1,*/'l.lead_identification IN ("'.str_replace(',','","',implode(',',$lead_type)).'")' => NULL);
         $join = array();
@@ -419,6 +419,7 @@ class Reports extends CI_Controller
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         //pe($this->db->last_query());
+        //pe($leads);die;
         $arrData['leads'] = array();
         $arrData['Total'] = 0;
         if($list){
@@ -441,8 +442,11 @@ class Reports extends CI_Controller
                         $Lead['userId'][] = $value['zone_id'];
                     }
                     $Lead[$index]['lead_identification'][$value['lead_identification']] = $value['count'];
+                    $Lead[$index]['lead_ticket_range'][$value['lead_ticket_range']] = $value['lead_ticket_range'];
+
                 }
             }
+           // pe($Lead);die;
             $arrData['viewName'] = $viewName;
             foreach ($list as $key => $value) {
                 //Employee Login
@@ -469,9 +473,11 @@ class Reports extends CI_Controller
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
                 if(!in_array($index,$Lead['userId'])){
                     $arrData['leads'][$index]['total'] = 0;
+                    $arrData['leads'][$index]['lead_ticket_range'] = 0;
                     $arrData['leads'][$index]['lead_identification'] = array();
                 }else{
                     $arrData['leads'][$index]['total'] = array_sum($Lead[$index]['lead_identification']);
+                    $arrData['leads'][$index]['lead_ticket_range'] = array_sum($Lead[$index]['lead_ticket_range']);
                     $arrData['leads'][$index]['lead_identification'] = $Lead[$index]['lead_identification'];
                 }
                 $arrData['Total'] += $arrData['leads'][$index]['total'];
@@ -483,6 +489,7 @@ class Reports extends CI_Controller
                 $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
+        //pe($arrData);die;
         return $arrData;
     }
 

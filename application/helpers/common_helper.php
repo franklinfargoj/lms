@@ -1233,7 +1233,7 @@ function convertCurrency($number)
     $length = strlen($number);
     $currency = 0;
 
-    if($length == 4 || $length == 5)
+   /* if($length == 4 || $length == 5)
     {
         // Thousand
         $number = $number / 1000;
@@ -1257,6 +1257,13 @@ function convertCurrency($number)
         $number = round($number,2);
         $ext = "Cr";
         $currency = $number.' '.$ext;
+    }*/
+    if($number > 0){
+        // Lakhs
+        $number = $number / 100000;
+        $number = round($number,2);
+        $ext = "Lac";
+        $currency = $number." ".$ext;
     }
 
     return $currency;

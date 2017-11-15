@@ -5,7 +5,7 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Generated Vs Converted
+            Business Generated Report
         </h3>
 
     </div>

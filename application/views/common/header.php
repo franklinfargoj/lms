@@ -178,11 +178,7 @@
 									Usage Report
 									</a>
 								</li>
-								<li>
-									<a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">
-										Pendency Leads
-									</a>
-								</li>
+
 							</ul>
 						</li>
 					
@@ -193,23 +189,19 @@
 						</a>
 							<ul class="cal-drop2">
 								<li>
-									<a href="<?php echo site_url('reports/index/leads_type_reports')?>">
-									 Lead Type
-									</a>
-								</li>
-								 <li>
-									<a href="<?php echo site_url('reports/index/leads_generated')?>">
-									Leads Generated
+									<a href="<?php echo site_url('reports/index/pendancy_leads_reports')?>">
+										Pendency Leads
 									</a>
 								</li>
 								<li>
-									<a href="<?php echo site_url('reports/index/leads_assigned')?>">
-									Leads Assigned
+									<a href="<?php echo site_url('reports/index/leads_type_reports')?>">
+										Interested Leads Report
 									</a>
 								</li>
+
 								<li>
 									<a href="<?php echo site_url('reports/index/leads_generated_vs_converted')?>">
-									Leads Generated vs Converted
+										Business Generated Report
 									</a>
 								</li>
 							</ul>
@@ -235,9 +227,19 @@
 							<span class="right-toggle">&#9666;</span>Classification<span class="left-toggle"> &#9656;</span>
 							</a>
 							<ul class="cal-drop4">
+<!--								<li>-->
+<!--									<a href="--><?php //echo site_url('reports/index/leads_classification')?><!--">-->
+<!--									Leads Classification-->
+<!--									</a>-->
+<!--								</li>-->
 								<li>
-									<a href="<?php echo site_url('reports/index/leads_classification')?>">
-									Leads Classification
+									<a href="<?php echo site_url('reports/index/leads_generated')?>">
+										Leads Generated
+									</a>
+								</li>
+								<li>
+									<a href="<?php echo site_url('reports/index/leads_assigned')?>">
+										Leads Assigned
 									</a>
 								</li>
 							</ul>

@@ -8,7 +8,7 @@ $lead_sources = $this->config->item('lead_source');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Lead Type Report
+            Interested Leads Report
         </h3>
 
     </div>
@@ -285,6 +285,9 @@ $lead_sources = $this->config->item('lead_source');
                                     
                                 }
                             ?>
+                            <th>
+                                Ticket Size (In Lacs)
+                            </th>
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
                                 Action
@@ -295,6 +298,7 @@ $lead_sources = $this->config->item('lead_source');
                     <tbody>
                     <?php 
                         $i = 0;
+                   // pe($leads);die;
                         foreach ($leads as $key => $value) {
                     ?>
                         <tr <?php //if($i==0){echo 'style="background-color:#00549b99;"';};?>>
@@ -370,6 +374,11 @@ $lead_sources = $this->config->item('lead_source');
                                    // }
                                 }
                             ?>
+                            <td>
+                                <?php
+                                echo convertCurrency($value['lead_ticket_range']);
+                                ?>
+                            </td>
                             <?php if(in_array($viewName,array('ZM','BM'))){
                                 $param = '';
                                 if(isset($value['zone_id'])){
