@@ -1198,6 +1198,7 @@ if(!function_exists('assignedLeadCount')){
         $CI->load->model('Lead');
         $action = 'count';
         $select = array();
+        $join = array();
         $table = Tbl_LeadAssign ;
         $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
         if($admin_type == 'BM'){
