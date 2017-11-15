@@ -1076,7 +1076,7 @@ class Leads extends CI_Controller
                 }
                 if($login_user['designation_name'] == 'BM'){
                     $where['la.branch_id'] = $login_user['branch_id'];
-                    $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 WHEN pc.title = 'Fee Income' THEN 3 ELSE 4 END , elapsed_day ASC";
+                    $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN pc.title = 'Fee Income' && la.status = 'DC' THEN 2 WHEN la.status = 'NI' THEN 3 ELSE 4 END , elapsed_day ASC";
                     //$order_by = "elapsed_day ASC";
                 }
             }
