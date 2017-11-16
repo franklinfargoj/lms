@@ -238,7 +238,9 @@ class Cron extends CI_Controller
 //            echo "<pre>";
 //            print_r($employee_list);die;
             $branch_manager['inactive']  = $this->get_leads(array('type'=>'inactive','till'=>'days','days_count'=>2,'user_type'=>'EM','branch_id' => $v->branch_id));
-            $branch_manager = call_user_func_array('array_merge', $branch_manager);
+            if(!empty($branch_manager)){
+                $branch_manager = call_user_func_array('array_merge', $branch_manager);
+            }
             
             $total['inactive'] = array_column($branch_manager,'inactive','hrms_id'); 
             $unique_hrms_ids = array_unique(array_column($branch_manager, 'hrms_id'));
