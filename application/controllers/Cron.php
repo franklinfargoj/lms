@@ -185,8 +185,10 @@ class Cron extends CI_Controller
             $branch_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'EM','branch_id' => $v->branch_id));
             $branch_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'EM','branch_id' => $v->branch_id));
             $branch_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'EM','branch_id' => $v->branch_id));
-            
-            $branch_manager = call_user_func_array('array_merge', $branch_manager);
+            if(!empty($branch_manager)){
+                $branch_manager = call_user_func_array('array_merge', $branch_manager);
+            }
+
             
             $total = array();
             foreach (array_keys($gm) as $key => $value) {
