@@ -591,9 +591,19 @@ class Dashboard extends CI_Controller {
                         $select1 = array();
                         $table1 = Tbl_Leads;
                         $join_assign1[] = array('table' =>Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = '.Tbl_Leads.'.id ','type' => 'left');
-                        $whereYear1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL, 'YEAR(' . $table1 . '.created_on)' => date('Y'));
-                        $whereMonth1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL, 'MONTH(' . $table1 . '.created_on)' => date('m'));
-                        $unassigned_leads_count_month = $this->master->get_leads($action1,$table1,$select1,$whereMonth1,$join_assign1,$group_by = array(),$order_by = array());
+                        $whereYear1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL);
+                $yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $whereYear1[Tbl_Leads.".created_on >='".$yr_start_date."'"] = NULL;
+                $whereYear1[Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
+                // $year_where['YEAR(l.created_on)'] = date('Y');
+                $month_where['MONTH(l.created_on)'] = date('m'); //Month till date filter
+                $month_where['YEAR(l.created_on)'] = date('Y');
+
+                $whereMonth1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL);
+                $whereMonth1['MONTH(' . $table1 . '.created_on)'] = date('m'); //Month till date filter
+                $whereMonth1['YEAR(' . $table1 . '.created_on)'] = date('Y');
+                $unassigned_leads_count_month = $this->master->get_leads($action1,$table1,$select1,$whereMonth1,$join_assign1,$group_by = array(),$order_by = array());
                         $unassigned_leads_count_year = $this->master->get_leads($action1,$table1,$select1,$whereYear1,$join_assign1,$group_by = array(),$order_by = array());
                         $result['Unassigned_Leads']['Month'] = $unassigned_leads_count_month;
                         $result['Unassigned_Leads']['Year'] = $unassigned_leads_count_year;
