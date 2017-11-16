@@ -181,8 +181,19 @@ class Dashboard extends CI_Controller {
      */
     private function zm_view($zone_id){
 
-        $where_month_Array = array('zone_id' => $zone_id,'MONTH(created_on)' => date('m'));
-        $where_year_Array = array('zone_id' => $zone_id,'YEAR(created_on)' => date('Y'));
+        //$where_month_Array = array('zone_id' => $zone_id,'MONTH(created_on)' => date('m'));
+        $where_month_Array = array('zone_id' => $zone_id);
+        //$where_year_Array = array('zone_id' => $zone_id,'YEAR(created_on)' => date('Y'));
+        $where_year_Array = array('zone_id' => $zone_id);
+
+        $yr_start_date=date('Y').'-04-01 00:00:00';
+        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        $where_year_Array["created_on >='".$yr_start_date."'"] = NULL;
+        $where_year_Array["created_on <='".$yr_end_date."'"] = NULL;
+        // $year_where['YEAR(l.created_on)'] = date('Y');
+        $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+        $where_month_Array['YEAR(created_on)'] = date('Y');
+
         $generated['monthly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_month_Array);
         $generated['yearly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_year_Array);
         $generated_key_value = array();
@@ -215,12 +226,16 @@ class Dashboard extends CI_Controller {
         //for converted
         foreach ($final as $id => $value) {
 
-            $where_month_Array = array('branch_id' => $value['created_by'],
-                'MONTH(created_on)' => date('m'),
-                'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
-            $where_year_Array = array('branch_id' => $value['created_by'],
-                'YEAR(created_on)' => date('Y'),
-                'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
+            $where_month_Array = array('branch_id' => $value['created_by'],'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
+
+            $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+            $where_month_Array['YEAR(created_on)'] = date('Y');
+            $where_year_Array = array('branch_id' => $value['created_by'],'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
+            $yr_start_date=date('Y').'-04-01 00:00:00';
+            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            $where_year_Array["created_on >='".$yr_start_date."'"] = NULL;
+            $where_year_Array["created_on <='".$yr_end_date."'"] = NULL;
+            // $year_where['YEAR(l.created_on)'] = date('Y');
             $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
             $converted_yearly = $this->master->get_converted_lead_bm_zm($where_year_Array);
             if (empty($converted)) {
@@ -242,10 +257,17 @@ class Dashboard extends CI_Controller {
      */
     private function gm_view(){
 
-        $where_generated_Array = array('zone_id !=' => NULL,
-            'MONTH(created_on)' => date('m'));
-        $where_year_Array = array('zone_id !=' => NULL,
-            'YEAR(created_on)' => date('Y'));
+        $where_generated_Array = array('zone_id !=' => NULL);
+        $where_year_Array = array('zone_id !=' => NULL);
+
+        $yr_start_date=date('Y').'-04-01 00:00:00';
+        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        $where_year_Array["created_on >='".$yr_start_date."'"] = NULL;
+        $where_year_Array["created_on <='".$yr_end_date."'"] = NULL;
+        // $year_where['YEAR(l.created_on)'] = date('Y');
+        $where_generated_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+        $where_generated_Array['YEAR(created_on)'] = date('Y');
+
         $generated['generated_leads'] = $this->master->get_generated_lead_bm_zm($where_generated_Array);
         $generated['yearly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_year_Array);
         $generated_key_value = array();
@@ -278,12 +300,14 @@ class Dashboard extends CI_Controller {
         //for converted
         foreach ($final as $id => $value) {
 
-            $where_month_Array = array('zone_id' => $value['created_by'],
-                'MONTH(created_on)' => date('m'),
-                'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
-            $where_year_Array = array('zone_id' => $value['created_by'],
-                'YEAR(created_on)' => date('Y'),
-                'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
+            $where_month_Array = array('zone_id' => $value['created_by'],'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
+            $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+            $where_month_Array['YEAR(created_on)'] = date('Y');
+            $where_year_Array = array('zone_id' => $value['created_by'],'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
+            $yr_start_date=date('Y').'-04-01 00:00:00';
+            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            $where_year_Array["created_on >='".$yr_start_date."'"] = NULL;
+            $where_year_Array["created_on <='".$yr_end_date."'"] = NULL;
             $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
             $converted_yearly = $this->master->get_converted_lead_bm_zm($where_year_Array);
             if (empty($converted)) {
@@ -323,17 +347,30 @@ class Dashboard extends CI_Controller {
             $result['branch_id'] = $branch_id;
             $this->make_bread->add('Lead Performance', '', 0);
             foreach ($source as $key => $lead_source){
-                $where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'),'l.lead_source' => $key);
-                $result['lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                $year_where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'),'l.lead_source' => $key);
+                $month_where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id, 'la.is_deleted' => 0,'la.is_updated' => 1, 'MONTH(la.created_on)' => date('m'),'l.lead_source' => $key);
 
-                $where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id, 'la.is_deleted' => 0,'la.is_updated' => 1, 'MONTH(la.created_on)' => date('m'),'l.lead_source' => $key);
-                $result['month_lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                $yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $year_where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
+                // $year_where['YEAR(l.created_on)'] = date('Y');
+                $month_where['MONTH(la.created_on)'] = date('m'); //Month till date filter
+                $month_where['YEAR(la.created_on)'] = date('Y');
+                //
 
-                $where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'),'l.lead_source' => $key,'la.status' => 'Converted');
-                $result['lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                //$where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'),'l.lead_source' => $key);
+                $result['lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $year_where, $join, '', '');
 
-                $where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'MONTH(la.created_on)' => date('m'),'l.lead_source' => $key,'la.status' => 'Converted');
-                $result['month_lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                //$where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id, 'la.is_deleted' => 0,'la.is_updated' => 1, 'MONTH(la.created_on)' => date('m'),'l.lead_source' => $key);
+                $result['month_lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $month_where, $join, '', '');
+
+                //$where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'),'l.lead_source' => $key,'la.status' => 'Converted');
+                $year_where['la.status'] =  'Converted';
+                $result['lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $year_where, $join, '', '');
+
+                //$where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'MONTH(la.created_on)' => date('m'),'l.lead_source' => $key,'la.status' => 'Converted');
+                $month_where['la.status'] =  'Converted';
+                $result['month_lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $month_where, $join, '', '');
             }
         }
 
@@ -342,17 +379,26 @@ class Dashboard extends CI_Controller {
             $result['zone_id'] = $zone_id;
             $this->make_bread->add('Lead Performance', '', 0);
             foreach ($source as $key => $lead_source){
-                $where = array('la.zone_id' => $zone_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'), 'l.lead_source' => $key);
-                $result['lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                $year_where = array('la.zone_id' => $zone_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'l.lead_source' => $key);
+                $month_where = array('la.zone_id' => $zone_id, 'la.is_deleted' => 0,'la.is_updated' => 1, 'l.lead_source' => $key);
+                $yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $year_where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
+                // $year_where['YEAR(l.created_on)'] = date('Y');
+                $month_where['MONTH(la.created_on)'] = date('m'); //Month till date filter
+                $month_where['YEAR(la.created_on)'] = date('Y');
+                $result['lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $year_where, $join, '', '');
 
-                $where = array('la.zone_id' => $zone_id, 'la.is_deleted' => 0,'la.is_updated' => 1, 'MONTH(la.created_on)' => date('m'),'l.lead_source' => $key);
-                $result['month_lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+               // $where = array('la.zone_id' => $zone_id, 'la.is_deleted' => 0,'la.is_updated' => 1, 'MONTH(la.created_on)' => date('m'),'l.lead_source' => $key);
+                $result['month_lead_assigned_'.$key] = $this->master->get_leads($action, $table, $select, $month_where, $join, '', '');
 
-                $where = array('la.zone_id' => $zone_id, 'la.is_deleted' => 0,'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'),'l.lead_source' => $key,'la.status' => 'Converted');
-                $result['lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                //$where = array('la.zone_id' => $zone_id, 'la.is_deleted' => 0,'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'),'l.lead_source' => $key,'la.status' => 'Converted');
+                $year_where['la.status'] =  'Converted';
+                $result['lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $year_where, $join, '', '');
 
-                $where = array('la.zone_id' => $zone_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'MONTH(la.created_on)' => date('m'),'l.lead_source' => $key,'la.status' => 'Converted');
-                $result['month_lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $where, $join, '', '');
+                //$where = array('la.zone_id' => $zone_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'MONTH(la.created_on)' => date('m'),'l.lead_source' => $key,'la.status' => 'Converted');
+                $month_where['la.status'] =  'Converted';
+                $result['month_lead_converted_'.$key] = $this->master->get_leads($action, $table, $select, $month_where, $join, '', '');
             }
         }
 
