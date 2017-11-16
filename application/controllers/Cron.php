@@ -487,7 +487,7 @@ class Cron extends CI_Controller
             }elseif($user_type == 'BM'){
                 $select[] = 'l.created_by_branch_id';
                 $where['l.zone_id'] = $zone_id;
-                $group_by = array('l.branch_id');
+                $group_by = array('l.created_by_branch_id');
             }elseif($user_type == 'EM'){
                 $select[] = 'l.created_by as hrms_id';
                 $where['l.branch_id'] = $branch_id;
@@ -507,7 +507,7 @@ class Cron extends CI_Controller
             }elseif($user_type == 'BM'){
                 $select[] = 'l.created_by_branch_id';
                 $where['l.zone_id'] = $zone_id;
-                $group_by = array('l.branch_id');
+                $group_by = array('l.created_by_branch_id');
             }
         }elseif($type == 'unassigned_noti'){
             //Unassigned Leads
