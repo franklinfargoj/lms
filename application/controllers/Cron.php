@@ -340,9 +340,10 @@ class Cron extends CI_Controller
         foreach ($zone_list as $k => $v) {
             $final = array();
             //FOR ZONE MANAGER
-            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('zone_id' => $v->zone_id),array(),'employee_dump');
+            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('zone_id' => '009846'),array(),'employee_dump');
             
             $zonal_manager['unassigned']  = $this->get_leads(array('type'=>'unassigned_noti','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
+
             if(!empty($zonal_manager['unassigned'])) {
                 $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
             }
@@ -371,11 +372,13 @@ class Cron extends CI_Controller
             //Notification Code
 
             //Mail Code
+            //pe($final['zonal_manager']);die;
             $subject = 'Unassigned Leads - '.$v->zone_id;
             $attachment_file = $this->export_to_excel('zm_unassigned_leads',$final['zonal_manager']);
             $to = array('email' => $v->email_id,'name' => $v->name);
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
+            die;
             //Mail Code
         }
     }
