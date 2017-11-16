@@ -479,14 +479,16 @@ class Cron extends CI_Controller
 
             }
             if($user_type == 'ZM'){
-                $select[] = 'l.zone_id';
+                $select[] = 'l.created_by_zone_id';
                 if($zone_id != ''){
-                    $where['l.zone_id'] = $zone_id;
+                    $where['l.created_by_zone_id'] = $zone_id;
+                    $where['l.created_by_zone_id !='] = NULL;
                 }
-                $group_by = array('l.zone_id');
+                $group_by = array('l.created_by_zone_id');
             }elseif($user_type == 'BM'){
                 $select[] = 'l.created_by_branch_id';
-                $where['l.zone_id'] = $zone_id;
+                $where['l.created_by_zone_id'] = $zone_id;
+                $where['l.created_by_branch_id !='] = NULL;
                 $group_by = array('l.created_by_branch_id');
             }elseif($user_type == 'EM'){
                 $select[] = 'l.created_by as hrms_id';
