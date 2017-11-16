@@ -614,22 +614,22 @@ class Dashboard extends CI_Controller {
                         $whereArray = array('la.employee_id' => $employee_id,'la.is_updated' => 1);
                         $yr_start_date=date('Y').'-04-01 00:00:00';
                         $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-                        $whereArray["l.created_on >='".$yr_start_date."' AND l.created_on <='".$yr_end_date."'"] = NULL;
+                        $whereArray["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
                         $result['total_assigned_leads'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
                         $whereArrayMonth = array('la.employee_id' => $employee_id,'la.is_updated' => 1);
-                        $whereArrayMonth['MONTH(l.created_on)'] = date('m'); //Month till date filter
-                        $whereArrayMonth['YEAR(l.created_on)'] = date('Y');
+                        $whereArrayMonth['MONTH(la.created_on)'] = date('m'); //Month till date filter
+                        $whereArrayMonth['YEAR(la.created_on)'] = date('Y');
                         $result['total_assigned_leads_month'] = $this->master->get_leads($action, $table, '', $whereArrayMonth, $join, '', '');
                     }
                     if(!empty($lead_source)){
                         $whereArray = array('la.employee_id' => $employee_id,'la.is_updated' => 1,'l.lead_source'=>$lead_source);
                         $yr_start_date=date('Y').'-04-01 00:00:00';
                         $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-                        $whereArray["l.created_on >='".$yr_start_date."' AND l.created_on <='".$yr_end_date."'"] = NULL;
+                        $whereArray["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
                         $result['total_assigned_leads'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
                         $whereArrayMonth = array('la.employee_id' => $employee_id,'la.is_updated' => 1,'l.lead_source'=>$lead_source);
-                        $whereArrayMonth['MONTH(l.created_on)'] = date('m'); //Month till date filter
-                        $whereArrayMonth['YEAR(l.created_on)'] = date('Y');
+                        $whereArrayMonth['MONTH(la.created_on)'] = date('m'); //Month till date filter
+                        $whereArrayMonth['YEAR(la.created_on)'] = date('Y');
                         $result['total_assigned_leads_month'] = $this->master->get_leads($action, $table, '', $whereArrayMonth, $join, '', '');
                     }
                 }
