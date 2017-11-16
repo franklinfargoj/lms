@@ -229,7 +229,7 @@ class Cron extends CI_Controller
      */
     public function bm_inactive_leads(){
         //Branch list for sending mail
-        $subject = 'Branch Manager Inactive Leads';
+
         $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%'),array(),'employee_dump');
         foreach ($branch_list as $k => $v) {
             $final = array();
@@ -266,8 +266,10 @@ class Cron extends CI_Controller
             //Mail Code
             $attachment_file = $this->export_to_excel('bm_inactive_leads',$final['branch_manager']);
             $to = array('email' => $v->email_id,'name' => $v->name);
+            $subject = 'Inactive Leads - '.$v->branch_name;
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
+            die;
             //Mail Code
         }
     }
@@ -530,6 +532,7 @@ class Cron extends CI_Controller
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
                 $where['MONTH(la.created_on)']  = date('m');
+                $where['YEAR(la.created_on)']  = date('Y');
             }
             if($till == 'days'){
                 $days_count = $data['days_count'];
