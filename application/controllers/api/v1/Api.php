@@ -416,13 +416,13 @@ class Api extends REST_Controller
                             $whereArray = array(Tbl_Leads . '.created_by' => $employee_id, 'status' => $key, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0);
                             $yr_start_date=date('Y').'-04-01 00:00:00';
                             $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-                            $whereArray[Tbl_LeadAssign  .".created_on >='$yr_start_date'"] = NULL;
-                            $whereArray[Tbl_LeadAssign  .".created_on <='$yr_end_date'"] = NULL;
+                            $whereArray[Tbl_Leads  .".created_on >='$yr_start_date'"] = NULL;
+                            $whereArray[Tbl_Leads  .".created_on <='$yr_end_date'"] = NULL;
                             $result[$i]['Year'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
 
                             $whereArray = array(Tbl_Leads . '.created_by' => $employee_id, 'status' => $key, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0);
-                            $whereArray['MONTH(' . Tbl_LeadAssign . '.created_on)'] = date('m'); //Month till date filter
-                            $whereArray['YEAR(' . Tbl_LeadAssign . '.created_on)'] = date('Y');
+                            $whereArray['MONTH(' . Tbl_Leads . '.created_on)'] = date('m'); //Month till date filter
+                            $whereArray['YEAR(' . Tbl_Leads . '.created_on)'] = date('Y');
 
 
                             $result[$i]['Month'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
