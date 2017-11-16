@@ -125,14 +125,14 @@ class Cron extends CI_Controller
 
             //$zonal_manager = call_user_func_array('array_merge', $zonal_manager);
             $zonal_manager = array_merge($zonal_manager);
-//            pe($zonal_manager);
+            pe($zonal_manager);
             $total = array();
             foreach (array_keys($gm) as $key => $value) {
                 if(!empty($zonal_manager[$value])){
                     $total[$value] = array_column($zonal_manager[$value], $value,'branch_id');
                 }
             }
-//            pe($total);die;
+           pe($total);die;
             $unique_branch_ids = array_unique(array_column($zonal_manager, 'branch_id'));
             foreach ($branch_list as $key => $value) {
 
