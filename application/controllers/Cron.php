@@ -190,22 +190,19 @@ class Cron extends CI_Controller
             pe($branch_manager);
             $total = array();
             foreach (array_keys($gm) as $key => $value) {
-                $total[$value] = array_column($branch_manager, $value,'hrms_id');
+                if(!empty($branch_manager[$value])) {
+                    $total[$value] = array_column($branch_manager[$value], $value, 'hrms_id');
+                }
             }
             pe($total);die;
-            $unique_hrms_ids = array_unique(array_column($branch_manager, 'hrms_id'));
+            //$unique_hrms_ids = array_unique(array_column($branch_manager, 'hrms_id'));
             foreach ($employee_list as $key => $value) {
-                if(!in_array($value->hrms_id,$unique_hrms_ids)){
-                    $final['branch_manager'][$value->hrms_id]['generated'] = 0;
-                    $final['branch_manager'][$value->hrms_id]['converted'] = 0;
-                    $final['branch_manager'][$value->hrms_id]['pending_before'] = 0;
-                    $final['branch_manager'][$value->hrms_id]['pending'] = 0;
-                }else{
+
                     $final['branch_manager'][$value->hrms_id]['generated'] = isset($total['generated'][$value->hrms_id]) ? $total['generated'][$value->hrms_id] : 0;
                     $final['branch_manager'][$value->hrms_id]['converted'] = isset($total['converted'][$value->hrms_id]) ? $total['converted'][$value->hrms_id] : 0;
                     $final['branch_manager'][$value->hrms_id]['pending_before'] = isset($total['pending_before'][$value->hrms_id]) ? $total['pending_before'][$value->hrms_id] : 0;
                     $final['branch_manager'][$value->hrms_id]['pending'] = isset($total['pending'][$value->hrms_id]) ? $total['pending'][$value->hrms_id] : 0;
-                }
+
                 $final['branch_manager'][$value->hrms_id]['hrms_id'] = $value->hrms_id;
                 $final['branch_manager'][$value->hrms_id]['employee_name'] = $value->name;
             }
@@ -495,6 +492,7 @@ class Cron extends CI_Controller
             }elseif($user_type == 'EM'){
                 $select[] = 'l.created_by as hrms_id';
                 $where['l.branch_id'] = $branch_id;
+                $where['l.created_by !='] = NULL;
                 $group_by = array('l.created_by');
             }
         }elseif($type == 'unassigned'){
