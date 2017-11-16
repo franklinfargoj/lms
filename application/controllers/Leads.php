@@ -1007,10 +1007,16 @@ class Leads extends CI_Controller
             $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','l.created_on','l.lead_source','p.title','la.status','r.remind_on','DATEDIFF(CURDATE( ),l.created_on) as elapsed_day');
             $where = array('la.is_deleted' => 0,'la.is_updated' => 1);
             if($till == 'mtd'){
+               // $where['MONTH(l.created_on)'] = date('m'); //Month till date filter
                 $where['MONTH(l.created_on)'] = date('m'); //Month till date filter
+                $where['YEAR(l.created_on)'] = date('Y');
             }
             if($till == 'ytd'){
-                $where['YEAR(l.created_on)'] = date('Y'); //Year till date filter
+                //$where['YEAR(l.created_on)'] = date('Y'); //Year till date filter
+                $yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $where["l.created_on >='".$yr_start_date."' AND l.created_on <='".$yr_end_date."'"] = NULL; //Year till date filter
+
             }
             if(!empty($param)){
                 $arrData['param'] = $param;
