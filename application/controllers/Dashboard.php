@@ -551,8 +551,13 @@ class Dashboard extends CI_Controller {
         //Genearted Count and Assigned Count
         switch ($type) {
             case 'generated':
-                    $year_where['YEAR(l.created_on)'] = date('Y');
-                    $month_where['MONTH(l.created_on)'] = date('m');
+                $yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $year_where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
+                   // $year_where['YEAR(l.created_on)'] = date('Y');
+                $month_where['MONTH(la.created_on)'] = date('m'); //Month till date filter
+                $month_where['YEAR(la.created_on)'] = date('Y');
+                    //$month_where['MONTH(l.created_on)'] = date('m');
                     if(!empty($status)){
                         foreach ($status as $key => $value) {
                             $where['status'] = $key;
@@ -582,8 +587,12 @@ class Dashboard extends CI_Controller {
 
                 break;
             case 'assigned':
-                    $year_where['YEAR(la.created_on)'] = date('Y');
-                    $month_where['MONTH(la.created_on)'] = date('m');
+                $yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $year_where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
+                // $year_where['YEAR(l.created_on)'] = date('Y');
+                $month_where['MONTH(la.created_on)'] = date('m'); //Month till date filter
+                $month_where['YEAR(la.created_on)'] = date('Y');
                 if(!empty($designation_type) && $designation_type == 'EM'){
                     $employee_id = $login_user['hrms_id'];
 
