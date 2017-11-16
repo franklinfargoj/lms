@@ -1042,15 +1042,18 @@ class Leads extends CI_Controller
         if($type == 'assigned'){
             $order_by='';
             $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','la.created_on','l.lead_source','p.title','pc.title as prod_cat','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
-            $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
+            $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
             if($till == 'mtd'){
                 $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
+                $where['YEAR(la.created_on)'] = date('Y');
                 if(empty($arrData['status'])) {
                     $where["la.status NOT IN('Closed','Converted')"] = NULL;
                 }
             }
             if($till == 'ytd'){
-                $where['YEAR(la.created_on)'] = date('Y'); //Year till date filter
+                $yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL; //Year till date filter
                 if(empty($arrData['status'])) {
                     $where["la.status NOT IN('Closed','Converted')"] = NULL;
                 }

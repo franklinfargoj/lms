@@ -61,142 +61,6 @@ class Api extends REST_Controller
 //        }
     }
 
-
-    public function authentication_post()
-    {
-        $params = $this->input->post();
-
-//
-//        if(!isset($params['user_id']) || !isset($params['device_token']) || !isset($params['password']) || ($params['user_id'] == NULL) || ($params['device_token'] == NULL) || ($params['password'] == NULL)){
-//            $err['result'] = false;
-//            $err['data'] = "Invalid Request";
-//            returnJson($err);
-//        }
-
-        if (!isset($params['user_id']) || !isset($params['password']) || !isset($params['device_token']) ||
-            !isset($params['device_type']) || ($params['device_type'] == NULL) ||
-            ($params['user_id'] == NULL) || ($params['password'] == NULL || ($params['device_token'] == NULL))) {
-            $err['result'] = false;
-            $err['data'] = "Invalid Request";
-            returnJson($err);
-        }
-
-        $user_id = $params['user_id'];
-        $password = $params['password'];
-        $device_token = $params['device_token'];
-        $device_type = $params['device_type'];
-
-        $result = get_details($params['designation_name']);
-
-        $hrms_id = $user_id;
-
-        $action = 'count';
-        $table = Tbl_Notification . ' as n';
-        $select = array('n.*');
-        $unread_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 0);
-//        $order_by = "n.priority ASC";
-        $leads['unread_notification'] = $this->notification->get_notifications($action, $select, $unread_where, $table, $join = array(), $order_by='');
-
-        $read_where = array('n.notification_to' => $hrms_id, 'n.is_read' => 1);
-        $leads['read_notification'] = $this->notification->get_notifications($action, $select, $read_where, $table, $join = array(), $order_by='');
-        if (isset($result['status']) && $result['status'] == 'success') {
-
-            $data = array('device_token' => $device_token,
-                'employee_id' => $result['basic_info']['hrms_id'],
-                'device_type' => $device_type
-            );
-            $this->Login_model->insert_login_log($data);
-
-            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'BM') {
-                if (isset($result['basic_info']['branch_id']) && $result['basic_info']['branch_id'] != '') {
-                    $branch_id = $result['basic_info']['branch_id'];
-                    $type = 'BM';
-                    $final = $this->count($type, $branch_id, $result);
-
-                    $leads['generated_converted'] = $final;
-                    //for assigned lead
-                    $where_assigned_Array = array('branch_id' => $branch_id,
-                        'YEAR(created_on)' => date('Y'));
-                }
-                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
-                $action = 'count';
-                $select = array();
-                $table = Tbl_Leads;
-                $where = array(Tbl_Leads . '.branch_id' => $result['basic_info']['branch_id'], Tbl_LeadAssign . 'lead_id', NULL);
-                $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => '');
-                $leads['un_assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
-            }
-            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'EM') {
-                if (isset($result['basic_info']['hrms_id']) && $result['basic_info']['hrms_id'] != '') {
-                    $created_id = $result['basic_info']['hrms_id'];
-
-                    //Parameters buiding for sending to list function.
-                    $action = 'count';
-                    $select = array();
-                    $join = array();
-                    $group_by = array();
-
-                    //For Generated Leads Count
-                    $table = Tbl_Leads;
-
-                    //Month till date
-                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
-                    $leads['generated_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
-
-                    //Year till date
-                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
-                    $leads['generated_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
-
-                    //For converted leads Count
-                    $table = Tbl_LeadAssign;
-
-                    //Month till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
-                    $leads['converted_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
-
-
-                    //Year till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
-                    $leads['converted_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
-
-                    //For assigned leads Count
-                    $table = Tbl_LeadAssign;
-
-                    //Year till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
-                    $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
-                }
-
-            }
-            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'ZM') {
-                if (isset($result['basic_info']['zone_id']) && $result['basic_info']['zone_id'] != '') {
-                    $zone_id = $result['basic_info']['zone_id'];
-                    $type = 'ZM';
-                    $final = $this->count($type, $zone_id, $result);
-                    $leads['generated_converted'] = $final;
-                }
-            }
-            if (isset($result['basic_info']['designation_name']) && $result['basic_info']['designation_name'] == 'GM') {
-                $type = 'GM';
-                $final = $this->count($type, '', $result);
-                $leads['generated_converted'] = $final;
-            }
-
-
-            $result = array(
-                "result" => True,
-                "data" => ['count' => $leads, 'basic_info' => $result['basic_info']]
-            );
-            returnJson($result);
-        } else {
-            $error = array(
-                "result" => false,
-                "data" => array("Invalid username or password.")
-            );
-            returnJson($error);
-        }
-    }
-
     public function leads_performance_post()
     {
         $params = $this->input->post();
@@ -452,21 +316,6 @@ class Api extends REST_Controller
         return $check;
     }
 
-
-    public function test_get()
-    {
-        $res = $this->input->get();
-        $zone_id = $res['branch_id'];
-
-        //for generated lead
-        $where_month_Array = array('branch_id' => $zone_id,
-            'MONTH(created_on)' => date('m'));
-        $result1['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
-
-        pe($result1);
-
-    }
-
     public function tickers_get()
     {
 
@@ -510,66 +359,6 @@ class Api extends REST_Controller
         $table = Tbl_Leads;
         $select = '';
     }
-
-    public function Lead_get()
-    {
-
-        $data['zone_list'][] = array(
-            'id' => '12',
-            'name' => 'zone1',
-        );
-        $data['zone_list'][] = array(
-            'id' => '13',
-            'name' => 'zone2',
-        );
-        $data['state_list'][] = array(
-            'id' => '12',
-            'zone_id' => '1',
-            'name' => 'maharashtra',
-        );
-        $data['state_list'][] = array(
-            'id' => '13',
-            'zone_id' => '1',
-            'name' => 'UP',
-        );
-        $data['district_list'][] = array(
-            'id' => '12',
-            'state_id' => '12',
-            'name' => 'mumbai',
-        );
-        $data['district_list'][] = array(
-            'id' => '13',
-            'state_id' => '13',
-            'name' => 'Deoria',
-        );
-        $data['branch_list'][] = array(
-            'id' => '12',
-            'district_id' => '13',
-            'name' => 'BKC',
-        );
-        $data['branch_list'][] = array(
-            'id' => '13',
-            'district_id' => '12',
-            'name' => 'salempur branch',
-        );
-        returnJson($data);
-
-        if (isset($result['status']) && $result['status'] == 'success') {
-
-            $table = "db_app_login_logs";
-            $data = array('device_token' => $device_token,
-                'employee_id' => $result
-            );
-            $this->app->insert_login_log($table, $data);
-        } else {
-            $error = array(
-                "result" => false,
-                "data" => array("Invalid username or password.")
-            );
-            returnJson($error);
-        }
-    }
-
 
     public function category_products_get()
     {
@@ -1060,17 +849,21 @@ class Api extends REST_Controller
 
             $select = array('l.id', 'l.customer_name', 'l.contact_no', 'l.lead_identification', 'la.created_on', 'l.lead_source', 'p.title', 'la.status'/*,'p1.title as interested_product_title'*/,
                 'r.remind_on', 'DATEDIFF(CURDATE( ),la.created_on) as elapsed_day','c.title as category_title');
-            $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
+            $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
+            $yr_start_date=date('Y').'-04-01 00:00:00';
+            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            $where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
             if ($type == 'EM') {
                 $where['la.employee_id'] = $id;
-                $where['la.status !='] = 'Closed';
+                $where["la.status NOT IN('Closed','Converted')"] = NULL;
                 $order_by = 'la.created_on desc';
             }
             if ($type == 'BM') {
                 $where['la.branch_id'] = $id;
-                $where['la.status !='] = 'Closed';
+                $where["la.status NOT IN('Closed','Converted')"] = NULL;
                 $where2 = array(Tbl_LeadAssign . '.branch_id' => $id);
-                $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 ELSE 3 END , elapsed_day ASC";
+                //$order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN la.status = 'NI' THEN 2 ELSE 3 END , elapsed_day ASC";
+                $order_by = "CASE WHEN la.status = 'AO' THEN 1 WHEN c.title = 'Fee Income' && la.status = 'DC' THEN 2 WHEN la.status = 'NI' THEN 3 ELSE 4 END , elapsed_day ASC";
             }
 
             $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
@@ -1764,30 +1557,42 @@ class Api extends REST_Controller
                     $table = Tbl_Leads;
 
                     //Month till date
-                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
+                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'),'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
                     $leads['generated_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
 
                     //Year till date
-                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+                    $where = array(Tbl_Leads . '.created_by' => $created_id);
+                    $yr_start_date=date('Y').'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    $where[Tbl_Leads.".created_on >='".$yr_start_date."' AND ".Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
+
                     $leads['generated_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
 
                     //For converted leads Count
                     $table = Tbl_LeadAssign;
 
                     //Month till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
                     $leads['converted_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
 
 
                     //Year till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1);
+                    $yr_start_date=date('Y').'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
+
                     $leads['converted_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
 
                     //For assigned leads Count
                     $table = Tbl_LeadAssign;
 
                     //Year till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
+                    $yr_start_date=date('Y').'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
+
                     $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
                 }
 
@@ -2177,23 +1982,31 @@ class Api extends REST_Controller
                     $table = Tbl_Leads;
 
                     //Month till date
-                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'));
+                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'MONTH(' . Tbl_Leads . '.created_on)' => date('m'),'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
                     $leads['generated_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
 
                     //Year till date
-                    $where = array(Tbl_Leads . '.created_by' => $created_id, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
+                    $where = array(Tbl_Leads . '.created_by' => $created_id);
+                    $yr_start_date=date('Y').'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    $where[Tbl_Leads.".created_on >='".$yr_start_date."' AND ".Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
+
                     $leads['generated_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
 
                     //For converted leads Count
                     $table = Tbl_LeadAssign;
 
                     //Month till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'));
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));
                     $leads['converted_mtd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
 
 
                     //Year till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1);
+                    $yr_start_date=date('Y').'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
+
                     $leads['converted_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
 
                     //For assigned leads Count

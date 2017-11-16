@@ -131,7 +131,7 @@ define('HRMS_BRANCH_RECORD', 'http://103.224.110.52/master.php');
 define('HRMS_EMP_DUMP', 'http://103.224.110.52/master_emp.php');
 define('Elapsed_day_converted', 7); //Elapsed Days for converted
 define('Elapsed_day_NI', 7); //Elapsed Days for Not Interested
-define('Elapsed_day', 90); //Elapsed Days for remaining all
+define('Elapsed_day', 365); //Elapsed Days for remaining all
 define('PENDENCY_DAY', 2); //Elapsed Days for remaining all
 define('FINACLE_ACCOUNT_RECORD', 'http://103.224.110.52/client.php?account_no=');
 
