@@ -428,7 +428,7 @@ class Api extends REST_Controller
                         $whereYear = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL);
                         $yr_start_date=date('Y').'-04-01 00:00:00';
                         $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-                        $whereYear["' . $table . '.created_on >='".$yr_start_date."' AND ' . $table . '.created_on <='".$yr_end_date."'"] = NULL;
+                        $whereYear[$table .".created_on >='.$yr_start_date.' AND '.$table . '.created_on <='.$yr_end_date.'"] = NULL;
                         $whereMonth = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL);
                         $whereMonth['MONTH(' . $table . '.created_on)'] = date('m'); //Month till date filter
                         $whereMonth['YEAR(' . $table . '.created_on)'] = date('Y');
