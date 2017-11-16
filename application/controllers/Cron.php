@@ -78,8 +78,8 @@ class Cron extends CI_Controller
                 $final['general_manager'][$value->zone_id]['zone_id'] = $value->zone_id;
                 $final['general_manager'][$value->zone_id]['zone_name'] = $value->zone_name;
             }
-//            echo "<pre>";
-//           print_r($final['general_manager']);die;
+            echo "<pre>";
+           print_r($final['general_manager']);die;
             //For GENERAL MANAGER
         foreach ($GM_list as $k => $v) {
             $attachment_file = $this->export_to_excel('gm_consolidated_mail', $final['general_manager']);
