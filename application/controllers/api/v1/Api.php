@@ -407,13 +407,13 @@ class Api extends REST_Controller
             switch ($params['type']) {
                 case 'BM':
                 case 'EM':
-                    $table = Tbl_LeadAssign;
+                    $table = Tbl_Leads;
                     $action = 'count';
                     $employee_id = $params['id'];
                     if (!empty($status)) {
                         $i = 0;
                         foreach ($status as $key => $value) {
-                            $whereArray = array(Tbl_Leads . '.created_by1' => $employee_id, 'status' => $key, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0);
+                            $whereArray = array(Tbl_Leads . '.created_by' => $employee_id, 'status' => $key, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0);
                             $yr_start_date=date('Y').'-04-01 00:00:00';
                             $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
                             $whereArray[Tbl_Leads  .".created_on >='$yr_start_date'"] = NULL;
