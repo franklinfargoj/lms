@@ -567,10 +567,10 @@ class Dashboard extends CI_Controller {
                 $join[] = array('table' => Tbl_Leads.' as l', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
                 $yr_start_date=date('Y').'-04-01 00:00:00';
                 $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-                $year_where["l.created_on >='".$yr_start_date."' AND l.created_on <='".$yr_end_date."'"] = NULL;
+                $year_where["la.created_on1 >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
                    // $year_where['YEAR(l.created_on)'] = date('Y');
-                $month_where['MONTH(l.created_on)'] = date('m'); //Month till date filter
-                $month_where['YEAR(l.created_on)'] = date('Y');
+                $month_where['MONTH(la.created_on)'] = date('m'); //Month till date filter
+                $month_where['YEAR(la.created_on)'] = date('Y');
                     //$month_where['MONTH(l.created_on)'] = date('m');
                     if(!empty($status)){
                         foreach ($status as $key => $value) {
