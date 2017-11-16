@@ -407,7 +407,7 @@ class Api extends REST_Controller
             switch ($params['type']) {
                 case 'BM':
                 case 'EM':
-                    $table = Tbl_Leads;
+                    $table = Tbl_LeadAssign;
                     $action = 'count';
                     $employee_id = $params['id'];
                     if (!empty($status)) {
