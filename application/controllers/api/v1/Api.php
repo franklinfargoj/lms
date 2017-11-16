@@ -1637,7 +1637,7 @@ class Api extends REST_Controller
                     $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
                     $yr_start_date=date('Y').'-04-01 00:00:00';
                     $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-                    $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
+                   // $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
                     $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
                 }
@@ -1656,7 +1656,7 @@ class Api extends REST_Controller
 //                        'YEAR(created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
 
                     $where_assigned_Array = "(status='AO' OR status='NI' AND branch_id =".$branch_id.") 
-                     AND (is_updated = 1 AND is_deleted = 0 AND YEAR(created_on) =".date('Y')." AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
+                     AND (is_updated = 1 AND is_deleted = 0 AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
                 }
                 $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
                 $action = 'count';
@@ -2081,7 +2081,7 @@ class Api extends REST_Controller
                     $table = Tbl_LeadAssign;
 
                     //Year till date
-                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'));
+                    $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
                     $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
                 }
 
@@ -2098,7 +2098,7 @@ class Api extends REST_Controller
 //                    $where_assigned_Array = array('branch_id' => $branch_id, 'is_updated' => 1,
 //                        'YEAR(created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
                     $where_assigned_Array = "(status='AO' OR status='NI' AND branch_id =".$branch_id.") 
-                     AND (is_updated = 1 AND is_deleted = 0 AND YEAR(created_on) =".date('Y')." AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
+                     AND (is_updated = 1 AND is_deleted = 0  AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
                 }
                 $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
                 $action = 'count';
