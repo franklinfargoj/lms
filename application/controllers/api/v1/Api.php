@@ -898,7 +898,7 @@ class Api extends REST_Controller
             $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
             $yr_start_date=date('Y').'-04-01 00:00:00';
             $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-            $where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
+           // $where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
             if ($type == 'EM') {
                 $where['la.employee_id'] = $id;
                 $where["la.status NOT IN('Closed','Converted')"] = NULL;
