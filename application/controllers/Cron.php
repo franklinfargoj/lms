@@ -282,15 +282,17 @@ class Cron extends CI_Controller
      */
     public function zm_inactive_leads(){
         //zone list for sending mail
-        $subject = 'Zone Manager Inacvtive Leads';
+
         $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
         foreach ($zone_list as $k => $v) {
             $final = array();
             //FOR ZONE MANAGER
-            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('zone_id' => $v->zone_id),array(),'employee_dump');
+            $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('zone_id' => '009846'),array(),'employee_dump');
             
-            $zonal_manager['inactive']  = $this->get_leads(array('type'=>'inactive','till'=>'TAT','user_type'=>'BM','zone_id' => $v->zone_id));
-            $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+            $zonal_manager['inactive']  = $this->get_leads(array('type'=>'inactive','till'=>'TAT','user_type'=>'BM','zone_id' => '009846'));
+            if(!empty($zonal_manager)) {
+                $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+            }
             
             $total['inactive'] = array_column($zonal_manager,'inactive','branch_id'); 
             $unique_branch_ids = array_unique(array_column($zonal_manager, 'branch_id'));
@@ -317,6 +319,7 @@ class Cron extends CI_Controller
 
             //Mail Code
             $attachment_file = $this->export_to_excel('zm_inactive_leads',$final['zonal_manager']);
+            $subject = 'Inactive Leads - '.$v->zone_id;
             $to = array('email' => $v->email_id,'name' => $v->name);
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
