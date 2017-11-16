@@ -485,7 +485,7 @@ class Cron extends CI_Controller
                 }
                 $group_by = array('l.zone_id');
             }elseif($user_type == 'BM'){
-                $select[] = 'l.branch_id';
+                $select[] = 'l.created_by_branch_id';
                 $where['l.zone_id'] = $zone_id;
                 $group_by = array('l.branch_id');
             }elseif($user_type == 'EM'){
@@ -505,7 +505,7 @@ class Cron extends CI_Controller
                 }
                 $group_by = array('l.zone_id');
             }elseif($user_type == 'BM'){
-                $select[] = 'l.branch_id';
+                $select[] = 'l.created_by_branch_id';
                 $where['l.zone_id'] = $zone_id;
                 $group_by = array('l.branch_id');
             }
