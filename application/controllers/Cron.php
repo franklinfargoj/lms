@@ -45,8 +45,8 @@ class Cron extends CI_Controller
             $general_manager['unassigned'] = $this->get_leads(array('type' => 'unassigned', 'till' => '', 'user_type' => 'ZM'));
             $general_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'ZM'));
             $general_manager['pending'] = $this->get_leads(array('type' => 'pending', 'till' => 'TAT', 'user_type' => 'ZM'));
-            echo "<pre>";
-        print_r($general_manager);//die;
+//            echo "<pre>";
+//        print_r($general_manager);//die;
 
             //$general_manager = call_user_func_array('array_merge', $general_manager);
             $general_manager = array_merge($general_manager);
@@ -64,7 +64,7 @@ class Cron extends CI_Controller
                 }
 
             }
-        pe($total);
+//        pe($total);
             $unique_zone_ids = array_unique(array_column($zone_list, 'zone_id'));
             //pe($unique_zone_ids);die;
             foreach ($zone_list as $key => $value) {
@@ -79,8 +79,8 @@ class Cron extends CI_Controller
                 $final['general_manager'][$value->zone_id]['zone_id'] = $value->zone_id;
                 $final['general_manager'][$value->zone_id]['zone_name'] = $value->zone_name;
             }
-            echo "<pre>";
-           print_r($final['general_manager']);die;
+//            echo "<pre>";
+//           print_r($final['general_manager']);die;
             //For GENERAL MANAGER
         foreach ($GM_list as $k => $v) {
             $attachment_file = $this->export_to_excel('gm_consolidated_mail', $final['general_manager']);
