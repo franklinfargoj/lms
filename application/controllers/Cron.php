@@ -64,6 +64,7 @@ class Cron extends CI_Controller
                 }
 
             }
+        pe($total);
             $unique_zone_ids = array_unique(array_column($zone_list, 'zone_id'));
             //pe($unique_zone_ids);die;
             foreach ($zone_list as $key => $value) {
