@@ -1053,7 +1053,7 @@ class Leads extends CI_Controller
                 $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
                 $where['YEAR(la.created_on)'] = date('Y');
                 if(empty($arrData['status'])) {
-                    $where["la.status NOT IN('Closed','Converted')"] = NULL;
+                    //$where["la.status NOT IN('Closed','Converted')"] = NULL;
                 }
             }
             if($till == 'ytd'){
@@ -1061,7 +1061,7 @@ class Leads extends CI_Controller
                 $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
                 $where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL; //Year till date filter
                 if(empty($arrData['status'])) {
-                    $where["la.status NOT IN('Closed','Converted')"] = NULL;
+                    //$where["la.status NOT IN('Closed','Converted')"] = NULL;
                 }
             }
             if(!empty($arrData['param'])){
