@@ -342,7 +342,7 @@ class Cron extends CI_Controller
             //FOR ZONE MANAGER
             $branch_list = $this->Lead->get_employee_dump(array('branch_id','branch_name'),array('zone_id' => '009846'),array(),'employee_dump');
             
-            $zonal_manager['unassigned']  = $this->get_leads(array('type'=>'unassigned_noti','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['unassigned']  = $this->get_leads(array('type'=>'unassigned_noti','till'=>'','user_type'=>'BM','zone_id' => '009846'));
 
             if(!empty($zonal_manager['unassigned'])) {
                 $zonal_manager = call_user_func_array('array_merge', $zonal_manager);
