@@ -479,7 +479,8 @@ class Cron extends CI_Controller
             //Generated Leads
             $select = array('COUNT(l.id) as generated');
             if($till == 'mtd'){
-                $where = array('MONTH(l.created_on)' => date('m')); //Month till date filter
+                $where = array('MONTH(l.created_on)' => date('m'),'YEAR(l.created_on)' => date('Y')); //Month till date filter
+
             }
             if($user_type == 'ZM'){
                 $select[] = 'l.zone_id';
