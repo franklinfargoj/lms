@@ -69,19 +69,11 @@
                             <div class="form-control">
                                 <label>Lead ID:</label> <span class="detail-label"><?php echo ucwords($leads[0]['id']);?></span>
                             </div>
-                            <div class="form-control ">
-                                <label>Customer Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['customer_name']);?></span>
-                            </div>
-                            <div class="form-control">
-                                <label>Contact:</label> <span class="detail-label"><?php echo $leads[0]['contact_no'];?></span>
-                            </div>
-
-<!--                            <div class="form-control">-->
-<!--                                <label>Category Name:</label> <span class="detail-label">--><?php //echo ucwords($leads[0]['category_title']);?><!--</span>-->
-<!--                            </div>-->
                             <div class="form-control">
                                 <label>Product:</label> <span class="detail-label"><?php echo ucwords($leads[0]['product_title']);?></span>
                             </div>
+
+
                             <?php if (isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identification'])){ ?>
                             <div class="form-control">
                                 <label>Lead Identified as :</label>
@@ -314,11 +306,23 @@
                         <?php if(isset($backUrl)){?>
                             <a href="<?php echo site_url($backUrl);?>" class="reset float-right form-style"> &#60; Back</a>
                         <?php }?>
+                            <div class="form-control ">
+                                <label>Customer Name:</label> <span class="detail-label"><?php echo ucwords($leads[0]['customer_name']);?></span>
+                            </div>
+                            <div class="form-control">
+                                <label>Contact:</label> <span class="detail-label"><?php echo $leads[0]['contact_no'];?></span>
+                            </div>
+
+                            <!--                            <div class="form-control">-->
+                            <!--                                <label>Category Name:</label> <span class="detail-label">--><?php //echo ucwords($leads[0]['category_title']);?><!--</span>-->
+                            <!--                            </div>-->
+
                             <?php
                             $exclude_status_bm = array('Converted','Closed','AO','DC','NI');
                             if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')) &&
                                 !in_array($leads[0]['status'],$exclude_status_bm))
                             ){?>
+
                             <div class="form-control">
                                 <label>Do you want to reassign this lead ?</label>
                             </div>
