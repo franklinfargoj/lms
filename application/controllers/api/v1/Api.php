@@ -428,10 +428,10 @@ class Api extends REST_Controller
                         $whereYear = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL);
                         $yr_start_date=date('Y').'-04-01 00:00:00';
                         $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-                        $year_where["' . $table . '.created_on >='".$yr_start_date."' AND ' . $table . '.created_on <='".$yr_end_date."'"] = NULL;
+                        $whereYear["' . $table . '.created_on >='".$yr_start_date."' AND ' . $table . '.created_on <='".$yr_end_date."'"] = NULL;
                         $whereMonth = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL);
-                        $month_where['MONTH(' . $table . '.created_on)'] = date('m'); //Month till date filter
-                        $month_where['YEAR(' . $table . '.created_on)'] = date('Y');
+                        $whereMonth['MONTH(' . $table . '.created_on)'] = date('m'); //Month till date filter
+                        $whereMonth['YEAR(' . $table . '.created_on)'] = date('Y');
 
                         $unassigned_leads_count_month = $this->Lead->get_leads($action,$table,$select,$whereMonth,$join_assign,$group_by = array(),$order_by = array());
                         $unassigned_leads_count_year = $this->Lead->get_leads($action,$table,$select,$whereYear,$join_assign,$group_by = array(),$order_by = array());
