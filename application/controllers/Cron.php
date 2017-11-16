@@ -480,14 +480,14 @@ class Cron extends CI_Controller
 
             }
             if($user_type == 'ZM'){
-                $select[] = 'l.created_by_zone_id';
+                $select[] = 'l.created_by_zone_id  as zone_id';
                 if($zone_id != ''){
                     $where['l.created_by_zone_id'] = $zone_id;
                 }
                 $where['l.created_by_zone_id !='] = NULL;
                 $group_by = array('l.created_by_zone_id');
             }elseif($user_type == 'BM'){
-                $select[] = 'l.created_by_branch_id';
+                $select[] = 'l.created_by_branch_id  as branch _id';
                 $where['l.created_by_zone_id'] = $zone_id;
                 $where['l.created_by_branch_id !='] = NULL;
                 $group_by = array('l.created_by_branch_id');
@@ -502,14 +502,16 @@ class Cron extends CI_Controller
             $where  = array('la.lead_id' => NULL);
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             if($user_type == 'ZM'){
-                $select[] = 'l.zone_id';
+                $select[] = 'l.created_by_zone_id as zone_id';
                 if($zone_id != ''){
-                    $where['l.zone_id'] = $zone_id;
+                    $where['l.created_by_zone_id'] = $zone_id;
                 }
+                $where['l.created_by_zone_id !='] = NULL;
                 $group_by = array('l.zone_id');
             }elseif($user_type == 'BM'){
-                $select[] = 'l.created_by_branch_id';
-                $where['l.zone_id'] = $zone_id;
+                $select[] = 'l.created_by_branch_id  as branch_id';
+                $where['l.created_by_zone_id'] = $zone_id;
+                $where['l.created_by_branch_id !='] = NULL;
                 $group_by = array('l.created_by_branch_id');
             }
         }elseif($type == 'unassigned_noti'){
