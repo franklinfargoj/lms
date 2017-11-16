@@ -1697,10 +1697,16 @@ class Api extends REST_Controller
     {
         switch ($type) {
             case 'BM':
-                $where_month_Array = array('branch_id' => $ids,
-                    'MONTH(created_on)' => date('m'));
-                $where_year_Array = array('branch_id' => $ids,
-                    'YEAR(created_on)' => date('Y'));
+                $where_month_Array = array('branch_id' => $ids);
+                $where_year_Array = array('branch_id' => $ids);
+
+                $yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
+                // $year_where['YEAR(l.created_on)'] = date('Y');
+                $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+                $where_month_Array['YEAR(created_on)'] = date('Y');
+
                 $generated['monthly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
                 $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
@@ -1730,12 +1736,14 @@ class Api extends REST_Controller
                 }
                 foreach ($final as $id => $value) {
 
-                    $where_month_Array = array('employee_id' => $value['created_by'],
-                        'MONTH(created_on)' => date('m'),
-                        'status' => 'converted');
-                    $where_year_Array = array('employee_id' => $value['created_by'],
-                        'YEAR(created_on)' => date('Y'),
-                        'status' => 'converted');
+                    $where_month_Array = array('employee_id' => $value['created_by'], 'status' => 'converted');
+                    $where_year_Array = array('employee_id' => $value['created_by'],'status' => 'converted');
+                    $yr_start_date=date('Y').'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
+                    // $year_where['YEAR(l.created_on)'] = date('Y');
+                    $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+                    $where_month_Array['YEAR(created_on)'] = date('Y');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     $converted_yearly = $this->Lead->get_converted_lead_bm_zm($where_year_Array);
                     if (empty($converted)) {
@@ -1752,11 +1760,17 @@ class Api extends REST_Controller
                 break;
 
             case 'ZM':
-                $where_month_Array = array('zone_id' => $ids,
-                    'MONTH(created_on)' => date('m'));
+                $where_month_Array = array('zone_id' => $ids);
 
-                $where_year_Array = array('zone_id' => $ids,
-                    'YEAR(created_on)' => date('Y'));
+                $where_year_Array = array('zone_id' => $ids);
+
+                $yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
+                // $year_where['YEAR(l.created_on)'] = date('Y');
+                $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+                $where_month_Array['YEAR(created_on)'] = date('Y');
+
                 $generated['monthly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_month_Array);
                 $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
@@ -1787,12 +1801,14 @@ class Api extends REST_Controller
                 //for converted
                 foreach ($final as $id => $value) {
 
-                    $where_month_Array = array('branch_id' => $value['created_by'],
-                        'MONTH(created_on)' => date('m'),
-                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
-                    $where_year_Array = array('branch_id' => $value['created_by'],
-                        'YEAR(created_on)' => date('Y'),
-                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
+                    $where_month_Array = array('branch_id' => $value['created_by'],'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
+                    $where_year_Array = array('branch_id' => $value['created_by'],'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
+                    $yr_start_date=date('Y').'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
+                    // $year_where['YEAR(l.created_on)'] = date('Y');
+                    $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+                    $where_month_Array['YEAR(created_on)'] = date('Y');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     $converted_yearly = $this->Lead->get_converted_lead_bm_zm($where_year_Array);
                     if (empty($converted)) {
@@ -1809,10 +1825,14 @@ class Api extends REST_Controller
                 break;
 
             case 'GM':
-                $where_generated_Array = array('zone_id !=' => NULL,
-                    'MONTH(created_on)' => date('m'));
-                $where_year_Array = array('zone_id !=' => NULL,
-                    'YEAR(created_on)' => date('Y'));
+                $where_generated_Array = array('zone_id !=' => NULL);
+                $where_year_Array = array('zone_id !=' => NULL);
+                $yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
+                // $year_where['YEAR(l.created_on)'] = date('Y');
+                $where_generated_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+                $where_generated_Array['YEAR(created_on)'] = date('Y');
                 $generated['generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_generated_Array);
                 $generated['yearly_generated_leads'] = $this->Lead->get_generated_lead_bm_zm($where_year_Array);
                 $generated_key_value = array();
@@ -1843,12 +1863,14 @@ class Api extends REST_Controller
                 //for converted
                 foreach ($final as $id => $value) {
 
-                    $where_month_Array = array('zone_id' => $value['created_by'],
-                        'MONTH(created_on)' => date('m'),
-                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
-                    $where_year_Array = array('zone_id' => $value['created_by'],
-                        'YEAR(created_on)' => date('Y'),
-                        'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
+                    $where_month_Array = array('zone_id' => $value['created_by'],'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
+                    $where_year_Array = array('zone_id' => $value['created_by'],'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
+                    $yr_start_date=date('Y').'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
+                    // $year_where['YEAR(l.created_on)'] = date('Y');
+                    $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+                    $where_month_Array['YEAR(created_on)'] = date('Y');
                     $converted = $this->Lead->get_converted_lead_bm_zm($where_month_Array);
                     $converted_yearly = $this->Lead->get_converted_lead_bm_zm($where_year_Array);
                     if (empty($converted)) {
