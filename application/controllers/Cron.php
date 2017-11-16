@@ -177,24 +177,24 @@ class Cron extends CI_Controller
             //FOR EMPLOYEE
             $branch_manager = array('generated' => array(),'converted' => array(),'pending_before' => array(),'pending' => array());
             $gm = $branch_manager;
-            $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('branch_id' => '000016'),array(),'employee_dump');
+            $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('branch_id' => $v->branch_id),array(),'employee_dump');
             
-            $branch_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'EM','branch_id' => '000016'));
-            $branch_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'EM','branch_id' => '000016'));
-            $branch_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'EM','branch_id' => '000016'));
-            $branch_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'EM','branch_id' => '000016'));
+            $branch_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'EM','branch_id' => $v->branch_id));
+            $branch_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'EM','branch_id' => $v->branch_id));
+            $branch_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'EM','branch_id' => $v->branch_id));
+            $branch_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'EM','branch_id' => $v->branch_id));
 //            if(!empty($branch_manager)){
 //                $branch_manager = call_user_func_array('array_merge', $branch_manager);
 //            }
             $branch_manager = array_merge($branch_manager);
-            pe($branch_manager);
+           // pe($branch_manager);
             $total = array();
             foreach (array_keys($gm) as $key => $value) {
                 if(!empty($branch_manager[$value])) {
                     $total[$value] = array_column($branch_manager[$value], $value, 'hrms_id');
                 }
             }
-            pe($total);die;
+            //pe($total);die;
             //$unique_hrms_ids = array_unique(array_column($branch_manager, 'hrms_id'));
             foreach ($employee_list as $key => $value) {
 
