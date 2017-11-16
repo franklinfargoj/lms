@@ -556,7 +556,7 @@ class Cron extends CI_Controller
             }
             if($type == 'pending_before'){
                 $select = array('COUNT(l.id) as pending_before');
-                $where['la.status IN ("NC","FU")']  = NULL;
+                $where['la.status IN ("NC","FU","DC")']  = NULL;
                 $day = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -'.PENDENCY_DAY.' day' ) ).' 00:00:00';
                 $where["CASE WHEN la.status = 'NC' THEN la.modified_on <'$day' WHEN la.status = 'FU' THEN fr.remind_on < '$day' WHEN la.status = 'DC' THEN p.turn_around_time < DATEDIFF(CURDATE(),la.modified_on) END"]=NULL;
                 $join[] = array('table' => Tbl_Reminder.' as fr','on_condition' => 'fr.lead_id = l.id','type' => '');
