@@ -323,6 +323,7 @@ class Cron extends CI_Controller
             $to = array('email' => $v->email_id,'name' => $v->name);
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
+            die;
             //Mail code
         }
     }
