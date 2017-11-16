@@ -168,7 +168,7 @@ class Cron extends CI_Controller
      * 
      */
     public function bm_consolidated_mail(){
-        $subject = 'LMS - Reports';
+
         $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%'),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($branch_list);die;
@@ -211,7 +211,7 @@ class Cron extends CI_Controller
             //FOR EMPLOYEE
             $attachment_file = $this->export_to_excel('bm_consolidated_mail',$final['branch_manager']);
             $to = array('email' => $v->email_id,'name' => $v->name);
-            
+            $subject = 'LMS - Reports - '.$v->branch_name;
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
 
