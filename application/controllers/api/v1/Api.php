@@ -79,21 +79,31 @@ class Api extends REST_Controller
                     $i = 0;
                     foreach ($source as $key => $lead_source) {
 
-                        $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),
-                            Tbl_Leads . '.lead_source' => $key);
-                        $result[$i]['year_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $whereyear = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, Tbl_Leads . '.lead_source' => $key);
 
-                        $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),
-                            Tbl_Leads . '.lead_source' => $key);
-                        $result[$i]['month_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $wheremonth = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_Leads . '.lead_source' => $key);
 
-                        $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),
-                            Tbl_Leads . '.lead_source' => $key, Tbl_LeadAssign . '.status' => 'Converted');
-                        $result[$i]['year_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $yr_start_date=date('Y').'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        $whereyear[Tbl_LeadAssign.".created_on >='".$yr_start_date."'"] = NULL;
+                        $whereyear[Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
-                        $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),
-                            Tbl_Leads . '.lead_source' => $key, Tbl_LeadAssign . '.status' => 'Converted');
-                        $result[$i]['month_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $wheremonth['MONTH(' . Tbl_LeadAssign . '.created_on)'] = date('m'); //Month till date filter
+                        $wheremonth['YEAR(' . Tbl_LeadAssign . '.created_on)'] = date('Y');
+
+                        $result[$i]['year_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $whereyear, $join, '', '');
+
+                        //$where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),Tbl_Leads . '.lead_source' => $key);
+                        $result[$i]['month_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $wheremonth, $join, '', '');
+
+                       // $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),       Tbl_Leads . '.lead_source' => $key, Tbl_LeadAssign . '.status' => 'Converted');
+
+                        $whereyear[Tbl_LeadAssign . '.status'] =  'Converted';
+                        $result[$i]['year_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $whereyear, $join, '', '');
+
+                        //$where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),                      Tbl_Leads . '.lead_source' => $key, Tbl_LeadAssign . '.status' => 'Converted');
+                        $wheremonth[Tbl_LeadAssign . '.status'] =  'Converted';
+                        $result[$i]['month_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $wheremonth, $join, '', '');
                         $result[$i]['lead_source'] = $lead_source;
                         $i++;
                     }
@@ -110,18 +120,28 @@ class Api extends REST_Controller
                     $select = array();
                     $i = 0;
                     foreach ($source as $key => $lead_source) {
-                        $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $key);
-                        $result[$i]['year_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
-                        $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $key);
-                        $result[$i]['month_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $whereyear = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, Tbl_Leads . '.lead_source' => $key);
+                        $wheremonth = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, Tbl_Leads . '.lead_source' => $key);
+                        $yr_start_date=date('Y').'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        $whereyear[Tbl_LeadAssign.".created_on >='".$yr_start_date."'"] = NULL;
+                        $whereyear[Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
-                        $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $key,
-                            Tbl_LeadAssign . '.status' => 'Converted');
-                        $result[$i]['year_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $wheremonth['MONTH(' . Tbl_LeadAssign . '.created_on)'] = date('m'); //Month till date filter
+                        $wheremonth['YEAR(' . Tbl_LeadAssign . '.created_on)'] = date('Y');
 
-                        $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $key,
-                            Tbl_LeadAssign . '.status' => 'Converted');
-                        $result[$i]['month_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $result[$i]['year_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $whereyear, $join, '', '');
+                        //$where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $key);
+                        $result[$i]['month_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $wheremonth, $join, '', '');
+
+                        //$where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $key,                           Tbl_LeadAssign . '.status' => 'Converted');
+                        $whereyear[Tbl_LeadAssign . '.status'] =  'Converted';
+                        $result[$i]['year_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $whereyear, $join, '', '');
+
+//                        $where = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $key,
+//                            Tbl_LeadAssign . '.status' => 'Converted');
+                        $wheremonth[Tbl_LeadAssign . '.status'] =  'Converted';
+                        $result[$i]['month_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $wheremonth, $join, '', '');
                         $result[$i]['lead_source'] = $lead_source;
                         $i++;
                     }
@@ -139,18 +159,29 @@ class Api extends REST_Controller
                     $select = array();
                     $i = 0;
                     foreach ($source as $key => $lead_source) {
-                        $where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $key);
-                        $result[$i]['year_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
-                        $where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $key);
-                        $result[$i]['month_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $whereyear = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,  Tbl_Leads . '.lead_source' => $key);
+                        $wheremonth = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, Tbl_Leads . '.lead_source' => $key);
+                        $yr_start_date=date('Y').'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        $whereyear[Tbl_LeadAssign.".created_on >='".$yr_start_date."'"] = NULL;
+                        $whereyear[Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
-                        $where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $key,
-                            Tbl_LeadAssign . '.status' => 'Converted');
-                        $result[$i]['year_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $wheremonth['MONTH(' . Tbl_LeadAssign . '.created_on)'] = date('m'); //Month till date filter
+                        $wheremonth['YEAR(' . Tbl_LeadAssign . '.created_on)'] = date('Y');
 
-                        $where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $key,
-                            Tbl_LeadAssign . '.status' => 'Converted');
-                        $result[$i]['month_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $where, $join, '', '');
+                        $result[$i]['year_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $whereyear, $join, '', '');
+                        //$where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $key);
+                        $result[$i]['month_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $wheremonth, $join, '', '');
+
+//                        $where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'), Tbl_Leads . '.lead_source' => $key,
+//                            Tbl_LeadAssign . '.status' => 'Converted');
+                        $whereyear[Tbl_LeadAssign . '.status'] =  'Converted';
+                        $result[$i]['year_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $whereyear, $join, '', '');
+
+//                        $where = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'), Tbl_Leads . '.lead_source' => $key,
+//                            Tbl_LeadAssign . '.status' => 'Converted');
+                        $wheremonth[Tbl_LeadAssign . '.status'] =  'Converted';
+                        $result[$i]['month_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $wheremonth, $join, '', '');
                         $result[$i]['lead_source'] = $lead_source;
                         $i++;
                     }
