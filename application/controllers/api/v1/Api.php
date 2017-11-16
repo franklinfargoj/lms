@@ -425,8 +425,14 @@ class Api extends REST_Controller
                         $select = array();
                         $table = Tbl_Leads;
                         $join_assign[] = array('table' =>Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = '.Tbl_Leads.'.id ','type' => 'left');
-                        $whereYear = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL, 'YEAR(' . $table . '.created_on)' => date('Y'));
-                        $whereMonth = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL, 'MONTH(' . $table . '.created_on)' => date('m'));
+                        $whereYear = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL);
+                        $yr_start_date=date('Y').'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        $year_where["' . $table . '.created_on >='".$yr_start_date."' AND ' . $table . '.created_on <='".$yr_end_date."'"] = NULL;
+                        $whereMonth = array($table . '.created_by' => $employee_id,'la.lead_id' => NULL);
+                        $month_where['MONTH(' . $table . '.created_on)'] = date('m'); //Month till date filter
+                        $month_where['YEAR(' . $table . '.created_on)'] = date('Y');
+
                         $unassigned_leads_count_month = $this->Lead->get_leads($action,$table,$select,$whereMonth,$join_assign,$group_by = array(),$order_by = array());
                         $unassigned_leads_count_year = $this->Lead->get_leads($action,$table,$select,$whereYear,$join_assign,$group_by = array(),$order_by = array());
                         $result[$i]['Year'] = $unassigned_leads_count_year;
