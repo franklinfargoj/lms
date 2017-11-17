@@ -283,6 +283,13 @@ class Lead  extends CI_Model
         return $response;
     }
 
+    public function delete($where,$table)
+    {
+
+        $this->db->where($where);
+        $this->db->delete($table);
+    }
+
     public function get_generated_lead_bm_zm($where_generated_Array){
         $result = array();
         if(!empty($where_generated_Array)){

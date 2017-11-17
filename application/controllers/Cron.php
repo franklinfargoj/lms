@@ -851,22 +851,19 @@ class Cron extends CI_Controller
             $hrms_keys = ['hrms_id','Name','Designation_Id','designation','Email','Contact_No','Branch_Id',
                 'Branch_Name','Zone_Id','Zone_Name','District','State','Supervisor_HRMS_Id'];
             $result = $result['dbk_lms_emp_pack']['dbk_lms_emp_all'];
-            $count = 1;
+
             foreach ($result as $key => $value){
                 foreach ($columns as $k => $column){
-                    $action = 'count';
-                    $table = Tbl_emp_dump;
-                    if($k == 0){
-                        $whereArray = array('hrms_id ='=>$value[$hrms_keys[$k]]);
-                        $count = $this->Lead->get_leads($action,$table,$select=array(),$whereArray,$join=array(),$group_by=array(),$order_by=array());
-                    }
-                    if($count == 0){
+
                         $insert[$key][$column] = trim($value[$hrms_keys[$k]]);
-                    }
                 }
             }
             if(!empty($insert)){
+                $data= array('is_old' => 1);
+                $this->Lead->update($where='1=1',Tbl_emp_dump,$data);
                 $this->db->insert_batch(Tbl_emp_dump,$insert);
+                $where=array('is_old' => 1);
+                $this->Lead->delete($where,Tbl_emp_dump);
                 redirect('dashboard','refresh');
             }
         }
