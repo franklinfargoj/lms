@@ -907,7 +907,7 @@ class Api extends REST_Controller
             $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
            // $where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
             if ($type == 'EM') {
-                $where['la.employee_id1'] = $id;
+                $where['la.employee_id'] = $id;
                 $where["la.status NOT IN('Closed','Converted')"] = NULL;
                 $order_by = 'la.created_on desc';
             }
