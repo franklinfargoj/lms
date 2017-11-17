@@ -123,7 +123,7 @@ $source = $this->config->item('lead_source');
                         <th style="text-align:left">Customer Name</th>
                         <th style="text-align:left">Product Name</th>
                         <?php if($lead_source == 'walkin'){?>
-                        <th style="text-align:left">Ticket Size</th>
+                        <th style="text-align:left">Ticket Size (In Lacs)</th>
                         <?php }?>
                         <th style="text-align:center">Elapsed Days</th>
                         <th style="text-align:left">Details</th>
@@ -162,7 +162,7 @@ $source = $this->config->item('lead_source');
                                 </td>
                                 <?php if($lead_source == 'walkin'){?>
                                 <td>
-                                    <?php echo $value['lead_ticket_range']; ?>
+                                    <?php echo convertCurrency($value['lead_ticket_range']); ?>
                                 </td>
                                     <?php }?>
                                 <td  style="text-align:center">

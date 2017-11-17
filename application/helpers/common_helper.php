@@ -1268,7 +1268,7 @@ function convertCurrency($number)
         $number = $number / 100000;
         $number = round($number,2);
         $ext = "Lac";
-        $currency = $number." ".$ext;
+        $currency = $number;
     }
 
     return $currency;
