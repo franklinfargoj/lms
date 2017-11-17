@@ -921,9 +921,9 @@ function dummy_branch_details(){
 
     function get_designation($designation_id){
 
-        $bm=array(520299,530399,540499,550599,560315,510113,520213,530213,540213,550213,560213);
+        $bm=array(520299,530399,540499,550599,560315);
         $zm=array(550502,560602,540402,550503);
-        $gm=array(560601,570701,540405);
+        $gm=array(560601,570701,540405,580801,590901,590902); // 580801 (ED),590901,590902(CMD)
 
         $designation = false;
         if(in_array($designation_id,$bm)){
