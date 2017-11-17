@@ -1118,10 +1118,12 @@ class Leads extends CI_Controller
                 'state_id' => $login_user['state_id'],
                 'zone_id' => $login_user['zone_id'],
                 'status' => 'NC',
+                'created_on' => date('Y-m-d H:i:s'),
                 'created_by' => $login_user['hrms_id'],
                 'modified_by' => $login_user['hrms_id'],
                 'modified_on' => date('Y-m-d H:i:s'),
-                'created_by_name' => $login_user['full_name']
+                'created_by_name' => $login_user['full_name'],
+                'modified_by_name' => $login_user['full_name']
             );
             if (is_array($lead_ids)) {
                 $leads = $lead_ids;

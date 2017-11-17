@@ -569,3 +569,10 @@ $config['map'] = array(
     'CBB'=>'CBB');
 $config['lead_analytics'] = '1'; // 1 for RAPC , 0 for branch
 $config['authorised_methods'] = array('masters','faq','tickers');
+
+$config['drop_reason'] = array(
+    'Incorrect Phone Number'=>'Incorrect Phone Number',
+    'Not Interested'=>'Not Interested',
+    'Does Not Qualify'=>'Does Not Qualify',
+    'Lost to competition'=>'Lost to competition',
+);

@@ -602,6 +602,7 @@ class Api extends REST_Controller
             $final_status = array();
             $final_source = array();
             $final_type = array();
+            $final_reason = array();
             foreach ($this->config->item('lead_status') as $key => $value){
                 $status['id'] = $key;
                 $status['title'] = $value;
@@ -617,9 +618,15 @@ class Api extends REST_Controller
                 $status['title'] = $value;
                 $final_type[] = $status;
             }
+            foreach ($this->config->item('drop_reason') as $key => $value){
+                $status['id'] = $key;
+                $status['title'] = $value;
+                $final_reason[] = $status;
+            }
             $lead_status['status'] = $final_status;
             $lead_status['lead_source'] = $final_source;
             $lead_status['lead_identification'] = $final_type;
+            $lead_status['drop_reason'] = $final_reason;
         }
         if (!empty($lead_status)) {
             $res = array('result' => True,
@@ -1473,8 +1480,11 @@ class Api extends REST_Controller
                 'state_id' => $params['state_id'],
                 'zone_id' => $params['zone_id'],
                 'status' => 'NC',
+                'created_on' => date('Y-m-d H:i:s'),
                 'created_by' => $params['hrms_id'],
-                'created_by_name' => $params['full_name']
+                'created_by_name' => $params['full_name'],
+                'modified_by' => $params['hrms_id'],
+                'modified_by_name' => $params['full_name']
             );
 
             $leads = explode(',', $params['lead_id']);
@@ -2423,7 +2433,10 @@ class Api extends REST_Controller
                                 'is_updated' => 1,
                                 'created_on' => date('y-m-d-H-i-s'),
                                 'created_by' => $leads_data['created_by'],
-                                'created_by_name' => $leads_data['created_by_name']
+                                'created_by_name' => $leads_data['created_by_name'],
+                                'modified_on' => date('y-m-d-H-i-s'),
+                                'modified_by' => $leads_data['employee_id'],
+                                'modified_by_name' => $leads_data['employee_name']
                             );
                             if(!empty($drop_reason)){
                                 $lead_status_data['reason_for_drop'] = $drop_reason;
