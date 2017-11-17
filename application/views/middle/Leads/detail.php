@@ -2,6 +2,7 @@
 //    $lead_status = $this->config->item('lead_status');
     $all_lead_status = $this->config->item('lead_status');
     $lead_type = $this->config->item('lead_type');
+    $drop_reason = $this->config->item('drop_reason');
     $color = 'gray';
     if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identification'])){
         switch ($leads[0]['lead_identification']) {
@@ -199,14 +200,17 @@
                                 <div class="form-control reason" >
                                     <label>Reason For Drop :<span style="color:red;">*</span></label>
                                     <?php
-                                    $reason = array(
-                                        'type'  => 'text',
-                                        'name'  => 'reason',
-                                        'id'    => 'reason',
-                                        'class' => '',
-                                        'value' => ''
+                                    echo "<span class='detail-label'>";
+                                    $options2[''] = 'Select';
+                                    foreach ($drop_reason as $key => $value) {
+                                        $options2[$key] = ucwords($value);
+                                    }
+                                    $js = array(
+                                        'id' => 'reason',
+                                        'class' => 'form-control'
                                     );
-                                    echo form_input($reason);
+                                    echo form_dropdown('reason', $options2, '', $js);
+                                    echo "</span>";
                                     echo form_error('reason');
                                     ?>
                                 </div>
