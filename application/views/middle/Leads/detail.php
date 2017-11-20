@@ -197,7 +197,7 @@
                                         echo form_input($customer_name);
                                     ?>
                                 </div>
-                                <div class="form-control reason" style="visibility: hidden">
+                                <div class="form-control reason" >
                                     <label>Reason For Drop :<span style="color:red;">*</span></label>
                                     <?php
                                     echo "<span class='detail-label'>";
