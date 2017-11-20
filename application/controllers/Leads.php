@@ -1515,7 +1515,7 @@ class Leads extends CI_Controller
         $login_user = get_session();
         $user = $login_user['hrms_id'];
         $action = 'list';
-        $select = array('lead.lead_name','products.title','lead.id');
+        $select = array('lead.id','lead.lead_name','products.title','lead.id');
         $table = Tbl_Leads.' AS lead';
         $join[] = array('table' =>Tbl_Products.' AS products','on_condition'=>'products.id = lead.product_id','type'=>'left');
         $where = array('lead.created_by'=>$user);

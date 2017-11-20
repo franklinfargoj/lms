@@ -33,6 +33,7 @@ $source = $this->config->item('lead_source');
                             <th style="text-align:center">Sr. No</th>
                             <th style="text-align:left">Customer Name</th>
                             <th style="text-align:left">Product Name</th>
+                            <th style="text-align:left">Status</th>
                             <th style="text-align:left">Details</th>
                         </tr>
                         </thead>
@@ -53,6 +54,16 @@ $source = $this->config->item('lead_source');
                                     </td>
                                     <td>
                                         <?php echo ucwords($value['title']); ?>
+                                    </td>
+                                    <td>
+                                        <?php $st = get_status($value['id']);
+                                         if(empty($st)){
+                                            echo " --- ";
+                                         }else{
+ echo $st['status'];
+                                         }
+
+                                        ?>
                                     </td>
                                     <td>
                                         <a href="<?php echo site_url('leads/lead_life_cycle/'.encode_id($value['id']))?>">Life Cycle</a>

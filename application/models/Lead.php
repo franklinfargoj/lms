@@ -480,4 +480,14 @@ class Lead  extends CI_Model
         }
         return $status_array;
     }
+
+    public function get_status($select,$where){
+
+        $this->db->select($select,TRUE);
+        $this->db->from('db_lead_assign');
+        $this->db->where($where);
+        $query = $this->db->get();
+//		pe($this->db->last_query());die;
+        return $query->result_array();
+    }
 }

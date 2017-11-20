@@ -1274,6 +1274,17 @@ function convertCurrency($number)
     return $currency;
 }
 
+function get_status($lead_id){
+    $CI = & get_instance();
+    $CI->load->model('Lead');
+    $select=array('status');
+    $where['lead_id'] = $lead_id;
+    $where['is_updated'] = 1;
+    $where['is_deleted'] = 0;
+    $data = $CI->Lead->get_status($select,$where);
+    return $data;
+}
+
 
 
 
