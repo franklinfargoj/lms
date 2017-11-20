@@ -2263,7 +2263,7 @@ class Api extends REST_Controller
                     $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                     $leads_data = $leadsAssign[0];
                     $id = $leads_data['id'];
-                    if($leads_data['branch_id'] == $params('branch_id')){
+                    if($leads_data['branch_id'] == $params['branch_id']){
                         $res = array('result' => False,
                             'data' => array('Lead Already assigned to selecterd branch'));
                         returnJson($res);
