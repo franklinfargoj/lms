@@ -34,7 +34,7 @@ $lead_sources = $this->config->item('lead_source');
     <span class="bg-top"></span>
     <div class="inner-content">
     <div class="container">
-        <p><strong>Purpose :</strong> This report shows breakup of leads which are currently in the interested stage. The date range specified above captures the date of lead generation.</p>
+        <p><strong>Purpose :</strong> This report shows breakup of leads which are currently in the interested stage. The date range specified captures the date of lead generation.</p>
     <div class="form">
     <p id="note"><span style="color:red;">*</span> These fields are required</p>
     <div class="lead-form-left" id="l-width">
