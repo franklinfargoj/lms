@@ -27,6 +27,16 @@ $source = $this->config->item('lead_source');
                             <th></th>
                             <th><input type="text" name="customername" placeholder="Search Customer Name"></th>
                             <th><input type="text" name="customername" placeholder="Search Product Name"></th>
+                            <th>
+                                <?php
+                                $lead_status = $this->config->item('lead_status');
+                                $options11['']='Select Status';
+                                foreach ($lead_status as $key => $value) {
+                                    $options11[$value] = $value;
+                                }
+                                echo form_dropdown('status', $options11 ,'',array());
+                                ?>
+                            </th>
                             <th></th>
                         </tr>
                         <tr>
@@ -61,7 +71,7 @@ $source = $this->config->item('lead_source');
                                          if(empty($st)){
                                             echo " --- ";
                                          }else{
- echo $st[0]['status'];
+ echo $lead_status[$st[0]['status']];
                                          }
 
                                         ?>
