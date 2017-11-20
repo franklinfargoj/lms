@@ -38,7 +38,11 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
-
+            <?php if(in_array($this->session->userdata('admin_type'),array('BM'))){?>
+            <p>All leads generated in last 1 year and assigned to your branch employees</p>
+            <?php }else{?>
+                <p>All leads generated in last 1 year and assigned to you</p>
+            <?php }?>
             <div class="lead-top clearfix">
                 <div class="float-left">
                     <span class="total-lead">
