@@ -903,7 +903,7 @@ class Reports extends CI_Controller
             $where  = array();
             $join = array();
             $join[] = array('table' => Tbl_cbs.' as rfc','on_condition' => 'rfc.lead_id = l.id','type' => '');
-            $alias = 'l';
+            $alias = 'la';
         }else{
             $select = array('COUNT(la.lead_id) as converted_count');
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status' => 'Converted');

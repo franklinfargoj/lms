@@ -267,6 +267,7 @@ class Api extends REST_Controller
         if (!is_array($routed_id)) {
             $lead_data['reroute_from_branch_id'] = $lead_data['branch_id'];
             $lead_data['branch_id'] = $routed_id;
+            $lead_data['modified_on'] = date('Y-m-d H:i:s',time()+5);
         }
         $lead_id = $this->Lead->add_leads($lead_data);
 

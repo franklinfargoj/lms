@@ -201,7 +201,7 @@
                                     <label>Reason For Drop :<span style="color:red;">*</span></label>
                                     <?php
                                     echo "<span class='detail-label'>";
-                                    $options2[''] = 'Select';
+                                    $options21[''] = 'Select';
                                     foreach ($drop_reason as $key => $value) {
                                         $options2[$key] = ucwords($value);
                                     }
@@ -209,7 +209,7 @@
                                         'id' => 'reason',
                                         'class' => 'form-control'
                                     );
-                                    echo form_dropdown('reason', $options2, '', $js);
+                                    echo form_dropdown('reason', $options21, '', $js);
                                     echo "</span>";
                                     echo form_error('reason');
                                     ?>
