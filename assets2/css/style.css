@@ -339,7 +339,7 @@ body{
 	background-repeat: no-repeat;
 }
 
-.form-submit a{
+.form-submit div{
 	display: table;
 	height: 45px;
 	border: 0 none;

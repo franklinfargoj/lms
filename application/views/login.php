@@ -85,12 +85,13 @@
 				<?php echo $this->load->view('common/captcha',array(),TRUE);?>
 				<div class="form-control form-submit clearfix">
 					<!-- <input type="submit" name="submit" value="LOGIN" class="submit-btn"> -->
-					<a href="javascript:void(0);" class="active">
+
+					<div class="active">
 						<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
 						<!-- <span>LOGIN</span> -->
 						<span><input type="submit" name="submit" value="LOGIN" class=""></span>
 						<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
-					</a>
+					</div>
 				</div>
 				<div class="form-options clearfix">
 					<a href="<?php echo site_url('login/view_faqs')?>" class="float-right">FAQ</a>
