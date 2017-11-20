@@ -57,6 +57,7 @@ $source = $this->config->item('lead_source');
                                     </td>
                                     <td>
                                         <?php $st = get_status($value['id']);
+                                        pe($st);
                                          if(empty($st)){
                                             echo " --- ";
                                          }else{
