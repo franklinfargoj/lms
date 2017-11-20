@@ -723,24 +723,29 @@ class Leads extends CI_Controller
                         $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                         $leads_data = $leadsAssign[0];
                         $id = $leads_data['id'];
-                        $update_lead_data['reroute_from_branch_id'] = $leads_data['branch_id'];
-                        $update_lead_data['state_id'] = $this->input->post('state_id');
-                        $update_lead_data['branch_id'] = $this->input->post('branch_id');
-                        $update_lead_data['district_id'] = $this->input->post('district_id');
-                        $date = date('Y-m-d H:i:s');
-                        $update_lead_data['modified_on'] = $date;
-                        $whereUpdate = array('id'=>$id);
-                        $this->Lead->update($whereUpdate,Tbl_Leads,$update_lead_data);
-                        $whereUpdate = array('lead_id'=>$id);
-                        $table = Tbl_LeadAssign;
-                        if(empty($drop_reason)){
-                            $data = array('is_updated'=>0);
-                        }else{
-                            $data = array('is_updated'=>0,'reason_for_drop'=>$drop_reason);
+                        if($leads_data['branch_id'] == $this->input->post('branch_id')){
+                            $this->session->set_flashdata('error','Lead Already assigned to selected branch');
+                            redirect('leads/leads_list/assigned/ytd','refresh');
+                        }else {
+                            $update_lead_data['reroute_from_branch_id'] = $leads_data['branch_id'];
+                            $update_lead_data['state_id'] = $this->input->post('state_id');
+                            $update_lead_data['branch_id'] = $this->input->post('branch_id');
+                            $update_lead_data['district_id'] = $this->input->post('district_id');
+                            $date = date('Y-m-d H:i:s');
+                            $update_lead_data['modified_on'] = $date;
+                            $whereUpdate = array('id' => $id);
+                            $this->Lead->update($whereUpdate, Tbl_Leads, $update_lead_data);
+                            $whereUpdate = array('lead_id' => $id);
+                            $table = Tbl_LeadAssign;
+                            if (empty($drop_reason)) {
+                                $data = array('is_updated' => 0);
+                            } else {
+                                $data = array('is_updated' => 0, 'reason_for_drop' => $drop_reason);
+                            }
+                            $this->Lead->update($whereUpdate, $table, $data);
+                            $this->session->set_flashdata('success', 'Lead information updated successfully');
+                            redirect('leads/leads_list/assigned/ytd', 'refresh');
                         }
-                        $this->Lead->update($whereUpdate,$table,$data);
-                        $this->session->set_flashdata('success','Lead information updated successfully');
-                        redirect('leads/leads_list/assigned/ytd','refresh');
                     }
                     else{
 

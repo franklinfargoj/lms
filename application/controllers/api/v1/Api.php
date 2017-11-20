@@ -2263,25 +2263,31 @@ class Api extends REST_Controller
                     $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                     $leads_data = $leadsAssign[0];
                     $id = $leads_data['id'];
-                    $update_lead_data['reroute_from_branch_id'] = $leads_data['branch_id'];
-                    $update_lead_data['state_id'] = $params['state_id'];
-                    $update_lead_data['branch_id'] = $params['branch_id'];
-                    $update_lead_data['district_id'] = $params['district_id'];
-                    $date = date('Y-m-d H:i:s');
-                    $update_lead_data['modified_on'] = $date;
-                    $whereUpdate = array('id'=>$id);
-                    $this->Lead->update($whereUpdate,Tbl_Leads,$update_lead_data);
-                    $whereUpdate = array('lead_id' => $id);
-                    $table = Tbl_LeadAssign;
-                    if(empty($drop_reason)){
-                        $data = array('is_updated'=>0);
-                    }else{
-                        $data = array('is_updated'=>0,'reason_for_drop'=>$drop_reason);
+                    if($leads_data['branch_id'] == $params('branch_id')){
+                        $res = array('result' => False,
+                            'data' => array('Lead Already assigned to selecterd branch'));
+                        returnJson($res);
+                    }else {
+                        $update_lead_data['reroute_from_branch_id'] = $leads_data['branch_id'];
+                        $update_lead_data['state_id'] = $params['state_id'];
+                        $update_lead_data['branch_id'] = $params['branch_id'];
+                        $update_lead_data['district_id'] = $params['district_id'];
+                        $date = date('Y-m-d H:i:s');
+                        $update_lead_data['modified_on'] = $date;
+                        $whereUpdate = array('id' => $id);
+                        $this->Lead->update($whereUpdate, Tbl_Leads, $update_lead_data);
+                        $whereUpdate = array('lead_id' => $id);
+                        $table = Tbl_LeadAssign;
+                        if (empty($drop_reason)) {
+                            $data = array('is_updated' => 0);
+                        } else {
+                            $data = array('is_updated' => 0, 'reason_for_drop' => $drop_reason);
+                        }
+                        $this->Lead->update($whereUpdate, $table, $data);
+                        $res = array('result' => TRUE,
+                            'data' => array('Lead Reroute to Other Branch Successfully'));
+                        returnJson($res);
                     }
-                    $this->Lead->update($whereUpdate, $table, $data);
-                    $res = array('result' => TRUE,
-                        'data' => array('Lead Reroute to Other Branch Successfully'));
-                    returnJson($res);
                 }else{
                     if (($leads_data['status'] != $params['status'])) {
 
