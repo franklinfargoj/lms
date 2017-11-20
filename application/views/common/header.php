@@ -63,6 +63,13 @@
 					</a>
 				</li>
 				<?php }?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+					<li class="<?php echo ($controller == 'leads' && $method == 'upload') ? 'active' : ''?>">
+						<a href="<?php echo site_url('leads/rapc')?>">
+							RAPC Upload
+						</a>
+					</li>
+				<?php }?>
 
 <!--                --><?php //if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
 <!--				<li class="--><?php //echo ($controller == 'leads' && $method == 'upload_employee') ? 'active' : ''?><!--">-->

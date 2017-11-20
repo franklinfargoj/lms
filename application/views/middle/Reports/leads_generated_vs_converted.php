@@ -31,6 +31,7 @@
     <span class="bg-top"></span>
     <div class="inner-content">
     <div class="container">
+        <p><strong>Purpose :</strong>This report shows leads generated and converted in the specified period.</p>
     <div class="form">
     <p id="note"><span style="color:red;">*</span> These fields are required</p>
     <div class="lead-form-left">

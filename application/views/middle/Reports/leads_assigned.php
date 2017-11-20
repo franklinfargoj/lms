@@ -35,6 +35,7 @@ $lead_sources = $this->config->item('lead_source');
     <span class="bg-top"></span>
     <div class="inner-content">
     <div class="container ">
+        <p><strong>Purpose :</strong>This report shows break-up of all assigned leads in different lead stages in the time period specified</p>
         <div class="form">
         <p id="note"><span style="color:red;">*</span> These fields are required</p>
     <div class="lead-form-left" id="l-width">

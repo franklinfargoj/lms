@@ -380,11 +380,11 @@
                                     ($this->session->userdata('admin_type') == 'EM' && !in_array($leads[0]['status'],$exclude_status_em)) ||
                                     ($this->session->userdata('admin_type') == 'BM' && !in_array($leads[0]['status'],$exclude_status_bm))){
                                 ?>
-                                <a href="javascript:void(0);" class="float-right submit_button">
+                                <div class="float-right submit_button">
                                     <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
                                     <span><input type="submit" class="custom_button" value="Submit" /></span>
                                     <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
-                                </a>
+                                </div>
                             <?php }?>
                         </div>
                     <!-- </form> -->

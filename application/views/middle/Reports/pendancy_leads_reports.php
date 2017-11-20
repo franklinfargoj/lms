@@ -35,6 +35,7 @@ $lead_sources = $this->config->item('lead_source');
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container ">
+            <p><strong>Purpose :</strong> This report shows count of those leads which have not been acted upon in due time.</p>
         <div class="form">
         <p id="note"><span style="color:red;">*</span> These fields are required</p>
             <div class="lead-form-left">

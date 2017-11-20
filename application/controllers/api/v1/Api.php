@@ -2265,7 +2265,7 @@ class Api extends REST_Controller
                     $id = $leads_data['id'];
                     if($leads_data['branch_id'] == $params['branch_id']){
                         $res = array('result' => False,
-                            'data' => array('Lead Already assigned to selecterd branch'));
+                            'data' => array('Lead can not be reassigned to same branch'));
                         returnJson($res);
                     }else {
                         $update_lead_data['reroute_from_branch_id'] = $leads_data['branch_id'];

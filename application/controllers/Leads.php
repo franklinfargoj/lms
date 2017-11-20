@@ -724,7 +724,7 @@ class Leads extends CI_Controller
                         $leads_data = $leadsAssign[0];
                         $id = $leads_data['id'];
                         if($leads_data['branch_id'] == $this->input->post('branch_id')){
-                            $this->session->set_flashdata('error','Lead Already assigned to selected branch');
+                            $this->session->set_flashdata('error','Lead can not be reassigned to same branch');
                             redirect('leads/leads_list/assigned/ytd','refresh');
                         }else {
                             $update_lead_data['reroute_from_branch_id'] = $leads_data['branch_id'];
@@ -1487,7 +1487,7 @@ class Leads extends CI_Controller
 
                 }
             }
-            $select = array('la.employee_id','la.employee_name','la.created_by_name','la.modified_on AS date','la.status');
+            $select = array('la.employee_id','la.employee_name','la.created_by_name','la.modified_on AS date','la.status','la.modified_by');
             $table = Tbl_LeadAssign.' as la';
             $where = array('lead_id'=>$lead_id);
             $order_by = 'date ASC';
@@ -1524,6 +1524,73 @@ class Leads extends CI_Controller
         $middle = "Leads/view/lead_generated";
         load_view($middle,$arrData);
     }
+    public function upload_rapc_mapping(){
+        if($this->input->post('Submit')) {
+            if (isset($_FILES['filename']) && !empty($_FILES['filename']['tmp_name'])) {
+                make_upload_directory('./uploads');
+                $file = upload_excel('./uploads', 'filename');
+                if (!is_array($file)) {
+                    $msg = notify($file, $type = "danger");
+                    $this->session->set_flashdata('error', $msg);
+                    redirect('leads/upload_employee');
+                } else {
+                    set_time_limit(0);
+                    ini_set('memory_limit', '-1');
+                    $keys = ['processing_center','branch_id','other_processing_center_id'];
 
+                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:C', $keys);
+                    $this->Lead->insert_uploaded_data(Tbl_processing_center,$excelData);
+                    $msg = notify('File Uploaded Successfully.','success');
+                    $this->session->set_flashdata('success', $msg);
+                    redirect(base_url('leads/upload_employee'), 'refresh');
+
+                }
+            }
+            $msg = notify("Please upload a file",'danger');
+            $this->session->set_flashdata('message', $msg);
+            redirect('leads/upload_employee');
+        }
+    }
+
+    public function rapc($param = '')
+    {
+        $admin = ucwords(strtolower($this->session->userdata('admin_type')));
+        if ($admin != 'Super Admin'){
+            redirect('dashboard');
+        }
+        /*Create Breadcumb*/
+        $this->make_bread->add('RAPC Upload', '', 0);
+        $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+
+        if($this->input->post('Submit')) {
+            if (isset($_FILES['filename']) && !empty($_FILES['filename']['tmp_name'])) {
+                make_upload_directory('./uploads');
+                $file = upload_excel('./uploads', 'filename');
+                if (!is_array($file)) {
+                    $msg = notify($file, $type = "danger");
+                    $this->session->set_flashdata('error', $msg);
+                    redirect('leads/upload_employee');
+                } else {
+                    set_time_limit(0);
+                    ini_set('memory_limit', '-1');
+                    $keys = ['processing_center','branch_id','other_processing_center_id'];
+
+                    $excelData = fetch_range_excel_data($file['full_path'], 'A2:C', $keys);
+                    $this->Lead->insert_uploaded_data(Tbl_processing_center,$excelData);
+                    $msg = notify('File Uploaded Successfully.','success');
+                    $this->session->set_flashdata('success', $msg);
+                    redirect(base_url('leads/upload_employee'), 'refresh');
+
+                }
+            }
+            $msg = notify("Please upload a file",'danger');
+            $this->session->set_flashdata('message', $msg);
+            redirect('leads/upload_employee');
+        }
+        //$arrData['uploaded_logs'] = $this->Lead->get_uploaded_leads_logs();
+        $middle = "Leads/rapcupload";
+        load_view($middle,$arrData);
+    }
 
 }

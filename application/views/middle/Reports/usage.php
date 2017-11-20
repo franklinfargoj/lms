@@ -35,6 +35,7 @@ $lead_status = $this->config->item('lead_status');
     <div class="inner-content">
         
      <div class="container">
+         <p><strong>Purpose :</strong> This report shows number of employees logged into the application from either mobile or web in the time period specified.</p>
     <div class="form">
     <p id="note"><span style="color:red;">*</span> These fields are required</p>
     <div class="lead-form-left" id="l-width">

@@ -236,10 +236,10 @@ class Product extends CI_Controller {
      */
     public function isTaken($title){
         $table = Tbl_Products;
-        $where = array('title'=>ucwords(strtolower($title)),'is_deleted'=>0);
+        $where = array('title'=>ucwords(strtolower($title)));
         $is_taken = isTaken($title,$table,$where);
         if($is_taken > 0){
-            $this->form_validation->set_message('isTaken', '%s is already taken');
+            $this->form_validation->set_message('isTaken', '%s already exists');
             return FALSE;
         }
         return TRUE;
