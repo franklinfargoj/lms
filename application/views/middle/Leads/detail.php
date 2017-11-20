@@ -197,7 +197,7 @@
                                         echo form_input($customer_name);
                                     ?>
                                 </div>
-                                <div class="form-control reason" >
+                                <div class="form-control reason" style="visibility: hidden">
                                     <label>Reason For Drop :<span style="color:red;">*</span></label>
                                     <?php
                                     echo "<span class='detail-label'>";
@@ -322,7 +322,7 @@
                             <!--                            </div>-->
 
                             <?php
-                            $exclude_status_bm = array('Converted','Closed','AO','DC','NI');
+                            $exclude_status_bm = array('Converted','Closed','AO','DC');
                             if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('BM')) &&
                                 !in_array($leads[0]['status'],$exclude_status_bm))
                             ){?>
@@ -343,24 +343,9 @@
                                 </div>
                                 <?php echo form_error('is_own_branch'); ?>
                             </div>
-                                <div id="state" class="form-control">
-<!--                                    <label>State:</label>-->
-                                    <?php echo form_dropdown('state_id', $data_state,$input['state_id'],''.$state_extra) ?>
-                                    <?php echo form_error('state_id'); ?>
-                                </div>
-                                <div id="district" class="form-control">
-<!--                                    <label>District:</label>-->
-                                    <?php echo form_dropdown('district_id', $data_district,$input['district_id'],''.$district_extra) ?>
-                                    <?php echo form_error('district_id'); ?>
-                                </div>
-                                <div id="branch" class="form-control">
-<!--                                    <label>Branch:</label>-->
-                                    <?php echo form_dropdown('branch_id', $data_branch,$input['branch_id'],''.$branch_extra) ?>
-                                    <?php echo form_error('branch_id'); ?>
-                                </div>
                                 <div class="form-control" id="reroute">
-<!--                                    <label>Reroute To:</label>-->
-                                    <select name="reroute_to">
+                                    <!--                                    <label>Reroute To:</label>-->
+                                    <select name="reroute_to" id="reroute_to" style="visibility: hidden">
                                         <option value="">Select Employee</option>
                                         <?php $result = get_details($this->session->userdata('admin_id'));?>
                                         <?php foreach ($result['list'] as $key =>$value){?>
@@ -368,6 +353,22 @@
                                         <?php }?>
                                     </select>
                                 </div>
+                                <div id="state" class="form-control" style="visibility: hidden">
+<!--                                    <label>State:</label>-->
+                                    <?php echo form_dropdown('state_id', $data_state,$input['state_id'],''.$state_extra) ?>
+                                    <?php echo form_error('state_id'); ?>
+                                </div>
+                                <div id="district" class="form-control" style="visibility: hidden">
+<!--                                    <label>District:</label>-->
+                                    <?php echo form_dropdown('district_id', $data_district,$input['district_id'],''.$district_extra) ?>
+                                    <?php echo form_error('district_id'); ?>
+                                </div>
+                                <div id="branch" class="form-control" style="visibility: hidden">
+<!--                                    <label>Branch:</label>-->
+                                    <?php echo form_dropdown('branch_id', $data_branch,$input['branch_id'],''.$branch_extra) ?>
+                                    <?php echo form_error('branch_id'); ?>
+                                </div>
+
                             <?php }?>
                         </div>
                         <div class="form-control form-submit clearfix">
@@ -410,10 +411,10 @@
         <?php if($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO'))){?>
         $('.submit_button').hide();
         <?php }?>
-        $("#state").hide();
-        $("#branch").hide();
-        $("#district").hide();
-        $("#reroute").hide();
+//        $("#state").hide();
+//        $("#branch").hide();
+//        $("#district").hide();
+//        $("#reroute").hide();
 
         var lead_status = "<?php echo $leads[0]['status']?>";  //Current Lead status
         var category_title = "<?php echo $leads[0]['category_title']?>";  //Current Category
@@ -586,28 +587,31 @@
 
     var base_url = "<?php echo base_url();?>";
     if ($('#is_own_branch').is(':checked')) {
-        $("#state").hide();
-        $("#branch").hide();
-        $("#district").hide();
-        $("#reroute").show();
+        $("#state").css('visibility', 'hidden');
+        $("#branch").css('visibility', 'hidden');
+        $("#district").css('visibility', 'hidden');
+        $("#reroute").css('visibility', 'visible');
+        $("#reroute_to").css('visibility', 'visible');
     }
 
     $('#is_other_branch').click(function () {
         var dist = '<select name="district_id" id = "district_id"><option value="">Select City</option></select>';
         var branch = '<select name="branch_id" id = "branch_id"><option value="">Select Branch</option></select>';
-        $("#state").show();
-        $("#branch").show();
-        $("#district").show();
-        $("#reroute").hide();
+        $("#state").css('visibility', 'visible');
+        $("#branch").css('visibility', 'visible');
+        $("#district").css('visibility', 'visible');
+        $("#reroute").css('visibility', 'hidden');
+        $("#reroute_to").css('visibility', 'hidden');
         $('select[name="state_id"]').val('');
         $('select[name="branch_id"]').html(branch);
         $('select[name="district_id"]').html(dist);
     });
     $('#is_own_branch').click(function () {
-        $("#state").hide();
-        $("#branch").hide();
-        $("#district").hide();
-        $("#reroute").show();
+        $("#state").css('visibility', 'hidden');
+        $("#branch").css('visibility', 'hidden');
+        $("#district").css('visibility', 'hidden');
+        $("#reroute").css('visibility', 'visible');
+        $("#reroute_to").css('visibility', 'visible');
     });
     $('#state_id').change(function () {
         var state_code = $('#state_id').val();
