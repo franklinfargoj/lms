@@ -1012,7 +1012,7 @@ class Reports extends CI_Controller
                     $WHERE['zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
             }
             if(isset($where[$alias.'.branch_id']) || isset($where[$alias.'.created_by_branch_id'])){
-                    $WHERE['branch_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+                    $WHERE['branch_id'] = !empty($arrData['branch_id']) ? $arrData['branch_id'] : $login_user['branch_id'];
 
             }
             //$WHERE['designation'] = 'HD';
