@@ -305,7 +305,7 @@ class Reports extends CI_Controller
         $lead_type = array_keys($this->config->item('lead_type'));
         //Build Input Parameter
         $action = 'list';
-        $select = array('COUNT(l.id1) as count','l.lead_identification','SUM(l.lead_ticket_range) as lead_ticket_range');
+        $select = array('COUNT(l.id) as count','l.lead_identification','SUM(l.lead_ticket_range) as lead_ticket_range');
         $table = Tbl_Leads.' as l';
         $where  = array(/*'la.is_deleted' => 0,'la.is_updated' => 1,*/'l.lead_identification IN ("'.str_replace(',','","',implode(',',$lead_type)).'")' => NULL);
         $where['a.is_deleted = 0 AND la.is_updated =1 AND la.status IN ("FU")']= NULL;
