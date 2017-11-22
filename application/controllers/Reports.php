@@ -1007,7 +1007,7 @@ class Reports extends CI_Controller
         if($viewName == 'BM'){
             //Get Data for branch
             if($type == 'generated') {
-                $select[] = $alias . '.branch_id';
+                $select[] = $alias . '.created_by_branch_id as branch_id';
                 $where[$alias . '.created_by_zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
                 $group_by[] = $alias . '.created_by_branch_id';
             }else{
