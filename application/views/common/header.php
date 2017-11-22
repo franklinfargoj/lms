@@ -176,13 +176,13 @@
 						<li class="<?php echo ($controller == 'usage') ? 'active' : ''?>" id="cal-droped3">
 							<a href="#">
 
-					<span class="right-toggle">&#9666;</span>Usage <span class="left-toggle"> &#9656;</span>
+					<span class="right-toggle">&#9666;</span>Login <span class="left-toggle"> &#9656;</span>
 
 							</a>
 							<ul class="cal-drop3">
 								<li>
 									<a href="<?php echo site_url('reports/index/usage')?>">
-									Usage Report
+									Login Report
 									</a>
 								</li>
 
