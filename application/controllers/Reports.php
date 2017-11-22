@@ -709,10 +709,11 @@ class Reports extends CI_Controller
         //Build Input Parameter
         $action = 'list';
         $select = array('COUNT(DISTINCT(la.lead_id)) as count','la.status');
-        $table = Tbl_Leads.' as l';
+        $table = Tbl_LeadAssign.' as la';
         $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status IN ("'.str_replace(',','","',implode(',',$lead_status)).'")' => NULL);
+        //$where  = array('la.status IN ("'.str_replace(',','","',implode(',',$lead_status)).'")' => NULL);
         $join = array();
-        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+        $join[] = array('table' => Tbl_Lead.' as l','on_condition' => 'la.lead_id = l.id','type' => '');
         $group_by = array('la.status');
 
         //If Start date selected
@@ -917,9 +918,11 @@ class Reports extends CI_Controller
              $alias = 'la';
 
         }elseif($type == 'assigned'){
+            $table = Tbl_LeadAssign.' as la';
             $select = array('COUNT(DISTINCT(la.lead_id)) as assigned_count');
-            $where  = array('la.status' => 'NC');
-            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+            //$where  = array('la.status' => 'NC');
+            $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status IN ("'.str_replace(',','","',implode(',',$lead_status)).'")' => NULL);
+            $join[] = array('table' => Tbl_Leads.' as l','on_condition' => 'l.id = la.lead_id','type' => '');
             $alias = 'la';
         }else{
             $select = array('COUNT(la.lead_id) as converted_count');
@@ -933,11 +936,21 @@ class Reports extends CI_Controller
 
         //If Start date selected
         if(!empty($arrData['start_date'])){
-            $where['DATE_FORMAT('.$alias.'.created_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            if($type == 'assigned'){
+                $where['DATE_FORMAT('.$alias.'.modified_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            }else{
+                $where['DATE_FORMAT('.$alias.'.created_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            }
+
         }
         //If End date selected
         if(!empty($arrData['end_date'])){
-            $where['DATE_FORMAT('.$alias.'.created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            if($type == 'assigned'){
+                $where['DATE_FORMAT('.$alias.'.modified_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            }else{
+                $where['DATE_FORMAT('.$alias.'.created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            }
+
         }
         //If Category selected
         if(!empty($arrData['product_category_id'])){
