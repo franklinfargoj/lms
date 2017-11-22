@@ -600,12 +600,12 @@ class Reports extends CI_Controller
         //Branch Manager Login
         if($viewName == 'BM'){
             //Get Data for Branch
-            $select[] = 'l.created_by_branch_id as branch_id';
+            $select[] = 'l.created_by_branch_id1 as branch_id';
             $where['l.created_by_zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
             $group_by[] = 'l.created_by_branch_id';
 
             //Get Listing for branch
-            $SELECT = array('branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('branch_id','branch_name','zone_id','zone_name');
             if(isset($where['l.zone_id'])){
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
@@ -803,7 +803,7 @@ class Reports extends CI_Controller
             $group_by[] = 'la.branch_id';
 
             //Get Listing for branch
-            $SELECT = array('branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('branch_id','branch_name','zone_id','zone_name');
             if(isset($where['la.zone_id'])){
                 $WHERE['zone_id'] = $where['la.zone_id'];
             }
@@ -1048,9 +1048,9 @@ class Reports extends CI_Controller
                 $group_by[] = $alias . '.branch_id';
             }
             //Get Listing for branch
-            $SELECT = array('branch_id','branch_name','zone_id','zone_name'); 
-            if(isset($where[$alias.'.zone_id'])){
-                $WHERE['zone_id'] = $where[$alias.'.zone_id'];
+            $SELECT = array('branch_id','branch_name','zone_id','zone_name');
+            if(isset($where[$alias.'.zone_id']) || isset($where[$alias.'.created_by_zone_id'])){
+                $WHERE['zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
             }
             //$WHERE['designation'] = 'BR';
             $GROUP_BY = array('branch_id');
@@ -1060,8 +1060,15 @@ class Reports extends CI_Controller
         //Zone Manager Login
         if($viewName == 'ZM'){
             //Get Data for zone
-            $select[] = $alias.'.zone_id';
-            $group_by[] = $alias.'.zone_id';
+            if($type == 'generated') {
+                $select[] = $alias . '.created_by_zone_id as zone_id';
+                $select[] = $alias.'.created_by_zone_id';
+                $group_by[] = $alias.'.created_by_zone_id';
+            }else{
+                $select[] = $alias.'.zone_id';
+                $group_by[] = $alias.'.zone_id';
+            }
+
             
             //Get Listing for branch
             $SELECT = array('zone_id','zone_name'); 
