@@ -717,11 +717,11 @@ class Reports extends CI_Controller
 
         //If Start date selected
         if(!empty($arrData['start_date'])){
-            $where['DATE_FORMAT(la.created_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            $where['DATE_FORMAT(la.modified_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
         }
         //If End date selected
         if(!empty($arrData['end_date'])){
-            $where['DATE_FORMAT(la.created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            $where['DATE_FORMAT(la.modified_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
         }
         //If Category selected
         if(!empty($arrData['product_category_id'])){
