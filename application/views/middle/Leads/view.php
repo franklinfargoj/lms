@@ -39,9 +39,9 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
     <div class="inner-content">
         <div class="container">
             <?php if(in_array($this->session->userdata('admin_type'),array('BM'))){?>
-            <p style="font-style: italic">All leads generated in last 1 year and assigned to your branch employees</p>
+            <p style="font-style: italic">All leads assigned to your branch employees in last 1 year</p>
             <?php }else{?>
-                <p style="font-style: italic">All leads generated in last 1 year and assigned to you</p>
+                <p style="font-style: italic">All leads assigned to you in last 1 year</p>
             <?php }?>
             <div class="lead-top clearfix">
                 <div class="float-left">
