@@ -83,7 +83,7 @@ class Reports extends CI_Controller
                 $arrData = $this->$action('assigned',$arrData);
                 $arrData = $this->$action('converted',$arrData);
                 $arrData = $this->$action('actual_business',$arrData);
-
+//pe($arrData);die;
                 $arrData = $this->combine($arrData);
                 //pe($arrData);die;
             }else{
@@ -1008,7 +1008,7 @@ class Reports extends CI_Controller
             //Get Data for branch
             $select[] = $alias.'.branch_id';
             $where[$alias.'.zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
-            $group_by[] = 'l.branch_id';
+            $group_by[] = $alias.'.branch_id';
 
             //Get Listing for branch
             $SELECT = array('branch_id','branch_name','zone_id','zone_name'); 
@@ -1045,6 +1045,7 @@ class Reports extends CI_Controller
     }
 
     private function combine($arrData){
+        //pe($arrData);die;
         $login_user = get_session();
         $viewName = $arrData['viewName'];
         if($arrData['view'] == 'employee'){
@@ -1065,9 +1066,10 @@ class Reports extends CI_Controller
         }
         $arrData['G_Total'] = $arrData['C_Total'] = 0;    
         $arrData['leads'] = array();
-        if(!empty($arrData['generated']) && !empty($arrData['converted']) && !empty($arrData['actual_business'])) {
-            $leads = array_merge($arrData['generated'], $arrData['converted'],$arrData['actual_business']);
-        }
+//        if(!empty($arrData['generated']) && !empty($arrData['converted']) && !empty($arrData['actual_business'] && !empty($arrData['assigned']))) {
+//            $leads = array_merge($arrData['generated'], $arrData['converted'],$arrData['actual_business'],$arrData['assigned']);
+//        }
+        $leads = array_merge((array)$arrData['generated'],(array) $arrData['converted'],(array)$arrData['actual_business'],(array)$arrData['assigned']);
         //pe($leads);die;
         if($arrData['list']) {
             $Lead['userId'] = array();
