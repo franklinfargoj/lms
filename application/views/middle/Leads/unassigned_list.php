@@ -215,10 +215,10 @@ $source = $this->config->item('lead_source');
 
         var table = $('#sample_3');
         var columns = [0,5];
-
+var chkbox = 1;
 
         //Initialize datatable configuration
-        initTable(table, columns);
+        initTable(table, columns,chkbox);
 
         $(".grp_check").change(function () {
             $(".multi_check").prop('checked', $(this).prop("checked"));

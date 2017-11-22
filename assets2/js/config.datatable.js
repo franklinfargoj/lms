@@ -1,4 +1,4 @@
-var initTable = function (table,columns) {
+var initTable = function (table,columns,chkbox) {
     /*
      * Initialize DataTables, with no sorting on the 'details' column
      */
@@ -35,5 +35,18 @@ var initTable = function (table,columns) {
             oTable.column($(this).parent().index() + ':visible').search(term,true, false).draw();
             
         });
+        if(chkbox == 1) {
+            oTable.on('order.dt search.dt', function () {
+                oTable.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }else{
+            oTable.on('order.dt search.dt', function () {
+                oTable.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }
     });
 }

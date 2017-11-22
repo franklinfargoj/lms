@@ -8,7 +8,7 @@ $lead_status = $this->config->item('lead_status');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Usage
+            Login
         </h3>
 
     </div>

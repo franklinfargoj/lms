@@ -59,6 +59,7 @@ class Reports extends CI_Controller
                 //pe($arrData);die;
             }else{
                 $arrData = $this->$action($arrData);
+                //pe($arrData);die;
             }
             if(!empty($arrData['product_category_id'])){
                 $product_list = $this->Lead->get_all_products(array('category_id' => $arrData['product_category_id'],'is_deleted' => 0,'status' => 'active'));
@@ -69,7 +70,7 @@ class Reports extends CI_Controller
                     $lead_sources = $this->config->item('lead_source');
                     $arrData['lead_source'] = $lead_sources[$arrData['lead_source']];
                 }
-
+                //pe($arrData);die;
                 $this->export_to_excel($action,$arrData);
             }
         }else{
@@ -304,10 +305,13 @@ class Reports extends CI_Controller
         $lead_type = array_keys($this->config->item('lead_type'));
         //Build Input Parameter
         $action = 'list';
-        $select = array('COUNT(l.id) as count','l.lead_identification','SUM(l.lead_ticket_range) as lead_ticket_range');
+        $select = array('COUNT(l.id1) as count','l.lead_identification','SUM(l.lead_ticket_range) as lead_ticket_range');
         $table = Tbl_Leads.' as l';
         $where  = array(/*'la.is_deleted' => 0,'la.is_updated' => 1,*/'l.lead_identification IN ("'.str_replace(',','","',implode(',',$lead_type)).'")' => NULL);
+        $where['a.is_deleted = 0 AND la.is_updated =1 AND la.status IN ("FU")']= NULL;
         $join = array();
+        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+
         //$join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         $group_by = array('l.lead_identification');
 
@@ -1381,6 +1385,7 @@ class Reports extends CI_Controller
         }
         
         $WHERE = array();
+
         //Employee Login
         if($viewName == 'EM'){
             $select[] = 'COUNT(l.employee_id) as count';
@@ -1439,12 +1444,13 @@ class Reports extends CI_Controller
         }
 
         $TABLE  = 'employee_dump';
+       // echo $arrData['national'];
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
-        /*pe($this->db->last_query());
-        exit;*/
+        //pe($this->db->last_query());
+        //exit;
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
-
+//pe($leads);die;
         $arrData['leads'] = array();
         $arrData['Total'] = 0;   
         if($list){
@@ -1471,6 +1477,7 @@ class Reports extends CI_Controller
                     $Lead[$index]['total'] = $value['count'];
                 }
             }
+            //pe($Lead);//pe($list);//die;
             $arrData['viewName'] = $viewName;
             foreach ($list as $key => $value) {
                 if($viewName == 'EM'){
@@ -1523,27 +1530,35 @@ class Reports extends CI_Controller
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
             }
-
-            if($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == ''){
-                $arrData['leads'] = array($this->session->userdata('branch_id')=> $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
-            }
-            if($this->session->userdata('admin_type') == 'ZM' && $arrData['view'] == ''){
-                $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
+           // echo $this->db->last_query();
+            //pe($arrData);//die;
+            if($arrData['national'] != 'yes') {
+                if ($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == '') {
+                    $arrData['leads'] = array($this->session->userdata('branch_id') => $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
+                }
+                if ($this->session->userdata('admin_type') == 'ZM' && $arrData['view'] == '') {
+                    $arrData['leads'] = array($this->session->userdata('zone_id') => $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
+                }
             }
         }
+//pe($arrData);//die;
         return $arrData;
     }
 
 
     public function export_to_excel($action,$arrData){
-        /*pe($arrData);
-        exit;*/
+//        echo $action;
+//       pe($arrData);
+//        exit;
         if($arrData['viewName'] == 'EM'){
             $header_value = array('Sr.No','Zone','Branch','HRMS ID','Employee Name','Designation','Source Type','Category Name','Product Name');
         }else if($arrData['viewName'] == 'BM'){
             $header_value = array('Sr.No','Zone','Branch','Source Type','Category Name','Product Name');   
         }else{
             $header_value = array('Sr.No','Zone','Source Type','Category Name','Product Name');
+        }
+        if($arrData['national'] == 'yes' && $action == 'usage'){
+            $header_value = array('Sr.No','Zone','Branch','HRMS ID','Employee Name','Designation');
         }
         switch ($action) {
             case 'pendancy_leads_reports':
@@ -1577,6 +1592,7 @@ class Reports extends CI_Controller
                     $usage_col = array('Total User','Logged in User','Not logged in User');
                 }
                 $header_value = array_merge($header_value,$usage_col);
+                //pe($header_value);die;
                 break;
 
         }
@@ -1585,6 +1601,10 @@ class Reports extends CI_Controller
 
 
     private function create_excel($action,$header_value,$data){
+        ini_set('max_execution_time', 5000);
+//        echo $action;
+//        pe($header_value);
+//        pe($data);die;
         $this->load->library('excel');
         $file_name = time().'data.xls';
         $excel_alpha = unserialize(EXCEL_ALPHA);
@@ -1637,7 +1657,9 @@ class Reports extends CI_Controller
         }
         
         $i=2;$j=1;
+        //pe($data['leads']);die;
         foreach ($data['leads'] as $key => $value) {
+            //echo 'h-'.$value['zone_name'];
             foreach ($header_value as $k => $v) {
                 $objSheet->getStyle($excel_alpha[$k] . $i)
                     ->getAlignment()
@@ -1666,9 +1688,13 @@ class Reports extends CI_Controller
             }else if($action == 'leads_classification'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['ticket']) ? $value['ticket'] : 0);
             }else if($action == 'usage'){
+                //echo "jkj";die;
+                //pe($data);
                 if($data['viewName'] == 'EM'){
+                    //echo "lo";//die;
                     $objSheet->getCell($excel_alpha[++$col].$i)->setValue($value['total']);
                 }else{
+                    //echo "ko";//die;
                     $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['total_user']) ? $value['total_user'] : 0);
                     $objSheet->getCell($excel_alpha[++$col].$i)->setValue($value['total']);
                     $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['not_logged_in']) ? $value['not_logged_in'] : 0);
@@ -1702,9 +1728,12 @@ class Reports extends CI_Controller
             }
             $i++;$j++;
         }
+       // pe($data);die;
+        //echo $file_name;die;
         //return $file_name;
         make_upload_directory('uploads');
         make_upload_directory('uploads/excel_list');
+        //echo $file_name;die;
         header('Content-Type: application/vnd.ms-excel'); //mime type
         header('Content-Disposition: attachment;filename="'.$file_name.'"');
         //tell browser what's the file name
