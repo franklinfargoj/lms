@@ -713,7 +713,7 @@ class Reports extends CI_Controller
         $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status IN ("'.str_replace(',','","',implode(',',$lead_status)).'")' => NULL);
         //$where  = array('la.status IN ("'.str_replace(',','","',implode(',',$lead_status)).'")' => NULL);
         $join = array();
-        $join[] = array('table' => Tbl_Lead.' as l','on_condition' => 'la.lead_id = l.id','type' => '');
+        $join[] = array('table' => Tbl_Leads.' as l','on_condition' => 'la.lead_id = l.id','type' => '');
         $group_by = array('la.status');
 
         //If Start date selected
