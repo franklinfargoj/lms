@@ -976,13 +976,28 @@ class Reports extends CI_Controller
                 $select[] = 'la.employee_id as employee_id';
             }
             if($arrData['national'] != 'yes'){
-                $where[$alias.'.zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+                if($type == 'generated'){
+                    $where[$alias.'.created_by_zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+                }else{
+                    $where[$alias.'.zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+                }
+
                 if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                     if(!empty($arrData['branch_id'])){
-                        $where[$alias.'.branch_id'] = $arrData['branch_id'];
+                        if($type == 'generated'){
+                            $where[$alias.'.created_by_branch_id'] = $arrData['branch_id'];
+                        }else{
+                            $where[$alias.'.branch_id'] = $arrData['branch_id'];
+                        }
+
                     }
                 }else{
-                    $where[$alias.'.branch_id'] = $login_user['branch_id'];
+                    if($type == 'generated'){
+                        $where[$alias.'.created_by_branch_id'] = $login_user['branch_id'];
+                    }else{
+                        $where[$alias.'.branch_id'] = $login_user['branch_id'];
+                    }
+
                 }
             }
             if($type == 'generated'){
@@ -993,11 +1008,12 @@ class Reports extends CI_Controller
 
             //Get Listing for employees
             $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name','designation');
-            if(isset($where[$alias.'.zone_id'])){
-                $WHERE['zone_id'] = $where[$alias.'.zone_id'];
+            if(isset($where[$alias.'.zone_id']) || isset($where[$alias.'.created_by_zone_id'])){
+                    $WHERE['zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
             }
-            if(isset($where[$alias.'.branch_id'])){
-                $WHERE['branch_id'] = $where[$alias.'.branch_id'];   
+            if(isset($where[$alias.'.branch_id']) || isset($where[$alias.'.created_by_branch_id'])){
+                    $WHERE['branch_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+
             }
             //$WHERE['designation'] = 'HD';
             $GROUP_BY = array('hrms_id');
