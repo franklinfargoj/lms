@@ -276,6 +276,9 @@
                                 Total Leads Generated
                             </th>
                             <th align="center">
+                                Total Leads Assigned
+                            </th>
+                            <th align="center">
                                 Total Leads Converted
                             </th>
                             <th align="center">
@@ -346,6 +349,11 @@
                             <td align="center">
                                 <?php 
                                     echo isset($value['generated_count']) ? $value['generated_count'] : 0;
+                                ?>
+                            </td>
+                            <td align="center">
+                                <?php
+                                echo isset($value['assigned_count']) ? $value['assigned_count'] : 0;
                                 ?>
                             </td>
                             <td align="center">
