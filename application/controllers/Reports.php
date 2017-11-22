@@ -708,7 +708,7 @@ class Reports extends CI_Controller
         $lead_status = array_keys($this->config->item('lead_status'));
         //Build Input Parameter
         $action = 'list';
-        $select = array('COUNT(la.lead_id) as count','la.status');
+        $select = array('COUNT(DISTINCT(la.lead_id)) as count','la.status');
         $table = Tbl_Leads.' as l';
         $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status IN ("'.str_replace(',','","',implode(',',$lead_status)).'")' => NULL);
         $join = array();
