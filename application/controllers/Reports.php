@@ -600,7 +600,7 @@ class Reports extends CI_Controller
         //Branch Manager Login
         if($viewName == 'BM'){
             //Get Data for Branch
-            $select[] = 'l.created_by_branch_id1 as branch_id';
+            $select[] = 'l.created_by_branch_id as branch_id';
             $where['l.created_by_zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
             $group_by[] = 'l.created_by_branch_id';
 
