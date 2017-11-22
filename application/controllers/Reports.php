@@ -88,7 +88,7 @@ class Reports extends CI_Controller
                 //pe($arrData);die;
             }else{
                 $arrData = $this->$action($arrData);
-                pe($arrData);die;
+                //pe($arrData);die;
             }
         }
         
