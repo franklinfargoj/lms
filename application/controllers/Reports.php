@@ -88,6 +88,7 @@ class Reports extends CI_Controller
                 //pe($arrData);die;
             }else{
                 $arrData = $this->$action($arrData);
+                pe($arrData);die;
             }
         }
         
@@ -599,9 +600,9 @@ class Reports extends CI_Controller
         //Branch Manager Login
         if($viewName == 'BM'){
             //Get Data for Branch
-            $select[] = 'l.branch_id';
-            $where['l.zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
-            $group_by[] = 'l.branch_id';
+            $select[] = 'l.created_by_branch_id as branch_id';
+            $where['l.created_by_zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+            $group_by[] = 'l.created_by_branch_id';
 
             //Get Listing for branch
             $SELECT = array('branch_id','branch_name','zone_id','zone_name'); 
@@ -630,6 +631,7 @@ class Reports extends CI_Controller
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
         /*pe($this->db->last_query());
         exit;*/
+        //pe($leads);die;
         $arrData['leads'] = array();
         $arrData['Total'] = 0;
         if($list){
@@ -697,6 +699,7 @@ class Reports extends CI_Controller
                 $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
+       // pe($arrData);die;
         return $arrData;
     }
 
@@ -914,7 +917,7 @@ class Reports extends CI_Controller
              $alias = 'la';
 
         }elseif($type == 'assigned'){
-            $select = array('COUNT(la.lead_id) as assigned_count');
+            $select = array('COUNT(DISTINCT(la.lead_id)) as assigned_count');
             $where  = array('la.status' => 'NC');
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
             $alias = 'la';
