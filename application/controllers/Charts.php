@@ -480,7 +480,6 @@ class Charts extends CI_Controller
     private function combine($arrData){
         $this->make_bread->add('Business Generated', '', 0);
         $arrData['G_Total'] = $arrData['C_Total'] = 0;
-if(!empty($arrData['generated']) && !empty($arrData['converted'])) {
     //$leads = array_merge($arrData['generated'], $arrData['converted']);
 
     $leads = array_merge((array)$arrData['generated'],(array) $arrData['converted'],(array)$arrData['actual_business'],(array)$arrData['assigned']);
@@ -527,18 +526,6 @@ if(!empty($arrData['generated']) && !empty($arrData['converted'])) {
             }
         }
     }
-}else{
-    foreach ($arrData['list'] as $key => $value) {
-        $index = $value->zone_id;
-        $arrData['zone_id'][] = $value->zone_id;
-        $arrData['zone_name'][] = $value->zone_name;
-
-            $arrData['generated_count'][] = isset($zone['generated_count'][$index]) ? $zone['generated_count'][$index] : 0;
-            $arrData['converted_count'][] = isset($zone['converted_count'][$index]) ? $zone['converted_count'][$index] : 0;
-            $arrData['assigned_count'][] = isset($zone['assigned_count'][$index]) ? $zone['assigned_count'][$index] : 0;
-
-    }
-}
         return $arrData;
     }
 
