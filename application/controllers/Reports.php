@@ -359,11 +359,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Identification', 'reports/index/leads_type_reports', 0);
+            $this->make_bread->add('Interested Leads', 'reports/index/leads_type_reports', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Leads Identification', '', 0);
+            $this->make_bread->add('Interested Leads', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';
