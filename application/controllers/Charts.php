@@ -56,8 +56,11 @@ class Charts extends CI_Controller
         if($action == 'leads_generated_vs_converted'){
             //pe($arrData);die;
             $arrData = $this->$action('generated',$arrData);
+            $arrData = $this->$action('assigned',$arrData);
             $arrData = $this->$action('converted',$arrData);
+            $arrData = $this->$action('actual_business',$arrData);
             $arrData = $this->combine($arrData);
+            //pe($arrData);die;
         }else{
 
             $arrData = $this->$action($chart_type,$arrData);
@@ -404,6 +407,20 @@ class Charts extends CI_Controller
             $select = array('COUNT(l.id) as generated_count');
             $where  = array();
             $alias = 'l';
+        }elseif($type == 'actual_business'){
+            $select = array('SUM(rfc.amount) as amount');
+            $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status' => 'Converted');
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+            $join[] = array('table' => Tbl_cbs.' as rfc','on_condition' => 'rfc.lead_id = l.id','type' => '');
+            $alias = 'la';
+
+        }elseif($type == 'assigned'){
+            $table = Tbl_LeadAssign.' as la';
+            $select = array('COUNT(DISTINCT(la.lead_id)) as assigned_count');
+            //$where  = array('la.status' => 'NC');
+            $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status IN ("'.str_replace(',','","',implode(',',$lead_status)).'")' => NULL);
+            $join[] = array('table' => Tbl_Leads.' as l','on_condition' => 'l.id = la.lead_id','type' => '');
+            $alias = 'la';
         }else{
             $select = array('COUNT(la.lead_id) as converted_count');
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status' => 'Converted');
@@ -413,11 +430,21 @@ class Charts extends CI_Controller
         $group_by = array();
         //If Start date selected
         if(!empty($arrData['start_date'])){
-            $where['DATE_FORMAT('.$alias.'.created_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            if($type == 'assigned'){
+                $where['DATE_FORMAT('.$alias.'.modified_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            }else{
+                $where['DATE_FORMAT('.$alias.'.created_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            }
+
         }
         //If End date selected
         if(!empty($arrData['end_date'])){
-            $where['DATE_FORMAT('.$alias.'.created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            if($type == 'assigned'){
+                $where['DATE_FORMAT('.$alias.'.modified_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            }else{
+                $where['DATE_FORMAT('.$alias.'.created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            }
+
         }
 
         //If Category selected
@@ -451,10 +478,13 @@ class Charts extends CI_Controller
     }
 
     private function combine($arrData){
-        $this->make_bread->add('Leads Generated Vs Converted', '', 0);
+        $this->make_bread->add('Business Generated', '', 0);
         $arrData['G_Total'] = $arrData['C_Total'] = 0;
 if(!empty($arrData['generated']) && !empty($arrData['converted'])) {
-    $leads = array_merge($arrData['generated'], $arrData['converted']);
+    //$leads = array_merge($arrData['generated'], $arrData['converted']);
+
+    $leads = array_merge((array)$arrData['generated'],(array) $arrData['converted'],(array)$arrData['actual_business'],(array)$arrData['assigned']);
+
     if ($arrData['list']) {
         foreach ($leads as $key => $value) {
             $zone['ids'][] = $value['zone_id'];
@@ -474,6 +504,13 @@ if(!empty($arrData['generated']) && !empty($arrData['converted'])) {
                 }
                 //$arrData['C_Total'] += $value['converted_count'];
             }
+            if (isset($value['assigned_count'])) {
+                if (isset($zone['assigned_count'])) {
+                    $zone['assigned_count'][$value['zone_id']] += $value['assigned_count'];
+                } else {
+                    $zone['assigned_count'][$value['zone_id']] = $value['assigned_count'];
+                }
+            }
         }
         foreach ($arrData['list'] as $key => $value) {
             $index = $value->zone_id;
@@ -482,9 +519,11 @@ if(!empty($arrData['generated']) && !empty($arrData['converted'])) {
             if (!in_array($value->zone_id, $zone['ids'])) {
                 $arrData['generated_count'][] = 0;
                 $arrData['converted_count'][] = 0;
+                $arrData['assigned_count'][] = 0;
             } else {
                 $arrData['generated_count'][] = isset($zone['generated_count'][$index]) ? $zone['generated_count'][$index] : 0;
                 $arrData['converted_count'][] = isset($zone['converted_count'][$index]) ? $zone['converted_count'][$index] : 0;
+                $arrData['assigned_count'][] = isset($zone['assigned_count'][$index]) ? $zone['assigned_count'][$index] : 0;
             }
         }
     }
@@ -496,6 +535,7 @@ if(!empty($arrData['generated']) && !empty($arrData['converted'])) {
 
             $arrData['generated_count'][] = isset($zone['generated_count'][$index]) ? $zone['generated_count'][$index] : 0;
             $arrData['converted_count'][] = isset($zone['converted_count'][$index]) ? $zone['converted_count'][$index] : 0;
+            $arrData['assigned_count'][] = isset($zone['assigned_count'][$index]) ? $zone['assigned_count'][$index] : 0;
 
     }
 }

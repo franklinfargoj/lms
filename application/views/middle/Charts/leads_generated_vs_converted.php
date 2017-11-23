@@ -4,7 +4,7 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Leads Generated Vs Converted
+            Business Generated Report
         </h3>
         <div class="float-right">
             <a href="<?php echo site_url('reports/index/leads_generated_vs_converted')?>" class="btn-Download">
@@ -24,7 +24,7 @@
             type: 'column'
         },
         title: {
-            text: 'Leads Generated Vs Converted'
+            text: ''
         },
         xAxis: {
             categories: <?php echo json_encode($zone_name)?>
@@ -71,8 +71,12 @@
             name: 'Leads Generated',
             data: <?php echo json_encode($generated_count,JSON_NUMERIC_CHECK)?>
         }, {
+            name: 'Leads Assigned',
+            data: <?php echo json_encode($assigned_count,JSON_NUMERIC_CHECK)?>
+        },{
             name: 'Leads Converted',
-            data: <?php echo json_encode($converted_count,JSON_NUMERIC_CHECK)?>
+            data: <?php echo json_encode($converted_count,JSON_NUMERIC_CHECK)?>,
+            color: 'green'
         }]
     });
 </script>

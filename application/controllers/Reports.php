@@ -1093,7 +1093,7 @@ class Reports extends CI_Controller
         $login_user = get_session();
         $viewName = $arrData['viewName'];
         if($arrData['view'] == 'employee'){
-            $this->make_bread->add('Leads Generated Vs Converted', 'reports/index/leads_generated_vs_converted', 0);
+            $this->make_bread->add('Business Generated', 'reports/index/leads_generated_vs_converted', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -1103,10 +1103,10 @@ class Reports extends CI_Controller
             }
             $this->make_bread->add('Employee View', '', 0);
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Generated Vs Converted', 'reports/index/leads_generated_vs_converted', 0);
+            $this->make_bread->add('Business Generated', 'reports/index/leads_generated_vs_converted', 0);
             $this->make_bread->add('Branch View', '', 0);
         }else{
-            $this->make_bread->add('Leads Generated Vs Converted', '', 0);
+            $this->make_bread->add('Business Generated', '', 0);
         }
         $arrData['G_Total'] = $arrData['C_Total'] = 0;    
         $arrData['leads'] = array();
