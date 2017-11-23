@@ -159,7 +159,7 @@ class Charts extends CI_Controller
     }
 
     private function leads_type_reports($chart_type,$arrData){
-        $this->make_bread->add('Leads Identification', '', 0);
+        $this->make_bread->add('Interested Leads', '', 0);
         $lead_type = array_keys($this->config->item('lead_type'));
 
         //Get Listing for Zone
@@ -175,10 +175,12 @@ class Charts extends CI_Controller
         $select = array('l.zone_id','COUNT(l.id) as count','l.lead_identification');
         $table = Tbl_Leads.' as l';
         $where  = array('l.lead_identification IN ("'.str_replace(',','","',implode(',',$lead_type)).'")' => NULL);
+        $where['la.is_deleted = 0 AND la.is_updated =1 AND la.status IN ("FU")']= NULL;
         if($chart_type == 'funnel'){
             $where['DATE_FORMAT(l.created_on,"%Y")'] = date('Y');
         }
         $join = array();
+        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         //$join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
         $group_by = array('l.zone_id','l.lead_identification');
         //If Start date selected
@@ -233,6 +235,7 @@ class Charts extends CI_Controller
                 }
             }
         }
+       // pe($arrData);die;
         return $arrData;
     }
 

@@ -4,7 +4,7 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Lead Type Report
+            Interested Leads Report
         </h3>
         <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
         <div class="float-right">
@@ -29,6 +29,12 @@ $i = 0;
 foreach ($lead_type as $key => $value){
     $data[$i]['name'] = $value;
     $data[$i]['data'] = $lead_identification[$key];
+    if($key == 'HOT')
+       $data[$i]['color'] = 'green';
+    if($key == 'WARM')
+        $data[$i]['color'] = 'yellow';
+    if($key == 'COLD')
+        $data[$i]['color'] = 'red';
     $i++;
 }
 ?>
