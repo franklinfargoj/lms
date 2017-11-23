@@ -459,8 +459,13 @@ class Charts extends CI_Controller
         if($arrData['lead_source'] !='all'){
             $where['l.lead_source'] = $arrData['lead_source'];
         }
-        $select[] = $alias.'.zone_id';
-        $group_by[] = $alias.'.zone_id';
+        if($type == 'generated') {
+            $select[] = $alias . '.created_by_zone_id as zone_id';
+            $group_by[] = $alias . '.created_by_zone_id';
+        }else {
+            $select[] = $alias . '.zone_id';
+            $group_by[] = $alias . '.zone_id';
+        }
 
         //Get Listing for branch
         $SELECT = array('zone_id','zone_name');
