@@ -23,6 +23,10 @@ $i = 0;
 foreach ($lead_status as $key => $value){
     $data[$i]['name'] = $value;
     $data[$i]['data'] = $status[$key];
+    if($key == 'FU')
+       $data[$i]['color'] = 'green';
+    if($key == 'Closed')
+        $data[$i]['color'] = 'gray';
     $i++;
 }
 ?>
