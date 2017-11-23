@@ -151,7 +151,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Pendancy Leads', 'reports/index/pendancy_leads_reports', 0);
+            $this->make_bread->add('Pendency Leads', 'reports/index/pendancy_leads_reports', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -162,11 +162,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Pendancy Leads', 'reports/index/pendancy_leads_reports', 0);
+            $this->make_bread->add('Pendency Leads', 'reports/index/pendancy_leads_reports', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Pendancy Leads', '', 0);
+            $this->make_bread->add('Pendency Leads', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM'){
                 $viewName = 'ZM';

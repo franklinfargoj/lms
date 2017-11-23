@@ -71,7 +71,7 @@ class Charts extends CI_Controller
     }
 
     private function pendancy_leads_reports($chart_type,$arrData){
-        $this->make_bread->add('Pendancy Leads', '', 0);
+        $this->make_bread->add('Pendency Leads', '', 0);
         $lead_status = array_keys($this->config->item('lead_status'));
 
         //Get Listing for branch

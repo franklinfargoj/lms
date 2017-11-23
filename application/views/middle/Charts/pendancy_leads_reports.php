@@ -24,6 +24,10 @@ foreach ($lead_status as $key => $value){
     if(!in_array($key,array("AO","Converted","Closed","NI"))){
         $data[$i]['name'] = $value;
         $data[$i]['data'] = $status[$key];
+        if($key == 'FU')
+            $data[$i]['color'] = 'green';
+        if($key == 'DC')
+            $data[$i]['color'] = 'yellow';
         $i++;
     }
 }
@@ -36,7 +40,7 @@ foreach ($lead_status as $key => $value){
             type: 'column'
         },
         title: {
-            text: 'Pendancy Leads'
+            text: ''
         },
         xAxis: {
             categories: <?php echo json_encode($zone_name)?>
