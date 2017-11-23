@@ -38,7 +38,7 @@ foreach ($lead_status as $key => $value){
             type: 'column'
         },
         title: {
-            text: 'Leads Assigned'
+            text: ''
         },
         xAxis: {
             categories: <?php echo json_encode($zone_name)?>
