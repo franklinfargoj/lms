@@ -11,10 +11,10 @@
             <a href="<?php echo site_url('reports/index/leads_type_reports')?>" class="btn-Download">
                 Grid View
             </a>
-            <span> | </span>
-            <a href="<?php echo site_url('charts/index/leads_type_reports/funnel')?>" class="btn-Download">
-                Funnel View
-            </a>
+<!--            <span> | </span>-->
+<!--            <a href="--><?php //echo site_url('charts/index/leads_type_reports/funnel')?><!--" class="btn-Download">-->
+<!--                Funnel View-->
+<!--            </a>-->
         </div>
         <?php }?>
     </div>
