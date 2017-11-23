@@ -332,7 +332,7 @@ class Charts extends CI_Controller
 
         //Build Input Parameter
         $action = 'list';
-        $select = array('la.zone_id','COUNT(la.lead_id) as count','la.status');
+        $select = array('la.zone_id','COUNT(DISTINCT(la.lead_id)) as count','la.status');
         $table = Tbl_Leads.' as l';
         $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status IN ("'.str_replace(',','","',implode(',',$lead_status)).'")' => NULL);
         $join = array();
