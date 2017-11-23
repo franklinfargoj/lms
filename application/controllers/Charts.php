@@ -540,7 +540,7 @@ if(!empty($arrData['generated']) && !empty($arrData['converted'])) {
     }
 
     private function usage($chart_type,$arrData){
-        $this->make_bread->add('Usage', '', 0);
+        $this->make_bread->add('Login', '', 0);
 
         //Get Listing for Zone
         $SELECT = array('zone_id','zone_name','COUNT(hrms_id) as total_user');
@@ -577,7 +577,7 @@ if(!empty($arrData['generated']) && !empty($arrData['converted'])) {
             foreach ($LIST as $key => $value) {
                 $index = $value->zone_id;
                 $arrData['zone_id'][] = $value->zone_id;
-                $arrData['zone_name'][] = $value->zone_name;
+                $arrData['zone_name'][] = $value->zone_name.'('.$value->total_user.')';
 
                 if(!in_array($value->zone_id,$zone['ids'])){
                     $arrData['logged_in'][] = 0;
@@ -592,6 +592,7 @@ if(!empty($arrData['generated']) && !empty($arrData['converted'])) {
                 }
             }
         }
+        //pe($arrData);die;
         return $arrData;
     }
 }

@@ -4,7 +4,7 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Usage
+            Login
         </h3>
         <div class="float-right">
             <a href="<?php echo site_url('reports/index/usage')?>" class="btn-Download">
@@ -21,7 +21,7 @@
             type: 'column'
         },
         title: {
-            text: 'Usage'
+            text: ''
         },
         xAxis: {
             categories: <?php echo json_encode($zone_name)?>
@@ -66,10 +66,8 @@
         },
         series: [{
             name: 'Logged In',
-            data: <?php echo json_encode($logged_in,JSON_NUMERIC_CHECK)?>
-        }, {
-            name: 'Not Logged In',
-            data: <?php echo json_encode($not_logged_in,JSON_NUMERIC_CHECK)?>
+            data: <?php echo json_encode($logged_in,JSON_NUMERIC_CHECK)?>,
+            color: 'green'
         }]
     });
 </script>
