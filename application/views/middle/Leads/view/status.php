@@ -31,6 +31,7 @@
         <table class="upload-table lead-table" id="sample_3">
             <thead>
             <tr class="top-header">
+                <th></th>
                 <th style="text-align:left">
                     <?php
                         $options['']='Select Status';
@@ -44,6 +45,7 @@
                 <th><!-- <input type="text" name="customername" placeholder="Search YTD"> --></th>
             </tr>
             <tr>
+                <th style="text-align:center">Sr. No</th>
                 <th style="text-align:left">Status</th>
                 <th style="text-align:center">This Month</th>
                 <th style="text-align:center">This Year</th>
@@ -51,7 +53,7 @@
             </thead>
             <tbody>
             <?php 
-            if(!empty($status)){
+            if(!empty($status)){ $i=0;
                 foreach ($status as $key => $value){
                     $param = '';
                     if(isset($employee_id) && !empty($employee_id)){
@@ -65,7 +67,14 @@
                         $param .= '/'.$lead_source;
                     }
                 ?>
+
                 <tr>
+                    <td style="text-align:center">
+                        <?php
+                        echo ++$i;
+                        ?>
+
+                    </td>
                     <td><?php echo $value; ?></td>
                     <?php
                         switch ($key) {
@@ -112,6 +121,12 @@
             ?>
             <?php if(isset($Unassigned_Leads['Month'])){?>
             <tr>
+                <td style="text-align:center">
+                    <?php
+                    echo ++$i;
+                    ?>
+
+                </td>
                 <td>Unassigned Leads</td>
                 <td style="text-align:center"><?php echo $Unassigned_Leads['Month']; ?></td>
                 <td style="text-align:center"><?php echo $Unassigned_Leads['Year']; ?></td>
