@@ -53,6 +53,7 @@ class Login extends CI_Controller {
             }else{
 
                 $pwd = base64_decode($this->input->post('password'));
+                echo $pwd;die;
                 // Captcha validation passed
                 if($this->input->post('username') == '1111111'){
                     $checkInput = array(
