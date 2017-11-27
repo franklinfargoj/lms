@@ -219,10 +219,20 @@
 				  })
 				  .on('blur', function(){
 				      var $this = $(this);
+
 				      if($this.val() == ''){
 				          $this.val('Password');
 				      }
+
+
 				  });
+			$('#login-form').submit(function () {
+				var newpwd = $('#password').val();
+				$('#password').val((window.btoa(newpwd)));
+			});
+
+
+
 		})
 	
 	$('#refresh_captcha').click(function(){

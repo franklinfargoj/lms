@@ -51,11 +51,13 @@ class Login extends CI_Controller {
                 //Generate Captcha
                 return $this->load->view("login",$arrData);
             }else{
+
+                $pwd = base64_decode($this->input->post('password'));
                 // Captcha validation passed
                 if($this->input->post('username') == '1111111'){
                     $checkInput = array(
                         'hrms_id' => $this->input->post('username'),
-                        'password' => md5($this->input->post('password'))
+                        'password' => md5($pwd)
                     );
                     $loginData = $this->master->check_login($checkInput);
                     if($loginData){
@@ -79,7 +81,7 @@ class Login extends CI_Controller {
                     }
                 }else{
                     $hrms_id = $this->input->post('username');
-                    $password = $this->input->post('password');
+                    $password = $pwd;
                     //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
                     $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$hrms_id.'&password='.$password);
                     $auth = json_decode($auth_response);
