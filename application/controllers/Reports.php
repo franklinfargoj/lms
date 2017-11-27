@@ -515,7 +515,7 @@ class Reports extends CI_Controller
         $table = Tbl_Leads.' as l';
         $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status IN ("'.str_replace(',','","',implode(',',$lead_status)).'")' => NULL);
         $join = array();
-        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+        $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'LEFT');
         $group_by = array('la.status');
 
         //If Start date selected
@@ -629,9 +629,10 @@ class Reports extends CI_Controller
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
-        /*pe($this->db->last_query());
+
+         /*pe($this->db->last_query());
         exit;*/
-        //pe($leads);die;
+        //pe($unassigned_leads_count);die;
         $arrData['leads'] = array();
         $arrData['Total'] = 0;
         if($list){

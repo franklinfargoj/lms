@@ -34,7 +34,7 @@ $data_submit = array(
 
             <div class="upload-form">
                 <?php
-                $url = base_url('leads/upload');
+                $url = base_url('rapc/upload');
                 echo form_open_multipart($url, $form_attributes);
                 ?>
 
@@ -65,7 +65,7 @@ $data_submit = array(
                 <?php echo form_close();?>
             </div>
             <div class="upload-xl">
-                <a href="<?php echo base_url('uploads/sample/rapc_lead.xlsx')?>">
+                <a href="<?php echo base_url('uploads/sample/Branch_RAPC_Mapping_Sample_DataSheet.xlsx')?>">
                     <img src="<?php echo base_url().ASSETS;?>images/excel-img.png" alt="excel">
                     <span>Download Sample File</span>
                 </a>
@@ -105,15 +105,6 @@ $data_submit = array(
             "pageLength": 10,
         });
 
-        // Apply the search
-        oTable.columns().every(function (index) {
-            table.find('thead tr:eq(0) th:eq(' + index + ') input').on('keyup change', function () {
-                oTable.column($(this).parent().index() + ':visible').search(this.value).draw();
-            });
-            table.find('thead tr:eq(0) th:eq(' + index + ') select').on('change', function () {
-                oTable.column($(this).parent().index() + ':visible').search(this.value).draw();
-            });
-        });
     }
     inituploadTable(table,columns);
     /*jQuery(document).ready(function() {
@@ -127,16 +118,11 @@ $data_submit = array(
     $('#upload_lead').validate({
 
         rules:{
-            lead_source:{
-                required:true
-            },
             filename:{
                 required:true
             }
         },messages:{
-            lead_source:{
-                required:'Please select lead source.'
-            },
+
             filename:{
                 required:'Please upload a file.'
             }

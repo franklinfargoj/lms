@@ -64,9 +64,16 @@
 				</li>
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-					<li class="<?php echo ($controller == 'leads' && $method == 'upload') ? 'active' : ''?>">
-						<a href="<?php echo site_url('leads/rapc')?>">
-							RAPC Upload
+					<li class="<?php echo ($controller == 'rapc' || ($controller == 'rapc' && $method == 'upload')) ? 'active' : ''?>">
+						<a href="<?php echo site_url('rapc')?>">
+							RAPC
+						</a>
+					</li>
+				<?php }?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+					<li class="<?php echo ($controller == 'rapc' && $method == 'route') ? 'active' : ''?>">
+						<a href="<?php echo site_url('rapc/route')?>">
+							Lead Routing
 						</a>
 					</li>
 				<?php }?>

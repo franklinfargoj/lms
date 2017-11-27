@@ -322,4 +322,40 @@ class Master_model extends CI_Model{
 //		pe($this->db->last_query());die;
 		return $query->result_array();
 	}
+
+	/**
+	 * delete_rapc
+	 * @author Ashok Jadhav
+	 * @access public
+	 * @param $id
+	 * @return int
+	 */
+	public function delete_map($id){
+		$where = array('id'=>$id);
+		return $this->db->delete(Tbl_processing_center,$where);
+	}
+
+	/**
+	 * add lead route
+	 * @author Ashok Jadhav
+	 * @access public
+	 * @param $data
+	 * @return int
+	 */
+	public function lead_route($where,$data){
+		return $this->update($where,Tbl_analytics_lead_route,$data);
+	}
+
+	/**
+	 * view lead route
+	 * @author Ashok Jadhav
+	 * @access public
+	 * @param $data
+	 * @return int
+	 */
+	public function view_lead_route($order_by = array()){
+		$select = array('id','route_to');
+		$where = array('route_to !=' => NULL);
+		return $this->view($select,$where,Tbl_analytics_lead_route,$join = array(),$order_by);
+	}
 }
