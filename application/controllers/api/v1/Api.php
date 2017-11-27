@@ -1542,7 +1542,8 @@ class Api extends REST_Controller
         }
 
         $user_id = $params['user_id'];
-        $password = $params['password'];
+        $password = base64_decode($params['password']);
+        echo $password;die;
         $device_token = $params['device_token'];
         $device_type = $params['device_type'];
 
