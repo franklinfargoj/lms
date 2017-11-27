@@ -90,11 +90,13 @@ class Login extends CI_Controller {
                         $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$auth->DBK_LMS_AUTH->username);
                         $records = json_decode($records_response);
                        // echo "<pre>";print_r($records);die;
+                        $authorisation_key= random_number();
                         $data = array('device_token' => NULL,
                             'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
                             'branch_id' => $records->dbk_lms_emp_record1->deptid,
                             'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
-                            'device_type' => NULL
+                            'device_type' => NULL,
+                            'authorisation_key'=> $authorisation_key
                         );
                         $this->master->insert_login_log($data); // login log
 
@@ -113,6 +115,7 @@ class Login extends CI_Controller {
                             'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
                             'mobile' => $records->dbk_lms_emp_record1->phone,
                             'email_id' => $records->dbk_lms_emp_record1->email,
+                            'authorisation_key' => $authorisation_key,
                             'list'=>$records->dbk_lms_emp_record1->DBK_LMS_COLL
                         );
                         $this->set_session($result);
@@ -189,6 +192,7 @@ class Login extends CI_Controller {
                  'mobile' => $data['mobile'],
                  'email_id' => $data['email_id'],
                  'isLoggedIn' => TRUE,
+                 'authorisation_key' => $data['authorisation_key'],
                  'list'=>$data['list']
              );
 
