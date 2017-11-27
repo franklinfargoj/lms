@@ -83,6 +83,7 @@ function is_logged_in() {
     // We need to use $CI->session instead of $this->session
     $isLoggedIn = $CI->session->userdata('isLoggedIn');
     $authorisation_key = $CI->session->userdata('authorisation_key');
+    //echo $authorisation_key;echo $CI->session->userdata('admin_id');die;
     $check_response = check_authorisation($authorisation_key,$CI->session->userdata('admin_id'));
     if($check_response != 'TRUE'){
         redirect('login/logout');

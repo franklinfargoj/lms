@@ -61,6 +61,16 @@ class Login extends CI_Controller {
                     );
                     $loginData = $this->master->check_login($checkInput);
                     if($loginData){
+                        $authorisation_key= random_number();
+                        $data = array('device_token' => NULL,
+                            'employee_id' => $this->input->post('username'),
+                            'branch_id' => 0,
+                            'zone_id' => 0,
+                            'device_type' => NULL,
+                            'authorisation_key'=> $authorisation_key
+                        );
+                        $this->master->insert_login_log($data); // login log
+                        $loginData[0]['authorisation_key']=$authorisation_key;
                         $this->set_session($loginData[0]);
                         if(!empty($this->input->post('remember_me'))) {
                             setcookie ("member_login",$this->input->post('username'),time()+ (10 * 365 * 24 * 60 * 60));
