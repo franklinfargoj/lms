@@ -19,7 +19,7 @@ class Leads extends CI_Controller
         parent::__construct();
         is_logged_in();
         $this->load->model('Lead');
-        
+        $this->load->model('Master_model','master');
         /*
         echo $this->encrypt->encode('denabank1234');
         exit;*/
@@ -375,7 +375,8 @@ class Leads extends CI_Controller
                     if(in_array(ucwords(strtolower(trim($prod_title))),$all_product)){
                         $whereArray = array('title' => ucwords(strtolower(trim($prod_title))),'status'=>'active');
                         $prod_id = $this->Lead->fetch_product_id($whereArray);
-                        if(($lead_source == 'Analytics' && $this->config->item('lead_analytics') == 1) ||
+                        $analytic_lead_route = $this->master->view_lead_route();
+                        if(($lead_source == 'Analytics' && $analytic_lead_route[0]['route_to'] == 1) ||
                             ($lead_source != 'Analytics'))
                         {
                             $mapping_whereArray = array('processing_center' => $prod_id['map_with'], 'branch_id' => $value['branch_id']);
