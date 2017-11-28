@@ -1,5 +1,5 @@
 <div class="passwordinner">
-    <div class="pull-left" id="captcha_img" style="width:18%;position:absolute;">
+    <div class="pull-left" id="captcha_img" style="width:auto;position:absolute;">
         <?php echo $capimage; ?>
     </div>
     <span id="refresh_captcha" style="cursor:pointer;float:right">
