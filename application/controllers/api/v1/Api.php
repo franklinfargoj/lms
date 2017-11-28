@@ -2368,9 +2368,13 @@ class Api extends REST_Controller
                     if ($params['status'] == 'FU') {
                         if (isset($params['remind_on']) && !empty($params['remind_on']) &&
                             isset($params['reminder_text']) && !empty($params['reminder_text'])) {
+                            $wherefollowup = array('lead_id'=>$params['lead_id'],'is_updated'=>1,'status'=>'FU');
+                            $tablefollowup = Tbl_LeadAssign;
+                            $datafollowup = array('followup_date'=>date('Y-m-d-H-i-s', strtotime($params['remind_on'])));
+                            $this->Lead->update($wherefollowup,$tablefollowup,$datafollowup);
                             $remindData = array(
                                 'lead_id' => $params['lead_id'],
-                                'remind_on' => date('y-m-d-H-i-s', strtotime($params['remind_on'])),
+                                'remind_on' => date('Y-m-d-H-i-s', strtotime($params['remind_on'])),
                                 'remind_to' => $leads_data['employee_id'],
                                 'reminder_text' => $params['reminder_text']
                             );

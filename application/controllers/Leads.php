@@ -792,6 +792,9 @@ class Leads extends CI_Controller
                             if(!empty($drop_reason)){
                                 $lead_status_data['reason_for_drop'] = $drop_reason;
                             }
+//                            if($lead_status == 'FU'){
+//                                $lead_status_data['followup_date'] = date('y-m-d-H-i-s',strtotime($this->input->post('remind_on')));
+//                            }
                             /*****************************************************************/
 
                             /****************************************************************
@@ -878,6 +881,9 @@ class Leads extends CI_Controller
                             redirect('leads/leads_list/assigned/ytd');
                         }else{
                             if($lead_status == 'FU'){
+                                $wherefollowup = array(Tbl_LeadAssign.'.lead_id' => $lead_id,Tbl_LeadAssign.'.is_updated' => 1,Tbl_LeadAssign.'.status' => 'FU');
+                                $followup_data = array('followup_date'=>date('Y-m-d-H-i-s',strtotime($this->input->post('remind_on'))));
+                                $this->Lead->update_lead_data($wherefollowup, $followup_data, Tbl_LeadAssign);
                                 $remindData = array(
                                     'lead_id' => $lead_id,
                                     'remind_on' => date('y-m-d-H-i-s',strtotime($this->input->post('remind_on'))),
