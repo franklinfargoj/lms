@@ -555,11 +555,21 @@ class Cron extends CI_Controller
                 $where['la.status']  = 'Converted';
             }
             if($type == 'pending_before'){
+                if($user_type == 'ZM'){
+                    $pending_days = 6;
+                }
+                if($user_type == 'BM'){
+                    $pending_days = 4;
+                }
+                if($user_type == 'EM'){
+                    $pending_days = 2;
+                }
                 $select = array('COUNT(l.id) as pending_before');
                 $where['la.status IN ("NC","FU","DC")']  = NULL;
-                $day = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -'.PENDENCY_DAY.' day' ) ).' 00:00:00';
-                $where["CASE WHEN la.status = 'NC' THEN la.modified_on <'$day' WHEN la.status = 'FU' THEN fr.remind_on < '$day' WHEN la.status = 'DC' THEN p.turn_around_time < DATEDIFF(CURDATE(),la.modified_on) END"]=NULL;
-                $join[] = array('table' => Tbl_Reminder.' as fr','on_condition' => 'fr.lead_id = l.id','type' => '');
+
+                $day = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -'.$pending_days.' day' ) ).' 00:00:00';
+                $where["CASE WHEN la.status = 'NC' THEN la.modified_on < '$day' WHEN la.status = 'FU' THEN la.followup_date < '$day' WHEN la.status = 'DC' THEN p.turn_around_time < DATEDIFF(CURDATE(),la.modified_on) END"]=NULL;
+               // $join[] = array('table' => Tbl_Reminder.' as fr','on_condition' => 'fr.lead_id = l.id','type' => '');
                 $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'p.id = l.product_id','type' => '');
             }
             if($type == 'inactive'){
