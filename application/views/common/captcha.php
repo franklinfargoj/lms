@@ -12,7 +12,7 @@
             $data_cap = array(
                 'name' => 'captext',
                 'id' => 'captext',
-                'class' => 'form-control form-control-solid placeholder-no-fix',
+                'class' => '',
                 // 'style' => 'float:right;',
             );
             echo form_input($data_cap);
