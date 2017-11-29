@@ -1494,7 +1494,7 @@ class Leads extends CI_Controller
 
                 }
             }
-            $select = array('la.employee_id','la.employee_name','la.created_by_name','la.modified_on AS date','la.status','la.modified_by');
+            $select = array('la.employee_id','la.employee_name','la.created_by_name','la.modified_on AS date','la.status','la.modified_by','la.modified_by_name');
             $table = Tbl_LeadAssign.' as la';
             $where = array('lead_id'=>$lead_id);
             $order_by = 'date ASC';
