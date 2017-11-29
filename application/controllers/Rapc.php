@@ -32,17 +32,31 @@ class Rapc extends CI_Controller {
      * @param none
      * @return void
      */
-	public function index()
-	{
-          /*Create Breadcumb*/
-          $this->make_bread->add('RAPC', '', 0);
-          $arrData['breadcrumb'] = $this->make_bread->output();
-          /*Create Breadcumb*/
-            $select=array('*');
-            $table=Tbl_processing_center;
-            $arrData['list'] = $this->master->view($select,$where=array(),$table,$join = array(),$order_by = array());
-            return load_view("Rapc/list",$arrData);
-	}
+//	public function index()
+//	{
+//          /*Create Breadcumb*/
+//          $this->make_bread->add('RAPC', '', 0);
+//          $arrData['breadcrumb'] = $this->make_bread->output();
+//          /*Create Breadcumb*/
+//            $select=array('*');
+//            $table=Tbl_processing_center;
+//            $arrData['list'] = $this->master->view($select,$where=array(),$table,$join = array(),$order_by = array());
+//            return load_view("Rapc/list",$arrData);
+//	}
+
+    public function index()
+    {
+        /*Create Breadcumb*/
+        $this->make_bread->add('Other Processing Center', '', 0);
+        $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+        $select=array('DISTINCT(processing_center) as id','processing_center as title');
+        $table=Tbl_processing_center;
+        $typelist = $this->master->view($select,$where=array(),$table,$join = array(),$order_by = array());
+        //pe($arrData['typelist']);die;
+        $arrData['typelist'] = dropdown($typelist,'Select');
+        return load_view("Rapc/view",$arrData);
+    }
 
 
      /*
@@ -91,7 +105,7 @@ class Rapc extends CI_Controller {
     public function upload($param = '')
     {
         /*Create Breadcumb*/
-        $this->make_bread->add('RAPC Upload', '', 0);
+        $this->make_bread->add('Other Processing Center', '', 0);
         $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
 
@@ -157,5 +171,80 @@ class Rapc extends CI_Controller {
         //$arrData['uploaded_logs'] = $this->Lead->get_uploaded_leads_logs();
         $middle = "Rapc/route";
         load_view($middle,$arrData);
+    }
+
+
+/* Center list
+* Fetches products according to selected type.
+* @author Gourav Thatoi
+* @access public
+* @param none
+* @return json
+*/
+    public function centerlist()
+    {
+        if ($this->input->post()) {
+            $type_id = $this->input->post("type_id");
+            $select=array('DISTINCT(other_processing_center_id)');
+            $whereArray = array('processing_center' => $type_id);
+            $table=Tbl_processing_center;
+            //$products = $this->Lead->get_all_products($whereArray);
+            $list = $this->master->view($select,$whereArray,$table,$join = array(),$order_by = array());
+//pe($list);
+            $center_extra = 'class="form-control" id="center_id"';
+            if (!empty($list)) {
+                $options[''] = 'select';
+                foreach ($list as $key => $value) {
+                    $procc_name = branchname($value['other_processing_center_id']);
+                    $options[$value['other_processing_center_id']] = ucwords(strtolower($procc_name[0]['name']));
+                }
+                $html = '<label>Processing Center:<span style="color:red;">*</span></label>';
+                $html .= form_dropdown('center_id', $options, '', $center_extra);
+            } else {
+                $options[''] = 'select';
+                $html = '<label>Processing Center:<span style="color:red;">*</span></label>';
+                $html .= form_dropdown('center_id', $options, '', $center_extra);
+            }
+            echo $html;
+        }
+    }
+
+    /*
+     * search
+     * Search for product description
+     * @author Ashok Jadhav
+     * @access public
+     * @param none
+     * @return void
+     */
+    public function search()
+    {
+        /*Create Breadcumb*/
+        $this->make_bread->add('Other Processing Center', '', 0);
+        $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+
+        if($this->input->post()){
+            $this->form_validation->set_rules('type_id','Center Type', 'required');
+            $this->form_validation->set_rules('center_id','Processing Center', 'required');
+            if ($this->form_validation->run() == FALSE)
+            {
+                $this->session->set_flashdata('error', validation_errors());
+                redirect(base_url('rapc'), 'refresh');
+            }
+            $type_id = $this->input->post('type_id');
+            $arrData['type_id'] = $type_id;
+            $center_id = $this->input->post('center_id');
+            $arrData['center_id'] = $center_id;
+
+            $select=array('*');
+            $whereArray = array('processing_center' => $type_id,'other_processing_center_id' => $center_id);
+            $table=Tbl_processing_center;
+            $arrData['type_id'] = $type_id;
+            $arrData['list'] = $this->master->view($select,$whereArray,$table,$join = array(),$order_by = array());;
+            return load_view("Rapc/list",$arrData);
+        }else{
+            redirect('rapc');
+        }
     }
 }

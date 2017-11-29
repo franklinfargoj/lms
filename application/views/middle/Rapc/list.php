@@ -5,7 +5,7 @@
 <!-- BEGIN PRODUCT -->
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center">RAPC</h3>
+        <h3 class="text-center"><?php echo $type_id;?></h3>
     </div>
 </div>
 <div class="page-content">
@@ -14,12 +14,15 @@
         <div class="container">
             <div class="lead-top clearfix">
                 <div class="float-left">
-                    <span class="total-lead">Total Products</span>
+                    <span class="total-lead">Total Branch</span>
                     <span class="lead-num"> : <?php echo count($list);?></span>
                 </div>
                 <div class="float-right">
-                    <span class="lead-num"><a href="<?php echo site_url('rapc/upload');?>">Upload</a></span>
+                    <span class="lead-num"><a href="<?php echo site_url('rapc');?>">Back</a></span>
                 </div>
+<!--                <div class="float-right">-->
+<!--                    <span class="lead-num"><a href="--><?php //echo site_url('rapc/upload');?><!--">Upload</a></span>-->
+<!--                </div>-->
             </div>
             <table id="sample_3" class="display lead-table">
                 <thead>

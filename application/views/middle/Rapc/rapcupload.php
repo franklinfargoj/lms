@@ -29,6 +29,9 @@ $data_submit = array(
     <span class="bg-top"></span>
     <div class="inner-content">
     <div class="container">
+        <div class="float-right">
+            <span class="lead-num"><a href="<?php echo site_url('rapc');?>">Back</a></span>
+        </div>
     <p id="note"><span style="color:red;">*</span> These fields are required</p>
         <div class="upload-content">
 
