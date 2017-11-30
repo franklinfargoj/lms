@@ -35,47 +35,46 @@ function pe($arr)
     //die;
 }
 
- function sendMail($to, $message, $subject,$company_name) {
-     //echo $to;"<br>";
- //    echo $message;"<br>";
- //    //echo $subject;"<br>";
- //   // echo $company_name;"<br>";
- //   // echo $company_email;"<br>";
- //    die;
-     $ci = &get_instance();
+// function sendmail($to, $message, $subject,$company_name,$company_email) {
+//     //echo $to;"<br>";
+// //    echo $message;"<br>";
+// //    //echo $subject;"<br>";
+// //   // echo $company_name;"<br>";
+// //   // echo $company_email;"<br>";
+// //    die;
+//     $ci = &get_instance();
 //     $ci->load->model('customers_model', 'customer');
 //     $smtp_details = $ci->customer->get_smtp_details();
 //     foreach($smtp_details as $row){
 //         $smtp_arr[] = $row->setting_value;
 //     }
 
-     $config = Array(
-         'protocol' => "sendmail",
-         //'smtp_host' => $smtp_arr[1],
-         //'smtp_port' => $smtp_arr[2],
-         //'smtp_user' => $smtp_arr[4],
-         //'smtp_pass' => base64_decode(base64_decode($smtp_arr[3])),
-         'mailtype' => 'html',
-         'charset' => 'utf-8',
-         'wordwrap' => TRUE
-     );
-     $ci = &get_instance();
-     $ci->load->library('email');
-     $ci->email->initialize($config);
-     $ci->email->from('mukeshkurmi1@gmail.com','mukesh kurmi2');
-     $ci->email->to('mukesh.kurmi@wwindia.com');
-     $ci->email->subject($subject);
-     $ci->email->message($message);
-     //return true;
-     if ($ci->email->send()) {
-         return true;
-     } else {
-         echo $ci->email->print_debugger();
-         return false;
-     }
+//     $config = Array(
+//         'protocol' => $smtp_arr[0],
+//         'smtp_host' => $smtp_arr[1],
+//         'smtp_port' => $smtp_arr[2],
+//         'smtp_user' => $smtp_arr[4],
+//         'smtp_pass' => base64_decode(base64_decode($smtp_arr[3])),
+//         'mailtype' => 'html',
+//         'charset' => 'utf-8',
+//         'wordwrap' => TRUE
+//     );
+//     $ci = &get_instance();
+//     $ci->load->library('email');
+//     $ci->email->initialize($config);
+//     $ci->email->from($smtp_arr[4], $company_name);
+//     $ci->email->to($to);
+//     $ci->email->subject($subject);
+//     $ci->email->message($message);
+//     //return true;
+//     if ($ci->email->send()) {
+//         return true;
+//     } else {
+//         return false;
+//     }
 
 
- }
+// }
 /*Added by Ashok Jadhav on 17 August 2017*/
 
 function is_logged_in() {
@@ -425,7 +424,6 @@ if(!function_exists('send_sms')){
         if($mobile!='') {
             $CI =& get_instance();
             $CI->load->model('Sms_model','sms');
-           echo  $password = $CI->encrypt->encode('Welcome@123');die;
             $credentials = $CI->sms->get_sms_credentials();
             //pe($credentials);
             $password = $CI->encrypt->decode($credentials['password']);
@@ -961,7 +959,7 @@ function fix_keys($array) {
     return $array;
 }
 
-function sendMail1($to = array(),$subject,$message,$attachment_file){
+function sendMail($to = array(),$subject,$message,$attachment_file){
 
     $CI=& get_instance();
     $CI->load->database();
