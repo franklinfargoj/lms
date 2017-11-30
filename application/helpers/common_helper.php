@@ -62,7 +62,7 @@ function pe($arr)
      $ci = &get_instance();
      $ci->load->library('email');
      $ci->email->initialize($config);
-     $ci->email->from('mukeshkurmi1@gmail.com','mukesh kurmi');
+     $ci->email->from('mukeshkurmi1@gmail.com','mukesh kurmi2');
      $ci->email->to('mukesh.kurmi@wwindia.com');
      $ci->email->subject($subject);
      $ci->email->message($message);
