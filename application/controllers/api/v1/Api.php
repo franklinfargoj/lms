@@ -43,7 +43,8 @@ class Api extends REST_Controller
                     isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
                     $response = array('result'=>False,
                         'data'=>array('Wrong authorisation key.'));
-                    $check_response = check_authorisation($headers['authorisation_key'],$headers['hrms_id']);
+                    $device =1;
+                    $check_response = check_authorisation($headers['authorisation_key'],$headers['hrms_id'],$device);
                     if(!$check_response)
                         returnJson($response);
                 }else{
