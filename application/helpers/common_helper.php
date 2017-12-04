@@ -1048,19 +1048,25 @@ if (!function_exists('random_number')){
 }
 
 if (!function_exists('check_authorisation')){
-    function check_authorisation($key,$hrms_id){
+    function check_authorisation($key,$hrms_id,$device=0){
         $CI = & get_instance();
         $CI->load->model('Lead');
         $select = 'authorisation_key';
         $table = Tbl_LoginLog;
         $order_by = 'date_time desc';
-        $where = array('employee_id'=>$hrms_id);
+        if($device){
+            $where = array('employee_id'=>$hrms_id,'device_type'=>'ANDROID');
+        }else{
+            $where = array('employee_id'=>$hrms_id,'device_type'=>NULL);
+        }
+
         $list = $CI->Lead->lists($table,$select,$where,$join=array(),$group_by=array(),$order_by,$limit=1);
         if(!empty($list) && $list[0]['authorisation_key'] == $key){
             return TRUE;
         }return false;
     }
 }
+
 if (!function_exists('verify_account')){
     function verify_account($acc_no){
         if($acc_no !=''){

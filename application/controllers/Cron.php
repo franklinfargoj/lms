@@ -793,59 +793,39 @@ class Cron extends CI_Controller
                     }
                 }
             }
-            foreach ($final_zone as $key => $value){
-                $action = 'count';
-                $table = Tbl_zone;
-                $where = array('code'=>$value['code']);
-                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
-                if($count > 0){
-                    unset($final_zone[$key]);
-                }
-            }
-            $available_states = array();
-            foreach ($final_state as $key => $value){
 
-                $action = 'count';
-                $table = Tbl_state;
-                $where = array('code'=>$value['code']);
-                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
-                if($count > 0 || in_array($value['code'],$available_states)){
-                    unset($final_state[$key]);
-                }
-                if(isset($value['code']) && !empty($value['code']))
-                $available_states[$key] = $value['code'];
-            }
-            foreach ($final_dist as $key => $value){
-                $action = 'count';
-                $table = Tbl_district;
-                $where = array('code'=>$value['code']);
-                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
-                if($count > 0){
-                    unset($final_dist[$key]);
-                }
-            }
-            foreach ($final_branch as $key => $value){
-                $action = 'count';
-                $table = Tbl_branch;
-                $where = array('code'=>$value['code']);
-                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
-                if($count > 0){
-                    unset($final_branch[$key]);
-                }
-            }
-            if(count($final_zone) > 0){
+
+                $data= array('is_old' => 1);
+                $this->Lead->update($where='1=1',Tbl_zone,$data);
                 $this->db->insert_batch(Tbl_zone,$final_zone);
+                $where=array('is_old' => 1);
+                $this->Lead->delete($where,Tbl_zone);
+                $data= array('is_old' => 1);
+                $this->Lead->update($where='1=1',Tbl_state,$data);
                 $this->db->insert_batch(Tbl_state,$final_state);
+                $where=array('is_old' => 1);
+                $this->Lead->delete($where,Tbl_state);
+                $data= array('is_old' => 1);
+                $this->Lead->update($where='1=1',Tbl_district,$data);
                 $this->db->insert_batch(Tbl_district,$final_dist);
+                $where=array('is_old' => 1);
+                $this->Lead->delete($where,Tbl_district);
+                $data= array('is_old' => 1);
+                $this->Lead->update($where='1=1',Tbl_branch,$data);
                 $this->db->insert_batch(Tbl_branch,$final_branch);
-                $this->session->set_flashdata('success','Successfully Inserated');
-                redirect('dashboard','refresh');
-            }else{
-                $this->session->set_flashdata('success','All Duplicate entries found.');
-                redirect('dashboard','refresh');
+                $where=array('is_old' => 1);
+                $this->Lead->delete($where,Tbl_branch);
+
+//                $this->db->insert_batch(Tbl_zone,$final_zone);
+//                $this->db->insert_batch(Tbl_state,$final_state);
+//                $this->db->insert_batch(Tbl_district,$final_dist);
+//                $this->db->insert_batch(Tbl_branch,$final_branch);
+
+        }else{
+
             }
 
-        }
+
 
     }
 
@@ -874,7 +854,6 @@ class Cron extends CI_Controller
                 $this->db->insert_batch(Tbl_emp_dump,$insert);
                 $where=array('is_old' => 1);
                 $this->Lead->delete($where,Tbl_emp_dump);
-                redirect('dashboard','refresh');
             }
         }
     }

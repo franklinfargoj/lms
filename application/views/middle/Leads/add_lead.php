@@ -305,6 +305,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         $.validator.addMethod("lettersonly", function(value, element) {
             return this.optional(element) || /^[a-z\s]+$/i.test(value);
         }, "Only alphabetical characters");
+        $.validator.addMethod("numbersonly", function(value, element) {
+            return this.optional(element) || /^[0-9\s]+$/i.test(value);
+        }, "Only Number Allowed");
 
         $("#addlead").validate({
 
@@ -321,7 +324,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     required: true,
                     number: true,
                     maxlength: 10,
-                    minlength: 10
+                    minlength: 10,
+                    numbersonly: true
                 },
                 product_category_id: {
                     required: true

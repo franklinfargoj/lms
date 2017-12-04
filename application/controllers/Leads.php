@@ -376,8 +376,8 @@ class Leads extends CI_Controller
                         $whereArray = array('title' => ucwords(strtolower(trim($prod_title))),'status'=>'active');
                         $prod_id = $this->Lead->fetch_product_id($whereArray);
                         $analytic_lead_route = $this->master->view_lead_route();
-                        if(($lead_source == 'Analytics' && $analytic_lead_route[0]['route_to'] == 1) ||
-                            ($lead_source != 'Analytics'))
+                        if(($lead_source == 'analytics' && $analytic_lead_route[0]['route_to'] == 1) ||
+                            ($lead_source != 'analytics'))
                         {
                             $mapping_whereArray = array('processing_center' => $prod_id['map_with'], 'branch_id' => $value['branch_id']);
                             $routed_id = $this->Lead->check_mapping($mapping_whereArray);
