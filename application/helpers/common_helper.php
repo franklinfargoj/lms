@@ -484,7 +484,7 @@ function sendPushNotification($emp_id,$message,$title)
 
             $rest = curl_exec($crl);
 //   echo $fields;
-    echo $rest;die;
+//    echo $rest;die;
             if ($rest === false) {
                 return curl_error($crl);
             }
