@@ -832,7 +832,7 @@ class Leads extends CI_Controller
                                 $where = array(Tbl_Leads . '.id' => $lead_id);
                                 $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                                 $leads_info = $leadsAssigned[0];
-pe($leads_info);die;
+
                                 if ($leads_info['lead_source'] == 'analytics') {
 
                                     if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
@@ -863,6 +863,7 @@ pe($leads_info);die;
                                             $order_by = "id DESC";
                                             $limit= 1;
                                             $this->Lead->update_routed_lead($whereUpdate, $table, $data,$order_by,$limit);
+                                            echo $this->db->last_query();die;
                                         }
                                     }
 
