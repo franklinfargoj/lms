@@ -832,22 +832,17 @@ class Leads extends CI_Controller
                                 $where = array(Tbl_Leads . '.id' => $lead_id);
                                 $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                                 $leads_info = $leadsAssigned[0];
-pe($leads_info);
                                 if ($leads_info['lead_source'] == 'analytics') {
 
                                     if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
-                                        echo "ko00";
                                         $action = 'list';
                                         $select = array('map_with');
                                         $table = Tbl_Products;
                                         $where = array('id' => $leads_info['product_id'],'status'=>'active');
                                         $product_mapped_with = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
-                                        echo $this->db->last_query();
                                         $product_mapped_with = $product_mapped_with[0]['map_with'];
                                         $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_data['branch_id']);
                                         $routed_id = $this->Lead->check_mapping($whereArray);
-                                        echo $this->db->last_query();
-                                        pe($routed_id);
                                         if ($this->input->post('is_own_branch') != '0') {
                                             $branch_id = $leads_data['branch_id'];
                                         } else {
@@ -866,13 +861,10 @@ pe($leads_info);
                                             $order_by = "id DESC";
                                             $limit= 1;
                                             $this->Lead->update_routed_lead($whereUpdate, $table, $data,$order_by,$limit);
-                                            echo $this->db->last_query();die;
-                                        }
-                                        die;
-                                    }else{
-                                        echo "ko";die;
-                                    }
 
+                                        }
+
+                                    }
                                 }
                             }
                         }
