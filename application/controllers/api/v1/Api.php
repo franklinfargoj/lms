@@ -97,7 +97,7 @@ class Api extends REST_Controller
                         //$where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'MONTH(' . Tbl_LeadAssign . '.created_on)' => date('m'),Tbl_Leads . '.lead_source' => $key);
                         $result[$i]['month_lead_assigned'] = $this->Lead->get_leads($action, $table, $select, $wheremonth, $join, '', '');
 
-                       // $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),       Tbl_Leads . '.lead_source' => $key, Tbl_LeadAssign . '.status' => 'Converted');
+                        // $where = array(Tbl_LeadAssign . '.employee_id' => $created_by, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, 'YEAR(' . Tbl_LeadAssign . '.created_on)' => date('Y'),       Tbl_Leads . '.lead_source' => $key, Tbl_LeadAssign . '.status' => 'Converted');
 
                         $whereyear[Tbl_LeadAssign . '.status'] =  'Converted';
                         $result[$i]['year_lead_converted'] = $this->Lead->get_leads($action, $table, $select, $whereyear, $join, '', '');
@@ -279,17 +279,17 @@ class Api extends REST_Controller
         }
         if($lead_id != false){
             //send sms
-        $sms = 'Thanks for showing interest in '.ucwords($product_name).' with Dena Bank. We will contact you shortly.';
-        send_sms($lead_data['contact_no'],$sms);
+            $sms = 'Thanks for showing interest in '.ucwords($product_name).' with Dena Bank. We will contact you shortly.';
+            send_sms($lead_data['contact_no'],$sms);
 
-        //Push notification
+            //Push notification
             $emp_id = $params['created_by'];
             $title = 'Lead Submitted Successfully';
             $push_message = 'Lead Submitted Successfully for '.ucwords($product_name);
             sendPushNotification($emp_id,$push_message,$title);
 
-        //Save notification
-        $this->insert_notification($lead_data);
+            //Save notification
+            $this->insert_notification($lead_data);
         }
 
         if ($assign_to == 'self') {
@@ -669,7 +669,7 @@ class Api extends REST_Controller
         $join[] = array('table' => Tbl_Products . ' as p', 'on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id', 'type' => '');
 
         $select = array('l.id', 'l.customer_name', 'l.lead_identification', 'l.created_on', 'l.lead_source',
-          "CONCAT(UCASE(LEFT(p.title, 1)),LCASE(SUBSTRING(p.title, 2))) as title", 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on');
+            "CONCAT(UCASE(LEFT(p.title, 1)),LCASE(SUBSTRING(p.title, 2))) as title", 'la.status'/*,'p1.title as interested_product_title'*/, 'r.remind_on');
         $where = array('la.employee_id' => $login_user['hrms_id'], 'la.is_deleted' => 0, 'YEAR(la.created_on)' => date('Y'));
         $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
 
@@ -907,7 +907,7 @@ class Api extends REST_Controller
             $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
             $yr_start_date=date('Y').'-04-01 00:00:00';
             $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-           // $where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
+            // $where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
             if ($type == 'EM') {
                 $where['la.employee_id'] = $id;
                 $where["la.status NOT IN('Closed','Converted')"] = NULL;
@@ -1544,7 +1544,7 @@ class Api extends REST_Controller
 
         $user_id = $params['user_id'];
         $password = base64_decode($params['password']);
-       // echo $password;die;
+        // echo $password;die;
         $device_token = $params['device_token'];
         $device_type = $params['device_type'];
 
@@ -1650,7 +1650,7 @@ class Api extends REST_Controller
                     $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
                     $yr_start_date=date('Y').'-04-01 00:00:00';
                     $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-                   // $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
+                    // $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
                     $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
                 }
@@ -1667,11 +1667,21 @@ class Api extends REST_Controller
                     //for assigned lead
 //                    $where_assigned_Array = array('branch_id' => $branch_id, 'is_updated' => 1,
 //                        'YEAR(created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
+//                    $where_assigned_Array = "(status='AO' OR status='NI' AND branch_id =".$branch_id.")
+//                     AND (is_updated = 1 AND is_deleted = 0 AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
+                    $action = 'count';
+                    $select = array();
+                    $joinbm = array();
+                    $table = Tbl_LeadAssign ;
 
-                    $where_assigned_Array = "(status='AO' OR status='NI' AND branch_id =".$branch_id.")
-                     AND (is_updated = 1 AND is_deleted = 0 AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
+                        $joinbm[] = array('table' => Tbl_Leads.' as l','on_condition' => 'l.id = '.Tbl_LeadAssign.'.lead_id','type' => '');
+                        $joinbm[] = array('table' => Tbl_Category.' as pc','on_condition' => 'l.product_category_id = pc.id','type' => '');
+                        $where = "(".Tbl_LeadAssign.".status='AO' OR ".Tbl_LeadAssign.".status='NI' OR (".Tbl_LeadAssign.".status = 'DC' AND pc.title = 'Fee Income') AND ".Tbl_LeadAssign.".branch_id =".$branch_id.") AND (".Tbl_LeadAssign.".is_updated = 1 AND ".Tbl_LeadAssign.".is_deleted = 0 AND YEAR(".Tbl_LeadAssign.".created_on) =".date('Y')." AND DATEDIFF( CURDATE( ) , ".Tbl_LeadAssign.".created_on) <=".Elapsed_day.")";
+
+                    //$leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by=array(), $order_by = array());
                 }
-                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
+
+                $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $joinbm, $group_by=array(), $order_by = array());
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
@@ -2107,13 +2117,20 @@ class Api extends REST_Controller
                     $final = $this->countnew($type, $branch_id, $records->dbk_lms_emp_record1->DBK_LMS_COLL);
 
                     $leads['generated_converted'] = $final;
-                    //for assigned lead
-//                    $where_assigned_Array = array('branch_id' => $branch_id, 'is_updated' => 1,
-//                        'YEAR(created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
-                    $where_assigned_Array = "(status='AO' OR status='NI' AND branch_id =".$branch_id.")
-                     AND (is_updated = 1 AND is_deleted = 0  AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
+                    $action = 'count';
+                    $select = array();
+                    $joinbm = array();
+                    $table = Tbl_LeadAssign ;
+
+                    $joinbm[] = array('table' => Tbl_Leads.' as l','on_condition' => 'l.id = '.Tbl_LeadAssign.'.lead_id','type' => '');
+                    $joinbm[] = array('table' => Tbl_Category.' as pc','on_condition' => 'l.product_category_id = pc.id','type' => '');
+                    $where = "(".Tbl_LeadAssign.".status='AO' OR ".Tbl_LeadAssign.".status='NI' OR (".Tbl_LeadAssign.".status = 'DC' AND pc.title = 'Fee Income') AND ".Tbl_LeadAssign.".branch_id =".$branch_id.") AND (".Tbl_LeadAssign.".is_updated = 1 AND ".Tbl_LeadAssign.".is_deleted = 0 AND YEAR(".Tbl_LeadAssign.".created_on) =".date('Y')." AND DATEDIFF( CURDATE( ) , ".Tbl_LeadAssign.".created_on) <=".Elapsed_day.")";
+
+                    //$leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by=array(), $order_by = array());
                 }
-                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
+
+                $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $joinbm, $group_by=array(), $order_by = array());
+
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
@@ -2249,259 +2266,259 @@ class Api extends REST_Controller
             }
             //=========================== Reroute to other branch
 
-                if ($params['reroute_to_own_branch'] == 0) {
-                    if (!isset($params['branch_id']) || empty($params['branch_id']) ||
-                        !isset($params['district_id']) || empty($params['district_id']) ||
-                        !isset($params['state_id']) || empty($params['state_id'])
-                    ) {
-                        $res = array('result' => False,
-                            'data' => array('State id or District id or Branch id missing.'));
-                        returnJson($res);
+            if ($params['reroute_to_own_branch'] == 0) {
+                if (!isset($params['branch_id']) || empty($params['branch_id']) ||
+                    !isset($params['district_id']) || empty($params['district_id']) ||
+                    !isset($params['state_id']) || empty($params['state_id'])
+                ) {
+                    $res = array('result' => False,
+                        'data' => array('State id or District id or Branch id missing.'));
+                    returnJson($res);
+                }
+                $action = 'list';
+                $table = Tbl_Leads;
+                $select = array(Tbl_Leads . '.*');
+                $where = array(Tbl_Leads . '.id' => $params['lead_id']);
+                $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+                $leads_data = $leadsAssign[0];
+                $id = $leads_data['id'];
+                if($leads_data['branch_id'] == $params['branch_id']){
+                    $res = array('result' => False,
+                        'data' => array('Lead can not be reassigned to same branch'));
+                    returnJson($res);
+                }else {
+                    $update_lead_data['reroute_from_branch_id'] = $leads_data['branch_id'];
+                    $update_lead_data['state_id'] = $params['state_id'];
+                    $update_lead_data['branch_id'] = $params['branch_id'];
+                    $update_lead_data['district_id'] = $params['district_id'];
+                    $date = date('Y-m-d H:i:s');
+                    $update_lead_data['modified_on'] = $date;
+                    $whereUpdate = array('id' => $id);
+                    $this->Lead->update($whereUpdate, Tbl_Leads, $update_lead_data);
+                    $whereUpdate = array('lead_id' => $id);
+                    $table = Tbl_LeadAssign;
+                    if (empty($drop_reason)) {
+                        $data = array('is_updated' => 0);
+                    } else {
+                        $data = array('is_updated' => 0, 'reason_for_drop' => $drop_reason);
                     }
-                    $action = 'list';
-                    $table = Tbl_Leads;
-                    $select = array(Tbl_Leads . '.*');
-                    $where = array(Tbl_Leads . '.id' => $params['lead_id']);
-                    $leadsAssign = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
-                    $leads_data = $leadsAssign[0];
-                    $id = $leads_data['id'];
-                    if($leads_data['branch_id'] == $params['branch_id']){
-                        $res = array('result' => False,
-                            'data' => array('Lead can not be reassigned to same branch'));
-                        returnJson($res);
-                    }else {
-                        $update_lead_data['reroute_from_branch_id'] = $leads_data['branch_id'];
-                        $update_lead_data['state_id'] = $params['state_id'];
-                        $update_lead_data['branch_id'] = $params['branch_id'];
-                        $update_lead_data['district_id'] = $params['district_id'];
-                        $date = date('Y-m-d H:i:s');
-                        $update_lead_data['modified_on'] = $date;
-                        $whereUpdate = array('id' => $id);
-                        $this->Lead->update($whereUpdate, Tbl_Leads, $update_lead_data);
-                        $whereUpdate = array('lead_id' => $id);
-                        $table = Tbl_LeadAssign;
-                        if (empty($drop_reason)) {
-                            $data = array('is_updated' => 0);
-                        } else {
-                            $data = array('is_updated' => 0, 'reason_for_drop' => $drop_reason);
-                        }
-                        $this->Lead->update($whereUpdate, $table, $data);
-                        $res = array('result' => TRUE,
-                            'data' => array('Lead Reroute to Other Branch Successfully'));
-                        returnJson($res);
-                    }
-                }else{
-                    if (($leads_data['status'] != $params['status'])) {
+                    $this->Lead->update($whereUpdate, $table, $data);
+                    $res = array('result' => TRUE,
+                        'data' => array('Lead Reroute to Other Branch Successfully'));
+                    returnJson($res);
+                }
+            }else{
+                if (($leads_data['status'] != $params['status'])) {
 
-                        //Set current entry as old (set is_updated = 0)
-                        $lead_status_data = array('is_updated' => 0);
-                        $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
+                    //Set current entry as old (set is_updated = 0)
+                    $lead_status_data = array('is_updated' => 0);
+                    $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
 
-                        if ($response1['status'] == 'success') {
-                            //Create new entry in table Lead Assign with changed status.
+                    if ($response1['status'] == 'success') {
+                        //Create new entry in table Lead Assign with changed status.
 
-                            /****************************************************************
-                             * Update Lead Status
-                             *****************************************************************/
-                            $lead_status_data = array(
-                                'lead_id' => $leads_data['lead_id'],
-                                'employee_id' => $leads_data['employee_id'],
-                                'employee_name' => $leads_data['employee_name'],
-                                'branch_id' => $leads_data['branch_id'],
-                                'district_id' => $leads_data['district_id'],
-                                'state_id' => $leads_data['state_id'],
-                                'zone_id' => $leads_data['zone_id'],
-                                'status' => $params['status'],
-                                'reason_for_drop' => $params['reason'],
-                                'is_updated' => 1,
-                                'created_on' => $leads_data['created_on'],
-                                'created_by' => $leads_data['created_by'],
-                                'created_by_name' => $leads_data['created_by_name'],
-                                'modified_on' => date('y-m-d-H-i-s'),
-                                'modified_by' => $leads_data['employee_id'],
-                                'modified_by_name' => $leads_data['employee_name']
-                            );
-                            $result1 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
-
-                        }
-
-                        if ($params['status'] == 'FU') {
-                                $action = 'list';
-                                $table = Tbl_Leads;
-                                $select = array(Tbl_Leads . '.*');
-                                $where = array(Tbl_Leads . '.id' => $params['lead_id']);
-                                $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
-                                $leads_info = $leadsAssigned[0];
-
-                                if($leads_info['lead_source'] == 'Analytics'){
-
-                                    if($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL){
-
-                                        $action = 'list';
-                                        $select = array('map_with');
-                                        $table = Tbl_Products;
-                                        $where = array('id'=>$leads_info['product_id']);
-                                        $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
-                                        $product_mapped_with=$product_mapped_with[0]['map_with'];
-                                        $whereArray = array('processing_center'=>$product_mapped_with,'branch_id'=>$leads_data['branch_id']);
-                                        $routed_id = $this->Lead->check_mapping($whereArray);
-                                        $branch_id = $leads_data['branch_id'];
-                                        if(!is_array($routed_id)){
-                                            $update_data['reroute_from_branch_id'] = $branch_id;
-                                            $update_data['branch_id'] = $routed_id;
-                                            $where = array('id'=>$params['lead_id']);
-                                            $table = Tbl_Leads;
-                                            $this->Lead->update_lead_data($where,$update_data,$table);
-                                            $whereUpdate = array('lead_id'=>$params['lead_id']);
-                                            $table = Tbl_LeadAssign;
-                                            $data = array('is_updated'=>0);
-                                            $this->Lead->update($whereUpdate,$table,$data);
-                                        }
-
-                                    }
-
-                                }
-                        }
-                    }
-                    /****************************************************************
-                     * Reminder set for follow up status
-                     *****************************************************************/
-                    if ($params['status'] == 'FU') {
-                        if (isset($params['remind_on']) && !empty($params['remind_on']) &&
-                            isset($params['reminder_text']) && !empty($params['reminder_text'])) {
-                            $wherefollowup = array('lead_id'=>$params['lead_id'],'is_updated'=>1,'status'=>'FU');
-                            $tablefollowup = Tbl_LeadAssign;
-                            $datafollowup = array('followup_date'=>date('Y-m-d-H-i-s', strtotime($params['remind_on'])));
-                            $this->Lead->update($wherefollowup,$tablefollowup,$datafollowup);
-                            $remindData = array(
-                                'lead_id' => $params['lead_id'],
-                                'remind_on' => date('Y-m-d-H-i-s', strtotime($params['remind_on'])),
-                                'remind_to' => $leads_data['employee_id'],
-                                'reminder_text' => $params['reminder_text']
-                            );
-                            //This will add entry into reminder scheduler for status (Interested/Follow up)
-                            $result3 = $this->Lead->add_reminder($remindData);
-                        } else {
-                            $res = array('result' => False,
-                                'data' => array('Invalid Request For Follow up Status'));
-                            returnJson($res);
-                        }
-                    }
-                    /****************************************************************
-                     * Point distribution When status is converted
-                     *****************************************************************/
-                    if($params['status'] == 'Converted'){
-                        $this->points_distrubution($params['lead_id']);
-                    }
-
-                    $cat_name = $params['category_title'];
-                    $customer_name = $params['customer_name'];
-                    $statusNotification = array('AO','NI');
-                    if(in_array($params['status'],$statusNotification) || ($cat_name == 'Fee Income' && $params['status'] == 'DC')){
-                        $title="Action Required";
-                        $description="Lead for ".ucwords(strtolower($customer_name))." requires your action";
-                        $notification_to = $leads_data['created_by'];
-                        $priority="Normal";
-                        notification_log($title,$description,$priority,$notification_to);
-                        //push notification
-                        $emp_id = $leads_data['created_by'];
-                        sendPushNotification($emp_id,$description,$title);
-                    }
-
-                    /*****************************************************************
-                     * Update Lead Identification
-                     *****************************************************************/
-                    if ($params['lead_identification'] != 'NA') {
-                        $where = array('id' => $params['lead_id']);
-                        $lead_identification_data = array(
-                            'lead_identification' => $params['lead_identification']
+                        /****************************************************************
+                         * Update Lead Status
+                         *****************************************************************/
+                        $lead_status_data = array(
+                            'lead_id' => $leads_data['lead_id'],
+                            'employee_id' => $leads_data['employee_id'],
+                            'employee_name' => $leads_data['employee_name'],
+                            'branch_id' => $leads_data['branch_id'],
+                            'district_id' => $leads_data['district_id'],
+                            'state_id' => $leads_data['state_id'],
+                            'zone_id' => $leads_data['zone_id'],
+                            'status' => $params['status'],
+                            'reason_for_drop' => $params['reason'],
+                            'is_updated' => 1,
+                            'created_on' => $leads_data['created_on'],
+                            'created_by' => $leads_data['created_by'],
+                            'created_by_name' => $leads_data['created_by_name'],
+                            'modified_on' => date('y-m-d-H-i-s'),
+                            'modified_by' => $leads_data['employee_id'],
+                            'modified_by_name' => $leads_data['employee_name']
                         );
-                        $result2 = $this->Lead->update_lead_data($where, $lead_identification_data, Tbl_Leads);
+                        $result1 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+
                     }
 
+                    if ($params['status'] == 'FU') {
+                        $action = 'list';
+                        $table = Tbl_Leads;
+                        $select = array(Tbl_Leads . '.*');
+                        $where = array(Tbl_Leads . '.id' => $params['lead_id']);
+                        $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+                        $leads_info = $leadsAssigned[0];
 
-                    //====================Reroute to same branch
-                    if (isset($params['reroute_to']) && !empty($params['reroute_to']) &&
-                        isset($params['reroute_to_name']) && !empty($params['reroute_to_name']))
-                    {
-                        //Set current entry as old (set is_updated = 0)
-                        $lead_status_data = array('is_updated' => 0);
-                        $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
+                        if($leads_info['lead_source'] == 'Analytics'){
 
-                        if ($response1['status'] == 'success') {
-                            //Create new entry in table Lead Assign with changed status.
+                            if($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL){
 
-                            /****************************************************************
-                             * Update Lead Status
-                             *****************************************************************/
-                            $lead_status_data = array(
-                                'lead_id' => $leads_data['lead_id'],
-                                'employee_id' => $params['reroute_to'],
-                                'employee_name' => $params['reroute_to_name'],
-                                'branch_id' => $leads_data['branch_id'],
-                                'district_id' => $leads_data['district_id'],
-                                'state_id' => $leads_data['state_id'],
-                                'zone_id' => $leads_data['zone_id'],
-                                'status' => $params['status'],
-                                'is_updated' => 1,
-                                'created_on' => date('y-m-d-H-i-s'),
-                                'created_by' => $leads_data['created_by'],
-                                'created_by_name' => $leads_data['created_by_name'],
-                                'modified_on' => date('y-m-d-H-i-s'),
-                                'modified_by' => $leads_data['employee_id'],
-                                'modified_by_name' => $leads_data['employee_name']
-                            );
-                            if(!empty($drop_reason)){
-                                $lead_status_data['reason_for_drop'] = $drop_reason;
+                                $action = 'list';
+                                $select = array('map_with');
+                                $table = Tbl_Products;
+                                $where = array('id'=>$leads_info['product_id']);
+                                $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
+                                $product_mapped_with=$product_mapped_with[0]['map_with'];
+                                $whereArray = array('processing_center'=>$product_mapped_with,'branch_id'=>$leads_data['branch_id']);
+                                $routed_id = $this->Lead->check_mapping($whereArray);
+                                $branch_id = $leads_data['branch_id'];
+                                if(!is_array($routed_id)){
+                                    $update_data['reroute_from_branch_id'] = $branch_id;
+                                    $update_data['branch_id'] = $routed_id;
+                                    $where = array('id'=>$params['lead_id']);
+                                    $table = Tbl_Leads;
+                                    $this->Lead->update_lead_data($where,$update_data,$table);
+                                    $whereUpdate = array('lead_id'=>$params['lead_id']);
+                                    $table = Tbl_LeadAssign;
+                                    $data = array('is_updated'=>0);
+                                    $this->Lead->update($whereUpdate,$table,$data);
+                                }
+
                             }
-                            $result4 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
 
                         }
                     }
-                    if ($result1['status'] == 'success' && $result2['status'] == 'success' && $result3['status'] == 'success') {
-                        $res = array('result' => True,
-                            'data' => array('Lead Status and Lead Identification and Reminder Save Successfully'));
-                        returnJson($res);
-                    }elseif ($result1['status'] == 'success' && $result2['status'] == 'success') {
-                        $res = array('result' => True,
-                            'data' => array('Lead Status and Lead Identification Save Successfully'));
-                        returnJson($res);
-                    }elseif ($result1['status'] == 'success' && $result3['status'] == 'success') {
-                        $res = array('result' => True,
-                            'data' => array('Lead Status and Lead Identification Reminder Save Successfully'));
-                        returnJson($res);
-                    }elseif ($result2['status'] == 'success' && $result3['status'] == 'success') {
-                        $res = array('result' => True,
-                            'data' => array('Lead Identification and Reminder Save Successfully'));
-                        returnJson($res);
-                    }elseif($result1['status'] == 'success'){
-                        $res = array('result' => True,
-                            'data' => array('Lead Status Updated Successfully'));
-                        returnJson($res);
-                    }elseif($result2['status'] == 'success'){
-                        $res = array('result' => True,
-                            'data' => array('Lead Identification Updated Successfully'));
-                        returnJson($res);
-                    }elseif($result3['status'] == 'success'){
-                        $res = array('result' => True,
-                            'data' => array('Reminder Save Successfully'));
-                        returnJson($res);
-                    }elseif($result4['status'] == 'success'){
-                        $res = array('result' => True,
-                            'data' => array('Reroute Successfully'));
-                        returnJson($res);
-                    }else {
-                        $res = array('result' => True,
-                            'data' => array('Nothing To Update'));
+                }
+                /****************************************************************
+                 * Reminder set for follow up status
+                 *****************************************************************/
+                if ($params['status'] == 'FU') {
+                    if (isset($params['remind_on']) && !empty($params['remind_on']) &&
+                        isset($params['reminder_text']) && !empty($params['reminder_text'])) {
+                        $wherefollowup = array('lead_id'=>$params['lead_id'],'is_updated'=>1,'status'=>'FU');
+                        $tablefollowup = Tbl_LeadAssign;
+                        $datafollowup = array('followup_date'=>date('Y-m-d-H-i-s', strtotime($params['remind_on'])));
+                        $this->Lead->update($wherefollowup,$tablefollowup,$datafollowup);
+                        $remindData = array(
+                            'lead_id' => $params['lead_id'],
+                            'remind_on' => date('Y-m-d-H-i-s', strtotime($params['remind_on'])),
+                            'remind_to' => $leads_data['employee_id'],
+                            'reminder_text' => $params['reminder_text']
+                        );
+                        //This will add entry into reminder scheduler for status (Interested/Follow up)
+                        $result3 = $this->Lead->add_reminder($remindData);
+                    } else {
+                        $res = array('result' => False,
+                            'data' => array('Invalid Request For Follow up Status'));
                         returnJson($res);
                     }
                 }
+                /****************************************************************
+                 * Point distribution When status is converted
+                 *****************************************************************/
+                if($params['status'] == 'Converted'){
+                    $this->points_distrubution($params['lead_id']);
+                }
+
+                $cat_name = $params['category_title'];
+                $customer_name = $params['customer_name'];
+                $statusNotification = array('AO','NI');
+                if(in_array($params['status'],$statusNotification) || ($cat_name == 'Fee Income' && $params['status'] == 'DC')){
+                    $title="Action Required";
+                    $description="Lead for ".ucwords(strtolower($customer_name))." requires your action";
+                    $notification_to = $leads_data['created_by'];
+                    $priority="Normal";
+                    notification_log($title,$description,$priority,$notification_to);
+                    //push notification
+                    $emp_id = $leads_data['created_by'];
+                    sendPushNotification($emp_id,$description,$title);
+                }
+
+                /*****************************************************************
+                 * Update Lead Identification
+                 *****************************************************************/
+                if ($params['lead_identification'] != 'NA') {
+                    $where = array('id' => $params['lead_id']);
+                    $lead_identification_data = array(
+                        'lead_identification' => $params['lead_identification']
+                    );
+                    $result2 = $this->Lead->update_lead_data($where, $lead_identification_data, Tbl_Leads);
+                }
+
+
+                //====================Reroute to same branch
+                if (isset($params['reroute_to']) && !empty($params['reroute_to']) &&
+                    isset($params['reroute_to_name']) && !empty($params['reroute_to_name']))
+                {
+                    //Set current entry as old (set is_updated = 0)
+                    $lead_status_data = array('is_updated' => 0);
+                    $response1 = $this->Lead->update_lead_data($where, $lead_status_data, $table);
+
+                    if ($response1['status'] == 'success') {
+                        //Create new entry in table Lead Assign with changed status.
+
+                        /****************************************************************
+                         * Update Lead Status
+                         *****************************************************************/
+                        $lead_status_data = array(
+                            'lead_id' => $leads_data['lead_id'],
+                            'employee_id' => $params['reroute_to'],
+                            'employee_name' => $params['reroute_to_name'],
+                            'branch_id' => $leads_data['branch_id'],
+                            'district_id' => $leads_data['district_id'],
+                            'state_id' => $leads_data['state_id'],
+                            'zone_id' => $leads_data['zone_id'],
+                            'status' => $params['status'],
+                            'is_updated' => 1,
+                            'created_on' => date('y-m-d-H-i-s'),
+                            'created_by' => $leads_data['created_by'],
+                            'created_by_name' => $leads_data['created_by_name'],
+                            'modified_on' => date('y-m-d-H-i-s'),
+                            'modified_by' => $leads_data['employee_id'],
+                            'modified_by_name' => $leads_data['employee_name']
+                        );
+                        if(!empty($drop_reason)){
+                            $lead_status_data['reason_for_drop'] = $drop_reason;
+                        }
+                        $result4 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+
+                    }
+                }
+                if ($result1['status'] == 'success' && $result2['status'] == 'success' && $result3['status'] == 'success') {
+                    $res = array('result' => True,
+                        'data' => array('Lead Status and Lead Identification and Reminder Save Successfully'));
+                    returnJson($res);
+                }elseif ($result1['status'] == 'success' && $result2['status'] == 'success') {
+                    $res = array('result' => True,
+                        'data' => array('Lead Status and Lead Identification Save Successfully'));
+                    returnJson($res);
+                }elseif ($result1['status'] == 'success' && $result3['status'] == 'success') {
+                    $res = array('result' => True,
+                        'data' => array('Lead Status and Lead Identification Reminder Save Successfully'));
+                    returnJson($res);
+                }elseif ($result2['status'] == 'success' && $result3['status'] == 'success') {
+                    $res = array('result' => True,
+                        'data' => array('Lead Identification and Reminder Save Successfully'));
+                    returnJson($res);
+                }elseif($result1['status'] == 'success'){
+                    $res = array('result' => True,
+                        'data' => array('Lead Status Updated Successfully'));
+                    returnJson($res);
+                }elseif($result2['status'] == 'success'){
+                    $res = array('result' => True,
+                        'data' => array('Lead Identification Updated Successfully'));
+                    returnJson($res);
+                }elseif($result3['status'] == 'success'){
+                    $res = array('result' => True,
+                        'data' => array('Reminder Save Successfully'));
+                    returnJson($res);
+                }elseif($result4['status'] == 'success'){
+                    $res = array('result' => True,
+                        'data' => array('Reroute Successfully'));
+                    returnJson($res);
+                }else {
+                    $res = array('result' => True,
+                        'data' => array('Nothing To Update'));
+                    returnJson($res);
+                }
+            }
         }else{
             $res = array('result' => False,
                 'data' => array('Invalid Request'));
             returnJson($res);
         }
-   }
+    }
 
     private function insert_notification($lead_data){
         if(!empty($lead_data)){
