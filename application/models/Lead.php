@@ -195,6 +195,20 @@ class Lead  extends CI_Model
      * @param $where,$data
      * @return array
      */
+    public function get_bm_assigned_leads($table,$select,$where,$join)
+    {
+        return $this->counts($table,$select,$where,$join);
+    }
+
+
+    /**
+     * update_lead_status
+     * Update Lead Status
+     * @author Ashok Jadhav
+     * @access public
+     * @param $where,$data
+     * @return array
+     */
     public function update_lead_data($where,$data,$table){
         return $this->update($where,$table,$data);
     }
