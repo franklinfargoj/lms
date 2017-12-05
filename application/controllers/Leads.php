@@ -852,6 +852,8 @@ class Leads extends CI_Controller
                                         if (!is_array($routed_id)) {
                                             $update_data['reroute_from_branch_id'] = $branch_id;
                                             $update_data['branch_id'] = $routed_id;
+                                            $date = date('Y-m-d H:i:s');
+                                            $update_data['modified_on'] = $date;
                                             $where = array('id' => $lead_id);
                                             $table = Tbl_Leads;
                                             $this->Lead->update_lead_data($where, $update_data, $table);
@@ -1509,7 +1511,7 @@ class Leads extends CI_Controller
             if(!empty($final_result)){
                 $final_result = sortBySubkey($final_result,'date');
             }
-            //pe($final_result);
+            pe($final_result);
             $arrData['lead_data'] = $final_result;
             $middle = 'Leads/life_cycle';
             return load_view($middle,$arrData);
