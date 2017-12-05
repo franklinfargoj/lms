@@ -1829,13 +1829,11 @@ table thead tr{
 img.like{max-width: 24%;}
 p.custname{position:relative;top:20px;display:inline-block}
 
-.bullet li {
-	padding-left: 20px;
-	margin-bottom: 10px;
+.bullet ol{
+	list-style: number;
+	list-style-position: inside;
 }
-
-.bullet li:before {
-	content: '\003e';
-	position: absolute;
-	left: 30px;
+.bullet ul{
+	list-style: disc;
+	list-style-position: inside;
 }
