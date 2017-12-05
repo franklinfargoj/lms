@@ -836,7 +836,7 @@ class Leads extends CI_Controller
                                 if ($leads_info['lead_source'] == 'analytics') {
 
                                     if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
-
+                                        echo "ko00";
                                         $action = 'list';
                                         $select = array('map_with');
                                         $table = Tbl_Products;
@@ -845,6 +845,8 @@ class Leads extends CI_Controller
                                         $product_mapped_with = $product_mapped_with[0]['map_with'];
                                         $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_data['branch_id']);
                                         $routed_id = $this->Lead->check_mapping($whereArray);
+                                        echo $this->db->last_query();
+                                        pe($routed_id);
                                         if ($this->input->post('is_own_branch') != '0') {
                                             $branch_id = $leads_data['branch_id'];
                                         } else {
@@ -865,6 +867,9 @@ class Leads extends CI_Controller
                                             $this->Lead->update_routed_lead($whereUpdate, $table, $data,$order_by,$limit);
                                             echo $this->db->last_query();die;
                                         }
+                                        die;
+                                    }else{
+                                        echo "ko";die;
                                     }
 
                                 }
