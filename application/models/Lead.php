@@ -197,7 +197,7 @@ class Lead  extends CI_Model
      */
     public function get_bm_assigned_leads($table,$select,$where,$join)
     {
-        return $this->counts($table,$select,$where,$join);
+        return $this->counts($table,$select,$where,$join,$group_by=array());
     }
 
 
