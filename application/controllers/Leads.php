@@ -842,6 +842,7 @@ class Leads extends CI_Controller
                                         $table = Tbl_Products;
                                         $where = array('id' => $leads_info['product_id'],'status'=>'active');
                                         $product_mapped_with = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+                                        echo $this->db->last_query();
                                         $product_mapped_with = $product_mapped_with[0]['map_with'];
                                         $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_data['branch_id']);
                                         $routed_id = $this->Lead->check_mapping($whereArray);
