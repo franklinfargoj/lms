@@ -68,6 +68,7 @@ class Reports extends CI_Controller
             }
             if($export == 'yes'){
                 if(!empty($arrData['lead_source'])){
+                    pe($arrData);die;
                     $lead_sources = $this->config->item('lead_source');
                     $arrData['lead_source'] = $lead_sources[$arrData['lead_source']];
                 }
@@ -1694,8 +1695,10 @@ class Reports extends CI_Controller
 
 
     public function export_to_excel($action,$arrData){
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
 //        echo $action;
-//       pe($arrData);
+//       pe($arrData);die;
 //        exit;
         if($arrData['viewName'] == 'EM'){
             $header_value = array('Sr.No','Zone','Branch','HRMS ID','Employee Name','Designation','Source Type','Category Name','Product Name');
@@ -1739,7 +1742,7 @@ class Reports extends CI_Controller
                     $usage_col = array('Total User','Logged in User','Not logged in User');
                 }
                 $header_value = array_merge($header_value,$usage_col);
-                //pe($header_value);die;
+                pe($header_value);//die;
                 break;
 
         }
@@ -1748,10 +1751,11 @@ class Reports extends CI_Controller
 
 
     private function create_excel($action,$header_value,$data){
-        ini_set('max_execution_time', 5000);
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
 //        echo $action;
 //        pe($header_value);
-//        pe($data);die;
+      // pe($data);die;
         $this->load->library('excel');
         $file_name = time().'data.xls';
         $excel_alpha = unserialize(EXCEL_ALPHA);
