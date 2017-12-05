@@ -2115,13 +2115,23 @@ class Api extends REST_Controller
                     $final = $this->countnew($type, $branch_id, $records->dbk_lms_emp_record1->DBK_LMS_COLL);
 
                     $leads['generated_converted'] = $final;
+                    $tableassign = Tbl_LeadAssign.' as la';
+                    $selectbm =array('la.lead_id1');
+                    $joinbm = array();
+                    $joinbm[] = array('table' => Tbl_Leads . ' as l', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
+                    $joinbm[] = array('table' => Tbl_Products . ' as p', 'on_condition' => 'l.product_id = p.id AND l.product_category_id = p.category_id', 'type' => '');
+                    $joinbm[] = array('table' => Tbl_Category . ' as c', 'on_condition' => 'l.product_category_id = c.id', 'type' => '');
+                    $wherebm["(la.status='AO' OR la.status='NI' OR (la.status = 'DC' AND c.title = 'Fee Income') AND la.branch_id =".$branch_id.")
+                     AND (la.is_updated = 1 AND la.is_deleted = 0 AND DATEDIFF( CURDATE( ) , la.created_on) <=".Elapsed_day.")"] = NULL;
+
                     //for assigned lead
 //                    $where_assigned_Array = array('branch_id' => $branch_id, 'is_updated' => 1,
 //                        'YEAR(created_on)' => date('Y'), 'DATEDIFF( CURDATE( ) , created_on) <=' => Elapsed_day);
-                    $where_assigned_Array = "(status='AO' OR status='NI' AND branch_id =".$branch_id.") 
-                     AND (is_updated = 1 AND is_deleted = 0  AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
+//                    $where_assigned_Array = "(status='AO' OR status='NI' AND branch_id =".$branch_id.")
+//                     AND (is_updated = 1 AND is_deleted = 0  AND DATEDIFF( CURDATE( ) , created_on) <=".Elapsed_day.")";
                 }
-                $leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
+                //$leads['assigned_leads'] = $this->Lead->get_assigned_leads($where_assigned_Array);
+                $leads['assigned_leads'] = $this->Lead->get_bm_assigned_leads($tableassign, $selectbm, $joinbm,$wherebm);
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
