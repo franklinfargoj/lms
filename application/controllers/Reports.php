@@ -88,7 +88,7 @@ class Reports extends CI_Controller
                 //pe($arrData);die;
             }else{
                 $arrData = $this->$action($arrData);
-                pe($arrData);die;
+
             }
         }
         
@@ -510,6 +510,7 @@ class Reports extends CI_Controller
         $login_user = get_session();
         $lead_status = array_keys($this->config->item('lead_status'));
         //Build Input Parameter
+
         $action = 'list';
         $select = array('COUNT(l.id) as count','la.status');
         $table = Tbl_Leads.' as l';
@@ -518,17 +519,23 @@ class Reports extends CI_Controller
         $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'LEFT');
         $group_by = array('la.status');
 
+        $select1 = array('COUNT(l.id) as generated_count');
+        $where1  = array();
+
         //If Start date selected
         if(!empty($arrData['start_date'])){
             $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            $where1['DATE_FORMAT(l.created_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
         }
         //If End date selected
         if(!empty($arrData['end_date'])){
             $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            $where1['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
         }
         //If Category selected
         if(!empty($arrData['product_category_id'])){
             $where['l.product_category_id'] = $arrData['product_category_id'];
+            $where1['l.product_category_id'] = $arrData['product_category_id'];
 
             $categoryData = $this->Master->view_product_category($arrData['product_category_id']);
             $arrData['category'] = $categoryData[0]['title'];  //Get Title
@@ -536,6 +543,7 @@ class Reports extends CI_Controller
         //If Product selected
         if(!empty($arrData['product_id'])){
             $where['l.product_id'] = $arrData['product_id'];
+            $where1['l.product_id'] = $arrData['product_id'];
 
             $productData = $this->Master->view_product($arrData['product_id']);
             $arrData['product'] = $productData[0]['title'];   //Get Title
@@ -543,6 +551,7 @@ class Reports extends CI_Controller
         //If Lead Source selected
         if(!empty($arrData['lead_source'])){
             $where['l.lead_source'] = $arrData['lead_source'];
+            $where1['l.lead_source'] = $arrData['lead_source'];
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
@@ -573,14 +582,17 @@ class Reports extends CI_Controller
         if($viewName == 'EM'){
             //Get Data for employees
             $select[] = 'l.created_by as employee_id';
+            $select1[] = 'l.created_by as employee_id';
             if($arrData['national'] != 'yes'){
                 $where['l.zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
                 if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                     if(!empty($arrData['branch_id'])){
                         $where['l.branch_id'] = $arrData['branch_id'];
+                        $where1['l.branch_id'] = $arrData['branch_id'];
                     }
                 }else{
                     $where['l.branch_id'] = $login_user['branch_id'];
+                    $where1['l.branch_id'] = $login_user['branch_id'];
                 }
             }
             $group_by[]  =  'l.created_by';
@@ -601,7 +613,9 @@ class Reports extends CI_Controller
         if($viewName == 'BM'){
             //Get Data for Branch
             $select[] = 'l.created_by_branch_id as branch_id';
+            $select1[] = 'l.created_by_branch_id as branch_id';
             $where['l.created_by_zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+            $where1['l.created_by_zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
             $group_by[] = 'l.created_by_branch_id';
 
             //Get Listing for branch
@@ -616,7 +630,8 @@ class Reports extends CI_Controller
         //Zone Manager Login
         if($viewName == 'ZM'){
             //Get Data for Branch
-            $select[] = 'l.zone_id';
+            $select[] = 'l.created_by_zone_id as zone_id';
+            $select1[] = 'l.created_by_zone_id as zone_id';
             $group_by[] = 'l.zone_id';
 
             //Get Listing for branch
@@ -630,13 +645,49 @@ class Reports extends CI_Controller
 
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
 
+        $group_by1 = array_pop($group_by);
+
+        $generated_leads = $this->Lead->get_leads($action,$table,$select1,$where1,$join=array(),$group_by1,$order_by = '');
+//pe($leads);
+//pe($generated_leads);//die;
          /*pe($this->db->last_query());
         exit;*/
         //pe($unassigned_leads_count);die;
-        $arrData['leads'] = array();
+//        $arrData['leads'] = array();
+//        $table = Tbl_Leads.' as l';
+//        $join = array();
+//        $select = array('COUNT(l.id1) as generated_count');
+//        $where  = array();
+//        $alias = 'l';
+//        $arrData[generated_count] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
         $arrData['Total'] = 0;
         if($list){
             $Lead['userId'] = array();
+            //$generatedLead['userId'] = array();
+
+            if(!empty($generated_leads)) {
+                foreach ($generated_leads as $key => $value) {
+                    //Employee Login
+                    if ($viewName == 'EM') {
+                        $index = $value['employee_id'];
+                        $generatedLead['userId'][] = $value['employee_id'];
+                    }
+
+                    //Branch Manager Login
+                    if ($viewName == 'BM') {
+                        $index = $value['branch_id'];
+                        $generatedLead['userId'][] = $value['branch_id'];
+                    }
+
+                    //Zone Manager Login
+                    if ($viewName == 'ZM') {
+                        $index = $value['zone_id'];
+                        $generatedLead['userId'][] = $value['zone_id'];
+                    }
+
+                    $generatedLead[$index]['generated'] = $value['generated_count'];
+                }
+            }
             if(!empty($leads)) {
                 foreach ($leads as $key => $value) {
                     //Employee Login
@@ -660,8 +711,11 @@ class Reports extends CI_Controller
                     $Lead[$index]['status'][$value['status']] = $value['count'];
                 }
             }
+//            pe($Lead);
+           //pe($generatedLead);die;
             $arrData['viewName'] = $viewName;
             foreach ($list as $key => $value) {
+                //echo $index;echo "<br>";
                 //Employee Login
                 if($viewName == 'EM'){
                     $index = $value->employee_id;
@@ -684,14 +738,41 @@ class Reports extends CI_Controller
                 }
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
-                if(!in_array($index,$Lead['userId'])){
-                    $arrData['leads'][$index]['total'] = 0;
-                    $arrData['leads'][$index]['status'] = array();
-                }else{
-                    $arrData['leads'][$index]['total'] = array_sum($Lead[$index]['status']);
-                    $arrData['leads'][$index]['status'] = $Lead[$index]['status'];
+                if(!empty($Lead['userId']) && !empty($generatedLead['userId'])){
+
+                    $generatedCnt = 0;
+                    $status = array();
+                    if(isset($generatedLead[$index])){
+                        $generatedCnt = $generatedLead[$index]['generated'];
+                    }
+                    if(isset($Lead[$index])){
+                        $status = $Lead[$index]['status'];
+                    }
+                    $arrData['leads'][$index]['total'] = $generatedCnt;
+                    $arrData['leads'][$index]['status'] = $status;
+
                 }
-                $arrData['Total'] += $arrData['leads'][$index]['total'];
+                if(empty($Lead['userId']) && !empty($generatedLead['userId'])){
+
+                    $generatedCnt = 0;
+                   if(isset($generatedLead[$index])){
+                       $generatedCnt = $generatedLead[$index]['generated'];
+                   }
+                        $arrData['leads'][$index]['total'] = $generatedCnt;
+                        $arrData['leads'][$index]['status'] = array();
+
+                }
+                if(!empty($Lead['userId']) && empty($generatedLead['userId'])){
+                    if(!in_array($index,$Lead['userId'])){
+                        $arrData['leads'][$index]['total'] = 0;
+                        $arrData['leads'][$index]['status'] = array();
+                    }else{
+                        $arrData['leads'][$index]['total'] = 0;
+                        $arrData['leads'][$index]['status'] = array();
+                    }
+                }
+
+                $arrData['Total'] = $arrData['Total']+$generatedCnt;
             }
             if($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == ''){
                 $arrData['leads'] = array($this->session->userdata('branch_id')=> $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
@@ -700,7 +781,7 @@ class Reports extends CI_Controller
                 $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
             }
         }
-       // pe($arrData);die;
+        //pe($arrData);die;
         return $arrData;
     }
 
