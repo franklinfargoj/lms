@@ -197,13 +197,13 @@
                                         echo form_input($customer_name);
                                     ?>
                                 </div>
-                                <div class="form-control reason" >
+                                <div class="form-control reason" style="display:none">
                                     <label>Reason For Drop :<span style="color:red;">*</span></label>
                                     <?php
                                     echo "<span class='detail-label'>";
                                     $options21[''] = 'Select';
                                     foreach ($drop_reason as $key => $value) {
-                                        $options2[$key] = ucwords($value);
+                                        $options21[$key] = ucwords($value);
                                     }
                                     $js = array(
                                         'id' => 'reason',
@@ -252,6 +252,7 @@
                                         'name'  => 'accountNo',
                                         'id'    => 'accountNo',
                                         'class' => '',
+                                        'maxlength' =>'12',
                                         'value' => ''
                                     );
                                     echo form_input($data);

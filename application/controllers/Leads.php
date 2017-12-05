@@ -469,7 +469,11 @@ class Leads extends CI_Controller
         $table = Tbl_Leads;
         $join = array('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $group_by = array('db_leads.lead_source');
-        $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id'],Tbl_LeadAssign.'.lead_id'=>NULL,'YEAR('.Tbl_Leads.'.created_on)' => date('Y'));
+        $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id']);
+        $yr_start_date=date('Y').'-04-01 00:00:00';
+        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        $where[Tbl_Leads.".created_on >='".$yr_start_date."' AND ".Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
+        $where['('.Tbl_LeadAssign.'.lead_id IS NULL OR '.Tbl_LeadAssign.'.is_deleted = 1)'] = NULL;
         $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
         $response = array();
         $keys=array('walkin'=>0,'analytics'=>0,'tie_ups'=>0,'enquiry'=>0);
@@ -739,9 +743,9 @@ class Leads extends CI_Controller
                             $whereUpdate = array('lead_id' => $id);
                             $table = Tbl_LeadAssign;
                             if (empty($drop_reason)) {
-                                $data = array('is_updated' => 0);
+                                $data = array('is_updated' => 0,'is_deleted' => 1);
                             } else {
-                                $data = array('is_updated' => 0, 'reason_for_drop' => $drop_reason);
+                                $data = array('is_updated' => 0,'is_deleted' => 1, 'reason_for_drop' => $drop_reason);
                             }
                             $this->Lead->update($whereUpdate, $table, $data);
                             $this->session->set_flashdata('success', 'Lead information updated successfully');
@@ -829,14 +833,14 @@ class Leads extends CI_Controller
                                 $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                                 $leads_info = $leadsAssigned[0];
 
-                                if ($leads_info['lead_source'] == 'Analytics') {
+                                if ($leads_info['lead_source'] == 'analytics') {
 
                                     if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
 
                                         $action = 'list';
                                         $select = array('map_with');
                                         $table = Tbl_Products;
-                                        $where = array('id' => $leads_info['product_id']);
+                                        $where = array('id' => $leads_info['product_id'],'status'=>'active');
                                         $product_mapped_with = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
                                         $product_mapped_with = $product_mapped_with[0]['map_with'];
                                         $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_data['branch_id']);
@@ -855,10 +859,11 @@ class Leads extends CI_Controller
                                             $this->Lead->update_lead_data($where, $update_data, $table);
                                             $whereUpdate = array('lead_id' => $lead_id);
                                             $table = Tbl_LeadAssign;
-                                            $data = array('is_updated' => 0);
-                                            $this->Lead->update($whereUpdate, $table, $data);
+                                            $data = array('is_updated' => 0,'is_deleted' => 1);
+                                            $order_by = "id DESC";
+                                            $limit= 1;
+                                            $this->Lead->update_routed_lead($whereUpdate, $table, $data,$order_by,$limit);
                                         }
-
                                     }
 
                                 }

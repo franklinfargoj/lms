@@ -106,7 +106,9 @@ class Lead  extends CI_Model
         $this->db->from('db_leads');
         $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');
-        $this->db->where('db_lead_assign.lead_id',NULL);
+        //$this->db->where('db_lead_assign1.lead_id',NULL);
+        $this->db->where("(db_lead_assign.lead_id IS NULL OR db_lead_assign.is_deleted=1)", NULL, FALSE);
+       // $this->db->or_where('db_lead_assign.is_deleted',1);
         $this->db->where('db_leads.branch_id',$login_user['branch_id']);
         $this->db->order_by('db_leads.created_on','desc');
         if(!empty($lead_status)){
@@ -489,5 +491,23 @@ class Lead  extends CI_Model
         $query = $this->db->get();
 //		pe($this->db->last_query());die;
         return $query->result_array();
+    }
+
+    public function update_routed_lead($where,$table,$data,$order_by,$limit=''){
+        $this->db->where($where);
+        $this->db->order_by($order_by);
+        $this->db->limit($limit);
+        $this->db->update($table,$data);
+
+
+        $errors = $this->db->error();
+        if($errors['code']){
+            $response['status'] = 'error';
+            $response['code'] = $errors['code'];
+        }else{
+            $response['status'] = 'success';
+            $response['affected_rows'] = $this->db->affected_rows();
+        }
+        return $response;
     }
 }

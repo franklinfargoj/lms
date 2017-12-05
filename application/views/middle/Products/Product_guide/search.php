@@ -112,7 +112,7 @@
                         foreach ($searchResult as $key => $value) { 
                         $i++;
                     ?>
-                        <div id="tabs-<?php echo $value['id'];?>" class="tab-content">
+                        <div id="tabs-<?php echo $value['id'];?>" class="tab-content bullet">
                         	<?php echo $value['description_text'];?>
                         </div>
                     <?php 
