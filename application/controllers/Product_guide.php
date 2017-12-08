@@ -49,7 +49,7 @@ class Product_guide extends CI_Controller {
           /*Create Breadcumb*/
 
           $arrData['productguidelist'] = $this->master->view_product_guide($productId);
-          asort($arrData['productguidelist']);
+          //asort($arrData['productguidelist']);
           return load_view("Products/Product_guide/view",$arrData);
 	}
 
@@ -223,7 +223,7 @@ class Product_guide extends CI_Controller {
 
                //Search for product description
                $arrData['searchResult'] = $this->master->view_product_guide($product_id);
-               asort($arrData['searchResult']);
+              // asort($arrData['searchResult']);
 
                return load_view("Products/Product_guide/search",$arrData);
           }else{

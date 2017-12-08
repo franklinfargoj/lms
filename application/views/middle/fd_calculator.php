@@ -44,9 +44,9 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                         <?php echo form_input($data_amount);?>
                     </div>
                     <div class="form-control">
-                        <label class="l-width">Rate of Interest:<span style="color:red;">*</span> </label>
+                        <label class="l-width">Rate of Interest (%):<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_interest);?>
-                        <span class="is_senior">+ 0.5</span>
+                        <span class="is_senior">+ 0.5%</span>
                     </div>
                     <div class="form-control">
                         <label>Period:<span style="color:red;">*</span> </label>
@@ -75,11 +75,11 @@ $data_maturity = array('name'=>'maturity','id'=>'maturity');
                     </div>
                     <div class="form-control form-submit clearfix">
 
-                        <a href="javascript:void(0);" class="active float-right">
-                            <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                            <span><input type="submit" class="custom_button" name="Submit" value="Calculate"></span>
-                            <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
-                        </a>
+                       <button type="submit" name="Submit" value="Calculate" class="full-btn float-right">
+<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+<span class="btn-txt">Calculate</span>
+<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+</button>
                         <a href="javascript:void(0);" class="reset float-right">
                             Reset
                         </a>

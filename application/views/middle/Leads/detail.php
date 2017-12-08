@@ -136,7 +136,8 @@
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
                                     || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
                                     && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC') ||
-                                        ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC'))
+                                        ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC')|| 
+                                        ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] != 'DC'))
                                     ))){}
                                         else {
                                             ?>
@@ -149,7 +150,7 @@
                                             'remind_to'  => $leads[0]['employee_id']
                                         );
                                         echo form_hidden($data);
-                                        $options1['']='Select';
+                                        $options1[$leads[0]['status']]='Select';
                                         if(!empty($lead_status)){
                                             foreach ($lead_status as $key => $value) {
                                                 if($leads[0]['category_title'] != 'Fee Income') {
@@ -174,17 +175,19 @@
                                         }
                                         $js = array(
                                                 'id'       => 'lead_status',
-                                                'class'    => 'form-control'
+                                                'class'    => ''
                                         );
                                     $data_status = array(
                                         'name'        => 'lead_status',
                                         'type'       => 'hidden',
                                         'value'       => $leads[0]['status']
                                     );
+
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
                                         || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
                                         && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC')
-                                        || ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC'))
+                                        || ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC')
+                                        || ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] != 'DC'))
                                             ))){
                                         echo form_input($data_status);
                                     }
@@ -252,7 +255,7 @@
                                         'name'  => 'accountNo',
                                         'id'    => 'accountNo',
                                         'class' => '',
-                                        'maxlength' =>'12',
+                                        'maxlength' => '12',
                                         'value' => ''
                                     );
                                     echo form_input($data);
@@ -382,9 +385,12 @@
                                     ($this->session->userdata('admin_type') == 'BM' && !in_array($leads[0]['status'],$exclude_status_bm))){
                                 ?>
                                 <div class="float-right submit_button">
-                                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
-                                    <span><input type="submit" class="custom_button" value="Submit" /></span>
-                                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
+                                    <button type="submit" name="Submit" value="Submit" class="full-btn">
+<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+<span class="btn-txt">Submit</span>
+<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+</button>
+
                                 </div>
                             <?php }?>
                         </div>
@@ -653,6 +659,7 @@
 
     $('.verify_account').click(function () {
         var acc_no = $.trim($('#accountNo').val());
+        
         if(acc_no.length === 0 || acc_no.length != 12){
             alert('Please Enter 12 digit Account number.');
         }else{
@@ -665,6 +672,7 @@
                     acc_no: acc_no
                 }
             }).success(function(resp){
+
                     var regex = /(<([^>]+)>)/ig;
                     var body = resp;
                     var result = body.replace(regex, "");

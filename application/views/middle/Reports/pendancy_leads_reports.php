@@ -35,7 +35,7 @@ $lead_sources = $this->config->item('lead_source');
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container ">
-            <p><strong>Purpose :</strong> This report shows count of those leads which have not been acted upon in due time.</p>
+            <p style="font-style:italic;"><strong>Purpose :</strong> This report shows count of those leads which have not been acted upon in due time.</p>
         <div class="form">
         <p id="note"><span style="color:red;">*</span> These fields are required</p>
             <div class="lead-form-left">
@@ -158,12 +158,11 @@ $lead_sources = $this->config->item('lead_source');
                 </div>
             </div>
             <div class="form-control form-submit clearfix">
-                <a href="javascript:void(0);" class="float-right">
-                    <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
-                    <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
-                    <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
-                </a>
-            </div>
+                <button type="submit" name="Submit" value="Submit" class="full-btn float-right">
+<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+<span class="btn-txt">Submit</span>
+<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+</button>    			            </div>
         </div>
         <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" alt="35" style="display:none;">
         <?php 

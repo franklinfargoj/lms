@@ -110,7 +110,7 @@ class Faq_model extends CI_Model{
 			/*pe($order_by);
 			exit;*/
 		}else{
-			$this->db->order_by($table.'.id','DESC');
+			$this->db->order_by($table.'.id','ASC');
 		}
 		$query = $this->db->get();
 		//pe($this->db->last_query())

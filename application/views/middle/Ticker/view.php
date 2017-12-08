@@ -68,11 +68,7 @@
                                 <a class="" href="<?php echo site_url('ticker/edit/'. encode_id($value['id']));?>">
                                     Edit
                                 </a> 
-                                <span>|</span> 
-                                <a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('ticker/delete/'. encode_id($value['id']))?>">
-                                    Delete
-                                </a> 
-                            </td>
+                                                            </td>
                         </tr>   
                         <?php   
                             }

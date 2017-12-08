@@ -32,10 +32,9 @@ class Dashboard extends CI_Controller {
      */
 	public function index()
 	{
-
         //Get session data
         $login_user = get_session();
-        $middle = 'admin_dashboard';
+        $middle = '';
         //Create Breadcumb
         /*$arrData['breadcrumb'] = $this->make_bread->output();*/
         $arrData['breadcrumb'] = '';

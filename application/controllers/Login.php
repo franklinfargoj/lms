@@ -51,8 +51,8 @@ class Login extends CI_Controller {
                 //Generate Captcha
                 return $this->load->view("login",$arrData);
             }else{
-
-                $pwd = base64_decode($this->input->post('password'));
+//echo $this->input->post('password');die;
+              $pwd = base64_decode($this->input->post('password'));
                 // Captcha validation passed
                 if($this->input->post('username') == '1111111'){
                     $checkInput = array(
@@ -91,12 +91,17 @@ class Login extends CI_Controller {
                     }
                 }else{
                     $hrms_id = $this->input->post('username');
-                    $password = $pwd;
+                    //$password = $this->input->post('password');
+                   $password = $pwd;
+
                     //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
                     $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$hrms_id.'&password='.$password);
                     $auth = json_decode($auth_response);
+//echo "<pre>";
+//print_r($auth);die;
                     if ($auth->DBK_LMS_AUTH->password == 'True') {
                         // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
+                        //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$auth->DBK_LMS_AUTH->username);
                         $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$auth->DBK_LMS_AUTH->username);
                         $records = json_decode($records_response);
                        // echo "<pre>";print_r($records);die;
@@ -107,6 +112,7 @@ class Login extends CI_Controller {
                             'zone_id' => $records->dbk_lms_emp_record1->dbk_state_id,
                             'device_type' => NULL,
                             'authorisation_key'=> $authorisation_key
+
                         );
                         $this->master->insert_login_log($data); // login log
 

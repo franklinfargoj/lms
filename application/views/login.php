@@ -86,12 +86,11 @@
 				<div class="form-control form-submit clearfix">
 					<!-- <input type="submit" name="submit" value="LOGIN" class="submit-btn"> -->
 
-					<div class="active">
-						<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
-						<!-- <span>LOGIN</span> -->
-						<span><input type="submit" name="submit" value="LOGIN" class=""></span>
-						<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
-					</div>
+					<button type="submit" class="full-btn">
+<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+<span class="btn-txt">LOGIN</span>
+<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+</button>
 				</div>
 				<div class="form-options clearfix">
 					<a href="<?php echo site_url('login/view_faqs')?>" class="float-right">FAQ</a>
@@ -134,6 +133,7 @@
 			
 		
 	<script src="<?php echo base_url().ASSETS;?>/js/jquery.min.js" type="text/javascript"></script>
+<script src="<?php echo base_url().ASSETS;?>/js/jquery.base64.min.js" type="text/javascript"></script>
 	<script src="<?php echo base_url().ASSETS;?>/js/jquery.validate.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		var base_url = "<?php echo base_url()?>";
@@ -228,7 +228,12 @@
 				  });
 			$('#login-form').submit(function () {
 				var newpwd = $('#password').val();
-				$('#password').val((window.btoa(newpwd)));
+                            if(window.btoa){
+                             $('#password').val((window.btoa(newpwd)));
+                               }else{
+                           $('#password').val($.base64.encode(newpwd));
+                         }
+				
 			});
 
 

@@ -112,7 +112,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <?php echo form_error('customer_name'); ?>
                     </div>
                     <div class="form-control">
-                        <label>Customer Number:<span style="color:red;">*</span> </label>
+                        <label>Contact Number:<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_phone); ?>
                         <?php echo form_error('contact_no'); ?>
                     </div>
@@ -159,7 +159,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                             $checked = FALSE;
                             $style = "";
                             ?>
-                            <label>Branch Type:<span style="color:red;">*</span> </label>
+                            <label>Lead belongs to:<span style="color:red;">*</span> </label>
                             <div class="radio-control">
                                 <input type="radio" id="is_own_branch" name="is_own_branch"
                                        value="1" <?php echo set_radio('is_own_branch', '1', TRUE); ?> />
@@ -193,11 +193,12 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 </div>
                 <div class="form-control form-submit clearfix">
 
-                    <a href="javascript:void(0);" class="active float-right">
-                        <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                        <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
-                        <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
-                    </a>
+                    <button type="submit" name="Submit" value="Submit" class="full-btn float-right">
+<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+<span class="btn-txt">Submit</span>
+<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+</button>
+
                     <a href="javascript:void(0);" class="reset float-right" id="reset">
                         Reset
                     </a>
@@ -305,9 +306,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         $.validator.addMethod("lettersonly", function(value, element) {
             return this.optional(element) || /^[a-z\s]+$/i.test(value);
         }, "Only alphabetical characters");
-        $.validator.addMethod("numbersonly", function(value, element) {
-            return this.optional(element) || /^[0-9\s]+$/i.test(value);
-        }, "Only Number Allowed");
+       $.validator.addMethod("numbersonly", function(value, element) {
+            return this.optional(element) || /^[0-9]+$/i.test(value);
+        }, "Only Numbers Allowed");
 
         $("#addlead").validate({
 

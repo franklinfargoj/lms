@@ -121,7 +121,7 @@ class Product_category extends CI_Controller {
                     return load_view("Products/Category/edit",$arrData);
                }else{
                     $update = array(
-                         'title' => strtolower($this->input->post('title')),
+                         'title' => ucwords(strtolower($this->input->post('title'))),
                          'status' => strtolower($this->input->post('status')),
                          'modified_by' => loginUserId(),
                          'modified_on' => date('y-m-d H:i:s')
@@ -221,10 +221,10 @@ class Product_category extends CI_Controller {
     */
      public function isTaken($title){
          $table = Tbl_Category;
-         $where = array('title'=>ucwords(strtolower($title)),'is_deleted'=>0);
+         $where = array('title'=>ucwords(strtolower($title)));
          $is_taken = isTaken($title,$table,$where);
          if($is_taken > 0){
-             $this->form_validation->set_message('isTaken', '%s is already taken');
+             $this->form_validation->set_message('isTaken', '%s already exists');
              return FALSE;
          }
          return TRUE;

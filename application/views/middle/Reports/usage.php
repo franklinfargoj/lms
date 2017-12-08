@@ -35,7 +35,7 @@ $lead_status = $this->config->item('lead_status');
     <div class="inner-content">
         
      <div class="container">
-         <p><strong>Purpose :</strong> This report shows number of employees logged into the application from either mobile or web in the time period specified.</p>
+         <p style="font-style:italic;"><strong>Purpose :</strong> This report shows number of employees logged into the application from either mobile or web in the time period specified.</p>
     <div class="form">
     <p id="note"><span style="color:red;">*</span> These fields are required</p>
     <div class="lead-form-left" id="l-width">
@@ -83,12 +83,11 @@ $lead_status = $this->config->item('lead_status');
         </div>
     
     <div class="form-control form-submit clearfix">
-        <a href="javascript:void(0);" class="float-right">
-            <img src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-            <span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
-            <img src="<?php echo base_url().ASSETS;?>images/right-nav.png">
-        </a>
-    </div>
+        <button type="submit" name="Submit" value="Submit" class="full-btn float-right">
+<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+<span class="btn-txt">Submit</span>
+<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+</button>    			    </div>
     </div>
    </div>
     </div>

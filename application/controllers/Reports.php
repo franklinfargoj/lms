@@ -68,7 +68,7 @@ class Reports extends CI_Controller
             }
             if($export == 'yes'){
                 if(!empty($arrData['lead_source'])){
-                    pe($arrData);die;
+                    //pe($arrData);die;
                     $lead_sources = $this->config->item('lead_source');
                     $arrData['lead_source'] = $lead_sources[$arrData['lead_source']];
                 }
@@ -621,8 +621,8 @@ class Reports extends CI_Controller
 
             //Get Listing for branch
             $SELECT = array('branch_id','branch_name','zone_id','zone_name');
-            if(isset($where['l.zone_id'])){
-                $WHERE['zone_id'] = $where['l.zone_id'];
+            if(isset($where['l.created_by_zone_id'])){
+                $WHERE['zone_id'] = $where['l.created_by_zone_id'];
             }
             //$WHERE['designation'] = 'BR';
             $GROUP_BY = array('branch_id');
@@ -1742,7 +1742,7 @@ class Reports extends CI_Controller
                     $usage_col = array('Total User','Logged in User','Not logged in User');
                 }
                 $header_value = array_merge($header_value,$usage_col);
-                pe($header_value);//die;
+               // pe($header_value); //die;
                 break;
 
         }
@@ -1879,6 +1879,7 @@ class Reports extends CI_Controller
             }
             $i++;$j++;
         }
+        
        // pe($data);die;
         //echo $file_name;die;
         //return $file_name;

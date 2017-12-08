@@ -39,7 +39,6 @@ The following libraries are included in CKEditor under the MIT license (see Appe
 
 * CKSource Samples Framework (included in the samples) - Copyright (c) 2014-2017, CKSource - Frederico Knabben.
 * PicoModal (included in `samples/js/sf.js`) - Copyright (c) 2012 James Frasca.
-* CodeMirror (included in the samples) - Copyright (C) 2014 by Marijn Haverbeke <marijnh@gmail.com> and others.
 
 Parts of code taken from the following libraries are included in CKEditor under the MIT license (see Appendix D):
 

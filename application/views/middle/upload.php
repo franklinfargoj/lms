@@ -50,7 +50,7 @@ $data_submit = array(
                         <label id="file-error" class="error" style="color: #A94442" for="file"></label>
                     </div>
                     <div class="form-group">
-                        <span>*Please Upload a file with extension xls or xlsx</span>
+                        <span>*Please Upload a file with extension xls or xlxs</span>
                     </div>
                 </div>
                 <div class="form-actions">

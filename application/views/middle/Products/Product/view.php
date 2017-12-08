@@ -79,10 +79,7 @@
                                 <a class="" href="<?php echo site_url('product/edit/'. encode_id($value['id']));?>">
                                     Edit
                                 </a> 
-                                <span>|</span> 
-                                <a class="delete" href="javascript:void(0);" data-url="<?php echo site_url('product/delete/'. encode_id($value['id']))?>">
-                                    Delete
-                                </a> 
+                                 
                                 <span>|</span> 
                                 <a class="" href="<?php echo site_url('product_guide/view_points/'. encode_id($value['id']));?>">
                                     Manage Points

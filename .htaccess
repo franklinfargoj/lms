@@ -1,14 +1,17 @@
 RewriteEngine on
+RewriteCond %{SERVER_PORT} 80
+#RewriteRule ^(.*)$ https://denasampark.denabank.co.in/$1 [R,L]
 RewriteCond $1 !^(index\.php|public|\.txt)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?$1
-<filesMatch "\.(html|htm|js|css)$">
-  FileETag None
-  <ifModule mod_headers.c>
-     Header unset ETag
-     Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
-     Header set Pragma "no-cache"
-     Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
-  </ifModule>
+
+<filesMatch "\.(js|css|png|svg|jpg|jpeg|gif|eot|ttf|woff)$">
+ FileEtag None
+<ifModule mod_headers.c>
+Header unset ETag
+Header set Cache-Control "no-cache, no-store, must-revalidate, post-check=0, pre-check=0"
+Header set Pragma "no-cache"
+Header set Expires "Wed,11 Jan 1984 05:00:00 GMT"
+</ifModule>
 </filesMatch>

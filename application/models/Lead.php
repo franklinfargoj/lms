@@ -439,7 +439,9 @@ class Lead  extends CI_Model
         $this->db->from('db_leads');
         $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');
-        $this->db->where('db_lead_assign.lead_id',NULL);
+       // $this->db->where('db_lead_assign.lead_id',NULL);
+ $this->db->where("(db_lead_assign.lead_id IS NULL OR db_lead_assign.is_deleted=1)", NULL, FALSE);
+
         $this->db->order_by('db_leads.created_on','desc');
         if(!empty($lead_status)){
             $this->db->where('db_leads.lead_source',$lead_status);

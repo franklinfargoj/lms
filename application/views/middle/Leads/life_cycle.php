@@ -98,7 +98,7 @@ $all_source = $this->config->item('lead_source');
                                     echo isset($lead_value['employee_name']) && !empty($lead_value['employee_name']) ? "Assigned To : ".ucwords(strtolower($lead_value['employee_name'])).'<br><br>' : 'Assigned To : NA<br><br>';
                                     echo isset($lead_value['created_by_name']) && !empty($lead_value['created_by_name']) ? "Assigned By : ".ucwords(strtolower($lead_value['created_by_name'])).'<br><br>' : 'Assigned By : NA<br><br>';
                                 }else{
-                                    echo isset($lead_value['employee_name']) && !empty($lead_value['employee_name']) ? "Status Updated By : ".ucwords(strtolower($lead_value['employee_name'])) : 'Status Updated By : NA<br><br>';
+                                    echo isset($lead_value['modified_by_name']) && !empty($lead_value['modified_by_name']) ? "Status Updated By : ".ucwords(strtolower($lead_value['modified_by_name'])) : 'Status Updated By : NA<br><br>';
                                 }
 
                                 $assigned_to++;?>

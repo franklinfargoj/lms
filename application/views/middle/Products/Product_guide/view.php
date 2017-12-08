@@ -56,12 +56,11 @@
                                     <?php echo form_error('description_text', '<span class="help-block">', '</span>');?>
                                 </div>
                                 <div class="form-control form-submit clearfix">
-                                    <a href="javascript:void(0);" class="active">
-                                        <img alt ="left nav" src="<?php echo base_url().ASSETS;?>images/left-nav.png">
-                                        <span><input type="submit" name="Submit" value="Submit"></span>
-                                        <img alt = "right nav" src="<?php echo base_url().ASSETS;?>images/right-nav.png">
-                                    </a>
-                                </div>
+                                   <button type="submit" name="Submit" value="Submit" class="full-btn float-right">
+<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+<span class="btn-txt">Submit</span>
+<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+</button>                                </div>
                             <?php echo form_close();?>
                         </div>
                         <script type="text/javascript">

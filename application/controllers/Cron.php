@@ -17,7 +17,9 @@ class Cron extends CI_Controller
         parent::__construct();
         $this->load->model('Lead');
     }
-
+function index(){
+	echo "hello";
+}
     /*
      * gm_consolidated_mail
      * Zone wise leads generated,converted,unassigned and pending count
@@ -79,8 +81,8 @@ class Cron extends CI_Controller
                 $final['general_manager'][$value->zone_id]['zone_id'] = $value->zone_id;
                 $final['general_manager'][$value->zone_id]['zone_name'] = $value->zone_name;
             }
-//            echo "<pre>";
-//           print_r($final['general_manager']);die;
+            //echo "<pre>";
+          // print_r($final['general_manager']);die;
             //For GENERAL MANAGER
         foreach ($GM_list as $k => $v) {
             $attachment_file = $this->export_to_excel('gm_consolidated_mail', $final['general_manager']);
@@ -555,20 +557,20 @@ class Cron extends CI_Controller
                 $where['la.status']  = 'Converted';
             }
             if($type == 'pending_before'){
-                if($user_type == 'ZM'){
-                    $pending_days = 6;
-                }
-                if($user_type == 'BM'){
-                    $pending_days = 4;
-                }
-                if($user_type == 'EM'){
-                    $pending_days = 2;
-                }
+if($user_type == 'ZM'){
+$pending_days = 6;
+}
+if($user_type == 'BM'){
+$pending_days = 4;
+}
+if($user_type == 'EM'){
+$pending_days = 2;
+}
+
                 $select = array('COUNT(l.id) as pending_before');
                 $where['la.status IN ("NC","FU","DC")']  = NULL;
-
                 $day = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -'.$pending_days.' day' ) ).' 00:00:00';
-                $where["CASE WHEN la.status = 'NC' THEN la.modified_on < '$day' WHEN la.status = 'FU' THEN la.followup_date < '$day' WHEN la.status = 'DC' THEN p.turn_around_time < DATEDIFF(CURDATE(),la.modified_on) END"]=NULL;
+                $where["CASE WHEN la.status = 'NC' THEN la.modified_on < '$day' WHEN la.status = 'FU' THEN la.followup_date < '$day' END"]=NULL;
                // $join[] = array('table' => Tbl_Reminder.' as fr','on_condition' => 'fr.lead_id = l.id','type' => '');
                 $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'p.id = l.product_id','type' => '');
             }
@@ -793,39 +795,82 @@ class Cron extends CI_Controller
                     }
                 }
             }
+            /* foreach ($final_zone as $key => $value){
+                $action = 'count';
+                $table = Tbl_zone;
+                $where = array('code'=>$value['code']);
+                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
+                if($count > 0){
+                    unset($final_zone[$key]);
+                }
+            }
+            $available_states = array();
+            foreach ($final_state as $key => $value){
 
+                $action = 'count';
+                $table = Tbl_state;
+                $where = array('code'=>$value['code']);
+                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
+                if($count > 0 || in_array($value['code'],$available_states)){
+                    unset($final_state[$key]);
+                }
+                if(isset($value['code']) && !empty($value['code']))
+                $available_states[$key] = $value['code'];
+            }
+            foreach ($final_dist as $key => $value){
+                $action = 'count';
+                $table = Tbl_district;
+                $where = array('code'=>$value['code']);
+                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
+                if($count > 0){
+                    unset($final_dist[$key]);
+                }
+            }
+            foreach ($final_branch as $key => $value){
+                $action = 'count';
+                $table = Tbl_branch;
+                $where = array('code'=>$value['code']);
+                $count = $this->Lead->get_leads($action,$table,$select=array(),$where,$join=array(),$group_by=array(),$order_by=array());
+                if($count > 0){
+                    unset($final_branch[$key]);
+                }
+            }
+*/
+  //          if(count($final_zone) > 0){
 
                 $data= array('is_old' => 1);
                 $this->Lead->update($where='1=1',Tbl_zone,$data);
                 $this->db->insert_batch(Tbl_zone,$final_zone);
                 $where=array('is_old' => 1);
                 $this->Lead->delete($where,Tbl_zone);
+
                 $data= array('is_old' => 1);
                 $this->Lead->update($where='1=1',Tbl_state,$data);
                 $this->db->insert_batch(Tbl_state,$final_state);
                 $where=array('is_old' => 1);
                 $this->Lead->delete($where,Tbl_state);
+
                 $data= array('is_old' => 1);
                 $this->Lead->update($where='1=1',Tbl_district,$data);
                 $this->db->insert_batch(Tbl_district,$final_dist);
                 $where=array('is_old' => 1);
                 $this->Lead->delete($where,Tbl_district);
+
                 $data= array('is_old' => 1);
                 $this->Lead->update($where='1=1',Tbl_branch,$data);
                 $this->db->insert_batch(Tbl_branch,$final_branch);
                 $where=array('is_old' => 1);
                 $this->Lead->delete($where,Tbl_branch);
 
-//                $this->db->insert_batch(Tbl_zone,$final_zone);
-//                $this->db->insert_batch(Tbl_state,$final_state);
-//                $this->db->insert_batch(Tbl_district,$final_dist);
-//                $this->db->insert_batch(Tbl_branch,$final_branch);
 
-        }else{
-
+                //$this->db->insert_batch(Tbl_zone,$final_zone);
+                //$this->db->insert_batch(Tbl_state,$final_state);
+                //$this->db->insert_batch(Tbl_district,$final_dist);
+                //$this->db->insert_batch(Tbl_branch,$final_branch);
+       }else{
             }
 
-
+    //    }
 
     }
 
@@ -854,7 +899,7 @@ class Cron extends CI_Controller
                 $this->db->insert_batch(Tbl_emp_dump,$insert);
                 $where=array('is_old' => 1);
                 $this->Lead->delete($where,Tbl_emp_dump);
-            }
+              }
         }
     }
 

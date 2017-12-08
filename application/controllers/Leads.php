@@ -243,7 +243,7 @@ class Leads extends CI_Controller
             $select_label = $this->input->post("select_label");
             $whereArray = array('category_id' => $category_id,'is_deleted' => 0,'status' => 'active');
             $products = $this->Lead->get_all_products($whereArray);
-            $product_extra = 'class="form-control" id="product_id"';
+            $product_extra = 'id="product_id"';
             if (!empty($products)) {
                 $options[''] = $select_label;
                 foreach ($products as $key => $value) {

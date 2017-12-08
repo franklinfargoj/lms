@@ -39,9 +39,9 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
     <div class="inner-content">
         <div class="container">
             <?php if(in_array($this->session->userdata('admin_type'),array('BM'))){?>
-            <p style="font-style: italic">All leads assigned to your branch employees in last 1 year</p>
+            <p style="font-style:italic;">All leads assigned to your branch employees in last 1 year</p>
             <?php }else{?>
-                <p style="font-style: italic">All leads assigned to you in last 1 year</p>
+                <p style="font-style:italic;">All leads assigned to you in last 1 year</p>
             <?php }?>
             <div class="lead-top clearfix">
                 <div class="float-left">
@@ -154,19 +154,27 @@ $param5 = isset($param) ? encode_id($param).'/' : '';
 
                             <td>
                                  <?php echo $i;?>
-                                <?php $admin = $this->session->userdata('admin_type');
-                                if($admin == 'BM' && in_array($value['status'],array('AO'))){?>
-                                    <img src="<?php echo base_url().ASSETS;?>images/like.gif" alt="logo" style="max-width: 24%">
-                                <?php }
-                                if($admin == 'BM' && in_array($value['status'],array('NI'))){?>
-                                <img src="<?php echo base_url().ASSETS;?>images/dislike.gif" alt="logo" style="max-width: 24%">
-                            <?php }
-                                if($admin == 'BM' && $value['prod_cat']=='Fee Income' && in_array($value['status'],array('DC'))){?>
-                                    <img src="<?php echo base_url().ASSETS;?>images/like.gif" alt="logo" style="max-width: 24%">
-                                <?php }?>
+                               
                             </td>
                             <td>
-                                 <?php echo ucwords($value['customer_name']);?>
+                              <?php $admin = $this->session->userdata('admin_type');
+                                if($admin == 'BM' && in_array($value['status'],array('AO'))){?>
+                                    <img src="<?php echo base_url().ASSETS;?>images/like.gif" alt="logo" class="like">
+                                <p class="custname"><?php echo ucwords($value['customer_name']);?></p>
+
+                                <?php }
+                                elseif($admin == 'BM' && in_array($value['status'],array('NI'))){?>
+                                <img src="<?php echo base_url().ASSETS;?>images/dislike.gif" alt="logo" class="like">
+                                <p class="custname"><?php echo ucwords($value['customer_name']);?></p>
+                               
+                                <?php }
+                                elseif($admin == 'BM' && $value['prod_cat']=='Fee Income' && in_array($value['status'],array('DC'))){?>
+                                    <img src="<?php echo base_url().ASSETS;?>images/like.gif" alt="logo" class="like">
+                                    <p class="custname"><?php echo ucwords($value['customer_name']);?></p>
+                                
+                                  <?php }else{?>
+                                 <?php echo ucwords($value['customer_name']);
+                                 }?>
                             </td>
                             <td>
                                  <?php echo ucwords($value['title']);?>

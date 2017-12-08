@@ -23,7 +23,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
                     <p id="note"><span style="color:red;">*</span> These fields are required</p>
 							<div class="form-control range-slider">
 									<label>Loan Amount:<span style="color:red;">*</span></label>
-                                    <input type="text" id="amount" name="amount" class="emi_cal">
+                                    <input type="text" id="amount" name="amount">
                                    <!--  <label class="value">&#x20B9;</label> -->
                                     <img class="value" src="<?php echo base_url().ASSETS;?>images/rupees.png" alt="rupees">
 							    <div id="slider1" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
@@ -44,7 +44,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 							</div>
 							<div class="form-control range-slider">
 								<label>Loan Tenure:<span style="color:red;">*</span></label>
-                                <input id ="years" type="text" name="years" class="emi_cal">
+                                <input id ="years" type="text" name="years">
                                 <label class="value">Years</label>
 									<div id="slider2" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
                                         <div id="slider2div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
@@ -63,7 +63,7 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 							</div>
 							<div class="form-control range-slider">
 									<label>Interest Rate:<span style="color:red;">*</span></label>
-                                    <input id="interest" type="text" name="interest" class="emi_cal1">
+                                    <input id="interest" type="text" name="interest">
                                     <label class="value">%</label>
 									<div id="slider3" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
                                         <div id="slider3div" class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
@@ -81,11 +81,13 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 							</div>
 
 						<div class="form-control form-submit clearfix">
-							<a href="#" class="float-right">
-									<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
-                                <span><input type="submit" class="custom_button" name="Submit" value="Calculate"></span>
-									<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
-							</a><br/>
+							
+<button type="submit" name="Submit" value="Calculate" class="full-btn float-right">
+<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+<span class="btn-txt">Calculate</span>
+<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+</button>
+<br/>
 							<div class="emi-section">
                                 <label>Your EMI</label>
                                 <span style="color: black" id="your_emi" class="input-box"></span>
@@ -103,32 +105,6 @@ $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset'
 var min = "<?php echo minEmi?>";
 var max = "<?php echo maxEmi?>";
 $(document).ready(function() {
-	$('.emi_cal')
-		.on('focus', function(){
-			var $this = $(this);
-			if($this.val() == '0'){
-				$this.val('');
-			}
-		})
-		.on('blur', function(){
-			var $this = $(this);
-			if($this.val() == ''){
-				$this.val('0');
-			}
-		});
-	$('.emi_cal1')
-		.on('focus', function(){
-			var $this = $(this);
-			if($this.val() == '5'){
-				$this.val('');
-			}
-		})
-		.on('blur', function(){
-			var $this = $(this);
-			if($this.val() == ''){
-				$this.val('5');
-			}
-		});
     emi_calculator(min, max);
 });
 </script>

@@ -35,46 +35,47 @@ function pe($arr)
     //die;
 }
 
-// function sendmail($to, $message, $subject,$company_name,$company_email) {
-//     //echo $to;"<br>";
-// //    echo $message;"<br>";
-// //    //echo $subject;"<br>";
-// //   // echo $company_name;"<br>";
-// //   // echo $company_email;"<br>";
-// //    die;
-//     $ci = &get_instance();
-//     $ci->load->model('customers_model', 'customer');
-//     $smtp_details = $ci->customer->get_smtp_details();
-//     foreach($smtp_details as $row){
-//         $smtp_arr[] = $row->setting_value;
-//     }
+ function sendMail1($to, $message, $subject,$attachment) {
+     $ci = &get_instance();
+$ci->load->library('email');
+     $record = $ci->db->from(Tbl_Mail)->get()->result();
 
-//     $config = Array(
-//         'protocol' => $smtp_arr[0],
-//         'smtp_host' => $smtp_arr[1],
-//         'smtp_port' => $smtp_arr[2],
-//         'smtp_user' => $smtp_arr[4],
-//         'smtp_pass' => base64_decode(base64_decode($smtp_arr[3])),
-//         'mailtype' => 'html',
-//         'charset' => 'utf-8',
-//         'wordwrap' => TRUE
-//     );
-//     $ci = &get_instance();
-//     $ci->load->library('email');
-//     $ci->email->initialize($config);
-//     $ci->email->from($smtp_arr[4], $company_name);
-//     $ci->email->to($to);
-//     $ci->email->subject($subject);
-//     $ci->email->message($message);
-//     //return true;
-//     if ($ci->email->send()) {
-//         return true;
-//     } else {
-//         return false;
-//     }
+     $config = Array(
+         'protocol' => 'smtp',
+          //'smtp_host' => "webmail.denabank.co.in",
+	  'smtp_host' => $record[0]->host,
+         'smtp_port' => $record[0]->port,
+         'smtp_user' => $record[0]->username,
+         'smtp_pass' => '',
+         'mailtype' => 'html',
+         //'charset' => 'utf-8',
+         'wordwrap' => TRUE
+         
+      );
+     
+     $ci->email->initialize($config);
+	$ci->email->set_newline("\r\n");
+     $ci->email->from($record[0]->fromemail, $record[0]->from);
+     //$ci->email->to($to);
+     $ci->email->to(array('exchadmin@denabank.co.in'));
+     $ci->email->subject($subject);
+     $ci->email->message("test msg from LMS");
+     if($attachment != '')
+      {
+       $ci->email->attach($attachment);
+       }
+     if ($ci->email->send()) {
+echo " mail sent to ".$ci->email->to;
+      exit();
+  return true;
+	
+
+     } else {
+         echo $ci->email->print_debugger();
+     }
 
 
-// }
+ }
 /*Added by Ashok Jadhav on 17 August 2017*/
 
 function is_logged_in() {
@@ -82,12 +83,13 @@ function is_logged_in() {
     $CI =& get_instance();
     // We need to use $CI->session instead of $this->session
     $isLoggedIn = $CI->session->userdata('isLoggedIn');
-    $authorisation_key = $CI->session->userdata('authorisation_key');
+   $authorisation_key = $CI->session->userdata('authorisation_key');
     //echo $authorisation_key;echo $CI->session->userdata('admin_id');die;
     $check_response = check_authorisation($authorisation_key,$CI->session->userdata('admin_id'));
     if($check_response != 'TRUE'){
         redirect('login/logout');
     }
+
     if ($isLoggedIn != 'TRUE') { redirect('login'); }
 }
 
@@ -427,7 +429,8 @@ if(!function_exists('send_sms')){
             $credentials = $CI->sms->get_sms_credentials();
             //pe($credentials);
             $password = $CI->encrypt->decode($credentials['password']);
-            $url = $credentials['url'].'?username='.$credentials['username'].'&password='.$password.'&to='.$mobile.'&udh=&from=DENABK&text='.urlencode($message);
+            $url = $credentials['url'].'?userid='.$credentials['username'].'&password='.$password.'&mobileno='.$mobile.'&sendername=BKDENA&sendernumber=0000&message='.urlencode($message).'&category=2&subject=Lead';           
+          
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -450,11 +453,12 @@ function sendPushNotification($emp_id,$message,$title)
     $CI =& get_instance();
     $CI->load->model('Lead');
     $select = array('device_token','device_type');
-    $where = array('employee_id'=>$emp_id);
+    $where = array('employee_id'=>$emp_id,'device_type'=>'ANDROID');
     $order_by = 'id desc';
     $limit = '1';
     $table = Tbl_LoginLog;
     $device_values = $CI->Lead->lists($table,$select,$where,'','',$order_by,$limit);
+//pe($device_values);die;
     if(!empty($device_values)){
         $device_id = $device_values[0]['device_token'];
         $device_type = $device_values[0]['device_type'];
@@ -483,8 +487,9 @@ function sendPushNotification($emp_id,$message,$title)
             curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
 
             $rest = curl_exec($crl);
+//pe(curl_error($crl));die;
 //   echo $fields;
-//    echo $rest;die;
+    //echo $rest;die;
             if ($rest === false) {
                 return curl_error($crl);
             }
@@ -792,6 +797,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
 }
 
 function call_external_url($url) {
+//echo $url;die;
     //return file_get_contents($url);die;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -800,6 +806,7 @@ function call_external_url($url) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
    // curl_setopt($ch, CURLOPT_POSTFIELDS, '');
+//pe(curl_error($ch));die;
     curl_exec($ch);
     $result = curl_exec($ch);
     curl_close($ch);
@@ -929,7 +936,7 @@ function dummy_branch_details(){
 
         $bm=array(520299,530399,540499,550599,560315);
         $zm=array(550502,560602,540402,550503);
-        $gm=array(560601,570701,540405,580801,590901,590902); // 580801 (ED),590901,590902(CMD)
+        $gm=array(560601,570701,540405);
 
         $designation = false;
         if(in_array($designation_id,$bm)){
@@ -960,20 +967,17 @@ function fix_keys($array) {
 }
 
 function sendMail($to = array(),$subject,$message,$attachment_file){
-
     $CI=& get_instance();
     $CI->load->database();
     $config = $CI->db->from(Tbl_Mail)->get()->result();
-
     $mail = new PHPMailer; //Create a new PHPMailer instance
-
     $mail->isSMTP(); //Tell PHPMailer to use SMTP
 
     //Enable SMTP debugging
     // 0 = off (for production use)
     // 1 = client messages
     // 2 = client and server messages
-    $mail->SMTPDebug = 0;
+    $mail->SMTPDebug = 2;
 
     //Ask for HTML-friendly debug output
     $mail->Debugoutput = 'html';
@@ -985,19 +989,19 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
     // if your network does not support SMTP over IPv6
 
     //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
-    $mail->Port = $config[0]->port;
+    $mail->Port = 25;
 
     //Set the encryption system to use - ssl (deprecated) or tls
-    $mail->SMTPSecure = 'ssl';
+    ////$mail->SMTPSecure = 'ssl';
 
     //Whether to use SMTP authentication
-    $mail->SMTPAuth = true;
+    $mail->SMTPAuth = false;
 
     //Username to use for SMTP authentication - use full email address for gmail
     $mail->Username = $config[0]->username;
 
     //Password to use for SMTP authentication
-    $mail->Password = $config[0]->password;
+    $mail->Password = '';
 
     $mail->SMTPOptions = array(
       'ssl' => array(
@@ -1034,11 +1038,9 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
         echo "Mailer Error: " . $mail->ErrorInfo;
         //exit;
     } else {
-        //echo "sent";
+//       echo "sent";
         unlink('uploads/excel_list/'.$attachment_file);
-        //exit;
     }
-    //exit;
 }
 
 if (!function_exists('random_number')){
@@ -1054,19 +1056,17 @@ if (!function_exists('check_authorisation')){
         $select = 'authorisation_key';
         $table = Tbl_LoginLog;
         $order_by = 'date_time desc';
-        if($device){
-            $where = array('employee_id'=>$hrms_id,'device_type'=>'ANDROID');
-        }else{
-            $where = array('employee_id'=>$hrms_id,'device_type'=>NULL);
+         if($device){
+         $where = array('employee_id'=>$hrms_id,'device_type'=>'ANDROID');
+         }else{
+        $where = array('employee_id'=>$hrms_id,'device_type'=> NULL);
         }
-
         $list = $CI->Lead->lists($table,$select,$where,$join=array(),$group_by=array(),$order_by,$limit=1);
         if(!empty($list) && $list[0]['authorisation_key'] == $key){
             return TRUE;
         }return false;
     }
 }
-
 if (!function_exists('verify_account')){
     function verify_account($acc_no){
         if($acc_no !=''){
@@ -1193,8 +1193,14 @@ if(!function_exists('unassignedLeadCount')){
         $action = 'count';
         $select = array();
         $table = Tbl_Leads;
-        $where = array(Tbl_Leads . '.branch_id' => $branch_id, Tbl_LeadAssign . '.lead_id' => NULL, 'YEAR(' . Tbl_Leads . '.created_on)' => date('Y'));
-        $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
+        $where = array(Tbl_Leads . '.branch_id' => $branch_id);
+        $where['('.Tbl_LeadAssign.'.lead_id IS NULL OR '.Tbl_LeadAssign.'.is_deleted = 1)'] = NULL;
+
+$yr_start_date=date('Y').'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $where[Tbl_Leads . ".created_on >='".$yr_start_date."'"] = NULL; 
+$where[Tbl_Leads . ".created_on <='".$yr_end_date."'"] = NULL;       
+$join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
         $data = $CI->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
         return $data;
 
@@ -1216,7 +1222,7 @@ if(!function_exists('assignedLeadCount')){
         if($admin_type == 'BM'){
             $join[] = array('table' => Tbl_Leads.' as l','on_condition' => 'l.id = '.Tbl_LeadAssign.'.lead_id','type' => '');
             $join[] = array('table' => Tbl_Category.' as pc','on_condition' => 'l.product_category_id = pc.id','type' => '');
-            $where = "(".Tbl_LeadAssign.".status='AO' OR ".Tbl_LeadAssign.".status='NI' OR (".Tbl_LeadAssign.".status = 'DC' AND pc.title = 'Fee Income') AND ".Tbl_LeadAssign.".branch_id =".$login_user['branch_id'].") AND (".Tbl_LeadAssign.".is_updated = 1 AND ".Tbl_LeadAssign.".is_deleted = 0 AND YEAR(".Tbl_LeadAssign.".created_on) =".date('Y')." AND DATEDIFF( CURDATE( ) , ".Tbl_LeadAssign.".created_on) <=".Elapsed_day.")";
+            $where = "(".Tbl_LeadAssign.".status='AO' OR ".Tbl_LeadAssign.".status='NI' OR (".Tbl_LeadAssign.".status = 'DC' AND pc.title = 'Fee Income')) AND ".Tbl_LeadAssign.".branch_id =".$login_user['branch_id']." AND (".Tbl_LeadAssign.".is_updated = 1 AND ".Tbl_LeadAssign.".is_deleted = 0 AND DATEDIFF( CURDATE( ) , ".Tbl_LeadAssign.".created_on) <=".Elapsed_day.")";
         }
 
         $data = $CI->Lead->get_leads($action, $table, $select, $where, $join, $group_by=array(), $order_by = array());
@@ -1296,6 +1302,7 @@ function get_status($lead_id){
     $data = $CI->Lead->get_status($select,$where);
     return $data;
 }
+
 
 
 

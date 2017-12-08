@@ -79,12 +79,11 @@
     					</div>
     				</div>
     				<div class="form-control form-submit clearfix">
-    					<a href="javascript:void(0);" class="float-right">
-    						<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
-    						<span><input type="submit" class="custom_button" name="Submit" value="Submit"></span>
-    						<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
-    					</a>
-    				</div>
+    					<button type="submit" name="Submit" value="Submit" class="full-btn float-right">
+<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+<span class="btn-txt">Submit</span>
+<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+</button>    				</div>
     			<!-- </form> -->
     			<?php echo form_close();?>
     		</div>
@@ -112,7 +111,7 @@
                         foreach ($searchResult as $key => $value) { 
                         $i++;
                     ?>
-                        <div id="tabs-<?php echo $value['id'];?>" class="tab-content bullet">
+                        <div id="tabs-<?php echo $value['id'];?>" class="tab-content">
                         	<?php echo $value['description_text'];?>
                         </div>
                     <?php 

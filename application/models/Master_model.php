@@ -193,6 +193,7 @@ class Master_model extends CI_Model{
 		if(!empty($id)){
 			$where[Tbl_ProductDetails.'.id'] = $id;
 		}
+              $order_by="FIELD(".Tbl_ProductDetails.".title,'Quick Guide','Terms','Fee & Charges','Documents')";
 		$join = array('table' => Tbl_Products,'on_condition' => Tbl_Products.'.id = '.Tbl_ProductDetails.'.product_id','type' => 'right');
 		return $this->view($select,$where,Tbl_ProductDetails , $join,$order_by);
 	}

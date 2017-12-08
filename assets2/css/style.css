@@ -1218,6 +1218,8 @@ table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.
 	height: auto;
 	line-height: 0;
 	margin-right: 5px;
+       position:relative;
+       top:-15px;
 }
 .ui-accordion-content{
 	padding: 15px 30px 25px 20px;
@@ -1826,8 +1828,9 @@ table thead tr{
 
 }
 
-img.like{max-width: 24%;}
-p.custname{position:relative;top:20px;display:inline-block}
+
+img.like{max-width :24%;}
+p.custname{position:relative;top:20px;display:inline-block;}
 
 .bullet ol{
 	list-style: number;
@@ -1836,4 +1839,35 @@ p.custname{position:relative;top:20px;display:inline-block}
 .bullet ul{
 	list-style: disc;
 	list-style-position: inside;
+}
+.full-btn {
+	background: none;
+	display: inherit;
+	border: none;
+	width: 116px;
+	cursor: pointer;
+       padding:0;
+}
+.full-btn .left-btn-img {
+	float: left;
+	width: 15px!important;
+	height: 41px!important;
+}
+.full-btn .btn-txt {
+	display: inline-block;
+	padding: 11px 0;
+	background-color: #01559d;
+	color: #fff;
+	vertical-align: middle;
+	text-align: center;
+	width: 86px;
+	font-family: "Montserrat";
+	font-size: 16px !important;
+	font-weight: bold !important;
+	height: 19px;
+}
+.full-btn .right-btn-img {
+	float: right;
+	width: 15px!important;
+	height: 40px!important;
 }

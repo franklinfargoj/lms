@@ -76,11 +76,12 @@ $source = $this->config->item('lead_source');
                                     ?>
                                 </div>
                                 <div class="form-control form-submit clearfix" id="btn-r">
-                                    <a href="javascript:void(0);" class="float-right">
-                                            <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav">
-                                            <span><input type="submit" class="custom_button" value="Submit" /></span>
-                                            <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
-                                    </a>
+                                    <button type="submit" name="Submit" value="Submit" class="full-btn float-right">
+<img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+<span class="btn-txt">Submit</span>
+<img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+</button>
+
                                 </div>
                             <?php
                                     }   
@@ -215,7 +216,8 @@ $source = $this->config->item('lead_source');
 
         var table = $('#sample_3');
         var columns = [0,5];
-var chkbox = 1;
+        var chkbox = 1;
+
 
         //Initialize datatable configuration
         initTable(table, columns,chkbox);
