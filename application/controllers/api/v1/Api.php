@@ -1552,7 +1552,6 @@ $password = base64_decode($params['password']);
         $device_token = $params['device_token'];
         $device_type = $params['device_type'];
 
-        //$auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$user_id.'?password='.$password);
         $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$user_id.'&password='.$password);
         $auth = json_decode($auth_response);
         if ($auth->DBK_LMS_AUTH->password == 'True') {

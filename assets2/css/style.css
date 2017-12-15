@@ -430,6 +430,7 @@ body{
 	margin-top: 25px;
 }
 .top-navigation a{
+	outline: none;
 	display: table;
 	color: #b1bac4;
 	font-family: "Montserrat-Regular";
@@ -1870,4 +1871,13 @@ p.custname{position:relative;top:20px;display:inline-block;}
 	float: right;
 	width: 15px!important;
 	height: 40px!important;
+}
+.pswd-note {
+	font-size: 12px;
+	color:#a91112;
+	margin-bottom: 15px;
+}
+.accountOpen{
+	margin-bottom: 0px !important;
+	margin-top: 11px !important;
 }

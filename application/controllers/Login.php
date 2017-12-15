@@ -101,7 +101,6 @@ class Login extends CI_Controller {
 //print_r($auth);die;
                     if ($auth->DBK_LMS_AUTH->password == 'True') {
                         // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-                        //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$auth->DBK_LMS_AUTH->username);
                         $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$auth->DBK_LMS_AUTH->username);
                         $records = json_decode($records_response);
                        // echo "<pre>";print_r($records);die;

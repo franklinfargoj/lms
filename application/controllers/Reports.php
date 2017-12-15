@@ -1830,9 +1830,11 @@ class Reports extends CI_Controller
             if($data['viewName'] == 'BM'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']));
             }
-            $objSheet->getCell($excel_alpha[++$col].$i)->setValue(!empty($data['lead_source']) ? ucwords($data['lead_source']) : 'All');
-            $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($data['category']) ? ucwords($data['category']) : 'All');
-            $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($data['product']) ? ucwords($data['product']) : 'All');
+            if($action != 'usage') {
+                $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(!empty($data['lead_source']) ? ucwords($data['lead_source']) : 'All');
+                $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(isset($data['category']) ? ucwords($data['category']) : 'All');
+                $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(isset($data['product']) ? ucwords($data['product']) : 'All');
+            }
             if($action == 'leads_generated_vs_converted'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['generated_count']) ? $value['generated_count'] : 0);
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['converted_count']) ? $value['converted_count'] : 0);
