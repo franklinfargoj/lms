@@ -24,6 +24,12 @@ class Api extends REST_Controller
     {
         // Initialization of class
         parent::__construct();
+
+        $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
+        if($explode[0] != 'okhttp'){
+          echo "Invalid access";
+            die;
+        }
         $this->load->model('Lead');
         $this->load->model('Login_model');
         $this->load->model('Ticker_model', 'ticker');
@@ -356,7 +362,7 @@ class Api extends REST_Controller
         $tickers = $this->ticker->view('title,description_text', $where, Tbl_Ticker, '', '', 2);
         if (!empty($tickers)) {
             $result = array('result' => True,
-                'data' => $_SERVER['HTTP_USER_AGENT']);
+                'data' => $tickers);
             returnJson($result);
         }
         $result = array('result' => False,
