@@ -251,25 +251,57 @@ $lead_status = $this->config->item('lead_status');
                                     $param .= '/'.encode_id($value['branch_id']);   
                                 }
                             ?>
-                            <td>
-                                <?php if ($i == 1 || $view == 'branch') {?>
-                                <?php 
-                                    if(in_array($viewName,array('ZM'))){
-                                        if($view == 'branch' || $view == 'employee'){
-                                        }else{
-                                ?>
-                                    <a class="" href="<?php echo site_url('reports/index/usage/branch'.$param)?>">
-                                        Branch View
-                                    </a>
-                                    <span>/</span> 
-                                <?php
+                                <td>
+                                    <?php if($this->session->userdata('admin_type') != 'Super admin'){?>
+                                        <?php if ($i == 1 || $view == 'branch') {?>
+                                            <?php
+                                            if(in_array($viewName,array('ZM'))){
+                                                if($view == 'branch' || $view == 'employee'){
+                                                }else{
+                                                    ?>
+                                                    <a class="" href="<?php echo site_url('reports/index/usage/branch'.$param)?>">
+                                                        Branch View
+                                                    </a>
+                                                    <span>/</span>
+                                                    <?php
+                                                }
+                                            }
+                                            ?>
+                                            <?php
+                                            if(in_array($viewName,array('ZM','BM'))){
+                                                if($view == 'employee'){
+                                                }else {
+
+                                                    ?>
+                                                    <a class=""
+                                                       href="<?php echo site_url('reports/index/usage/employee' . $param) ?>">
+                                                        Employee View
+                                                    </a>
+                                                    <?php
+                                                }
+
+                                            }
+                                            ?>
+                                        <?php }?>
+                                    <?php }else{?>
+
+                                        <?php
+                                        if(in_array($viewName,array('ZM'))){
+                                            if($view == 'branch' || $view == 'employee'){
+                                            }else{
+                                                ?>
+                                                <a class="" href="<?php echo site_url('reports/index/usage/branch'.$param)?>">
+                                                    Branch View
+                                                </a>
+                                                <span>/</span>
+                                                <?php
+                                            }
                                         }
-                                     }
-                                ?>
-                                <?php 
-                                    if(in_array($viewName,array('ZM','BM'))){
-                                        if($view == 'employee'){
-                                        }else {
+                                        ?>
+                                        <?php
+                                        if(in_array($viewName,array('ZM','BM'))){
+                                            if($view == 'employee'){
+                                            }else {
 
                                                 ?>
                                                 <a class=""
@@ -279,10 +311,11 @@ $lead_status = $this->config->item('lead_status');
                                                 <?php
                                             }
 
-                                     }
-                                ?>
-                                <?php }?>
-                            </td>
+                                        }
+                                        ?>
+
+                                    <?php }?>
+                                </td>
                             <?php }?>
                         </tr>
                     <?php

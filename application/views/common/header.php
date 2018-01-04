@@ -174,7 +174,7 @@
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','GM'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','GM','Super admin'))) {?>
 				<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>" id="cal-droped1">
 					<a href="#">
 					Reports &#9662;
