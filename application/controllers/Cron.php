@@ -15,6 +15,7 @@ class Cron extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
+        is_cli() OR show_404();
         $this->load->model('Lead');
     }
 function index(){
@@ -214,7 +215,6 @@ function index(){
             $subject = 'LMS - Reports - '.$v->branch_name;
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
-
         }
     }
 
@@ -653,7 +653,10 @@ $pending_days = 2;
         $this->load->library('excel');
         $file_name = time().'data.xls';
         $excel_alpha = unserialize(EXCEL_ALPHA);
-        $objPHPExcel = $this->excel;
+
+        //$objPHPExcel = $this->excel;
+          $objPHPExcel = new PHPExcel();
+
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
         $objPHPExcel->getDefaultStyle()->getFont()->setSize(11);
         $objPHPExcel->getDefaultStyle()->getFont()->setBold(true);

@@ -7,10 +7,10 @@
     if(isset($leads[0]['lead_identification']) && !empty($leads[0]['lead_identification'])){
         switch ($leads[0]['lead_identification']) {
             case 'HOT':
-                $color = 'red';
+                $color = 'green';
                 break;
             case 'WARM':
-                $color = 'green';
+                $color = 'yellow';
                 break;
             case 'COLD':
                 $color = 'blue';
@@ -210,7 +210,7 @@
                                     }
                                     $js = array(
                                         'id' => 'reason',
-                                        'class' => 'form-control'
+                                        'class' => ''
                                     );
                                     echo form_dropdown('reason', $options21, '', $js);
                                     echo "</span>";
@@ -292,7 +292,7 @@
                                                     }
                                                     $js = array(
                                                         'id' => 'lead_identification',
-                                                        'class' => 'form-control'
+                                                        'class' => ''
                                                     );
                                                     echo form_dropdown('lead_identification', $options2, $leads[0]['lead_identification'], $js);
                                                     echo "</span>";
@@ -412,6 +412,7 @@
     </div>
     <span class="bg-bottom"></span>
 </div>
+<script src="<?php echo base_url().ASSETS;?>/js/jquery.base64.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -669,14 +670,15 @@
                 url: base_url + "leads/verify_account",
                 data: {
                     '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
-                    acc_no: acc_no
+                    acc_no: $.base64.encode($.base64.encode(acc_no))
                 }
             }).success(function(resp){
-
                     var regex = /(<([^>]+)>)/ig;
                     var body = resp;
                     var result = body.replace(regex, "");
                     var response = JSON.parse(result);
+                      //var response = JSON.parse(resp);
+
                         if(response['status'] == 'True'){
                             $('.loader').hide();
                             alert('Success');

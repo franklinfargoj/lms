@@ -477,11 +477,12 @@ function sendPushNotification($emp_id,$message,$title)
             );
 
             $fields = json_encode(array('to' => $device_id, 'data' => array('notificationData'=>$data)));
-
+            $proxy = '172.25.129.11:8080';
             $crl = curl_init();
             curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
             curl_setopt($crl, CURLOPT_POST,true);
             curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($crl, CURLOPT_PROXY, $proxy);
             curl_setopt($crl, CURLOPT_POSTFIELDS, $fields );
 
             curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
@@ -524,7 +525,7 @@ function get_notification_count(){
 function get_details($hrms_id = ''){
     if(!empty($hrms_id)){
         //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$hrms_id);
+        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$hrms_id);
         $records = json_decode($records_response);
         $result['basic_info'] = array(
             'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
@@ -809,6 +810,7 @@ function call_external_url($url) {
 //pe(curl_error($ch));die;
     curl_exec($ch);
     $result = curl_exec($ch);
+//pe(curl_error($ch));die;
     curl_close($ch);
     return($result);
 }
@@ -977,7 +979,7 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
     // 0 = off (for production use)
     // 1 = client messages
     // 2 = client and server messages
-    $mail->SMTPDebug = 2;
+    $mail->SMTPDebug = 0;
 
     //Ask for HTML-friendly debug output
     $mail->Debugoutput = 'html';
@@ -1018,8 +1020,12 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
     $mail->addReplyTo($config[0]->fromemail, $config[0]->from);
 
     //Set who the message is to be sent to
-    $mail->addAddress('mukesh.kurmi@wwindia.com','Mukesh Kurmi');
+    //$mail->addAddress('mukesh.kurmi@wwindia.com','Mukesh Kurmi');
     //$mail->addAddress($to['email'],$to['name']);
+      $mail->addAddress('pragati@denabank.co.in','Pragati Dena Bank');
+//$mail->addAddress('sunmit@denabank.co.in','Pragati Dena Bank');
+
+
 
     //Set the subject line
     $mail->Subject = $subject;
@@ -1070,7 +1076,7 @@ if (!function_exists('check_authorisation')){
 if (!function_exists('verify_account')){
     function verify_account($acc_no){
         if($acc_no !=''){
-            $url = FINACLE_ACCOUNT_RECORD.$acc_no;
+            $url = FINACLE_ACCOUNT_RECORD.'/'.$acc_no;
             $response = call_external_url($url);
             return $response;
         }
@@ -1090,74 +1096,6 @@ if (!function_exists('isTaken')){
     }
 }
 
-if (!function_exists('cbs')){
-    function cbs($account_no){
-
-        $messageId = "1200";
-        // Primariy Bitmap Start
-        $primaryBitmap = chr(bindec("10110000"));
-        $primaryBitmap = $primaryBitmap.chr(bindec("00110000"));
-        $primaryBitmap = $primaryBitmap.chr(bindec("10000001"));
-        $primaryBitmap = $primaryBitmap.chr(bindec("00000001"));
-        $primaryBitmap = $primaryBitmap.chr(bindec("01000000"));
-        $primaryBitmap = $primaryBitmap.chr(bindec("00100000"));
-        $primaryBitmap = $primaryBitmap.chr(bindec("10000000"));
-        $primaryBitmap = $primaryBitmap.chr(0);
-        // Primary Bitmap End
-        // Secondary Bitmap Start
-        $secBitmap = chr(0);
-        $secBitmap = $secBitmap.chr(0);
-        $secBitmap = $secBitmap.chr(0);
-        $secBitmap = $secBitmap.chr(0);
-        $secBitmap = $secBitmap.chr(bindec("00000100"));
-        $secBitmap = $secBitmap.chr(0);
-        $secBitmap = $secBitmap.chr(0);
-        $secBitmap = $secBitmap.chr(bindec("00101000"));
-        // Secondary Bitmap End
-        $field_3='820000';
-        $field_4='0000000000000000';
-        $field_11='000000000000';
-        $field_12=date('YmdHis');
-        $field_17=date('Ymd');
-        $field_24='200';
-        $field_32='03018';
-        $field_34='09000000000';
-        //$field_41='LMS             ';
-        $field_43='08BANKAWAY';
-        $field_49='INR';
-        $field_102='31018        0000    '.$account_no;
-        $field_123='003LMS';
-        $field_125='009LMSMOBILE';
-
-        $message = $messageId.$primaryBitmap.$secBitmap.$field_3.$field_4.$field_11.$field_12.$field_17.$field_24.$field_32.$field_34.$field_43.$field_49.$field_102.$field_123;
-
-        $host    = "172.25.3.130";
-        $port    = 23099;
-
-        // create socket
-        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP) or die("Could not create socket\n");
-        // connect to server
-        $result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");
-        // send message to server
-        socket_write($socket, $message, strlen($message)) or die("Could not send data to server\n");
-        // get server response
-        $result = socket_read ($socket, 2048) or die("Could not read server response\n");
-        //echo "Reply From Server  :".$result;
-        // close socket
-        socket_close($socket);
-
-        $response = array();
-        if(strpos($result,'UNI000000') !== false){
-            $response_data = explode('LMS',$result);
-            $response['status'] = 'True';
-        }else{
-            $response['status'] = 'False';
-        }
-        $response['data'] = $response_data[1];
-        echo json_encode($response);
-    }
-
-}
 if (!function_exists('sortBySubkey')){
 function sortBySubkey(&$array, $subkey, $sortType = SORT_ASC) {
     foreach ($array as $subarray) {
@@ -1302,6 +1240,21 @@ function get_status($lead_id){
     $data = $CI->Lead->get_status($select,$where);
     return $data;
 }
+
+function get_salt()
+{
+  return encode_id(date('YmdHis'));
+}
+
+function aes_decode($encrypted_str){
+    $key = 'RwcmlVpg';
+    $method = 'aes-256-cbc';
+    $key = substr(hash('sha256', $key, true), 0, 32);
+    $iv = '4e5Wa71fYoT7MFEX';
+    $decrypted_string = openssl_decrypt(base64_decode($encrypted_str), $method, $key, OPENSSL_RAW_DATA, $iv);
+    return $decrypted_string;
+}
+
 
 
 

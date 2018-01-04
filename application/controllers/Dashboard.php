@@ -60,8 +60,8 @@ class Dashboard extends CI_Controller {
 
                         //Year till date
                         $where  = array(Tbl_Leads.'.created_by' => $login_user['hrms_id']);
-                        $yr_start_date=date('Y').'-04-01 00:00:00';
-                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')).'-03-31 23:59:59';
                         $where[Tbl_Leads.".created_on >='".$yr_start_date."' AND ".Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
                         $leads['generated_ytd'] = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
 
@@ -75,8 +75,8 @@ class Dashboard extends CI_Controller {
 
                         //Year till date
                         $where  = array(Tbl_LeadAssign.'.employee_id' => $login_user['hrms_id'],Tbl_LeadAssign.'.status' => 'Converted',Tbl_LeadAssign.'.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1);
-                    $yr_start_date=date('Y').'-04-01 00:00:00';
-                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')).'-03-31 23:59:59';
                     $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
                     $leads['converted_ytd'] = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
 
@@ -186,8 +186,8 @@ class Dashboard extends CI_Controller {
         //$where_year_Array = array('zone_id' => $zone_id,'YEAR(created_on)' => date('Y'));
         $where_year_Array = array('zone_id' => $zone_id);
 
-        $yr_start_date=date('Y').'-04-01 00:00:00';
-        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+        $yr_end_date=(date('Y')).'-03-31 23:59:59';
         $where_year_Array["created_on >='".$yr_start_date."'"] = NULL;
         $where_year_Array["created_on <='".$yr_end_date."'"] = NULL;
         // $year_where['YEAR(l.created_on)'] = date('Y');
@@ -231,8 +231,8 @@ class Dashboard extends CI_Controller {
             $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
             $where_month_Array['YEAR(created_on)'] = date('Y');
             $where_year_Array = array('branch_id' => $value['created_by'],'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
-            $yr_start_date=date('Y').'-04-01 00:00:00';
-            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+            $yr_end_date=(date('Y')).'-03-31 23:59:59';
             $where_year_Array["created_on >='".$yr_start_date."'"] = NULL;
             $where_year_Array["created_on <='".$yr_end_date."'"] = NULL;
             // $year_where['YEAR(l.created_on)'] = date('Y');
@@ -260,8 +260,8 @@ class Dashboard extends CI_Controller {
         $where_generated_Array = array('zone_id !=' => NULL);
         $where_year_Array = array('zone_id !=' => NULL);
 
-        $yr_start_date=date('Y').'-04-01 00:00:00';
-        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+        $yr_end_date=(date('Y')).'-03-31 23:59:59';
         $where_year_Array["created_on >='".$yr_start_date."'"] = NULL;
         $where_year_Array["created_on <='".$yr_end_date."'"] = NULL;
         // $year_where['YEAR(l.created_on)'] = date('Y');
@@ -304,8 +304,8 @@ class Dashboard extends CI_Controller {
             $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
             $where_month_Array['YEAR(created_on)'] = date('Y');
             $where_year_Array = array('zone_id' => $value['created_by'],'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
-            $yr_start_date=date('Y').'-04-01 00:00:00';
-            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+            $yr_end_date=(date('Y')).'-03-31 23:59:59';
             $where_year_Array["created_on >='".$yr_start_date."'"] = NULL;
             $where_year_Array["created_on <='".$yr_end_date."'"] = NULL;
             $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
@@ -350,8 +350,8 @@ class Dashboard extends CI_Controller {
                 $year_where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'YEAR(la.created_on)' => date('Y'),'l.lead_source' => $key);
                 $month_where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $branch_id, 'la.is_deleted' => 0,'la.is_updated' => 1, 'MONTH(la.created_on)' => date('m'),'l.lead_source' => $key);
 
-                $yr_start_date=date('Y').'-04-01 00:00:00';
-                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')).'-03-31 23:59:59';
                 $year_where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
                 // $year_where['YEAR(l.created_on)'] = date('Y');
                 $month_where['MONTH(la.created_on)'] = date('m'); //Month till date filter
@@ -381,8 +381,8 @@ class Dashboard extends CI_Controller {
             foreach ($source as $key => $lead_source){
                 $year_where = array('la.zone_id' => $zone_id,'la.is_deleted' => 0,'la.is_updated' => 1, 'l.lead_source' => $key);
                 $month_where = array('la.zone_id' => $zone_id, 'la.is_deleted' => 0,'la.is_updated' => 1, 'l.lead_source' => $key);
-                $yr_start_date=date('Y').'-04-01 00:00:00';
-                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')).'-03-31 23:59:59';
                 $year_where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
                 // $year_where['YEAR(l.created_on)'] = date('Y');
                 $month_where['MONTH(la.created_on)'] = date('m'); //Month till date filter
@@ -415,8 +415,8 @@ class Dashboard extends CI_Controller {
             foreach ($source as $key => $lead_source){
                 $year_where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $login_user['branch_id'],'la.employee_id' => $created_by, 'la.is_deleted' => 0,'la.is_updated' => 1,'l.lead_source' => $key);
                 $month_where = array('la.zone_id' => $login_user['zone_id'],'la.branch_id' => $login_user['branch_id'],'la.employee_id' => $created_by, 'la.is_deleted' => 0,'la.is_updated' => 1,'l.lead_source' => $key);
-                $yr_start_date=date('Y').'-04-01 00:00:00';
-                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')).'-03-31 23:59:59';
                 $year_where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
                 // $year_where['YEAR(l.created_on)'] = date('Y');
                 $month_where['MONTH(la.created_on)'] = date('m'); //Month till date filter
@@ -611,8 +611,8 @@ class Dashboard extends CI_Controller {
                 $table = Tbl_LeadAssign.' as la';
                 $join = array();
                 $join[] = array('table' => Tbl_Leads.' as l', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
-                $yr_start_date=date('Y').'-04-01 00:00:00';
-                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')).'-03-31 23:59:59';
                 $year_where["l.created_on >='".$yr_start_date."' AND l.created_on <='".$yr_end_date."'"] = NULL;
                    // $year_where['YEAR(l.created_on)'] = date('Y');
                 $month_where['MONTH(l.created_on)'] = date('m'); //Month till date filter
@@ -638,8 +638,8 @@ class Dashboard extends CI_Controller {
                         $table1 = Tbl_Leads;
                         $join_assign1[] = array('table' =>Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = '.Tbl_Leads.'.id ','type' => 'left');
                         $whereYear1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL);
-                $yr_start_date=date('Y').'-04-01 00:00:00';
-                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')).'-03-31 23:59:59';
                 $whereYear1[Tbl_Leads.".created_on >='".$yr_start_date."'"] = NULL;
                 $whereYear1[Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
                 // $year_where['YEAR(l.created_on)'] = date('Y');
@@ -657,8 +657,8 @@ class Dashboard extends CI_Controller {
 
                 break;
             case 'assigned':
-                $yr_start_date=date('Y').'-04-01 00:00:00';
-                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')).'-03-31 23:59:59';
                 $year_where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
                 // $year_where['YEAR(l.created_on)'] = date('Y');
                 $month_where['MONTH(la.created_on)'] = date('m'); //Month till date filter
@@ -668,8 +668,8 @@ class Dashboard extends CI_Controller {
 
                     if(empty($lead_source)){
                         $whereArray = array('la.employee_id' => $employee_id,'la.is_updated' => 1);
-                        $yr_start_date=date('Y').'-04-01 00:00:00';
-                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')).'-03-31 23:59:59';
                         $whereArray["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
                         $result['total_assigned_leads'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
                         $whereArrayMonth = array('la.employee_id' => $employee_id,'la.is_updated' => 1);
@@ -679,8 +679,8 @@ class Dashboard extends CI_Controller {
                     }
                     if(!empty($lead_source)){
                         $whereArray = array('la.employee_id' => $employee_id,'la.is_updated' => 1,'l.lead_source'=>$lead_source);
-                        $yr_start_date=date('Y').'-04-01 00:00:00';
-                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')).'-03-31 23:59:59';
                         $whereArray["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
                         $result['total_assigned_leads'] = $this->master->get_leads($action, $table, '', $whereArray, $join, '', '');
                         $whereArrayMonth = array('la.employee_id' => $employee_id,'la.is_updated' => 1,'l.lead_source'=>$lead_source);
@@ -767,8 +767,8 @@ class Dashboard extends CI_Controller {
 
         //Year till date
         $where = array(Tbl_Leads.'.created_by' => $login_user['hrms_id']);
-        $yr_start_date=date('Y').'-04-01 00:00:00';
-        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+        $yr_end_date=(date('Y')).'-03-31 23:59:59';
         $where[Tbl_Leads.".created_on >='".$yr_start_date."'"] = NULL;
         $where[Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
 
@@ -779,8 +779,8 @@ class Dashboard extends CI_Controller {
         $join[] = array('table' => Tbl_Leads, 'on_condition' => Tbl_Leads . '.id = ' . Tbl_LeadAssign . '.lead_id', 'type' => '');
         //year till date
         $whereArray = array(Tbl_Leads . '.created_by' => $login_user['hrms_id'], Tbl_LeadAssign.'.status' => 'Converted', Tbl_LeadAssign . '.is_updated' => 1);
-        $yr_start_date=date('Y').'-04-01 00:00:00';
-        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+        $yr_end_date=(date('Y')).'-03-31 23:59:59';
         $whereArray[Tbl_Leads.".created_on >='".$yr_start_date."'"] = NULL;
         $whereArray[Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
 

@@ -256,6 +256,11 @@
 										Leads Assigned
 									</a>
 								</li>
+                                                                <li>
+									<a href="<?php echo site_url('reports/index/status_flow')?>">
+										Master Report
+									</a>
+								</li>
 							</ul>
 						</li>
 						

@@ -56,6 +56,7 @@
 					// Assuming that the 'title' field value was incorrect:
 					echo form_error('username', '<span class="help-block">', '</span>');
 				?>
+                            
 				<div class="form-control password">
 					<?php 
 							$attributes = array(
@@ -82,11 +83,12 @@
 					//Assuming that the 'password' field value was incorrect:
 					echo form_error('password', '<span class="help-block">', '</span>');
 				?>
+<p class="pswd-note">* Please Use HRMS Password</p>
 				<?php echo $this->load->view('common/captcha',array(),TRUE);?>
 				<div class="form-control form-submit clearfix">
 					<!-- <input type="submit" name="submit" value="LOGIN" class="submit-btn"> -->
 
-					<button type="submit" class="full-btn">
+					<button type="button" class="full-btn" id="form-sub">
 <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
 <span class="btn-txt">LOGIN</span>
 <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
@@ -226,13 +228,27 @@
 
 
 				  });
-			$('#login-form').submit(function () {
+			$('#form-sub').click(function () {
 				var newpwd = $('#password').val();
                             if(window.btoa){
-                             $('#password').val((window.btoa(newpwd)));
+                             var enc_salt = window.btoa(window.btoa(newpwd))+'/'+"<?php echo get_salt();?>";
                                }else{
-                           $('#password').val($.base64.encode(newpwd));
+                            var enc_salt = $.base64.encode($.base64.encode(newpwd))+'/'+"<?php echo get_salt();?>";
                          }
+                $.ajax({
+                method: "POST",
+                url: base_url + "login/aes",
+                data: {
+                    '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                    'auth' : enc_salt
+                }
+            }).success(function (resp) {
+              var rre = JSON.parse(resp);
+              var aes = rre['aes'];
+              $('#password').val(aes);
+              $('#login-form').submit();
+            });
+
 				
 			});
 

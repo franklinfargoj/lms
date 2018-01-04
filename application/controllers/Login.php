@@ -52,7 +52,9 @@ class Login extends CI_Controller {
                 return $this->load->view("login",$arrData);
             }else{
 //echo $this->input->post('password');die;
-              $pwd = base64_decode($this->input->post('password'));
+              //$pwd = base64_decode($this->input->post('password'));
+$pwd = decode_id($this->input->post('password'));
+
                 // Captcha validation passed
                 if($this->input->post('username') == '1111111'){
                     $checkInput = array(
@@ -95,13 +97,13 @@ class Login extends CI_Controller {
                    $password = $pwd;
 
                     //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
-                    $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$hrms_id.'&password='.$password);
+                    $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$hrms_id.'?password='.$password);
                     $auth = json_decode($auth_response);
 //echo "<pre>";
 //print_r($auth);die;
                     if ($auth->DBK_LMS_AUTH->password == 'True') {
                         // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-                        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$auth->DBK_LMS_AUTH->username);
+                        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$auth->DBK_LMS_AUTH->username);
                         $records = json_decode($records_response);
                        // echo "<pre>";print_r($records);die;
                         $authorisation_key= random_number();
@@ -267,5 +269,14 @@ class Login extends CI_Controller {
             return TRUE;
         }
     }
+
+public function aes()
+    {
+        $exp_str = explode('/',$this->input->post('auth'));
+        $pwd = base64_decode(base64_decode($exp_str[0]));
+        $data['aes'] = encode_id($pwd);
+        echo json_encode($data);
+    }
+
 
 }

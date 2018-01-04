@@ -109,6 +109,7 @@ class Leads extends CI_Controller
                     $branch_id = $this->input->post('branch_id');
                 }
                 
+                $lead_data['created_on'] = date('Y-m-d H:i:s');
                 $lead_data['created_by'] = $login_user['hrms_id'];
                 $lead_data['created_by_name'] = $login_user['full_name'];
 
@@ -167,6 +168,11 @@ class Leads extends CI_Controller
                     $lead_assign['created_by']=$login_user['hrms_id'];
                     $lead_assign['created_by_name']=$login_user['full_name'];
                     $lead_assign['created_on']=date('Y-m-d H:i:s');
+
+                    $lead_assign['modified_by']=$login_user['hrms_id'];
+                    $lead_assign['modified_by_name']=$login_user['full_name'];
+                    $lead_assign['modified_on']=date('Y-m-d H:i:s',time()+5);
+
                     $this->Lead->insert_assign($lead_assign);
                     //Push notification
                     $emp_id = $login_user['hrms_id'];
@@ -353,6 +359,7 @@ class Leads extends CI_Controller
      */
     private function validate_leads_data($excelData,$lead_source)
     {
+//pe($excelData);die;
         $total_inserted=0; $total_rows = count($excelData);
         $error = $insert_array = $update_array = array();
 
@@ -376,6 +383,8 @@ class Leads extends CI_Controller
                         $whereArray = array('title' => ucwords(strtolower(trim($prod_title))),'status'=>'active');
                         $prod_id = $this->Lead->fetch_product_id($whereArray);
                         $analytic_lead_route = $this->master->view_lead_route();
+                        $value['created_on']=date('Y-m-d H:i:s');
+
                         if(($lead_source == 'analytics' && $analytic_lead_route[0]['route_to'] == 1) ||
                             ($lead_source != 'analytics'))
                         {
@@ -384,8 +393,10 @@ class Leads extends CI_Controller
                             if (!is_array($routed_id)){
                                 $value['reroute_from_branch_id'] = $value['branch_id'];
                                 $value['branch_id'] = $routed_id;
+                                $value['modified_on']=date('Y-m-d H:i:s',time()+5);
                             }else{
                                 $value['reroute_from_branch_id'] = NULL;
+                                $value['modified_on']=date('Y-m-d H:i:s',time()+3);
                             }
                         }
                         $is_own_branch = '1';
@@ -402,6 +413,7 @@ class Leads extends CI_Controller
                         $value['product_id']=$prod_id['id'];
                         $value['lead_name']=$value['customer_name'];
                         $value['lead_source']=$lead_source;
+                       // pe($value);die;
                         $insert_array[] = $value;
                         $total_inserted++;
                     }else{
@@ -470,8 +482,8 @@ class Leads extends CI_Controller
         $join = array('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $group_by = array('db_leads.lead_source');
         $where = array(Tbl_Leads . '.branch_id' => $login_user['branch_id']);
-        $yr_start_date=date('Y').'-04-01 00:00:00';
-        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+        $yr_end_date=(date('Y')).'-03-31 23:59:59';
         $where[Tbl_Leads.".created_on >='".$yr_start_date."' AND ".Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
         $where['('.Tbl_LeadAssign.'.lead_id IS NULL OR '.Tbl_LeadAssign.'.is_deleted = 1)'] = NULL;
         $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
@@ -708,12 +720,24 @@ class Leads extends CI_Controller
                     $lead_identification = $this->input->post('lead_identification');
                     $lead_status = $this->input->post('lead_status');
                     $drop_reason = array();
+		    if($login_user['designation_name'] == 'EM'){
                     if($lead_status == 'NI'){
                         $drop_reason = $this->input->post('reason');
                         if(empty($drop_reason) || $drop_reason == NULL){
                             $this->form_validation->set_rules('reason','Reason For Drop', 'required');
                             if ($this->form_validation->run() === FALSE) {
                                 $this->session->set_flashdata('error','Enter Reason For Drop.');
+                                redirect('leads/details/assigned/ytd/'.encode_id($lead_id));
+                            }
+                        }
+                    }
+		}
+                       if($lead_status == 'AO'){
+                        $accountNo = $this->input->post('accountNo');
+                        if(empty($accountNo) || $accountNo == NULL){
+                            $this->form_validation->set_rules('accountNo','Account Number', 'required');
+                            if ($this->form_validation->run() === FALSE) {
+                                $this->session->set_flashdata('error','Enter Account Number');
                                 redirect('leads/details/assigned/ytd/'.encode_id($lead_id));
                             }
                         }
@@ -789,10 +813,14 @@ class Leads extends CI_Controller
                                 'created_on' => $leads_data['created_on'],
                                 'created_by' => $leads_data['created_by'],
                                 'created_by_name' => $leads_data['created_by_name'],
-                                'modified_on' => date('y-m-d-H-i-s'),
+                                'modified_on' => date('Y-m-d H:i:s'),
                                 'modified_by' => $login_user['hrms_id'],
                                 'modified_by_name' => $login_user['full_name']
                             );
+                            if ($lead_status == 'Converted' || $lead_status == 'Closed') {
+                                $lead_status_data['view_status'] = 1;
+                            }
+//pe($lead_status_data);die;
                             if(!empty($drop_reason)){
                                 $lead_status_data['reason_for_drop'] = $drop_reason;
                             }
@@ -805,7 +833,7 @@ class Leads extends CI_Controller
                              * Reroute Lead
                              *****************************************************************/
                             if (isset($employee_id) && !empty($employee_id)) {
-                                $lead_old_data['is_deleted'] = 1;
+                                $lead_old_data['is_deleted'] = 0;
                                 $explode_employee = explode('-', $employee_id);
                                 $lead_status_data['employee_id'] = $explode_employee[0];
                                 $lead_status_data['employee_name'] = $explode_employee[1];
@@ -852,7 +880,7 @@ class Leads extends CI_Controller
                                         if (!is_array($routed_id)) {
                                             $update_data['reroute_from_branch_id'] = $branch_id;
                                             $update_data['branch_id'] = $routed_id;
-                                            $date = date('Y-m-d H:i:s');
+                                            $date = date('Y-m-d H:i:s',time()+5);
                                             $update_data['modified_on'] = $date;
                                             $where = array('id' => $lead_id);
                                             $table = Tbl_Leads;
@@ -905,7 +933,7 @@ class Leads extends CI_Controller
                                 $split_cbs_resp = explode('~',$cbs_res);
                                 $responseData = array(
                                     'lead_id' => $lead_id,
-                                    'account_no'=>trim($this->input->post('accountNo')),
+                                    'account_no'=>base64_decode(base64_decode(trim($this->input->post('accountNo')))),
                                     'response_data' => $this->input->post('response_data'),
                                     'amount' => substr($split_cbs_resp[0], 3),
                                     'customer_name' => $split_cbs_resp[1],
@@ -916,7 +944,7 @@ class Leads extends CI_Controller
                                 $this->Lead->insert_lead_data($responseData,Tbl_cbs);
                                 $table = Tbl_Leads;
                                 $where = array('id'=>$lead_id);
-                                $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
+                                $data = array('opened_account_no'=>base64_decode(base64_decode(trim($this->input->post('accountNo')))));
                                 $this->Lead->update_lead_data($where,$data,$table);
                             }
                             if($lead_status == 'Converted'){
@@ -1031,8 +1059,8 @@ class Leads extends CI_Controller
             }
             if($till == 'ytd'){
                 //$where['YEAR(l.created_on)'] = date('Y'); //Year till date filter
-                $yr_start_date=date('Y').'-04-01 00:00:00';
-                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')).'-03-31 23:59:59';
                 $where["l.created_on >='".$yr_start_date."' AND l.created_on <='".$yr_end_date."'"] = NULL; //Year till date filter
 
             }
@@ -1139,7 +1167,7 @@ class Leads extends CI_Controller
                 'created_on' => date('Y-m-d H:i:s'),
                 'created_by' => $login_user['hrms_id'],
                 'modified_by' => $login_user['hrms_id'],
-                'modified_on' => date('Y-m-d H:i:s'),
+                'modified_on' => date('Y-m-d H:i:s',time()+5),
                 'created_by_name' => $login_user['full_name'],
                 'modified_by_name' => $login_user['full_name']
             );
@@ -1154,6 +1182,10 @@ class Leads extends CI_Controller
                 $insertData = $assign_data;
                 $response = $this->Lead->insert_lead_data($insertData,Tbl_LeadAssign);
                 if($response['status']=='success'){
+		$lead_old_data = array('is_deleted' => 0);
+		$where = array(Tbl_LeadAssign.'.lead_id' => $dataArray[0]);
+		$this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
+
                     //Add Notification
                     $title="New Lead Assigned";
                     $description="Lead for ".ucwords(strtolower($dataArray[1]))." assigned to you for ".ucwords(strtolower($dataArray[2]));
@@ -1428,8 +1460,9 @@ class Leads extends CI_Controller
 
     public function verify_account(){
         if($this->input->post('acc_no') != ''){
-            $acc_no = $this->input->post('acc_no');
-            $response = verify_account($acc_no);
+            $acc_no = base64_decode(base64_decode($this->input->post('acc_no')));
+            //$response = verify_account($acc_no);
+            $response = $this->verify_accountcbs($acc_no);
             echo $response;
         }
     }
@@ -1511,7 +1544,7 @@ class Leads extends CI_Controller
             if(!empty($final_result)){
                 $final_result = sortBySubkey($final_result,'date');
             }
-            //pe($final_result);
+            //pe($final_result);die;
             $arrData['lead_data'] = $final_result;
             $middle = 'Leads/life_cycle';
             return load_view($middle,$arrData);
@@ -1563,6 +1596,82 @@ class Leads extends CI_Controller
             $this->session->set_flashdata('message', $msg);
             redirect('leads/upload_employee');
         }
+    }
+   
+private function verify_accountcbs($acc_no)
+    {
+        //echo $acc_no;die;
+        $host    = "172.25.2.23";
+        $port    = 11221;
+        $strval='1200';
+        $primary = chr(bindec('10110000'));
+        $primary = $primary.chr(bindec('00110000'));
+        $primary = $primary.chr(bindec('10000001'));
+        $primary = $primary.chr(bindec('00000001'));
+        $primary = $primary.chr(bindec('01000000'));
+        $primary = $primary.chr(bindec('00100000'));
+        $primary = $primary.chr(bindec('10000000'));
+        $primary = $primary.chr(0);
+
+        $sec = chr(0);
+        $sec = $sec.chr(0);
+        $sec = $sec.chr(0);
+        $sec = $sec.chr(0);
+        $sec = $sec.chr(bindec('00000100'));
+        $sec = $sec.chr(0);
+        $sec = $sec.chr(0);
+        $sec = $sec.chr(bindec('00101000'));
+
+        $field_3 = '970000';
+        $field_4 = '0000000000000000';
+        $field_11 = '000000'.date('His');
+        $field_12 = date('YmdHis');
+        $field_17 = date('Ymd');
+        $field_24 = '200';
+        $field_32 = '03018';
+        $field_34 = '09000400463';
+        //$field_41 = 'LMS             ';
+        $field_43 = '08BANKAWAY';
+        $field_49 = 'INR';
+        $field_102 = '31018        0000    '.$acc_no;
+        $field_123 = '003LMS';
+        $field_125 = '009LMSMOBILE';
+
+        //$message = $msg."970000000000000000000000000001010120170808072141201708082000301809000000000IVR             08BANKAWAYINR31018        0000    9158885659  003IVR009IVRMOBILE";
+
+        $msg_header= $strval.$primary.$sec;
+        $message = $msg_header.$field_3.$field_4.$field_11.$field_12.$field_17.$field_24.$field_32.$field_34.$field_43.$field_49.$field_102.$field_123.$field_125;
+
+        //echo "Message To server :".$message;
+        // create socket
+        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP) or die("Could not create socket\n");
+        // connect to server
+        $result = socket_connect($socket, $host, $port) or die("Could not connect to server\n");
+        //echo "Conection Established Successfully With IP - ".$host." And PORT - ".$port;
+        //echo "<br>";
+        // send string to server
+        $cnt = socket_write($socket, $message, strlen($message)) or die("Could not send data to server\n");
+        //echo "Message Sent To Server :".$message;
+        //echo "<br>";
+        //echo "Sent Message Length :" .$cnt;
+        //echo "<br>";
+        // get server response
+        $result = socket_read ($socket, 2048) or die("Could not read server response\n");
+        //echo "Reply From Server  :".$result;die;
+        // close socket
+        socket_close($socket);
+
+        $response= array();
+        if(strpos($result,'UNI000000') !== false)
+        {
+            $response_data = explode('LMS',$result);
+            $response['status']='True';
+        }else{
+            $response_data = explode('LMS',$result);
+            $response['status']='False';
+        }
+        $response['data'] = $response_data[1];
+        return json_encode($response);
     }
 
 }
