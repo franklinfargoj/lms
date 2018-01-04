@@ -21,14 +21,14 @@ class Reports extends CI_Controller
 
         $param1 = $this->uri->segment(3,0);
         $admin = ucwords(strtolower($this->session->userdata('admin_type')));
-        if ($admin == 'Em'){
+        if ($admin == 'Em' || $admin == 'Super Admin'){
             redirect('dashboard');
         }
-        if ($admin == 'Super Admin'){
-            if($param1 != 'usage' && $param1 != 'status_flow'){
-                redirect('dashboard');
-            }
-        }
+//        if ($admin == 'Super Admin'){
+//            if($param1 != 'usage' && $param1 != 'status_flow'){
+//                redirect('dashboard');
+//            }
+//        }
 
         $this->load->model('Lead');
         $this->load->model('Master_model','Master');
@@ -181,7 +181,7 @@ class Reports extends CI_Controller
         }else{
             $this->make_bread->add('Pendency Leads', '', 0);
             $viewName = $login_user['designation_name'];
-            if($viewName == 'GM'){
+            if($viewName == 'GM' || $viewName == 'Super admin'){
                 $viewName = 'ZM';
             }
         }
@@ -378,7 +378,7 @@ class Reports extends CI_Controller
         }else{
             $this->make_bread->add('Interested Leads', '', 0);
             $viewName = $login_user['designation_name'];
-            if($viewName == 'GM'){
+            if($viewName == 'GM' || $viewName == 'Super admin'){
                 $viewName = 'ZM';
             }
         }
@@ -585,7 +585,7 @@ class Reports extends CI_Controller
         }else{
             $this->make_bread->add('Leads Generated', '', 0);
             $viewName = $login_user['designation_name'];
-            if($viewName == 'GM'){
+            if($viewName == 'GM' || $viewName == 'Super admin'){
                 $viewName = 'ZM';
             }
         }
@@ -856,7 +856,7 @@ class Reports extends CI_Controller
         }else{
             $this->make_bread->add('Leads Assigned', '', 0);
             $viewName = $login_user['designation_name'];
-            if($viewName == 'GM'){
+            if($viewName == 'GM' || $viewName == 'Super admin'){
                 $viewName = 'ZM';
             }
         }
@@ -1071,7 +1071,7 @@ class Reports extends CI_Controller
             $viewName = 'BM';
         }else{
             $viewName = $login_user['designation_name'];
-            if($viewName == 'GM'){
+            if($viewName == 'GM' || $viewName == 'Super admin'){
                 $viewName = 'ZM';
             }
         }
@@ -1367,7 +1367,7 @@ class Reports extends CI_Controller
         }else{
             $this->make_bread->add('Leads Classifcation','', 0);
             $viewName = $login_user['designation_name'];
-            if($viewName == 'GM'){
+            if($viewName == 'GM' || $viewName == 'Super admin'){
                 $viewName = 'ZM';
             }
         }

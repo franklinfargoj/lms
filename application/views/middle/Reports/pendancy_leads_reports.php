@@ -374,6 +374,7 @@ $lead_sources = $this->config->item('lead_source');
                                     }
                                 ?>
                                 <td>
+                                    <?php if($this->session->userdata('admin_type') != 'Super admin'){?>
                                     <?php if ($i == 1 || $view == 'branch') {?>
                                     <?php
                                         if(in_array($viewName,array('ZM'))){
@@ -383,7 +384,7 @@ $lead_sources = $this->config->item('lead_source');
                                         <a class="" href="<?php echo site_url('reports/index/pendancy_leads_reports/branch'.$param)?>">
                                             Branch View
                                         </a>
-                                        <span>/</span>
+                                        <span>|</span>
                                     <?php
                                             }
                                          }
@@ -402,6 +403,36 @@ $lead_sources = $this->config->item('lead_source');
                                             }
                                          }
                                     ?>
+                                    <?php }?>
+                                    <?php }else{?>
+
+                                            <?php
+                                            if(in_array($viewName,array('ZM'))){
+                                                if($view == 'branch' || $view == 'employee'){
+                                                }else{
+                                                    ?>
+                                                    <a class="" href="<?php echo site_url('reports/index/pendancy_leads_reports/branch'.$param)?>">
+                                                        Branch View
+                                                    </a>
+                                                    <span>|</span>
+                                                    <?php
+                                                }
+                                            }
+                                            ?>
+                                            <?php
+                                            if(in_array($viewName,array('ZM','BM'))){
+                                                if($view == 'employee'){
+                                                }else {
+                                                    ?>
+                                                    <a class=""
+                                                       href="<?php echo site_url('reports/index/pendancy_leads_reports/employee' . $param) ?>">
+                                                        Employee View
+                                                    </a>
+                                                    <?php
+
+                                                }
+                                            }
+                                            ?>
                                     <?php }?>
                                 </td>
                                 <?php }?>

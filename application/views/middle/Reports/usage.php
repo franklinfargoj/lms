@@ -262,7 +262,7 @@ $lead_status = $this->config->item('lead_status');
                                                     <a class="" href="<?php echo site_url('reports/index/usage/branch'.$param)?>">
                                                         Branch View
                                                     </a>
-                                                    <span>/</span>
+                                                    <span>|</span>
                                                     <?php
                                                 }
                                             }
@@ -293,7 +293,7 @@ $lead_status = $this->config->item('lead_status');
                                                 <a class="" href="<?php echo site_url('reports/index/usage/branch'.$param)?>">
                                                     Branch View
                                                 </a>
-                                                <span>/</span>
+                                                <span>|</span>
                                                 <?php
                                             }
                                         }
