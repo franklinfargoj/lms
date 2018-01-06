@@ -174,7 +174,7 @@
 					</a>
 				</li>
 				<?php }?>
-				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','GM','Super admin'))) {?>
+				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','GM'))) {?>
 				<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>" id="cal-droped1">
 					<a href="#">
 					Reports &#9662;
@@ -267,7 +267,47 @@
 					</ul>
 				</li>
 				<?php }?>
-			</ul>
+                <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+                    <li class="<?php echo ($controller == 'reports') ? 'active' : ''?>" id="cal-droped1">
+                        <a href="#">
+                            Reports &#9662;
+                        </a>
+                        <ul class="cal-drop1">
+                            <li class="<?php echo ($controller == 'usage') ? 'active' : ''?>" id="cal-droped3">
+                                <a href="#">
+
+                                    <span class="right-toggle">&#9666;</span>Login <span class="left-toggle"> &#9656;</span>
+
+                                </a>
+                                <ul class="cal-drop3">
+                                    <li>
+                                        <a href="<?php echo site_url('reports/index/usage')?>">
+                                            Login Report
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                            <li class="<?php echo ($controller == 'leads_classification') ? 'active' : ''?>" id="cal-droped2">
+                                <a href="#">
+
+                                    <span class="right-toggle">&#9666;</span>Classification<span class="left-toggle"> &#9656;</span>
+                                </a>
+                                <ul class="cal-drop2">
+                                    <li>
+                                        <a href="<?php echo site_url('reports/index/status_flow')?>">
+                                            Master Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </li>
+                <?php }?>
+            </ul>
 		</div>
 		<div class="right-nav">
 				<div class="notification">

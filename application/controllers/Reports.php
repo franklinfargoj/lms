@@ -21,14 +21,14 @@ class Reports extends CI_Controller
 
         $param1 = $this->uri->segment(3,0);
         $admin = ucwords(strtolower($this->session->userdata('admin_type')));
-        if ($admin == 'Em' || $admin == 'Super Admin'){
+        if ($admin == 'Em'){
             redirect('dashboard');
         }
-//        if ($admin == 'Super Admin'){
-//            if($param1 != 'usage' && $param1 != 'status_flow'){
-//                redirect('dashboard');
-//            }
-//        }
+        if ($admin == 'Super Admin'){
+            if($param1 != 'usage' && $param1 != 'status_flow'){
+                redirect('dashboard');
+            }
+        }
 
         $this->load->model('Lead');
         $this->load->model('Master_model','Master');

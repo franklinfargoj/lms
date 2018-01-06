@@ -94,6 +94,19 @@ class Leads extends CI_Controller
                 $middle = 'Leads/add_lead';
                 return load_view($middle, $arrData);
             }else{
+
+                // check for duplicate entry
+                $whereEx = array(
+                    'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
+                    'contact_no'=> $this->input->post('contact_no'),
+                    'product_id'=> $this->input->post('product_id'),
+                    'created_by'=>$this->input->post('created_by')
+                );
+                $is_exsits = $this->Lead->is_exsits($whereEx);
+                if($is_exsits){
+                    $this->session->set_flashdata('error', "Lead Already Added");
+                    redirect(base_url('leads/add'), 'refresh');
+                }
                 
                 $login_user = get_session();
                 $lead_data['state_id'] = $lead_data['created_by_state_id'] = $login_user['state_id'];
@@ -935,7 +948,7 @@ class Leads extends CI_Controller
                                     'lead_id' => $lead_id,
                                     'account_no'=>base64_decode(base64_decode(trim($this->input->post('accountNo')))),
                                     'response_data' => $this->input->post('response_data'),
-                                    'amount' => substr($split_cbs_resp[0], 3),
+                                    'amount' => $split_cbs_resp[0],
                                     'customer_name' => $split_cbs_resp[1],
                                     'customer_contact_no' => $split_cbs_resp[2],
                                     'email_id' => $split_cbs_resp[3],
@@ -1664,10 +1677,10 @@ private function verify_accountcbs($acc_no)
         $response= array();
         if(strpos($result,'UNI000000') !== false)
         {
-            $response_data = explode('LMS',$result);
+            $response_data = explode('LMS~',$result);
             $response['status']='True';
         }else{
-            $response_data = explode('LMS',$result);
+            $response_data = explode('LMS~',$result);
             $response['status']='False';
         }
         $response['data'] = $response_data[1];

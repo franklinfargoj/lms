@@ -526,4 +526,15 @@ class Lead  extends CI_Model
         }
         return $response;
     }
+
+    public function is_exsits($whereEx){
+        $this->db->select('id');
+        $this->db->from('db_leads');
+        $this->db->where($whereEx);
+        $resultArray = $this->db->get()->result_array();
+        if (count($resultArray) > 0) {
+            return $resultArray[0]['id'];
+        }
+        return false;
+    }
 }

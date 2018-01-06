@@ -26,9 +26,9 @@ class Api extends REST_Controller
         parent::__construct();
 
 $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
-if($explode[0] != 'okhttp'){
-   echo "Invalid Access";die;
-}
+//if($explode[0] != 'okhttp'){
+//   echo "Invalid Access";die;
+//}
         $this->load->model('Lead');
         $this->load->model('Login_model');
         $this->load->model('Ticker_model', 'ticker');
@@ -43,7 +43,7 @@ if($explode[0] != 'okhttp'){
             $params = $this->input->post();
             $headers = getallheaders();
 
-            if(!empty($headers) && !isset($params['password'])){
+           /* if(!empty($headers) && !isset($params['password'])){
                 if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
                     isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
                     $response = array('result'=>False,
@@ -63,7 +63,7 @@ if($explode[0] != 'okhttp'){
                         'data'=>array('authorisation key or hrms id missing.'));
                     returnJson($response);
                 }
-            }
+            }*/
         }
     }
 
@@ -206,6 +206,20 @@ if($explode[0] != 'okhttp'){
     public function add_lead_post()
     {
         $params = $this->input->post();
+
+        // check for duplicate entry
+        $whereEx = array(
+            'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
+            'contact_no'=> $this->input->post('contact_no'),
+            'product_id'=> $this->input->post('product_id'),
+            'created_by'=>$this->input->post('created_by')
+        );
+        $is_exsits = $this->Lead->is_exsits($whereEx);
+        if($is_exsits){
+            $result = array('result' => False,
+                'data' => 'Record Already Added');
+            returnJson($result);
+        }
         $error = array();
         $validations = array('customer_name' => 'Customer Name', 'contact_no' => 'Phone No',
             'product_category_id' => 'Product Category', 'product_id' => 'Product', 'lead_ticket_range' => 'Range',
@@ -2586,7 +2600,7 @@ $wherefollowup = array('lead_id'=>$params['lead_id'],'is_updated'=>1,'status'=>'
                     //'account_no'=>$acc_no,
                     'account_no'=>aes_decode($acc_no),
                     'response_data' => $api_res['data'],
-                    'amount' => substr($split_cbs_resp[0], 3),
+                    'amount' => $split_cbs_resp[0],
                     'customer_name' => $split_cbs_resp[1],
                     'customer_contact_no' => $split_cbs_resp[2],
                     'email_id' => $split_cbs_resp[3],
@@ -2852,10 +2866,10 @@ private function verify_cbs_account($acc_no)
         $response= array();
         if(strpos($result,'UNI000000') !== false)
         {
-            $response_data = explode('LMS',$result);
+            $response_data = explode('LMS~',$result);
             $response['status']='True';
         }else{
-            $response_data = explode('LMS',$result);
+            $response_data = explode('LMS~',$result);
             $response['status']='False';
         }
         $response['data'] = $response_data[1];

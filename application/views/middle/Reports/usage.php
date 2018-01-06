@@ -83,7 +83,7 @@ $lead_status = $this->config->item('lead_status');
         </div>
     
     <div class="form-control form-submit clearfix">
-        <button type="submit" name="Submit" value="Submit" class="full-btn float-right">
+        <button type="submit" name="Submit" value="Submit" id="su" class="full-btn float-right">
 <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
 <span class="btn-txt">Submit</span>
 <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
@@ -91,7 +91,7 @@ $lead_status = $this->config->item('lead_status');
     </div>
    </div>
     </div>
-
+<?php if($this->session->userdata('admin_type') != 'Super admin'){?>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){
@@ -334,6 +334,15 @@ $lead_status = $this->config->item('lead_status');
     }else{?>
     <span class="no_result">No records found</span>
 <?php }?>
+<?php }else{?>
+<div class="container clearfix">
+    <div class="float-right">&nbsp;
+        <a href="javascript:void(0);" class="export_national btn-Download">
+            Download Bank Data
+        </a>
+    </div>
+</div>
+<?php }?>
 <span class="bg-bottom"></span>
 <!-- END LEADS-->
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
@@ -347,6 +356,10 @@ $lead_status = $this->config->item('lead_status');
             //Initialize datatable configuration
             initTable(table,columns);
         }
+
+        $('#su').click(function(){
+            $('#su').hide();
+        })
     });
 </script>
 <script src="<?php echo base_url().ASSETS;?>js/reports.js"></script>
