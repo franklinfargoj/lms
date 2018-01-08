@@ -11,7 +11,7 @@ class Reports extends CI_Controller
      * @access private
      * @param none
      * @return void
-     * 
+     *
      */
     function __construct()
     {
@@ -41,7 +41,7 @@ class Reports extends CI_Controller
      * @access public
      * @param $action,$view,$zone_id,$branch_id,$export = 'no'
      * @return void
-     * 
+     *
      */
     public function index($action,$view = null,$zone_id = null,$branch_id = null,$export = 'no')
     {
@@ -104,7 +104,7 @@ class Reports extends CI_Controller
 
             }
         }
-        
+
         //Get All dropdown
         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
         $arrData['category_list'] = dropdown($category_list,'All');
@@ -116,7 +116,7 @@ class Reports extends CI_Controller
 
     public function view()
     {
-        $this->make_bread->add('Reports', '', 0);   
+        $this->make_bread->add('Reports', '', 0);
         $arrData['breadcrumb'] = $this->make_bread->output();
         return load_view('Reports/index',$arrData);
     }
@@ -209,7 +209,7 @@ class Reports extends CI_Controller
                 $WHERE['zone_id'] = $where['la.zone_id'];
             }
             if(isset($where['la.branch_id'])){
-                $WHERE['branch_id'] = $where['la.branch_id'];   
+                $WHERE['branch_id'] = $where['la.branch_id'];
             }
             //$WHERE['designation'] = 'HD';
             $GROUP_BY = array('hrms_id');
@@ -223,7 +223,7 @@ class Reports extends CI_Controller
             $group_by[] = 'la.branch_id';
 
             //Get Listing for branch
-            $SELECT = array('branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('branch_id','branch_name','zone_id','zone_name');
             if(isset($where['la.zone_id'])){
                 $WHERE['zone_id'] = $where['la.zone_id'];
             }
@@ -238,7 +238,7 @@ class Reports extends CI_Controller
             $group_by[] = 'la.zone_id';
 
             //Get Listing for branch
-            $SELECT = array('zone_id','zone_name'); 
+            $SELECT = array('zone_id','zone_name');
             $WHERE = array();
             //$WHERE['designation'] = 'ZD';
             $GROUP_BY = array('zone_id');
@@ -382,7 +382,7 @@ class Reports extends CI_Controller
                 $viewName = 'ZM';
             }
         }
-        
+
         $WHERE = array();
         //Employee Login
         if($viewName == 'EM'){
@@ -406,7 +406,7 @@ class Reports extends CI_Controller
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
             if(isset($where['l.branch_id'])){
-                $WHERE['branch_id'] = $where['l.branch_id'];   
+                $WHERE['branch_id'] = $where['l.branch_id'];
             }
             //$WHERE['designation'] = 'HD';
             $GROUP_BY = array('hrms_id');
@@ -420,7 +420,7 @@ class Reports extends CI_Controller
             $group_by[] = 'l.branch_id';
 
             //Get Listing for branch
-            $SELECT = array('branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('branch_id','branch_name','zone_id','zone_name');
             if(isset($where['l.zone_id'])){
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
@@ -433,9 +433,9 @@ class Reports extends CI_Controller
             //Get Data for zone
             $select[] = 'l.zone_id';
             $group_by[] = 'l.zone_id';
-            
+
             //Get Listing for branch
-            $SELECT = array('zone_id','zone_name'); 
+            $SELECT = array('zone_id','zone_name');
             $WHERE = array();
             //$WHERE['designation'] = 'ZD';
             $GROUP_BY = array('zone_id');
@@ -472,7 +472,7 @@ class Reports extends CI_Controller
 
                 }
             }
-           // pe($Lead);die;
+            // pe($Lead);die;
             $arrData['viewName'] = $viewName;
             foreach ($list as $key => $value) {
                 //Employee Login
@@ -575,7 +575,7 @@ class Reports extends CI_Controller
                         $this->make_bread->add('Branch View', 'reports/index/leads_generated/branch/'.encode_id($arrData['zone_id']), 0);
                     }
                 }
-            } 
+            }
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
@@ -616,12 +616,12 @@ class Reports extends CI_Controller
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
             if(isset($where['l.branch_id'])){
-                $WHERE['branch_id'] = $where['l.branch_id'];   
+                $WHERE['branch_id'] = $where['l.branch_id'];
             }
             //$WHERE['designation'] = 'HD';
             $GROUP_BY = array('hrms_id');
         }
-           
+
         //Branch Manager Login
         if($viewName == 'BM'){
             //Get Data for Branch
@@ -648,7 +648,7 @@ class Reports extends CI_Controller
             $group_by[] = 'l.zone_id';
 
             //Get Listing for branch
-            $SELECT = array('zone_id','zone_name'); 
+            $SELECT = array('zone_id','zone_name');
             //$WHERE['designation'] = 'ZD';
             $GROUP_BY = array('zone_id');
         }
@@ -663,8 +663,8 @@ class Reports extends CI_Controller
         $generated_leads = $this->Lead->get_leads($action,$table,$select1,$where1,$join=array(),$group_by1,$order_by = '');
 //pe($leads);
 //pe($generated_leads);//die;
-         /*pe($this->db->last_query());
-        exit;*/
+        /*pe($this->db->last_query());
+       exit;*/
         //pe($unassigned_leads_count);die;
 //        $arrData['leads'] = array();
 //        $table = Tbl_Leads.' as l';
@@ -725,7 +725,7 @@ class Reports extends CI_Controller
                 }
             }
 //            pe($Lead);
-           //pe($generatedLead);die;
+            //pe($generatedLead);die;
             $arrData['viewName'] = $viewName;
             foreach ($list as $key => $value) {
                 //echo $index;echo "<br>";
@@ -768,11 +768,11 @@ class Reports extends CI_Controller
                 if(empty($Lead['userId']) && !empty($generatedLead['userId'])){
 
                     $generatedCnt = 0;
-                   if(isset($generatedLead[$index])){
-                       $generatedCnt = $generatedLead[$index]['generated'];
-                   }
-                        $arrData['leads'][$index]['total'] = $generatedCnt;
-                        $arrData['leads'][$index]['status'] = array();
+                    if(isset($generatedLead[$index])){
+                        $generatedCnt = $generatedLead[$index]['generated'];
+                    }
+                    $arrData['leads'][$index]['total'] = $generatedCnt;
+                    $arrData['leads'][$index]['status'] = array();
 
                 }
                 if(!empty($Lead['userId']) && empty($generatedLead['userId'])){
@@ -860,7 +860,7 @@ class Reports extends CI_Controller
                 $viewName = 'ZM';
             }
         }
-        
+
         $WHERE = array();
         //Employee Login
         if($viewName == 'EM'){
@@ -884,7 +884,7 @@ class Reports extends CI_Controller
                 $WHERE['zone_id'] = $where['la.zone_id'];
             }
             if(isset($where['la.branch_id'])){
-                $WHERE['branch_id'] = $where['la.branch_id'];   
+                $WHERE['branch_id'] = $where['la.branch_id'];
             }
             //$WHERE['designation'] = 'HD';
             $GROUP_BY = array('hrms_id');
@@ -913,7 +913,7 @@ class Reports extends CI_Controller
             $group_by[] = 'la.zone_id';
 
             //Get Listing for branch
-            $SELECT = array('zone_id','zone_name'); 
+            $SELECT = array('zone_id','zone_name');
             $WHERE = array();
             //$WHERE['designation'] = 'ZD';
             $GROUP_BY = array('zone_id');
@@ -1010,7 +1010,7 @@ class Reports extends CI_Controller
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'la.status' => 'Converted');
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
             $join[] = array('table' => Tbl_cbs.' as rfc','on_condition' => 'rfc.lead_id = l.id','type' => '');
-             $alias = 'la';
+            $alias = 'la';
 
         }elseif($type == 'assigned'){
             $table = Tbl_LeadAssign.' as la';
@@ -1120,10 +1120,10 @@ class Reports extends CI_Controller
             //Get Listing for employees
             $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name','designation');
             if(isset($where[$alias.'.zone_id']) || isset($where[$alias.'.created_by_zone_id'])){
-                    $WHERE['zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+                $WHERE['zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
             }
             if(isset($where[$alias.'.branch_id']) || isset($where[$alias.'.created_by_branch_id'])){
-                    $WHERE['branch_id'] = !empty($arrData['branch_id']) ? $arrData['branch_id'] : $login_user['branch_id'];
+                $WHERE['branch_id'] = !empty($arrData['branch_id']) ? $arrData['branch_id'] : $login_user['branch_id'];
 
             }
             //$WHERE['designation'] = 'HD';
@@ -1164,9 +1164,9 @@ class Reports extends CI_Controller
                 $group_by[] = $alias.'.zone_id';
             }
 
-            
+
             //Get Listing for branch
-            $SELECT = array('zone_id','zone_name'); 
+            $SELECT = array('zone_id','zone_name');
             $WHERE = array();
             //$WHERE['designation'] = 'ZD';
             $GROUP_BY = array('zone_id');
@@ -1178,8 +1178,8 @@ class Reports extends CI_Controller
         }
 
         $arrData[$type] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
-       // pe($this->db->last_query());
-       //pe($arrData);die;
+        // pe($this->db->last_query());
+        //pe($arrData);die;
         return $arrData;
     }
 
@@ -1203,7 +1203,7 @@ class Reports extends CI_Controller
         }else{
             $this->make_bread->add('Business Generated', '', 0);
         }
-        $arrData['G_Total'] = $arrData['C_Total'] = 0;    
+        $arrData['G_Total'] = $arrData['C_Total'] = 0;
         $arrData['leads'] = array();
 //        if(!empty($arrData['generated']) && !empty($arrData['converted']) && !empty($arrData['actual_business'] && !empty($arrData['assigned']))) {
 //            $leads = array_merge($arrData['generated'], $arrData['converted'],$arrData['actual_business'],$arrData['assigned']);
@@ -1262,7 +1262,7 @@ class Reports extends CI_Controller
                         }
                     }
                 }
-        }
+            }
             foreach ($arrData['list'] as $key => $value) {
                 //Employee Login
                 if($viewName == 'EM'){
@@ -1371,7 +1371,7 @@ class Reports extends CI_Controller
                 $viewName = 'ZM';
             }
         }
-        
+
         $WHERE = array();
         //Employee Login
         if($viewName == 'EM'){
@@ -1394,7 +1394,7 @@ class Reports extends CI_Controller
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
             if(isset($where['l.branch_id'])){
-                $WHERE['branch_id'] = $where['l.branch_id'];   
+                $WHERE['branch_id'] = $where['l.branch_id'];
             }
             //$WHERE['designation'] = 'HD';
             $GROUP_BY = array('hrms_id');
@@ -1407,7 +1407,7 @@ class Reports extends CI_Controller
             $group_by[] = 'l.branch_id';
 
             //Get Listing for branch
-            $SELECT = array('branch_id','branch_name','zone_id','zone_name'); 
+            $SELECT = array('branch_id','branch_name','zone_id','zone_name');
             if(isset($where['l.zone_id'])){
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
@@ -1421,7 +1421,7 @@ class Reports extends CI_Controller
             $group_by[] = 'l.zone_id';
 
             //Get Listing for branch
-            $SELECT = array('zone_id','zone_name'); 
+            $SELECT = array('zone_id','zone_name');
             $WHERE = array();
             //$WHERE['designation'] = 'ZD';
             $GROUP_BY = array('zone_id');
@@ -1520,7 +1520,7 @@ class Reports extends CI_Controller
         if(!empty($arrData['end_date'])){
             $where['DATE_FORMAT(l.date_time,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
         }
-        
+
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
             $this->make_bread->add('Usage', 'reports/index/usage', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
@@ -1543,7 +1543,7 @@ class Reports extends CI_Controller
                 $viewName = 'ZM';
             }
         }
-        
+
         $WHERE = array();
 
         //Employee Login
@@ -1558,7 +1558,7 @@ class Reports extends CI_Controller
                     }
                 }else{
                     $where['l.branch_id'] = $login_user['branch_id'];
-                }   
+                }
             }
             $group_by[]  =  'l.employee_id';
 
@@ -1568,7 +1568,7 @@ class Reports extends CI_Controller
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
             if(isset($where['l.branch_id'])){
-                $WHERE['branch_id'] = $where['l.branch_id'];   
+                $WHERE['branch_id'] = $where['l.branch_id'];
             }
             //$WHERE['designation'] = 'HD';
             $GROUP_BY = array('hrms_id');
@@ -1582,7 +1582,7 @@ class Reports extends CI_Controller
             $group_by[] = 'l.branch_id';
 
             //Get Listing for branch
-            $SELECT = array('branch_id','branch_name','zone_id','zone_name','COUNT(hrms_id) as total_user'); 
+            $SELECT = array('branch_id','branch_name','zone_id','zone_name','COUNT(hrms_id) as total_user');
             if(isset($where['l.zone_id'])){
                 $WHERE['zone_id'] = $where['l.zone_id'];
             }
@@ -1597,14 +1597,14 @@ class Reports extends CI_Controller
             $group_by[] = 'l.zone_id';
 
             //Get Listing for branch
-            $SELECT = array('zone_id','zone_name','COUNT(hrms_id) as total_user'); 
+            $SELECT = array('zone_id','zone_name','COUNT(hrms_id) as total_user');
             $WHERE = array();
             //$WHERE['designation'] = 'ZD';
             $GROUP_BY = array('zone_id');
         }
 
         $TABLE  = 'employee_dump';
-       // echo $arrData['national'];
+        // echo $arrData['national'];
         $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
         //pe($this->db->last_query());
         //exit;
@@ -1612,7 +1612,7 @@ class Reports extends CI_Controller
         $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
 //pe($leads);die;
         $arrData['leads'] = array();
-        $arrData['Total'] = 0;   
+        $arrData['Total'] = 0;
         if($list){
             $Lead['userId'] = array();
             if(!empty($leads)) {
@@ -1690,7 +1690,7 @@ class Reports extends CI_Controller
                 $arrData['leads'][$index]['zone_name'] = $value->zone_name;
                 $arrData['leads'][$index]['zone_id'] = $value->zone_id;
             }
-           // echo $this->db->last_query();
+            // echo $this->db->last_query();
             //pe($arrData);//die;
             if($arrData['national'] != 'yes') {
                 if ($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == '') {
@@ -1715,7 +1715,7 @@ class Reports extends CI_Controller
         if($arrData['viewName'] == 'EM'){
             $header_value = array('Sr.No','Zone','Branch','HRMS ID','Employee Name','Designation','Source Type','Category Name','Product Name');
         }else if($arrData['viewName'] == 'BM'){
-            $header_value = array('Sr.No','Zone','Branch','Source Type','Category Name','Product Name');   
+            $header_value = array('Sr.No','Zone','Branch','Source Type','Category Name','Product Name');
         }else{
             $header_value = array('Sr.No','Zone','Source Type','Category Name','Product Name');
         }
@@ -1733,7 +1733,7 @@ class Reports extends CI_Controller
             $header_value = array('Sr.No','Zone','Branch','HRMS ID','Employee Name','Designation');
         }
 
-       if($action == 'status_flow'){
+        if($action == 'status_flow'){
             $header_value = array('Sr. No.','Lead Id','Customer Name','Contact Number','Product Category','Product','Ticket Size','Lead Source','Lead Generation Date','Lead Generated By','Lead Generation Branch ID','Lead Generation Branch Name','Lead Generation Zone Name','Lead Assigned Current Branch Name','HRMS ID of Lead Generator','Lead Assignment Date(1)','Lead Assigned To (1)','Lead Assigned to HRMS ID (1)','Lead Assigned To Branch ID (1)','Lead Assigned To Branch Name (1)','Lead Assignment Date(2)','Lead Assigned To (2)','Lead Assigned to HRMS ID (2)','Lead Assigned To Branch ID (2)','Lead Assigned To Branch Name (2)','Lead Marked as Interested Date','Lead Marked as Interested By','Lead Marked as Interested By HRMS ID','Lead Identified As','Lead Marked as Documents Collected Date','Lead Marked as Documents Collected By','Lead Marked as Documents Collected By HRMS ID','Lead Marked as Account Opened Date','Lead Marked as Account Opened By','Lead Marked as Account Opened By HRMS ID','Lead marked as Drop/Not Interested Date','Lead marked as Drop/Not Interested By','Lead marked as Drop/Not Interested By HRMS ID','Reason for Drop','Lead Marked as Converted Date','Lead Marked as Converted By','Lead Marked as Converted By HRMS ID','Account Number of lead converted','Account Balance of Lead Converted','Lead marked as Reject Date','Lead marked as Reject By','Lead marked as Reject By HRMS ID');
         }
 
@@ -1769,12 +1769,12 @@ class Reports extends CI_Controller
                     $usage_col = array('Total User','Logged in User','Not logged in User');
                 }
                 $header_value = array_merge($header_value,$usage_col);
-               // pe($header_value); //die;
+                // pe($header_value); //die;
                 break;
 
         }
         //$this->create_excel($action,$header_value,$arrData);
-if($action == 'status_flow'){
+        if($action == 'status_flow'){
             $this->create_dump_excel($action,$header_value,$arrData);
         }else{
             $this->create_excel($action,$header_value,$arrData);
@@ -1788,7 +1788,7 @@ if($action == 'status_flow'){
         ini_set('memory_limit', '-1');
 //        echo $action;
 //        pe($header_value);
-      // pe($data);die;
+        // pe($data);die;
         $this->load->library('excel');
         $file_name = time().'data.xls';
         $excel_alpha = unserialize(EXCEL_ALPHA);
@@ -1839,7 +1839,7 @@ if($action == 'status_flow'){
 
             $objSheet->getCell($excel_alpha[$key].'1')->setValue($value);
         }
-        
+
         $i=2;$j=1;
         //pe($data['leads']);die;
         foreach ($data['leads'] as $key => $value) {
@@ -1865,10 +1865,10 @@ if($action == 'status_flow'){
             }
             if($action != 'usage'){
 
-            $objSheet->getCell($excel_alpha[++$col].$i)->setValue(!empty($data['lead_source']) ? ucwords($data['lead_source']) : 'All');
-            $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($data['category']) ? ucwords($data['category']) : 'All');
-            $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($data['product']) ? ucwords($data['product']) : 'All');
-           }
+                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(!empty($data['lead_source']) ? ucwords($data['lead_source']) : 'All');
+                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($data['category']) ? ucwords($data['category']) : 'All');
+                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($data['product']) ? ucwords($data['product']) : 'All');
+            }
             if($action == 'leads_generated_vs_converted'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['generated_count']) ? $value['generated_count'] : 0);
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['converted_count']) ? $value['converted_count'] : 0);
@@ -1893,14 +1893,14 @@ if($action == 'status_flow'){
             if(in_array($action,array('leads_generated','leads_assigned','pendancy_leads_reports'))){
                 $lead_status = array_keys($this->config->item('lead_status'));
                 foreach ($lead_status as $k1 => $v1) {
-                        if(in_array($v1,array_keys($value['status']))){
-                            $objSheet->getCell($excel_alpha[++$m].$i)->setValue($value['status'][$v1]);
+                    if(in_array($v1,array_keys($value['status']))){
+                        $objSheet->getCell($excel_alpha[++$m].$i)->setValue($value['status'][$v1]);
+                    }else{
+                        if(($action == 'pendancy_leads_reports') && (in_array($v1,array('AO','Converted','Closed','NI')))){
                         }else{
-                            if(($action == 'pendancy_leads_reports') && (in_array($v1,array('AO','Converted','Closed','NI')))){
-                            }else{
-                                $objSheet->getCell($excel_alpha[++$m].$i)->setValue(0);
-                            }
-                        }    
+                            $objSheet->getCell($excel_alpha[++$m].$i)->setValue(0);
+                        }
+                    }
                 }
             }
             if($action == 'leads_type_reports'){
@@ -1910,13 +1910,13 @@ if($action == 'status_flow'){
                         $objSheet->getCell($excel_alpha[++$m].$i)->setValue($value['lead_identification'][$v1]);
                     }else{
                         $objSheet->getCell($excel_alpha[++$m].$i)->setValue(0);
-                    }    
+                    }
                 }
             }
             $i++;$j++;
         }
-        
-       // pe($data);die;
+
+        // pe($data);die;
         //echo $file_name;die;
         //return $file_name;
         make_upload_directory('uploads');
@@ -1929,7 +1929,7 @@ if($action == 'status_flow'){
         $objWriter->save('php://output');
     }
 
-private function status_flow($arrData){
+    private function status_flow($arrData){
 
         $login_user = get_session();
         $action = 'list';
@@ -1971,7 +1971,7 @@ private function status_flow($arrData){
             $lead_id = $row['id'];
             $final_result = array();
             $action = 'list';
-            $select = array('l.id','l.customer_name','l.lead_source','l.contact_no','l.created_by_branch_id','l.created_by_zone_id','l.created_on AS generated_on','l.reroute_from_branch_id','l.modified_on','l.branch_id','l.created_by_name as generated','rfc.amount','l.opened_account_no');
+            $select = array('l.id','l.customer_name','l.lead_source','l.contact_no','l.created_by_branch_id','l.created_on AS generated_on','l.reroute_from_branch_id','l.modified_on','l.branch_id','l.created_by_name as generated','rfc.amount','l.opened_account_no');
             $table = Tbl_Leads.' as l';
             $join = array();
             $join[] = array('table' => Tbl_cbs.' as rfc','on_condition' => 'l.id = rfc.lead_id','type' => 'left');
@@ -2017,11 +2017,11 @@ private function status_flow($arrData){
     }
 
 
-private function create_dump_excel($action,$header_value,$data){
+    private function create_dump_excel($action,$header_value,$data){
         set_time_limit(0);
         ini_set('memory_limit', '-1');
         $lead_type = $this->config->item('lead_type');
-//        echo $action;
+       // echo $action;
 //        pe($header_value);
         // pe($data);die;
         $this->load->library('excel');
@@ -2156,7 +2156,7 @@ private function create_dump_excel($action,$header_value,$data){
                             $branchname1 = $branchname1[0]['name'];
                             $objSheet->getCell($excel_alpha[19] . $i)->setValue(ucwords($branchname1));
 
-                           
+
                         }
                         if ($value[$key]['status'] == 'NC' && $value[$key]['assignee_branch'] == $value[0]['branch_id']) {
                             $objSheet->getCell($excel_alpha[20] . $i)->setValue(ucwords($value[$key]['date']));
@@ -2185,7 +2185,7 @@ private function create_dump_excel($action,$header_value,$data){
                         $objSheet->getCell($excel_alpha[28] . $i)->setValue(ucwords($lead_type[$value[0]['lead_identification']]));
                     }
 
-                    
+
 
                     if($value[$key]['status'] == 'DC'){
                         $objSheet->getCell($excel_alpha[29] . $i)->setValue(ucwords($value[$key]['date']));

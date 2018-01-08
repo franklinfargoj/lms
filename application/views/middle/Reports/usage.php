@@ -252,7 +252,7 @@ $lead_status = $this->config->item('lead_status');
                                 }
                             ?>
                                 <td>
-                                    <?php if($this->session->userdata('admin_type') != 'Super admin'){?>
+                                    <?php if($this->session->userdata('admin_type') == 'ZM' || $this->session->userdata('admin_type') == 'BM'){?>
                                         <?php if ($i == 1 || $view == 'branch') {?>
                                             <?php
                                             if(in_array($viewName,array('ZM'))){

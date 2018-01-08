@@ -80,20 +80,18 @@ class Dashboard extends CI_Controller {
 
                         //Year till date
                         $where  = array(Tbl_LeadAssign.'.employee_id' => $login_user['hrms_id'],Tbl_LeadAssign.'.status' => 'Converted',Tbl_LeadAssign.'.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1);
-                        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
-                        $yr_end_date=(date('Y')).'-03-31 23:59:59';
-
-                        $current_month = date('n');
-                        if($current_month >=4){
-                            $yr_start_date=(date('Y')).'-04-01 00:00:00';
-                            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
-                        }
-
+                    $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                    $current_month = date('n');
+                    if($current_month >=4){
+                        $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    }
                     $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
-                        $leads['converted_ytd'] = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
+                    $leads['converted_ytd'] = $this->master->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
 
-                        //For assigned leads Count
-                        $table = Tbl_LeadAssign;
+                    //For assigned leads Count
+                    $table = Tbl_LeadAssign;
 
                         //Year till date
                         $where  = array(Tbl_LeadAssign.'.employee_id' => $login_user['hrms_id'],Tbl_LeadAssign.'.is_deleted' => 0,'YEAR('.Tbl_LeadAssign.'.created_on)' => date('Y'));

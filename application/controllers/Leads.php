@@ -94,20 +94,17 @@ class Leads extends CI_Controller
                 $middle = 'Leads/add_lead';
                 return load_view($middle, $arrData);
             }else{
-
-                // check for duplicate entry
-                $whereEx = array(
-                    'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
-                    'contact_no'=> $this->input->post('contact_no'),
-                    'product_id'=> $this->input->post('product_id'),
-                    'created_by'=>$this->input->post('created_by')
-                );
-                $is_exsits = $this->Lead->is_exsits($whereEx);
-                if($is_exsits){
-                    $this->session->set_flashdata('error', "Lead Already Added");
-                    redirect(base_url('leads/add'), 'refresh');
-                }
-                
+                 // check for duplicate entry
+                 $whereEx = array(
+                     'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
+                     'contact_no'=> $this->input->post('contact_no'),
+                     'product_id'=> $this->input->post('product_id')
+                 );
+                 $is_exsits = $this->Lead->is_exsits($whereEx);
+                 if($is_exsits){
+                     $this->session->set_flashdata('error', "Lead Already Added");
+                     redirect(base_url('leads/add'), 'refresh');
+                 } 
                 $login_user = get_session();
                 $lead_data['state_id'] = $lead_data['created_by_state_id'] = $login_user['state_id'];
                 $lead_data['branch_id'] = $lead_data['created_by_branch_id'] = $login_user['branch_id'];
@@ -951,7 +948,7 @@ class Leads extends CI_Controller
                                 $split_cbs_resp = explode('~',$cbs_res);
                                 $responseData = array(
                                     'lead_id' => $lead_id,
-                                    'account_no'=>base64_decode(base64_decode(trim($this->input->post('accountNo')))),
+                                    'account_no'=>trim($this->input->post('accountNo')),
                                     'response_data' => $this->input->post('response_data'),
                                     'amount' => $split_cbs_resp[0],
                                     'customer_name' => $split_cbs_resp[1],
@@ -962,7 +959,7 @@ class Leads extends CI_Controller
                                 $this->Lead->insert_lead_data($responseData,Tbl_cbs);
                                 $table = Tbl_Leads;
                                 $where = array('id'=>$lead_id);
-                                $data = array('opened_account_no'=>base64_decode(base64_decode(trim($this->input->post('accountNo')))));
+                                $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
                                 $this->Lead->update_lead_data($where,$data,$table);
                             }
                             if($lead_status == 'Converted'){

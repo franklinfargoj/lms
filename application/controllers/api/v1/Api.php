@@ -26,9 +26,9 @@ class Api extends REST_Controller
         parent::__construct();
 
 $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
-//if($explode[0] != 'okhttp'){
-//   echo "Invalid Access";die;
-//}
+if($explode[0] != 'okhttp'){
+   echo "Invalid Access";die;
+}
         $this->load->model('Lead');
         $this->load->model('Login_model');
         $this->load->model('Ticker_model', 'ticker');
@@ -43,7 +43,7 @@ $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
             $params = $this->input->post();
             $headers = getallheaders();
 
-           /* if(!empty($headers) && !isset($params['password'])){
+            if(!empty($headers) && !isset($params['password'])){
                 if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
                     isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
                     $response = array('result'=>False,
@@ -63,7 +63,7 @@ $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
                         'data'=>array('authorisation key or hrms id missing.'));
                     returnJson($response);
                 }
-            }*/
+            }
         }
     }
 
@@ -221,20 +221,18 @@ $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
     public function add_lead_post()
     {
         $params = $this->input->post();
-
         // check for duplicate entry
-        $whereEx = array(
+         $whereEx = array(
             'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
-            'contact_no'=> $this->input->post('contact_no'),
-            'product_id'=> $this->input->post('product_id'),
-            'created_by'=>$this->input->post('created_by')
-        );
-        $is_exsits = $this->Lead->is_exsits($whereEx);
-        if($is_exsits){
-            $result = array('result' => False,
-                'data' => 'Record Already Added');
-            returnJson($result);
-        }
+             'contact_no'=> $this->input->post('contact_no'),
+             'product_id'=> $this->input->post('product_id')
+         );
+         $is_exsits = $this->Lead->is_exsits($whereEx);
+         if($is_exsits){
+             $result = array('result' => False,
+                 'data' => array('Record Already Added'));
+             returnJson($result);
+         }
         $error = array();
         $validations = array('customer_name' => 'Customer Name', 'contact_no' => 'Phone No',
             'product_category_id' => 'Product Category', 'product_id' => 'Product', 'lead_ticket_range' => 'Range',

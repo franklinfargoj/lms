@@ -798,7 +798,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
 }
 
 function call_external_url($url) {
-//echo $url;die;
+
     //return file_get_contents($url);die;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -1022,8 +1022,10 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
     //Set who the message is to be sent to
     //$mail->addAddress('mukesh.kurmi@wwindia.com','Mukesh Kurmi');
     //$mail->addAddress($to['email'],$to['name']);
-      $mail->addAddress('pragati@denabank.co.in','Pragati Dena Bank');
-//$mail->addAddress('sunmit@denabank.co.in','Pragati Dena Bank');
+      //$mail->addAddress('pragati@denabank.co.in','Pragati Dena Bank');
+     //$mail->addAddress('sunmit@denabank.co.in','Pragati Dena Bank');
+    $mail->addAddress('jeet.gupta@denabank.co.in','Pragati Dena Bank');
+    $mail->addCC('sunmit@denabank.co.in','Pragati Dena Bank');
 
 
 
@@ -1193,17 +1195,6 @@ if(!function_exists('branchname')){
     }
 }
 
-if(!function_exists('zonename')){
-    function zonename($id){
-        $CI = & get_instance();
-        $CI->load->model('Master_model','master');
-        $select=array('name');
-        $where['code'] = $id;
-        $data = $CI->master->get_zonename($select,$where);
-        return $data;
-    }
-}
-
 function convertCurrency($number)
 {
     // Convert Price to Crores or Lakhs or Thousands
@@ -1269,6 +1260,17 @@ function aes_decode($encrypted_str){
     $iv = '4e5Wa71fYoT7MFEX';
     $decrypted_string = openssl_decrypt(base64_decode($encrypted_str), $method, $key, OPENSSL_RAW_DATA, $iv);
     return $decrypted_string;
+}
+
+if(!function_exists('zonename')){
+    function zonename($id){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $select=array('name');
+        $where['code'] = $id;
+        $data = $CI->master->get_zonename($select,$where);
+        return $data;
+    }
 }
 
 
