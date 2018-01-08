@@ -162,6 +162,7 @@
     </div>
     </div>
     </div>
+        <?php if($this->session->userdata('admin_type') != 'Super admin'){?>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" alt="35" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){
@@ -453,6 +454,14 @@
 <?php
     }else{?>
     <span class="no_result">No records found</span>
+<?php }}else{?>
+    <div class="container clearfix">
+        <div class="float-right">&nbsp;
+            <a href="javascript:void(0);" class="export_national btn-Download">
+                Download Bank Data
+            </a>
+        </div>
+    </div>
 <?php }?>
 <span class="bg-bottom" ></span>
 <!-- END LEADS-->

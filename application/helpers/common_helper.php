@@ -1134,8 +1134,13 @@ if(!function_exists('unassignedLeadCount')){
         $where = array(Tbl_Leads . '.branch_id' => $branch_id);
         $where['('.Tbl_LeadAssign.'.lead_id IS NULL OR '.Tbl_LeadAssign.'.is_deleted = 1)'] = NULL;
 
-$yr_start_date=date('Y').'-04-01 00:00:00';
-                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+        $yr_end_date=(date('Y')).'-03-31 23:59:59';
+        $current_month = date('n');
+        if($current_month >=4){
+            $yr_start_date=(date('Y')).'-04-01 00:00:00';
+            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        }
                 $where[Tbl_Leads . ".created_on >='".$yr_start_date."'"] = NULL; 
 $where[Tbl_Leads . ".created_on <='".$yr_end_date."'"] = NULL;       
 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
@@ -1184,6 +1189,17 @@ if(!function_exists('branchname')){
         $select=array('name');
         $where['code'] = $id;
         $data = $CI->master->get_branchname($select,$where);
+        return $data;
+    }
+}
+
+if(!function_exists('zonename')){
+    function zonename($id){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $select=array('name');
+        $where['code'] = $id;
+        $data = $CI->master->get_zonename($select,$where);
         return $data;
     }
 }

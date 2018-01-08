@@ -359,4 +359,14 @@ class Master_model extends CI_Model{
 		$where = array('route_to !=' => NULL);
 		return $this->view($select,$where,Tbl_analytics_lead_route,$join = array(),$order_by);
 	}
+
+    public function get_zonename($select,$where){
+
+        $this->db->select($select,TRUE);
+        $this->db->from('db_zone');
+        $this->db->where($where);
+        $query = $this->db->get();
+//		pe($this->db->last_query());die;
+        return $query->result_array();
+    }
 }

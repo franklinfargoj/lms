@@ -91,6 +91,11 @@ $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
 
                         $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                         $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                        $current_month = date('n');
+                        if($current_month >=4){
+                            $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        }
                         $whereyear[Tbl_LeadAssign.".created_on >='".$yr_start_date."'"] = NULL;
                         $whereyear[Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
@@ -130,6 +135,11 @@ $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
                         $wheremonth = array(Tbl_LeadAssign . '.branch_id' => $branch_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, Tbl_Leads . '.lead_source' => $key);
                         $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                         $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                        $current_month = date('n');
+                        if($current_month >=4){
+                            $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        }
                         $whereyear[Tbl_LeadAssign.".created_on >='".$yr_start_date."'"] = NULL;
                         $whereyear[Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
@@ -169,6 +179,11 @@ $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
                         $wheremonth = array(Tbl_LeadAssign . '.zone_id' => $zone_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0, Tbl_Leads . '.lead_source' => $key);
                         $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                         $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                        $current_month = date('n');
+                        if($current_month >=4){
+                            $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        }
                         $whereyear[Tbl_LeadAssign.".created_on >='".$yr_start_date."'"] = NULL;
                         $whereyear[Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
@@ -474,6 +489,11 @@ $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
                             $whereArray = array(Tbl_Leads . '.created_by' => $employee_id, 'status' => $key, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0);
                             $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                             $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                            $current_month = date('n');
+                            if($current_month >=4){
+                                $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                            }
                             $whereArray[Tbl_Leads  .".created_on >='$yr_start_date'"] = NULL;
                             $whereArray[Tbl_Leads  .".created_on <='$yr_end_date'"] = NULL;
                             $result[$i]['Year'] = $this->Lead->get_leads($action, $table, '', $whereArray, $join, '', '');
@@ -495,6 +515,11 @@ $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
                         $whereYear['(la.lead_id IS NULL OR la.is_deleted = 1)'] = NULL;
                         $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                         $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                        $current_month = date('n');
+                        if($current_month >=4){
+                            $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                        }
                         $whereYear[$table .".created_on >='$yr_start_date'"] = NULL;
                         $whereYear[$table .".created_on <='$yr_end_date'"] = NULL;
                         $whereMonth = array($table . '.created_by' => $employee_id);
@@ -936,6 +961,11 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
             $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
             $yr_end_date=(date('Y')).'-03-31 23:59:59';
+            $current_month = date('n');
+            if($current_month >=4){
+                $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            }
            // $where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
             if ($type == 'EM') {
                 $where['la.employee_id'] = $id;
@@ -1656,6 +1686,11 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
                     $where = array(Tbl_Leads . '.created_by' => $created_id);
                     $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                     $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                    $current_month = date('n');
+                    if($current_month >=4){
+                        $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    }
                     $where[Tbl_Leads.".created_on >='".$yr_start_date."' AND ".Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
 
                     $leads['generated_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
@@ -1672,6 +1707,11 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
                     $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1);
                     $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                     $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                    $current_month = date('n');
+                    if($current_month >=4){
+                        $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    }
                     $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
                     $leads['converted_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
@@ -1683,6 +1723,11 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
                     $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
                     $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                     $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                    $current_month = date('n');
+                    if($current_month >=4){
+                        $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    }
                    // $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
                     $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
@@ -1760,6 +1805,11 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
 
                 $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                 $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                $current_month = date('n');
+                if($current_month >=4){
+                    $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                }
                 $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
                 // $year_where['YEAR(l.created_on)'] = date('Y');
                 $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
@@ -1798,6 +1848,11 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                     $where_year_Array = array('employee_id' => $value['created_by'],'status' => 'converted');
                     $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                     $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                    $current_month = date('n');
+                    if($current_month >=4){
+                        $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    }
                     $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
                     // $year_where['YEAR(l.created_on)'] = date('Y');
                     $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
@@ -1824,6 +1879,11 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
 
                 $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                 $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                $current_month = date('n');
+                if($current_month >=4){
+                    $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                }
                 $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
                 // $year_where['YEAR(l.created_on)'] = date('Y');
                 $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
@@ -1863,6 +1923,11 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                     $where_year_Array = array('branch_id' => $value['created_by'],'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
                     $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                     $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                    $current_month = date('n');
+                    if($current_month >=4){
+                        $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    }
                     $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
                     // $year_where['YEAR(l.created_on)'] = date('Y');
                     $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
@@ -1887,6 +1952,11 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                 $where_year_Array = array('zone_id !=' => NULL);
                 $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                 $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                $current_month = date('n');
+                if($current_month >=4){
+                    $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                }
                 $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
                 // $year_where['YEAR(l.created_on)'] = date('Y');
                 $where_generated_Array['MONTH(created_on)'] = date('m'); //Month till date filter
@@ -1925,6 +1995,11 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                     $where_year_Array = array('zone_id' => $value['created_by'],'status' => 'converted','is_updated'=>1,'is_deleted'=>0);
                     $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                     $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                    $current_month = date('n');
+                    if($current_month >=4){
+                        $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    }
                     $where_year_Array["created_on >='".$yr_start_date."' AND created_on <='".$yr_end_date."'"] = NULL;
                     // $year_where['YEAR(l.created_on)'] = date('Y');
                     $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
@@ -2115,6 +2190,11 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                     $where = array(Tbl_Leads . '.created_by' => $created_id);
                     $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                     $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                    $current_month = date('n');
+                    if($current_month >=4){
+                        $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    }
                     $where[Tbl_Leads.".created_on >='".$yr_start_date."' AND ".Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
 
                     $leads['generated_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
@@ -2131,6 +2211,11 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                     $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign.'.is_updated' => 1);
                     $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                     $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                    $current_month = date('n');
+                    if($current_month >=4){
+                        $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                        $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                    }
                     $where[Tbl_LeadAssign.".created_on >='".$yr_start_date."' AND ".Tbl_LeadAssign.".created_on <='".$yr_end_date."'"] = NULL;
 
                     $leads['converted_ytd'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
@@ -2776,6 +2861,11 @@ $wherefollowup = array('lead_id'=>$params['lead_id'],'is_updated'=>1,'status'=>'
             $where = array(Tbl_Leads . '.created_by' => $params['hrms_id']);
             $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
             $yr_end_date=(date('Y')).'-03-31 23:59:59';
+            $current_month = date('n');
+            if($current_month >=4){
+                $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            }
             $where[Tbl_Leads.".created_on >='".$yr_start_date."'"] = NULL;
             $where[Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
             $result['total_generated'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
@@ -2787,6 +2877,11 @@ $wherefollowup = array('lead_id'=>$params['lead_id'],'is_updated'=>1,'status'=>'
             $whereArray = array(Tbl_Leads . '.created_by' => $params['hrms_id'], Tbl_LeadAssign . '.status' => 'Converted', Tbl_LeadAssign . '.is_updated' => 1);
             $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
             $yr_end_date=(date('Y')).'-03-31 23:59:59';
+            $current_month = date('n');
+            if($current_month >=4){
+                $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            }
             $whereArray[Tbl_Leads.".created_on >='".$yr_start_date."'"] = NULL;
             $whereArray[Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
             $result['total_converted'] = $this->Lead->get_leads($action, $table, $select, $whereArray, $join, $group_by = array(), $order_by = array());
