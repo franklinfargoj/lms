@@ -98,10 +98,10 @@ class Cbs extends CI_Controller {
         $response= array();
         if(strpos($result,'UNI000000') !== false)
         {
-            $response_data = explode('LMS',$result);
+            $response_data = explode('LMS~',$result);
             $response['status']='True';
         }else{
-            $response_data = explode('LMS',$result);
+            $response_data = explode('LMS~',$result);
             $response['status']='False';
         }
         $response['data'] = $response_data[1];
