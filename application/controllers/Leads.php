@@ -17,7 +17,7 @@ class Leads extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-        is_logged_in();
+        //is_logged_in();
         $this->load->model('Lead');
         $this->load->model('Master_model','master');
         /*
@@ -98,9 +98,11 @@ class Leads extends CI_Controller
                  $whereEx = array(
                      'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
                      'contact_no'=> $this->input->post('contact_no'),
-                     'product_id'=> $this->input->post('product_id')
+                     'product_id'=> $this->input->post('product_id'),
+                     'DATEDIFF( CURDATE( ) , created_on) <=' => 180
                  );
                  $is_exsits = $this->Lead->is_exsits($whereEx);
+                 die;
                  if($is_exsits){
                      $this->session->set_flashdata('error', "Lead Already Added");
                      redirect(base_url('leads/add'), 'refresh');
