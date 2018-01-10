@@ -96,7 +96,7 @@ class Leads extends CI_Controller
             }else{
                  // check for duplicate entry
                  $whereEx = array(
-                     'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
+                     //'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
                      'contact_no'=> $this->input->post('contact_no'),
                      'product_id'=> $this->input->post('product_id'),
                      'DATEDIFF( CURDATE( ) , created_on) <=' => 180
