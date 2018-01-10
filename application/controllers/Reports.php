@@ -1948,6 +1948,7 @@ class Reports extends CI_Controller
         if(!empty($arrData['end_date'])){
             $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
         }
+        //$where['l.id']=432;
 //        if(!empty($arrData['product_category_id'])){
 //            $where['l.product_category_id'] = $arrData['product_category_id'];
 //            $categoryData = $this->Master->view_product_category($arrData['product_category_id']);
@@ -1980,21 +1981,74 @@ class Reports extends CI_Controller
             //pe($result);die;
             if(!empty($result)){
                 if($result[0]['reroute_from_branch_id'] !=''){
-                    $final_result[] = array('id'=>$result[0]['id'],'generated'=>$result[0]['generated'],'generated_on'=>$result[0]['generated_on'],
-                        'date'=>$result[0]['generated_on'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
-                        'customer_name'=>$result[0]['customer_name'],'branch_id'=>$result[0]['branch_id'],
-                        'contact_no'=>$result[0]['contact_no'],'lead_source'=>$result[0]['lead_source'],'created_by_branch_id'=>$result[0]['created_by_branch_id'],'product'=>$row['product'],'product_category'=>$row['product_category'],'ticket_size'=>$row['lead_ticket_range'],'created_by_hrms_id'=>$row['created_by_hrms_id'],'lead_identification'=>$row['lead_identification']);
-                    $final_result[] = array('id'=>$result[0]['id'],'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
-                        'reroute_to_branch_id'=>$result[0]['branch_id'],'modified_on'=>$result[0]['modified_on'],
-                        'date'=>$result[0]['modified_on'],'created_by_branch_id'=>$result[0]['created_by_branch_id'],'product'=>$row['product'],'product_category'=>$row['product_category'],'ticket_size'=>$row['lead_ticket_range'],'created_by_hrms_id'=>$row['created_by_hrms_id'],'lead_identification'=>$row['lead_identification']);
+                    $final_result[] = array(
+                        'id'=>$result[0]['id'],
+                        'generated'=>$result[0]['generated'],
+                        'generated_on'=>$result[0]['generated_on'],
+                        'date'=>$result[0]['generated_on'],
+                        'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
+                        'customer_name'=>$result[0]['customer_name'],
+                        'branch_id'=>$result[0]['branch_id'],
+                        'contact_no'=>$result[0]['contact_no'],
+                        'lead_source'=>$result[0]['lead_source'],
+                        'created_by_branch_id'=>$result[0]['created_by_branch_id'],
+                        'product'=>trim($row['product']),
+                        'product_category'=>$row['product_category'],
+                        'ticket_size'=>$row['lead_ticket_range'],
+                        'created_by_hrms_id'=>$row['created_by_hrms_id'],
+                        'lead_identification'=>$row['lead_identification'],
+                        'created_by_zone_id'=>$result[0]['created_by_zone_id'],
+                        'amount'=>$result[0]['amount'],
+                        'opened_account_no'=>$result[0]['opened_account_no']
+                    );
+                    $final_result[] = array(
+                        'id'=>$result[0]['id'],
+                        'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
+                        'reroute_to_branch_id'=>$result[0]['branch_id'],
+                        'modified_on'=>$result[0]['modified_on'],
+                        'date'=>$result[0]['modified_on'],
+                        'created_by_branch_id'=>$result[0]['created_by_branch_id'],
+                        'product'=>trim($row['product']),
+                        'product_category'=>$row['product_category'],
+                        'ticket_size'=>$row['lead_ticket_range'],
+                        'created_by_hrms_id'=>$row['created_by_hrms_id'],
+                        'lead_identification'=>$row['lead_identification'],
+                        'created_by_zone_id'=>$result[0]['created_by_zone_id'],
+                        'amount'=>$result[0]['amount'],
+                        'opened_account_no'=>$result[0]['opened_account_no']
+                    );
                 }else{
-                    $final_result = $result;
-                    $final_result[0]['product'] = $row['product'];
-                    $final_result[0]['product_category'] = $row['product_category'];
-                    $final_result[0]['ticket_size'] = $row['lead_ticket_range'];
-                    $final_result[0]['created_by_hrms_id'] = $row['created_by_hrms_id'];
-                    $final_result[0]['lead_identification'] = $row['lead_identification'];
-                    $final_result[0]['date'] = $result[0]['generated_on'];
+//                    $final_result = $result;
+//
+//                    $final_result[0]['product'] = $row['product'];
+//                    $final_result[0]['product_category'] = $row['product_category'];
+//                    $final_result[0]['ticket_size'] = $row['lead_ticket_range'];
+//                    $final_result[0]['created_by_hrms_id'] = $row['created_by_hrms_id'];
+//                    $final_result[0]['lead_identification'] = $row['lead_identification'];
+//                    $final_result[0]['date'] = $result[0]['generated_on'];
+//                    $final_result[0]['branch_id'] = $result[0]['branch_id'];
+//                    $final_result[0]['created_by_branch_id'] = $result[0]['created_by_branch_id'];
+                    $final_result[] = array(
+                        'id'=>$result[0]['id'],
+                        'generated'=>$result[0]['generated'],
+                        'generated_on'=>$result[0]['generated_on'],
+                        'date'=>$result[0]['generated_on'],
+                        'reroute_from_branch_id'=>$result[0]['reroute_from_branch_id'],
+                        'customer_name'=>$result[0]['customer_name'],
+                        'branch_id'=>$result[0]['branch_id'],
+                        'contact_no'=>$result[0]['contact_no'],
+                        'lead_source'=>$result[0]['lead_source'],
+                        'created_by_branch_id'=>$result[0]['created_by_branch_id'],
+                        'product'=>trim($row['product']),
+                        'product_category'=>$row['product_category'],
+                        'ticket_size'=>$row['lead_ticket_range'],
+                        'created_by_hrms_id'=>$row['created_by_hrms_id'],
+                        'lead_identification'=>$row['lead_identification'],
+                        'created_by_zone_id'=>$result[0]['created_by_zone_id'],
+                        'amount'=>$result[0]['amount'],
+                        'opened_account_no'=>$result[0]['opened_account_no']
+                    );
+                    //pe($final_result);die;
 
                 }
             }
@@ -2003,6 +2057,7 @@ class Reports extends CI_Controller
             $where = array('lead_id'=>$lead_id);
             $order_by = 'date ASC';
             $assign_result = $this->Lead->get_leads($action,$table,$select,$where,$join=array(),$group_by=array(),$order_by);
+
             if(!empty($assign_result)){
                 $final_result = array_merge($final_result,$assign_result);
             }
