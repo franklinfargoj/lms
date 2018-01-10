@@ -102,7 +102,6 @@ class Leads extends CI_Controller
                      'DATEDIFF( CURDATE( ) , created_on) <=' => 180
                  );
                  $is_exsits = $this->Lead->is_exsits($whereEx);
-                 die;
                  if($is_exsits){
                      $this->session->set_flashdata('error', "Lead Already Added");
                      redirect(base_url('leads/add'), 'refresh');
