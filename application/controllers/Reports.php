@@ -1755,7 +1755,7 @@ class Reports extends CI_Controller
                 $header_value = array_merge($header_value,$leads_assigned_col);
                 break;
             case 'leads_generated_vs_converted':
-                $leads_g_vs_c_col = array('Total Leads Generated','Total Leads Converted');
+                $leads_g_vs_c_col = array('Total Leads Generated','Total Leads Assigned','Total Leads Converted','Actual Business (In Lacs)');
                 $header_value = array_merge($header_value,$leads_g_vs_c_col);
                 break;
             case 'leads_classification':
@@ -1871,7 +1871,9 @@ class Reports extends CI_Controller
             }
             if($action == 'leads_generated_vs_converted'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['generated_count']) ? $value['generated_count'] : 0);
+                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['assigned_count']) ? $value['assigned_count'] : 0);
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['converted_count']) ? $value['converted_count'] : 0);
+                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['actual_business']) ? convertCurrency($value['actual_business']) : 0);
             }else if($action == 'leads_classification'){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(isset($value['ticket']) ? $value['ticket'] : 0);
             }else if($action == 'usage'){
