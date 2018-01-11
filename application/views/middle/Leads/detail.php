@@ -100,6 +100,9 @@
                             <div class="form-control">
                                 <label>Assigned To:</label> <span class="detail-label"><?php echo ucwords(strtolower($leads[0]['employee_name']));?></span>
                             </div>
+                            <div class="form-control">
+                                <label>Initial Remark:</label> <span class="detail-label"><?php echo ucwords(strtolower($leads[0]['remark']));?></span>
+                            </div>
                             <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('EM','BM'))) && ($leads[0]['status'] != 'Converted')){?>
                                 <!-- <div class="form-control">
                                     <label>Interest in other product</label>

@@ -17,7 +17,7 @@ class Leads extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-        //is_logged_in();
+        is_logged_in();
         $this->load->model('Lead');
         $this->load->model('Master_model','master');
         /*
