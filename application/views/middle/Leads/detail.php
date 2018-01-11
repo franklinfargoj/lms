@@ -45,7 +45,7 @@
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">Lead Detail</h3>
-        
+
     </div>
 </div>
 <div class="page-content">
@@ -55,7 +55,7 @@
             <?php if($leads){?>
                 <div class="lead-form">
                     <!-- <form> -->
-                    <?php 
+                    <?php
                         //Form
                         $attributes = array(
                             'role' => 'form',
@@ -96,13 +96,14 @@
                                     }
                                     echo isset($leads[0]['status']) ? $all_lead_status[$leads[0]['status']].$account_no : 'NA';?></span>
                             </div>
-                           
+                            <div class="form-control">
+                                <label>Followup Remark:</label> <span class="detail-label"><?php echo ucwords(strtolower($leads[0]['reminder_text']));?></span>
+                            </div>
+
                             <div class="form-control">
                                 <label>Assigned To:</label> <span class="detail-label"><?php echo ucwords(strtolower($leads[0]['employee_name']));?></span>
                             </div>
-                            <div class="form-control">
-                                <label>Initial Remark:</label> <span class="detail-label"><?php echo ucwords(strtolower($leads[0]['remark']));?></span>
-                            </div>
+
                             <?php if(($type == 'assigned') && (in_array($this->session->userdata('admin_type'),array('EM','BM'))) && ($leads[0]['status'] != 'Converted')){?>
                                 <!-- <div class="form-control">
                                     <label>Interest in other product</label>
@@ -129,7 +130,7 @@
                                                     'id'       => 'product_category_id',
                                                     'class'    => 'form-control'
                                             );
-                                            echo form_dropdown('product_category_id', $options , '',$js);    
+                                            echo form_dropdown('product_category_id', $options , '',$js);
                                         }
                                     ?>
                                 </div> -->
@@ -139,7 +140,7 @@
                                     if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
                                     || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
                                     && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC') ||
-                                        ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC')|| 
+                                        ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC')||
                                         ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] != 'DC'))
                                     ))){}
                                         else {
@@ -215,7 +216,7 @@
                                         'id' => 'reason',
                                         'class' => ''
                                     );
-                                    echo form_dropdown('reason', $options21, '', $js);
+                                    echo form_dropdown('reason', $options21, $leads[0]['reason_for_drop'], $js);
                                     echo "</span>";
                                     echo form_error('reason');
                                     ?>
@@ -223,7 +224,7 @@
                                 <?php if($this->session->userdata('admin_type')=='EM'){?>
                                 <div class="form-control followUp" style="display:none">
                                     <label>Next Followup Date:<span style="color:red;">*</span></label>
-                                    <?php 
+                                    <?php
                                         if(!empty($leads[0]['remind_on'])){
                                             $value = date('d-m-Y',strtotime($leads[0]['remind_on']));
                                         }else{
@@ -322,6 +323,9 @@
                             </div>
                             <div class="form-control">
                                 <label>Contact:</label> <span class="detail-label"><?php echo $leads[0]['contact_no'];?></span>
+                            </div>
+                            <div class="form-control">
+                                <label>Initial Remark:</label> <span class="detail-label"><?php echo ucwords(strtolower($leads[0]['remark']));?></span>
                             </div>
 
                             <!--                            <div class="form-control">-->
@@ -431,14 +435,14 @@
         var category_title = "<?php echo $leads[0]['category_title']?>";  //Current Category
         $('.reason').hide();
         if(lead_status == 'FU'){
-            $('.followUp').show();              //Display follow up fields 
+            $('.followUp').show();              //Display follow up fields
         }
         if(lead_status == 'NC'){
             $('#lead_identification').attr('disabled','disabled');              //Display follow up fields
         }
 
         $('#lead_status').change(function(){
-            var option = $(this).val();         
+            var option = $(this).val();
             action(option);
         });
 
@@ -446,7 +450,7 @@
             $(this).datepicker({dateFormat: 'dd-mm-yy',minDate: 0});
 
         });
-        
+
         $('#product_category_id').change(function () {
             var csrf = $("input[name=csrf_dena_bank]").val();
             var category_id = $(this).val();
@@ -504,7 +508,9 @@
             }else if(option == 'NI'){
                 $('.accountOpen').hide();
                 $('.followUp').hide();
+                <?php if($this->session->userdata('admin_type')=='EM'){?>
                 $('.reason').show();
+                <?php }?>
             }
             else{
                 $('.accountOpen').hide();
@@ -663,7 +669,7 @@
 
     $('.verify_account').click(function () {
         var acc_no = $.trim($('#accountNo').val());
-        
+
         if(acc_no.length === 0 || acc_no.length != 12){
             alert('Please Enter 12 digit Account number.');
         }else{
