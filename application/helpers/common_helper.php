@@ -936,7 +936,7 @@ function dummy_branch_details(){
 
     function get_designation($designation_id){
 
-        $bm=array(520299,530399,540499,550599,560315);
+        $bm=array(510199,520299,530399,540499,550599,560315);
         $zm=array(550502,560602,540402,550503);
         $gm=array(560601,570701,540405);
 
