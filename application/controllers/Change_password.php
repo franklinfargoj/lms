@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class My_profile extends CI_Controller {
+class Change_password extends CI_Controller {
 
     /*
      * construct
@@ -31,11 +31,11 @@ class My_profile extends CI_Controller {
 	public function index()
 	{
           /*Create Breadcumb*/
-          $this->make_bread->add('My Profile', '', 0);
+          $this->make_bread->add('Change Password', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
           /*Create Breadcumb*/
 
-          return load_view("my_profile",$arrData);
+          return load_view("change_password",$arrData);
 	}
 
      /*
@@ -50,23 +50,23 @@ class My_profile extends CI_Controller {
      {
           if($this->input->post()){
                /*Create Breadcumb*/
-               $this->make_bread->add('My Profile', '', 0);
+               $this->make_bread->add('Change Password', '', 0);
                $arrData['breadcrumb'] = $this->make_bread->output();
                /*Create Breadcumb*/
 
-               $where = array('id' => loginUserId());
+               $where = array('hrms_id' => loginUserId());
                $get_admin_details = $this->master->get_admin_details($where);
                $this->form_validation->set_rules('current_pwd','Current Password', 'trim|required');
                $this->form_validation->set_rules('new_pwd','New Password', 'trim|required|matches[re_pwd]');
                $this->form_validation->set_rules('re_pwd','Re-type New Password', 'trim|required');
                if($this->input->post('current_pwd') != '' && md5($this->input->post('current_pwd')) != $get_admin_details[0]['password']){
                     $this->session->set_flashdata('error', 'Current password entered is wrong');
-                    redirect('my_profile');
+                    redirect('change_password');
                }
                if ($this->form_validation->run() == FALSE)
                {    
                     $arrData['has_error'] = 'has-error';
-                    return load_view("my_profile",$arrData);
+                    return load_view("change_password",$arrData);
                }else{
                     $checkInput = array(
                          'password'      => md5($this->input->post('new_pwd'))
@@ -74,10 +74,10 @@ class My_profile extends CI_Controller {
                     $updateFlag = $this->master->reset_password($where,$checkInput);
                     if($updateFlag){
                          $this->session->set_flashdata('success','Password reset successfully');
-                         redirect('my_profile');
+                         redirect('change_password');
                     }else{
                          $this->session->set_flashdata('error','Failed to reset password');
-                         redirect('my_profile');
+                         redirect('change_password');
                     }
                }
           }
