@@ -1273,6 +1273,17 @@ if(!function_exists('zonename')){
     }
 }
 
+if(!function_exists('designation_by_hrms_id')){
+    function designation_by_hrms_id($id){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $select=array('designation');
+        $where['hrms_id'] = $id;
+        $data = $CI->master->designation_by_hrms_id($select,$where);
+        return $data;
+    }
+}
+
 
 
 
