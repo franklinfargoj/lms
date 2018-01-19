@@ -214,7 +214,8 @@ function index(){
             $to = array('email' => $v->email_id,'name' => $v->name);
             $subject = 'LMS - Reports - '.$v->branch_name;
             $message = 'Please Find an attachment';
-            sendMail($to,$subject,$message,$attachment_file);
+           // sendMail($to,$subject,$message,$attachment_file);
+            die;
         }
     }
 
@@ -493,7 +494,7 @@ function index(){
                 $group_by = array('l.created_by_branch_id');
             }elseif($user_type == 'EM'){
                 $select[] = 'l.created_by as hrms_id';
-                $where['l.branch_id'] = $branch_id;
+                $where['l.created_by_branch_id'] = $branch_id;
                 $where['l.created_by !='] = NULL;
                 $group_by = array('l.created_by');
             }
