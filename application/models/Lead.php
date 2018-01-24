@@ -320,16 +320,16 @@ class Lead  extends CI_Model
                 return $result;
             }
             //for gm
-            if(array_key_exists('zone_id !=',$where_generated_Array)){
-                $this->db->select('zone_id, COUNT(zone_id) as total');
-                $this->db->group_by('zone_id');
+            if(array_key_exists('created_by_zone_id !=',$where_generated_Array)){
+                $this->db->select('created_by_zone_id, COUNT(zone_id) as total');
+                $this->db->group_by('created_by_zone_id');
                 $this->db->order_by('total','desc');
                 $result = $this->db->get_where(Tbl_Leads,$where_generated_Array)->result_array();
                 return $result;
             }
             //for zonal manager
-            $this->db->select('branch_id, COUNT(branch_id) as total');
-            $this->db->group_by('branch_id');
+            $this->db->select('created_by_branch_id, COUNT(branch_id) as total');
+            $this->db->group_by('created_by_branch_id');
             $this->db->order_by('total','desc');
             $result = $this->db->get_where(Tbl_Leads,$where_generated_Array)->result_array();
         }

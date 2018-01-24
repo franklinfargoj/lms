@@ -192,9 +192,9 @@ class Dashboard extends CI_Controller {
     private function zm_view($zone_id){
 
         //$where_month_Array = array('zone_id' => $zone_id,'MONTH(created_on)' => date('m'));
-        $where_month_Array = array('zone_id' => $zone_id);
+        $where_month_Array = array('created_by_zone_id' => $zone_id);
         //$where_year_Array = array('zone_id' => $zone_id,'YEAR(created_on)' => date('Y'));
-        $where_year_Array = array('zone_id' => $zone_id);
+        $where_year_Array = array('created_by_zone_id' => $zone_id);
 
         $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
         $yr_end_date=(date('Y')).'-03-31 23:59:59';
@@ -214,10 +214,10 @@ class Dashboard extends CI_Controller {
         $generated_key_value = array();
         $generated_key_value_year = array();
         foreach ($generated['monthly_generated_leads'] as $k => $v) {
-            $generated_key_value[$v['branch_id']] = $v['total'];
+            $generated_key_value[$v['created_by_branch_id']] = $v['total'];
         }
         foreach ($generated['yearly_generated_leads'] as $k => $v) {
-            $generated_key_value_year[$v['branch_id']] = $v['total'];
+            $generated_key_value_year[$v['created_by_branch_id']] = $v['total'];
         }
         $final = array();
         $login_user = get_session();
@@ -277,8 +277,8 @@ class Dashboard extends CI_Controller {
      */
     private function gm_view(){
 
-        $where_generated_Array = array('zone_id !=' => NULL);
-        $where_year_Array = array('zone_id !=' => NULL);
+        $where_generated_Array = array('created_by_zone_id !=' => NULL);
+        $where_year_Array = array('created_by_zone_id !=' => NULL);
 
         $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
         $yr_end_date=(date('Y')).'-03-31 23:59:59';
@@ -299,10 +299,10 @@ class Dashboard extends CI_Controller {
         $generated_key_value_year = array();
         $final = array();
         foreach ($generated['generated_leads'] as $k => $v) {
-            $generated_key_value[$v['zone_id']] = $v['total'];
+            $generated_key_value[$v['created_by_zone_id']] = $v['total'];
         }
         foreach ($generated['yearly_generated_leads'] as $k => $v) {
-            $generated_key_value_year[$v['zone_id']] = $v['total'];
+            $generated_key_value_year[$v['created_by_zone_id']] = $v['total'];
         }
         $login_user = get_session();
         $result = get_details($login_user['hrms_id']);
