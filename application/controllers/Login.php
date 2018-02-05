@@ -105,6 +105,40 @@ $pwd = decode_id($this->input->post('password'));
                         // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
                         $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$auth->DBK_LMS_AUTH->username);
                         $records = json_decode($records_response);
+
+                     /* if($auth->DBK_LMS_AUTH->username == '0004236'){
+                        echo  $records_response;
+                        echo "<br>Unable to Decode due to ";
+ $records = json_decode($records_response);
+                        switch(json_last_error()){
+case JSON_ERROR_NONE:
+echo 'NONE';
+break;
+case JSON_ERROR_DEPTH:
+echo '-max';
+break;
+case JSON_ERROR_STATE_MISMATCH:
+echo 'JSON_ERROR_STATE_MISMATCH';
+break;
+case JSON_ERROR_CTRL_CHAR:
+echo 'JSON_ERROR_CTRL_CHAR';
+break;
+case JSON_ERROR_CTRL_CHAR:
+echo 'JSON_ERROR_CTRL_CHAR';
+break;
+case JSON_ERROR_SYNTAX:
+echo 'Syntax error,malformed JSON';
+break;
+case JSON_ERROR_UTF8:
+echo '- Malformed UTF-8 Character, possibly incorrectly encoded'; break;
+default:
+echo 'def';
+break;
+}
+die;
+}
+*/
+
                        // echo "<pre>";print_r($records);die;
                         $authorisation_key= random_number();
                         $data = array('device_token' => NULL,

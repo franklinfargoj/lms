@@ -223,10 +223,10 @@ if($explode[0] != 'okhttp'){
         $params = $this->input->post();
         // check for duplicate entry
          $whereEx = array(
-           // 'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
+            'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
              'contact_no'=> $this->input->post('contact_no'),
              'product_id'=> $this->input->post('product_id'),
-             'DATEDIFF( CURDATE( ) , created_on) <=' => 180
+             'DATEDIFF(CURDATE(),created_on) <=' => 180
          );
          $is_exsits = $this->Lead->is_exsits($whereEx);
          if($is_exsits){
@@ -1826,7 +1826,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                     $generated_key_value_year[$v['created_by']] = $v['total'];
                 }
                 foreach ($result as $key => $val) {
-                    if (!array_key_exists($val->DESCR10, $generated_key_value)) {
+                    if (!array_key_exists($val->DESCR10, $generated_key_value_year)) {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => ucwords(strtolower($val->DESCR30)),
@@ -1836,8 +1836,8 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => ucwords(strtolower($val->DESCR30)),
-                            'total_generated_mtd' => $generated_key_value[$val->DESCR10],
-                            'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
+                            'total_generated_mtd' => ($generated_key_value[$val->DESCR10])?$generated_key_value[$val->DESCR10]:0,
+                            'total_generated_ytd' => ($generated_key_value_year[$val->DESCR10])?$generated_key_value_year[$val->DESCR10]:0);
                     }
                     $final[$val->DESCR10] = $push_generated;
                 }
@@ -1872,9 +1872,9 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                 break;
 
             case 'ZM':
-                $where_month_Array = array('zone_id' => $ids);
+                $where_month_Array = array('created_by_zone_id' => $ids);
 
-                $where_year_Array = array('zone_id' => $ids);
+                $where_year_Array = array('created_by_zone_id' => $ids);
 
                 $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                 $yr_end_date=(date('Y')).'-03-31 23:59:59';
@@ -1894,13 +1894,13 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                 $generated_key_value_year = array();
                 $final = array();
                 foreach ($generated['monthly_generated_leads'] as $k => $v) {
-                    $generated_key_value[$v['branch_id']] = $v['total'];
+                    $generated_key_value[$v['created_by_branch_id']] = $v['total'];
                 }
                 foreach ($generated['yearly_generated_leads'] as $k => $v) {
-                    $generated_key_value_year[$v['branch_id']] = $v['total'];
+                    $generated_key_value_year[$v['created_by_branch_id']] = $v['total'];
                 }
                 foreach ($result as $key => $val) {
-                    if (!array_key_exists($val->DESCR10, $generated_key_value)) {
+                    if (!array_key_exists($val->DESCR10, $generated_key_value_year)) {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => ucwords(strtolower($val->DESCR30)),
@@ -1910,8 +1910,8 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => ucwords(strtolower($val->DESCR30)),
-                            'total_generated_mtd' => $generated_key_value[$val->DESCR10],
-                            'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
+                            'total_generated_mtd' => ($generated_key_value[$val->DESCR10])?$generated_key_value[$val->DESCR10]:0,
+                            'total_generated_ytd' => ($generated_key_value_year[$val->DESCR10])?$generated_key_value_year[$val->DESCR10]:0);
                     }
                     $final[$val->DESCR10] = $push_generated;
                 }
@@ -1947,8 +1947,8 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                 break;
 
             case 'GM':
-                $where_generated_Array = array('zone_id !=' => NULL);
-                $where_year_Array = array('zone_id !=' => NULL);
+                $where_generated_Array = array('created_by_zone_id !=' => NULL);
+                $where_year_Array = array('created_by_zone_id !=' => NULL);
                 $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                 $yr_end_date=(date('Y')).'-03-31 23:59:59';
                 $current_month = date('n');
@@ -1966,13 +1966,13 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                 $generated_key_value_year = array();
                 $final = array();
                 foreach ($generated['generated_leads'] as $k => $v) {
-                    $generated_key_value[$v['zone_id']] = $v['total'];
+                    $generated_key_value[$v['created_by_zone_id']] = $v['total'];
                 }
                 foreach ($generated['yearly_generated_leads'] as $k => $v) {
-                    $generated_key_value_year[$v['zone_id']] = $v['total'];
+                    $generated_key_value_year[$v['created_by_zone_id']] = $v['total'];
                 }
                 foreach ($result as $key => $val) {
-                    if (!array_key_exists($val->DESCR10, $generated_key_value)) {
+                    if (!array_key_exists($val->DESCR10, $generated_key_value_year)) {
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => ucwords(strtolower($val->DESCR30)),
@@ -1982,8 +1982,8 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                         $push_generated = array(
                             'created_by' => $val->DESCR10,
                             'created_by_name' => ucwords(strtolower($val->DESCR30)),
-                            'total_generated_mtd' => $generated_key_value[$val->DESCR10],
-                            'total_generated_ytd' => $generated_key_value_year[$val->DESCR10]);
+                            'total_generated_mtd' => ($generated_key_value[$val->DESCR10])?$generated_key_value[$val->DESCR10]:0,
+                            'total_generated_ytd' => ($generated_key_value_year[$val->DESCR10])?$generated_key_value_year[$val->DESCR10]:0);
                     }
                     $final[$val->DESCR10] = $push_generated;
                 }
@@ -2968,5 +2968,62 @@ private function verify_cbs_account($acc_no)
         }
         $response['data'] = $response_data[1];
         return json_encode($response);
+    }
+
+    public function route_to_rapc()
+    {
+        $params = $this->input->post();
+        if (!empty($params) && isset($params['lead_id']) && !empty($params['lead_id']) &&
+            isset($params['hrms_id']) && !empty($params['hrms_id']) &&
+            isset($params['full_name']) && !empty($params['full_name'])
+        ) {
+            $lead_id = $params['lead_id'];
+            $action = 'list';
+            $table = Tbl_Leads;
+            $select = array(Tbl_Leads . '.*');
+            $where = array(Tbl_Leads . '.id' => $lead_id);
+            $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+            $leads_info = $leadsAssigned[0];
+
+            if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
+                $action = 'list';
+                $select = array('map_with');
+                $table = Tbl_Products;
+                $where = array('id' => $leads_info['product_id'], 'status' => 'active');
+                $product_mapped_with = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+                $product_mapped_with = $product_mapped_with[0]['map_with'];
+                $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_info['branch_id']);
+                $routed_id = $this->Lead->check_mapping($whereArray);
+
+                if (!is_array($routed_id)) {
+                    $update_data['reroute_from_branch_id'] = $leads_info['branch_id'];
+                    $update_data['branch_id'] = $routed_id;
+                    $date = date('Y-m-d H:i:s', time() + 5);
+                    $update_data['modified_on'] = $date;
+                    $update_data['modified_by'] = $params['hrms_id'];
+                    $update_data['modified_by_name'] = $params['full_name'];
+                    $where = array('id' => $lead_id);
+                    $table = Tbl_Leads;
+                    $this->Lead->update_lead_data($where, $update_data, $table);
+                    $whereUpdate = array('lead_id' => $lead_id);
+                    $table = Tbl_LeadAssign;
+                    $data = array('is_updated' => 0, 'is_deleted' => 1);
+                    $order_by = "id DESC";
+                    $limit = 1;
+                    $this->Lead->update_routed_lead($whereUpdate, $table, $data, $order_by, $limit);
+
+                }
+                $error = array(
+                    "result" => True,
+                    "data" => array("Lead Assigned Successfully")
+                );
+                returnJson($error);
+            }
+        }
+        $error = array(
+            "result" => False,
+            "data" => array("Missing Parameters.")
+        );
+        returnJson($error);
     }
 }

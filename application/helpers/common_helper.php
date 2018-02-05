@@ -936,9 +936,10 @@ function dummy_branch_details(){
 
     function get_designation($designation_id){
 
-        $bm=array(510199,520299,530399,540499,550599,560315);
+        //$bm=array(520299,530399,540499,550599,560315);
+  	$bm=array(510199,520299,530399,540499,550599,560315);	
         $zm=array(550502,560602,540402,550503);
-        $gm=array(560601,570701,540405);
+        $gm=array(560601,570701,540405,580801);
 
         $designation = false;
         if(in_array($designation_id,$bm)){
@@ -1020,12 +1021,12 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
     $mail->addReplyTo($config[0]->fromemail, $config[0]->from);
 
     //Set who the message is to be sent to
-    $mail->addAddress('mukesh.kurmi@wwindia.com','Mukesh Kurmi');
-    //$mail->addAddress($to['email'],$to['name']);
-      //$mail->addAddress('pragati@denabank.co.in','Pragati Dena Bank');
-     //$mail->addAddress('sunmit@denabank.co.in','Pragati Dena Bank');
+    //$mail->addAddress('mukesh.kurmi@wwindia.com','Mukesh Kurmi');
+    $mail->addAddress($to['email'],$to['name']);
+    // $mail->addAddress('pragati@denabank.co.in','Pragati Dena Bank');
+    // $mail->addAddress('rahul.choubey@denabank.co.in','Pragati Dena Bank');
     //$mail->addAddress('jeet.gupta@denabank.co.in','Pragati Dena Bank');
-    //$mail->addCC('sunmit@denabank.co.in','Pragati Dena Bank');
+   // $mail->addCC('sunmit@denabank.co.in','Pragati Dena Bank');
 
 
 

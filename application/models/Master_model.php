@@ -370,7 +370,7 @@ class Master_model extends CI_Model{
         return $query->result_array();
     }
 
-    public function designation_by_hrms_id($select,$where){
+   public function designation_by_hrms_id($select,$where){
 
         $this->db->select($select,TRUE);
         $this->db->from('employee_dump');

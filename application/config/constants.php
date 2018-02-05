@@ -122,19 +122,15 @@ define('Tbl_analytics_lead_route', 'db_analytics_lead_route');
 
 
 
-//define('HRMS_API_URL_AUTH', 'http://172.25.2.35:8001/PSIGW/RESTListeningConnector/DBK_LMS_AUTH.v1/?');
-//define('HRMS_API_URL_GET_RECORD', 'http://172.25.2.35:8001/PSIGW/RESTListeningConnector/DBK_LMS_EMP_RECORD1.v1/?');
-//define('HRMS_BRANCH_RECORD', 'http://172.25.2.35:8001/PSIGW/RESTListeningConnector/DBK_BRANCH_DETAILS.v1/?call=0');
-//define('HRMS_EMP_DUMP', 'http://172.25.2.35:8001/PSIGW/RESTListeningConnector/DBK_LMS_EMPY_DTL.v1/?call=Y');
-define('HRMS_API_URL_AUTH', 'https://denasampark.denabank.co.in/lms/hrms_auth.php?');
-define('HRMS_API_URL_GET_RECORD', 'https://denasampark.denabank.co.in/lms/hrms_records.php?');
-define('HRMS_BRANCH_RECORD', 'https://denasampark.denabank.co.in/master.php');
-define('HRMS_EMP_DUMP', 'https://denasampark.denabank.co.in/master_emp.php');
+define('HRMS_API_URL_AUTH', 'http://172.25.2.35:8001/PSIGW/RESTListeningConnector/DBK_LMS_AUTH.v1/?');
+define('HRMS_API_URL_GET_RECORD', 'http://172.25.2.35:8001/PSIGW/RESTListeningConnector/DBK_LMS_EMP_RECORD1.v1/?');
+define('HRMS_BRANCH_RECORD', 'http://172.25.2.35:8001/PSIGW/RESTListeningConnector/DBK_BRANCH_DETAILS.v1/?call=0');
+define('HRMS_EMP_DUMP', 'http://172.25.2.35:8001/PSIGW/RESTListeningConnector/DBK_LMS_EMPY_DTL.v1/?call=Y');
 define('Elapsed_day_converted', 7); //Elapsed Days for converted
 define('Elapsed_day_NI', 7); //Elapsed Days for Not Interested
 define('Elapsed_day', 365); //Elapsed Days for remaining all
 define('PENDENCY_DAY', 2); //Elapsed Days for remaining all
-define('FINACLE_ACCOUNT_RECORD', 'https://denasampark.denabank.co.in/client.php?account_no=');
+define('FINACLE_ACCOUNT_RECORD', 'https://172.25.2.134/Cbs/verify_account');
 define('FCMKEY','AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP
 ');
 

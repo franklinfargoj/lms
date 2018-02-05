@@ -85,7 +85,7 @@
 
         //Initialize datatable configuration
         initTable(table,columns);
-
+});
         $('.delete').click(function(){
             var url = $(this).data('url');
             var result = confirm("Are you sure want to delete?");
@@ -93,5 +93,4 @@
                 window.location.href = url;
             }
         });
-    });
 </script>

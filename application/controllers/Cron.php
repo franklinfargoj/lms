@@ -15,7 +15,7 @@ class Cron extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-        is_cli() OR show_404();
+       is_cli() OR show_404();
         $this->load->model('Lead');
     }
 function index(){
@@ -150,7 +150,7 @@ function index(){
             }
            //echo "<pre>";
 //            echo $v->zone_id;
-           //print_r($final['zonal_manager']);die;
+          // pe($final['zonal_manager']);die;
             //FOR ZONAL MANAGER
             $subject = 'LMS - Reports - '.$v->zone_name;
             $attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
@@ -158,6 +158,7 @@ function index(){
 
             $message = 'Please Find an attachment';
             sendMail($to,$subject,$message,$attachment_file);
+//die;
         }
     }       
 
@@ -214,8 +215,8 @@ function index(){
             $to = array('email' => $v->email_id,'name' => $v->name);
             $subject = 'LMS - Reports - '.$v->branch_name;
             $message = 'Please Find an attachment';
-           // sendMail($to,$subject,$message,$attachment_file);
-            die;
+            sendMail($to,$subject,$message,$attachment_file);
+           // die;
         }
     }
 

@@ -16,24 +16,11 @@ class Cbs extends CI_Controller {
     {
         // Initialization of class
         parent::__construct();
-        //is_logged_in();     //check login
+        is_logged_in();     //check login
     }
 
     public function verify_account($acc_no)
     {
-        $result = '1210�0�F!�(970000000000000000000000000008532420180104085324201801042000301809000400463UNI00000008BANKAWAY102+0000000000447339+0000000000447339+0000000000000000+0000000000000000+0000000000447339INR INR31018 0000 116210001406003LMS061LMS~4473.39~BALIVADA RAJNEESH~9820701564~rajneeshb@denabank.co.in';
-        $response= array();
-        if(strpos($result,'UNI000000') !== false)
-        {
-            $response_data = explode('LMS~',$result);
-            $response['status']='True';
-        }else{
-            $response_data = explode('LMS~',$result);
-            $response['status']='False';
-        }
-        $response['data'] = $response_data[1];
-        echo json_encode($response);
-        die;
         //echo $acc_no;die;
         $host    = "172.25.2.23";
         $port    = 11221;
@@ -76,7 +63,7 @@ class Cbs extends CI_Controller {
         $msg_header= $strval.$primary.$sec;
         $message = $msg_header.$field_3.$field_4.$field_11.$field_12.$field_17.$field_24.$field_32.$field_34.$field_43.$field_49.$field_102.$field_123.$field_125;
 
-        //echo "Message To server :".$message;
+        // echo "Message To server :".$message;
         // create socket
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP) or die("Could not create socket\n");
         // connect to server
@@ -91,7 +78,7 @@ class Cbs extends CI_Controller {
         //echo "<br>";
         // get server response
         $result = socket_read ($socket, 2048) or die("Could not read server response\n");
-        //echo "Reply From Server  :".$result;die;
+        // echo "Reply From Server  :".$result;die;
         // close socket
         socket_close($socket);
 

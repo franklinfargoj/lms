@@ -266,15 +266,17 @@
 						
 					</ul>
 				</li>
+
 				<?php }?>
-                <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-                    <li class="<?php echo ($controller == 'change_password') ? 'active' : ''?>">
-                        <a href="<?php echo site_url('change_password')?>">
-                            Change Password
-                        </a>
-                    </li>
-                <?php }?>
-            </ul>
+                         <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+				<li class="<?php echo ($controller == 'change_password') ? 'active' : ''?>">
+					<a href="<?php echo site_url('change_password')?>">
+						Change Password
+					</a>
+				</li>
+				<?php }?>
+
+			</ul>
 		</div>
 		<div class="right-nav">
 				<div class="notification">

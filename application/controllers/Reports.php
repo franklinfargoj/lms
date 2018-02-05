@@ -2168,8 +2168,10 @@ class Reports extends CI_Controller
                     $objSheet->getCell($excel_alpha[7] . $i)->setValue(ucwords($value[$key]['lead_source']));
                     $objSheet->getCell($excel_alpha[8] . $i)->setValue(ucwords($value[$key]['generated_on']));
                     $objSheet->getCell($excel_alpha[9] . $i)->setValue(ucwords($value[$key]['generated']));
+
                     $designation11 = designation_by_hrms_id($value[$key]['created_by_hrms_id']);
                     $designation11 = $designation11[0]['designation'];
+
                     $objSheet->getCell($excel_alpha[10] . $i)->setValue($designation11);
                     $objSheet->getCell($excel_alpha[11] . $i)->setValue(ucwords($value[$key]['created_by_branch_id']));
                     $branchname11 = branchname($value[$key]['created_by_branch_id']);
@@ -2184,22 +2186,22 @@ class Reports extends CI_Controller
                     $objSheet->getCell($excel_alpha[15] . $i)->setValue(ucwords($value[$key]['created_by_hrms_id']));
                     /*  if(isset($value[$key]['reroute_from_branch_id'])) {
 
-                          $objSheet->getCell($excel_alpha[12] . $i)->setValue(ucwords($value[$key]['date']));
-                          $objSheet->getCell($excel_alpha[15] . $i)->setValue(ucwords($value[$key]['reroute_from_branch_id']));
+                          $objSheet->getCell($excel_alpha[13] . $i)->setValue(ucwords($value[$key]['date']));
+                          $objSheet->getCell($excel_alpha[16] . $i)->setValue(ucwords($value[$key]['reroute_from_branch_id']));
                           $branchname1 = branchname($value[$key]['reroute_from_branch_id']);
                           $branchname1 = $branchname1[0]['name'];
-                          $objSheet->getCell($excel_alpha[16] . $i)->setValue(ucwords($branchname1));
-                          $objSheet->getCell($excel_alpha[17] . $i)->setValue(ucwords($value[$key]['date']));
-                          $objSheet->getCell($excel_alpha[20] . $i)->setValue(ucwords($value[$key]['branch_id']));
+                          $objSheet->getCell($excel_alpha[17] . $i)->setValue(ucwords($branchname1));
+                          $objSheet->getCell($excel_alpha[18] . $i)->setValue(ucwords($value[$key]['date']));
+                          $objSheet->getCell($excel_alpha[21] . $i)->setValue(ucwords($value[$key]['branch_id']));
                           $branchname2 = branchname($value[$key]['branch_id']);
                           $branchname2 = $branchname2[0]['name'];
-                          $objSheet->getCell($excel_alpha[21] . $i)->setValue(ucwords($branchname2));
+                          $objSheet->getCell($excel_alpha[22] . $i)->setValue(ucwords($branchname2));
                       }else{
-                          $objSheet->getCell($excel_alpha[12] . $i)->setValue(ucwords($value[$key]['date']));
-                          $objSheet->getCell($excel_alpha[15] . $i)->setValue(ucwords($value[$key]['branch_id']));
+                          $objSheet->getCell($excel_alpha[13] . $i)->setValue(ucwords($value[$key]['date']));
+                          $objSheet->getCell($excel_alpha[16] . $i)->setValue(ucwords($value[$key]['branch_id']));
                           $branchname1 = branchname($value[$key]['branch_id']);
                           $branchname1 = $branchname1[0]['name'];
-                          $objSheet->getCell($excel_alpha[16] . $i)->setValue(ucwords($branchname1));
+                          $objSheet->getCell($excel_alpha[17] . $i)->setValue(ucwords($branchname1));
                       }
                   */
 

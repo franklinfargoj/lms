@@ -17,7 +17,7 @@ class Leads extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-        is_logged_in();
+        //is_logged_in();
         $this->load->model('Lead');
         $this->load->model('Master_model','master');
         /*
@@ -96,10 +96,10 @@ class Leads extends CI_Controller
             }else{
                  // check for duplicate entry
                  $whereEx = array(
-                     //'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
+                     'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
                      'contact_no'=> $this->input->post('contact_no'),
                      'product_id'=> $this->input->post('product_id'),
-                     'DATEDIFF( CURDATE( ) , created_on) <=' => 180
+                     'DATEDIFF(CURDATE(),created_on) <=' => 180
                  );
                  $is_exsits = $this->Lead->is_exsits($whereEx);
                  if($is_exsits){
@@ -1693,6 +1693,50 @@ private function verify_accountcbs($acc_no)
         }
         $response['data'] = $response_data[1];
         return json_encode($response);
+    }
+
+    public function route_to_rapc($lead_id,$lead_source)
+    {
+        $login_user = get_session();
+        $lead_id = decode_id($lead_id);
+        $action = 'list';
+        $table = Tbl_Leads;
+        $select = array(Tbl_Leads . '.*');
+        $where = array(Tbl_Leads . '.id' => $lead_id);
+        $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+        $leads_info = $leadsAssigned[0];
+
+        if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
+            $action = 'list';
+            $select = array('map_with');
+            $table = Tbl_Products;
+            $where = array('id' => $leads_info['product_id'],'status'=>'active');
+            $product_mapped_with = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $product_mapped_with = $product_mapped_with[0]['map_with'];
+            $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_info['branch_id']);
+            $routed_id = $this->Lead->check_mapping($whereArray);
+
+            if (!is_array($routed_id)) {
+                $update_data['reroute_from_branch_id'] = $leads_info['branch_id'];
+                $update_data['branch_id'] = $routed_id;
+                $date = date('Y-m-d H:i:s',time()+5);
+                $update_data['modified_on'] = $date;
+                $update_data['modified_by'] = $login_user['hrms_id'];
+                $update_data['modified_by_name'] = $login_user['full_name'];
+                $where = array('id' => $lead_id);
+                $table = Tbl_Leads;
+                $this->Lead->update_lead_data($where, $update_data, $table);
+                $whereUpdate = array('lead_id' => $lead_id);
+                $table = Tbl_LeadAssign;
+                $data = array('is_updated' => 0,'is_deleted' => 1);
+                $order_by = "id DESC";
+                $limit= 1;
+                $this->Lead->update_routed_lead($whereUpdate, $table, $data,$order_by,$limit);
+
+            }
+            $this->session->set_flashdata('success','Lead Assigned Successfully.');
+            redirect('leads/unassigned_leads_list/'.$lead_source);
+        }
     }
 
 }

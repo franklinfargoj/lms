@@ -17,6 +17,11 @@ class Change_password extends CI_Controller {
 		// Initialization of class
 		parent::__construct();
           is_logged_in();     //check login
+        $admin = ucwords(strtolower($this->session->userdata('admin_type')));
+        if ($admin != 'Super Admin'){
+            redirect('dashboard');
+        }
+
           $this->load->model('Login_model','master');
 	}
 

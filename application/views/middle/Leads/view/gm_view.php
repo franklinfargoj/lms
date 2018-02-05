@@ -5,7 +5,11 @@
 
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center">Genaral Manager</h3>
+<?php if($this->session->userdata('designation_id')=='580801'){?>
+        <h3 class="text-center">Executive Director</h3>
+<?php }else{?>
+<h3 class="text-center">General Manager</h3>
+<?php }?>
     </div>
 </div>
 <div class="page-content">
@@ -16,7 +20,7 @@
             <thead>
             <tr class="top-header">
                 <th></th>
-                <th><input type="text" name="customername" placeholder="Search Branch Name"></th>
+                <th><input type="text" name="customername" placeholder="Search zone Name"></th>
                 <th><!-- <input type="text" name="customername" placeholder="Search Generated Leads"> --></th>
                 <th><!-- <input type="text" name="customername" placeholder="Search Converted Leads"> --></th>
                 <th><!-- <input type="text" name="customername" placeholder="Search Generated Leads"> --></th>
