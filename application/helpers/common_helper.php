@@ -969,7 +969,7 @@ function fix_keys($array) {
     return $array;
 }
 
-function sendMail($to = array(),$subject,$message,$attachment_file){
+function sendMail($to = array(),$subject,$message,$attachment_file,$cc){
     $CI=& get_instance();
     $CI->load->database();
     $config = $CI->db->from(Tbl_Mail)->get()->result();
@@ -1027,6 +1027,9 @@ function sendMail($to = array(),$subject,$message,$attachment_file){
     // $mail->addAddress('rahul.choubey@denabank.co.in','Pragati Dena Bank');
     //$mail->addAddress('jeet.gupta@denabank.co.in','Pragati Dena Bank');
    // $mail->addCC('sunmit@denabank.co.in','Pragati Dena Bank');
+    if($cc == 1){
+        $mail->addCC('rahul.choubey@denabank.co.in','Rahul Choubey');
+    }
 
 
 

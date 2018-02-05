@@ -32,6 +32,7 @@ function index(){
      */
     public function gm_consolidated_mail()
     {
+        $cc =0;
         $GM_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%GENERAL MANAGER%'),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($GM_list);die;
@@ -90,7 +91,7 @@ function index(){
             $to = array('email' => $v->email_id,'name' => $v->name);
             $subject = 'LMS - Reports';
             $message = 'Please Find an attachment';
-            sendMail($to, $subject, $message, $attachment_file);
+            sendMail($to, $subject, $message, $attachment_file,$cc);
         }
     }
 
@@ -104,7 +105,7 @@ function index(){
      * 
      */
     public function zm_consolidated_mail(){
-
+        $cc =1;
         $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($zone_list);die;
@@ -157,7 +158,7 @@ function index(){
             $to = array('email' => $v->email_id,'name' => $v->name);
 
             $message = 'Please Find an attachment';
-            sendMail($to,$subject,$message,$attachment_file);
+            sendMail($to,$subject,$message,$attachment_file,$cc);
 //die;
         }
     }       
@@ -172,7 +173,7 @@ function index(){
      * 
      */
     public function bm_consolidated_mail(){
-
+        $cc =0;
         $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%'),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($branch_list);die;
@@ -215,7 +216,7 @@ function index(){
             $to = array('email' => $v->email_id,'name' => $v->name);
             $subject = 'LMS - Reports - '.$v->branch_name;
             $message = 'Please Find an attachment';
-            sendMail($to,$subject,$message,$attachment_file);
+            sendMail($to,$subject,$message,$attachment_file,$cc);
            // die;
         }
     }
