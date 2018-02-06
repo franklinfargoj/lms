@@ -2164,7 +2164,7 @@ class Reports extends CI_Controller
                     $objSheet->getCell($excel_alpha[3] . $i)->setValue(ucwords($value[$key]['contact_no']));
                     $objSheet->getCell($excel_alpha[4] . $i)->setValue(ucwords($value[$key]['product_category']));
                     $objSheet->getCell($excel_alpha[5] . $i)->setValue(ucwords($value[$key]['product']));
-                    $objSheet->getCell($excel_alpha[6] . $i)->setValue(ucwords($value[$key]['ticket_size']));
+                    $objSheet->getCell($excel_alpha[6] . $i)->setValue((int)($value[$key]['ticket_size']));
                     $objSheet->getCell($excel_alpha[7] . $i)->setValue(ucwords($value[$key]['lead_source']));
                     $objSheet->getCell($excel_alpha[8] . $i)->setValue(ucwords($value[$key]['generated_on']));
                     $objSheet->getCell($excel_alpha[9] . $i)->setValue(ucwords($value[$key]['generated']));
