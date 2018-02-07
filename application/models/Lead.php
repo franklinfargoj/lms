@@ -102,7 +102,7 @@ class Lead  extends CI_Model
 
     public function unassigned_leads($lead_status = '',$id = ''){
         $login_user = get_session();
-        $this->db->select('db_leads.*,db_master_products.title as product_title');
+        $this->db->select('db_leads.*,db_master_products.title as product_title,db_master_products.map_with as mapping');
         $this->db->from('db_leads');
         $this->db->join('db_lead_assign','db_lead_assign.lead_id = db_leads.id ','left');
         $this->db->join('db_master_products','db_master_products.id = db_leads.product_id ','left');

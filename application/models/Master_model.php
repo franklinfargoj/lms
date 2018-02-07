@@ -380,4 +380,14 @@ class Master_model extends CI_Model{
         return $query->result_array();
     }
 
+    public function get_bm($select,$where){
+
+        $this->db->select($select,TRUE);
+        $this->db->from('employee_dump');
+        $this->db->where($where);
+        $query = $this->db->get();
+//		pe($this->db->last_query());die;
+        return $query->result_array();
+    }
+
 }

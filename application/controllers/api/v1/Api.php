@@ -296,14 +296,14 @@ if($explode[0] != 'okhttp'){
         $where = array('id'=>$lead_data['product_id']);
         $product_mapped_with = $this->Lead->get_leads($action,$table,$select,$where,'','','');
         $product_name=$product_mapped_with[0]['title'];
-        $product_mapped_with=$product_mapped_with[0]['map_with'];
-        $whereArray = array('processing_center'=>$product_mapped_with, 'branch_id' => $lead_data['branch_id']);
-        $routed_id = $this->Lead->check_mapping($whereArray);
-        if (!is_array($routed_id)) {
-            $lead_data['reroute_from_branch_id'] = $lead_data['branch_id'];
-            $lead_data['branch_id'] = $routed_id;
-            $lead_data['modified_on'] = date('Y-m-d H:i:s',time()+5);
-        }
+//        $product_mapped_with=$product_mapped_with[0]['map_with'];
+//        $whereArray = array('processing_center'=>$product_mapped_with, 'branch_id' => $lead_data['branch_id']);
+//        $routed_id = $this->Lead->check_mapping($whereArray);
+//        if (!is_array($routed_id)) {
+//            $lead_data['reroute_from_branch_id'] = $lead_data['branch_id'];
+//            $lead_data['branch_id'] = $routed_id;
+//            $lead_data['modified_on'] = date('Y-m-d H:i:s',time()+5);
+//        }
         $lead_id = $this->Lead->add_leads($lead_data);
 
         if (is_array($lead_id)) {
@@ -2461,6 +2461,11 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                             );
                                 if ($params['status'] == 'Converted' || $params['status'] == 'Closed') {
                                 $lead_status_data['view_status'] = 1;
+//                                $Bm_details = get_bm($leads_data['branch_id']);
+//                                $lead_status_data['modified_by'] = $Bm_details[0]['hrms_id'];
+//                                $lead_status_data['modified_by_name'] = $Bm_details[0]['name'];
+                                $lead_status_data['modified_by'] = $leads_data['created_by'];
+                                $lead_status_data['modified_by_name'] = $leads_data['created_by_name'];
                              }
                             $result1 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
 
@@ -2597,8 +2602,10 @@ $wherefollowup = array('lead_id'=>$params['lead_id'],'is_updated'=>1,'status'=>'
                                 'created_by' => $leads_data['created_by'],
                                 'created_by_name' => $leads_data['created_by_name'],
                                 'modified_on' => date('y-m-d-H-i-s'),
-                                'modified_by' => $leads_data['employee_id'],
-                                'modified_by_name' => $leads_data['employee_name']
+                                //'modified_by' => $leads_data['employee_id'],
+                                //'modified_by_name' => $leads_data['employee_name']
+                                'modified_by' => $leads_data['created_by'],
+                                'modified_by_name' => $leads_data['created_by_name']
                             );
                             if(!empty($drop_reason)){
                                 $lead_status_data['reason_for_drop'] = $drop_reason;

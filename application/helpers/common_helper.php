@@ -1288,6 +1288,17 @@ if(!function_exists('designation_by_hrms_id')){
     }
 }
 
+if(!function_exists('get_bm')){
+    function get_bm($id){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $select=array('hrms_id','name');
+        $where["hrms_id = (select hrms_id FROM employee_dump WHERE designation like '%BRANCH MANAGER%' AND branch_id = ".$id.")"] = NULL;
+        $data = $CI->master->get_bm($select,$where);
+        return $data;
+    }
+}
+
 
 
 
