@@ -1,10 +1,9 @@
 <?php
-$lead_source = $this->config->item('lead_source');
-$removed_lead_source = array_shift($lead_source);
+$lead_source_list = $this->config->item('lead_source');
 ?>
 <div class="page-title">
 	<div class="container clearfix">
-		<h3 class="text-center">Add Lead Routing Mapping</h3>
+		<h3 class="text-center">Update Lead Routing Mapping</h3>
 
 	</div>
 </div>
@@ -24,11 +23,11 @@ $removed_lead_source = array_shift($lead_source);
 					'class' => 'form',
 					'autocomplete' => 'off'
 				);
-				echo form_open(base_url().'/rapc/add_mapping', $attributes);
+				echo form_open(base_url().'rapc/edit_mapping/'.encode_id($lead_source), $attributes);
 				?>
                 <div class="form-control">
                     <label>Lead Source:<span style="color:red;">*</span></label>
-                    <?php echo form_dropdown('lead_source', $lead_source) ?>
+                    <?php echo ucwords($lead_source_list[$lead_source]); ?>
                 </div>
 					<div class="form-control">
 						<label>Default Assign:<span style="color:red;">*</span></label>

@@ -72,7 +72,7 @@
 				<?php }?>
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
 					<li class="<?php echo ($controller == 'rapc' && $method == 'route') ? 'active' : ''?>">
-						<a href="<?php echo site_url('rapc/route')?>">
+						<a href="<?php echo site_url('rapc/mapping_list')?>">
 							Lead Routing
 						</a>
 					</li>

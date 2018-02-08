@@ -142,7 +142,7 @@ class Rapc extends CI_Controller {
     public function route($param = '')
     {
         /*Create Breadcumb*/
-        $this->make_bread->add('Analytics Lead Route', '', 0);
+        $this->make_bread->add('Lead Routing Mapping', '', 0);
         $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
         $arrData['routeDetail'] = $this->master->view_lead_route();
@@ -247,4 +247,106 @@ class Rapc extends CI_Controller {
             redirect('rapc');
         }
     }
+
+    /*
+     * mapping_list
+     * mapping_list for this controller.
+     * @author Ashok Jadhav
+	* @access public
+     * @param none
+     * @return void
+     */
+    public function mapping_list()
+    {
+        /*Create Breadcumb*/
+        $this->make_bread->add('Lead Routing Mapping', '', 0);
+        $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+
+        $arrData['mappinglist'] = $this->master->mapping_list();
+        return load_view("Rapc/mapping_list",$arrData);
+    }
+
+    public function add_mapping($param = '')
+    {
+        /*Create Breadcumb*/
+        $this->make_bread->add('Add Lead Routing Mapping', '', 0);
+        $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+        if($this->input->post('Submit')) {
+            $this->form_validation->set_rules('lead_source','Lead Source', 'trim|required|callback_chkRecord');
+            $this->form_validation->set_rules('default_assign','Default Assign', 'trim|required');
+            if ($this->form_validation->run() == FALSE)
+            {   $this->session->set_flashdata('error',validation_errors());
+                return load_view("Rapc/route",$arrData);
+            }else{
+                $data = array(
+                    'lead_source' => $this->input->post('lead_source'),
+                    'route_to' => $this->input->post('default_assign'),
+                    'created_by' => loginUserId(),
+                    'modified_by' => loginUserId(),
+                    'modified_on' => date('Y-m-d H:i:s')
+                );
+                $response = $this->master->add_lead_mapping($data);
+                if($response['status'] == 'error'){
+                    $this->session->set_flashdata('error','Failed to Add Record');
+                    redirect('rapc/add_mapping');
+                }else{
+                    $this->session->set_flashdata('success','Record added successfully.');
+                    redirect('rapc/mapping_list');
+                }
+            }
+        }
+        //$arrData['uploaded_logs'] = $this->Lead->get_uploaded_leads_logs();
+        $middle = "Rapc/route";
+        load_view($middle,$arrData);
+    }
+
+    public function chkRecord($lead_source)
+    {
+        $arrData['routeDetail'] = $this->master->chkRecord($lead_source);
+        if($arrData['routeDetail'][0]['id']){
+            $this->form_validation->set_message('chkRecord', 'Record already added for selected source');
+            return FALSE;
+        }else{
+            return TRUE;
+        }
+    }
+
+    public function edit_mapping($lead_source)
+    {
+        $lead_source = decode_id($lead_source);
+        /*Create Breadcumb*/
+        $this->make_bread->add('Update Lead Routing Mapping', '', 0);
+        $arrData['breadcrumb'] = $this->make_bread->output();
+        /*Create Breadcumb*/
+        $arrData['routeDetail'] = $this->master->chkRecord($lead_source);
+        $arrData['lead_source'] = $lead_source;
+        if($this->input->post('Submit')) {
+            $this->form_validation->set_rules('default_assign','Default Assign', 'trim|required');
+            if ($this->form_validation->run() == FALSE)
+            {   $this->session->set_flashdata('error','Please Select Default Assign');
+                return load_view("Rapc/edit_map",$arrData);
+            }else{
+                $data = array(
+                    'route_to' => $this->input->post('default_assign'),
+                    'modified_by' => loginUserId(),
+                    'modified_on' => date('Y-m-d H:i:s')
+                );
+                $where = array('lead_source' => $lead_source);
+                $response = $this->master->lead_route($where,$data);
+                if($response['status'] == 'error'){
+                    $this->session->set_flashdata('error','Failed to Update Record');
+                    redirect('rapc/mapping_list');
+                }else{
+                    $this->session->set_flashdata('success','Record Updated successfully.');
+                    redirect('rapc/mapping_list');
+                }
+            }
+        }
+        //$arrData['uploaded_logs'] = $this->Lead->get_uploaded_leads_logs();
+        $middle = "Rapc/edit_map";
+        load_view($middle,$arrData);
+    }
+
 }

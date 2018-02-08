@@ -390,4 +390,41 @@ class Master_model extends CI_Model{
         return $query->result_array();
     }
 
+    /**
+     * view lead route list
+     * @author Ashok Jadhav
+     * @access public
+     * @param $data
+     * @return int
+     */
+    public function mapping_list($order_by = array()){
+        $select = array('id','lead_source','route_to');
+        $where = array();
+        return $this->view($select,$where,Tbl_analytics_lead_route,$join = array(),$order_by);
+    }
+
+    /**
+     * add_product
+     * @author Ashok Jadhav
+     * @access public
+     * @param $data
+     * @return int
+     */
+    public function add_lead_mapping($data){
+        return $this->insert(Tbl_analytics_lead_route,$data);
+    }
+
+    /**
+     * view lead route
+     * @author Ashok Jadhav
+     * @access public
+     * @param $data
+     * @return int
+     */
+    public function chkRecord($lead_source){
+        $select = array('id','route_to');
+        $where = array('lead_source' => $lead_source);
+        return $this->view($select,$where,Tbl_analytics_lead_route,$join = array(),$order_by= array());
+    }
+
 }
