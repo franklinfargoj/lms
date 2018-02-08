@@ -42,7 +42,7 @@ $removed_lead_source = array_shift($lead_source);
 							<input type="radio" id= "branch" name="default_assign" value="1" <?php
 							echo set_value('status', $routeDetail[0]['route_to']) == '1' ? "checked" : "";
 							?> />
-							<label>RAPC</label>
+							<label>Processing Center</label>
 						</div>
 					</div>
 

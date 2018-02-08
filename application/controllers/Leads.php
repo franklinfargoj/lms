@@ -393,21 +393,21 @@ class Leads extends CI_Controller
                     if(in_array(ucwords(strtolower(trim($prod_title))),$all_product)){
                         $whereArray = array('title' => ucwords(strtolower(trim($prod_title))),'status'=>'active');
                         $prod_id = $this->Lead->fetch_product_id($whereArray);
-                        $analytic_lead_route = $this->master->view_lead_route();
+                        //$analytic_lead_route = $this->master->view_lead_route();
+                        $analytic_lead_route = $this->master->chkRecord($lead_source);
                         $value['created_on']=date('Y-m-d H:i:s');
-
-                        if(($lead_source == 'analytics' && $analytic_lead_route[0]['route_to'] == 1) ||
-                            ($lead_source != 'analytics'))
-                        {
-                            $mapping_whereArray = array('processing_center' => $prod_id['map_with'], 'branch_id' => $value['branch_id']);
-                            $routed_id = $this->Lead->check_mapping($mapping_whereArray);
-                            if (!is_array($routed_id)){
-                                $value['reroute_from_branch_id'] = $value['branch_id'];
-                                $value['branch_id'] = $routed_id;
-                                $value['modified_on']=date('Y-m-d H:i:s',time()+5);
-                            }else{
-                                $value['reroute_from_branch_id'] = NULL;
-                                $value['modified_on']=date('Y-m-d H:i:s',time()+3);
+                        if(!empty($analytic_lead_route)) {
+                            if ($analytic_lead_route[0]['route_to'] == 1) {
+                                $mapping_whereArray = array('processing_center' => $prod_id['map_with'], 'branch_id' => $value['branch_id']);
+                                $routed_id = $this->Lead->check_mapping($mapping_whereArray);
+                                if (!is_array($routed_id)) {
+                                    $value['reroute_from_branch_id'] = $value['branch_id'];
+                                    $value['branch_id'] = $routed_id;
+                                    $value['modified_on'] = date('Y-m-d H:i:s', time() + 5);
+                                } else {
+                                    $value['reroute_from_branch_id'] = NULL;
+                                    $value['modified_on'] = date('Y-m-d H:i:s', time() + 3);
+                                }
                             }
                         }
                         $is_own_branch = '1';
@@ -877,7 +877,7 @@ class Leads extends CI_Controller
                                 $where = array(Tbl_Leads . '.id' => $lead_id);
                                 $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                                 $leads_info = $leadsAssigned[0];
-                                if ($leads_info['lead_source'] == 'analytics') {
+                                if ($leads_info['lead_source'] == 'analytics' || $leads_info['lead_source'] == 'enquiry' || $leads_info['lead_source'] == 'tie_ups') {
 
                                     if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
                                         $action = 'list';
