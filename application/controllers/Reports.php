@@ -1786,6 +1786,7 @@ class Reports extends CI_Controller
     private function create_excel($action,$header_value,$data){
         set_time_limit(0);
         ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 600);
 //        echo $action;
 //        pe($header_value);
         // pe($data);die;
@@ -1933,6 +1934,9 @@ class Reports extends CI_Controller
 
     private function status_flow($arrData){
 
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 600);
         $login_user = get_session();
         $action = 'list';
         $select = array('l.id','l.lead_identification','l.created_by as created_by_hrms_id','l.lead_ticket_range','p.title as product','pc.title as product_category','l.opened_account_no');
@@ -2077,6 +2081,7 @@ class Reports extends CI_Controller
     private function create_dump_excel($action,$header_value,$data){
         set_time_limit(0);
         ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 600);
         $lead_type = $this->config->item('lead_type');
        // echo $action;
 //        pe($header_value);
