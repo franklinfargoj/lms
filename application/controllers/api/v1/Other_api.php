@@ -36,6 +36,15 @@ class Other_api extends REST_Controller
                     'data'=>array('Security Token is missing.')
                 );
                 returnJson($response);
+            }else{
+                $token = $params['token'];
+                if($token != 'dena!@#lms07'){
+                    $response = array(
+                        'result'=>False,
+                        'data'=>array('Invalid Security Token.')
+                    );
+                    returnJson($response);
+                }
             }
     }
 
@@ -55,11 +64,11 @@ class Other_api extends REST_Controller
             $your_date = strtotime($date);
             $datediff = $now - $your_date;
             $days =  round($datediff / (60 * 60 * 24));
-//            if($days >30){
-//                $res = array('result' => False,
-//                    'data' => array('Date not more than 30 days old from today'));
-//                returnJson($res);
-//            }
+            if($days >30){
+                $res = array('result' => False,
+                    'data' => array('Date not more than 30 days old from today'));
+                returnJson($res);
+            }
             $action = 'list';
             $select = array('lead.id','lead.customer_name','lead.contact_no','lead.created_by_branch_id','lead.branch_id as current_branch_id','lead.created_by','lead.reroute_from_branch_id','lead.created_on','products.title as product','product_category.title as category','lead.id');
             $table = Tbl_Leads.' AS lead';
