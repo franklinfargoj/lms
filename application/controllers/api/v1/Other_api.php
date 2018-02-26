@@ -78,10 +78,15 @@ class Other_api extends REST_Controller
             $where["date(lead.created_on) >='".$date."' AND date(lead.created_on) <='".date('Y-m-d')."'"] = NULL;
             $order_by = 'lead.created_on DESC';
             $generated_leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by=array(),$order_by);
-
-            $res = array('result' => True,
-                'data' => $generated_leads);
-            returnJson($res);
+            if(!empty($generated_leads)) {
+                $res = array('result' => True,
+                    'data' => $generated_leads);
+                returnJson($res);
+            }else{
+                $res = array('result' => False,
+                    'data' => array('No Records Found'));
+                returnJson($res);
+            }
         } else {
             $res = array('result' => False,
                 'data' => array('Date is missing'));
