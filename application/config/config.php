@@ -223,7 +223,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------
@@ -380,7 +380,7 @@ $config['encryption_key'] = 'denabank';
 /*$config['sess_driver'] = 'files';*/
 $config['sess_driver'] = 'database';
 $config['sess_cookie_name'] = 'ci_session';
-$config['sess_expiration'] = 7200;
+$config['sess_expiration'] = 1200;
 /*$config['sess_save_path'] = NULL;*/
 $config['sess_save_path'] = 'db_ci_sessions';
 $config['sess_match_ip'] = FALSE;
@@ -464,7 +464,8 @@ $config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add
     'api/v1/authenticate/check_authentication','api/v1/api/notification_list',
     'api/v1/api/assigned_leads_status','api/v1/api/update_notification_count',
     'api/v1/api/check_account_no','api/v1/api/update_lead_status_by_em',
-    'api/v1/api/verify_account','api/v1/api/leads_count_by_leads_status','api/v1/api/generated_conversion'
+    'api/v1/api/verify_account','api/v1/api/leads_count_by_leads_status','api/v1/api/generated_conversion','api/v1/api/route_to_rapc',
+    'api/v1/other_api/rapc_leads_list'
     );
 
 /*
@@ -571,8 +572,10 @@ $config['lead_analytics'] = '1'; // 1 for RAPC , 0 for branch
 $config['authorised_methods'] = array('masters','faq','tickers');
 
 $config['drop_reason'] = array(
-    'Incorrect Phone Number'=>'Incorrect Phone Number',
+    'Not Eligible'=>'Not Eligible',
+    'Documents Incomplete'=>'Documents Incomplete',
     'Not Interested'=>'Not Interested',
-    'Does Not Qualify'=>'Does Not Qualify',
-    'Lost to competition'=>'Lost to competition',
+    'Not Reachable'=>'Not Reachable',
+    'Lost To Competition'=>'Lost To Competition',
+    'Others'=>'Others',
 );
