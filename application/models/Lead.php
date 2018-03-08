@@ -217,6 +217,10 @@ class Lead  extends CI_Model
         return $this->insert($table,$data);
     }
 
+    public function update_reminder_data($where,$data,$table){
+        return $this->update($where,$table,$data);
+    }
+
     
     /**
      * add_reminder

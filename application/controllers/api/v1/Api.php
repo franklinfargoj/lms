@@ -2522,10 +2522,20 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                     if ($params['status'] == 'FU') {
                         if (isset($params['remind_on']) && !empty($params['remind_on']) &&
                             isset($params['reminder_text']) && !empty($params['reminder_text'])) {
-$wherefollowup = array('lead_id'=>$params['lead_id'],'is_updated'=>1,'status'=>'FU');
-                                            $tablefollowup = Tbl_LeadAssign;
-                                            $datafollowup = array('followup_date'=>date('Y-m-d-H-i-s', strtotime($params['remind_on'])));
-                                            $this->Lead->update($wherefollowup,$tablefollowup,$datafollowup);
+                            $wherefollowup = array('lead_id'=>$params['lead_id'],'is_updated'=>1,'status'=>'FU');
+                            $tablefollowup = Tbl_LeadAssign;
+                            $datafollowup = array('followup_date'=>date('Y-m-d-H-i-s', strtotime($params['remind_on'])));
+                            $this->Lead->update($wherefollowup,$tablefollowup,$datafollowup);
+
+                            // archive old reminder if any
+                            $where = array('lead_id' => $params['lead_id']);
+                            $is_cancelled_data = array(
+                                'is_cancelled' => 'Yes'
+                            );
+                            $response24 = $this->Lead->update_reminder_data($where,$is_cancelled_data,Tbl_Reminder);
+
+                            // Add new reminder
+
                             $remindData = array(
                                 'lead_id' => $params['lead_id'],
                                 'remind_on' => date('Y-m-d-H-i-s', strtotime($params['remind_on'])),
