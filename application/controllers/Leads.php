@@ -935,6 +935,16 @@ class Leads extends CI_Controller
                                 $wherefollowup = array(Tbl_LeadAssign.'.lead_id' => $lead_id,Tbl_LeadAssign.'.is_updated' => 1,Tbl_LeadAssign.'.status' => 'FU');
                                 $followup_data = array('followup_date'=>date('Y-m-d-H-i-s',strtotime($this->input->post('remind_on'))));
                                 $this->Lead->update_lead_data($wherefollowup, $followup_data, Tbl_LeadAssign);
+
+                                // archive old reminder if any
+                                $where = array('lead_id' => $lead_id);
+                                $is_cancelled_data = array(
+                                    'is_cancelled' => 'Yes'
+                                );
+                                $response24 = $this->Lead->update_reminder_data($where,$is_cancelled_data,Tbl_Reminder);
+
+                                // Add new reminder
+
                                 $remindData = array(
                                     'lead_id' => $lead_id,
                                     'remind_on' => date('y-m-d-H-i-s',strtotime($this->input->post('remind_on'))),
