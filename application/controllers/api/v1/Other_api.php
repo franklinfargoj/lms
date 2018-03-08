@@ -72,12 +72,12 @@ class Other_api extends REST_Controller
 //                returnJson($res);
 //            }
             $action = 'list';
-            $select = array('lead.id','lead.customer_name','lead.contact_no','lead.created_by_branch_id','lead.branch_id as current_branch_id','lead.created_by','lead.reroute_from_branch_id','lead.created_on','products.title as product','product_category.title as category','lead.id');
+            $select = array('lead.id1','lead.customer_name','lead.contact_no','lead.created_by_branch_id','lead.branch_id as current_branch_id','lead.created_by','lead.reroute_from_branch_id','lead.created_on','products.title as product','product_category.title as category','lead.id');
             $table = Tbl_Leads.' AS lead';
             $join[] = array('table' =>Tbl_Products.' AS products','on_condition'=>'products.id = lead.product_id','type'=>'left');
             $join[] = array('table' =>Tbl_Category.' AS product_category','on_condition'=>'product_category.id = lead.product_category_id','type'=>'left');
             $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = lead.id','type' => 'LEFT');
-            $where = array('la.status NOT IN ("NC","DC","AO","Converted","Closed","NI")' => NULL);
+            $where = array('la.is_updated=1 AND la.status IN ("FU")' => NULL);
             $where["date(lead.created_on) <='".$date."' AND date(lead.created_on) >='".$previous_date."' AND products.id IN(23,24,25,26,29,30)"] = NULL;
             $order_by = 'lead.created_on DESC';
             $generated_leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by=array(),$order_by);
