@@ -9,7 +9,7 @@ $lead_sources = $this->config->item('lead_source');
 <div class="page-title">
     <div class="container clearfix">
         <h3 class="text-center">
-            Current Location Report
+            Unassigned Leads
         </h3>
 
     </div>
@@ -22,7 +22,7 @@ $lead_sources = $this->config->item('lead_source');
             'class' => 'form',
             'autocomplete' => 'off'
         );
-        echo form_open(site_url().'reports/index/leads_assigned', $attributes);
+        echo form_open(site_url().'reports/index/leads_unassigned', $attributes);
         $data = array(
             'view'   => isset($view) ? $view : '',
             'zone_id'  => isset($zone_id) ? encode_id($zone_id) : '',
@@ -34,10 +34,10 @@ $lead_sources = $this->config->item('lead_source');
 <div class="lead-form">
     <span class="bg-top"></span>
     <div class="inner-content">
-    <div class="container ">
-        <p style="font-style:italic;"><strong>Purpose :</strong>This report shows break-up of all assigned leads in different lead stages in the time period specified</p>
-        <div class="form">
-        <p id="note"><span style="color:red;">*</span> These fields are required</p>
+    <div class="container">
+        <p><strong>Purpose :</strong>This report shows total unassigned leads in the time period specified</p>
+    <div class="form">
+    <p id="note"><span style="color:red;">*</span> These fields are required</p>
     <div class="lead-form-left" id="l-width">
         <div class="form-control">
             <label>Start Date:<span style="color:red;">*</span></label>   
@@ -155,17 +155,16 @@ $lead_sources = $this->config->item('lead_source');
                 }
             ?>
         </div>
-   
+    
     <div class="form-control form-submit clearfix">
         <button type="submit" name="Submit" value="Submit" class="full-btn float-right">
 <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
 <span class="btn-txt">Submit</span>
 <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
 </button>    			    </div>
-     </div>
-     </div>
-     </div>
-    <?php echo form_close();?>
+    </div>
+    </div>
+</div>
         <?php if($this->session->userdata('admin_type') != 'Super admin2'){?>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" alt="35" style="display:none;">
 <?php 
@@ -175,66 +174,63 @@ $lead_sources = $this->config->item('lead_source');
     $('.loader').show();
 </script>
 <!-- BEGIN LEADS -->
-<div class="lead-top result"  style="display:none;">
-    <div class="container clearfix">
-        <div class="float-left">
-            <span class="total-lead">
-                <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
-                    Total Assigned Leads Of Your Zone
-                <?php }else{?>
-                    Total Assigned Leads
+    <div class="lead-top result" style="display:none;">
+        <div class="container clearfix">
+            <div class="float-left">
+                <span class="total-lead">
+                    <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
+                        Total Unassigned Leads Of Your Zone
+                    <?php }else{?>
+                        Total Unassigned Leads
+                    <?php }?>
+                </span>
+                <span class="lead-num"> : <?php echo $Total;?></span>
+            </div>
+            <div class="float-right">
+                <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
+
+                        <?php
+                        if(!isset($product_category_id) || $product_category_id == ''){
+                            $product_category_id1= 'all';
+                        }else{
+                            $product_category_id1 =$product_category_id;
+                        }
+                        if(!isset($product_id) || $product_id == ''){
+                            $product_id1= 'all';
+                        }else{
+                            $product_id1=$product_id;
+                        }
+                        if(!isset($lead_source) || $lead_source == ''){
+                            $lead_source1= 'all';
+                        }else{
+                            $lead_source1=$lead_source;
+                        }
+                        $chart_param = $start_date.'/'.$end_date.'/'.$product_category_id1.'/'.$product_id1.'/'.$lead_source1;
+                        $chart_param=encode_id($chart_param);
+                        ?>
+<!--                        <a href="--><?php //echo site_url('charts/index/leads_unassigned/'.$chart_param)?><!--" class="btn-Download">-->
+<!--                            Chart View-->
+<!--                        </a>-->
+<!--                    &nbsp;&nbsp;|&nbsp;&nbsp;-->
                 <?php }?>
-
-            </span>
-            <span class="lead-num"> : <?php echo $Total;?></span>
-        </div>
-        <div class="float-right">
-            <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
-
-                    <?php
-                    if(!isset($product_category_id) || $product_category_id == ''){
-                        $product_category_id1= 'all';
-                    }else{
-                        $product_category_id1 =$product_category_id;
-                    }
-                    if(!isset($product_id) || $product_id == ''){
-                        $product_id1= 'all';
-                    }else{
-                        $product_id1=$product_id;
-                    }
-                    if(!isset($lead_source) || $lead_source == ''){
-                        $lead_source1= 'all';
-                    }else{
-                        $lead_source1=$lead_source;
-                    }
-                    $chart_param = $start_date.'/'.$end_date.'/'.$product_category_id1.'/'.$product_id1.'/'.$lead_source1;
-                    $chart_param=encode_id($chart_param);
-                    ?>
-                    <a href="<?php echo site_url('charts/index/leads_assigned/'.$chart_param)?>" class="btn-Download">
-                        Chart View
-                    </a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp;
-            <?php }?>
-            <a href="javascript:void(0);" class="export_to_excel btn-Download">
+                <a href="javascript:void(0);" class="export_to_excel btn-Download">
                 Export to Excel 
             </a>
             &nbsp;&nbsp;|&nbsp;&nbsp;
-            <a href="javascript:void(0);" class="export_national btn-Download">
+                <a href="javascript:void(0);" class="export_national btn-Download">
                     Download Bank Data
                 </a>
+            </div>
         </div>
     </div>
-</div>
-<?php echo form_close();?>
+    <?php echo form_close();?>
 <div class="result" style="display:none;">
     <div class="page-content">
-        
-        <div class="inner-content">
             <div class="container">
                 <table id="sample_3" class="display lead-table">
                     <thead>
                         <tr>
-                            <th style="text-align:center">
+                            <th align="center">
                                 Sr. No.
                             </th>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -267,22 +263,10 @@ $lead_sources = $this->config->item('lead_source');
                             <th>
                                 Product Name
                             </th>
-                            <th style="text-align:center">
-                                Total Assigned Leads
+                            <th align="center">
+                                Total Unassigned Leads
                             </th>
-                            <?php 
-                                foreach ($lead_status as $key => $value) {
-                                    //if(!in_array($key,array('AO','Converted','Closed'))){
-                            ?>
-                            <th style="text-align:center">
-                                <?php
-                                    echo $value; 
-                                ?>
-                            </th>
-                            <?php
-                                    //}
-                                }
-                            ?>
+
                             <?php if(in_array($viewName,array('ZM','BM'))){?>
                             <th>
                                 Action
@@ -296,7 +280,7 @@ $lead_sources = $this->config->item('lead_source');
                         foreach ($leads as $key => $value) {
                     ?>
                         <tr>
-                            <td style="text-align:center">
+                            <td align="center">
                                 <?php echo ++$i;?>
                             </td>
                             <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
@@ -345,29 +329,11 @@ $lead_sources = $this->config->item('lead_source');
                                     echo !empty($product) ? ucwords($product) : 'All';
                                 ?>
                             </td>
-                            <td style="text-align:center">
+                            <td align="center">
                                 <?php 
                                     echo $value['total'];
                                 ?>
                             </td>
-                            <?php 
-                            //pe($value['status']);
-                                foreach ($lead_status as $k => $v) {
-                                    //if(!in_array($k,array('AO','Converted','Closed'))){
-                            ?>
-                            <td style="text-align:center">
-                                <?php
-                                if(in_array($k,array_keys($value['status']))){
-                                        echo $value['status'][$k];
-                                    }else{
-                                        echo 0;
-                                    }
-                                ?>
-                            </td>
-                            <?php
-                                    //}
-                                }
-                            ?>
                             <?php if(in_array($viewName,array('ZM','BM'))){
                                 $param = '';
                                 if(isset($value['zone_id'])){
@@ -385,7 +351,7 @@ $lead_sources = $this->config->item('lead_source');
                                         if($view == 'branch' || $view == 'employee'){
                                         }else{
                                 ?>
-                                    <a class="" href="<?php echo site_url('reports/index/leads_assigned/branch'.$param)?>">
+                                    <a class="" href="<?php echo site_url('reports/index/leads_unassigned/branch'.$param)?>">
                                         Branch View
                                     </a>
                                     <span>|</span>
@@ -397,10 +363,9 @@ $lead_sources = $this->config->item('lead_source');
                                     if(in_array($viewName,array('ZM','BM'))){
                                         if($view == 'employee'){
                                         }else {
-
                                                 ?>
                                                 <a class=""
-                                                   href="<?php echo site_url('reports/index/leads_assigned/employee' . $param) ?>">
+                                                   href="<?php echo site_url('reports/index/leads_unassigned/employee' . $param) ?>">
                                                     Employee View
                                                 </a>
                                                 <?php
@@ -415,7 +380,7 @@ $lead_sources = $this->config->item('lead_source');
                                             if($view == 'branch' || $view == 'employee'){
                                             }else{
                                                 ?>
-                                                <a class="" href="<?php echo site_url('reports/index/leads_assigned/branch'.$param)?>">
+                                                <a class="" href="<?php echo site_url('reports/index/leads_unassigned/branch'.$param)?>">
                                                     Branch View
                                                 </a>
                                                 <span>|</span>
@@ -427,10 +392,9 @@ $lead_sources = $this->config->item('lead_source');
                                         if(in_array($viewName,array('ZM','BM'))){
                                             if($view == 'employee'){
                                             }else {
-
                                                 ?>
                                                 <a class=""
-                                                   href="<?php echo site_url('reports/index/leads_assigned/employee' . $param) ?>">
+                                                   href="<?php echo site_url('reports/index/leads_unassigned/employee' . $param) ?>">
                                                     Employee View
                                                 </a>
                                                 <?php
@@ -448,7 +412,7 @@ $lead_sources = $this->config->item('lead_source');
                     </tbody>
                 </table>
             </div>
-        </div>
+        
         </div>
         
     </div>
@@ -456,8 +420,7 @@ $lead_sources = $this->config->item('lead_source');
 <?php
     }else{?>
     <span class="no_result">No records found</span>
-<?php }
-    }else{?>
+<?php }}else{?>
     <div class="container clearfix">
         <div class="float-right">&nbsp;
             <a href="javascript:void(0);" class="export_national btn-Download">
@@ -466,7 +429,7 @@ $lead_sources = $this->config->item('lead_source');
         </div>
     </div>
     <?php }?>
-<span class="bg-bottom"></span>
+<span class="bg-bottom" > </span>
 <!-- END LEADS-->
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>

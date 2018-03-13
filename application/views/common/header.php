@@ -253,9 +253,14 @@
 								</li>
 								<li>
 									<a href="<?php echo site_url('reports/index/leads_assigned')?>">
-										Leads Assigned
+                                        Current Location
 									</a>
 								</li>
+                                <li>
+                                    <a href="<?php echo site_url('reports/index/leads_unassigned')?>">
+                                        Unassigned Leads
+                                    </a>
+                                </li>
                                                                 <li>
 									<a href="<?php echo site_url('reports/index/status_flow')?>">
 										Master Report

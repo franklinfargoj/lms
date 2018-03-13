@@ -839,7 +839,7 @@ class Reports extends CI_Controller
         }
 
         if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
-            $this->make_bread->add('Leads Assigned',  'reports/index/leads_assigned', 0);
+            $this->make_bread->add('Current Location',  'reports/index/leads_assigned', 0);
             if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
                 if(!empty($arrData['branch_id'])){
                     if($login_user['designation_name'] != 'BM'){
@@ -850,11 +850,11 @@ class Reports extends CI_Controller
             $this->make_bread->add('Employee View', '', 0);
             $viewName = 'EM';
         }else if($arrData['view']){
-            $this->make_bread->add('Leads Assigned',  'reports/index/leads_assigned', 0);
+            $this->make_bread->add('Current Location',  'reports/index/leads_assigned', 0);
             $this->make_bread->add('Branch View', '', 0);
             $viewName = 'BM';
         }else{
-            $this->make_bread->add('Leads Assigned', '', 0);
+            $this->make_bread->add('Current Location', '', 0);
             $viewName = $login_user['designation_name'];
             if($viewName == 'GM' || $viewName == 'Super admin'){
                 $viewName = 'ZM';
@@ -1786,7 +1786,7 @@ class Reports extends CI_Controller
     private function create_excel($action,$header_value,$data){
         set_time_limit(0);
         ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 600);
+        ini_set('max_execution_time', 1800);
 //        echo $action;
 //        pe($header_value);
         // pe($data);die;
@@ -1936,7 +1936,7 @@ class Reports extends CI_Controller
 
         set_time_limit(0);
         ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 600);
+        ini_set('max_execution_time', 1800);
         $login_user = get_session();
         $action = 'list';
         $select = array('l.id','l.lead_identification','l.created_by as created_by_hrms_id','l.lead_ticket_range','p.title as product','pc.title as product_category','l.opened_account_no');
@@ -2081,7 +2081,7 @@ class Reports extends CI_Controller
     private function create_dump_excel($action,$header_value,$data){
         set_time_limit(0);
         ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 600);
+        ini_set('max_execution_time', 1800);
         $lead_type = $this->config->item('lead_type');
        // echo $action;
 //        pe($header_value);
@@ -2304,6 +2304,214 @@ class Reports extends CI_Controller
         //tell browser what's the file name
         header('Cache-Control: max-age=0'); //no cache
         $objWriter->save('php://output');
+    }
+
+
+    private function leads_unassigned($arrData){
+        //pe(zoneid('001949'));die;
+        $login_user = get_session();
+        $lead_status = array_keys($this->config->item('lead_status'));
+        //Build Input Parameter
+
+        $action = 'list';
+        $select = array('COUNT(DISTINCT(l.id)) as count');
+        $table = Tbl_Leads. ' as l';
+        $where=array();
+        $join[] = array('table' =>Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id ','type' => 'left');
+        $where['(la.lead_id IS NULL OR la.is_deleted = 1)'] = NULL;
+
+        //If Start date selected
+        if(!empty($arrData['start_date'])){
+            $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            }
+        //If End date selected
+        if(!empty($arrData['end_date'])){
+            $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            }
+        //If Category selected
+        if(!empty($arrData['product_category_id'])){
+            $where['l.product_category_id'] = $arrData['product_category_id'];
+
+            $categoryData = $this->Master->view_product_category($arrData['product_category_id']);
+            $arrData['category'] = $categoryData[0]['title'];  //Get Title
+        }
+        //If Product selected
+        if(!empty($arrData['product_id'])){
+            $where['l.product_id'] = $arrData['product_id'];
+
+            $productData = $this->Master->view_product($arrData['product_id']);
+            $arrData['product'] = $productData[0]['title'];   //Get Title
+        }
+        //If Lead Source selected
+        if(!empty($arrData['lead_source'])){
+            $where['l.lead_source'] = $arrData['lead_source'];
+        }
+
+        if(($arrData['view'] == 'employee') || ($arrData['national'] == 'yes')){
+            $this->make_bread->add('Unassigned Leads', 'reports/index/leads_unassigned', 0);
+            if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
+                if(!empty($arrData['branch_id'])){
+                    if($login_user['designation_name'] != 'BM'){
+                        $this->make_bread->add('Branch View', 'reports/index/leads_unassigned/branch/'.encode_id($arrData['zone_id']), 0);
+                    }
+                }
+            }
+            $this->make_bread->add('Employee View', '', 0);
+            $viewName = 'EM';
+        }else if($arrData['view']){
+            $this->make_bread->add('Unassigned Leads', 'reports/index/leads_unassigned', 0);
+            $this->make_bread->add('Branch View', '', 0);
+            $viewName = 'BM';
+        }else{
+            $this->make_bread->add('Unassigned Leads', '', 0);
+            $viewName = $login_user['designation_name'];
+            if($viewName == 'GM' || $viewName == 'Super admin'){
+                $viewName = 'ZM';
+            }
+        }
+
+        $WHERE = array();
+        //Employee Login
+        if($viewName == 'EM'){
+            //Get Data for employees
+            $select[] = 'l.created_by as employee_id';
+            $select1[] = 'l.created_by as employee_id';
+            if($arrData['national'] != 'yes'){
+                $where['l.zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+                if((!empty($arrData['zone_id'])) || (!empty($arrData['branch_id']))){
+                    if(!empty($arrData['branch_id'])){
+                        $where['l.branch_id'] = $arrData['branch_id'];
+                    }
+                }else{
+                    $where['l.branch_id'] = $login_user['branch_id'];
+                }
+            }
+            $group_by[]  =  'l.created_by';
+
+            //Get Listing for employees
+            $SELECT = array('hrms_id as employee_id','name as employee_name','branch_id','branch_name','zone_id','zone_name','designation');
+            if(isset($where['l.zone_id'])){
+                $WHERE['zone_id'] = $where['l.zone_id'];
+            }
+            if(isset($where['l.branch_id'])){
+                $WHERE['branch_id'] = $where['l.branch_id'];
+            }
+            //$WHERE['designation'] = 'HD';
+            $GROUP_BY = array('hrms_id');
+        }
+
+        //Branch Manager Login
+        if($viewName == 'BM'){
+            //Get Data for Branch
+            $select[] = 'l.branch_id as branch_id';
+            $select1[] = 'l.branch_id as branch_id';
+            $where['l.zone_id'] = !empty($arrData['zone_id']) ? $arrData['zone_id'] : $login_user['zone_id'];
+            $group_by[] = 'l.branch_id';
+
+            //Get Listing for branch
+            $SELECT = array('branch_id','branch_name','zone_id','zone_name');
+            if(isset($where['l.zone_id'])){
+                $WHERE['zone_id'] = $where['l.zone_id'];
+            }
+            //$WHERE['designation'] = 'BR';
+            $GROUP_BY = array('branch_id');
+        }
+
+        //Zone Manager Login
+        if($viewName == 'ZM'){
+            //Get Data for Branch
+            $select[] = 'l.zone_id as zone_id';
+            $select1[] = 'l.zone_id as zone_id';
+            $group_by[] = 'l.zone_id';
+
+            //Get Listing for branch
+            $SELECT = array('zone_id','zone_name');
+            //$WHERE['designation'] = 'ZD';
+            $GROUP_BY = array('zone_id');
+        }
+
+        $TABLE  = 'employee_dump';
+        $list = $this->Lead->get_employee_dump($SELECT,$WHERE,$GROUP_BY,$TABLE,$viewName);
+
+        $leads = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = 'count DESC');
+       // pe($leads);
+        $arrData['Total'] = 0;
+        if($list){
+            $Lead['userId'] = array();
+            //$generatedLead['userId'] = array();
+
+            if(!empty($leads)) {
+                foreach ($leads as $key => $value) {
+                    //echo $value['count'];
+                    //Employee Login
+                    if ($viewName == 'EM') {
+                        $index = $value['employee_id'];
+                        $Lead['userId'][] = $value['employee_id'];
+                    }
+
+                    //Branch Manager Login
+                    if ($viewName == 'BM') {
+                        $index = $value['branch_id'];
+                        $Lead['userId'][] = $value['branch_id'];
+                    }
+
+                    //Zone Manager Login
+                    if ($viewName == 'ZM') {
+                        $index = $value['zone_id'];
+                        $Lead['userId'][] = $value['zone_id'];
+                    }
+
+                    $unassignedLead[$index]['unassigned_leads'] = $value['count'];
+                }
+            }
+            //pe($Lead);die;
+            //pe($list);
+            //pe($generatedLead);die;
+            $arrData['viewName'] = $viewName;
+            foreach ($list as $key => $value) {
+                //echo $index;echo "<br>";
+                //Employee Login
+                if($viewName == 'EM'){
+                    $index = $value->employee_id;
+                    $arrData['leads'][$index]['employee_id'] = $value->employee_id;
+                    $arrData['leads'][$index]['employee_name'] = $value->employee_name;
+                    $arrData['leads'][$index]['designation'] = $value->designation;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+                //Branch Manager Login
+                if($viewName == 'BM'){
+                    $index = $value->branch_id;
+                    $arrData['leads'][$index]['branch_name'] = $value->branch_name;
+                    $arrData['leads'][$index]['branch_id'] = $value->branch_id;
+                }
+
+                //Zone Manager Login
+                if($viewName == 'ZM'){
+                    $index = $value->zone_id;
+
+                }
+                $arrData['leads'][$index]['zone_name'] = $value->zone_name;
+                $arrData['leads'][$index]['zone_id'] = $value->zone_id;
+
+                if(!empty($unassignedLead[$index]['unassigned_leads'])){
+                    $arrData['leads'][$index]['total']=$unassignedLead[$index]['unassigned_leads'];
+                    $arrData['Total'] += $unassignedLead[$index]['unassigned_leads'];
+                }else{
+                    $arrData['leads'][$index]['total']=0;
+                }
+            }
+            if($this->session->userdata('admin_type') == 'BM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('branch_id')=> $arrData['leads'][$this->session->userdata('branch_id')]) + $arrData['leads'];
+            }
+            if($this->session->userdata('admin_type') == 'ZM' && $arrData['view'] == ''){
+                $arrData['leads'] = array($this->session->userdata('zone_id')=> $arrData['leads'][$this->session->userdata('zone_id')]) + $arrData['leads'];
+            }
+        }
+        sksort($arrData['leads'], "total");
+        //pe($arrData);die;
+
+        return $arrData;
     }
 
 
