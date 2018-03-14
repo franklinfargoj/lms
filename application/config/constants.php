@@ -127,10 +127,10 @@ define('Tbl_analytics_lead_route', 'db_analytics_lead_route');
 //define('HRMS_BRANCH_RECORD', 'http://172.25.2.35:8001/PSIGW/RESTListeningConnector/DBK_BRANCH_DETAILS.v1/?call=0');
 //define('HRMS_EMP_DUMP', 'http://172.25.2.35:8001/PSIGW/RESTListeningConnector/DBK_LMS_EMPY_DTL.v1/?call=Y');
 
-define('HRMS_API_URL_AUTH', 'http://103.224.111.35/lms/hrms_auth.php?');
-define('HRMS_API_URL_GET_RECORD', 'http://103.224.111.35/lms/hrms_records.php?');
-define('HRMS_BRANCH_RECORD', 'http://103.224.111.35/lms/master.php');
-define('HRMS_EMP_DUMP', 'http://103.224.111.35/lms/master_emp.php');
+define('HRMS_API_URL_AUTH', 'https://103.224.111.35/lms/hrms_auth.php?');
+define('HRMS_API_URL_GET_RECORD', 'https://103.224.111.35/lms/hrms_records.php?');
+define('HRMS_BRANCH_RECORD', 'https://103.224.111.35/lms/master.php');
+define('HRMS_EMP_DUMP', 'https://103.224.111.35/lms/master_emp.php');
 
 define('Elapsed_day_converted', 7); //Elapsed Days for converted
 define('Elapsed_day_NI', 7); //Elapsed Days for Not Interested
