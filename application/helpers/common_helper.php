@@ -525,7 +525,8 @@ function get_notification_count(){
 function get_details($hrms_id = ''){
     if(!empty($hrms_id)){
         //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$hrms_id);
+        //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$hrms_id);
+        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$hrms_id);
         $records = json_decode($records_response);
         $result['basic_info'] = array(
             'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,

@@ -97,13 +97,15 @@ $pwd = decode_id($this->input->post('password'));
                    $password = $pwd;
 
                     //$auth_response = call_external_url(HRMS_API_URL_AUTH.'?username='.$user_id.'?password='.$password);
-                    $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$hrms_id.'?password='.$password);
+                    //$auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$hrms_id.'?password='.$password);
+                    $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$hrms_id.'&password='.$password);
                     $auth = json_decode($auth_response);
 //echo "<pre>";
 //print_r($auth);die;
                     if ($auth->DBK_LMS_AUTH->password == 'True') {
                         // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-                        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$auth->DBK_LMS_AUTH->username);
+                        //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$auth->DBK_LMS_AUTH->username);
+                        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$auth->DBK_LMS_AUTH->username);
                         $records = json_decode($records_response);
 
                      /* if($auth->DBK_LMS_AUTH->username == '0004236'){
