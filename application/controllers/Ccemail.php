@@ -45,7 +45,7 @@ class Ccemail extends CI_Controller {
 
     /*
      * index
-     * Index Page for this controller.
+     * add()
      * @author Franklin Fargoj
 	 * @access public
      * @param none
@@ -79,7 +79,14 @@ class Ccemail extends CI_Controller {
         }
     }
 
-
+    /*
+     * index
+     * edit()
+     * @author Franklin Fargoj
+     * @access public
+     * @param $id
+     * @return void
+     */
     public function edit($id){
         $id = decode_id($id);
 
@@ -89,18 +96,13 @@ class Ccemail extends CI_Controller {
 
         $arrData['cc_name_email'] = $this->Ccemail_model->view_cc_email($id);
 
-
         if($this->input->post()){
-
             $this->form_validation->set_rules('ccname','Name', 'required');
             $this->form_validation->set_rules('ccemail','Email', 'required|valid_email');
-
             if ($this->form_validation->run() == FALSE){
-
                 $arrData['has_error'] = 'has-error';
                 return load_view("edit_ccemail",$arrData);
             }else{
-
                 $update = array(
                     'name' => $this->input->post('ccname'),
                     'email' => $this->input->post('ccemail'),
@@ -108,7 +110,6 @@ class Ccemail extends CI_Controller {
                 );
 
                 $response = $this->Ccemail_model->edit_cc_email($id,$update);
-
                 if($response['status'] == 'error'){
                     $this->session->set_flashdata('error','Failed to edit CC email');
                     redirect('edit_ccemail'.encode_id($id));
@@ -116,13 +117,10 @@ class Ccemail extends CI_Controller {
                     $this->session->set_flashdata('success','CC email updated successfully.');
                     redirect('ccemail');
                 }
-
             }
-
         }else{
             return load_view("edit_ccemail",$arrData);
         }
     }
-
 
 }

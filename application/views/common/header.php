@@ -28,6 +28,7 @@
 					</a>
 				</li>
 				<?php }?>
+
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
 				<li class="<?php echo ($controller == 'product_category') ? 'active' : ''?>">
 					<a href="<?php echo site_url('product_category')?>">
@@ -280,6 +281,14 @@
 					</a>
 				</li>
 				<?php }?>
+
+                <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+                <li>
+                    <a href="<?php echo site_url('ccemail')?>">
+                        CC Email
+                    </a>
+                </li>
+                <?php }?>
 
 			</ul>
 		</div>
