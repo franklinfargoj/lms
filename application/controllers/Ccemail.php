@@ -61,6 +61,7 @@ class Ccemail extends CI_Controller {
 
             $this->form_validation->set_rules('ccname','Name', 'required');
             $this->form_validation->set_rules('ccemail','Email', 'required|is_unique[email_cc.email]|valid_email');
+            $this->form_validation->set_message('is_unique', 'The Email is already taken');
             if ($this->form_validation->run() == FALSE){
 
                 $arrData['has_error'] = 'has-error';

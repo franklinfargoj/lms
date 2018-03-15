@@ -91,5 +91,22 @@ class Login_model extends CI_Model{
 		}
 		return false;
 	}
-	
+    /**
+     * insert_login_log
+     * Inserts login log to the database
+     * @author Gourav Thatoi
+     * @access public
+     * @param $data
+     * @return boolean
+     */
+    public function insert_email($data = array())
+    {
+        if (!empty($data)) {
+            $this->db->insert(email_cc, $data);
+            return true;
+        }
+        return false;
+    }
+
+
 }

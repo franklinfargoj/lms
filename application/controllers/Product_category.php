@@ -104,6 +104,8 @@ class Product_category extends CI_Controller {
           /*Create Breadcumb*/
 
           $arrData['categoryDetail'] = $this->master->view_product_category($id);
+
+
           if(count($arrData['categoryDetail']) > 1){
                $this->session->set_flashdata('error','Invalid access');
                redirect('product_category');

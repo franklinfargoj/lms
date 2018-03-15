@@ -1043,9 +1043,6 @@ function sendMail($to = array(),$subject,$message,$attachment_file,$cc){
 
    /* if($cc == 1){
         $mail->addCC('rahul.choubey@denabank.co.in','Rahul Choubey');
-    }*/
-
-
 
     if($cc == 1) {
         if (count($active_mail) > 0) {

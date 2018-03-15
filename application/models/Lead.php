@@ -143,6 +143,7 @@ class Lead  extends CI_Model
      */
     public function get_leads($action,$table,$select,$where,$join,$group_by,$order_by)
     {
+
         if($action == 'count'){
 //            return $this->db->where($where)->count_all_results($table);
             return $this->counts($table,$select,$where,$join,$group_by);
@@ -268,7 +269,9 @@ class Lead  extends CI_Model
         if(!empty($limit)){
             $this->db->limit($limit);
         }
+        /*pe($this->db);die;*/
         $query = $this->db->get();
+       /* pe($query->result_array());die;*/
         if($query !== FALSE && $query->num_rows() > 0) {
             return $query->result_array();
         }
@@ -373,6 +376,7 @@ class Lead  extends CI_Model
     }
 
     private function counts($table,$select,$where,$join,$group_by){
+
         $this->db->select($select,TRUE);
         $this->db->from($table);
         if(!empty($join)){
