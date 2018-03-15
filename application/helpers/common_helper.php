@@ -799,19 +799,21 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
 }
 
 function call_external_url($url) {
-echo $url;
+//echo $url;
     //return file_get_contents($url);die;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, 0);
     //curl_setopt($ch, CURLOPT_HTTPHEADER, '');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    //curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
    // curl_setopt($ch, CURLOPT_POSTFIELDS, '');
 //pe(curl_error($ch));die;
     curl_exec($ch);
     $result = curl_exec($ch);
-pe(curl_error($ch));die;
+//pe(curl_error($ch));die;
     curl_close($ch);
     return($result);
 }
@@ -1313,7 +1315,7 @@ if(!function_exists('zoneid')){
         $join[] = array('table' =>Tbl_branch.' as b','on_condition' => 'b.district_code = d.code','type' => '');
         $where['b.code'] = $id;
         $data = $CI->master->get_zoneid($select,$join,$where,$table);
-        return $data;
+        return $data[0]['code'];
     }
 }
 
