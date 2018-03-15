@@ -1306,16 +1306,11 @@ if(!function_exists('zoneid')){
     function zoneid($id){
         $CI = & get_instance();
         $CI->load->model('Master_model','master');
-        $select=array('z.code');
-        $table = Tbl_zone.' as z';
-        $join = array();
-        $where = array();
-        $join[] = array('table' =>Tbl_state.' as s','on_condition' => 'z.code = s.zone_code','type' => '');
-        $join[] = array('table' =>Tbl_district.' as d','on_condition' => 's.code = d.state_code','type' => '');
-        $join[] = array('table' =>Tbl_branch.' as b','on_condition' => 'b.district_code = d.code','type' => '');
-        $where['b.code'] = $id;
-        $data = $CI->master->get_zoneid($select,$join,$where,$table);
-        return $data[0]['code'];
+        $select=array('zone_id');
+        $table = Tbl_emp_dump;
+        $where['branch_id'] = $id;
+        $data = $CI->master->get_zoneid($select,$join=array(),$where,$table);
+        return $data[0]['zone_id'];
     }
 }
 
