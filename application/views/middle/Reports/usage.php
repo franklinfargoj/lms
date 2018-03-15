@@ -91,7 +91,7 @@ $lead_status = $this->config->item('lead_status');
     </div>
    </div>
     </div>
-<?php if($this->session->userdata('admin_type') != 'Super admin'){?>
+<?php if($this->session->userdata('admin_type') != 'Super admin2'){?>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){

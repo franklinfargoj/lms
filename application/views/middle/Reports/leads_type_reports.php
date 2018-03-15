@@ -165,7 +165,7 @@ $lead_sources = $this->config->item('lead_source');
     </div>
     </div>
     </div>
-        <?php if($this->session->userdata('admin_type') != 'Super admin'){?>
+        <?php if($this->session->userdata('admin_type') != 'Super admin2'){?>
 <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" alt="35" style="display:none;">
 <?php 
     if(isset($leads) && !empty($leads)){

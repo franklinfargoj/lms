@@ -271,9 +271,11 @@ class Master_model extends CI_Model{
 
 		$this->db->select($select,TRUE);
 		$this->db->from($table);
-		if(!empty($join)){
-			$this->db->join($join['table'],$join['on_condition'],$join['type']);
-		}
+        if(!empty($join)){
+            foreach ($join as $key => $value) {
+                $this->db->join($value['table'],$value['on_condition'],$value['type']);
+            }
+        }
 		if(!empty($where)){
 			$this->db->where($where);
 		}
@@ -285,7 +287,6 @@ class Master_model extends CI_Model{
 			$this->db->order_by($table.'.id','DESC');
 		}
 		$query = $this->db->get();
-//		pe($this->db->last_query());die;
 		return $query->result_array();
 	}
 
@@ -427,4 +428,8 @@ class Master_model extends CI_Model{
         return $this->view($select,$where,Tbl_analytics_lead_route,$join = array(),$order_by= array());
     }
 
+    public function get_zoneid($select,$join,$where,$table){
+        $order_by = 'z.id ASC';
+        return $this->view($select,$where,$table,$join,$order_by);
+    }
 }

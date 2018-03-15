@@ -525,7 +525,8 @@ function get_notification_count(){
 function get_details($hrms_id = ''){
     if(!empty($hrms_id)){
         //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$hrms_id);
+        //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$hrms_id);
+        $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$hrms_id);
         $records = json_decode($records_response);
         $result['basic_info'] = array(
             'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
@@ -798,7 +799,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
 }
 
 function call_external_url($url) {
-
+echo $url;
     //return file_get_contents($url);die;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -810,7 +811,7 @@ function call_external_url($url) {
 //pe(curl_error($ch));die;
     curl_exec($ch);
     $result = curl_exec($ch);
-//pe(curl_error($ch));die;
+pe(curl_error($ch));die;
     curl_close($ch);
     return($result);
 }
@@ -1297,6 +1298,52 @@ if(!function_exists('get_bm')){
         $data = $CI->master->get_bm($select,$where);
         return $data;
     }
+}
+
+if(!function_exists('zoneid')){
+    function zoneid($id){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $select=array('z.code');
+        $table = Tbl_zone.' as z';
+        $join = array();
+        $where = array();
+        $join[] = array('table' =>Tbl_state.' as s','on_condition' => 'z.code = s.zone_code','type' => '');
+        $join[] = array('table' =>Tbl_district.' as d','on_condition' => 's.code = d.state_code','type' => '');
+        $join[] = array('table' =>Tbl_branch.' as b','on_condition' => 'b.district_code = d.code','type' => '');
+        $where['b.code'] = $id;
+        $data = $CI->master->get_zoneid($select,$join,$where,$table);
+        return $data;
+    }
+}
+
+
+function sksort(&$array, $subkey="id", $sort_ascending=false) {
+
+    if (count($array))
+        $temp_array[key($array)] = array_shift($array);
+
+    foreach($array as $key => $val){
+        $offset = 0;
+        $found = false;
+        foreach($temp_array as $tmp_key => $tmp_val)
+        {
+            if(!$found and strtolower($val[$subkey]) > strtolower($tmp_val[$subkey]))
+            {
+                $temp_array = array_merge(    (array)array_slice($temp_array,0,$offset),
+                    array($key => $val),
+                    array_slice($temp_array,$offset)
+                );
+                $found = true;
+            }
+            $offset++;
+        }
+        if(!$found) $temp_array = array_merge($temp_array, array($key => $val));
+    }
+
+    if ($sort_ascending) $array = array_reverse($temp_array);
+
+    else $array = $temp_array;
 }
 
 
