@@ -2415,6 +2415,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                         $update_lead_data['state_id'] = $params['state_id'];
                         $update_lead_data['branch_id'] = $params['branch_id'];
                         $update_lead_data['district_id'] = $params['district_id'];
+                        $update_lead_data['zone_id'] = zoneid($params['branch_id']);
                         $date = date('Y-m-d H:i:s');
                         $update_lead_data['modified_on'] = $date;
                         $whereUpdate = array('id' => $id);
@@ -2482,7 +2483,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                                 $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                                 $leads_info = $leadsAssigned[0];
 
-                                if($leads_info['lead_source'] == 'analytics'){
+                                //if($leads_info['lead_source'] == 'analytics'){
 
                                     if($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL){
 
@@ -2498,6 +2499,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                                         if(!is_array($routed_id)){
                                             $update_data['reroute_from_branch_id'] = $branch_id;
                                             $update_data['branch_id'] = $routed_id;
+                                            $update_data['zone_id'] = zoneid($routed_id);
                                             $date = date('Y-m-d H:i:s',time()+5);
                                             $update_data['modified_on']=$date;
                                             $where = array('id'=>$params['lead_id']);
@@ -2516,7 +2518,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
 
                                     }
 
-                                }
+                                //}
                         }
                     }
                     /****************************************************************
