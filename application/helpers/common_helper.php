@@ -799,19 +799,21 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
 }
 
 function call_external_url($url) {
-echo $url;
+
     //return file_get_contents($url);die;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, 0);
     //curl_setopt($ch, CURLOPT_HTTPHEADER, '');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+   // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
    // curl_setopt($ch, CURLOPT_POSTFIELDS, '');
 //pe(curl_error($ch));die;
     curl_exec($ch);
     $result = curl_exec($ch);
-pe(curl_error($ch));die;
+
     curl_close($ch);
     return($result);
 }
@@ -971,8 +973,12 @@ function fix_keys($array) {
 }
 
 function sendMail($to = array(),$subject,$message,$attachment_file,$cc){
+
+
     $CI=& get_instance();
     $CI->load->database();
+    $CI->load->model('Ccemail_model');
+    $active_mail = $CI->Ccemail_model->active_cc_mail();
     $config = $CI->db->from(Tbl_Mail)->get()->result();
     $mail = new PHPMailer; //Create a new PHPMailer instance
     $mail->isSMTP(); //Tell PHPMailer to use SMTP
@@ -997,7 +1003,6 @@ function sendMail($to = array(),$subject,$message,$attachment_file,$cc){
 
     //Set the encryption system to use - ssl (deprecated) or tls
     ////$mail->SMTPSecure = 'ssl';
-
     //Whether to use SMTP authentication
     $mail->SMTPAuth = false;
 
@@ -1022,18 +1027,34 @@ function sendMail($to = array(),$subject,$message,$attachment_file,$cc){
     $mail->addReplyTo($config[0]->fromemail, $config[0]->from);
 
     //Set who the message is to be sent to
-    //$mail->addAddress('mukesh.kurmi@wwindia.com','Mukesh Kurmi');
-    $mail->addAddress($to['email'],$to['name']);
+    $mail->addAddress('franklin.fargoj@neosofttech.com','Mukesh Kurmi');
+    //$mail->addAddress($to['email'],$to['name']);
     // $mail->addAddress('pragati@denabank.co.in','Pragati Dena Bank');
     // $mail->addAddress('rahul.choubey@denabank.co.in','Pragati Dena Bank');
     //$mail->addAddress('jeet.gupta@denabank.co.in','Pragati Dena Bank');
    // $mail->addCC('sunmit@denabank.co.in','Pragati Dena Bank');
-    if($cc == 1){
+
+
+    /*if(count($attachment_file) > 0) {
+        for ($i = 0; $i < count($attachment_file); $i++) {
+            $mail->addAttachment('uploads/excel_list/' . $attachment_file[$i], rand() . '.xls');
+            //$mail->addAttachment('uploads/excel_list/'.$attachment_file[$i]);
+        }
+    }*/
+
+   /* if($cc == 1){
         $mail->addCC('rahul.choubey@denabank.co.in','Rahul Choubey');
+    }*/
+
+
+
+    if($cc == 1) {
+        if (count($active_mail) > 0) {
+            foreach ($active_mail as $key => $value) {
+                $mail->addCC($value['email'], $value['name']);
+            }
+        }
     }
-
-
-
     //Set the subject line
     $mail->Subject = $subject;
 
@@ -1043,9 +1064,18 @@ function sendMail($to = array(),$subject,$message,$attachment_file,$cc){
     $mail->msgHTML($message);
 
     //Attach an image file
-    if(!empty($attachment_file)){
+     if(count($attachment_file) > 0){
+         for($i=0;$i<count($attachment_file);$i++){
+
+            // $mail->addAttachment('uploads/excel_list/'.$attachment_file[$i], rand().'.xls');
+             $mail->addAttachment('uploads/excel_list/'.$attachment_file[$i]);
+         }
+     }
+
+    //Attach an image file
+    /*if(!empty($attachment_file)){
         $mail->addAttachment('uploads/excel_list/'.$attachment_file);
-    }
+    }*/
     //send the message, check for errors
     if (!$mail->send()) {
         echo "Mailer Error: " . $mail->ErrorInfo;
@@ -1055,6 +1085,9 @@ function sendMail($to = array(),$subject,$message,$attachment_file,$cc){
         unlink('uploads/excel_list/'.$attachment_file);
     }
 }
+
+
+
 
 if (!function_exists('random_number')){
     function random_number(){

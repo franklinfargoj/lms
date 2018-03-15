@@ -3,7 +3,7 @@
 /**
  * Master_model Class
  *
- * @author Ashok Jadhav
+ * @author Franklin Fargoj
  *
  */
 class Ccemail_model extends CI_Model{
@@ -42,12 +42,12 @@ class Ccemail_model extends CI_Model{
     }
 
     /**
-     * add_cc_email
-     * Inserts cc email to the database
+     * list_cc_email
+     * List cc email from the database
      * @author Franklin Fargoj
      * @access public
-     * @param $data
-     * @return boolean
+     * @param none
+     * @return array
      */
     public function list_cc_email(){
         $this->db->select('*');
@@ -57,6 +57,14 @@ class Ccemail_model extends CI_Model{
     }
 
 
+    /**
+     * view_cc_email
+     * retreives the data as per the id for displaying in edit section
+     * @author Franklin Fargoj
+     * @access public
+     * @param $id
+     * @return array
+     */
     public function view_cc_email($id){
         $this->db->select('*');
         $this->db->where('id',$id);
@@ -65,6 +73,14 @@ class Ccemail_model extends CI_Model{
     }
 
 
+    /**
+     * edit_cc_email
+     * Edit the cc_email as per the specific id
+     * @author Franklin Fargoj
+     * @access public
+     * @param $id,$update
+     * @return array
+     */
     public function edit_cc_email($id,$update){
         $this->db->where('id', $id);
         $this->db->update('email_cc', $update);
@@ -78,6 +94,21 @@ class Ccemail_model extends CI_Model{
             $response['affected_rows'] = $this->db->affected_rows();
         }
         return $response;
+    }
+
+    /**
+     * active_cc_mail
+     * Gets mail address and name with sctive status
+     * @author Franklin Fargoj
+     * @access public
+     * @param none
+     * @return array
+     */
+    public function active_cc_mail(){
+        $this->db->select('name,email');
+        $this->db->where('status', "active");
+        $query = $this->db->get('email_cc');
+        return $query->result_array();
     }
 
 }
