@@ -799,7 +799,7 @@ function export_excel($header_value,$data,$type='',$lead_source=''){
 }
 
 function call_external_url($url) {
-
+echo $url;
     //return file_get_contents($url);die;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -811,7 +811,7 @@ function call_external_url($url) {
 //pe(curl_error($ch));die;
     curl_exec($ch);
     $result = curl_exec($ch);
-//pe(curl_error($ch));die;
+pe(curl_error($ch));
     curl_close($ch);
     return($result);
 }
