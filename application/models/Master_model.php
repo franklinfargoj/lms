@@ -429,7 +429,7 @@ class Master_model extends CI_Model{
     }
 
     public function get_zoneid($select,$join,$where,$table){
-        $order_by = 'z.id ASC';
+        $order_by = array();
         return $this->view($select,$where,$table,$join,$order_by);
     }
 }

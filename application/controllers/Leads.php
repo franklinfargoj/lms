@@ -403,6 +403,7 @@ class Leads extends CI_Controller
                                 if (!is_array($routed_id)) {
                                     $value['reroute_from_branch_id'] = $value['branch_id'];
                                     $value['branch_id'] = $routed_id;
+                                    $value['zone_id'] = zoneid($routed_id);
                                     $value['modified_on'] = date('Y-m-d H:i:s', time() + 5);
                                 } else {
                                     $value['reroute_from_branch_id'] = NULL;
@@ -650,12 +651,12 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_Category.' as c','on_condition' => 'l.product_category_id = c.id','type' => '');
 
             if($type == 'generated'){
-                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
+                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
                 $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             }
             if($type == 'assigned'){
                 //SELECT COLUMNS
-                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','r.remind_on','r.reminder_text');
+                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','r.remind_on','r.reminder_text');
 
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
@@ -712,6 +713,7 @@ class Leads extends CI_Controller
             }
 
         }
+        //pe($arrData);die;
         return load_view($middle = "Leads/detail",$arrData);
     }
 
@@ -777,6 +779,7 @@ class Leads extends CI_Controller
                             $update_lead_data['state_id'] = $this->input->post('state_id');
                             $update_lead_data['branch_id'] = $this->input->post('branch_id');
                             $update_lead_data['district_id'] = $this->input->post('district_id');
+                            $update_lead_data['zone_id'] = zoneid($this->input->post('branch_id'));
                             $date = date('Y-m-d H:i:s');
                             $update_lead_data['modified_on'] = $date;
                             $whereUpdate = array('id' => $id);
@@ -877,7 +880,7 @@ class Leads extends CI_Controller
                                 $where = array(Tbl_Leads . '.id' => $lead_id);
                                 $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                                 $leads_info = $leadsAssigned[0];
-                                if ($leads_info['lead_source'] == 'analytics' || $leads_info['lead_source'] == 'enquiry' || $leads_info['lead_source'] == 'tie_ups') {
+                                //if ($leads_info['lead_source'] == 'analytics' || $leads_info['lead_source'] == 'enquiry' || $leads_info['lead_source'] == 'tie_ups') {
 
                                     if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
                                         $action = 'list';
@@ -893,10 +896,10 @@ class Leads extends CI_Controller
                                         } else {
                                             $branch_id = $this->input->post('branch_id');
                                         }
-
                                         if (!is_array($routed_id)) {
                                             $update_data['reroute_from_branch_id'] = $branch_id;
                                             $update_data['branch_id'] = $routed_id;
+                                            $update_data['zone_id'] = zoneid($routed_id);
                                             $date = date('Y-m-d H:i:s',time()+5);
                                             $update_data['modified_on'] = $date;
                                             $where = array('id' => $lead_id);
@@ -912,7 +915,7 @@ class Leads extends CI_Controller
                                         }
 
                                     }
-                                }
+                                //}
                             }
                         }
                     }

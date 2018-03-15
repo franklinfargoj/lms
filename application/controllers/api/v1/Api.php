@@ -1024,12 +1024,12 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             $join[] = array('table' => Tbl_Category . ' as c', 'on_condition' => 'l.product_category_id = c.id', 'type' => '');
 
             if ($type == 'generated') {
-                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
+                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id','l.created_by_branch_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
                 $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => 'left');
             }
 
             if ($type == 'converted') {
-                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
+                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id', 'l.created_by_branch_id','p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
                 $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
@@ -1050,6 +1050,8 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             $arrData['leads'][0]['product_title']=ucwords($arrData['leads'][0]['product_title']);
             $arrData['leads'][0]['category_title']=ucwords($arrData['leads'][0]['category_title']);
+            $generatedb = branchname($arrData['leads'][0]['created_by_branch_id']);
+            $arrData['leads'][0]['created_by_branch_id']=ucwords($generatedb[0]['name']);
             $res = array('result' => True,
                 'data' => $arrData['leads']);
             returnJson($res);
@@ -2415,6 +2417,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                         $update_lead_data['state_id'] = $params['state_id'];
                         $update_lead_data['branch_id'] = $params['branch_id'];
                         $update_lead_data['district_id'] = $params['district_id'];
+                        $update_lead_data['zone_id'] = zoneid($params['branch_id']);
                         $date = date('Y-m-d H:i:s');
                         $update_lead_data['modified_on'] = $date;
                         $whereUpdate = array('id' => $id);
@@ -2482,7 +2485,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                                 $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                                 $leads_info = $leadsAssigned[0];
 
-                                if($leads_info['lead_source'] == 'analytics'){
+                                //if($leads_info['lead_source'] == 'analytics'){
 
                                     if($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL){
 
@@ -2498,6 +2501,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                                         if(!is_array($routed_id)){
                                             $update_data['reroute_from_branch_id'] = $branch_id;
                                             $update_data['branch_id'] = $routed_id;
+                                            $update_data['zone_id'] = zoneid($routed_id);
                                             $date = date('Y-m-d H:i:s',time()+5);
                                             $update_data['modified_on']=$date;
                                             $where = array('id'=>$params['lead_id']);
@@ -2516,7 +2520,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
 
                                     }
 
-                                }
+                                //}
                         }
                     }
                     /****************************************************************

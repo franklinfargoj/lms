@@ -15,11 +15,11 @@ class Cron extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-       is_cli() OR show_404();
+       //is_cli() OR show_404();
         $this->load->model('Lead');
     }
 function index(){
-	echo "hello";
+    echo "hello";
 }
     /*
      * gm_consolidated_mail
@@ -154,7 +154,9 @@ function index(){
           // pe($final['zonal_manager']);die;
             //FOR ZONAL MANAGER
             $subject = 'LMS - Reports - '.$v->zone_name;
-            $attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
+            $first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
+            $second_attachment_file = $this->zm_consolidated_mail_for_advances($v->zone_id);
+            $attachment_file = array($first_attachment_file,$second_attachment_file);
             $to = array('email' => $v->email_id,'name' => $v->name);
 
             $message = 'Please Find an attachment';
@@ -538,6 +540,101 @@ function index(){
                 $where['l.created_on <'] = $day.' 00:00:00';
                 $group_by = array('l.branch_id');
             }
+        }elseif($type == 'adv_total'){
+            //Generated Leads
+            $select = array('COUNT(l.id) as generated');
+            if($till == 'mtd'){
+                $where = array('MONTH(l.created_on)' => date('m'),'YEAR(l.created_on)' => date('Y')); //Month till date filter
+
+            }
+            $where['l.product_category_id'] = 12;
+            if($user_type == 'ZM'){
+                $select[] = 'l.created_by_zone_id  as zone_id';
+                if($zone_id != ''){
+                    $where['l.created_by_zone_id'] = $zone_id;
+                }
+                $where['l.created_by_zone_id !='] = NULL;
+                $group_by = array('l.created_by_zone_id');
+            }elseif($user_type == 'BM'){
+                $select[] = 'l.created_by_branch_id  as branch_id';
+                $where['l.created_by_zone_id'] = $zone_id;
+                $where['l.created_by_branch_id !='] = NULL;
+                $group_by = array('l.created_by_branch_id');
+            }elseif($user_type == 'EM'){
+                $select[] = 'l.created_by as hrms_id';
+                $where['l.created_by_branch_id'] = $branch_id;
+                $where['l.created_by !='] = NULL;
+                $group_by = array('l.created_by');
+            }
+        }elseif($type == 'adv_converted'){
+            //Converted Leads
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+
+            $select = array('COUNT(l.id) as converted');
+
+            if($till == 'mtd'){
+                $where = array('MONTH(la.modified_on)' => date('m'),'YEAR(l.modified_on)' => date('Y')); //Month till date filter
+
+            }
+            $where['la.status']  = 'Converted';
+            $where['l.product_category_id'] = 12;
+            if($user_type == 'ZM'){
+                $select[] = 'la.zone_id';
+                if($zone_id != ''){
+                    $where['la.zone_id'] = $zone_id;
+                }
+                $group_by = array('la.zone_id');
+            }elseif($user_type == 'BM'){
+                $select[] = 'la.branch_id';
+                $where['la.zone_id'] = $zone_id;
+                $group_by = array('la.branch_id');
+            }elseif($user_type == 'EM'){
+                $select[] = 'la.employee_id as hrms_id';
+                $where['la.branch_id'] = $branch_id;
+                $group_by = array('la.employee_id');
+            }
+        }elseif($type == 'adv_assigned'){
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+
+            $select = array('COUNT(l.id) as assigned');
+
+            if($till == 'mtd'){
+                $where = array('MONTH(la.created_on)' => date('m'),'YEAR(l.created_on)' => date('Y')); //Month till date filter
+
+            }
+            $where['l.product_category_id'] = 12;
+            if($user_type == 'ZM'){
+                $select[] = 'la.zone_id as zone_id';
+                if($zone_id != ''){
+                    $where['la.zone_id'] = $zone_id;
+                }
+                $where['la.zone_id !='] = NULL;
+                $group_by = array('la.zone_id');
+            }elseif($user_type == 'BM'){
+                $select[] = 'la.branch_id  as branch_id';
+                $where['la.zone_id'] = $zone_id;
+                $where['la.branch_id !='] = NULL;
+                $group_by = array('la.branch_id');
+            }
+        }elseif($type == 'adv_unassigned'){
+            //Unassigned Leads
+            $select = array('COUNT(l.id) as unassigned');
+            $where  = array('la.lead_id' => NULL);
+            $where['l.product_category_id'] = 12;
+            $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
+            if($user_type == 'ZM'){
+                $select[] = 'l.zone_id as zone_id';
+                if($zone_id != ''){
+                    $where['l.zone_id'] = $zone_id;
+                }
+                $where['l.zone_id !='] = NULL;
+                $group_by = array('l.zone_id');
+            }elseif($user_type == 'BM'){
+                $select[] = 'l.branch_id  as branch_id';
+                $where['l.zone_id'] = $zone_id;
+                $where['l.branch_id !='] = NULL;
+                $group_by = array('l.branch_id');
+            }
         }else{
             //Assigned Leads
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1);
@@ -623,6 +720,9 @@ $pending_days = 2;
             case 'zm_consolidated_mail':
             $header_value = array('Branch Id','Branch Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
+            case 'zm_consolidated_mail_advances':
+                $header_value = array('Branch Id','Branch Name','Total Lead Generated (MTD)','Total Lead Assigned (MTD)','Total Lead Converted (MTD)','No.of Unassigned Leads');
+                break;
             case 'bm_consolidated_mail':
             $header_value = array('HRMS Id','Employee Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
@@ -655,6 +755,9 @@ $pending_days = 2;
        // pe($data);die;
         $this->load->library('excel');
         $file_name = time().'data.xls';
+        if($action == 'zm_consolidated_mail_advances' ){
+            $file_name = 'Advances_leads.xls';
+        }
         $excel_alpha = unserialize(EXCEL_ALPHA);
 
         //$objPHPExcel = $this->excel;
@@ -722,7 +825,7 @@ $pending_days = 2;
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['zone_id']));
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['zone_name']));
             }
-            if(in_array($action,array('zm_consolidated_mail','zm_inactive_leads','zm_unassigned_leads'))){
+            if(in_array($action,array('zm_consolidated_mail','zm_consolidated_mail_advances','zm_inactive_leads','zm_unassigned_leads'))){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_id']));
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']));
             }
@@ -730,16 +833,24 @@ $pending_days = 2;
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['hrms_id']));
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['employee_name']));
             }
-            if(in_array($action,array('gm_consolidated_mail','zm_consolidated_mail','bm_consolidated_mail'))){
-                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['generated']));
-                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['converted']));
-                if($action == 'bm_consolidated_mail' ){
-                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['pending_before']));
-                }else{
-                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['unassigned']));
-                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['pending_before']));
+            if(in_array($action,array('gm_consolidated_mail','zm_consolidated_mail','zm_consolidated_mail_advances','bm_consolidated_mail'))){
+                if($action == 'zm_consolidated_mail_advances' ){
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['generated']));
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['assigned']));
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['converted']));
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['unassigned']));
+
+                }else {
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['generated']));
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['converted']));
+                    if ($action == 'bm_consolidated_mail') {
+                        $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['pending_before']));
+                    } else {
+                        $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['unassigned']));
+                        $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['pending_before']));
+                    }
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['pending']));
                 }
-                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['pending']));
             }
             if(in_array($action,array('bm_inactive_leads','zm_inactive_leads'))){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['inactive']));   
@@ -936,4 +1047,54 @@ $pending_days = 2;
             redirect('leads/upload_employee');
         }
     }
+
+    /*
+     * zm_consolidated_mail
+     * Branch wise leads generated,converted,unassigned and pending count
+     * @author Ashok Jadhav (AJ)
+     * @access public
+     * @param none
+     * @return void
+     *
+     */
+    private function zm_consolidated_mail_for_advances($zone_id){
+            $final = array();
+            //FOR ZONAL MANAGER
+            $zonal_manager = array('generated' => array(),'converted' => array(),'assigned' => array(),'unassigned' => array());
+            $gm = $zonal_manager;
+            $branch_list = $this->Lead->get_employee_dump(array('DISTINCT(branch_id) as branch_id','branch_name'),array('zone_id' => $zone_id),array(),'employee_dump');
+//            echo "<pre>";
+////            echo $v->zone_id;
+//           print_r($branch_list);die;
+            $zonal_manager['generated']  = $this->get_leads(array('type'=>'adv_total','till'=>'mtd','user_type'=>'BM','zone_id' => $zone_id));
+            $zonal_manager['converted']  = $this->get_leads(array('type'=>'adv_converted','till'=>'mtd','user_type'=>'BM','zone_id' => $zone_id));
+            $zonal_manager['assigned']   = $this->get_leads(array('type'=>'adv_assigned','till'=>'mtd','user_type'=>'BM','zone_id' => $zone_id));
+            $zonal_manager['unassigned'] = $this->get_leads(array('type'=>'adv_unassigned','till'=>'','user_type'=>'BM','zone_id' => $zone_id));
+
+            //$zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+            $zonal_manager = array_merge($zonal_manager);
+            //pe($zonal_manager);
+            $total = array();
+            foreach (array_keys($gm) as $key => $value) {
+                if(!empty($zonal_manager[$value])){
+                    $total[$value] = array_column($zonal_manager[$value], $value,'branch_id');
+                }
+            }
+//            pe($total);die;
+            $unique_branch_ids = array_unique(array_column($zonal_manager, 'branch_id'));
+            foreach ($branch_list as $key => $value) {
+
+                $final['zonal_manager'][$value->branch_id]['generated'] = isset($total['generated'][$value->branch_id]) ? $total['generated'][$value->branch_id] : 0;
+                $final['zonal_manager'][$value->branch_id]['converted'] = isset($total['converted'][$value->branch_id]) ? $total['converted'][$value->branch_id] : 0;
+                $final['zonal_manager'][$value->branch_id]['unassigned'] = isset($total['unassigned'][$value->branch_id]) ? $total['unassigned'][$value->branch_id] : 0;
+                $final['zonal_manager'][$value->branch_id]['assigned'] = isset($total['assigned'][$value->branch_id]) ? $total['assigned'][$value->branch_id] : 0;
+
+                $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
+                $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
+            }
+        $attachment_file = $this->export_to_excel('zm_consolidated_mail_advances',$final['zonal_manager']);
+
+        return $attachment_file;
+    }
+
 }

@@ -24,11 +24,11 @@ $lead_source_list = $this->config->item('lead_source');
     <span class="bg-top"></span>
     <div class="inner-content">
         <div class="container">
-            <div class="lead-top clearfix">
-                <div class="float-right">
-                    <span class="lead-num"><a href="<?php echo site_url('rapc/add_mapping');?>">Add</a></span>
-                </div>
-            </div>
+<!--            <div class="lead-top clearfix">-->
+<!--                <div class="float-right">-->
+<!--                    <span class="lead-num"><a href="--><?php //echo site_url('rapc/add_mapping');?><!--">Add</a></span>-->
+<!--                </div>-->
+<!--            </div>-->
             <table id="sample_3" class="display lead-table">
                 <thead>
                 <tr>
