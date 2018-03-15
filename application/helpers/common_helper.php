@@ -811,7 +811,7 @@ echo $url;
 //pe(curl_error($ch));die;
     curl_exec($ch);
     $result = curl_exec($ch);
-pe(curl_error($ch));
+pe(curl_error($ch));die;
     curl_close($ch);
     return($result);
 }
