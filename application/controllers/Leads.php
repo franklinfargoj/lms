@@ -777,6 +777,7 @@ class Leads extends CI_Controller
                             $update_lead_data['state_id'] = $this->input->post('state_id');
                             $update_lead_data['branch_id'] = $this->input->post('branch_id');
                             $update_lead_data['district_id'] = $this->input->post('district_id');
+                            $update_lead_data['zone_id'] = zoneid($this->input->post('branch_id'));
                             $date = date('Y-m-d H:i:s');
                             $update_lead_data['modified_on'] = $date;
                             $whereUpdate = array('id' => $id);
@@ -877,7 +878,7 @@ class Leads extends CI_Controller
                                 $where = array(Tbl_Leads . '.id' => $lead_id);
                                 $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                                 $leads_info = $leadsAssigned[0];
-                                if ($leads_info['lead_source'] == 'analytics' || $leads_info['lead_source'] == 'enquiry' || $leads_info['lead_source'] == 'tie_ups') {
+                                //if ($leads_info['lead_source'] == 'analytics' || $leads_info['lead_source'] == 'enquiry' || $leads_info['lead_source'] == 'tie_ups') {
 
                                     if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
                                         $action = 'list';
@@ -893,10 +894,10 @@ class Leads extends CI_Controller
                                         } else {
                                             $branch_id = $this->input->post('branch_id');
                                         }
-
                                         if (!is_array($routed_id)) {
                                             $update_data['reroute_from_branch_id'] = $branch_id;
                                             $update_data['branch_id'] = $routed_id;
+                                            $update_data['zone_id'] = zoneid($routed_id);
                                             $date = date('Y-m-d H:i:s',time()+5);
                                             $update_data['modified_on'] = $date;
                                             $where = array('id' => $lead_id);
@@ -912,7 +913,7 @@ class Leads extends CI_Controller
                                         }
 
                                     }
-                                }
+                                //}
                             }
                         }
                     }
