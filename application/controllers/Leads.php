@@ -403,6 +403,7 @@ class Leads extends CI_Controller
                                 if (!is_array($routed_id)) {
                                     $value['reroute_from_branch_id'] = $value['branch_id'];
                                     $value['branch_id'] = $routed_id;
+                                    $value['zone_id'] = zoneid($routed_id);
                                     $value['modified_on'] = date('Y-m-d H:i:s', time() + 5);
                                 } else {
                                     $value['reroute_from_branch_id'] = NULL;
