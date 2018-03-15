@@ -1024,12 +1024,12 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             $join[] = array('table' => Tbl_Category . ' as c', 'on_condition' => 'l.product_category_id = c.id', 'type' => '');
 
             if ($type == 'generated') {
-                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
+                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id','l.created_by_branch_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
                 $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => 'left');
             }
 
             if ($type == 'converted') {
-                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
+                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id', 'l.created_by_branch_id','p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
                 $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
@@ -1050,6 +1050,8 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             $arrData['leads'][0]['product_title']=ucwords($arrData['leads'][0]['product_title']);
             $arrData['leads'][0]['category_title']=ucwords($arrData['leads'][0]['category_title']);
+            $generatedb = branchname($arrData['leads'][0]['created_by_branch_id']);
+            $arrData['leads'][0]['created_by_branch_id']=ucwords($generatedb[0]['name']);
             $res = array('result' => True,
                 'data' => $arrData['leads']);
             returnJson($res);

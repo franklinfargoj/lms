@@ -651,12 +651,12 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_Category.' as c','on_condition' => 'l.product_category_id = c.id','type' => '');
 
             if($type == 'generated'){
-                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
+                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
                 $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             }
             if($type == 'assigned'){
                 //SELECT COLUMNS
-                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','r.remind_on','r.reminder_text');
+                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','r.remind_on','r.reminder_text');
 
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
@@ -713,6 +713,7 @@ class Leads extends CI_Controller
             }
 
         }
+        //pe($arrData);die;
         return load_view($middle = "Leads/detail",$arrData);
     }
 
