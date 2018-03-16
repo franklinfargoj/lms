@@ -140,16 +140,18 @@ $source = $this->config->item('lead_source');
                     ?>
                             <tr>
                                 <td  style="text-align:center">
-                                <?php
+                                <?php if($value['lead_source'] != 'walkin' || ($value['lead_source'] == 'walkin' && $value['mapping'] == 'BRANCH')) {
+
                                     $data = array(
-                                        'name'          => 'lead_ids[]',
-                                        'id'            => 'check_all',
-                                        'value'         => $value['id'].'-'.$value['customer_name'].'-'.$value['product_title'],
-                                        'class'         => 'multi_check'
+                                        'name' => 'lead_ids[]',
+                                        'id' => 'check_all',
+                                        'value' => $value['id'] . '-' . $value['customer_name'] . '-' . $value['product_title'],
+                                        'class' => 'multi_check'
                                     );
                                     echo form_checkbox($data);
                                     // Would produce: <input type="checkbox" name="newsletter" id="newsletter" value="1" style="margin:10px" />
-                                ?>
+                                }
+                                    ?>
                                 </td>
                                 <td style="text-align:center">
                                     <?php

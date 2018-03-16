@@ -105,6 +105,7 @@
                                     if($leads[0]['status']=='NI')
                                     {
                                         $account_no = " (Reason :".$leads[0]['reason_for_drop'].")";
+                                        $account_no .= "<br>Description : ".$leads[0]['desc_for_drop'];
                                     }
                                     echo isset($leads[0]['status']) ? $all_lead_status[$leads[0]['status']].$account_no : 'NA';?></span>
                             </div>
@@ -299,6 +300,10 @@
                                     echo form_error('reason');
                                     ?>
                                 </div>
+                                <div class="form-control reason" style="display:none">
+                                    <label>Description:<span style="color:red;">*</span></label>
+                                    <textarea rows="4" cols="80" name="drop_desc"><?php if(!empty($leads[0]['drop_desc'])) echo $leads[0]['reminder_text'];?></textarea>
+                                </div>
                                 <?php if($this->session->userdata('admin_type')=='EM' || ($this->session->userdata('admin_id') == $leads[0]['employee_id'])){?>
                                 <div class="form-control followUp" style="display:none">
                                     <label>Next Followup Date:<span style="color:red;">*</span></label>
@@ -373,11 +378,11 @@
                                 </div>
                                 <div class="form-control lead_identified">
                                     <?php
-                                    if($this->session->userdata('admin_type')=='EM'){
+                                    if($this->session->userdata('admin_type')=='EM' || ($this->session->userdata('admin_id') == $leads[0]['employee_id'])){
                                         if($leads[0]['lead_identification'] == '') {
                                             if (isset($lead_identification)) {
                                                 $status_array = array('AO', 'Closed', 'Converted', 'NI','FU','DC');
-                                                $admin = array('EM');
+                                                $admin = array('EM','BM');
                                                 if (isset($leads[0]['status']) && in_array($leads[0]['status'], $status_array)
                                                     && in_array($this->session->userdata('admin_type'), $admin)
                                                 ) {}
@@ -602,7 +607,7 @@
             }else if(option == 'NI'){
                 $('.accountOpen').hide();
                 $('.followUp').hide();
-                <?php if($this->session->userdata('admin_type')=='EM'){?>
+                <?php if($this->session->userdata('admin_type')=='EM' || ($this->session->userdata('admin_id') == $leads[0]['employee_id'])){?>
                 $('.reason').show();
                 <?php }?>
             }
@@ -665,6 +670,9 @@
                 },
                 is_verified:{
                     required:true
+                },
+                drop_desc:{
+                    required:true
                 }
             },
             messages: {
@@ -697,6 +705,9 @@
                 },
                 is_verified:{
                     required:"Please Select "
+                },
+                drop_desc:{
+                    required:"Please enter drop description"
                 }
             }
         });
