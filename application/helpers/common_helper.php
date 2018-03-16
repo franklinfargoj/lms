@@ -1026,8 +1026,8 @@ function sendMail($to = array(),$subject,$message,$attachment_file,$cc){
     $mail->addReplyTo($config[0]->fromemail, $config[0]->from);
 
     //Set who the message is to be sent to
-    //$mail->addAddress('mukesh.kurmi@wwindia.com','Mukesh Kurmi');
-    $mail->addAddress($to['email'],$to['name']);
+    $mail->addAddress('mukesh.kurmi@wwindia.com','Mukesh Kurmi');
+    //$mail->addAddress($to['email'],$to['name']);
     // $mail->addAddress('pragati@denabank.co.in','Pragati Dena Bank');
     // $mail->addAddress('rahul.choubey@denabank.co.in','Pragati Dena Bank');
     //$mail->addAddress('jeet.gupta@denabank.co.in','Pragati Dena Bank');
@@ -1062,7 +1062,6 @@ function sendMail($to = array(),$subject,$message,$attachment_file,$cc){
     //Attach an image file
      if(count($attachment_file) > 0){
          for($i=0;$i<count($attachment_file);$i++){
-
             // $mail->addAttachment('uploads/excel_list/'.$attachment_file[$i], rand().'.xls');
              $mail->addAttachment('uploads/excel_list/'.$attachment_file[$i]);
          }

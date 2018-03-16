@@ -662,12 +662,12 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_Category.' as c','on_condition' => 'l.product_category_id = c.id','type' => '');
 
             if($type == 'generated'){
-                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
+                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','p.map_with','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
                 $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             }
             if($type == 'assigned'){
                 //SELECT COLUMNS
-                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','r.remind_on','r.reminder_text');
+                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','p.map_with'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','la.desc_for_drop','r.remind_on','r.reminder_text');
 
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
@@ -688,9 +688,15 @@ class Leads extends CI_Controller
             if($type == 'assigned'){
                 $all_status = $this->config->item('lead_status');
 
-                if($this->session->userdata('admin_type') == 'BM'){
+                if($this->session->userdata('admin_type') == 'BM' && ($this->session->userdata('admin_id') != $arrData['leads'][0]['employee_id'])){
                     $bm_status = $all_status;
                     unset($bm_status['NC'],$bm_status['AO'],$bm_status['NI'],$bm_status['DC'],$bm_status['FU']);
+                    if($arrData['leads'][0]['status'] == 'NI'){
+                        unset($bm_status['Converted']);
+                    }
+                    if($arrData['leads'][0]['status'] == 'AO'){
+                        unset($bm_status['Closed']);
+                    }
                     $arrData['lead_status'] = $bm_status;
                 }else{
                     if($arrData['leads'][0]['status'] == 'NC'){
@@ -715,10 +721,11 @@ class Leads extends CI_Controller
                         $ao_status = $all_status;
                         if($login_user['designation_name'] == 'EM'){
                             unset($ao_status['NC'],$ao_status['DC'],$ao_status['AO'],$ao_status['FU'],$ao_status['NI']);
+                            $arrData['lead_status'] = $ao_status;
                         }else{
-                            unset($ao_status['AO'],$ao_status['FU'],$ao_status['NI']);
+                            $arrData['lead_status'] = array('Converted' => 'Converted');
                         }
-                        $arrData['lead_status'] = $ao_status;
+
                     }
                 }
             }
@@ -737,25 +744,41 @@ class Leads extends CI_Controller
      * @return array
      */
     public function update_lead_status(){
+        //pe($this->input->post());die;
         if($this->input->post()){
             $login_user = get_session();
             $lead_id = decode_id($this->input->post('lead_id'));
             $lead_type = $this->input->post('lead_type');
+            $is_verified = $this->input->post('is_verified');
             /****************************************************************
                                 For Assigned List
             *****************************************************************/
                 if($lead_type == 'assigned'){
-
+                    $actionw = 'list';
+                    $tablew = Tbl_LeadAssign;
+                    $selectw = array(Tbl_LeadAssign.'.employee_id');
+                    $wherew = array(Tbl_LeadAssign.'.lead_id' => $lead_id,Tbl_LeadAssign.'.is_updated' => 1);
+                    $leadsAssignw = $this->Lead->get_leads($actionw,$tablew,$selectw,$wherew,$join = array(),$group_by = array(),$order_by = array());
+                    $leads_dataw = $leadsAssignw[0];
                     $lead_identification = $this->input->post('lead_identification');
                     $lead_status = $this->input->post('lead_status');
                     $drop_reason = array();
-		    if($login_user['designation_name'] == 'EM'){
-                    if($lead_status == 'NI'){
+		    if($login_user['designation_name'] == 'EM' || ($this->session->userdata('admin_id') == $leads_dataw['employee_id'])){
+
+		        if($lead_status == 'NI'){
                         $drop_reason = $this->input->post('reason');
+                        $drop_reason_desc = $this->input->post('drop_desc');
                         if(empty($drop_reason) || $drop_reason == NULL){
                             $this->form_validation->set_rules('reason','Reason For Drop', 'required');
                             if ($this->form_validation->run() === FALSE) {
                                 $this->session->set_flashdata('error','Enter Reason For Drop.');
+                                redirect('leads/details/assigned/ytd/'.encode_id($lead_id));
+                            }
+                        }
+                        if(empty($drop_reason_desc) || $drop_reason_desc == NULL){
+                            $this->form_validation->set_rules('drop_desc','Description For Drop', 'required');
+                            if ($this->form_validation->run() === FALSE) {
+                                $this->session->set_flashdata('error','Enter Description For Drop.');
                                 redirect('leads/details/assigned/ytd/'.encode_id($lead_id));
                             }
                         }
@@ -800,7 +823,7 @@ class Leads extends CI_Controller
                             if (empty($drop_reason)) {
                                 $data = array('is_updated' => 0,'is_deleted' => 1);
                             } else {
-                                $data = array('is_updated' => 0,'is_deleted' => 1, 'reason_for_drop' => $drop_reason);
+                                $data = array('is_updated' => 0,'is_deleted' => 1, 'reason_for_drop' => $drop_reason, 'desc_for_drop' => $drop_reason_desc);
                             }
                             $this->Lead->update($whereUpdate, $table, $data);
                             $this->session->set_flashdata('success', 'Lead information updated successfully');
@@ -854,6 +877,7 @@ class Leads extends CI_Controller
 //pe($lead_status_data);die;
                             if(!empty($drop_reason)){
                                 $lead_status_data['reason_for_drop'] = $drop_reason;
+                                $lead_status_data['desc_for_drop'] = $drop_reason_desc;
                             }
 //                            if($lead_status == 'FU'){
 //                                $lead_status_data['followup_date'] = date('y-m-d-H-i-s',strtotime($this->input->post('remind_on')));
@@ -1610,7 +1634,16 @@ class Leads extends CI_Controller
         $select = array('lead.id','lead.lead_name','products.title','lead.id');
         $table = Tbl_Leads.' AS lead';
         $join[] = array('table' =>Tbl_Products.' AS products','on_condition'=>'products.id = lead.product_id','type'=>'left');
-        $where = array('lead.created_by'=>$user);
+        if($this->session->userdata('admin_type')=='EM'){
+            $where = array('lead.created_by'=>$user);
+        }
+        if($this->session->userdata('admin_type')=='BM'){
+            $where = array('lead.created_by_branch_id'=>$this->session->userdata('branch_id'));
+        }
+        if($this->session->userdata('admin_type')=='BM'){
+            $where = array('lead.created_by_zone_id'=>$this->session->userdata('zone_id'));
+        }
+
         $order_by = 'lead.created_on DESC';
         $arrData['generated_leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by=array(),$order_by);
         $middle = "Leads/view/lead_generated";
@@ -1761,6 +1794,56 @@ private function verify_accountcbs($acc_no)
             }
             $this->session->set_flashdata('success','Lead Assigned Successfully.');
             redirect('leads/unassigned_leads_list/'.$lead_source);
+        }
+    }
+
+    /* Move lead to rapc by BM
+     *
+     *
+     */
+    function move_rapc(){
+        $lead_id = decode_id($this->input->post('id'));
+        $action = 'list';
+        $table = Tbl_Leads;
+        $select = array(Tbl_Leads . '.*');
+        $where = array(Tbl_Leads . '.id' => $lead_id);
+        $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+        $leads_info = $leadsAssigned[0];
+        //pe($leads_info);die;
+        //if ($leads_info['lead_source'] == 'analytics' || $leads_info['lead_source'] == 'enquiry' || $leads_info['lead_source'] == 'tie_ups') {
+
+        if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
+            $action = 'list';
+            $select = array('map_with');
+            $table = Tbl_Products;
+            $where = array('id' => $leads_info['product_id'],'status'=>'active');
+            $product_mapped_with = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $product_mapped_with = $product_mapped_with[0]['map_with'];
+            $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_info['branch_id']);
+            $routed_id = $this->Lead->check_mapping($whereArray);
+
+            if (!is_array($routed_id)) {
+                $update_data['reroute_from_branch_id'] = $leads_info['branch_id'];
+                $update_data['branch_id'] = $routed_id;
+                $update_data['zone_id'] = zoneid($routed_id);
+                $update_data['modified_by'] = zoneid($routed_id);
+                $update_data['modified_by_name'] = zoneid($routed_id);
+                $date = date('Y-m-d H:i:s',time()+5);
+                $update_data['modified_on'] = $date;
+                $where = array('id' => $lead_id);
+                $table = Tbl_Leads;
+                $this->Lead->update_lead_data($where, $update_data, $table);
+                $whereUpdate = array('lead_id' => $lead_id);
+                $table = Tbl_LeadAssign;
+                $data = array('is_updated' => 0,'is_deleted' => 1);
+                $order_by = "id DESC";
+                $limit= 1;
+                $this->Lead->update_routed_lead($whereUpdate, $table, $data,$order_by,$limit);
+                return true;
+            }else{
+                return false;
+            }
+
         }
     }
 
