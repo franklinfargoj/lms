@@ -306,9 +306,17 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         $.validator.addMethod("lettersonly", function(value, element) {
             return this.optional(element) || /^[a-z\s]+$/i.test(value);
         }, "Only alphabetical characters");
-       $.validator.addMethod("numbersonly", function(value, element) {
+        $.validator.addMethod("numbersonly", function(value, element) {
             return this.optional(element) || /^[0-9]+$/i.test(value);
         }, "Only Numbers Allowed");
+
+        $.validator.addMethod("name_validation", function(value, element, regexpr) {
+            return regexpr.test(value);
+        }, "Enter a valid name.");
+
+        $.validator.addMethod("contact_validation", function(value, element, regexpr) {
+            return regexpr.test(value);
+        }, "Enter a valid namekjkj.");
 
         $("#addlead").validate({
 
@@ -326,7 +334,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     number: true,
                     maxlength: 10,
                     minlength: 10,
-                    numbersonly: true
+                    numbersonly: true,
+                    regx: /^[1-9\-\s]+$/
                 },
                 product_category_id: {
                     required: true
@@ -366,9 +375,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 contact_no: {
                     required: "Please enter phone number",
                     maxlength: 'Phone number is not 10 digits',
-                    minlength: 'Phone number is not 10 digits'
-
-
+                    minlength: 'Phone number is not 10 digits',
+                    regx: "Contact number should not begin with zero"
                 },
                 product_category_id: {
                     required: "Please select product category"

@@ -74,7 +74,7 @@ class Leads extends CI_Controller
             $this->form_validation->set_error_delimiters('<span class = "help-block">', '</span>');
             //$this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
             $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alpha_dash_space');
-            $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric');
+            $this->form_validation->set_rules('contact_no', 'Phone No.', 'required|max_length[10]|min_length[10]|numeric|callback_alpha_not_zero');
             $this->form_validation->set_rules('lead_ticket_range', 'Range.', 'required|numeric');
             $this->form_validation->set_rules('product_category_id', 'Product Category', 'required');
             $this->form_validation->set_rules('product_id', 'Product','required');
@@ -222,9 +222,20 @@ class Leads extends CI_Controller
         }
     }
 
+    public  function alpha_not_zero($str){
+        $x =  substr($str, 0, 1);
+        $check = ($x == 0)? FALSE : TRUE;
+
+        if(!$check){
+        $this->form_validation->set_message('alpha_not_zero', 'Contact number should not begin with zero');
+        }
+        return $check;
+    }
+
     public function alpha_dash_space($str)
     {
         $check =  ( ! preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+
         if(!$check){
             $this->form_validation->set_message('alpha_dash_space', 'Please enter only alphabets.');
         }
