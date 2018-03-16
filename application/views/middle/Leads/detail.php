@@ -73,7 +73,7 @@
                             </div>
                             <div class="form-control">
                                 <?php
-                                    if(!empty($value['created_by_branch_id'])){
+                                    if(!empty($leads[0]['created_by_branch_id'])){
                                         $generatedb = branchname($leads[0]['created_by_branch_id']);
                                         $generatedBY =  ucwords($generatedb[0]['name']);
                                     }else{
