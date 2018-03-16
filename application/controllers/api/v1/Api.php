@@ -26,9 +26,9 @@ class Api extends REST_Controller
         parent::__construct();
 
 $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
-if($explode[0] != 'okhttp'){
-   echo "Invalid Access";die;
-}
+//if($explode[0] != 'okhttp'){
+//   echo "Invalid Access";die;
+//}
         $this->load->model('Lead');
         $this->load->model('Login_model');
         $this->load->model('Ticker_model', 'ticker');
@@ -37,7 +37,7 @@ if($explode[0] != 'okhttp'){
         $this->load->model('Notification_model', 'notification');
         $method = $this->router->method;
         $authorised_methods = $this->config->item('authorised_methods');
-        if(in_array($method,$authorised_methods)){
+        /*if(in_array($method,$authorised_methods)){
             return true;
         }else{
             $params = $this->input->post();
@@ -64,7 +64,7 @@ if($explode[0] != 'okhttp'){
                     returnJson($response);
                 }
             }
-        }
+        }*/
     }
 
     public function leads_performance_post()
@@ -1037,7 +1037,7 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
 
             if ($type == 'assigned') {
                 //SELECT COLUMNS
-                $select = array('l.id', 'l.remark', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id', 'p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/, 'c.title AS category_title', 'l.product_category_id', 'la.status', 'la.employee_id', 'la.employee_name', 'r.remind_on', 'r.reminder_text', 'l.remark','la.reason_for_drop');
+                $select = array('l.id', 'l.remark', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id','l.created_by_branch_id', 'p.title AS product_title','p.map_with'/*,'l.interested_product_id','p1.title AS interested_product_title'*/, 'c.title AS category_title', 'l.product_category_id', 'la.status', 'la.employee_id', 'la.employee_name', 'r.remind_on', 'r.reminder_text', 'l.remark','la.reason_for_drop');
 
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
@@ -1050,8 +1050,15 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
             $arrData['leads'][0]['product_title']=ucwords($arrData['leads'][0]['product_title']);
             $arrData['leads'][0]['category_title']=ucwords($arrData['leads'][0]['category_title']);
-            $generatedb = branchname($arrData['leads'][0]['created_by_branch_id']);
-            $arrData['leads'][0]['created_by_branch_id']=ucwords($generatedb[0]['name']);
+            if(!empty($arrData['leads'][0]['created_by_branch_id'])){
+                $generatedb = branchname($arrData['leads'][0]['created_by_branch_id']);
+                $generatedBY = ucwords($generatedb[0]['name']);
+            }else{
+                $source = $this->config->item('lead_source');
+                $generatedBY = ucwords($source[$arrData['leads'][0]['lead_source']]);
+            }
+
+            $arrData['leads'][0]['created_by_branch']= $generatedBY;
             $res = array('result' => True,
                 'data' => $arrData['leads']);
             returnJson($res);
