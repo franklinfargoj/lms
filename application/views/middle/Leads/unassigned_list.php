@@ -58,6 +58,7 @@ $source = $this->config->item('lead_source');
                                     <select name="assign_to">
                                         <option value="">Select Employee</option>
                                     <?php $result = get_details($this->session->userdata('admin_id'));?>
+                                        <option value="<?php echo $this->session->userdata('admin_id').'-'.ucwords(strtolower($this->session->userdata('admin_name'))); ?>"><?php echo ucwords(strtolower($this->session->userdata('admin_name')));?></option>
                                         <?php foreach ($result['list'] as $key =>$value){?>
                                         <option value="<?php echo $value->DESCR10.'-'.$value->DESCR30;?>"><?php echo ucwords($value->DESCR30);?></option>
                                         <?php }?>
@@ -178,7 +179,9 @@ $source = $this->config->item('lead_source');
                                 </td>
                                 <td>
                                     <a href="<?php echo site_url('leads/lead_life_cycle/'.encode_id($value['id']))?>">Life Cycle</a>
-<!--                                    <span>|</span><a href="--><?php //echo site_url('leads/unassigned_leads_details/'.encode_id($lead_source).'/'. encode_id($value['id'])); ?><!--">View</a>-->
+                                    <?php if($value['lead_source'] == 'walkin' && $value['mapping'] != 'BRANCH'){?>
+                                    <span>|</span><a href="javascript:void(0);" id="send_rapc" data="<?php echo encode_id($value['id']);?>">Send processing Center</a>
+                                    <?php }?>
                                 </td>
                             </tr>
                             <?php
@@ -230,6 +233,22 @@ $source = $this->config->item('lead_source');
                 $(".grp_check").prop('checked', true);
             } else {
                 $(".grp_check").prop('checked', '');
+            }
+        });
+
+        $("#send_rapc").click(function() {
+            if (window.confirm('CIR / CIBIL report generated and Lead is Qualified'))
+            {
+                $.ajax({
+                    method:'POST',
+                    url: baseUrl + 'leads/move_rapc',
+                    data:{
+                        '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                        id:$(this).attr('data')
+                    }
+                }).success(function (resp) {
+                    location.reload();
+                });
             }
         });
 

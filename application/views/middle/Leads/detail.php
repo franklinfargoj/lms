@@ -138,15 +138,13 @@
                                         }
                                     ?>
                                 </div> -->
+                            <?php if($this->session->userdata('admin_type')=='BM' && ($this->session->userdata('admin_id') == $leads[0]['employee_id']))
+                            {?>
                                 <div class="form-control">
                                     <?php
 
-                                    if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
-                                    || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
-                                    && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC') ||
-                                        ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC')||
-                                        ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] != 'DC'))
-                                    ))){}
+                                    if(in_array($leads[0]['status'],array('Closed','Converted'))
+                                    ){}
                                         else {
                                             ?>
                                             <label>Change Status:</label>
@@ -191,12 +189,8 @@
                                         'value'       => $leads[0]['status']
                                     );
 
-                                    if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
-                                        || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
-                                        && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC')
-                                        || ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC')
-                                        || ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] != 'DC'))
-                                            ))){
+                                    if(($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))
+                                        ){
                                         echo form_input($data_status);
                                     }
                                     else{
@@ -208,6 +202,78 @@
                                         echo form_input($customer_name);
                                     ?>
                                 </div>
+                                <?php }else{?>
+                                <div class="form-control">
+                                <?php
+
+                                if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
+                                    || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
+                                            && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC') ||
+                                                ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC')||
+                                                ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] != 'DC'))))
+                                ){}
+                                else {
+                                    ?>
+                                    <label>Change Status:</label>
+                                    <?php
+                                }
+                                $data = array(
+                                    'lead_id' => encode_id($leads[0]['id']),
+                                    'lead_type'    => 'assigned',
+                                    'remind_to'  => $leads[0]['employee_id']
+                                );
+                                echo form_hidden($data);
+                                $options1[$leads[0]['status']]='Select';
+                                if(!empty($lead_status)){
+                                    foreach ($lead_status as $key => $value) {
+                                        if($leads[0]['category_title'] != 'Fee Income') {
+                                            if ($key != $leads[0]['status']) {
+                                                if (((in_array($this->session->userdata('admin_type'), array('EM'))) && (in_array($key, array('Converted', 'Closed')))) || (in_array($key, $previous_status))) {
+                                                    continue;
+                                                }
+                                            }
+                                            $options1[$key] = $value;
+                                        }else{
+                                            if($key !='AO'){
+                                                if ($key != $leads[0]['status']) {
+                                                    if (((in_array($this->session->userdata('admin_type'), array('EM'))) && (in_array($key, array('Converted', 'Closed')))) || (in_array($key, $previous_status))) {
+                                                        continue;
+                                                    }
+                                                }
+                                                $options1[$key] = $value;
+                                            }
+
+                                        }
+                                    }
+                                }
+                                $js = array(
+                                    'id'       => 'lead_status',
+                                    'class'    => ''
+                                );
+                                $data_status = array(
+                                    'name'        => 'lead_status',
+                                    'type'       => 'hidden',
+                                    'value'       => $leads[0]['status']
+                                );
+
+                                if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
+                                    || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
+                                            && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC')
+                                                || ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC')
+                                                || ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] != 'DC'))
+                                        ))){
+                                    echo form_input($data_status);
+                                }
+                                else{
+                                    echo form_dropdown('lead_status', $options1 , $leads[0]['status'],$js);
+                                }
+                                $category_name = array('name'=>'cat_name','type'=>'hidden','value'=>$leads[0]['category_title']);
+                                echo form_input($category_name);
+                                $customer_name = array('name'=>'customer_name','type'=>'hidden','value'=>$leads[0]['customer_name']);
+                                echo form_input($customer_name);
+                                ?>
+                            </div>
+                            <?php }?>
                                 <div class="form-control reason" style="display:none">
                                     <label>Reason For Drop :<span style="color:red;">*</span></label>
                                     <?php
@@ -225,7 +291,7 @@
                                     echo form_error('reason');
                                     ?>
                                 </div>
-                                <?php if($this->session->userdata('admin_type')=='EM'){?>
+                                <?php if($this->session->userdata('admin_type')=='EM' || ($this->session->userdata('admin_id') == $leads[0]['employee_id'])){?>
                                 <div class="form-control followUp" style="display:none">
                                     <label>Next Followup Date:<span style="color:red;">*</span></label>
                                     <?php
@@ -248,17 +314,22 @@
                                         <label>Followup Remark:<span style="color:red;">*</span></label>
                                         <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
                                     </div>
+                                    <?php if($leads[0]['map_with'] != 'BRANCH'){?>
                                     <div class="form-control followUp" style="display:none">
-                                        <label>Is CIR / CIBIL report generated and Lead is Qualified ?:<span style="color:red;">*</span></label>
+                                        <label></label>
+                                        <span style="color:red;">*</span> Is CIR / CIBIL report generated and Lead is Qualified ?
+                                        <span>
                                         <div class="radio-control">
-                                            <input type="radio" name="is_verified" value="1" />
+                                            <input type="radio" name="is_verified" id="is_verified" value="1" />
                                             <label>Yes</label>
                                         </div>
                                         <div class="radio-control">
-                                            <input type="radio" name="is_verified" value="0"/>
+                                            <input type="radio" name="is_verified" id="is_verified" value="0"/>
                                             <label>No</label>
                                         </div>
+                                        </span>
                                     </div>
+                                        <?php }?>
                                     <?php }?>
                                     <?php if($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO'))){?>
                                         <div class="form-control accountOpen" >
@@ -583,6 +654,9 @@
                 },
                 reminder_text:{
                     required:true
+                },
+                is_verified:{
+                    required:true
                 }
             },
             messages: {
@@ -612,6 +686,9 @@
                 },
                 reminder_text:{
                     required:"Please enter Followup remarks"
+                },
+                is_verified:{
+                    required:"Please Select "
                 }
             }
         });

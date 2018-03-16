@@ -651,12 +651,12 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_Category.' as c','on_condition' => 'l.product_category_id = c.id','type' => '');
 
             if($type == 'generated'){
-                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
+                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','p.map_with','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
                 $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             }
             if($type == 'assigned'){
                 //SELECT COLUMNS
-                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','r.remind_on','r.reminder_text');
+                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','p.map_with'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','r.remind_on','r.reminder_text');
 
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
@@ -677,9 +677,15 @@ class Leads extends CI_Controller
             if($type == 'assigned'){
                 $all_status = $this->config->item('lead_status');
 
-                if($this->session->userdata('admin_type') == 'BM'){
+                if($this->session->userdata('admin_type') == 'BM' && ($this->session->userdata('admin_id') != $arrData['leads'][0]['employee_id'])){
                     $bm_status = $all_status;
                     unset($bm_status['NC'],$bm_status['AO'],$bm_status['NI'],$bm_status['DC'],$bm_status['FU']);
+                    if($arrData['leads'][0]['status'] == 'NI'){
+                        unset($bm_status['Converted']);
+                    }
+                    if($arrData['leads'][0]['status'] == 'AO'){
+                        unset($bm_status['Closed']);
+                    }
                     $arrData['lead_status'] = $bm_status;
                 }else{
                     if($arrData['leads'][0]['status'] == 'NC'){
@@ -704,10 +710,11 @@ class Leads extends CI_Controller
                         $ao_status = $all_status;
                         if($login_user['designation_name'] == 'EM'){
                             unset($ao_status['NC'],$ao_status['DC'],$ao_status['AO'],$ao_status['FU'],$ao_status['NI']);
+                            $arrData['lead_status'] = $ao_status;
                         }else{
-                            unset($ao_status['AO'],$ao_status['FU'],$ao_status['NI']);
+                            $arrData['lead_status'] = array('Converted' => 'Converted');
                         }
-                        $arrData['lead_status'] = $ao_status;
+
                     }
                 }
             }
@@ -730,6 +737,7 @@ class Leads extends CI_Controller
             $login_user = get_session();
             $lead_id = decode_id($this->input->post('lead_id'));
             $lead_type = $this->input->post('lead_type');
+            $is_verified = $this->input->post('is_verified');
             /****************************************************************
                                 For Assigned List
             *****************************************************************/
@@ -1750,6 +1758,56 @@ private function verify_accountcbs($acc_no)
             }
             $this->session->set_flashdata('success','Lead Assigned Successfully.');
             redirect('leads/unassigned_leads_list/'.$lead_source);
+        }
+    }
+
+    /* Move lead to rapc by BM
+     *
+     *
+     */
+    function move_rapc(){
+        $lead_id = decode_id($this->input->post('id'));
+        $action = 'list';
+        $table = Tbl_Leads;
+        $select = array(Tbl_Leads . '.*');
+        $where = array(Tbl_Leads . '.id' => $lead_id);
+        $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+        $leads_info = $leadsAssigned[0];
+        //pe($leads_info);die;
+        //if ($leads_info['lead_source'] == 'analytics' || $leads_info['lead_source'] == 'enquiry' || $leads_info['lead_source'] == 'tie_ups') {
+
+        if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
+            $action = 'list';
+            $select = array('map_with');
+            $table = Tbl_Products;
+            $where = array('id' => $leads_info['product_id'],'status'=>'active');
+            $product_mapped_with = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+            $product_mapped_with = $product_mapped_with[0]['map_with'];
+            $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_info['branch_id']);
+            $routed_id = $this->Lead->check_mapping($whereArray);
+
+            if (!is_array($routed_id)) {
+                $update_data['reroute_from_branch_id'] = $leads_info['branch_id'];
+                $update_data['branch_id'] = $routed_id;
+                $update_data['zone_id'] = zoneid($routed_id);
+                $update_data['modified_by'] = zoneid($routed_id);
+                $update_data['modified_by_name'] = zoneid($routed_id);
+                $date = date('Y-m-d H:i:s',time()+5);
+                $update_data['modified_on'] = $date;
+                $where = array('id' => $lead_id);
+                $table = Tbl_Leads;
+                $this->Lead->update_lead_data($where, $update_data, $table);
+                $whereUpdate = array('lead_id' => $lead_id);
+                $table = Tbl_LeadAssign;
+                $data = array('is_updated' => 0,'is_deleted' => 1);
+                $order_by = "id DESC";
+                $limit= 1;
+                $this->Lead->update_routed_lead($whereUpdate, $table, $data,$order_by,$limit);
+                return true;
+            }else{
+                return false;
+            }
+
         }
     }
 

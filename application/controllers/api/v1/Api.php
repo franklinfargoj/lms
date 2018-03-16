@@ -1024,12 +1024,12 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             $join[] = array('table' => Tbl_Category . ' as c', 'on_condition' => 'l.product_category_id = c.id', 'type' => '');
 
             if ($type == 'generated') {
-                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id','l.created_by_branch_id', 'p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
+                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id','l.created_by_branch_id', 'p.title AS product_title','p.map_with', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
                 $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => 'left');
             }
 
             if ($type == 'converted') {
-                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id', 'l.created_by_branch_id','p.title AS product_title', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
+                $select = array('l.id', 'l.customer_name', 'l.lead_identification','l.opened_account_no', 'l.lead_source', 'l.contact_no', 'l.product_id', 'l.created_by_branch_id','p.title AS product_title','p.map_with', 'c.title AS category_title', 'l.product_category_id', 'la.status', 'l.remark');
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
                 $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
@@ -3022,6 +3022,7 @@ private function verify_cbs_account($acc_no)
                 if (!is_array($routed_id)) {
                     $update_data['reroute_from_branch_id'] = $leads_info['branch_id'];
                     $update_data['branch_id'] = $routed_id;
+                    $update_data['zone_id'] = zoneid($routed_id);
                     $date = date('Y-m-d H:i:s', time() + 5);
                     $update_data['modified_on'] = $date;
                     $update_data['modified_by'] = $params['hrms_id'];
