@@ -335,7 +335,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     maxlength: 10,
                     minlength: 10,
                     numbersonly: true,
-                    regx: /^[1-9\-\s]+$/
+                    regx: /^[1-9][0-9]*$/
                 },
                 product_category_id: {
                     required: true
@@ -347,6 +347,7 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     required: true,
                     number:true,
                     min:1,
+                    regx: /^[1-9][0-9]*$/
                 },
                 state_id: {
                     required: true
@@ -370,7 +371,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 lead_ticket_range: {
                     required: "Please select ticket range",
                     number: "Only numbers allowed",
-                    min:"Ticket size should be greater than 0"
+                    min:"Ticket size should be greater than 0",
+                    regx:"Ticket size should begin with number greater then zero"
                 },
                 contact_no: {
                     required: "Please enter phone number",
