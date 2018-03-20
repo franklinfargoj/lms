@@ -26,9 +26,9 @@ class Api extends REST_Controller
         parent::__construct();
 
         $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
-//        if($explode[0] != 'okhttp'){
-//           echo "Invalid Access";die;
-//        }
+        if($explode[0] != 'okhttp'){
+           echo "Invalid Access";die;
+        }
         $this->load->model('Lead');
         $this->load->model('Login_model');
         $this->load->model('Ticker_model', 'ticker');
@@ -37,7 +37,7 @@ class Api extends REST_Controller
         $this->load->model('Notification_model', 'notification');
         $method = $this->router->method;
         $authorised_methods = $this->config->item('authorised_methods');
-       /* if(in_array($method,$authorised_methods)){
+        if(in_array($method,$authorised_methods)){
             return true;
         }else{
             $params = $this->input->post();
@@ -64,7 +64,7 @@ class Api extends REST_Controller
                     returnJson($response);
                 }
             }
-        }*/
+        }
     }
 
     public function leads_performance_post()
