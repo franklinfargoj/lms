@@ -1229,6 +1229,7 @@ class Leads extends CI_Controller
         $arrData['lead_sources'] = $this->Lead->get_enum(Tbl_Leads,'lead_source');
         return $arrData;
     }
+
     private function assign_to($employee_id,$lead_ids)
     {
        $explode_employee = explode('-',$employee_id);
@@ -1255,27 +1256,37 @@ class Leads extends CI_Controller
             } else {
                 $leads[] = $lead_ids;
             }
+            $multiple_description ='';
+            // pe($leads);die;
             foreach ($leads as $key => $value) {
                 $dataArray = explode("-",$value);
                 $assign_data['lead_id'] = $dataArray[0];
                 $insertData = $assign_data;
                 $response = $this->Lead->insert_lead_data($insertData,Tbl_LeadAssign);
-                if($response['status']=='success'){
-		$lead_old_data = array('is_deleted' => 0);
-		$where = array(Tbl_LeadAssign.'.lead_id' => $dataArray[0]);
-		$this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
 
+                if($response['status']=='success'){
+                    $lead_old_data = array('is_deleted' => 0);
+                    $where = array(Tbl_LeadAssign.'.lead_id' => $dataArray[0]);
+                    $this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
                     //Add Notification
                     $title="New Lead Assigned";
                     $description="Lead for ".ucwords(strtolower($dataArray[1]))." assigned to you for ".ucwords(strtolower($dataArray[2]));
+                    $multiple_description.=" - Lead for ".ucwords(strtolower($dataArray[1]))." assigned to you for ".ucwords(strtolower($dataArray[2]))."<br>";
                     $notification_to = $explode_employee[0];
                     $priority="Normal";
+
                     notification_log($title,$description,$priority,$notification_to);
-                    //push notification
-                    $emp_id = $explode_employee[0];
-                    sendPushNotification($emp_id,$description,$title);
                 }
             }
+            //push notification
+            $emp_id = $explode_employee[0];
+
+            if(count($leads)>1){
+                $description="You have assigned ".count($leads)." leads<br>";
+                $description.=$multiple_description;
+
+            }
+             sendPushNotification($emp_id,$description,$title);
         }
     }
 
