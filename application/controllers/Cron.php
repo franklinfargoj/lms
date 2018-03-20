@@ -88,6 +88,7 @@ function index(){
             //For GENERAL MANAGER
         foreach ($GM_list as $k => $v) {
             $attachment_file = $this->export_to_excel('gm_consolidated_mail', $final['general_manager']);
+            $attachment_file = array($attachment_file);
             $to = array('email' => $v->email_id,'name' => $v->name);
             $subject = 'Pending Leads under Dena Sampark for follow up';
             $message = $this->gm_msg();
@@ -214,6 +215,7 @@ function index(){
             }
             //FOR EMPLOYEE
             $attachment_file = $this->export_to_excel('bm_consolidated_mail',$final['branch_manager']);
+            $attachment_file = array($attachment_file);
             $to = array('email' => $v->email_id,'name' => $v->name);
             $subject = 'Pending Leads under Dena Sampark for follow up';
             $message = $this->bm_msg();
