@@ -114,6 +114,7 @@ class Leads extends CI_Controller
                 if($this->input->post('is_own_branch') == '0'){
                     $lead_data['state_id'] = $this->input->post('state_id');
                     $lead_data['branch_id'] = $this->input->post('branch_id');
+                    $lead_data['zone_id'] = zoneid($this->input->post('branch_id'));
                     $lead_data['district_id'] = $this->input->post('district_id');
                     $branch_id = $this->input->post('branch_id');
                 }
@@ -166,15 +167,12 @@ class Leads extends CI_Controller
                     if($_POST['is_own_branch']== 0){
                         $branch_id = $_POST['branch_id'];
                         $branch_manager_id = $this->Lead->branch_manager_id($branch_id);
-                        $push_message = "New Lead Assigned to you";
-                        $title = 'New Lead Assigned';
-                        sendPushNotification($branch_manager_id,$push_message,$title);
                     }else{
                         $branch_manager_id = $this->Lead->branch_manager_id($branch_id);
-                        $push_message = "New Lead Assigned to you";
-                        $title = 'New Lead Assigned';
-                        sendPushNotification($branch_manager_id,$push_message,$title);
                     }
+                    $push_message = "New Lead Assigned to your branch";
+                    $title = 'New Lead Assigned to your branch';
+                    sendPushNotification($branch_manager_id,$push_message,$title);
                 }
                 $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
 

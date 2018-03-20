@@ -322,8 +322,18 @@ class Api extends REST_Controller
             $push_message = 'Lead Submitted Successfully for '.ucwords($product_name);
             sendPushNotification($emp_id,$push_message,$title);
 
-        //Save notification
-        $this->insert_notification($lead_data);
+            //Save notification
+            $this->insert_notification($lead_data);
+
+            if($params['is_own_branch']== 0){
+                $branch_id = $params['branch_id'];
+                $branch_manager_id = $this->Lead->branch_manager_id($branch_id);
+            }else{
+                $branch_manager_id = $this->Lead->branch_manager_id($branch_id);
+            }
+            $push_message = "New Lead Assigned to your branch";
+            $title = 'New Lead Assigned to your branch';
+            sendPushNotification($branch_manager_id,$push_message,$title);
         }
 
         if ($assign_to == 'self') {
