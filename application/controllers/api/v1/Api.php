@@ -288,6 +288,7 @@ class Api extends REST_Controller
         unset($lead_data['unique_id']);
 
         $lead_data['lead_name'] = $this->input->post('customer_name');
+        $lead_data['zone_id'] = zoneid($this->input->post('branch_id'));
         $lead_data['created_on'] = date('Y-m-d H:i:s');
         $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
         $action = 'list';
@@ -325,12 +326,7 @@ class Api extends REST_Controller
             //Save notification
             $this->insert_notification($lead_data);
 
-            if($params['is_own_branch']== 0){
-                $branch_id = $params['branch_id'];
-                $branch_manager_id = $this->Lead->branch_manager_id($branch_id);
-            }else{
-                $branch_manager_id = $this->Lead->branch_manager_id($branch_id);
-            }
+            $branch_manager_id = $this->Lead->branch_manager_id($params['branch_id']);
             $push_message = "New Lead Assigned to your branch";
             $title = 'New Lead Assigned to your branch';
             sendPushNotification($branch_manager_id,$push_message,$title);
@@ -343,7 +339,7 @@ class Api extends REST_Controller
             $lead_assign['branch_id'] = $params['branch_id'];
             $lead_assign['district_id'] = $params['district_id'];
             $lead_assign['state_id'] = $params['state_id'];
-            $lead_assign['zone_id'] = $params['zone_id'];
+            $lead_assign['zone_id'] = zoneid($params['branch_id']);
             $lead_assign['created_by'] = $params['created_by'];
             $lead_assign['created_by_name'] = $params['created_by_name'];
             $lead_assign['created_on'] = date('Y-m-d H:i:s');
