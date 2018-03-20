@@ -89,8 +89,8 @@ function index(){
         foreach ($GM_list as $k => $v) {
             $attachment_file = $this->export_to_excel('gm_consolidated_mail', $final['general_manager']);
             $to = array('email' => $v->email_id,'name' => $v->name);
-            $subject = 'LMS - Reports';
-            $message = 'Please Find an attachment';
+            $subject = 'Pending Leads under Dena Sampark for follow up';
+            $message = $this->gm_msg();
             sendMail($to, $subject, $message, $attachment_file,$cc);
         }
     }
@@ -153,13 +153,12 @@ function index(){
 //            echo $v->zone_id;
           // pe($final['zonal_manager']);die;
             //FOR ZONAL MANAGER
-            $subject = 'LMS - Reports - '.$v->zone_name;
+            $subject = 'Pending Leads under Dena Sampark for follow up';
             $first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
             $second_attachment_file = $this->zm_consolidated_mail_for_advances($v->zone_id);
             $attachment_file = array($first_attachment_file,$second_attachment_file);
             $to = array('email' => $v->email_id,'name' => $v->name);
-
-            $message = 'Please Find an attachment';
+            $message = $this->zm_msg();
             sendMail($to,$subject,$message,$attachment_file,$cc);
 //die;
         }
@@ -216,10 +215,10 @@ function index(){
             //FOR EMPLOYEE
             $attachment_file = $this->export_to_excel('bm_consolidated_mail',$final['branch_manager']);
             $to = array('email' => $v->email_id,'name' => $v->name);
-            $subject = 'LMS - Reports - '.$v->branch_name;
-            $message = 'Please Find an attachment';
+            $subject = 'Pending Leads under Dena Sampark for follow up';
+            $message = $this->bm_msg();
             sendMail($to,$subject,$message,$attachment_file,$cc);
-           // die;
+            //die;
         }
     }
 
@@ -1095,6 +1094,53 @@ $pending_days = 2;
         $attachment_file = $this->export_to_excel('zm_consolidated_mail_advances',$final['zonal_manager']);
 
         return $attachment_file;
+    }
+
+    private function bm_msg(){
+        $msg = "Dear Sir/Madam,<br><br>
+                Re: Pendency of Leads in Dena Sampark<br><br>
+                Please find attach herewith leads details of Dena Sampark. These are the leads which have not been acted upon by respective employee of your branch in T+2 Days. The attachment contains following parameters:<br><br>
+                1) Lead Generated (During the current month).<br>
+                2) Lead Converted (During the current month).<br><br>
+                Following points need your immediate intervention:<br><br>
+                3) Leads pending at pre-documentation stage. (The leads which are not acted upon in due time at various stages).<br>
+                4) Leads pending at post documentation stage. (The leads which are mark “Document collected” and are pending beyond defined TAT).<br><br>
+                You are requested to kindly look into the pendency and take up with respective employee for immediate suitable disposal of the pending leads.<br><br>
+                This is an auto generated e-mail escalated to you on account of pendency beyond defined TAT at branch level which will be further auto escalated to respective Zonal Manager and further to Field General Manager after two days of pendencies at each  level.<br><br>
+                Regards,<br>Dena Sampark";
+        return $msg;
+    }
+
+    private function zm_msg(){
+        $msg = "Dear Sir/Madam,<br><br>
+                Re: Pendency of Leads in Dena Sampark<br><br>
+                Please find attach herewith leads details of Dena Sampark. These are the leads which have not been acted upon by respective BM in T+2 Days. The attachment contains following parameters:<br><br>
+                1) Lead Generated (During the current month).<br>
+                2) Lead Converted (During the current month).<br><br>
+                Following points need your immediate intervention:<br><br>
+                3) Number of Unassigned Leads.<br>
+                4) Leads pending at pre-documentation stage. (The leads which are not acted upon in due time at various stages).<br>
+                5) Leads pending at post documentation stage. (The leads which are mark “Document collected” and are pending beyond defined TAT).<br><br>
+                You are requested to kindly look into the pendency and take up with respective BM’s for immediate suitable disposal of the pending leads.<br><br>
+                This is an auto generated e-mail escalated to you on account of pendency beyond defined TAT at branch level which will be further auto escalated to respective Field General Manager after two days of pendencies at each  level.<br><br>
+                Regards,<br>Dena Sampark";
+        return $msg;
+    }
+
+    private function gm_msg(){
+        $msg = "Dear Sir/Madam,<br><br>
+                Re: Pendency of Leads in Dena Sampark<br><br>
+                Please find attach herewith leads details of Dena Sampark. These are the leads which have not been acted upon by respective BM within defined TAT and the same were escalated to DZM/ZM for further action. The attachment contains following parameters:<br><br>
+                1) Lead Generated (During the current month).<br>
+                2) Lead Converted (During the current month).<br><br>
+                Following points need your intervention:<br><br>
+                3) Number of Unassigned Leads.<br>
+                4) Leads pending at pre-documentation stage. (The leads which are not acted upon in due time at various stages).<br>
+                5) Leads pending at post documentation stage. (The leads which are mark “Document collected” and are pending beyond defined TAT).<br><br>
+                You are requested to kindly look into the pendency and take up the matter for suitable disposal of the pending leads.<br><br>
+                This is an auto generated e-mail escalated to you on account of pendency beyond defined TAT at Branch/DZM/ZM level.<br><br>
+                Regards,<br>Dena Sampark";
+        return $msg;
     }
 
 }
