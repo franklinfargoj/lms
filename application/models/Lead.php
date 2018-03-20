@@ -18,6 +18,8 @@ class Lead  extends CI_Model
 
 	}
 
+
+
 	public function add_leads($lead_data = array())
 	{
 		if (!empty($lead_data)) {
@@ -544,4 +546,22 @@ class Lead  extends CI_Model
          }
          return false;
      }
+
+
+    /**
+     * branch_manager_id
+     * Retrieves branch manager id
+     * @author Franklin Fargoj
+     * @access public
+     * @param $branch_id
+     * @return value
+     */
+    public  function branch_manager_id($branch_id){
+        $this->db->select('hrms_id');
+        $this->db->from('employee_dump');
+        $this->db->where('branch_id',$branch_id);
+        $this->db->like('designation','BRANCH MANAGER');
+        $result = $this->db->get()->result_array();
+        return $result[0]['hrms_id'];
+    }
 }

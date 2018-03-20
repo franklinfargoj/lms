@@ -48,15 +48,14 @@ class Leads extends CI_Controller
           $this->make_bread->add('Add Leads', '', 0);
           $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
-
         $arrData['category_selected'] = '';
         $arrData['product_selected'] = '';
         $arrData['products'] = '';
 
         $action = 'list';$table=Tbl_state;
-        $select=array('TRIM(code) as code','TRIM(name) as name');
+        $select = array('TRIM(code) as code','TRIM(name) as name');
         $orderby = 'name ASC';
-        $where=array('name !='=>'','code !='=>'');
+        $where = array('name !='=>'','code !='=>'');
         $arrData['states'] = $this->Lead->get_leads($action,$table,$select,$where,'','',$orderby);
 
         $action = 'list';$table=Tbl_district;$select=array('code','name');
@@ -67,10 +66,10 @@ class Leads extends CI_Controller
         $where = array('code !='=>'');
         $arrData['branches'] = $this->Lead->get_leads($action,$table,$select,$where,'','','');
 
-
         $category_list = $this->Lead->get_all_category(array('is_deleted' => 0,'status' => 'active'));
         $arrData['category'] = dropdown($category_list,'Select');
         if ($this->input->post("Submit") == "Submit") {
+
             $this->form_validation->set_error_delimiters('<span class = "help-block">', '</span>');
             //$this->form_validation->set_rules('is_existing_customer', 'Customer', 'required');
             $this->form_validation->set_rules('customer_name', 'Customer Name', 'required|callback_alpha_dash_space');
@@ -81,8 +80,6 @@ class Leads extends CI_Controller
             //$this->form_validation->set_rules('remark', 'Remark', 'required');
             $this->form_validation->set_rules('is_own_branch', 'Branch', 'required');
             //$this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
-
-            
 
             if ($this->input->post('is_own_branch') == '0') {
                 $this->form_validation->set_rules('state_id', 'State', 'required');
@@ -107,6 +104,7 @@ class Leads extends CI_Controller
                      redirect(base_url('leads/add'), 'refresh');
                  } 
                 $login_user = get_session();
+
                 $lead_data['state_id'] = $lead_data['created_by_state_id'] = $login_user['state_id'];
                 $lead_data['branch_id'] = $lead_data['created_by_branch_id'] = $login_user['branch_id'];
                 $lead_data['district_id'] = $lead_data['created_by_district_id'] = $login_user['district_id'];
@@ -132,7 +130,6 @@ class Leads extends CI_Controller
                     }else{
                         $lead_data[$value] = $this->input->post($value);
                     }
-
                 }
                 $action = 'list';
                 $select = array('map_with','title');
@@ -152,8 +149,8 @@ class Leads extends CI_Controller
 //                }
                 $lead_data['lead_name'] = $this->input->post('customer_name');
                 $lead_id = $this->Lead->add_leads($lead_data);
-                if($lead_id != false){
 
+                if($lead_id != false){
                     //send sms
                     $sms = 'Thanks for showing interest in '.ucwords($product_name).' with Dena Bank. We will contact you shortly.';
                     send_sms($this->input->post('contact_no'),$sms);
@@ -163,11 +160,24 @@ class Leads extends CI_Controller
                     $title = 'Lead Submitted Successfully';
                     $push_message = 'Lead Submitted Successfully '.ucwords($product_name);
                     sendPushNotification($emp_id,$push_message,$title);
-                    //Save notification
+                     //Save notification
                     $this->insert_notification($lead_data);
-                }
 
+                    if($_POST['is_own_branch']== 0){
+                        $branch_id = $_POST['branch_id'];
+                        $branch_manager_id = $this->Lead->branch_manager_id($branch_id);
+                        $push_message = "New Lead Assigned to you";
+                        $title = 'New Lead Assigned';
+                        sendPushNotification($branch_manager_id,$push_message,$title);
+                    }else{
+                        $branch_manager_id = $this->Lead->branch_manager_id($branch_id);
+                        $push_message = "New Lead Assigned to you";
+                        $title = 'New Lead Assigned';
+                        sendPushNotification($branch_manager_id,$push_message,$title);
+                    }
+                }
                 $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
+
                 if($assign_to == 'self'){
                     $lead_assign['lead_id'] = $lead_id;
                     $lead_assign['employee_id']=$login_user['hrms_id'];
@@ -191,6 +201,7 @@ class Leads extends CI_Controller
                     $push_message = "New Lead Assigned to you";
                     sendPushNotification($emp_id,$push_message,$title);
                 }
+
                 $this->session->set_flashdata('success', "Lead Submitted Successfully");
                 redirect(base_url('leads/add'), 'refresh');
             }
@@ -1525,7 +1536,9 @@ class Leads extends CI_Controller
             $data['branch'] = $html1;
             $data['state'] = $html;
             $data['district'] = $html2;
-            echo json_encode($data);
+            echo json_encode($data);die;
+
+
     }
 
     public function verify_account(){
