@@ -24,7 +24,6 @@ class Api extends REST_Controller
     {
         // Initialization of class
         parent::__construct();
-
         $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
         if($explode[0] != 'okhttp'){
            echo "Invalid Access";die;
@@ -220,8 +219,8 @@ class Api extends REST_Controller
 
     public function add_lead_post()
     {
-        $params = $this->input->post();
-        // check for duplicate entry
+         $params = $this->input->post();
+         // check for duplicate entry
          $whereEx = array(
             'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
              'contact_no'=> $this->input->post('contact_no'),
@@ -352,7 +351,6 @@ class Api extends REST_Controller
             $push_message = "New Lead Assigned to you";
             sendPushNotification($emp_id,$push_message,$title);
         }
-
         //send sms
         /*$message = 'Thanks for showing interest with Dena Bank. We will contact you shortly';
         send_sms($this->input->post('contact_no'),$message);*/
@@ -1564,19 +1562,23 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             );
 
             $leads = explode(',', $params['lead_id']);
+
             if (is_array($leads)) {
                 $leads_id = $leads;
             } else {
                 $leads_id[] = $leads;
             }
+            $multiple_description ='';
+
             foreach ($leads_id as $key => $value) {
                 $assign_data['lead_id'] = $value;
                 $insertData = $assign_data;
                 $response = $this->Lead->insert_lead_data($insertData,Tbl_LeadAssign);
+
                 if($response['status']=='success'){
-		$lead_old_data = array('is_deleted' => 0);
-		$where = array(Tbl_LeadAssign.'.lead_id' => $value);
-		$this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
+                    $lead_old_data = array('is_deleted' => 0);
+                    $where = array(Tbl_LeadAssign.'.lead_id' => $value);
+                    $this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
 
                     $action = 'list';
                     $select = array('lead.customer_name','product.title');
@@ -1586,15 +1588,23 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
                     $allData = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by=array(),$order_by=array());
                     //Add Notification
                     $title="New Lead Assigned";
+
                     $description="Lead for ".ucwords(strtolower($allData[0]['customer_name']))." assigned to you for ".ucwords(strtolower($allData[0]['title']));
+                    $multiple_description.=" - Lead for ".ucwords(strtolower($allData[0]['customer_name']))." assigned to you for ".ucwords(strtolower($allData[0]['title']))."<br>";
+
                     $notification_to = $params['employee_id'];
                     $priority="Normal";
                     notification_log($title,$description,$priority,$notification_to);
-                    //push notification
-                    $emp_id = $params['employee_id'];
-                    sendPushNotification($emp_id,$description,$title);
                 }
             }
+            //push notification
+            $emp_id = $params['employee_id'];
+            if(count($leads_id)>1){
+                $description="You have assigned ".count($leads_id)." leads<br>";
+                $description.=$multiple_description;
+            }
+            sendPushNotification($emp_id,$description,$title);
+
             $res = array('result' => True,
                 'data' => 'Leads assigned successfully');
             returnJson($res);
