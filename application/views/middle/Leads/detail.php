@@ -791,13 +791,17 @@
                 data: {
                     '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
                     acc_no: $.base64.encode($.base64.encode(acc_no))
-                }
+                }/*,
+                beforeSend:function(){
+                    return confirm("Are you sure?");
+                }*/
             }).success(function(resp){
                     var regex = /(<([^>]+)>)/ig;
                     var body = resp;
                     var result = body.replace(regex, "");
                     var response = JSON.parse(result);
-                      //var response = JSON.parse(resp);
+                    //alert(response);
+                    //var response = JSON.parse(resp);
 
                         if(response['status'] == 'True'){
                             $('.loader').hide();
@@ -806,6 +810,17 @@
                             $('#response_data').val(response['data']);
                         }else{
                             $('.loader').hide();
+                            var useraction = confirm("Are you sure you want to verify?");
+                            if(useraction)
+                            {
+                                //on click of okay, call the required API function
+                                window.location = "http://localhost/lms/leads/details/assigned/ytd/";
+                            }
+                            else
+                            {
+                                //on click of cancel,redirect on the same page
+                                window.location = "http://localhost/lms/leads/leads_list/assigned/ytd";
+                            }
                             alert('Verification Failed');
                         }
             });
