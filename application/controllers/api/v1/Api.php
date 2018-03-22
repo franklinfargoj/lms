@@ -2510,7 +2510,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
 
                                 //if($leads_info['lead_source'] == 'analytics'){
                             if ($leads_info['lead_source'] == 'analytics' || $leads_info['lead_source'] == 'enquiry' || $leads_info['lead_source'] == 'tie_ups') {
-                                if ($params['is_verified']) {
+                                if ($params['is_qualified']) {
                                     if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
 
                                         $action = 'list';
@@ -2579,7 +2579,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                             //This will add entry into reminder scheduler for status (Interested/Follow up)
                             $result3 = $this->Lead->add_reminder($remindData);
 
-                            if ($params['is_verified']) {
+                            if ($params['is_qualified']) {
                                 $action = 'list';
                                 $table = Tbl_Leads;
                                 $select = array(Tbl_Leads . '.*');
