@@ -2412,6 +2412,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
             $drop_reason = array();
             if($params['status'] == 'NI' && isset($params['reason']) && !empty($params['reason'])){
                 $drop_reason = $params['reason'];
+                $desc_drop_reason = $params['desc_reason'];
             }
             //=========================== Reroute to other branch
 
@@ -2450,7 +2451,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                         if (empty($drop_reason)) {
                             $data = array('is_updated' => 0,'is_deleted' => 1);
                         } else {
-                            $data = array('is_updated' => 0,'is_deleted' => 1, 'reason_for_drop' => $drop_reason);
+                            $data = array('is_updated' => 0,'is_deleted' => 1, 'reason_for_drop' => $drop_reason,'desc_for_drop' =>$desc_drop_reason);
                         }
                         $this->Lead->update($whereUpdate, $table, $data);
                         $res = array('result' => TRUE,
@@ -2480,6 +2481,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                                 'zone_id' => $leads_data['zone_id'],
                                 'status' => $params['status'],
                                 'reason_for_drop' => $params['reason'],
+                                'desc_for_drop' => $params['desc_reason'],
                                 'is_updated' => 1,
                                 'created_on' => $leads_data['created_on'],
                                 'created_by' => $leads_data['created_by'],
@@ -2691,6 +2693,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                             );
                             if(!empty($drop_reason)){
                                 $lead_status_data['reason_for_drop'] = $drop_reason;
+                                $lead_status_data['desc_for_drop'] = $desc_drop_reason;
                             }
                             $result4 = $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
 

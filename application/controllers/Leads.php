@@ -492,6 +492,7 @@ class Leads extends CI_Controller
         $arrData['lead_source'] = $lead_source;
         $arrData['type'] = 'unassigned';
         $middle = "Leads/unassigned_list";
+        pe($arrData['unassigned_leads']);die;
         load_view($middle,$arrData);
     }
 
