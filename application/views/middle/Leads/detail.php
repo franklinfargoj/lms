@@ -327,7 +327,7 @@
                                         <label>Followup Remark:<span style="color:red;">*</span></label>
                                         <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
                                     </div>
-                                    <?php if($leads[0]['map_with'] != 'BRANCH'){?>
+                                    <?php if($leads[0]['map_with'] != 'BRANCH' && ($leads[0]['reroute_from_branch_id'] == '' || $leads[0]['reroute_from_branch_id'] == NULL)){?>
                                     <div class="form-control followUp" style="display:none">
                                         <label></label>
                                         <span style="color:red;">*</span> Is CIR / CIBIL report generated and Lead is Qualified ?
