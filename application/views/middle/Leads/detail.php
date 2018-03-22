@@ -805,22 +805,19 @@
 
                         if(response['status'] == 'True'){
                             $('.loader').hide();
-                            alert('Success');
-                            $('.submit_button').show();
-                            $('#response_data').val(response['data']);
-                        }else{
-                            $('.loader').hide();
-                            var useraction = confirm("Are you sure you want to verify?");
+                            var useraction = confirm("Is record verified?");
                             if(useraction)
                             {
-                                //on click of okay, call the required API function
-                                window.location = "http://localhost/lms/leads/details/assigned/ytd/";
+                                $('.submit_button').show();
+                                $('#response_data').val(response['data']);
                             }
                             else
                             {
-                                //on click of cancel,redirect on the same page
-                                window.location = "http://localhost/lms/leads/leads_list/assigned/ytd";
+                                location.reload();
                             }
+
+                        }else{
+                            $('.loader').hide();
                             alert('Verification Failed');
                         }
             });
