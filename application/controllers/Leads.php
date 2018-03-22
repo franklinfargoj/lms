@@ -672,7 +672,7 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_Category.' as c','on_condition' => 'l.product_category_id = c.id','type' => '');
 
             if($type == 'generated'){
-                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.reroute_from_branch_id','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','p.map_with','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
+                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.reroute_from_branch_id','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','p.map_with','c.title AS category_title','l.product_category_id','la.status','la.desc_for_drop','la.employee_name');
                 $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             }
             if($type == 'assigned'){
