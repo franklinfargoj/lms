@@ -805,7 +805,7 @@
 
                         if(response['status'] == 'True'){
                             $('.loader').hide();
-                            var useraction = confirm("Is record verified?");
+                            var useraction = confirm(response + " \n\n Is above record verified?");
                             if(useraction)
                             {
                                 $('.submit_button').show();
