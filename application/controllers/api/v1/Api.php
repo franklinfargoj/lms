@@ -25,9 +25,9 @@ class Api extends REST_Controller
         // Initialization of class
         parent::__construct();
         $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
-//        if($explode[0] != 'okhttp'){
-//           echo "Invalid Access";die;
-//        }
+        if($explode[0] != 'okhttp'){
+           echo "Invalid Access";die;
+        }
         $this->load->model('Lead');
         $this->load->model('Login_model');
         $this->load->model('Ticker_model', 'ticker');
@@ -42,7 +42,7 @@ class Api extends REST_Controller
             $params = $this->input->post();
             $headers = getallheaders();
 
-            /*if(!empty($headers) && !isset($params['password'])){
+            if(!empty($headers) && !isset($params['password'])){
                 if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
                     isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
                     $response = array('result'=>False,
@@ -62,7 +62,7 @@ class Api extends REST_Controller
                         'data'=>array('authorisation key or hrms id missing.'));
                     returnJson($response);
                 }
-            }*/
+            }
         }
     }
 
