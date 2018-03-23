@@ -618,10 +618,14 @@ class Leads extends CI_Controller
      * @return array
      */
     public function details($type,$till,$lead_id,$status = null,$param = null,$lead_source = null){
+        /*
+        pe($type);pe($till);pe($lead_id);die;*/
+
         $lead_id = decode_id($lead_id);
         $arrData['type'] = $type;
         $arrData['till'] = $till;
         $lead_status = $this->config->item('lead_status');
+        // pe($lead_status);die;
         $table=Tbl_state;
         $where=array('name !='=>'','code !='=>'');
         $order_by = 'name ASC';
@@ -653,12 +657,10 @@ class Leads extends CI_Controller
         }
         $arrData['breadcrumb'] = $this->make_bread->output();
 
-
         $this->make_bread->add('Lead Detail','', 0);
         $arrData['breadcrumb'] = $this->make_bread->output();
 
         /*Create Breadcumb*/
-
         $login_user = get_session();
 
         if(isset($login_user['designation_name']) && !empty($login_user['designation_name'])){
@@ -744,7 +746,26 @@ class Leads extends CI_Controller
         return load_view($middle = "Leads/detail",$arrData);
     }
 
+
     /**
+     * details_generated
+     * Only for assigned lead list able to change lead status / Add Follow Up details
+     * @author Franklin Fargoj
+     * @access public
+     * @param $type,$till,$lead_id
+     * @return array
+     */
+    public function details_generated($lead_id){
+
+        $all_status = $this->config->item('lead_status');
+         $lead_id = decode_id($lead_id);
+        $arrData['leads'] = $this->Lead->lead_details($lead_id);
+        $arrData['breadcrumb'] = $this->make_bread->output();
+            //pe($arrData['leads']);die;
+        return load_view($middle = "Leads/detail_lead",$arrData);
+    }
+
+        /**
      * update_lead_status
      * Only for assigned lead list able to change lead status / Add Follow Up details
      * @author Ashok Jadhav
@@ -1551,13 +1572,14 @@ class Leads extends CI_Controller
     }
 
     public function verify_account(){
-        if($this->input->post('acc_no') != ''){
+           if($this->input->post('acc_no') != ''){
             $acc_no = base64_decode(base64_decode($this->input->post('acc_no')));
             //$response = verify_account($acc_no);
             $response = $this->verify_accountcbs($acc_no);
             echo $response;
         }
     }
+
     public function upload_employee(){
         $admin = ucwords(strtolower($this->session->userdata('admin_type')));
         if ($admin != 'Super Admin'){
