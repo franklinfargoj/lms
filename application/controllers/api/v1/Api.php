@@ -25,9 +25,9 @@ class Api extends REST_Controller
         // Initialization of class
         parent::__construct();
         $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
-        if($explode[0] != 'okhttp'){
-           echo "Invalid Access";die;
-        }
+//        if($explode[0] != 'okhttp'){
+//           echo "Invalid Access";die;
+//        }
         $this->load->model('Lead');
         $this->load->model('Login_model');
         $this->load->model('Ticker_model', 'ticker');
@@ -42,7 +42,7 @@ class Api extends REST_Controller
             $params = $this->input->post();
             $headers = getallheaders();
 
-            if(!empty($headers) && !isset($params['password'])){
+            /*if(!empty($headers) && !isset($params['password'])){
                 if(isset($headers['authorisation_key']) && $headers['authorisation_key'] !=NULL &&
                     isset($headers['hrms_id']) && $headers['hrms_id'] !=NULL){
                     $response = array('result'=>False,
@@ -62,7 +62,7 @@ class Api extends REST_Controller
                         'data'=>array('authorisation key or hrms id missing.'));
                     returnJson($response);
                 }
-            }
+            }*/
         }
     }
 
@@ -2284,12 +2284,12 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                 $tablerapc = Tbl_processing_center ;
                 $whererapc = array('branch_id' => $branch_id);
 
-                $leads['processing_center'] = $this->Lead->get_leads($actionrapc, $tablerapc, $selectrapc, $whererapc, $joinrapc=array(), $group_by=array(), $order_by = array());
+                $processing_center = $this->Lead->get_leads($actionrapc, $tablerapc, $selectrapc, $whererapc, $joinrapc=array(), $group_by=array(), $order_by = array());
                 $leads['processing_center'] = '';
-                if(!empty($leads['processing_center'])){
-                    $processing_branch = branchname($leads['processing_center'][0]['other_processing_center_id']);
+                if(!empty($processing_center)){
+                    $processing_branch = branchname($processing_center[0]['other_processing_center_id']);
                     $processing_branch = $processing_branch[0]['name'];
-                    $leads['processing_center'] =$processing_branch;
+                    $leads['processing_center'] = $processing_branch;
                 }
                 $action = 'count';
                 $select = array();
