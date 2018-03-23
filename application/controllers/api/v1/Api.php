@@ -2254,6 +2254,23 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                     //Year till date
                     $where = array(Tbl_LeadAssign . '.employee_id' => $created_id, Tbl_LeadAssign . '.is_updated' => 1, Tbl_LeadAssign . '.is_deleted' => 0,Tbl_LeadAssign . '.view_status' => 0, 'DATEDIFF( CURDATE( ) , ' . Tbl_LeadAssign . '.created_on) <=' => Elapsed_day);
                     $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+
+                    $actionrapc = 'list';
+                    $selectrapc = array();
+                    $tablerapc = Tbl_processing_center ;
+                    $whererapc = array('branch_id' => $result['basic_info']['branch_id']);
+
+                    $processing_center_details = $this->Lead->get_leads($actionrapc, $tablerapc, $selectrapc, $whererapc, $joinrapc=array(), $group_by=array(), $order_by = array());
+                    $leads['RAPC']='';
+                    $leads['CBB']='';
+                    $leads['MSME']='';
+                    if(!empty($processing_center_details)){
+                        foreach ($processing_center_details as $row) {
+                            $processing_branch = branchname($row['other_processing_center_id']);
+                            $processing_branch = $processing_branch[0]['name'];
+                            $leads[$row['processing_center']] = $processing_branch;
+                        }
+                    }
                 }
 
             }
@@ -2284,12 +2301,16 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                 $tablerapc = Tbl_processing_center ;
                 $whererapc = array('branch_id' => $branch_id);
 
-                $processing_center = $this->Lead->get_leads($actionrapc, $tablerapc, $selectrapc, $whererapc, $joinrapc=array(), $group_by=array(), $order_by = array());
-                $leads['processing_center'] = '';
-                if(!empty($processing_center)){
-                    $processing_branch = branchname($processing_center[0]['other_processing_center_id']);
-                    $processing_branch = $processing_branch[0]['name'];
-                    $leads['processing_center'] = $processing_branch;
+                $processing_center_details = $this->Lead->get_leads($actionrapc, $tablerapc, $selectrapc, $whererapc, $joinrapc=array(), $group_by=array(), $order_by = array());
+                $leads['RAPC']='';
+                $leads['CBB']='';
+                $leads['MSME']='';
+                if(!empty($processing_center_details)){
+                    foreach ($processing_center_details as $row) {
+                        $processing_branch = branchname($row['other_processing_center_id']);
+                        $processing_branch = $processing_branch[0]['name'];
+                        $leads[$row['processing_center']] = $processing_branch;
+                    }
                 }
                 $action = 'count';
                 $select = array();
