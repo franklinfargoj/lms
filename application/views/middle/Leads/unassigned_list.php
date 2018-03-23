@@ -140,7 +140,7 @@ $source = $this->config->item('lead_source');
                     ?>
                             <tr>
                                 <td  style="text-align:center">
-                                <?php if($value['lead_source'] != 'walkin' || ($value['lead_source'] == 'walkin' && $value['mapping'] == 'BRANCH')) {
+                                <?php if($value['lead_source'] != 'walkin' || ($value['lead_source'] == 'walkin' && $value['mapping'] == 'BRANCH' || ($value['reroute_from_branch_id'] != '' || $value['reroute_from_branch_id'] != NULL))) {
 
                                     $data = array(
                                         'name' => 'lead_ids[]',
@@ -192,9 +192,12 @@ $source = $this->config->item('lead_source');
                                     ?>
                                 </td>
                                 <td>
+                                    <?php $branch_mapp = get_branch_map($value['mapping'],$this->session->userdata('branch_id'));
+                                           $branch_map = $branch_mapp[0]['processing_center'];
+                                    ?>
                                     <a href="<?php echo site_url('leads/lead_life_cycle/'.encode_id($value['id']))?>">Life Cycle</a>
-                                    <?php if($value['lead_source'] == 'walkin' && $value['mapping'] != 'BRANCH' && ($value['reroute_from_branch_id'] == '' || $value['reroute_from_branch_id'] == NULL)){?>
-                                    <span>|</span><a href="javascript:void(0);" id="send_rapc" data="<?php echo encode_id($value['id']);?>">Send processing Center</a>
+                                    <?php if($value['lead_source'] == 'walkin' && ($value['mapping'] != 'BRANCH' && $value['mapping'] == $branch_map) && ($value['reroute_from_branch_id'] == '' || $value['reroute_from_branch_id'] == NULL)){?>
+                                    <span>|</span><a href="javascript:void(0);" id="send_rapc" data="<?php echo encode_id($value['id']);?>">Send <?php echo $branch_map;?></a>
                                     <?php }?>
                                 </td>
                             </tr>

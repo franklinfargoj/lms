@@ -1209,6 +1209,17 @@ function sksort(&$array, $subkey="id", $sort_ascending=false) {
     else $array = $temp_array;
 }
 
+function get_branch_map($map,$branch_id){
+    $CI = & get_instance();
+    $CI->load->model('Lead');
+    $actionrapc = 'list';
+    $selectrapc = array();
+    $tablerapc = Tbl_processing_center ;
+    $whererapc = array('branch_id' => $branch_id,'processing_center' => $map);
+    $processing_center_details = $CI->Lead->get_leads($actionrapc, $tablerapc, $selectrapc, $whererapc, $joinrapc=array(), $group_by=array(), $order_by = array());
+    return $processing_center_details;
+}
+
 
 
 
