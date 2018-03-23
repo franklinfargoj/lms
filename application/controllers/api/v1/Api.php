@@ -2285,7 +2285,12 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                 $whererapc = array('branch_id' => $branch_id);
 
                 $leads['processing_center'] = $this->Lead->get_leads($actionrapc, $tablerapc, $selectrapc, $whererapc, $joinrapc=array(), $group_by=array(), $order_by = array());
-
+                $leads['processing_center'] = '';
+                if(!empty($leads['processing_center'])){
+                    $processing_branch = branchname($leads['processing_center'][0]['other_processing_center_id']);
+                    $processing_branch = $processing_branch[0]['name'];
+                    $leads['processing_center'] =$processing_branch;
+                }
                 $action = 'count';
                 $select = array();
                 $table = Tbl_Leads;
