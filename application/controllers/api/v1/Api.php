@@ -680,6 +680,7 @@ class Api extends REST_Controller
                 $status['title'] = $value;
                 $final_reason[] = $status;
             }
+
             $lead_status['status'] = $final_status;
             $lead_status['lead_source'] = $final_source;
             $lead_status['lead_identification'] = $final_type;
@@ -2277,6 +2278,13 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                 }
 
                 $leads['assigned_leads'] = $this->Lead->get_leads($action, $table, $select, $where, $joinbm, $group_by=array(), $order_by = array());
+
+                $actionrapc = 'list';
+                $selectrapc = array();
+                $tablerapc = Tbl_processing_center ;
+                $whererapc = array('branch_id' => $branch_id);
+
+                $leads['processing_center'] = $this->Lead->get_leads($actionrapc, $tablerapc, $selectrapc, $whererapc, $joinrapc=array(), $group_by=array(), $order_by = array());
 
                 $action = 'count';
                 $select = array();
