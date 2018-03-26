@@ -441,7 +441,7 @@ function sendPushNotification($emp_id,$message,$title)
             curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
             curl_setopt($crl, CURLOPT_POST,true);
             curl_setopt($crl, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-            curl_setopt($crl, CURLOPT_PROXY, $proxy);
+           // curl_setopt($crl, CURLOPT_PROXY, $proxy);
             curl_setopt($crl, CURLOPT_POSTFIELDS, $fields );
 
             curl_setopt($crl, CURLOPT_RETURNTRANSFER, true );
