@@ -15,7 +15,7 @@ class Cron extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-       is_cli() OR show_404();
+       //is_cli() OR show_404();
         $this->load->model('Lead');
     }
 function index(){
@@ -32,8 +32,8 @@ function index(){
      */
     public function gm_consolidated_mail()
     {
-        $cc =0;
-        $GM_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%GENERAL MANAGER%'),array(),'employee_dump');
+        $cc =1;
+        $GM_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation_id' => 570701),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($GM_list);die;
 
@@ -106,7 +106,7 @@ function index(){
      * 
      */
     public function zm_consolidated_mail(){
-        $cc =1;
+        $cc =0;
         $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($zone_list);die;
