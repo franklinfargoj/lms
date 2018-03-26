@@ -2198,7 +2198,8 @@ class Reports extends CI_Controller
                     $branchname13 = $branchname13[0]['name'];
                     $objSheet->getCell($excel_alpha[14] . $i)->setValue(ucwords($branchname13));
                     $objSheet->getCell($excel_alpha[15] . $i)->setValue(ucwords($value[$key]['created_by_hrms_id']));
-                    $zonename122 = zonename($value[$key]['zone_id']);
+                    $current_zone_id = zoneid($value[$key]['branch_id']);
+                    $zonename122 = zonename($current_zone_id);
                     $zonename122 = $zonename122[0]['name'];
                     $objSheet->getCell($excel_alpha[48] . $i)->setValue(ucwords($zonename122));
 

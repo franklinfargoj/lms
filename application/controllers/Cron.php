@@ -32,16 +32,16 @@ function index(){
      */
     public function gm_consolidated_mail()
     {
-        $cc =0;
-        $GM_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%GENERAL MANAGER%'),array(),'employee_dump');
+        $cc =1;
+        $GM_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation_id' => 570701,'zone_id NOT IN(009999)' => NULL),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($GM_list);die;
-
+        foreach ($GM_list as $k => $v) {
             $final = array();
             //For GENERAL MANAGER
             $general_manager = array('generated' => array(), 'converted' => array(), 'unassigned' => array(),'pending_before' => array(), 'pending' => array());
             $gm = $general_manager;
-            $zone_list = $this->Lead->get_employee_dump(array('DISTINCT(zone_id) as zone_id', 'zone_name'), array(), array(), 'employee_dump');
+            $zone_list = $this->Lead->get_employee_dump(array('DISTINCT(zone_id) as zone_id', 'zone_name'), array('designation like' => '%ZONAL MANAGER%','supervisor_id'=>$v->hrms_id), array(), 'employee_dump');
 //            echo "<pre>";
 //        print_r($zone_list);die;
             $general_manager['generated'] = $this->get_leads(array('type' => 'generated', 'till' => 'mtd', 'user_type' => 'ZM'));
@@ -86,7 +86,7 @@ function index(){
             //echo "<pre>";
           // print_r($final['general_manager']);die;
             //For GENERAL MANAGER
-        foreach ($GM_list as $k => $v) {
+
             $attachment_file = $this->export_to_excel('gm_consolidated_mail', $final['general_manager']);
             $attachment_file = array($attachment_file);
             $to = array('email' => $v->email_id,'name' => $v->name);
@@ -106,7 +106,7 @@ function index(){
      * 
      */
     public function zm_consolidated_mail(){
-        $cc =1;
+        $cc =0;
         $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
 //        echo "<pre>";
 //        print_r($zone_list);die;
@@ -755,7 +755,7 @@ $pending_days = 2;
     private function create_excel($action,$header_value,$data){
        // pe($data);die;
         $this->load->library('excel');
-        $file_name = time().'data.xls';
+        $file_name = 'leads_under_Denasampark_for_follow_up-'.date('d-m-Y').'-'.time().'data.xls';
         if($action == 'zm_consolidated_mail_advances' ){
             $file_name = 'Advances_leads.xls';
         }
