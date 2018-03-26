@@ -51,7 +51,7 @@ $input = get_session();
                     </div>
 
                     <div class="form-control">
-                        <label>Ticket Size:</label><span class="detail-label"><?php echo ucwords($leads[0]['lead_ticket_range']);?></span>
+                        <label>Ticket Size:</label><span class="detail-label"><?php echo convertCurrency($leads[0]['lead_ticket_range']).' Lacs';?></span>
                     </div>
 
                     <div class="form-control">
