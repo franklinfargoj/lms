@@ -698,8 +698,11 @@ class Leads extends CI_Controller
             }
             $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
             if($type == 'assigned'){
-                $all_status = $this->config->item('lead_status');
 
+                $all_status = $this->config->item('lead_status');
+                if($arrData['leads'][0]['product_category_id'] != 12){
+                    unset($all_status['Sanction']) ;
+                }
                 if($this->session->userdata('admin_type') == 'BM' && ($this->session->userdata('admin_id') != $arrData['leads'][0]['employee_id'])){
                     $bm_status = $all_status;
                     unset($bm_status['NC'],$bm_status['AO'],$bm_status['NI'],$bm_status['DC'],$bm_status['FU']);
