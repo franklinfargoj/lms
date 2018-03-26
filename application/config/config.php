@@ -539,6 +539,7 @@ $config['lead_status'] = array(
     'NC' => 'Not Contacted',
     'FU' => 'Interested' ,
     'DC' => 'Documents Collected',
+    'Sanction' => 'Sanction',
     'AO' => 'Account Opened',
     'Converted' => 'Converted',
     'NI' => 'Drop/Not Interested',
