@@ -1359,7 +1359,7 @@ class Leads extends CI_Controller
             $emp_id = $explode_employee[0];
 
             if(count($leads)>1){
-                $description="You have assigned ".count($leads)." leads<br>";
+                $description="You have assigned ".count($leads)." leads\n\n";
                 $description.=$multiple_description;
 
             }
