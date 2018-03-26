@@ -755,7 +755,7 @@ $pending_days = 2;
     private function create_excel($action,$header_value,$data){
        // pe($data);die;
         $this->load->library('excel');
-        $file_name = time().'data.xls';
+        $file_name = 'leads_under_Denasampark_for_follow_up-'.date('d-m-Y').'-'.time().'data.xls';
         if($action == 'zm_consolidated_mail_advances' ){
             $file_name = 'Advances_leads.xls';
         }

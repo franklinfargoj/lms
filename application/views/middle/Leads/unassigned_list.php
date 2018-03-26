@@ -137,6 +137,8 @@ $source = $this->config->item('lead_source');
                         if ($unassigned_leads) {
                             $i = 0;
                             foreach ($unassigned_leads as $key => $value) {
+                                $branch_mapp = get_branch_map($value['mapping'],$this->session->userdata('branch_id'));
+                                $branch_map = $branch_mapp[0]['processing_center'];
                     ?>
                             <tr>
                                 <td  style="text-align:center">
@@ -192,9 +194,6 @@ $source = $this->config->item('lead_source');
                                     ?>
                                 </td>
                                 <td>
-                                    <?php $branch_mapp = get_branch_map($value['mapping'],$this->session->userdata('branch_id'));
-                                           $branch_map = $branch_mapp[0]['processing_center'];
-                                    ?>
                                     <a href="<?php echo site_url('leads/lead_life_cycle/'.encode_id($value['id']))?>">Life Cycle</a>
                                     <?php if($value['lead_source'] == 'walkin' && ($value['mapping'] != 'BRANCH' && $value['mapping'] == $branch_map) && ($value['reroute_from_branch_id'] == '' || $value['reroute_from_branch_id'] == NULL)){?>
                                     <span>|</span><a href="javascript:void(0);" id="send_rapc" data="<?php echo encode_id($value['id']);?>">Send <?php echo $branch_map;?></a>
