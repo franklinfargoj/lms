@@ -756,8 +756,45 @@ class Leads extends CI_Controller
      * @return array
      */
     public function details_generated($lead_id){
+
         $lead_id = decode_id($lead_id);
         $arrData['leads'] = $this->Lead->lead_details($lead_id);
+
+        $all_status = $this->config->item('lead_status');
+        if($arrData['leads'][0]['status'] == 'NC'){
+            $nc_status = $all_status;
+            unset($nc_status['NC'],$nc_status['Converted'],$nc_status['Closed']);
+            $arrData['lead_status'] = $nc_status;
+        }
+        if($arrData['leads'][0]['status'] == 'NI'){
+            $arrData['lead_status'] = array('Closed' => 'Reject');
+        }
+        if($arrData['leads'][0]['status'] == 'FU'){
+            $fu_status = $all_status;
+            unset($fu_status['NC'],$fu_status['Converted'],$fu_status['FU'],$fu_status['Closed']);
+            $arrData['lead_status'] = $fu_status;
+        }
+        if($arrData['leads'][0]['status'] == 'DC'){
+            $dc_status = $all_status;
+            unset($dc_status['NC'],$dc_status['DC'],$dc_status['Converted'],$dc_status['FU'],$dc_status['Closed']);
+            $arrData['lead_status'] = $dc_status;
+        }
+        if($arrData['leads'][0]['status'] == 'AO'){
+            $ao_status = $all_status;
+            if($login_user['designation_name'] == 'EM'){
+                unset($ao_status['NC'],$ao_status['DC'],$ao_status['AO'],$ao_status['FU'],$ao_status['NI']);
+                $arrData['lead_status'] = $ao_status;
+            }else{
+                $arrData['lead_status'] = array('Converted' => 'Converted');
+            }
+
+        }
+
+
+
+
+        $lead_id = decode_id($lead_id);
+       // $arrData['leads'] = $this->Lead->lead_details($lead_id);
         $this->make_bread->add('Lead Generated','leads/generated');
         $this->make_bread->add('Lead Details','', 1);
         $arrData['breadcrumb'] = $this->make_bread->output();

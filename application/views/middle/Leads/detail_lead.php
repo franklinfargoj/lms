@@ -1,5 +1,5 @@
 <?php
-//    $lead_status = $this->config->item('lead_status');
+    $lead_status = $this->config->item('lead_status');
 $all_lead_status = $this->config->item('lead_status');
 $lead_type = $this->config->item('lead_type');
 $source = $this->config->item('lead_source');
@@ -51,7 +51,7 @@ $input = get_session();
                     </div>
 
                     <div class="form-control">
-                        <label>Ticket Size:</label><span class="detail-label"><?php echo ucwords($leads[0]['lead_ticket_range']);?></span>
+                        <label>Ticket Size:</label><span class="detail-label"><?php echo convertCurrency($leads[0]['lead_ticket_range']).' Lacs';?></span>
                     </div>
 
                     <div class="form-control">
@@ -72,36 +72,17 @@ $input = get_session();
 
                     <div class="form-control">
                         <label>Lead Status:</label> <span class="detail-label">
-
-                           <?php
-                           $status = $leads[0]['status'];
-                           switch ($status) {
-                               case "NC":
-                                   echo "Not contacted";
-                                   break;
-                               case "FU":
-                                   echo "Interested";
-                                   break;
-                               case "DC":
-                                   echo "Documents collected";
-                                   break;
-                               case "AO":
-                                   echo "Account opened";
-                                   break;
-                               case "Converted":
-                                   echo "Converted";
-                                   break;
-                               case "NI":
-                                   echo "Drop/Not interested";
-                                   break;
-                               case "Closed":
-                                   echo "Reject";
-                                   break;
-                               default:
-                                   echo "-----";
-                           }
-                           ?>
-
+                            <?php $account_no = $leads[0]['opened_account_no'] ? " (".$leads[0]['opened_account_no'].")" :'';
+                            if($leads[0]['status']=='FU')
+                            {
+                                $account_no = " (Next Followup Date :".date('d-m-Y',strtotime($leads[0]['remind_on'])).")";
+                            }
+                            if($leads[0]['status']=='NI')
+                            {
+                                $account_no = " (Reason :".$leads[0]['reason_for_drop'].")";
+                                $account_no .= "<br>Description : ".$leads[0]['desc_for_drop'];
+                            }
+                            echo isset($leads[0]['status']) ? $all_lead_status[$leads[0]['status']].$account_no : 'NA';?></span>
                     </div>
 
 
