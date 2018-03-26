@@ -72,6 +72,9 @@
                                 <label>Lead ID:</label> <span class="detail-label"><?php echo ucwords($leads[0]['id']);?></span>
                             </div>
                             <div class="form-control">
+                                <label>Ticket Size:</label> <span class="detail-label"><?php echo convertCurrency($leads[0]['lead_ticket_range']).' Lacs ';?></span>
+                            </div>
+                            <div class="form-control">
                                 <?php
                                     if(!empty($leads[0]['created_by_branch_id'])){
                                         $generatedb = branchname($leads[0]['created_by_branch_id']);
@@ -327,7 +330,11 @@
                                         <label>Followup Remark:<span style="color:red;">*</span></label>
                                         <textarea rows="4" cols="80" name="reminder_text"><?php if(!empty($leads[0]['reminder_text'])) echo $leads[0]['reminder_text'];?></textarea>
                                     </div>
-                                    <?php if($leads[0]['map_with'] != 'BRANCH'){?>
+                                    <?php
+                                    $branch_mapp = get_branch_map($leads[0]['map_with'],$this->session->userdata('branch_id'));
+                                    $branch_map = $branch_mapp[0]['processing_center'];
+                                    ?>
+                                    <?php if($leads[0]['map_with'] != 'BRANCH' && $leads[0]['map_with'] == $branch_map && ($leads[0]['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL)){?>
                                     <div class="form-control followUp" style="display:none">
                                         <label></label>
                                         <span style="color:red;">*</span> Is CIR / CIBIL report generated and Lead is Qualified ?
@@ -805,22 +812,19 @@
 
                         if(response['status'] == 'True'){
                             $('.loader').hide();
-                            alert('Success');
-                            $('.submit_button').show();
-                            $('#response_data').val(response['data']);
-                        }else{
-                            $('.loader').hide();
-                            var useraction = confirm("Are you sure you want to verify?");
+                            var useraction = confirm(response + " \n\n Is above record verified?");
                             if(useraction)
                             {
-                                //on click of okay, call the required API function
-                                window.location = "http://localhost/lms/leads/details/assigned/ytd/";
+                                $('.submit_button').show();
+                                $('#response_data').val(response['data']);
                             }
                             else
                             {
-                                //on click of cancel,redirect on the same page
-                                window.location = "http://localhost/lms/leads/leads_list/assigned/ytd";
+                                location.reload();
                             }
+
+                        }else{
+                            $('.loader').hide();
                             alert('Verification Failed');
                         }
             });

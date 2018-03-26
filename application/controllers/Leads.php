@@ -492,6 +492,7 @@ class Leads extends CI_Controller
         $arrData['lead_source'] = $lead_source;
         $arrData['type'] = 'unassigned';
         $middle = "Leads/unassigned_list";
+        //pe($arrData['unassigned_leads']);die;
         load_view($middle,$arrData);
     }
 
@@ -673,12 +674,12 @@ class Leads extends CI_Controller
             $join[] = array('table' => Tbl_Category.' as c','on_condition' => 'l.product_category_id = c.id','type' => '');
 
             if($type == 'generated'){
-                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','p.map_with','c.title AS category_title','l.product_category_id','la.status','la.employee_name');
+                $select = array('l.id','l.opened_account_no','l.customer_name','l.lead_identification','l.reroute_from_branch_id','l.lead_ticket_range','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','p.map_with','c.title AS category_title','l.product_category_id','la.status','la.desc_for_drop','la.employee_name');
                 $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => 'left');
             }
             if($type == 'assigned'){
                 //SELECT COLUMNS
-                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','p.map_with'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','la.desc_for_drop','r.remind_on','r.reminder_text');
+                $select = array('l.id','l.opened_account_no','l.remark','l.customer_name','l.lead_identification','l.reroute_from_branch_id','l.lead_ticket_range','l.lead_source','l.contact_no','l.product_id','l.created_by_branch_id','p.title AS product_title','p.map_with'/*,'l.interested_product_id','p1.title AS interested_product_title'*/,'c.title AS category_title','l.product_category_id','la.status','la.employee_id','la.employee_name','la.reason_for_drop','la.desc_for_drop','r.remind_on','r.reminder_text');
 
                 $where['la.is_deleted'] = 0;
                 $where['la.is_updated'] = 1;
@@ -982,13 +983,14 @@ class Leads extends CI_Controller
                                 $where = array(Tbl_Leads . '.id' => $lead_id);
                                 $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
                                 $leads_info = $leadsAssigned[0];
-                                //if ($leads_info['lead_source'] == 'analytics' || $leads_info['lead_source'] == 'enquiry' || $leads_info['lead_source'] == 'tie_ups') {
+                                if ($leads_info['lead_source'] == 'analytics' || $leads_info['lead_source'] == 'enquiry' || $leads_info['lead_source'] == 'tie_ups') {
+                                    if ($is_verified) {
 
                                     if ($leads_info['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL) {
                                         $action = 'list';
                                         $select = array('map_with');
                                         $table = Tbl_Products;
-                                        $where = array('id' => $leads_info['product_id'],'status'=>'active');
+                                        $where = array('id' => $leads_info['product_id'], 'status' => 'active');
                                         $product_mapped_with = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
                                         $product_mapped_with = $product_mapped_with[0]['map_with'];
                                         $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_data['branch_id']);
@@ -1002,22 +1004,26 @@ class Leads extends CI_Controller
                                             $update_data['reroute_from_branch_id'] = $branch_id;
                                             $update_data['branch_id'] = $routed_id;
                                             $update_data['zone_id'] = zoneid($routed_id);
-                                            $date = date('Y-m-d H:i:s',time()+5);
+                                            $date = date('Y-m-d H:i:s', time() + 5);
                                             $update_data['modified_on'] = $date;
+                                            $update_data['modified_by'] = $login_user['hrms_id'];
+                                            $update_data['modified_by_name'] = $login_user['full_name'];
+
                                             $where = array('id' => $lead_id);
                                             $table = Tbl_Leads;
                                             $this->Lead->update_lead_data($where, $update_data, $table);
                                             $whereUpdate = array('lead_id' => $lead_id);
                                             $table = Tbl_LeadAssign;
-                                            $data = array('is_updated' => 0,'is_deleted' => 1);
+                                            $data = array('is_updated' => 0, 'is_deleted' => 1);
                                             $order_by = "id DESC";
-                                            $limit= 1;
-                                            $this->Lead->update_routed_lead($whereUpdate, $table, $data,$order_by,$limit);
+                                            $limit = 1;
+                                            $this->Lead->update_routed_lead($whereUpdate, $table, $data, $order_by, $limit);
 
                                         }
 
                                     }
-                                //}
+                                }
+                                }
                             }
                         }
                     }
@@ -1059,6 +1065,47 @@ class Leads extends CI_Controller
                                 //This will add entry into reminder scheduler for status (Interested/Follow up)
                                 $this->Lead->add_reminder($remindData);
 
+                                if($is_verified){
+                                    $action = 'list';
+                                    $table = Tbl_Leads;
+                                    $select = array(Tbl_Leads . '.*');
+                                    $where = array(Tbl_Leads . '.id' => $lead_id);
+                                    $leadsAssigned = $this->Lead->get_leads($action, $table, $select, $where, $join = array(), $group_by = array(), $order_by = array());
+                                    $leads_info = $leadsAssigned[0];
+                                    $action = 'list';
+                                    $select = array('map_with');
+                                    $table = Tbl_Products;
+                                    $where = array('id' => $leads_info['product_id'], 'status' => 'active');
+                                    $product_mapped_with = $this->Lead->get_leads($action, $table, $select, $where, '', '', '');
+                                    $product_mapped_with = $product_mapped_with[0]['map_with'];
+                                    $whereArray = array('processing_center' => $product_mapped_with, 'branch_id' => $leads_data['branch_id']);
+                                    $routed_id = $this->Lead->check_mapping($whereArray);
+                                    if ($this->input->post('is_own_branch') != '0') {
+                                        $branch_id = $leads_data['branch_id'];
+                                    } else {
+                                        $branch_id = $this->input->post('branch_id');
+                                    }
+                                    if (!is_array($routed_id)) {
+                                        $update_data['reroute_from_branch_id'] = $branch_id;
+                                        $update_data['branch_id'] = $routed_id;
+                                        $update_data['zone_id'] = zoneid($routed_id);
+                                        $date = date('Y-m-d H:i:s', time() + 5);
+                                        $update_data['modified_on'] = $date;
+                                        $update_data['modified_by'] = $login_user['hrms_id'];
+                                        $update_data['modified_by_name'] = $login_user['full_name'];
+
+                                        $where = array('id' => $lead_id);
+                                        $table = Tbl_Leads;
+                                        $this->Lead->update_lead_data($where, $update_data, $table);
+                                        $whereUpdate = array('lead_id' => $lead_id);
+                                        $table = Tbl_LeadAssign;
+                                        $data = array('is_updated' => 0, 'is_deleted' => 1);
+                                        $order_by = "id DESC";
+                                        $limit = 1;
+                                        $this->Lead->update_routed_lead($whereUpdate, $table, $data, $order_by, $limit);
+
+                                    }
+                                }
                             }
                             if($lead_status == 'AO'){
                                 $cbs_res = $this->input->post('response_data');
