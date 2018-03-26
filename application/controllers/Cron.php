@@ -15,7 +15,7 @@ class Cron extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-       //is_cli() OR show_404();
+       is_cli() OR show_404();
         $this->load->model('Lead');
     }
 function index(){
