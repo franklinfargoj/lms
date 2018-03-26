@@ -71,27 +71,30 @@ $input = get_session();
 
                            <?php
                            $status = $leads[0]['status'];
-
                            switch ($status) {
                                case "NC":
                                    echo "Not contacted";
                                    break;
-                               case "":
+                               case "FU":
                                    echo "Interested";
                                    break;
-                               case "":
+                               case "DC":
                                    echo "Documents collected";
                                    break;
-                               case "":
+                               case "AO":
                                    echo "Account opened";
                                    break;
-                               case "":
+                               case "Converted":
                                    echo "Converted";
                                    break;
-                               case "":
-                                   echo "Not interested";
+                               case "NI":
+                                   echo "Drop/Not interested";
+                                   break;
+                               case "Closed":
+                                   echo "Reject";
+                                   break;
                                default:
-                                   echo " ";
+                                   echo "-----";
                            }
                            ?>
 

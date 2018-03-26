@@ -756,12 +756,12 @@ class Leads extends CI_Controller
      * @return array
      */
     public function details_generated($lead_id){
-
         $all_status = $this->config->item('lead_status');
-         $lead_id = decode_id($lead_id);
+        $lead_id = decode_id($lead_id);
         $arrData['leads'] = $this->Lead->lead_details($lead_id);
         $arrData['breadcrumb'] = $this->make_bread->output();
-            //pe($arrData['leads']);die;
+        $arrData['backUrl'] = 'leads/generated';
+        //pe($arrData['leads']);die;
         return load_view($middle = "Leads/detail_lead",$arrData);
     }
 

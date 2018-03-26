@@ -79,12 +79,14 @@ $source = $this->config->item('lead_source');
                                          if(empty($st)){
                                             echo " --- ";
                                          }else{
- echo $lead_status[$st[0]['status']];
+                                             echo $lead_status[$st[0]['status']];
                                          }
 
                                         ?>
                                     </td>
                                     <td>
+                                        <a href="<?php echo site_url('leads/details_generated/'.encode_id($value['id']))?>">View</a>
+                                        <span>|</span>
                                         <a href="<?php echo site_url('leads/lead_life_cycle/'.encode_id($value['id']))?>">Life Cycle</a>
                                     </td>
                                 </tr>
