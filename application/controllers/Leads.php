@@ -752,16 +752,16 @@ class Leads extends CI_Controller
      * Only for assigned lead list able to change lead status / Add Follow Up details
      * @author Franklin Fargoj
      * @access public
-     * @param $type,$till,$lead_id
+     * @param $lead_id
      * @return array
      */
     public function details_generated($lead_id){
-        $all_status = $this->config->item('lead_status');
         $lead_id = decode_id($lead_id);
         $arrData['leads'] = $this->Lead->lead_details($lead_id);
+        $this->make_bread->add('Lead Generated','leads/generated');
+        $this->make_bread->add('Lead Details','', 1);
         $arrData['breadcrumb'] = $this->make_bread->output();
         $arrData['backUrl'] = 'leads/generated';
-        //pe($arrData['leads']);die;
         return load_view($middle = "Leads/detail_lead",$arrData);
     }
 
@@ -1669,7 +1669,7 @@ class Leads extends CI_Controller
 
     public function generated(){
         /*Create Breadcumb*/
-        $this->make_bread->add('Lead Generated', 'leads/lead_generated', 0);
+        $this->make_bread->add('Lead Generated', '', 0);
         $arrData['breadcrumb'] = $this->make_bread->output();
         /*Create Breadcumb*/
         $login_user = get_session();

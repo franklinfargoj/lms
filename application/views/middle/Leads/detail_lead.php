@@ -44,10 +44,14 @@ $input = get_session();
                 );
                 echo form_open(site_url().'leads/update_lead_status', $attributes);
                 ?>
-                <div class="lead-form-left">
+                <div class="lead-form-left top-m">
 
                     <div class="form-control">
                         <label>Lead ID:</label> <span class="detail-label"><?php echo ucwords($leads[0]['id']);?></span>
+                    </div>
+
+                    <div class="form-control">
+                        <label>Ticket Size:</label><span class="detail-label"><?php echo ucwords($leads[0]['lead_ticket_range']);?></span>
                     </div>
 
                     <div class="form-control">
@@ -102,7 +106,7 @@ $input = get_session();
 
 
                     <div class="form-control">
-                        <label>Followup Remark:</label> <span class="detail-label"><?php //echo ucwords(strtolower($leads[0]['remark']));?></span>
+                        <label>Followup Remark:</label> <span class="detail-label"><?php echo ucwords(strtolower($leads[0]['reminder_text']));?></span>
                     </div>
 
 
