@@ -701,7 +701,7 @@ class Leads extends CI_Controller
 
                 $all_status = $this->config->item('lead_status');
                 if($arrData['leads'][0]['product_category_id'] != 12){
-                    unset($all_status['Sanction']) ;
+                    unset($all_status['Sanction']);
                 }
                 if($this->session->userdata('admin_type') == 'BM' && ($this->session->userdata('admin_id') != $arrData['leads'][0]['employee_id'])){
                     $bm_status = $all_status;
@@ -732,6 +732,12 @@ class Leads extends CI_Controller
                         unset($dc_status['NC'],$dc_status['DC'],$dc_status['Converted'],$dc_status['FU'],$dc_status['Closed']);
                         $arrData['lead_status'] = $dc_status;
                     }
+                    if($arrData['leads'][0]['status'] == 'Sanction'){
+                        $dc_status = $all_status;
+                        unset($dc_status['NC'],$dc_status['DC'],$dc_status['Sanction'],$dc_status['Converted'],$dc_status['FU'],$dc_status['Closed']);
+                        $arrData['lead_status'] = $dc_status;
+                    }
+
                     if($arrData['leads'][0]['status'] == 'AO'){
                         $ao_status = $all_status;
                         if($login_user['designation_name'] == 'EM'){
