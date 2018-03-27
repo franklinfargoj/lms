@@ -262,11 +262,16 @@
                                         Unassigned Leads
                                     </a>
                                 </li>
-                                                                <li>
+                                <li>
 									<a href="<?php echo site_url('reports/index/status_flow')?>">
 										Master Report
 									</a>
 								</li>
+                                <li>
+                                    <a href="<?php echo site_url('reports/index/dashboard')?>">
+                                        Dashboard
+                                    </a>
+                                </li>
 							</ul>
 						</li>
 						
