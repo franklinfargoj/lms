@@ -154,7 +154,7 @@ class Leads extends CI_Controller
                 if($lead_id != false){
                     //send sms
                     $sms = 'Thanks for showing interest in '.ucwords($product_name).' with Dena Bank. We will contact you shortly.';
-                    send_sms($this->input->post('contact_no'),$sms);
+                    //send_sms($this->input->post('contact_no'),$sms);
 
                     //Push notification
                     $emp_id = $login_user['hrms_id'];
@@ -1902,6 +1902,7 @@ private function verify_accountcbs($acc_no)
      *
      */
     function move_rapc(){
+        $login_user = get_session();
         $lead_id = decode_id($this->input->post('id'));
         $action = 'list';
         $table = Tbl_Leads;
@@ -1926,8 +1927,8 @@ private function verify_accountcbs($acc_no)
                 $update_data['reroute_from_branch_id'] = $leads_info['branch_id'];
                 $update_data['branch_id'] = $routed_id;
                 $update_data['zone_id'] = zoneid($routed_id);
-                $update_data['modified_by'] = zoneid($routed_id);
-                $update_data['modified_by_name'] = zoneid($routed_id);
+                $update_data['modified_by'] = $login_user['hrms_id'];
+                $update_data['modified_by_name'] = $login_user['full_name'];
                 $date = date('Y-m-d H:i:s',time()+5);
                 $update_data['modified_on'] = $date;
                 $where = array('id' => $lead_id);
@@ -1945,6 +1946,53 @@ private function verify_accountcbs($acc_no)
             }
 
         }
+    }
+
+    /* drop lead by BM
+     *
+     *
+     */
+    function drop_lead(){
+        $lead_id = decode_id($this->input->post('id'));
+        $login_user = get_session();
+        $lead_status_data = array(
+            'lead_id' => $lead_id,
+            'employee_id' => $login_user['hrms_id'],
+            'employee_name' => $login_user['full_name'],
+            'branch_id' => $login_user['branch_id'],
+            'district_id' => $login_user['district_id'],
+            'state_id' => $login_user['state_id'],
+            'zone_id' => $login_user['zone_id'],
+            'status' => 'NC',
+            'is_updated' => 0,
+            'created_on' => date('Y-m-d H:i:s'),
+            'created_by' => $login_user['hrms_id'],
+            'created_by_name' => $login_user['full_name'],
+            'modified_on' => date('Y-m-d H:i:s', time() + 5),
+            'modified_by' => $login_user['hrms_id'],
+            'modified_by_name' => $login_user['full_name']
+        );
+        $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+        $lead_status_data = array(
+            'lead_id' => $lead_id,
+            'employee_id' => $login_user['hrms_id'],
+            'employee_name' => $login_user['full_name'],
+            'branch_id' => $login_user['branch_id'],
+            'district_id' => $login_user['district_id'],
+            'state_id' => $login_user['state_id'],
+            'zone_id' => $login_user['zone_id'],
+            'status' => 'NI',
+            'reason_for_drop' => 'Not verified',
+            'desc_for_drop' => 'Not verified and drop from unassign list',
+            'is_updated' => 1,
+            'created_on' => date('Y-m-d H:i:s', time() + 7),
+            'created_by' => $login_user['hrms_id'],
+            'created_by_name' => $login_user['full_name'],
+            'modified_on' => date('Y-m-d H:i:s', time() + 10),
+            'modified_by' => $login_user['hrms_id'],
+            'modified_by_name' => $login_user['full_name']
+        );
+        $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
     }
 
 }
