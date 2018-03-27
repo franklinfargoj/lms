@@ -196,8 +196,8 @@ $source = $this->config->item('lead_source');
                                 <td>
                                     <a href="<?php echo site_url('leads/lead_life_cycle/'.encode_id($value['id']))?>">Life Cycle</a>
                                     <?php if($value['lead_source'] == 'walkin' && ($value['mapping'] != 'BRANCH' && $value['mapping'] == $branch_map) && ($value['reroute_from_branch_id'] == '' || $value['reroute_from_branch_id'] == NULL)){?>
-                                    <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href="javascript:void(0);" id="send_rapc" data="<?php echo encode_id($value['id']);?>">Send To <?php echo $branch_map;?></a>
-                                    <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href="javascript:void(0);" id="drop_lead" data="<?php echo encode_id($value['id']);?>">Drop </a>
+                                    <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href="javascript:void(0);" class="send_rapc" data="<?php echo encode_id($value['id']);?>">Send To <?php echo $branch_map;?></a>
+                                    <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href="javascript:void(0);" class="drop_lead" data="<?php echo encode_id($value['id']);?>">Drop </a>
                                     <?php }?>
                                 </td>
                             </tr>
@@ -253,7 +253,7 @@ $source = $this->config->item('lead_source');
             }
         });
 
-        $("#send_rapc").click(function() {
+        $(".send_rapc").click(function() {
             if (window.confirm('CIR / CIBIL report generated and Lead is Qualified?'))
             {
                 $.ajax({
@@ -269,7 +269,7 @@ $source = $this->config->item('lead_source');
             }
         });
 
-        $("#drop_lead").click(function() {
+        $(".drop_lead").click(function() {
             if (window.confirm('Are you sure want to drop this lead?'))
             {
                 $.ajax({
