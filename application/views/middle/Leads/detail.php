@@ -337,7 +337,7 @@
                                     <?php if($leads[0]['map_with'] != 'BRANCH' && $leads[0]['map_with'] == $branch_map && ($leads[0]['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL)){?>
                                     <div class="form-control followUp" style="display:none">
                                         <label></label>
-                                        <span style="color:red;">*</span> Is CIR / CIBIL report generated and Lead is Qualified ?
+                                        <span style="color:red;">*</span> CIR / CIBIL report generated and Lead is Qualified?
                                         <span>
                                         <div class="radio-control">
                                             <input type="radio" name="is_verified" id="is_verified" value="1" />

@@ -3138,12 +3138,77 @@ private function verify_cbs_account($acc_no)
                     $this->Lead->update_routed_lead($whereUpdate, $table, $data, $order_by, $limit);
 
                 }
-                $error = array(
+                $mag = array(
                     "result" => True,
                     "data" => array("Lead Assigned Successfully")
                 );
-                returnJson($error);
+                returnJson($msg);
             }
+        }
+        $error = array(
+            "result" => False,
+            "data" => array("Missing Parameters.")
+        );
+        returnJson($error);
+    }
+
+    /* drop lead by BM
+   *
+   *
+   */
+    function drop_lead(){
+        $params = $this->input->post();
+        if (!empty($params) && isset($params['lead_id']) && !empty($params['lead_id']) &&
+            isset($params['hrms_id']) && !empty($params['hrms_id']) &&
+            isset($params['full_name']) && !empty($params['full_name'])&&
+            isset($params['branch_id']) && !empty($params['branch_id'])&&
+            isset($params['district_id']) && !empty($params['district_id'])&&
+            isset($params['state_id']) && !empty($params['state_id'])&&
+            isset($params['zone_id']) && !empty($params['zone_id'])
+        ) {
+            $lead_status_data = array(
+                'lead_id' => $params['lead_id'],
+                'employee_id' => $params['hrms_id'],
+                'employee_name' => $params['full_name'],
+                'branch_id' => $params['branch_id'],
+                'district_id' => $params['district_id'],
+                'state_id' => $params['state_id'],
+                'zone_id' => $params['zone_id'],
+                'status' => 'NC',
+                'is_updated' => 0,
+                'created_on' => date('Y-m-d H:i:s'),
+                'created_by' => $params['hrms_id'],
+                'created_by_name' => $params['full_name'],
+                'modified_on' => date('Y-m-d H:i:s', time() + 5),
+                'modified_by' => $params['hrms_id'],
+                'modified_by_name' => $params['full_name']
+            );
+            $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+            $lead_status_data1 = array(
+                'lead_id' => $params['lead_id'],
+                'employee_id' => $params['hrms_id'],
+                'employee_name' => $params['full_name'],
+                'branch_id' => $params['branch_id'],
+                'district_id' => $params['district_id'],
+                'state_id' => $params['state_id'],
+                'zone_id' => $params['zone_id'],
+                'status' => 'NI',
+                'reason_for_drop' => 'Not verified',
+                'desc_for_drop' => 'Not verified and drop from unassign list',
+                'is_updated' => 1,
+                'created_on' => date('Y-m-d H:i:s', time() + 7),
+                'created_by' => $params['hrms_id'],
+                'created_by_name' => $params['full_name'],
+                'modified_on' => date('Y-m-d H:i:s', time() + 10),
+                'modified_by' => $params['hrms_id'],
+                'modified_by_name' => $params['full_name']
+            );
+            $this->Lead->insert_lead_data($lead_status_data1, Tbl_LeadAssign);
+            $msg = array(
+                "result" => True,
+                "data" => array("Lead Drop Successfully")
+            );
+            returnJson($msg);
         }
         $error = array(
             "result" => False,

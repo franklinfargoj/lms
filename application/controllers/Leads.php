@@ -1973,7 +1973,7 @@ private function verify_accountcbs($acc_no)
             'modified_by_name' => $login_user['full_name']
         );
         $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
-        $lead_status_data = array(
+        $lead_status_data1 = array(
             'lead_id' => $lead_id,
             'employee_id' => $login_user['hrms_id'],
             'employee_name' => $login_user['full_name'],
@@ -1992,7 +1992,7 @@ private function verify_accountcbs($acc_no)
             'modified_by' => $login_user['hrms_id'],
             'modified_by_name' => $login_user['full_name']
         );
-        $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+        $this->Lead->insert_lead_data($lead_status_data1, Tbl_LeadAssign);
     }
 
 }
