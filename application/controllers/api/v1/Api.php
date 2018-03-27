@@ -2817,7 +2817,7 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                 $this->Lead->insert_lead_data($responseData,Tbl_cbs);
                 $table = Tbl_Leads;
                 $where = array('id'=>$params['lead_id']);
-                $data = array('opened_account_no'=>aes_decode($acc_no),'actual_amt_cbs'=>$split_cbs_resp[0]);
+                $data = array('opened_account_no'=>aes_decode($acc_no));
                 $this->Lead->update_lead_data($where,$data,$table);
                 $res = array('result' => True,
                     'data' => array('Successfully Verified.'));

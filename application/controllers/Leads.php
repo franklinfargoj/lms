@@ -1095,7 +1095,7 @@ class Leads extends CI_Controller
                                 $this->Lead->insert_lead_data($responseData,Tbl_cbs);
                                 $table = Tbl_Leads;
                                 $where = array('id'=>$lead_id);
-                                $data = array('opened_account_no'=>trim($this->input->post('accountNo')),'actual_amt_cbs'=>$split_cbs_resp[0]);
+                                $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
                                 $this->Lead->update_lead_data($where,$data,$table);
                             }
                             if($lead_status == 'Converted'){
