@@ -3156,7 +3156,7 @@ private function verify_cbs_account($acc_no)
    *
    *
    */
-    function drop_lead(){
+    function drop_lead_post(){
         $params = $this->input->post();
         if (!empty($params) && isset($params['lead_id']) && !empty($params['lead_id']) &&
             isset($params['hrms_id']) && !empty($params['hrms_id']) &&
