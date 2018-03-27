@@ -25,9 +25,9 @@ class Api extends REST_Controller
         // Initialization of class
         parent::__construct();
         $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
-        if($explode[0] != 'okhttp'){
-           echo "Invalid Access";die;
-        }
+//        if($explode[0] != 'okhttp'){
+//           echo "Invalid Access";die;
+//        }
         $this->load->model('Lead');
         $this->load->model('Login_model');
         $this->load->model('Ticker_model', 'ticker');
@@ -36,7 +36,7 @@ class Api extends REST_Controller
         $this->load->model('Notification_model', 'notification');
         $method = $this->router->method;
         $authorised_methods = $this->config->item('authorised_methods');
-        if(in_array($method,$authorised_methods)){
+        /*if(in_array($method,$authorised_methods)){
             return true;
         }else{
             $params = $this->input->post();
@@ -63,7 +63,7 @@ class Api extends REST_Controller
                     returnJson($response);
                 }
             }
-        }
+        }*/
     }
 
     public function leads_performance_post()
@@ -314,7 +314,7 @@ class Api extends REST_Controller
         if($lead_id != false){
             //send sms
         $sms = 'Thanks for showing interest in '.ucwords($product_name).' with Dena Bank. We will contact you shortly.';
-        send_sms($lead_data['contact_no'],$sms);
+        //send_sms($lead_data['contact_no'],$sms);
 
         //Push notification
             $emp_id = $params['created_by'];
