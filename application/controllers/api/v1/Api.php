@@ -2781,8 +2781,6 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
     private function insert_notification($lead_data){
         if(!empty($lead_data)){
             $this->load->model('Master_model','master');
-            $productData = $this->master->view_product($lead_data['product_id']);
-
             $title = 'New lead added';
             $description = 'Lead For '.ucwords($lead_data['customer_name']).' submitted sucessfully';
             $priority = 'Normal';
