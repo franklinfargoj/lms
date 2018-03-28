@@ -1,6 +1,7 @@
 <?php
 $lead_type = $this->config->item('lead_type');
 $lead_status = $this->config->item('lead_status');
+$lead_source = $this->config->item('lead_source');
 ?>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
@@ -90,238 +91,89 @@ echo form_hidden($data);
                 </div>
             </div>
         </div>
-        <?php if($this->session->userdata('admin_type') != 'Super admin2'){?>
         <img class="loader" src="<?php echo base_url().ASSETS;?>images/35.gif" style="display:none;">
-        <?php
-        if(isset($leads) && !empty($leads)){
-        ?>
+
         <script type="text/javascript">
             $('.loader').show();
         </script>
         <!-- BEGIN LEADS -->
-        <div class="lead-top result" style="display:none;">
-            <div class="container clearfix">
-                <div class="float-left">
-                <span class="total-lead">
-                    <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM')) && $view == 'branch'){ ?>
-                        Total Users Count Of Your Zone
-                    <?php }else{?>
-                        Total Users Count
-                    <?php }?>
-                </span>
-                    <span class="lead-num"> : <?php echo $Total;?></span>
-                </div>
-                <div class="float-right">
-                    <?php if(in_array($this->session->userdata('admin_type'),array('ZM','GM'))){ ?>
-
-                        <?php
-                        $chart_param = $start_date.'/'.$end_date;
-                        $chart_param=encode_id($chart_param);
-                        ?>
-                        <a href="<?php echo site_url('charts/index/usage/'.$chart_param)?>" class="btn-Download">
-                            Chart View
-                        </a>
-                        &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <?php }?>
-                    <a href="javascript:void(0);" class="export_to_excel btn-Download">
-                        Export to Excel
-                    </a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <a href="javascript:void(0);" class="export_national btn-Download">
-                        Download Bank Data
-                    </a>
-                </div>
-            </div>
-        </div>
         <?php echo form_close();?>
         <div class="result" style="display:none;">
             <div class="page-content">
                 <div class="container">
-                    <table id="sample_3" class="display lead-table">
-                        <thead>
+                    <table border="1">
                         <tr>
-                            <th align="center">
-                                Sr. No.
-                            </th>
-                            <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
-                                <th>
-                                    Zone
-                                </th>
-                            <?php }?>
-                            <?php if(in_array($viewName,array('BM','EM'))){?>
-                                <th>
-                                    Branch
-                                </th>
-                            <?php }?>
-                            <?php if(in_array($viewName,array('EM'))){?>
-                                <!--                                <th>-->
-                                <!--                                    HRMS ID-->
-                                <!--                                </th>-->
-                                <th>
-                                    Employee Name
-                                </th>
-                                <!--                                <th>-->
-                                <!--                                    Designation-->
-                                <!--                                </th>-->
-                            <?php }?>
-                            <?php if(in_array($viewName,array('EM'))){?>
-                                <th align="center">
-                                    Logged in count
-                                </th>
-                            <?php }else{?>
-                                <th align="center">
-                                    Total User
-                                </th>
-                                <th align="center">
-                                    Logged in User
-                                </th>
-                                <th align="center">
-                                    Not Logged in User
-                                </th>
-                            <?php }?>
-                            <?php if(in_array($viewName,array('ZM','BM'))){?>
-                                <th>
-                                    Action
-                                </th>
-                            <?php }?>
+                            <td></td>
+                            <td>Emp Adoption</td>
+                            <td>Emp Adoption</td>
+                            <td>Emp Usage</td>
+                            <td>Branch Adoption</td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $i = 0;
-                        foreach ($leads as $key => $value) {
-                            ?>
-                            <tr>
-                                <td align="center">
-                                    <?php echo ++$i;?>
-                                </td>
-                                <?php if(in_array($viewName,array('ZM','BM','EM'))){?>
-                                    <td>
-                                        <?php
-                                        echo isset($value['zone_name']) ? ucwords(strtolower($value['zone_name'])) : '';
-                                        ?>
-                                    </td>
-                                <?php }?>
-                                <?php if(in_array($viewName,array('BM','EM'))){?>
-                                    <td>
-                                        <?php
-                                        echo isset($value['zone_name']) ? ucwords(strtolower($value['branch_name'])) : '';
-                                        ?>
-                                    </td>
-                                <?php }?>
-                                <?php if(in_array($viewName,array('EM'))){?>
-                                    <!--                                <td>-->
-                                    <!--                                    --><?php
-//                                    echo isset($value['employee_id']) ? $value['employee_id'] : '';
-//                                    ?>
-                                    <!--                                </td>-->
-                                    <td>
-                                        <?php
-                                        echo isset($value['employee_name']) ? ucwords(strtolower($value['employee_name'])) : '';
-                                        ?>
-                                    </td>
-                                    <!--                                <td>-->
-                                    <!--                                    --><?php
-//                                    echo isset($value['designation']) ? $value['designation'] : '';
-//                                    ?>
-                                    <!--                                </td>-->
-                                <?php }?>
-                                <?php if(in_array($viewName,array('EM'))){?>
-                                    <td align="center">
-                                        <?php echo  $value['total'];?>
-                                    </td>
-                                <?php }else{?>
-                                    <td align="center">
-                                        <?php echo  isset($value['total_user']) ? $value['total_user'] : 0;?>
-                                    </td>
-                                    <td align="center">
-                                        <?php echo  $value['total'];?>
-                                    </td>
-                                    <td align="center">
-                                        <?php echo isset($value['not_logged_in']) ? $value['not_logged_in'] : 0;?>
-                                    </td>
-                                <?php }?>
-                                <?php if(in_array($viewName,array('ZM','BM'))){
-                                    $param = '';
-                                    if(isset($value['zone_id'])){
-                                        $param .= '/'.encode_id($value['zone_id']);
-                                    }
-                                    if(isset($value['branch_id'])){
-                                        $param .= '/'.encode_id($value['branch_id']);
-                                    }
-                                    ?>
-                                    <td>
-                                        <?php if($this->session->userdata('admin_type') == 'ZM' || $this->session->userdata('admin_type') == 'BM'){?>
-                                            <?php if ($i == 1 || $view == 'branch') {?>
-                                                <?php
-                                                if(in_array($viewName,array('ZM'))){
-                                                    if($view == 'branch' || $view == 'employee'){
-                                                    }else{
-                                                        ?>
-                                                        <a class="" href="<?php echo site_url('reports/index/usage/branch'.$param)?>">
-                                                            Branch View
-                                                        </a>
-                                                        <span>|</span>
-                                                        <?php
-                                                    }
-                                                }
-                                                ?>
-                                                <?php
-                                                if(in_array($viewName,array('ZM','BM'))){
-                                                    if($view == 'employee'){
-                                                    }else {
-
-                                                        ?>
-                                                        <a class=""
-                                                           href="<?php echo site_url('reports/index/usage/employee' . $param) ?>">
-                                                            Employee View
-                                                        </a>
-                                                        <?php
-                                                    }
-
-                                                }
-                                                ?>
-                                            <?php }?>
-                                        <?php }else{?>
-
-                                            <?php
-                                            if(in_array($viewName,array('ZM'))){
-                                                if($view == 'branch' || $view == 'employee'){
-                                                }else{
-                                                    ?>
-                                                    <a class="" href="<?php echo site_url('reports/index/usage/branch'.$param)?>">
-                                                        Branch View
-                                                    </a>
-                                                    <span>|</span>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
-                                            <?php
-                                            if(in_array($viewName,array('ZM','BM'))){
-                                                if($view == 'employee'){
-                                                }else {
-
-                                                    ?>
-                                                    <a class=""
-                                                       href="<?php echo site_url('reports/index/usage/employee' . $param) ?>">
-                                                        Employee View
-                                                    </a>
-                                                    <?php
-                                                }
-
-                                            }
-                                            ?>
-
-                                        <?php }?>
-                                    </td>
-                                <?php }?>
-                            </tr>
-                            <?php
-                        }
-                        ?>
-                        </tbody>
+                        <tr>
+                            <td></td>
+                            <td>Unique employee logins (since inception)</td>
+                            <td>Unique employee logins (Today)</td>
+                            <td>Unique employees generating leads</td>
+                            <td>Branches generating leads (at least 1)</td>
+                        </tr>
+                        <tr>
+                            <td>Actual</td>
+                            <td><?php echo $unique_login_count;?></td>
+                            <td><?php echo $today_unique_login_count;?></td>
+                            <td><?php echo $unique_leadcreator_employee_count;?></td>
+                            <td><?php echo $unique_leadcreator_branch_count;?></td>
+                        </tr>
+                        <tr>
+                            <td>Base</td>
+                            <td><?php echo $total_employee_count;?></td>
+                            <td><?php echo $total_employee_count;?></td>
+                            <td><?php echo $total_employee_count;?></td>
+                            <td><?php echo $total_branch_count;?></td>
+                        </tr>
+                        <tr>
+                            <td>%</td>
+                            <td><?php echo round(($unique_login_count/$total_employee_count)*100,2).'%';?></td>
+                            <td><?php echo round(($today_unique_login_count/$total_employee_count)*100,2).'%';?></td>
+                            <td><?php echo round(($unique_leadcreator_employee_count/$total_employee_count)*100,2).'%';?></td>
+                            <td><?php echo round(($unique_leadcreator_branch_count/$total_branch_count)*100,2).'%';?></td>
+                        </tr>
                     </table>
+                    <?php
+                    if(isset($leads) && !empty($leads)){
+
+//                    pe($leads);
+//                    pe($product_category);
+                    foreach ($lead_source as $key=>$val) {?>
+                        <table>
+                        <?php if (!empty($leads[$key])) {
+                            echo "<p>".$val."</p>";?>
+                        <tr>
+                            <td>Category</td>
+                            <td># of input leads</td>
+                            <td># of leads converted</td>
+                            <td>% Conversion (#)</td>
+                            <td>Business in Cr. (Input)</td>
+                            <td>Business Converted (in Cr)</td>
+                            <td> % Conversion (Amt)</td>
+                        </tr>
+                        <?php }?>
+                        <?php
+                        if (!empty($leads[$key])) {
+                            foreach ($product_category as $row) {
+                                ?>
+                                <tr>
+                                    <td><?php echo $row['title'];?></td>
+                                    <td><?php echo (isset($leads[$key]['generated'][$row['id']]) && $leads[$key]['generated'][$row['id']])?$leads[$key]['generated'][$row['id']]:0;?></td>
+                                    <td><?php echo (isset($leads[$key]['converted'][$row['id']]) && $leads[$key]['converted'][$row['id']])?$leads[$key]['converted'][$row['id']]:0;?></td>
+                                    <td><?php echo (isset($leads[$key]['generated'][$row['id']]) && $leads[$key]['generated'][$row['id']] && isset($leads[$key]['converted'][$row['id']]) && $leads[$key]['converted'][$row['id']])?round(($leads[$key]['converted'][$row['id']]/$leads[$key]['generated'][$row['id']])*100,2).'%':'0.00%';?></td>
+                                    <td><?php echo (isset($leads[$key]['estimated_business'][$row['id']]) && $leads[$key]['estimated_business'][$row['id']])?$leads[$key]['estimated_business'][$row['id']]:0;?></td>
+                                    <td><?php echo (isset($leads[$key]['actual_business'][$row['id']]) && $leads[$key]['actual_business'][$row['id']])?$leads[$key]['actual_business'][$row['id']]:0;?></td>
+                                    <td><?php echo (isset($leads[$key]['estimated_business'][$row['id']]) && $leads[$key]['estimated_business'][$row['id']] && isset($leads[$key]['actual_business'][$row['id']]) && $leads[$key]['actual_business'][$row['id']])?round(($leads[$key]['actual_business'][$row['id']]/$leads[$key]['estimated_business'][$row['id']])*100,2).'%':'0.00%';?></td>
+                                </tr>
+                            <?php } ?>
+                            </table>
+                        <?php }
+                    }?>
                 </div>
             </div>
         </div>
@@ -333,15 +185,7 @@ echo form_hidden($data);
 }else{?>
     <span class="no_result">No records found</span>
 <?php }?>
-<?php }else{?>
-    <div class="container clearfix">
-        <div class="float-right">&nbsp;
-            <a href="javascript:void(0);" class="export_national btn-Download">
-                Download Bank Data
-            </a>
-        </div>
-    </div>
-<?php }?>
+
 <span class="bg-bottom"></span>
 <!-- END LEADS-->
 <script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>

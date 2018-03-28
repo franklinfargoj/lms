@@ -267,11 +267,13 @@
 										Master Report
 									</a>
 								</li>
+                                <?php if($this->session->userdata('admin_type')=='Super admin'){?>
                                 <li>
                                     <a href="<?php echo site_url('reports/index/dashboard')?>">
                                         Dashboard
                                     </a>
                                 </li>
+                                <?php }?>
 							</ul>
 						</li>
 						
