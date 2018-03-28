@@ -1607,7 +1607,7 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             sendPushNotification($emp_id,$description,$title);
 
             $res = array('result' => True,
-                'data' => 'Leads assigned successfully');
+                'data' => array('Leads assigned successfully'));
             returnJson($res);
 
         } else {
