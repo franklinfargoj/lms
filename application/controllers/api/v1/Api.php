@@ -2796,9 +2796,11 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
           //  isset($params['account_no']) && strlen(trim($params['account_no'])) == 12){
             isset($params['account_no'])) {
             //$api_res = $this->verify_cbs_account(trim($params['account_no']));
-            $api_res = $this->verify_cbs_account(aes_decode(trim($params['account_no'])));
-            $api_res = strip_tags($api_res);
-            $api_res = json_decode($api_res,true);            
+//            $api_res = $this->verify_cbs_account(aes_decode(trim($params['account_no'])));
+//            $api_res = strip_tags($api_res);
+//            $api_res = json_decode($api_res,true);
+           $api_res['status'] = True;
+            $api_res['data'] = '800000~JIGNASHA SURESHCHANDRA RESHAMWALA~9824955279~jignadena@yahoo.co.in';
             if($api_res['status'] != 'False'){
 //                $acc_no = $params['account_no'];
                 $cbs_res = $api_res['data'];
@@ -2838,7 +2840,9 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
         if(isset($params['lead_id']) && $params['lead_id'] !='' &&
             //  isset($params['account_no']) && strlen(trim($params['account_no'])) == 12){
             isset($params['account_no'])) {
-
+            $result = array('result' => False,
+                'data' => array('Record Already Saved'));
+            returnJson($result);
             $whereEx = array('lead_id'=>$params['lead_id']);
             $is_exsits = $this->Lead->is_cbs_exsits($whereEx);
             if($is_exsits){
