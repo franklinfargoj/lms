@@ -1791,7 +1791,7 @@ class Reports extends CI_Controller
 //        pe($header_value);
         // pe($data);die;
         $this->load->library('excel');
-        $file_name = time().'data.xls';
+        $file_name = $action.'-'.time().'data.xls';
         $excel_alpha = unserialize(EXCEL_ALPHA);
         $objPHPExcel = $this->excel;
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
@@ -2096,7 +2096,7 @@ class Reports extends CI_Controller
 //        pe($header_value);
         // pe($data);die;
         $this->load->library('excel');
-        $file_name = time().'data.xls';
+        $file_name = 'Master_report-'.date('d-m-Y').'-'.time().'data.xls';
         $excel_alpha = unserialize(EXCEL_ALPHA);
         $objPHPExcel = $this->excel;
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Calibri');
