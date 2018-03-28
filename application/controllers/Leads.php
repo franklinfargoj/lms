@@ -703,20 +703,12 @@ class Leads extends CI_Controller
                 if($arrData['leads'][0]['product_category_id'] != 12){
                     unset($all_status['Sanction']);
                 }
-                if($this->session->userdata('admin_type') == 'BM' && ($this->session->userdata('admin_id') != $arrData['leads'][0]['employee_id'])){
-                    $bm_status = $all_status;
-                    unset($bm_status['NC'],$bm_status['AO'],$bm_status['NI'],$bm_status['DC'],$bm_status['FU']);
-                    if($arrData['leads'][0]['status'] == 'NI'){
-                        unset($bm_status['Converted']);
-                    }
-                    if($arrData['leads'][0]['status'] == 'AO'){
-                        unset($bm_status['Closed']);
-                    }
-                    $arrData['lead_status'] = $bm_status;
-                }else{
+                if($this->session->userdata('admin_type') == 'EM'){
+                    unset($all_status['Converted'],$all_status['Closed']);
+                }
                     if($arrData['leads'][0]['status'] == 'NC'){
                         $nc_status = $all_status;
-                        unset($nc_status['NC'],$nc_status['Converted'],$nc_status['Closed']);
+                        unset($nc_status['NC']);
                         $arrData['lead_status'] = $nc_status;
                     }
                     if($arrData['leads'][0]['status'] == 'NI'){
@@ -724,17 +716,17 @@ class Leads extends CI_Controller
                     }
                     if($arrData['leads'][0]['status'] == 'FU'){
                         $fu_status = $all_status;
-                        unset($fu_status['NC'],$fu_status['Converted'],$fu_status['FU'],$fu_status['Closed']);
+                        unset($fu_status['NC'],$fu_status['FU']);
                         $arrData['lead_status'] = $fu_status;
                     }
                     if($arrData['leads'][0]['status'] == 'DC'){
                         $dc_status = $all_status;
-                        unset($dc_status['NC'],$dc_status['DC'],$dc_status['Converted'],$dc_status['FU'],$dc_status['Closed']);
+                        unset($dc_status['NC'],$dc_status['DC'],$dc_status['FU']);
                         $arrData['lead_status'] = $dc_status;
                     }
                     if($arrData['leads'][0]['status'] == 'Sanction'){
                         $dc_status = $all_status;
-                        unset($dc_status['NC'],$dc_status['DC'],$dc_status['Sanction'],$dc_status['Converted'],$dc_status['FU'],$dc_status['Closed']);
+                        unset($dc_status['NC'],$dc_status['DC'],$dc_status['Sanction'],$dc_status['FU']);
                         $arrData['lead_status'] = $dc_status;
                     }
 
@@ -748,7 +740,7 @@ class Leads extends CI_Controller
                         }
 
                     }
-                }
+
             }
 
         }
@@ -1080,23 +1072,27 @@ class Leads extends CI_Controller
                                 }
                             }
                             if($lead_status == 'AO'){
-                                $cbs_res = $this->input->post('response_data');
-                                $split_cbs_resp = explode('~',$cbs_res);
-                                $responseData = array(
-                                    'lead_id' => $lead_id,
-                                    'account_no'=>trim($this->input->post('accountNo')),
-                                    'response_data' => $this->input->post('response_data'),
-                                    'amount' => $split_cbs_resp[0],
-                                    'customer_name' => $split_cbs_resp[1],
-                                    'customer_contact_no' => $split_cbs_resp[2],
-                                    'email_id' => $split_cbs_resp[3],
-                                );
-                                //This will add entry into cbs response for status (Account Opened)
-                                $this->Lead->insert_lead_data($responseData,Tbl_cbs);
-                                $table = Tbl_Leads;
-                                $where = array('id'=>$lead_id);
-                                $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
-                                $this->Lead->update_lead_data($where,$data,$table);
+                                $whereEx = array('lead_id'=>$lead_id);
+                                $is_exsits = $this->Lead->is_cbs_exsits($whereEx);
+                                if(!$is_exsits) {
+                                    $cbs_res = $this->input->post('response_data');
+                                    $split_cbs_resp = explode('~', $cbs_res);
+                                    $responseData = array(
+                                        'lead_id' => $lead_id,
+                                        'account_no' => trim($this->input->post('accountNo')),
+                                        'response_data' => $this->input->post('response_data'),
+                                        'amount' => $split_cbs_resp[0],
+                                        'customer_name' => $split_cbs_resp[1],
+                                        'customer_contact_no' => $split_cbs_resp[2],
+                                        'email_id' => $split_cbs_resp[3],
+                                    );
+                                    //This will add entry into cbs response for status (Account Opened)
+                                    $this->Lead->insert_lead_data($responseData, Tbl_cbs);
+                                    $table = Tbl_Leads;
+                                    $where = array('id' => $lead_id);
+                                    $data = array('opened_account_no' => trim($this->input->post('accountNo')));
+                                    $this->Lead->update_lead_data($where, $data, $table);
+                                }
                             }
                             if($lead_status == 'Converted'){
                                 $this->points_distrubution($lead_id);

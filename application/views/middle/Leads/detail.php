@@ -150,80 +150,14 @@
                                         }
                                     ?>
                                 </div> -->
-                            <?php if($this->session->userdata('admin_type')=='BM' && ($this->session->userdata('admin_id') == $leads[0]['employee_id']))
-                            {?>
-                                <div class="form-control">
-                                    <?php
-
-                                    if(in_array($leads[0]['status'],array('Closed','Converted'))
-                                    ){}
-                                        else {
-                                            ?>
-                                            <label>Change Status:</label>
-                                    <?php
-                                        }
-                                        $data = array(
-                                            'lead_id' => encode_id($leads[0]['id']),
-                                            'lead_type'    => 'assigned',
-                                            'remind_to'  => $leads[0]['employee_id']
-                                        );
-                                        echo form_hidden($data);
-                                        $options1[$leads[0]['status']]='Select';
-                                        if(!empty($lead_status)){
-                                            foreach ($lead_status as $key => $value) {
-                                                if($leads[0]['category_title'] != 'Fee Income') {
-                                                    if ($key != $leads[0]['status']) {
-                                                        if (((in_array($this->session->userdata('admin_type'), array('EM'))) && (in_array($key, array('Converted', 'Closed')))) || (in_array($key, $previous_status))) {
-                                                            continue;
-                                                        }
-                                                    }
-                                                    $options1[$key] = $value;
-                                                }else{
-                                                    if($key !='AO'){
-                                                        if ($key != $leads[0]['status']) {
-                                                            if (((in_array($this->session->userdata('admin_type'), array('EM'))) && (in_array($key, array('Converted', 'Closed')))) || (in_array($key, $previous_status))) {
-                                                                continue;
-                                                            }
-                                                        }
-                                                        $options1[$key] = $value;
-                                                    }
-
-                                                }
-                                            }
-                                        }
-                                        $js = array(
-                                                'id'       => 'lead_status',
-                                                'class'    => ''
-                                        );
-                                    $data_status = array(
-                                        'name'        => 'lead_status',
-                                        'type'       => 'hidden',
-                                        'value'       => $leads[0]['status']
-                                    );
-
-                                    if(($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))
-                                        ){
-                                        echo form_input($data_status);
-                                    }
-                                    else{
-                                            echo form_dropdown('lead_status', $options1 , $leads[0]['status'],$js);
-                                    }
-                                        $category_name = array('name'=>'cat_name','type'=>'hidden','value'=>$leads[0]['category_title']);
-                                        echo form_input($category_name);
-                                        $customer_name = array('name'=>'customer_name','type'=>'hidden','value'=>$leads[0]['customer_name']);
-                                        echo form_input($customer_name);
-                                    ?>
-                                </div>
-                                <?php }else{?>
                                 <div class="form-control">
                                 <?php
 
                                 if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
-                                    || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
-                                            && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC') ||
-                                                ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC')||
-                                                ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] != 'DC'))))
-                                ){}
+                                  || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted'))))
+                                {
+
+                                }
                                 else {
                                     ?>
                                     <label>Change Status:</label>
@@ -269,11 +203,7 @@
                                 );
 
                                 if(($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO','NI','Closed','Converted')))
-                                    || ($this->session->userdata('admin_type')=='BM' && (!in_array($leads[0]['status'],array('NI','AO'))
-                                            && (($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] != 'DC')
-                                                || ($leads[0]['category_title'] != 'Fee Income' && $leads[0]['status'] == 'DC')
-                                                || ($leads[0]['category_title'] == 'Fee Income' && $leads[0]['status'] != 'DC'))
-                                        ))){
+                                    || ($this->session->userdata('admin_type')=='BM' && in_array($leads[0]['status'],array('Closed','Converted')))){
                                     echo form_input($data_status);
                                 }
                                 else{
@@ -285,7 +215,6 @@
                                 echo form_input($customer_name);
                                 ?>
                             </div>
-                            <?php }?>
                                 <div class="form-control reason" style="display:none">
                                     <label>Reason For Drop :<span style="color:red;">*</span></label>
                                     <?php
@@ -307,7 +236,6 @@
                                     <label>Description:<span style="color:red;">*</span></label>
                                     <textarea rows="4" cols="80" name="drop_desc"><?php if(!empty($leads[0]['drop_desc'])) echo $leads[0]['reminder_text'];?></textarea>
                                 </div>
-                                <?php if($this->session->userdata('admin_type')=='EM' || ($this->session->userdata('admin_id') == $leads[0]['employee_id'])){?>
                                 <div class="form-control followUp" style="display:none">
                                     <label>Next Followup Date:<span style="color:red;">*</span></label>
                                     <?php
@@ -334,7 +262,7 @@
                                     $branch_mapp = get_branch_map($leads[0]['map_with'],$this->session->userdata('branch_id'));
                                     $branch_map = $branch_mapp[0]['processing_center'];
                                     ?>
-                                    <?php if($leads[0]['map_with'] != 'BRANCH' && $leads[0]['map_with'] == $branch_map && ($leads[0]['reroute_from_branch_id'] == '' || $leads_info['reroute_from_branch_id'] == NULL)){?>
+                                    <?php if($leads[0]['map_with'] != 'BRANCH' && $leads[0]['map_with'] == $branch_map && ($leads[0]['reroute_from_branch_id'] == '' || $leads[0]['reroute_from_branch_id'] == NULL)){?>
                                     <div class="form-control followUp" style="display:none">
                                         <label></label>
                                         <span style="color:red;">*</span> CIR / CIBIL report generated and Lead is Qualified?
@@ -350,7 +278,6 @@
                                         </span>
                                     </div>
                                         <?php }?>
-                                    <?php }?>
                                     <?php if($this->session->userdata('admin_type')=='EM' && in_array($leads[0]['status'],array('AO'))){?>
                                         <div class="form-control accountOpen" >
                                     <?php }else{?>
@@ -385,7 +312,7 @@
                                 </div>
                                 <div class="form-control lead_identified">
                                     <?php
-                                    if($this->session->userdata('admin_type')=='EM' || ($this->session->userdata('admin_id') == $leads[0]['employee_id'])){
+                                    if($this->session->userdata('admin_type')=='EM' || $this->session->userdata('admin_type')=='BM'){
                                         if($leads[0]['lead_identification'] == '') {
                                             if (isset($lead_identification)) {
                                                 $status_array = array('AO', 'Closed', 'Converted', 'NI','FU','DC');
@@ -614,9 +541,8 @@
             }else if(option == 'NI'){
                 $('.accountOpen').hide();
                 $('.followUp').hide();
-                <?php if($this->session->userdata('admin_type')=='EM' || ($this->session->userdata('admin_id') == $leads[0]['employee_id'])){?>
                 $('.reason').show();
-                <?php }?>
+
             }
             else{
                 $('.accountOpen').hide();
@@ -812,7 +738,7 @@
 
                         if(response['status'] == 'True'){
                             $('.loader').hide();
-                            var useraction = confirm(response + " \n\n Is above record verified?");
+                            var useraction = confirm(response['data'] + " \n\n Is above record verified?");
                             if(useraction)
                             {
                                 $('.submit_button').show();

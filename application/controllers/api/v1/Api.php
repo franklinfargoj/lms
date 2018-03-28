@@ -2800,6 +2800,58 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
             $api_res = strip_tags($api_res);
             $api_res = json_decode($api_res,true);            
             if($api_res['status'] != 'False'){
+//                $acc_no = $params['account_no'];
+                $cbs_res = $api_res['data'];
+//                $split_cbs_resp = explode('~',$cbs_res);
+//                $responseData = array(
+//                    'lead_id' => $params['lead_id'],
+//                    //'account_no'=>$acc_no,
+//                    'account_no'=>aes_decode($acc_no),
+//                    'response_data' => $api_res['data'],
+//                    'amount' => $split_cbs_resp[0],
+//                    'customer_name' => $split_cbs_resp[1],
+//                    'customer_contact_no' => $split_cbs_resp[2],
+//                    'email_id' => $split_cbs_resp[3],
+//                );
+//                //This will add entry into cbs response for status (Account Opened)
+//                $this->Lead->insert_lead_data($responseData,Tbl_cbs);
+//                $table = Tbl_Leads;
+//                $where = array('id'=>$params['lead_id']);
+//                $data = array('opened_account_no'=>aes_decode($acc_no));
+//                $this->Lead->update_lead_data($where,$data,$table);
+                $res = array('result' => True,
+                    'data' => array($cbs_res));
+                returnJson($res);
+            }
+            $res = array('result' => False,
+                'data' => array('Verification Failed'));
+            returnJson($res);
+        }
+        $res = array('result' => False,
+            'data' => array('Invalid Request'));
+        returnJson($res);
+    }
+
+    public function confirm_cbs_response_post(){
+
+        $params = $this->input->post();
+        if(isset($params['lead_id']) && $params['lead_id'] !='' &&
+            //  isset($params['account_no']) && strlen(trim($params['account_no'])) == 12){
+            isset($params['account_no'])) {
+
+            $whereEx = array('lead_id'=>$params['lead_id']);
+            $is_exsits = $this->Lead->is_cbs_exsits($whereEx);
+            if($is_exsits){
+                $result = array('result' => False,
+                    'data' => array('Record Already Saved'));
+                returnJson($result);
+            }
+
+            //$api_res = $this->verify_cbs_account(trim($params['account_no']));
+            $api_res = $this->verify_cbs_account(aes_decode(trim($params['account_no'])));
+            $api_res = strip_tags($api_res);
+            $api_res = json_decode($api_res,true);
+            if($api_res['status'] != 'False'){
                 $acc_no = $params['account_no'];
                 $cbs_res = $api_res['data'];
                 $split_cbs_resp = explode('~',$cbs_res);

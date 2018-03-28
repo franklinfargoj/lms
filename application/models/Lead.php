@@ -622,5 +622,16 @@ class Lead  extends CI_Model
         }
     }
 
+    public function is_cbs_exsits($whereEx){
+        $this->db->select('id');
+        $this->db->from('db_response_from_cbs');
+        $this->db->where($whereEx);
+        $resultArray = $this->db->get()->result_array();
+        if (count($resultArray) > 0) {
+            return $resultArray[0]['id'];
+        }
+        return false;
+    }
+
 
 }
