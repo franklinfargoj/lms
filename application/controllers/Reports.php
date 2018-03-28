@@ -2597,6 +2597,28 @@ class Reports extends CI_Controller
             $arrData['converted_leads'][$key] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
         }
 
+        foreach ($source as $key=>$val) {
+            $action = 'list';
+            $select = array('SUM( t.amount ) as total_actual_amt, c.id as cateory_id, c.title as prodct_category_title FROM (SELECT DISTINCT (lead_id), amount FROM db_response_from_cbs)t');
+            $table = Tbl_cbs . ' as t';
+            $where = array('l.lead_source'=>$key);
+            $join = array();
+            $join[] = array('table' => Tbl_Leads.' as l','on_condition' => 't.lead_id = l.id','type' => '');
+            $join[] = array('table' => Tbl_Category.' as c','on_condition' => 'l.product_category_id = c.id','type' => '');
+            $group_by = array('l.product_category_id');
+
+            //If Start date selected
+            if (!empty($arrData['start_date'])) {
+                $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") >='] = date('Y-m-d', strtotime($arrData['start_date']));
+            }
+            //If End date selected
+            if (!empty($arrData['end_date'])) {
+                $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d', strtotime($arrData['end_date']));
+            }
+
+            $arrData['actual_business_amt'][$key] = $this->Lead->actual_amt($table, $select, $where, $join, $group_by, $order_by = array());
+        }
+
         pe($arrData);die;
         return $arrData;
     }
