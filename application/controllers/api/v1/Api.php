@@ -2840,8 +2840,8 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
         if(isset($params['lead_id']) && $params['lead_id'] !='' &&
             //  isset($params['account_no']) && strlen(trim($params['account_no'])) == 12){
             isset($params['account_no'])) {
-            $result = array('result' => False,
-                'data' => array('Record Already Saved'));
+            $result = array('result' => True,
+                'data' => array('Successfully Verified'));
             returnJson($result);
             $whereEx = array('lead_id'=>$params['lead_id']);
             $is_exsits = $this->Lead->is_cbs_exsits($whereEx);
