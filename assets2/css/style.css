@@ -1881,3 +1881,24 @@ p.custname{position:relative;top:20px;display:inline-block;}
       margin-bottom : 0px !important;
       margin-top : 11px !important;
 }
+
+.result thead tr th {
+	font-size: 15px;
+}
+.result table tr td {
+	color: #666666;
+	font-size: 15px;
+}
+tfoot tr {
+	background: #5e6469;
+	color: #fff;
+}
+.result table tfoot tr td {
+	color: #fff;
+}
+tr.odd {
+	background: #f9f9f9;
+}
+tr.even {
+	background: #fff;
+}
