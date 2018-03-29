@@ -144,9 +144,9 @@ echo form_hidden($data);
 //                    pe($leads);
 //                    pe($product_category);
                     foreach ($lead_source as $key=>$val) {?>
-                        <table>
                         <?php if (!empty($leads[$key])) {
                             echo "<p>".$val."</p>";?>
+                        <table>
                         <tr>
                             <td>Category</td>
                             <td># of input leads</td>
@@ -156,9 +156,8 @@ echo form_hidden($data);
                             <td>Business Converted (in Cr)</td>
                             <td> % Conversion (Amt)</td>
                         </tr>
-                        <?php }?>
+
                         <?php
-                        if (!empty($leads[$key])) {
                             foreach ($product_category as $row) {
                                 ?>
                                 <tr>
@@ -166,14 +165,24 @@ echo form_hidden($data);
                                     <td><?php echo (isset($leads[$key]['generated'][$row['id']]) && $leads[$key]['generated'][$row['id']])?$leads[$key]['generated'][$row['id']]:0;?></td>
                                     <td><?php echo (isset($leads[$key]['converted'][$row['id']]) && $leads[$key]['converted'][$row['id']])?$leads[$key]['converted'][$row['id']]:0;?></td>
                                     <td><?php echo (isset($leads[$key]['generated'][$row['id']]) && $leads[$key]['generated'][$row['id']] && isset($leads[$key]['converted'][$row['id']]) && $leads[$key]['converted'][$row['id']])?round(($leads[$key]['converted'][$row['id']]/$leads[$key]['generated'][$row['id']])*100,2).'%':'0.00%';?></td>
-                                    <td><?php echo (isset($leads[$key]['estimated_business'][$row['id']]) && $leads[$key]['estimated_business'][$row['id']])?$leads[$key]['estimated_business'][$row['id']]:0;?></td>
-                                    <td><?php echo (isset($leads[$key]['actual_business'][$row['id']]) && $leads[$key]['actual_business'][$row['id']])?$leads[$key]['actual_business'][$row['id']]:0;?></td>
+                                    <td><?php echo (isset($leads[$key]['estimated_business'][$row['id']]) && $leads[$key]['estimated_business'][$row['id']])?convertCurrencyCr($leads[$key]['estimated_business'][$row['id']]):0;?></td>
+                                    <td><?php echo (isset($leads[$key]['actual_business'][$row['id']]) && $leads[$key]['actual_business'][$row['id']])?convertCurrencyCr($leads[$key]['actual_business'][$row['id']]):0;?></td>
                                     <td><?php echo (isset($leads[$key]['estimated_business'][$row['id']]) && $leads[$key]['estimated_business'][$row['id']] && isset($leads[$key]['actual_business'][$row['id']]) && $leads[$key]['actual_business'][$row['id']])?round(($leads[$key]['actual_business'][$row['id']]/$leads[$key]['estimated_business'][$row['id']])*100,2).'%':'0.00%';?></td>
                                 </tr>
                             <?php } ?>
-                            </table>
-                        <?php }
-                    }?>
+
+                            <tr>
+                                <td>Total</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <?php } ?>
+                    <?php }?>
                 </div>
             </div>
         </div>
@@ -188,18 +197,8 @@ echo form_hidden($data);
 
 <span class="bg-bottom"></span>
 <!-- END LEADS-->
-<script src="<?php echo base_url().ASSETS;?>js/jquery.dataTables.min.js"></script>
-<script src="<?php echo base_url().ASSETS;?>js/config.datatable.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function() {
-        var table = $('#sample_3');
-        if(table.length > 0){
-            var columns = [3];
-
-            //Initialize datatable configuration
-            initTable(table,columns);
-        }
-
         $('#su').click(function(){
             $('#su').hide();
         })

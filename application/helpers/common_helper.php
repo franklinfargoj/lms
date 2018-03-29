@@ -1220,6 +1220,19 @@ function get_branch_map($map,$branch_id){
     return $processing_center_details;
 }
 
+function convertCurrencyCr($number)
+{
+    if($number > 0){
+        // Lakhs
+        $number = $number / 10000000;
+        $number = round($number,2);
+        $ext = "Cr";
+        $currency = $number;
+    }
+
+    return $currency;
+}
+
 
 
 
