@@ -2123,7 +2123,19 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
             if (!empty($lead_source)) {
                 $where['l.lead_source'] = $lead_source;
             }
-            $year_where['YEAR(la.created_on)'] = date('Y');
+
+            //
+            $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+            $yr_end_date=(date('Y')).'-03-31 23:59:59';
+            $current_month = date('n');
+            if($current_month >=4){
+                $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            }
+            $year_where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
+
+            //
+            //$year_where['YEAR(la.created_on)'] = date('Y');
             $month_where['MONTH(la.created_on)'] = date('m');
             if (!empty($status)) {
                 foreach ($status as $key => $value) {
