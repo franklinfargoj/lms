@@ -591,5 +591,45 @@ class Lead  extends CI_Model
         return $result;
     }
 
+    public function actual_amt($table,$select,$where,$join,$group_by,$order_by,$limit=''){
+
+        $this->db->select($select,TRUE);
+        //$this->db->from($table);
+        if(!empty($join)){
+            foreach ($join as $key => $value) {
+                $this->db->join($value['table'],$value['on_condition'],$value['type']);
+            }
+        }
+        if(!empty($where)){
+            $this->db->where($where);
+        }
+        if(!empty($group_by)){
+            $this->db->group_by($group_by);
+        }
+        if(!empty($order_by)){
+            $this->db->order_by($order_by);
+        }
+        if(!empty($limit)){
+            $this->db->limit($limit);
+        }
+        /*pe($this->db);die;*/
+        $query = $this->db->get();
+        /* pe($query->result_array());die;*/
+        if($query !== FALSE && $query->num_rows() > 0) {
+            return $query->result_array();
+        }
+    }
+
+    public function is_cbs_exsits($whereEx){
+        $this->db->select('id');
+        $this->db->from('db_response_from_cbs');
+        $this->db->where($whereEx);
+        $resultArray = $this->db->get()->result_array();
+        if (count($resultArray) > 0) {
+            return $resultArray[0]['id'];
+        }
+        return false;
+    }
+
 
 }

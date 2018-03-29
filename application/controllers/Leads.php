@@ -154,7 +154,7 @@ class Leads extends CI_Controller
                 if($lead_id != false){
                     //send sms
                     $sms = 'Thanks for showing interest in '.ucwords($product_name).' with Dena Bank. We will contact you shortly.';
-                    send_sms($this->input->post('contact_no'),$sms);
+                    //send_sms($this->input->post('contact_no'),$sms);
 
                     //Push notification
                     $emp_id = $login_user['hrms_id'];
@@ -698,22 +698,17 @@ class Leads extends CI_Controller
             }
             $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by = array());
             if($type == 'assigned'){
-                $all_status = $this->config->item('lead_status');
 
-                if($this->session->userdata('admin_type') == 'BM' && ($this->session->userdata('admin_id') != $arrData['leads'][0]['employee_id'])){
-                    $bm_status = $all_status;
-                    unset($bm_status['NC'],$bm_status['AO'],$bm_status['NI'],$bm_status['DC'],$bm_status['FU']);
-                    if($arrData['leads'][0]['status'] == 'NI'){
-                        unset($bm_status['Converted']);
-                    }
-                    if($arrData['leads'][0]['status'] == 'AO'){
-                        unset($bm_status['Closed']);
-                    }
-                    $arrData['lead_status'] = $bm_status;
-                }else{
+                $all_status = $this->config->item('lead_status');
+                if($arrData['leads'][0]['product_category_id'] != 12){
+                    unset($all_status['Sanction']);
+                }
+                if($this->session->userdata('admin_type') == 'EM'){
+                    unset($all_status['Converted'],$all_status['Closed']);
+                }
                     if($arrData['leads'][0]['status'] == 'NC'){
                         $nc_status = $all_status;
-                        unset($nc_status['NC'],$nc_status['Converted'],$nc_status['Closed']);
+                        unset($nc_status['NC']);
                         $arrData['lead_status'] = $nc_status;
                     }
                     if($arrData['leads'][0]['status'] == 'NI'){
@@ -721,14 +716,20 @@ class Leads extends CI_Controller
                     }
                     if($arrData['leads'][0]['status'] == 'FU'){
                         $fu_status = $all_status;
-                        unset($fu_status['NC'],$fu_status['Converted'],$fu_status['FU'],$fu_status['Closed']);
+                        unset($fu_status['NC'],$fu_status['FU']);
                         $arrData['lead_status'] = $fu_status;
                     }
                     if($arrData['leads'][0]['status'] == 'DC'){
                         $dc_status = $all_status;
-                        unset($dc_status['NC'],$dc_status['DC'],$dc_status['Converted'],$dc_status['FU'],$dc_status['Closed']);
+                        unset($dc_status['NC'],$dc_status['DC'],$dc_status['FU']);
                         $arrData['lead_status'] = $dc_status;
                     }
+                    if($arrData['leads'][0]['status'] == 'Sanction'){
+                        $dc_status = $all_status;
+                        unset($dc_status['NC'],$dc_status['DC'],$dc_status['Sanction'],$dc_status['FU']);
+                        $arrData['lead_status'] = $dc_status;
+                    }
+
                     if($arrData['leads'][0]['status'] == 'AO'){
                         $ao_status = $all_status;
                         if($login_user['designation_name'] == 'EM'){
@@ -739,7 +740,7 @@ class Leads extends CI_Controller
                         }
 
                     }
-                }
+
             }
 
         }
@@ -1103,23 +1104,27 @@ class Leads extends CI_Controller
                                 }
                             }
                             if($lead_status == 'AO'){
-                                $cbs_res = $this->input->post('response_data');
-                                $split_cbs_resp = explode('~',$cbs_res);
-                                $responseData = array(
-                                    'lead_id' => $lead_id,
-                                    'account_no'=>trim($this->input->post('accountNo')),
-                                    'response_data' => $this->input->post('response_data'),
-                                    'amount' => $split_cbs_resp[0],
-                                    'customer_name' => $split_cbs_resp[1],
-                                    'customer_contact_no' => $split_cbs_resp[2],
-                                    'email_id' => $split_cbs_resp[3],
-                                );
-                                //This will add entry into cbs response for status (Account Opened)
-                                $this->Lead->insert_lead_data($responseData,Tbl_cbs);
-                                $table = Tbl_Leads;
-                                $where = array('id'=>$lead_id);
-                                $data = array('opened_account_no'=>trim($this->input->post('accountNo')));
-                                $this->Lead->update_lead_data($where,$data,$table);
+                                $whereEx = array('lead_id'=>$lead_id);
+                                $is_exsits = $this->Lead->is_cbs_exsits($whereEx);
+                                if(!$is_exsits) {
+                                    $cbs_res = $this->input->post('response_data');
+                                    $split_cbs_resp = explode('~', $cbs_res);
+                                    $responseData = array(
+                                        'lead_id' => $lead_id,
+                                        'account_no' => trim($this->input->post('accountNo')),
+                                        'response_data' => $this->input->post('response_data'),
+                                        'amount' => $split_cbs_resp[0],
+                                        'customer_name' => $split_cbs_resp[1],
+                                        'customer_contact_no' => $split_cbs_resp[2],
+                                        'email_id' => $split_cbs_resp[3],
+                                    );
+                                    //This will add entry into cbs response for status (Account Opened)
+                                    $this->Lead->insert_lead_data($responseData, Tbl_cbs);
+                                    $table = Tbl_Leads;
+                                    $where = array('id' => $lead_id);
+                                    $data = array('opened_account_no' => trim($this->input->post('accountNo')));
+                                    $this->Lead->update_lead_data($where, $data, $table);
+                                }
                             }
                             if($lead_status == 'Converted'){
                                 $this->points_distrubution($lead_id);
@@ -1382,7 +1387,7 @@ class Leads extends CI_Controller
             $emp_id = $explode_employee[0];
 
             if(count($leads)>1){
-                $description="You have assigned ".count($leads)." leads<br>";
+                $description="You have assigned ".count($leads)." leads\n\n";
                 $description.=$multiple_description;
 
             }
@@ -1926,6 +1931,7 @@ private function verify_accountcbs($acc_no)
      *
      */
     function move_rapc(){
+        $login_user = get_session();
         $lead_id = decode_id($this->input->post('id'));
         $action = 'list';
         $table = Tbl_Leads;
@@ -1950,8 +1956,8 @@ private function verify_accountcbs($acc_no)
                 $update_data['reroute_from_branch_id'] = $leads_info['branch_id'];
                 $update_data['branch_id'] = $routed_id;
                 $update_data['zone_id'] = zoneid($routed_id);
-                $update_data['modified_by'] = zoneid($routed_id);
-                $update_data['modified_by_name'] = zoneid($routed_id);
+                $update_data['modified_by'] = $login_user['hrms_id'];
+                $update_data['modified_by_name'] = $login_user['full_name'];
                 $date = date('Y-m-d H:i:s',time()+5);
                 $update_data['modified_on'] = $date;
                 $where = array('id' => $lead_id);
@@ -1969,6 +1975,53 @@ private function verify_accountcbs($acc_no)
             }
 
         }
+    }
+
+    /* drop lead by BM
+     *
+     *
+     */
+    function drop_lead(){
+        $lead_id = decode_id($this->input->post('id'));
+        $login_user = get_session();
+        $lead_status_data = array(
+            'lead_id' => $lead_id,
+            'employee_id' => $login_user['hrms_id'],
+            'employee_name' => $login_user['full_name'],
+            'branch_id' => $login_user['branch_id'],
+            'district_id' => $login_user['district_id'],
+            'state_id' => $login_user['state_id'],
+            'zone_id' => $login_user['zone_id'],
+            'status' => 'NC',
+            'is_updated' => 0,
+            'created_on' => date('Y-m-d H:i:s'),
+            'created_by' => $login_user['hrms_id'],
+            'created_by_name' => $login_user['full_name'],
+            'modified_on' => date('Y-m-d H:i:s', time() + 5),
+            'modified_by' => $login_user['hrms_id'],
+            'modified_by_name' => $login_user['full_name']
+        );
+        $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+        $lead_status_data1 = array(
+            'lead_id' => $lead_id,
+            'employee_id' => $login_user['hrms_id'],
+            'employee_name' => $login_user['full_name'],
+            'branch_id' => $login_user['branch_id'],
+            'district_id' => $login_user['district_id'],
+            'state_id' => $login_user['state_id'],
+            'zone_id' => $login_user['zone_id'],
+            'status' => 'NI',
+            'reason_for_drop' => 'Not verified',
+            'desc_for_drop' => 'Not verified and drop from unassign list',
+            'is_updated' => 1,
+            'created_on' => date('Y-m-d H:i:s', time() + 7),
+            'created_by' => $login_user['hrms_id'],
+            'created_by_name' => $login_user['full_name'],
+            'modified_on' => date('Y-m-d H:i:s', time() + 10),
+            'modified_by' => $login_user['hrms_id'],
+            'modified_by_name' => $login_user['full_name']
+        );
+        $this->Lead->insert_lead_data($lead_status_data1, Tbl_LeadAssign);
     }
 
 }

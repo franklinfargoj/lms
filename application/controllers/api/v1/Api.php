@@ -25,9 +25,9 @@ class Api extends REST_Controller
         // Initialization of class
         parent::__construct();
         $explode = explode('/',$_SERVER['HTTP_USER_AGENT']);
-        if($explode[0] != 'okhttp'){
-           echo "Invalid Access";die;
-        }
+//        if($explode[0] != 'okhttp'){
+//           echo "Invalid Access";die;
+//        }
         $this->load->model('Lead');
         $this->load->model('Login_model');
         $this->load->model('Ticker_model', 'ticker');
@@ -36,7 +36,7 @@ class Api extends REST_Controller
         $this->load->model('Notification_model', 'notification');
         $method = $this->router->method;
         $authorised_methods = $this->config->item('authorised_methods');
-        if(in_array($method,$authorised_methods)){
+        /*if(in_array($method,$authorised_methods)){
             return true;
         }else{
             $params = $this->input->post();
@@ -63,7 +63,7 @@ class Api extends REST_Controller
                     returnJson($response);
                 }
             }
-        }
+        }*/
     }
 
     public function leads_performance_post()
@@ -314,7 +314,7 @@ class Api extends REST_Controller
         if($lead_id != false){
             //send sms
         $sms = 'Thanks for showing interest in '.ucwords($product_name).' with Dena Bank. We will contact you shortly.';
-        send_sms($lead_data['contact_no'],$sms);
+        //send_sms($lead_data['contact_no'],$sms);
 
         //Push notification
             $emp_id = $params['created_by'];
@@ -1607,7 +1607,7 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             sendPushNotification($emp_id,$description,$title);
 
             $res = array('result' => True,
-                'data' => 'Leads assigned successfully');
+                'data' => array('Leads assigned successfully'));
             returnJson($res);
 
         } else {
@@ -2781,8 +2781,6 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
     private function insert_notification($lead_data){
         if(!empty($lead_data)){
             $this->load->model('Master_model','master');
-            $productData = $this->master->view_product($lead_data['product_id']);
-
             $title = 'New lead added';
             $description = 'Lead For '.ucwords($lead_data['customer_name']).' submitted sucessfully';
             $priority = 'Normal';
@@ -2800,7 +2798,58 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
             //$api_res = $this->verify_cbs_account(trim($params['account_no']));
             $api_res = $this->verify_cbs_account(aes_decode(trim($params['account_no'])));
             $api_res = strip_tags($api_res);
-            $api_res = json_decode($api_res,true);            
+            $api_res = json_decode($api_res,true);
+            if($api_res['status'] != 'False'){
+//                $acc_no = $params['account_no'];
+                $cbs_res = $api_res['data'];
+//                $split_cbs_resp = explode('~',$cbs_res);
+//                $responseData = array(
+//                    'lead_id' => $params['lead_id'],
+//                    //'account_no'=>$acc_no,
+//                    'account_no'=>aes_decode($acc_no),
+//                    'response_data' => $api_res['data'],
+//                    'amount' => $split_cbs_resp[0],
+//                    'customer_name' => $split_cbs_resp[1],
+//                    'customer_contact_no' => $split_cbs_resp[2],
+//                    'email_id' => $split_cbs_resp[3],
+//                );
+//                //This will add entry into cbs response for status (Account Opened)
+//                $this->Lead->insert_lead_data($responseData,Tbl_cbs);
+//                $table = Tbl_Leads;
+//                $where = array('id'=>$params['lead_id']);
+//                $data = array('opened_account_no'=>aes_decode($acc_no));
+//                $this->Lead->update_lead_data($where,$data,$table);
+                $res = array('result' => True,
+                    'data' => array($cbs_res));
+                returnJson($res);
+            }
+            $res = array('result' => False,
+                'data' => array('Verification Failed'));
+            returnJson($res);
+        }
+        $res = array('result' => False,
+            'data' => array('Invalid Request'));
+        returnJson($res);
+    }
+
+    public function confirm_cbs_response_post(){
+
+        $params = $this->input->post();
+        if(isset($params['lead_id']) && $params['lead_id'] !='' &&
+            //  isset($params['account_no']) && strlen(trim($params['account_no'])) == 12){
+            isset($params['account_no'])) {
+            $whereEx = array('lead_id'=>$params['lead_id']);
+            $is_exsits = $this->Lead->is_cbs_exsits($whereEx);
+            if($is_exsits){
+                $result = array('result' => False,
+                    'data' => array('Record Already Saved'));
+                returnJson($result);
+            }
+
+            //$api_res = $this->verify_cbs_account(trim($params['account_no']));
+            $api_res = $this->verify_cbs_account(aes_decode(trim($params['account_no'])));
+            $api_res = strip_tags($api_res);
+            $api_res = json_decode($api_res,true);
             if($api_res['status'] != 'False'){
                 $acc_no = $params['account_no'];
                 $cbs_res = $api_res['data'];
@@ -3140,12 +3189,77 @@ private function verify_cbs_account($acc_no)
                     $this->Lead->update_routed_lead($whereUpdate, $table, $data, $order_by, $limit);
 
                 }
-                $error = array(
+                $mag = array(
                     "result" => True,
                     "data" => array("Lead Assigned Successfully")
                 );
-                returnJson($error);
+                returnJson($msg);
             }
+        }
+        $error = array(
+            "result" => False,
+            "data" => array("Missing Parameters.")
+        );
+        returnJson($error);
+    }
+
+    /* drop lead by BM
+   *
+   *
+   */
+    function drop_lead_post(){
+        $params = $this->input->post();
+        if (!empty($params) && isset($params['lead_id']) && !empty($params['lead_id']) &&
+            isset($params['hrms_id']) && !empty($params['hrms_id']) &&
+            isset($params['full_name']) && !empty($params['full_name'])&&
+            isset($params['branch_id']) && !empty($params['branch_id'])&&
+            isset($params['district_id']) && !empty($params['district_id'])&&
+            isset($params['state_id']) && !empty($params['state_id'])&&
+            isset($params['zone_id']) && !empty($params['zone_id'])
+        ) {
+            $lead_status_data = array(
+                'lead_id' => $params['lead_id'],
+                'employee_id' => $params['hrms_id'],
+                'employee_name' => $params['full_name'],
+                'branch_id' => $params['branch_id'],
+                'district_id' => $params['district_id'],
+                'state_id' => $params['state_id'],
+                'zone_id' => $params['zone_id'],
+                'status' => 'NC',
+                'is_updated' => 0,
+                'created_on' => date('Y-m-d H:i:s'),
+                'created_by' => $params['hrms_id'],
+                'created_by_name' => $params['full_name'],
+                'modified_on' => date('Y-m-d H:i:s', time() + 5),
+                'modified_by' => $params['hrms_id'],
+                'modified_by_name' => $params['full_name']
+            );
+            $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+            $lead_status_data1 = array(
+                'lead_id' => $params['lead_id'],
+                'employee_id' => $params['hrms_id'],
+                'employee_name' => $params['full_name'],
+                'branch_id' => $params['branch_id'],
+                'district_id' => $params['district_id'],
+                'state_id' => $params['state_id'],
+                'zone_id' => $params['zone_id'],
+                'status' => 'NI',
+                'reason_for_drop' => 'Not verified',
+                'desc_for_drop' => 'Not verified and drop from unassign list',
+                'is_updated' => 1,
+                'created_on' => date('Y-m-d H:i:s', time() + 7),
+                'created_by' => $params['hrms_id'],
+                'created_by_name' => $params['full_name'],
+                'modified_on' => date('Y-m-d H:i:s', time() + 10),
+                'modified_by' => $params['hrms_id'],
+                'modified_by_name' => $params['full_name']
+            );
+            $this->Lead->insert_lead_data($lead_status_data1, Tbl_LeadAssign);
+            $msg = array(
+                "result" => True,
+                "data" => array("Lead Drop Successfully")
+            );
+            returnJson($msg);
         }
         $error = array(
             "result" => False,

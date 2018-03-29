@@ -196,7 +196,8 @@ $source = $this->config->item('lead_source');
                                 <td>
                                     <a href="<?php echo site_url('leads/lead_life_cycle/'.encode_id($value['id']))?>">Life Cycle</a>
                                     <?php if($value['lead_source'] == 'walkin' && ($value['mapping'] != 'BRANCH' && $value['mapping'] == $branch_map) && ($value['reroute_from_branch_id'] == '' || $value['reroute_from_branch_id'] == NULL)){?>
-                                    <span>|</span><a href="javascript:void(0);" id="send_rapc" data="<?php echo encode_id($value['id']);?>">Send <?php echo $branch_map;?></a>
+                                    <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href="javascript:void(0);" class="send_rapc" data="<?php echo encode_id($value['id']);?>">Send To <?php echo $branch_map;?></a>
+                                    <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href="javascript:void(0);" class="drop_lead" data="<?php echo encode_id($value['id']);?>">Drop </a>
                                     <?php }?>
                                 </td>
                             </tr>
@@ -252,12 +253,28 @@ $source = $this->config->item('lead_source');
             }
         });
 
-        $("#send_rapc").click(function() {
-            if (window.confirm('CIR / CIBIL report generated and Lead is Qualified'))
+        $(".send_rapc").click(function() {
+            if (window.confirm('CIR / CIBIL report generated and Lead is Qualified?'))
             {
                 $.ajax({
                     method:'POST',
                     url: baseUrl + 'leads/move_rapc',
+                    data:{
+                        '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                        id:$(this).attr('data')
+                    }
+                }).success(function (resp) {
+                    location.reload();
+                });
+            }
+        });
+
+        $(".drop_lead").click(function() {
+            if (window.confirm('Are you sure want to drop this lead?'))
+            {
+                $.ajax({
+                    method:'POST',
+                    url: baseUrl + 'leads/drop_lead',
                     data:{
                         '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
                         id:$(this).attr('data')
