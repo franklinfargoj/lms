@@ -143,7 +143,12 @@ echo form_hidden($data);
 
 //                    pe($leads);
 //                    pe($product_category);
-                    foreach ($lead_source as $key=>$val) {?>
+                    foreach ($lead_source as $key=>$val) {
+                        $total_generated=0;
+                        $total_converted=0;
+                        $total_estimated_business=0;
+                        $total_actual_business=0;
+                        ?>
                         <?php if (!empty($leads[$key])) {
                             echo "<p>".$val."</p>";?>
                         <table>
@@ -159,6 +164,19 @@ echo form_hidden($data);
 
                         <?php
                             foreach ($product_category as $row) {
+
+                                if(isset($leads[$key]['generated'][$row['id']]) && !empty($leads[$key]['generated'][$row['id']])){
+                                    $total_generated += $leads[$key]['generated'][$row['id']];
+                                }
+                                if(isset($leads[$key]['converted'][$row['id']]) && !empty($leads[$key]['converted'][$row['id']])){
+                                    $total_converted += $leads[$key]['converted'][$row['id']];
+                                }
+                                if(isset($leads[$key]['estimated_business'][$row['id']]) && !empty($leads[$key]['estimated_business'][$row['id']])){
+                                    $total_estimated_business += $leads[$key]['estimated_business'][$row['id']];
+                                }
+                                if(isset($leads[$key]['actual_business'][$row['id']]) && !empty($leads[$key]['actual_business'][$row['id']])){
+                                    $total_actual_business += $leads[$key]['actual_business'][$row['id']];
+                                }
                                 ?>
                                 <tr>
                                     <td><?php echo $row['title'];?></td>
@@ -173,12 +191,12 @@ echo form_hidden($data);
 
                             <tr>
                                 <td>Total</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td><?php echo $total_generated;?></td>
+                                <td><?php echo $total_converted;?></td>
+                                <td><?php echo ($total_converted)?round(($total_converted/$total_generated)*100,2).'%':'0.00%';?></td>
+                                <td><?php echo convertCurrencyCr($total_estimated_business);?></td>
+                                <td><?php echo convertCurrencyCr($total_actual_business);?></td>
+                                <td><?php echo ($total_actual_business)?round(($total_actual_business/$total_estimated_business)*100,2).'%':'0.00%';?></td>
                             </tr>
                         </table>
                         <?php } ?>
