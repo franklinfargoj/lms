@@ -98,7 +98,7 @@ echo form_hidden($data);
         </script>
         <!-- BEGIN LEADS -->
         <?php echo form_close();?>
-        <div class="result" style="display:none;">
+        <div class="result result-dash" style="display:none;">
             <div class="page-content">
                 <div class="container">
                     <table border="1">
@@ -112,35 +112,37 @@ echo form_hidden($data);
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="odd">
+                            <tr class="odd-dash">
                                 <td></td>
                                 <td>Unique employee logins (since inception)</td>
                                 <td>Unique employee logins (Today)</td>
                                 <td>Unique employees generating leads</td>
                                 <td>Branches generating leads (at least 1)</td>
                             </tr>
-                            <tr class="even">
+                            <tr class="even-dash">
                                 <td>Actual</td>
                                 <td><?php echo $unique_login_count;?></td>
                                 <td><?php echo $today_unique_login_count;?></td>
                                 <td><?php echo $unique_leadcreator_employee_count;?></td>
                                 <td><?php echo $unique_leadcreator_branch_count;?></td>
                             </tr>
-                            <tr class="odd">
+                            <tr class="odd-dash">
                                 <td>Base</td>
                                 <td><?php echo $total_employee_count;?></td>
                                 <td><?php echo $total_employee_count;?></td>
                                 <td><?php echo $total_employee_count;?></td>
                                 <td><?php echo $total_branch_count;?></td>
                             </tr>
-                            <tr class="even">
+                        </tbody>
+                        <tfoot>
+                            <tr>
                                 <td>%</td>
                                 <td><?php echo round(($unique_login_count/$total_employee_count)*100,2).'%';?></td>
                                 <td><?php echo round(($today_unique_login_count/$total_employee_count)*100,2).'%';?></td>
                                 <td><?php echo round(($unique_leadcreator_employee_count/$total_employee_count)*100,2).'%';?></td>
                                 <td><?php echo round(($unique_leadcreator_branch_count/$total_branch_count)*100,2).'%';?></td>
                             </tr>
-                        </tbody>
+                        </tfoot>
                     </table>
                     <?php
                     if(isset($leads) && !empty($leads)){
@@ -161,7 +163,7 @@ echo form_hidden($data);
                             </div>
                         <table>
                         <tbody>
-                        <tr class="odd">
+                        <tr class="odd-dash">
                             <td>Category</td>
                             <td># of input leads</td>
                             <td># of leads converted</td>
@@ -189,7 +191,7 @@ echo form_hidden($data);
                                     $total_actual_business += convertCurrencyCr($leads[$key]['actual_business'][$row['id']]);
                                 }
                                 ?>
-                                <tr <?php if($i%2 == 0){echo 'class="odd"';}else{ echo 'class="even"';};?>>
+                                <tr <?php if($i%2 == 0){echo 'class="odd-dash"';}else{ echo 'class="even-dash"';};?>>
                                     <td><?php echo $row['title'];?></td>
                                     <td><?php echo (isset($leads[$key]['generated'][$row['id']]) && $leads[$key]['generated'][$row['id']])?$leads[$key]['generated'][$row['id']]:0;?></td>
                                     <td><?php echo (isset($leads[$key]['converted'][$row['id']]) && $leads[$key]['converted'][$row['id']])?$leads[$key]['converted'][$row['id']]:0;?></td>
