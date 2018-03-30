@@ -1585,7 +1585,8 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
                     $select = array('lead.customer_name','product.title');
                     $table = Tbl_Leads.' AS lead';
                     $where = array('lead.id'=>$value);
-                    $join = array('table' =>Tbl_Products.' AS product','on_condition'=>'product.id = lead.product_id','type'=>'');
+                    $join = array();
+                    $join[] = array('table' =>Tbl_Products.' AS product','on_condition'=>'product.id = lead.product_id','type'=>'');
                     $allData = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by=array(),$order_by=array());
                     //Add Notification
                     $title="New Lead Assigned";
