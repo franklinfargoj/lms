@@ -1601,8 +1601,8 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             //push notification
             $emp_id = $params['employee_id'];
             if(count($leads_id)>1){
-                $description="You have assigned ".count($leads_id)." leads<br>";
-                $description.=$multiple_description;
+                $description="You have assigned ".count($leads_id)." leads.";
+                //$description.=$multiple_description;
             }
             sendPushNotification($emp_id,$description,$title);
 
