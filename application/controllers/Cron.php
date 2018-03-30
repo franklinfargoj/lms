@@ -15,12 +15,10 @@ class Cron extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-       //is_cli() OR show_404();
+       is_cli() OR show_404();
         $this->load->model('Lead');
     }
-function index(){
-    echo "hello";
-}
+
     /*
      * gm_consolidated_mail
      * Zone wise leads generated,converted,unassigned and pending count
@@ -1107,7 +1105,7 @@ $pending_days = 2;
     * @return void
     */
     public function zm_consolidated_sms(){
-        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','contact_no','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
+        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation_id','contact_no','zone_id','zone_name'),array('designation_id IN(560602,550502)' => NULL),array(),'employee_dump');
 
         foreach ($zone_list as $k => $v) {
             //FOR ZONAL MANAGER
@@ -1125,20 +1123,30 @@ $pending_days = 2;
             $sum_pending_before=0;
             $sum_pending=0;
 
-            foreach ($zonal_manager['generated'] as $key => $value) {
-                $sum_generated+= $value['generated'];
+            if(!empty($zonal_manager['generated'])) {
+                foreach ($zonal_manager['generated'] as $key => $value) {
+                    $sum_generated += $value['generated'];
+                }
             }
-            foreach ($zonal_manager['converted'] as $key => $value) {
-                $sum_converted+= $value['converted'];
+            if(!empty($zonal_manager['converted'])) {
+                foreach ($zonal_manager['converted'] as $key => $value) {
+                    $sum_converted += $value['converted'];
+                }
             }
-            foreach ($zonal_manager['unassigned'] as $key => $value) {
-                $sum_unassigned+= $value['unassigned'];
+            if(!empty($zonal_manager['unassigned'])) {
+                foreach ($zonal_manager['unassigned'] as $key => $value) {
+                    $sum_unassigned += $value['unassigned'];
+                }
             }
-            foreach ( $zonal_manager['pending_before'] as $key => $value) {
-                $sum_pending_before+= $value['pending_before'];
+            if(!empty($zonal_manager['pending_before'])) {
+                foreach ($zonal_manager['pending_before'] as $key => $value) {
+                    $sum_pending_before += $value['pending_before'];
+                }
             }
-            foreach ( $zonal_manager['pending'] as $key => $value) {
-                $sum_pending+= $value['pending'];
+            if(!empty($zonal_manager['pending'])) {
+                foreach ($zonal_manager['pending'] as $key => $value) {
+                    $sum_pending += $value['pending'];
+                }
             }
             //send sms
             $sms =  'Lead Generated (MTD) = '.ucwords($sum_generated).
@@ -1146,6 +1154,7 @@ $pending_days = 2;
                     ' ,No.of Unassigned Leads = '.ucwords($sum_unassigned).
                     ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
                     ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
+
             send_sms($v->contact_no,$sms);
         }
     }
@@ -1181,17 +1190,26 @@ $pending_days = 2;
             $sum_converted=0;
             $sum_pending_before=0;
             $sum_pending=0;
-            foreach ($branch_manager['generated'] as $key => $value) {
-                $sum_generated+= $value['generated'];
+
+            if(!empty($branch_manager['generated'])) {
+                foreach ($branch_manager['generated'] as $key => $value) {
+                    $sum_generated += $value['generated'];
+                }
             }
-            foreach ($branch_manager['converted'] as $key => $value) {
-                $sum_converted+= $value['converted'];
+            if(!empty($branch_manager['converted'])) {
+                foreach ($branch_manager['converted'] as $key => $value) {
+                    $sum_converted += $value['converted'];
+                }
             }
-            foreach ($branch_manager['pending_before'] as $key => $value) {
-                $sum_pending_before+= $value['pending_before'];
+            if(!empty($branch_manager['pending_before'])) {
+                foreach ($branch_manager['pending_before'] as $key => $value) {
+                    $sum_pending_before += $value['pending_before'];
+                }
             }
-            foreach ($branch_manager['pending'] as $key => $value) {
-                $sum_pending+= $value['pending'];
+            if(!empty($branch_manager['pending'])) {
+                foreach ($branch_manager['pending'] as $key => $value) {
+                    $sum_pending += $value['pending'];
+                }
             }
 
             //FOR EMPLOYEE SMS
@@ -1199,6 +1217,7 @@ $pending_days = 2;
                 ' ,Lead Converted (MTD) = '.ucwords($sum_converted).
                 ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
                 ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
+
             send_sms($v->contact_no,$sms);
         }
     }
