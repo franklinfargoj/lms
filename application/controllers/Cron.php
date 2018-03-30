@@ -15,7 +15,7 @@ class Cron extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-       is_cli() OR show_404();
+       //is_cli() OR show_404();
         $this->load->model('Lead');
     }
 function index(){
@@ -220,7 +220,7 @@ function index(){
             $subject = 'Pending Leads under Dena Sampark for follow up';
             $message = $this->bm_msg();
             sendMail($to,$subject,$message,$attachment_file,$cc);
-            //die;
+           // die;
         }
     }
 
@@ -1097,6 +1097,114 @@ $pending_days = 2;
 
         return $attachment_file;
     }
+
+    /*
+    * zm_consolidated_sms
+    * Branch wise leads generated,converted,unassigned and pending count
+    * @author Franklin Fargoj
+    * @access public
+    * @param none
+    * @return void
+    */
+    public function zm_consolidated_sms(){
+        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','contact_no','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
+
+        foreach ($zone_list as $k => $v) {
+            //FOR ZONAL MANAGER
+            $zonal_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending_before' => array(),'pending' => array());
+
+            $zonal_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['unassigned'] = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
+            $zonal_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'BM','zone_id' => $v->zone_id));
+
+            $sum_generated=0;
+            $sum_converted=0;
+            $sum_unassigned = 0;
+            $sum_pending_before=0;
+            $sum_pending=0;
+
+            foreach ($zonal_manager['generated'] as $key => $value) {
+                $sum_generated+= $value['generated'];
+            }
+            foreach ($zonal_manager['converted'] as $key => $value) {
+                $sum_converted+= $value['converted'];
+            }
+            foreach ($zonal_manager['unassigned'] as $key => $value) {
+                $sum_unassigned+= $value['unassigned'];
+            }
+            foreach ( $zonal_manager['pending_before'] as $key => $value) {
+                $sum_pending_before+= $value['pending_before'];
+            }
+            foreach ( $zonal_manager['pending'] as $key => $value) {
+                $sum_pending+= $value['pending'];
+            }
+            //send sms
+            $sms =  'Lead Generated (MTD) = '.ucwords($sum_generated).
+                    ' ,Lead Converted (MTD) = '.ucwords($sum_converted).
+                    ' ,No.of Unassigned Leads = '.ucwords($sum_unassigned).
+                    ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
+                    ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
+            send_sms($v->contact_no,$sms);
+        }
+    }
+
+
+      /*
+      * bm_consolidated_sms
+      * Employee wise  leads generated,converted,unassigned and pending count
+      * @author Franklin Fargoj
+      * @access public
+      * @param none
+      * @return void
+      *
+      */
+    public function bm_consolidated_sms(){
+
+        $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','contact_no','branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%'),array(),'employee_dump');
+
+        foreach ($branch_list as $k => $v) {
+            $final = array();
+            //FOR EMPLOYEE
+            $branch_manager = array('generated' => array(),'converted' => array(),'pending_before' => array(),'pending' => array());
+            $gm = $branch_manager;
+            $employee_list = $this->Lead->get_employee_dump(array('hrms_id','name'),array('branch_id' => $v->branch_id),array(),'employee_dump');
+
+            $branch_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'EM','branch_id' => $v->branch_id));
+            $branch_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'EM','branch_id' => $v->branch_id));
+            $branch_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'EM','branch_id' => $v->branch_id));
+            $branch_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'EM','branch_id' => $v->branch_id));
+
+
+            $sum_generated=0;
+            $sum_converted=0;
+            $sum_pending_before=0;
+            $sum_pending=0;
+            foreach ($branch_manager['generated'] as $key => $value) {
+                $sum_generated+= $value['generated'];
+            }
+            foreach ($branch_manager['converted'] as $key => $value) {
+                $sum_converted+= $value['converted'];
+            }
+            foreach ($branch_manager['pending_before'] as $key => $value) {
+                $sum_pending_before+= $value['pending_before'];
+            }
+            foreach ($branch_manager['pending'] as $key => $value) {
+                $sum_pending+= $value['pending'];
+            }
+
+            //FOR EMPLOYEE SMS
+            $sms =  'Lead Generated (MTD) = '.ucwords($sum_generated).
+                ' ,Lead Converted (MTD) = '.ucwords($sum_converted).
+                ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
+                ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
+            send_sms($v->contact_no,$sms);
+        }
+    }
+
+
+
 
     private function bm_msg(){
         $msg = "Dear Sir/Madam,<br><br>

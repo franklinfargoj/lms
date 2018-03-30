@@ -586,8 +586,6 @@ class Lead  extends CI_Model
                 ->join('db_lead_assign AS La', 'La.lead_id = Ld.id', 'left')
                 ->join('db_master_products', 'db_master_products.id = Ld.product_id', 'left')
                 ->join('db_reminder_scheduler','db_reminder_scheduler.lead_id=Ld.id','left')
-                ->where('La.is_deleted',0)
-                ->where('La.is_updated',1)
                 ->where('Ld.id',$lead_id);
         $result = $this->db->get()->result_array();
         return $result;
