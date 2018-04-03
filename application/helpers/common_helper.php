@@ -866,7 +866,7 @@ function sendMail($to = array(),$subject,$message,$attachment_file,$cc){
     $mail->addReplyTo($config[0]->fromemail, $config[0]->from);
 
     //Set who the message is to be sent to
-    $mail->addAddress('mukesh.kurmi@wwindia.com','Mukesh Kurmi');
+    $mail->addAddress('franklin.fargoj@neosofttech.com','Mukesh Kurmi');
     //$mail->addAddress($to['email'],$to['name']);
     // $mail->addAddress('pragati@denabank.co.in','Pragati Dena Bank');
     // $mail->addAddress('rahul.choubey@denabank.co.in','Pragati Dena Bank');
