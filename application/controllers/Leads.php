@@ -1277,7 +1277,7 @@ class Leads extends CI_Controller
         }
         if($type == 'assigned'){
             $order_by='';
-            $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','la.created_on','l.lead_source','p.title','pc.title as prod_cat','la.status'/*,'p1.title as interested_product_title'*/,'r.remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
+            $select = array('l.id','l.customer_name','l.contact_no','l.lead_identification','la.created_on','l.lead_source','p.title','pc.title as prod_cat','la.status'/*,'p1.title as interested_product_title'*/,'la.followup_date as remind_on','DATEDIFF(CURDATE( ),la.created_on) as elapsed_day');
             $where  = array('la.is_deleted' => 0,'la.is_updated' => 1,'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
 //            if($till == 'mtd'){
 //                $where['MONTH(la.created_on)'] = date('m'); //Month till date filter
@@ -1329,7 +1329,7 @@ class Leads extends CI_Controller
 
         }
 
-        $join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
+        //$join[] = array('table' => Tbl_Reminder.' as r','on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"','type' => 'left');
         $arrData['leads'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by = array(),$order_by);
         $arrData['lead_sources'] = $this->Lead->get_enum(Tbl_Leads,'lead_source');
         return $arrData;
