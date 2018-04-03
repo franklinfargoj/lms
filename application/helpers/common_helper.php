@@ -1228,6 +1228,8 @@ function convertCurrencyCr($number)
         $number = round($number,2);
         $ext = "Cr";
         $currency = $number;
+    }else{
+        $currency = 0;
     }
 
     return $currency;

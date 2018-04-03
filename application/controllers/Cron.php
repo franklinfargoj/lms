@@ -15,13 +15,11 @@ class Cron extends CI_Controller
     {
         // Initialization of class
         parent::__construct();
-       //is_cli() OR show_404();
+       is_cli() OR show_404();
         $this->load->model('Lead');
+        $this->load->model('Reminder_model');
     }
 
-    function index(){
-        echo "hello";
-    }
     /*
      * gm_consolidated_mail
      * Zone wise leads generated,converted,unassigned and pending count
@@ -178,8 +176,8 @@ class Cron extends CI_Controller
     public function bm_consolidated_mail(){
         $cc =0;
         $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%'),array(),'employee_dump');
-//      echo "<pre>";
-//      print_r($branch_list);die;
+//        echo "<pre>";
+//        print_r($branch_list);die;
         foreach ($branch_list as $k => $v) {
             $final = array();
             //FOR EMPLOYEE
@@ -221,7 +219,7 @@ class Cron extends CI_Controller
             $subject = 'Pending Leads under Dena Sampark for follow up';
             $message = $this->bm_msg();
             sendMail($to,$subject,$message,$attachment_file,$cc);
-            //die;
+           // die;
         }
     }
 
@@ -1108,7 +1106,7 @@ $pending_days = 2;
     * @return void
     */
     public function zm_consolidated_sms(){
-        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','contact_no','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
+        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation_id','contact_no','zone_id','zone_name'),array('designation_id IN(560602,550502)' => NULL),array(),'employee_dump');
 
         foreach ($zone_list as $k => $v) {
             //FOR ZONAL MANAGER
@@ -1126,14 +1124,14 @@ $pending_days = 2;
             $sum_pending_before=0;
             $sum_pending=0;
 
-            if(!empty($zonal_manager['generated'])){
+            if(!empty($zonal_manager['generated'])) {
                 foreach ($zonal_manager['generated'] as $key => $value) {
-                    $sum_generated+= $value['generated'];
+                    $sum_generated += $value['generated'];
                 }
             }
-            if(!empty($zonal_manager['converted'])){
+            if(!empty($zonal_manager['converted'])) {
                 foreach ($zonal_manager['converted'] as $key => $value) {
-                    $sum_converted+= $value['converted'];
+                    $sum_converted += $value['converted'];
                 }
             }
             if(!empty($zonal_manager['unassigned'])) {
@@ -1157,6 +1155,7 @@ $pending_days = 2;
                     ' ,No.of Unassigned Leads = '.ucwords($sum_unassigned).
                     ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
                     ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
+
             send_sms($v->contact_no,$sms);
         }
     }
@@ -1172,8 +1171,9 @@ $pending_days = 2;
       *
       */
     public function bm_consolidated_sms(){
+
         $branch_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','contact_no','branch_id','branch_name'),array('designation like' => '%BRANCH MANAGER%'),array(),'employee_dump');
-        
+
         foreach ($branch_list as $k => $v) {
             $final = array();
             //FOR EMPLOYEE
@@ -1185,6 +1185,8 @@ $pending_days = 2;
             $branch_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'EM','branch_id' => $v->branch_id));
             $branch_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'EM','branch_id' => $v->branch_id));
             $branch_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'EM','branch_id' => $v->branch_id));
+
+
             $sum_generated=0;
             $sum_converted=0;
             $sum_pending_before=0;
@@ -1210,12 +1212,14 @@ $pending_days = 2;
                     $sum_pending += $value['pending'];
                 }
             }
-         //FOR EMPLOYEE SMS
-         $sms =  'Lead Generated (MTD) = '.ucwords($sum_generated).
+
+            //FOR EMPLOYEE SMS
+            $sms =  'Lead Generated (MTD) = '.ucwords($sum_generated).
                 ' ,Lead Converted (MTD) = '.ucwords($sum_converted).
                 ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
                 ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
-         send_sms($v->contact_no,$sms);
+
+            send_sms($v->contact_no,$sms);
         }
     }
 
@@ -1267,6 +1271,28 @@ $pending_days = 2;
                 This is an auto generated e-mail escalated to you on account of pendency beyond defined TAT at Branch/DZM/ZM level.<br><br>
                 Regards,<br>Dena Sampark";
         return $msg;
+    }
+
+    /*
+     * current_day_schedules
+     * Current day employee schedule
+     * @author Franklin Fargoj
+     * @access private
+     * @param none
+     * @return void
+     */
+    public function current_day_schedules(){
+        $today_schedule = $this->Reminder_model->get_current_schedule();
+
+        //pe($today_schedule);die;
+        //$today_schedule[0]['remind_to']; //pe($today_schedule);die;
+        if (count($today_schedule) > 0) {
+            foreach ($today_schedule as $key => $value) {
+                $contact_no= $this->Lead->get_employee_dump(array('contact_no'),array('hrms_id' => $value['remind_to']),array(),'employee_dump');
+                $contact=$contact_no[0]->contact_no;
+                send_sms($contact,$value['reminder_text']);
+            }
+        }
     }
 
 }

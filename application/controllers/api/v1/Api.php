@@ -1585,6 +1585,7 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
                     $select = array('lead.customer_name','product.title');
                     $table = Tbl_Leads.' AS lead';
                     $where = array('lead.id'=>$value);
+                    $join = array();
                     $join[] = array('table' =>Tbl_Products.' AS product','on_condition'=>'product.id = lead.product_id','type'=>'');
                     $allData = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by=array(),$order_by=array());
                     //Add Notification
@@ -1601,8 +1602,8 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             //push notification
             $emp_id = $params['employee_id'];
             if(count($leads_id)>1){
-                $description="You have assigned ".count($leads_id)." leads<br>";
-                $description.=$multiple_description;
+                $description="You have assigned ".count($leads_id)." leads.";
+                //$description.=$multiple_description;
             }
             sendPushNotification($emp_id,$description,$title);
 
@@ -2123,7 +2124,19 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
             if (!empty($lead_source)) {
                 $where['l.lead_source'] = $lead_source;
             }
-            $year_where['YEAR(la.created_on)'] = date('Y');
+
+            //
+            $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+            $yr_end_date=(date('Y')).'-03-31 23:59:59';
+            $current_month = date('n');
+            if($current_month >=4){
+                $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            }
+            $year_where["la.created_on >='".$yr_start_date."' AND la.created_on <='".$yr_end_date."'"] = NULL;
+
+            //
+            //$year_where['YEAR(la.created_on)'] = date('Y');
             $month_where['MONTH(la.created_on)'] = date('m');
             if (!empty($status)) {
                 foreach ($status as $key => $value) {

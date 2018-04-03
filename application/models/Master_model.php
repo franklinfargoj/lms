@@ -271,11 +271,11 @@ class Master_model extends CI_Model{
 
 		$this->db->select($select,TRUE);
 		$this->db->from($table);
+
         if(!empty($join)){
-            foreach ($join as $key => $value) {
-                $this->db->join($value['table'],$value['on_condition'],$value['type']);
-            }
+            $this->db->join($join['table'],$join['on_condition'],$join['type']);
         }
+
 		if(!empty($where)){
 			$this->db->where($where);
 		}

@@ -1387,8 +1387,8 @@ class Leads extends CI_Controller
             $emp_id = $explode_employee[0];
 
             if(count($leads)>1){
-                $description="You have assigned ".count($leads)." leads\n\n";
-                $description.=$multiple_description;
+                $description="You have assigned ".count($leads)." leads.";
+                //$description.=$multiple_description;
 
             }
              sendPushNotification($emp_id,$description,$title);
