@@ -961,7 +961,7 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             $join[] = array('table' => Tbl_Category . ' as c', 'on_condition' => 'l.product_category_id = c.id', 'type' => '');
 
             $select = array('l.id', 'l.customer_name', 'l.contact_no', 'l.lead_identification', 'la.created_on', 'l.lead_source', 'p.title', 'la.status'/*,'p1.title as interested_product_title'*/,
-                'r.remind_on', 'DATEDIFF(CURDATE( ),la.created_on) as elapsed_day','c.title as category_title');
+                'la.followup_date as remind_on', 'DATEDIFF(CURDATE( ),la.created_on) as elapsed_day','c.title as category_title');
             $where = array('la.is_deleted' => 0, 'la.is_updated' => 1, 'DATEDIFF( CURDATE( ) , la.created_on) <=' => Elapsed_day);
             $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
             $yr_end_date=(date('Y')).'-03-31 23:59:59';
@@ -987,7 +987,7 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             $join[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = l.id', 'type' => '');
             /*$join[] = array('table' => Tbl_Products.' as p1','on_condition' => 'l.interested_product_id = p1.id','type' => 'left');*/
 
-            $join[] = array('table' => Tbl_Reminder . ' as r', 'on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"', 'type' => 'left');
+           // $join[] = array('table' => Tbl_Reminder . ' as r', 'on_condition' => 'la.lead_id = r.lead_id AND r.is_cancelled = "No"', 'type' => 'left');
             $arrData['leads'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by);
 
             if ($type == 'EM') {
