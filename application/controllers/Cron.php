@@ -1251,7 +1251,7 @@ $pending_days = 2;
                 3) Number of Unassigned Leads.<br>
                 4) Leads pending at pre-documentation stage. (The leads which are not acted upon in due time at various stages).<br>
                 5) Leads pending at post documentation stage. (The leads which are mark Document collected and are pending beyond defined TAT).<br><br>
-                You are requested to kindly look into the pendency and take up with respective BM's for immediate suitable disposal of the pending leads.<br><br>
+                You are requested to kindly look into the pendency and take up with respective BM for immediate suitable disposal of the pending leads.<br><br>
                 This is an auto generated e-mail escalated to you on account of pendency beyond defined TAT at branch level which will be further auto escalated to respective Field General Manager after two days of pendencies at each  level.<br><br>
                 Regards,<br>Dena Sampark";
         return $msg;
