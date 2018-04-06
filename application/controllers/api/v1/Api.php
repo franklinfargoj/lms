@@ -221,18 +221,18 @@ class Api extends REST_Controller
     {
          $params = $this->input->post();
          // check for duplicate entry
-//         $whereEx = array(
-//            'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
-//             'contact_no'=> $this->input->post('contact_no'),
-//             'product_id'=> $this->input->post('product_id'),
-//             'DATEDIFF(CURDATE(),created_on) <=' => 180
-//         );
-//         $is_exsits = $this->Lead->is_exsits($whereEx);
-//         if($is_exsits){
-//             $result = array('result' => False,
-//                 'data' => array('Record Already Added'));
-//             returnJson($result);
-//         }
+         $whereEx = array(
+            'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
+             'contact_no'=> $this->input->post('contact_no'),
+             'product_id'=> $this->input->post('product_id'),
+             'DATEDIFF(CURDATE(),created_on) <=' => 180
+         );
+         $is_exsits = $this->Lead->is_exsits($whereEx);
+         if($is_exsits){
+             $result = array('result' => False,
+                 'data' => array('Record Already Added'));
+             returnJson($result);
+         }
         $error = array();
         $validations = array('customer_name' => 'Customer Name', 'contact_no' => 'Phone No',
             'product_category_id' => 'Product Category', 'product_id' => 'Product', 'lead_ticket_range' => 'Range',
