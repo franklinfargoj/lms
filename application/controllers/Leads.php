@@ -522,7 +522,7 @@ class Leads extends CI_Controller
             $yr_start_date=(date('Y')).'-04-01 00:00:00';
             $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
         }
-        $where[Tbl_Leads.".created_on >='".$yr_start_date."' AND ".Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
+        //$where[Tbl_Leads.".created_on >='".$yr_start_date."' AND ".Tbl_Leads.".created_on <='".$yr_end_date."'"] = NULL;
         $where['('.Tbl_LeadAssign.'.lead_id IS NULL OR '.Tbl_LeadAssign.'.is_deleted = 1)'] = NULL;
         $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($select,$table,$join,$where,$group_by);
         $response = array();
