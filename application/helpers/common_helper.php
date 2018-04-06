@@ -1017,7 +1017,7 @@ if(!function_exists('unassignedLeadCount')){
             $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
         }
 //                $where[Tbl_Leads . ".created_on >='".$yr_start_date."'"] = NULL;
-//$where[Tbl_Leads . ".created_on <='".$yr_end_date."'"] = NULL;
+// $where[Tbl_Leads . ".created_on <='".$yr_end_date."'"] = NULL;
 $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.lead_id = ' . Tbl_Leads . '.id', 'type' => 'left');
         $data = $CI->Lead->get_leads($action, $table, $select, $where, $join, $group_by = array(), $order_by = array());
         return $data;
