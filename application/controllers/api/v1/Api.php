@@ -3202,7 +3202,7 @@ private function verify_cbs_account($acc_no)
                     $this->Lead->update_routed_lead($whereUpdate, $table, $data, $order_by, $limit);
 
                 }
-                $mag = array(
+                $msg = array(
                     "result" => True,
                     "data" => array("Lead Assigned Successfully")
                 );
