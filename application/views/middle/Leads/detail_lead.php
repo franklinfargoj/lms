@@ -75,7 +75,7 @@ $input = get_session();
                             <?php $account_no = $leads[0]['opened_account_no'] ? " (".$leads[0]['opened_account_no'].")" :'';
                             if($leads[0]['status']=='FU')
                             {
-                                $account_no = " (Next Followup Date :".date('d-m-Y',strtotime($leads[0]['remind_on'])).")";
+                                $account_no = " (Next Followup Date :".date('d-m-Y',strtotime($leads[0]['followup_date'])).")";
                             }
                             if($leads[0]['status']=='NI')
                             {
