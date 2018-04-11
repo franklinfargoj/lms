@@ -253,7 +253,7 @@ $source = $this->config->item('lead_source');
             }
         });
 
-        $(".send_rapc").click(function() {
+        $(document).on('click', '.send_rapc', function(){
             if (window.confirm('CIR / CIBIL report generated and Lead is Qualified?'))
             {
                 $.ajax({
