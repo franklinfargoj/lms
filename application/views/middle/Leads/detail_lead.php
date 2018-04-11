@@ -87,12 +87,22 @@ $input = get_session();
 
 
                     <div class="form-control">
-                        <label>Followup Remark:</label> <span class="detail-label"><?php echo ucwords(strtolower($leads[0]['reminder_text']));?></span>
+                        <label>Followup Remark:</label>
+                        <span class="detail-label">
+                            <?php
+                                   echo ucwords(strtolower($leads[0]['reminder_text']));
+                            ?>
+                        </span>
                     </div>
 
 
                     <div class="form-control">
-                        <label>Assigned To:</label> <span class="detail-label"><?php echo ucwords(strtolower($leads[0]['employee_name']));?></span>
+                        <label>Assigned To:</label>
+                        <span class="detail-label">
+                        <?php
+                            echo ucwords(strtolower($leads[0]['employee_name']));
+                        ?>
+                        </span>
                     </div>
 
                 </div>

@@ -759,10 +759,25 @@ class Leads extends CI_Controller
      */
     public function details_generated($lead_id){
         $lead_id = decode_id($lead_id);
-        $arrData['leads'] = $this->Lead->lead_details($lead_id);
-        //pe($lead_id);die;
-        $all_status = $this->config->item('lead_status');
+        $status = get_status($lead_id);
 
+        //  pe($status);die;
+        if(!empty($status)){
+
+        $arrData['leads'] = $this->Lead->lead_details($lead_id);
+
+        if(empty($arrData['leads'])){
+            // echo "hi";die;
+            $arrData['leads'] = $this->Lead->lead_details_status($lead_id);
+            //pe($arrData['leads']);die;
+            $this->make_bread->add('Lead Generated','leads/generated');
+            $this->make_bread->add('Lead Details','', 1);
+            $arrData['breadcrumb'] = $this->make_bread->output();
+            $arrData['backUrl'] = 'leads/generated';
+            return load_view($middle = "Leads/detail_lead",$arrData);
+        }else{
+
+        $all_status = $this->config->item('lead_status');
         if($arrData['leads'][0]['status'] == 'NC'){
             $nc_status = $all_status;
             unset($nc_status['NC'],$nc_status['Converted'],$nc_status['Closed']);
@@ -797,6 +812,17 @@ class Leads extends CI_Controller
         $arrData['breadcrumb'] = $this->make_bread->output();
         $arrData['backUrl'] = 'leads/generated';
         return load_view($middle = "Leads/detail_lead",$arrData);
+        }
+        }else{
+            $arrData['leads'] = $this->Lead->lead_details_status_null($lead_id);
+            //pe($arrData['leads']);die;
+            $this->make_bread->add('Lead Generated','leads/generated');
+            $this->make_bread->add('Lead Details','', 1);
+            $arrData['breadcrumb'] = $this->make_bread->output();
+            $arrData['backUrl'] = 'leads/generated';
+            return load_view($middle = "Leads/detail_lead",$arrData);
+        }
+
     }
 
         /**

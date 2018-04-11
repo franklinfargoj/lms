@@ -581,17 +581,59 @@ class Lead  extends CI_Model
      * @return value
      */
     public function lead_details($lead_id){
-        $this->db->select('Ld.id,Ld.lead_identification,Ld.lead_ticket_range,Ld.opened_account_no,Ld.created_by_branch_id,Ld.customer_name,Ld.contact_no,Ld.remark,La.employee_name,La.status,La.is_deleted,La.is_updated,La.followup_date,db_master_products.title,db_reminder_scheduler.reminder_text')
+
+        $this->db->select('Ld.id,Ld.lead_identification,Ld.lead_ticket_range,Ld.opened_account_no,Ld.created_by_branch_id,Ld.customer_name,Ld.contact_no,Ld.remark,La.employee_name,La.status,La.is_deleted,La.is_updated,La.followup_date,db_master_products.title,rs.reminder_text,rs.is_cancelled')
                 ->from('db_leads AS Ld')
                 ->join('db_lead_assign AS La', 'La.lead_id = Ld.id', 'left')
                 ->join('db_master_products', 'db_master_products.id = Ld.product_id', 'left')
-                ->join('db_reminder_scheduler','db_reminder_scheduler.lead_id=Ld.id','left')
+                ->join('db_reminder_scheduler AS rs','rs.lead_id=Ld.id','left')
+                ->where('rs.is_cancelled',No)
                 ->where('La.is_deleted',0)
                 ->where('La.is_updated',1)
                 ->where('Ld.id',$lead_id);
         $result = $this->db->get()->result_array();
         return $result;
     }
+
+    /**
+     * lead_details_status_null
+     * Gets the detail of lead
+     * @author Franklin Fargoj
+     * @access public
+     * @param $lead_id
+     * @return value
+     */
+    public function lead_details_status_null($lead_id){
+        $this->db->select('Ld.id,Ld.lead_ticket_range, Ld.customer_name,Ld.contact_no,Ld.remark,Ld.opened_account_no,Ld.lead_identification,Ld.created_by_branch_id,db_master_products.title')
+        ->from('db_leads AS Ld')
+        ->join('db_master_products', 'db_master_products.id = Ld.product_id', 'left')
+        ->where('Ld.id',$lead_id);
+        $result = $this->db->get()->result_array();
+        return $result;
+    }
+
+    /**
+     * lead_details_status
+     * Gets the detail of lead
+     * @author Franklin Fargoj
+     * @access public
+     * @param $lead_id
+     * @return value
+     */
+    public function lead_details_status($lead_id){
+        $this->db->select('Ld.id,Ld.lead_ticket_range, Ld.customer_name,Ld.contact_no,Ld.remark,Ld.opened_account_no,Ld.lead_identification,Ld.created_by_branch_id,db_master_products.title,La.status,La.employee_name')
+            ->from('db_leads AS Ld')
+            ->join('db_lead_assign AS La', 'La.lead_id = Ld.id', 'left')
+            ->join('db_master_products', 'db_master_products.id = Ld.product_id', 'left')
+            ->where('La.is_deleted',0)
+            ->where('La.is_updated',1)
+            ->where('Ld.id',$lead_id);
+        $result = $this->db->get()->result_array();
+        return $result;
+    }
+
+
+
 
     public function actual_amt($table,$select,$where,$join,$group_by,$order_by,$limit=''){
 
