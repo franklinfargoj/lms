@@ -269,7 +269,7 @@ $source = $this->config->item('lead_source');
             }
         });
 
-        $(".drop_lead").click(function() {
+         $(document).on('click', '.drop_lead', function(){
             if (window.confirm('Are you sure want to drop this lead?'))
             {
                 $.ajax({
