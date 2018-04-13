@@ -581,6 +581,7 @@ class Lead  extends CI_Model
      * @return value
      */
     public function lead_details($lead_id){
+
         $this->db->select('Ld.id,Ld.lead_identification,Ld.lead_ticket_range,Ld.opened_account_no,Ld.created_by_branch_id,Ld.customer_name,Ld.contact_no,Ld.remark,La.employee_name,La.status,La.is_deleted,La.is_updated,La.followup_date,db_master_products.title,rs.reminder_text,rs.is_cancelled,La.reason_for_drop,La.desc_for_drop')
                 ->from('db_leads AS Ld')
                 ->join('db_lead_assign AS La', 'La.lead_id = Ld.id', 'left')
