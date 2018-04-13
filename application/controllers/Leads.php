@@ -619,14 +619,13 @@ class Leads extends CI_Controller
      * @return array
      */
     public function details($type,$till,$lead_id,$status = null,$param = null,$lead_source = null){
-        /*
-        pe($type);pe($till);pe($lead_id);die;*/
+        //pe($type);pe($till);pe($lead_id);die;
 
         $lead_id = decode_id($lead_id);
         $arrData['type'] = $type;
         $arrData['till'] = $till;
         $lead_status = $this->config->item('lead_status');
-        // pe($lead_status);die;
+       //  pe($lead_status);die;
         $table=Tbl_state;
         $where=array('name !='=>'','code !='=>'');
         $order_by = 'name ASC';
@@ -663,6 +662,7 @@ class Leads extends CI_Controller
 
         /*Create Breadcumb*/
         $login_user = get_session();
+        //pe($login_user);die;
 
         if(isset($login_user['designation_name']) && !empty($login_user['designation_name'])){
             //Parameters buiding for sending to list function.
@@ -700,12 +700,14 @@ class Leads extends CI_Controller
             if($type == 'assigned'){
 
                 $all_status = $this->config->item('lead_status');
+
                 if($arrData['leads'][0]['product_category_id'] != 12){
                     unset($all_status['Sanction']);
                 }
                 if($this->session->userdata('admin_type') == 'EM'){
                     unset($all_status['Converted'],$all_status['Closed']);
                 }
+
                     if($arrData['leads'][0]['status'] == 'NC'){
                         $nc_status = $all_status;
                         unset($nc_status['NC']);
@@ -759,70 +761,12 @@ class Leads extends CI_Controller
      */
     public function details_generated($lead_id){
         $lead_id = decode_id($lead_id);
-        $status = get_status($lead_id);
-
-        //  pe($status);die;
-        if(!empty($status)){
-
         $arrData['leads'] = $this->Lead->lead_details($lead_id);
-
-        if(empty($arrData['leads'])){
-            // echo "hi";die;
-            $arrData['leads'] = $this->Lead->lead_details_status($lead_id);
-            //pe($arrData['leads']);die;
-            $this->make_bread->add('Lead Generated','leads/generated');
-            $this->make_bread->add('Lead Details','', 1);
-            $arrData['breadcrumb'] = $this->make_bread->output();
-            $arrData['backUrl'] = 'leads/generated';
-            return load_view($middle = "Leads/detail_lead",$arrData);
-        }else{
-
-        $all_status = $this->config->item('lead_status');
-        if($arrData['leads'][0]['status'] == 'NC'){
-            $nc_status = $all_status;
-            unset($nc_status['NC'],$nc_status['Converted'],$nc_status['Closed']);
-            $arrData['lead_status'] = $nc_status;
-        }
-        if($arrData['leads'][0]['status'] == 'NI'){
-            $arrData['lead_status'] = array('Closed' => 'Reject');
-        }
-        if($arrData['leads'][0]['status'] == 'FU'){
-            $fu_status = $all_status;
-            unset($fu_status['NC'],$fu_status['Converted'],$fu_status['FU'],$fu_status['Closed']);
-            $arrData['lead_status'] = $fu_status;
-        }
-        if($arrData['leads'][0]['status'] == 'DC'){
-            $dc_status = $all_status;
-            unset($dc_status['NC'],$dc_status['DC'],$dc_status['Converted'],$dc_status['FU'],$dc_status['Closed']);
-            $arrData['lead_status'] = $dc_status;
-        }
-        if($arrData['leads'][0]['status'] == 'AO'){
-            $ao_status = $all_status;
-            $login_user = get_session();
-            if($login_user['designation_name'] == 'EM'){
-                unset($ao_status['NC'],$ao_status['DC'],$ao_status['AO'],$ao_status['FU'],$ao_status['NI']);
-                $arrData['lead_status'] = $ao_status;
-            }else{
-                $arrData['lead_status'] = array('Converted' => 'Converted');
-            }
-        }
-
         $this->make_bread->add('Lead Generated','leads/generated');
         $this->make_bread->add('Lead Details','', 1);
         $arrData['breadcrumb'] = $this->make_bread->output();
         $arrData['backUrl'] = 'leads/generated';
         return load_view($middle = "Leads/detail_lead",$arrData);
-        }
-        }else{
-            $arrData['leads'] = $this->Lead->lead_details_status_null($lead_id);
-            //pe($arrData['leads']);die;
-            $this->make_bread->add('Lead Generated','leads/generated');
-            $this->make_bread->add('Lead Details','', 1);
-            $arrData['breadcrumb'] = $this->make_bread->output();
-            $arrData['backUrl'] = 'leads/generated';
-            return load_view($middle = "Leads/detail_lead",$arrData);
-        }
-
     }
 
         /**
