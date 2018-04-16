@@ -79,6 +79,7 @@ class Leads extends CI_Controller
             $this->form_validation->set_rules('product_id', 'Product','required');
             //$this->form_validation->set_rules('remark', 'Remark', 'required');
             $this->form_validation->set_rules('is_own_branch', 'Branch', 'required');
+            $this->form_validation->set_rules('other_source', 'Source', 'required');
             //$this->form_validation->set_rules('lead_identification', 'Lead Identification', 'required');
 
             if ($this->input->post('is_own_branch') == '0') {
@@ -88,8 +89,10 @@ class Leads extends CI_Controller
             }
 
             if ($this->form_validation->run() === FALSE) {
-                $middle = 'Leads/add_lead';
-                return load_view($middle, $arrData);
+                $this->session->set_flashdata('error', validation_errors());
+//                $middle = 'Leads/add_lead';
+//                return load_view($middle, $arrData);
+                redirect(base_url('leads/add'), 'refresh');
             }else{
                  // check for duplicate entry
                  $whereEx = array(

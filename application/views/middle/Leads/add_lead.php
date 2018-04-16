@@ -111,13 +111,13 @@ $remark_extra = 'style="rows:4 ; cols:80"';
 
                     <div class="form-control">
                         <label>Source:<span style="color:red;">*</span></label>
-                        <select name="other_source" class="form-control">
+                        <select name="other_source" id="other_source">
                             <option value="">Select</option>
                             <?php foreach ($other_sources as $key => $val){?>
                              <option value="<?php echo $key;?>"><?php echo $val;?></option>
                             <?php }?>
                         </select>
-
+                        <?php echo form_error('other_source'); ?>
                     </div>
                     <div class="form-control">
                         <label>Customer Name:<span style="color:red;">*</span> </label>
@@ -356,6 +356,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 product_id: {
                     required: true
                 },
+                other_source:{
+                    required: true
+                },
                 lead_ticket_range: {
                     required: true,
                     number:true,
@@ -398,6 +401,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 },
                 product_id: {
                     required: "Please select product"
+                },
+                other_source:{
+                    required : "Please select lead source"
                 },
                 district_id: {
                     required: "Please select district"
