@@ -560,7 +560,7 @@ $config['escalation_days_diff'] = array(
 $config['lead_source'] = array(
     'walkin'=>'Branch Generated',
     'enquiry'=>'Website,IVR',
-    'tie_ups'=>'Others',
+    'tie_ups'=>'Other Agent',
     'analytics'=>'Analytics',
     );
 

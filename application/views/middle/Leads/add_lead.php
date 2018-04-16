@@ -1,4 +1,5 @@
 <?php
+$other_sources = $this->config->item('other_sources');
 $form_attributes = array('class' => 'form', 'method' => 'post', 'accept-charset' => '', 'id' => 'addlead');
 $data_customer = array('name' => 'customer_name',
     'id' => 'customer_name',
@@ -73,6 +74,8 @@ if ($products != '') {
         $product_options[$value['id']] = $value['title'];
     }
 }
+
+
 $input = get_session();
 $data_ticket_range = array('name'=>'lead_ticket_range','id'=>'ticket_range','type'=>'text','value'=>'');
 $lead_id_options[''] = 'Select Lead Identification';
@@ -106,6 +109,16 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 <p id="note"><span style="color:red;">*</span> These fields are required</p>
                 <div class="lead-form-left">
 
+                    <div class="form-control">
+                        <label>Source:<span style="color:red;">*</span></label>
+                        <select name="other_source" class="form-control">
+                            <option value="">Select</option>
+                            <?php foreach ($other_sources as $key => $val){?>
+                             <option value="<?php echo $key;?>"><?php echo $val;?></option>
+                            <?php }?>
+                        </select>
+
+                    </div>
                     <div class="form-control">
                         <label>Customer Name:<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_customer);?>

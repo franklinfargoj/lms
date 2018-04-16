@@ -57,7 +57,7 @@
             <div class="box box-m box-m1">
             <div class="performance-box-top"></div>
                 <img src="<?php echo base_url().ASSETS;?>images/hand-box.jpg" alt="self" class="Pbox-img">
-                <h4>Others</h4>
+                <h4>Other Agent</h4>
                 <div class="bg-red bg-c">
                 <img src="<?php echo base_url().ASSETS;?>images/red-circle.png" alt="bg-red" class="img-w">
                 <ul>
