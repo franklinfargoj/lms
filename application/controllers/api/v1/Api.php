@@ -681,10 +681,17 @@ class Api extends REST_Controller
                 $final_reason[] = $status;
             }
 
+            foreach ($this->config->item('other_sources') as $key => $value){
+                $status['id'] = $key;
+                $status['title'] = $value;
+                $final_other_source[] = $status;
+            }
+
             $lead_status['status'] = $final_status;
             $lead_status['lead_source'] = $final_source;
             $lead_status['lead_identification'] = $final_type;
             $lead_status['drop_reason'] = $final_reason;
+            $lead_status['other_source'] = $final_other_source;
         }
         if (!empty($lead_status)) {
             $res = array('result' => True,
