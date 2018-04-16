@@ -580,3 +580,11 @@ $config['drop_reason'] = array(
     'Lost To Competition'=>'Lost To Competition',
     'Others'=>'Others',
 );
+
+$config['other_sources'] = array(
+    'HLC'=>'HLC',
+    'DSA'=>'DSA',
+    'Other Agent'=>'Other Agent',
+    'BC'=>"BC's",
+    'BR'=>"BRANCH"
+);
