@@ -31,30 +31,35 @@ class Login extends CI_Controller {
      */
 	public function index()
 	{
+	    //die('m in login');
+        //phpinfo();
+        //exit;
         $isLoggedIn = $this->session->userdata('isLoggedIn');
         if (!empty($isLoggedIn)) { redirect('dashboard'); }
         //Get tickers title
             $this->load->model('Ticker_model','ticker');
             $select = array('id','title');
             $where['is_deleted'] = 0;
+            $where['status'] = 'active';
             $arrData['tickers'] = $this->ticker->view($select,$where,Tbl_Ticker,array(),array(),$limit = 2);
-        //Get tickers title    
+            //Get tickers title
         if($this->input->post()){
             $this->form_validation->set_rules('username','Username', 'trim|required');
             $this->form_validation->set_rules('password','Password', 'trim|required');
             $this->form_validation->set_rules('captext','Security code', 'trim|required|callback_check_captcha');
             if ($this->form_validation->run() == FALSE)
             {    
+//                die('in if');
                 $arrData['has_error'] = 'has-error';
                 //Generate Captcha
                 $arrData['capimage'] = $this->load_captcha();
                 //Generate Captcha
                 return $this->load->view("login",$arrData);
             }else{
-//echo $this->input->post('password');die;
-              //$pwd = base64_decode($this->input->post('password'));
-$pwd = decode_id($this->input->post('password'));
 
+              //$pwd = base64_decode($this->input->post('password'));
+                $pwd = decode_id($this->input->post('password'));
+                //dd($pwd);
                 // Captcha validation passed
                 if($this->input->post('username') == '1111111'){
                     $checkInput = array(
@@ -308,6 +313,7 @@ die;
 
 public function aes()
     {
+        //die('m called');
         $exp_str = explode('/',$this->input->post('auth'));
         $pwd = base64_decode(base64_decode($exp_str[0]));
         $data['aes'] = encode_id($pwd);
