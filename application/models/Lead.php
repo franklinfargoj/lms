@@ -316,6 +316,7 @@ class Lead  extends CI_Model
     }
 
     public function get_generated_lead_bm_zm($where_generated_Array){
+
         $result = array();
         if(!empty($where_generated_Array)){
             //for branch manager
@@ -345,6 +346,16 @@ class Lead  extends CI_Model
         return $result;
 
     }
+
+
+    public function getEntireZoneDetails(){
+        $this->db->select('code,name');
+        $result = $this->db->get(Tbl_zone)->result_array();
+        return $result;
+
+    }
+
+
     public function get_converted_lead_bm_zm($where_converted_Array){
         $result = array();
         if(!empty($where_converted_Array)){

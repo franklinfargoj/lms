@@ -42,7 +42,11 @@ class Dashboard extends CI_Controller {
 
         //Get session data
         $leads = array();
-//echo $login_user['designation_name'];
+
+        if($login_user['designation_name'] == SA){
+            $login_user['designation_name'] = 'SA';
+        }
+
         if(isset($login_user['designation_name']) && !empty($login_user['designation_name'])){
             switch ($login_user['designation_name']){
                 case 'EM':
@@ -115,6 +119,10 @@ class Dashboard extends CI_Controller {
                 case 'GM':
                     $arrData['leads'] = $this->gm_view();
                     $middle = "Leads/view/gm_view";
+                    break;
+                case 'SA':
+                    $arrData['leads'] = $this->superAdminView();
+                    $middle = "Leads/view/sa_view";
                     break;
             }
 
@@ -303,6 +311,7 @@ class Dashboard extends CI_Controller {
         $generated_key_value = array();
         $generated_key_value_year = array();
         $final = array();
+
         foreach ($generated['generated_leads'] as $k => $v) {
             $generated_key_value[$v['created_by_zone_id']] = $v['total'];
         }
@@ -327,6 +336,95 @@ class Dashboard extends CI_Controller {
             }
             $final[$val->DESCR10] = $push_generated;
         }
+        //for converted
+        foreach ($final as $id => $value) {
+
+            $where_month_Array = array('zone_id' => $value['created_by'],'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
+            $where_month_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+            $where_month_Array['YEAR(created_on)'] = date('Y');
+            $where_year_Array = array('zone_id' => $value['created_by'],'status' => 'converted','is_updated' => 1,'is_deleted' => 0);
+            $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+            $yr_end_date=(date('Y')).'-03-31 23:59:59';
+            $current_month = date('n');
+            if($current_month >=4){
+                $yr_start_date=(date('Y')).'-04-01 00:00:00';
+                $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+            }
+            $where_year_Array["created_on >='".$yr_start_date."'"] = NULL;
+            $where_year_Array["created_on <='".$yr_end_date."'"] = NULL;
+            $converted = $this->master->get_converted_lead_bm_zm($where_month_Array);
+            $converted_yearly = $this->master->get_converted_lead_bm_zm($where_year_Array);
+            if (empty($converted)) {
+                $converted = 0;
+            }
+            if (empty($converted_yearly)) {
+                $converted_yearly = 0;
+            }
+            $final[$value['created_by']]['total_converted_mtd'] = $converted;
+            $final[$value['created_by']]['total_converted_ytd'] = $converted_yearly;
+        }
+        return $final;
+    }
+
+
+
+
+    private function superAdminView(){
+
+        $where_generated_Array = array('created_by_zone_id !=' => NULL);
+        $where_year_Array = array('created_by_zone_id !=' => NULL);
+
+        $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
+        $yr_end_date=(date('Y')).'-03-31 23:59:59';
+        $current_month = date('n');
+        if($current_month >=4){
+            $yr_start_date=(date('Y')).'-04-01 00:00:00';
+            $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+        }
+        $where_year_Array["created_on >='".$yr_start_date."'"] = NULL;
+        $where_year_Array["created_on <='".$yr_end_date."'"] = NULL;
+        // $year_where['YEAR(l.created_on)'] = date('Y');
+        $where_generated_Array['MONTH(created_on)'] = date('m'); //Month till date filter
+        $where_generated_Array['YEAR(created_on)'] = date('Y');
+
+        $generated['generated_leads'] = $this->master->get_generated_lead_bm_zm($where_generated_Array);
+        $generated['yearly_generated_leads'] = $this->master->get_generated_lead_bm_zm($where_year_Array);
+        $generated_key_value = array();
+        $generated_key_value_year = array();
+        $final = array();
+
+
+
+        foreach ($generated['generated_leads'] as $k => $v) {
+            $generated_key_value[$v['created_by_zone_id']] = $v['total'];
+        }
+        foreach ($generated['yearly_generated_leads'] as $k => $v) {
+            $generated_key_value_year[$v['created_by_zone_id']] = $v['total'];
+        }
+        $login_user = get_session();
+
+//        $result = get_details($login_user['hrms_id']);
+
+        $result  =  $this->master->getEntireZoneDetails();
+
+        foreach ($result as $key => $val) {
+            if (!array_key_exists($val['code'], $generated_key_value_year)) {
+                $push_generated = array(
+                    'created_by' => $val['code'],
+                    'created_by_name' => $val['name'],
+                    'total_generated_mtd' => 0,
+                    'total_generated_ytd' => 0);
+            } else {
+                $push_generated = array(
+                    'created_by' => $val['code'],
+                    'created_by_name' => $val['name'],
+                    'total_generated_mtd' => (isset($generated_key_value[$val['code']]))?$generated_key_value[$val['code']] : 0,
+                    'total_generated_ytd' => (isset($generated_key_value_year[$val['code']]))?$generated_key_value_year[$val['code']]:0);
+            }
+            $final[$val['code']] = $push_generated;
+        }
+
+
         //for converted
         foreach ($final as $id => $value) {
 
@@ -414,7 +512,7 @@ class Dashboard extends CI_Controller {
             }
         }
 
-        if ($this->session->userdata('admin_type') == 'GM') {
+        if (($this->session->userdata('admin_type') == 'GM')||($this->session->userdata('admin_type') == SA)) {
             $result['title'] = 'Lead Performance';
             $result['zone_id'] = $zone_id;
             $this->make_bread->add('Lead Performance', '', 0);
@@ -595,7 +693,7 @@ class Dashboard extends CI_Controller {
         $join[] = array('table' => Tbl_LeadAssign.' as la', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
 
         //User Level conditions
-        if(!empty($designation_type) && $designation_type == 'GM'){
+        if(!empty($designation_type) && ($designation_type == 'GM' || $designation_type == 'Super admin')){
             $zone_id = decode_id($id);
             $result['created_by_zone_id']  = $zone_id;
             if($type == 'generated'){
@@ -660,49 +758,50 @@ class Dashboard extends CI_Controller {
         //Genearted Count and Assigned Count
         switch ($type) {
             case 'generated':
-                $table = Tbl_LeadAssign.' as la';
+                $table = Tbl_LeadAssign . ' as la';
                 $join = array();
-                $join[] = array('table' => Tbl_Leads.' as l', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
-                $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
-                $yr_end_date=(date('Y')).'-03-31 23:59:59';
+                $join[] = array('table' => Tbl_Leads . ' as l', 'on_condition' => 'l.id = la.lead_id', 'type' => '');
+                $yr_start_date = (date('Y') - 1) . '-04-01 00:00:00';
+                $yr_end_date = (date('Y')) . '-03-31 23:59:59';
                 $current_month = date('n');
-                if($current_month >=4){
-                    $yr_start_date=(date('Y')).'-04-01 00:00:00';
-                    $yr_end_date=(date('Y')+1).'-03-31 23:59:59';
+                if ($current_month >= 4) {
+                    $yr_start_date = (date('Y')) . '-04-01 00:00:00';
+                    $yr_end_date = (date('Y') + 1) . '-03-31 23:59:59';
                 }
-                $year_where["l.created_on >='".$yr_start_date."' AND l.created_on <='".$yr_end_date."'"] = NULL;
-                   // $year_where['YEAR(l.created_on)'] = date('Y');
+                $year_where["l.created_on >='" . $yr_start_date . "' AND l.created_on <='" . $yr_end_date . "'"] = NULL;
+                // $year_where['YEAR(l.created_on)'] = date('Y');
                 $month_where['MONTH(l.created_on)'] = date('m'); //Month till date filter
                 $month_where['YEAR(l.created_on)'] = date('Y');
-                    //$month_where['MONTH(l.created_on)'] = date('m');
-                    if(!empty($status)){
-                        foreach ($status as $key => $value) {
-                            $where['status'] = $key;
-                            
-                            //This Year Generated
-                            $year_where = array_merge($year_where,$where);
-                            
-                            //This Month Generated
-                            $month_where = array_merge($month_where,$where);
-                            
-                            $result[$key]['Month'] = $this->master->get_leads($action, $table, '', $month_where, $join, '', '');
-                            //pe($this->db->last_query());
-                            $result[$key]['Year'] = $this->master->get_leads($action, $table, '', $year_where, $join, '', '');
-                        }
-                    }
-                        $action1 = 'count';
-                        $select1 = array();
-                        $table1 = Tbl_Leads;
-                        $join_assign1[] = array('table' =>Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = '.Tbl_Leads.'.id ','type' => 'left');
+                //$month_where['MONTH(l.created_on)'] = date('m');
+                if (!empty($status)) {
+                    foreach ($status as $key => $value) {
+                        $where['status'] = $key;
 
-if($designation_type == 'ZM'){
-                        $whereYear1 = array($table1 . '.created_by_branch_id' => $branch_id,'la.lead_id' => NULL);}
-else{
-$whereYear1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL);
-}
-if($designation_type == 'GM'){
-                $whereMonth1 = array($table1 . '.created_by_zone_id' => $zone_id,'la.lead_id' => NULL);
-}
+                        //This Year Generated
+                        $year_where = array_merge($year_where, $where);
+
+                        //This Month Generated
+                        $month_where = array_merge($month_where, $where);
+
+                        $result[$key]['Month'] = $this->master->get_leads($action, $table, '', $month_where, $join, '', '');
+                        //pe($this->db->last_query());
+                        $result[$key]['Year'] = $this->master->get_leads($action, $table, '', $year_where, $join, '', '');
+                    }
+                }
+                $action1 = 'count';
+                $select1 = array();
+                $table1 = Tbl_Leads;
+                $join_assign1[] = array('table' => Tbl_LeadAssign . ' as la', 'on_condition' => 'la.lead_id = ' . Tbl_Leads . '.id ', 'type' => 'left');
+
+                if ($designation_type == 'ZM') {
+                    $whereYear1 = array($table1 . '.created_by_branch_id' => $branch_id, 'la.lead_id' => NULL);
+                }
+                elseif($designation_type == 'GM' || $designation_type == SA){
+                    $whereYear1 = array($table1 . '.created_by_zone_id' => $zone_id,'la.lead_id' => NULL);
+                }else{
+                $whereYear1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL);
+                }
+
 
                 $yr_start_date=(date('Y')-1).'-04-01 00:00:00';
                 $yr_end_date=(date('Y')).'-03-31 23:59:59';
@@ -716,14 +815,14 @@ if($designation_type == 'GM'){
                 // $year_where['YEAR(l.created_on)'] = date('Y');
                 $month_where['MONTH(l.created_on)'] = date('m'); //Month till date filter
                 $month_where['YEAR(l.created_on)'] = date('Y');
-if($designation_type == 'ZM'){
-                $whereMonth1 = array($table1 . '.created_by_branch_id' => $branch_id,'la.lead_id' => NULL);}
-else{
-$whereMonth1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL);
-}
-if($designation_type == 'GM'){
-                $whereMonth1 = array($table1 . '.created_by_zone_id' => $zone_id,'la.lead_id' => NULL);
-}
+                if($designation_type == 'ZM'){
+                                $whereMonth1 = array($table1 . '.created_by_branch_id' => $branch_id,'la.lead_id' => NULL);}
+                elseif($designation_type == 'GM'||$designation_type == SA){
+                    $whereMonth1 = array($table1 . '.created_by_zone_id' => $zone_id,'la.lead_id' => NULL);
+                }else{
+                $whereMonth1 = array($table1 . '.created_by' => $employee_id,'la.lead_id' => NULL);
+                }
+
                 $whereMonth1['MONTH(' . $table1 . '.created_on)'] = date('m'); //Month till date filter
                 $whereMonth1['YEAR(' . $table1 . '.created_on)'] = date('Y');
                 $unassigned_leads_count_month = $this->master->get_leads($action1,$table1,$select1,$whereMonth1,$join_assign1,$group_by = array(),$order_by = array());
@@ -803,6 +902,7 @@ if($designation_type == 'GM'){
         //pe($this->db->last_query());
         $result['breadcrumb'] = $this->make_bread->output();
         $middle = "Leads/view/status";
+        //pe($result);
         load_view($middle,$result);
     }
 

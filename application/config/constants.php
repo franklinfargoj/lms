@@ -213,3 +213,4 @@ define('minEmi','0');
 define('maxEmi','20000000');
 define('add_lead_min','0');
 define('add_lead_max','5000000');
+define('SA','Super admin');

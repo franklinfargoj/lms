@@ -2,7 +2,7 @@
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- END PAGE LEVEL STYLES -->
-<?php 
+<?php
     $status = $this->config->item('lead_status');
     $title = ucwords($type).' Leads';
 ?>
@@ -89,6 +89,10 @@
                             case 'DC':
                                 $Month = $DC['Month'];
                                 $Year = $DC['Year'];
+                                break;
+                            case 'Sanction':
+                                $Month = $Sanction['Month'];
+                                $Year = $Sanction['Year'];
                                 break;
                             case 'AO':
                                 $Month = $AO['Month'];
