@@ -98,6 +98,8 @@
                                 </span>
                             </div>
                             <?php }?>
+
+
                             <div class="form-control">
                                 <label>Lead Status:</label> <span class="detail-label">
                                     <?php $account_no = $leads[0]['opened_account_no'] ? " (".$leads[0]['opened_account_no'].")" :'';
@@ -112,6 +114,8 @@
                                     }
                                     echo isset($leads[0]['status']) ? $all_lead_status[$leads[0]['status']].$account_no : 'NA';?></span>
                             </div>
+
+
                             <div class="form-control">
                                 <label>Followup Remark:</label> <span class="detail-label"><?php echo ucwords(strtolower($leads[0]['reminder_text']));?></span>
                             </div>
@@ -150,6 +154,8 @@
                                         }
                                     ?>
                                 </div> -->
+
+
                                 <div class="form-control">
                                 <?php
 
@@ -171,6 +177,7 @@
                                 echo form_hidden($data);
                                 $options1[$leads[0]['status']]='Select';
                                 if(!empty($lead_status)){
+                                    //pe($lead_status);die;
                                     foreach ($lead_status as $key => $value) {
                                         if($leads[0]['category_title'] != 'Fee Income') {
                                             if ($key != $leads[0]['status']) {
@@ -310,6 +317,7 @@
                                         <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="right-nav">
                                     </a>
                                 </div>
+
                                 <div class="form-control lead_identified">
                                     <?php
                                     if($this->session->userdata('admin_type')=='EM' || $this->session->userdata('admin_type')=='BM'){
@@ -711,6 +719,38 @@
         });
     });
 
+    $('#lead_status').change(function () {
+
+        var current_status = "<?php echo $leads[0]['status']; ?>";
+        var selected_status = $(this).val();
+
+        if(current_status == 'NC'){
+            if(selected_status==='DC'||selected_status==='AO'||
+               selected_status==='Converted'||selected_status==='Sanction'||
+               selected_status==='Closed') {
+                alert('Please select  Interested or Drop/Not interested.');
+                $(this).val('NC');
+            }
+        }else if(current_status == 'FU'){
+            if(selected_status==='Sanction'|| selected_status==='Converted') {
+                alert('Please select  Documents Collected or Drop/Not interested.');
+                //$(this).val('FU');
+            }
+        }else if(current_status == 'DC'){
+            if(selected_status==='Closed') {
+                alert('Please select Converted or Drop/Not interested.');
+                //$(this).val('DC');
+            }
+        }else if(current_status == 'AO'){
+            if(selected_status==='Closed') {
+                alert('Please select Converted.');
+                //$(this).val('DC');
+            }
+        }
+
+    })
+
+
     $('.verify_account').click(function () {
         var acc_no = $.trim($('#accountNo').val());
 
@@ -757,4 +797,5 @@
         }
 
     });
+
 </script>

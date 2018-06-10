@@ -581,17 +581,21 @@ class Lead  extends CI_Model
      * @return value
      */
     public function lead_details($lead_id){
-        $this->db->select('Ld.id,Ld.lead_identification,Ld.lead_ticket_range,Ld.opened_account_no,Ld.created_by_branch_id,Ld.customer_name,Ld.contact_no,Ld.remark,La.employee_name,La.status,La.is_deleted,La.is_updated,db_master_products.title,r.remind_on,r.reminder_text')
+
+        $this->db->select('Ld.id,Ld.lead_identification,Ld.lead_ticket_range,Ld.opened_account_no,Ld.created_by_branch_id,Ld.customer_name,Ld.contact_no,Ld.remark,La.employee_name,La.status,La.is_deleted,La.is_updated,La.followup_date,db_master_products.title,rs.reminder_text,rs.is_cancelled,La.reason_for_drop,La.desc_for_drop')
                 ->from('db_leads AS Ld')
                 ->join('db_lead_assign AS La', 'La.lead_id = Ld.id', 'left')
                 ->join('db_master_products', 'db_master_products.id = Ld.product_id', 'left')
-                ->join('db_reminder_scheduler AS r','r.lead_id=Ld.id','left')
-                ->where('La.is_updated',1)
-                ->where('La.is_deleted',0)
+                ->join('db_reminder_scheduler AS rs','rs.lead_id=Ld.id','left')
+                ->order_by("La.id", "desc")
+                ->order_by("rs.id", "desc")
+                ->limit(1,0)
                 ->where('Ld.id',$lead_id);
         $result = $this->db->get()->result_array();
         return $result;
     }
+
+
 
     public function actual_amt($table,$select,$where,$join,$group_by,$order_by,$limit=''){
 
