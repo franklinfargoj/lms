@@ -110,16 +110,6 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 <div class="lead-form-left">
 
                     <div class="form-control">
-                        <label>Source:<span style="color:red;">*</span></label>
-                        <select name="other_source" id="other_source">
-                            <option value="">Select</option>
-                            <?php foreach ($other_sources as $key => $val){?>
-                             <option value="<?php echo $key;?>"><?php echo $val;?></option>
-                            <?php }?>
-                        </select>
-                        <?php echo form_error('other_source'); ?>
-                    </div>
-                    <div class="form-control">
                         <label>Customer Name:<span style="color:red;">*</span> </label>
                         <?php echo form_input($data_customer);?>
                         <?php echo form_error('customer_name'); ?>
@@ -196,6 +186,18 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     </div>
                     <div id="branch" class="form-control">
                         <?php echo form_error('branch_id'); ?>
+                    </div>
+
+                    <div class="form-control">
+                        <label>If Through Any Agent:<span style="color:red;">*</span></label>
+                        <select name="other_source" id="other_source">
+                            <option value="">Select</option>
+                            <?php foreach ($other_source as $data){?>
+                                <option value="<?php echo $data['id'];?>"><?php echo $data['title'];?></option>
+                            <?php }?>
+                            <option value="NULL">None</option>
+                        </select>
+                        <?php echo form_error('other_source'); ?>
                     </div>
 
                     <div class="form-control">

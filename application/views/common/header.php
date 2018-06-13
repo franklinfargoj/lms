@@ -196,10 +196,10 @@
 
 							</ul>
 						</li>
-					
+
 						<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>" id="cal-droped2">
 						<a href="#">
-						 
+
 						<span class="right-toggle">&#9666;</span>Performance<span class="left-toggle"> &#9656;</span>
 						</a>
 							<ul class="cal-drop2">
@@ -238,7 +238,7 @@
 						</li> -->
 						<li class="<?php echo ($controller == 'leads_classification') ? 'active' : ''?>" id="cal-droped4">
 							<a href="#">
-							
+
 							<span class="right-toggle">&#9666;</span>Classification<span class="left-toggle"> &#9656;</span>
 							</a>
 							<ul class="cal-drop4">
@@ -276,17 +276,19 @@
                                 <?php }?>
 							</ul>
 						</li>
-						
+
 					</ul>
 				</li>
 
 				<?php }?>
-                         <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-				<li class="<?php echo ($controller == 'change_password') ? 'active' : ''?>">
-					<a href="<?php echo site_url('change_password')?>">
-						Change Password
-					</a>
-				</li>
+
+
+                <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+                    <li class="<?php echo ($controller == 'change_password') ? 'active' : ''?>">
+                        <a href="<?php echo site_url('change_password')?>">
+                            Change Password
+                        </a>
+                    </li>
 				<?php }?>
 
                 <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
@@ -295,6 +297,14 @@
                         CC Email
                     </a>
                 </li>
+                <?php }?>
+
+                <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+                    <li>
+                        <a href="<?php echo site_url('othersource')?>">
+                            Other Source
+                        </a>
+                    </li>
                 <?php }?>
 
 			</ul>
@@ -341,6 +351,11 @@
 	    $("#cal-droped4").hover(function(){
 	    	// event.preventDefault();
 	        $(".cal-drop4").toggle();
+	    });
+
+	    $("#cal-droped5").hover(function(){
+	    	// event.preventDefault();
+	        $(".cal-drop5").toggle();
 	    });
 		$("#per-droped ").hover(function(){
 
