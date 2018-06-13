@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | development and MUST NOT be used in production!
 |
 | If you need to allow multiple domains, remember that this file is
-| a PHP script and you can easily do that on you
+| a PHP script and you can easily do that on your
 |
 */
 $config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].':8844/DENABANK/lms';
