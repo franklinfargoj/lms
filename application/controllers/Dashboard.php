@@ -32,6 +32,7 @@ class Dashboard extends CI_Controller {
      */
 	public function index()
 	{
+
         //Get session data
         $login_user = get_session();
         $middle = '';

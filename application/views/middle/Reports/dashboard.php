@@ -2,6 +2,8 @@
 $lead_type = $this->config->item('lead_type');
 $lead_status = $this->config->item('lead_status');
 $lead_source = $this->config->item('lead_source');
+
+
 ?>
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link href="<?php echo base_url().ASSETS;?>css/jquery.dataTables.min.css" rel="stylesheet">
@@ -103,57 +105,69 @@ echo form_hidden($data);
                 <div class="container">
                     <table border="1">
                         <thead>
-                            <tr>
-                                <th></th>
-                                <th>Emp Adoption</th>
-                                <th>Emp Adoption</th>
-                                <th>Emp Usage</th>
-                                <th>Branch Adoption</th>
-                            </tr>
+                        <tr>
+                            <th></th>
+                            <th>Emp Adoption</th>
+                            <th>Emp Adoption</th>
+                            <th>Emp Usage</th>
+                            <th>Branch Adoption</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr class="odd-dash">
-                                <td></td>
-                                <td>Unique employee logins (since inception)</td>
-                                <td>Unique employee logins (Today)</td>
-                                <td>Unique employees generating leads</td>
-                                <td>Branches generating leads (at least 1)</td>
-                            </tr>
-                            <tr class="even-dash">
-                                <td>Actual</td>
-                                <td><?php echo $unique_login_count;?></td>
-                                <td><?php echo $today_unique_login_count;?></td>
-                                <td><?php echo $unique_leadcreator_employee_count;?></td>
-                                <td><?php echo $unique_leadcreator_branch_count;?></td>
-                            </tr>
-                            <tr class="odd-dash">
-                                <td>Base</td>
-                                <td><?php echo $total_employee_count;?></td>
-                                <td><?php echo $total_employee_count;?></td>
-                                <td><?php echo $total_employee_count;?></td>
-                                <td><?php echo $total_branch_count;?></td>
-                            </tr>
+                        <tr class="odd-dash">
+                            <td></td>
+                            <td>Unique employee logins (As on today)</td>
+                            <td>Unique employee logins (Today)</td>
+                            <td>Unique employees generating leads</td>
+                            <td>Branches generating leads (at least 1)</td>
+                        </tr>
+                        <tr class="even-dash">
+                            <td>Actual</td>
+                            <td><?php echo $unique_login_count;?></td>
+                            <td><?php echo $today_unique_login_count;?></td>
+                            <td><?php echo $unique_leadcreator_employee_count;?></td>
+                            <td><?php echo $unique_leadcreator_branch_count;?></td>
+                        </tr>
+                        <tr class="odd-dash">
+                            <td>Base</td>
+                            <td><?php echo $total_employee_count;?></td>
+                            <td><?php echo $total_employee_count;?></td>
+                            <td><?php echo $total_employee_count;?></td>
+                            <td><?php echo $total_branch_count;?></td>
+                        </tr>
                         </tbody>
                         <tfoot>
-                            <tr>
-                                <td>%</td>
-                                <td><?php echo round(($unique_login_count/$total_employee_count)*100,2).'%';?></td>
-                                <td><?php echo round(($today_unique_login_count/$total_employee_count)*100,2).'%';?></td>
-                                <td><?php echo round(($unique_leadcreator_employee_count/$total_employee_count)*100,2).'%';?></td>
-                                <td><?php echo round(($unique_leadcreator_branch_count/$total_branch_count)*100,2).'%';?></td>
-                            </tr>
+                        <tr>
+                            <td>%</td>
+                            <td><?php echo round(($unique_login_count/$total_employee_count)*100,2).'%';?></td>
+                            <td><?php echo round(($today_unique_login_count/$total_employee_count)*100,2).'%';?></td>
+                            <td><?php echo round(($unique_leadcreator_employee_count/$total_employee_count)*100,2).'%';?></td>
+                            <td><?php echo round(($unique_leadcreator_branch_count/$total_branch_count)*100,2).'%';?></td>
+                        </tr>
                         </tfoot>
                     </table>
+
+                    <div class="page-title">
+                        <div class="container clearfix">
+                            <h3 class="text-center">Metrics</h3>
+                        </div>
+                    </div>
+
+
                     <?php
                     if(isset($leads) && !empty($leads)){
 
-//                    pe($leads);
-//                    pe($product_category);
+                    $total_estimated_business_in_cr=0;
+                    $total_actual_business_in_cr = 0;
+                    $total_conversion_in_cr = '0.00%';
+                    //                    pe($product_category);
                     foreach ($lead_source as $key=>$val) {
                         $total_generated=0;
                         $total_converted=0;
                         $total_estimated_business=0;
                         $total_actual_business=0;
+
+//
                         ?>
                         <?php if (!empty($leads[$key])) {?>
                             <div class="page-title">
@@ -161,61 +175,273 @@ echo form_hidden($data);
                                     <h3 class="text-center"><?php echo $val;?></h3>
                                 </div>
                             </div>
-                        <table>
+                            <table>
+                                <tbody>
+                                <tr class="odd-dash">
+                                    <td>Category</td>
+                                    <td># of input leads</td>
+                                    <td># of leads converted</td>
+                                    <td>% Conversion (#)</td>
+                                    <td>Business in Cr. (Input)</td>
+                                    <td>Business Converted (in Cr)</td>
+                                    <td> % Conversion (Amt)</td>
+                                </tr>
+
+
+
+                                <?php
+                                    $sumGenCurrentSaving = 0;
+                                    $sumGenTermRecurring = 0;
+                                    $sumConvCurrentSaving = 0;
+                                    $sumConvTermRecurring = 0;
+
+                                    $casaConversion = 0;
+                                    $termConversion = 0;
+
+                                    $casaBusinessConversion = 0;
+                                    $termBusinessConversion = 0;
+
+                                    $sumEstimatedCurrentSaving = 0;
+                                    $sumEstimatedTermRecurring = 0;
+
+                                    $sumActualCurrentSaving = 0;
+                                    $sumActualTermRecurring = 0;
+
+
+                                   foreach($product as $productId => $products){
+                                       if(isset($leadData[$key]['generated'][$productId])){
+                                           if($productId == SAVING || $productId == CURRENT){
+                                               $sumGenCurrentSaving += $leadData[$key]['generated'][$productId];
+                                           }
+                                           if($productId == TERM || $productId == RECURRING){
+                                               $sumGenTermRecurring += $leadData[$key]['generated'][$productId];
+                                           }
+                                       }
+
+                                       if(isset($leadData[$key]['converted'][$productId])){
+                                           if($productId == SAVING || $productId == CURRENT){
+                                               $sumConvCurrentSaving += $leadData[$key]['converted'][$productId];
+                                           }
+                                           if($productId == TERM || $productId == RECURRING){
+                                               $sumConvTermRecurring += $leadData[$key]['converted'][$productId];
+                                           }
+                                       }
+
+
+                                       if(isset($leadData[$key]['estimated_business'][$productId])){
+                                           if($productId == SAVING || $productId == CURRENT){
+                                               $sumEstimatedCurrentSaving += $leadData[$key]['estimated_business'][$productId];
+                                           }
+                                           if($productId == TERM || $productId == RECURRING){
+                                               $sumEstimatedTermRecurring += $leadData[$key]['estimated_business'][$productId];
+                                           }
+                                       }
+
+                                       if(isset($leadData[$key]['actual_business'][$productId])){
+                                           if($productId == SAVING || $productId == CURRENT){
+                                               $sumActualCurrentSaving += $leadData[$key]['actual_business'][$productId];
+                                           }
+                                           if($productId == TERM || $productId == RECURRING){
+                                               $sumActualTermRecurring += $leadData[$key]['actual_business'][$productId];
+                                           }
+                                       }
+                                   }
+
+                                   if($sumConvCurrentSaving!= 0 && $sumGenCurrentSaving!=0) {
+                                       $casaConversion = round($sumConvCurrentSaving / $sumGenCurrentSaving * 100, 2) . '%';
+                                   }else{
+                                       $casaConversion = "0.00%";
+                                   }
+
+                                    if($sumConvTermRecurring!= 0 && $sumGenTermRecurring!=0) {
+                                        $termConversion = round($sumConvTermRecurring / $sumGenTermRecurring * 100, 2) . '%';
+                                    }else{
+                                        $termConversion = "0.00%";
+                                    }
+
+
+
+                                    if($sumActualCurrentSaving!= 0 && $sumEstimatedCurrentSaving !=0) {
+                                        $casaBusinessConversion = round($sumActualCurrentSaving / $sumEstimatedCurrentSaving * 100, 2) . '%';
+                                    }else{
+                                        $casaBusinessConversion = "0.00%";
+                                    }
+
+                                    if($sumActualTermRecurring!= 0 && $sumEstimatedTermRecurring!=0) {
+                                        $termBusinessConversion = round($sumActualTermRecurring / $sumEstimatedTermRecurring * 100, 2) . '%';
+                                    }else{
+                                        $termBusinessConversion = "0.00%";
+                                    }
+                                ?>
+
+                                <tr class="even-dash">
+                                    <td>CASA</td>
+                                    <td><?php echo $sumGenCurrentSaving;?></td>
+                                    <td><?php echo $sumConvCurrentSaving;?></td>
+                                    <td><?php echo $casaConversion;?></td>
+                                    <td><?php echo convertCurrencyCr($sumEstimatedCurrentSaving);?></td>
+                                    <td><?php echo convertCurrencyCr($sumActualCurrentSaving);?></td>
+                                    <td><?php echo $casaBusinessConversion;?></td>
+                                </tr>
+
+                                <tr class="odd-dash">
+                                    <td>Term Deposit</td>
+                                    <td><?php echo $sumGenTermRecurring;?></td>
+                                    <td><?php echo $sumConvTermRecurring?></td>
+                                    <td><?php echo $termConversion;?></td>
+                                    <td><?php echo convertCurrencyCr($sumEstimatedTermRecurring);?></td>
+                                    <td><?php echo convertCurrencyCr($sumActualTermRecurring);?></td>
+                                    <td><?php echo $termBusinessConversion;?></td>
+                                </tr>
+
+                                <?php
+                                $i=0;
+                                foreach ($product_category as $row) {
+                                    $i++;
+
+
+                                    if($key == 'walkin') {
+                                        if (isset($leads[$key]['estimated_business'][$row['id']]) && !empty($leads[$key]['generated'][$row['id']])) {
+                                            $total_estimated_business_in_cr += convertCurrencyCr($leads[$key]['estimated_business'][$row['id']]);
+                                        }
+                                        if(isset($leads[$key]['actual_business'][$row['id']]) && !empty($leads[$key]['actual_business'][$row['id']])){
+                                            $total_actual_business_in_cr += convertCurrencyCr($leads[$key]['actual_business'][$row['id']]);
+                                        }
+
+                                        if($total_actual_business_in_cr != 0 || $total_estimated_business_in_cr != 0) {
+                                            $total_conversion_in_cr = round(($total_actual_business_in_cr / $total_estimated_business_in_cr) * 100, 2) . '%';
+                                        }else{
+                                            $total_conversion_in_cr = '0.00%';
+                                        }
+                                    }
+
+
+
+                                    if(isset($leads[$key]['generated'][$row['id']]) && !empty($leads[$key]['generated'][$row['id']])){
+                                        $total_generated += $leads[$key]['generated'][$row['id']];
+                                    }
+                                    if(isset($leads[$key]['converted'][$row['id']]) && !empty($leads[$key]['converted'][$row['id']])){
+                                        $total_converted += $leads[$key]['converted'][$row['id']];
+                                    }
+                                    if(isset($leads[$key]['estimated_business'][$row['id']]) && !empty($leads[$key]['estimated_business'][$row['id']])){
+                                        $total_estimated_business += convertCurrencyCr($leads[$key]['estimated_business'][$row['id']]);
+                                    }
+                                    if(isset($leads[$key]['actual_business'][$row['id']]) && !empty($leads[$key]['actual_business'][$row['id']])){
+                                        $total_actual_business += convertCurrencyCr($leads[$key]['actual_business'][$row['id']]);
+                                    }
+
+
+
+                                    if($row['id'] == DEPOSIT){
+                                        continue;
+                                    }
+                                    ?>
+                                    <tr <?php if($i%2 == 0){echo 'class="odd-dash"';}else{ echo 'class="even-dash"';};?>>
+
+                                        <td><?php echo $row['title'];?></td>
+                                        <td><?php echo (isset($leads[$key]['generated'][$row['id']]) && $leads[$key]['generated'][$row['id']])?$leads[$key]['generated'][$row['id']]:0;?></td>
+                                        <td><?php echo (isset($leads[$key]['converted'][$row['id']]) && $leads[$key]['converted'][$row['id']])?$leads[$key]['converted'][$row['id']]:0;?></td>
+                                        <td><?php echo (isset($leads[$key]['generated'][$row['id']]) && $leads[$key]['generated'][$row['id']] && isset($leads[$key]['converted'][$row['id']]) && $leads[$key]['converted'][$row['id']])?round(($leads[$key]['converted'][$row['id']]/$leads[$key]['generated'][$row['id']])*100,2).'%':'0.00%';?></td>
+                                        <td><?php echo (isset($leads[$key]['estimated_business'][$row['id']]) && $leads[$key]['estimated_business'][$row['id']])?convertCurrencyCr($leads[$key]['estimated_business'][$row['id']]):0;?></td>
+                                        <td><?php echo (isset($leads[$key]['actual_business'][$row['id']]) && $leads[$key]['actual_business'][$row['id']])?convertCurrencyCr($leads[$key]['actual_business'][$row['id']]):0;?></td>
+                                        <td><?php echo (isset($leads[$key]['estimated_business'][$row['id']]) && $leads[$key]['estimated_business'][$row['id']] && isset($leads[$key]['actual_business'][$row['id']]) && $leads[$key]['actual_business'][$row['id']])?round(($leads[$key]['actual_business'][$row['id']]/$leads[$key]['estimated_business'][$row['id']])*100,2).'%':'0.00%';?></td>
+                                    </tr>
+                                <?php } ?>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td>Total</td>
+                                    <td><?php echo $total_generated;?></td>
+                                    <td><?php echo $total_converted;?></td>
+                                    <td><?php echo ($total_converted)?round(($total_converted/$total_generated)*100,2).'%':'0.00%';?></td>
+                                    <td><?php echo $total_estimated_business;?></td>
+                                    <td><?php echo $total_actual_business;?></td>
+                                    <td><?php echo ($total_actual_business)?round(($total_actual_business/$total_estimated_business)*100,2).'%':'0.00%';?></td>
+                                </tr>
+                                </tfoot>
+
+                                </tfoot>
+                            </table>
+                        <?php } ?>
+                    <?php }?>
+
+
+
+
+
+
+
+
+                    <table>
                         <tbody>
                         <tr class="odd-dash">
-                            <td>Category</td>
-                            <td># of input leads</td>
-                            <td># of leads converted</td>
-                            <td>% Conversion (#)</td>
-                            <td>Business in Cr. (Input)</td>
-                            <td>Business Converted (in Cr)</td>
-                            <td> % Conversion (Amt)</td>
+                            <td>Key metrics</td>
+                            <td>Actuals(today)</td>
+                            <td>Percentage</td>
+                            <td>Actuals (yesterday)</td>
+                            <td>Delta</td>
+                        </tr>
+                        <?php
+                        $uniqueEmployeeLoginYesterday = $unique_login_count - $today_unique_login_count;
+                        $uniqueEmployeeLoginDelta = $unique_login_count - $uniqueEmployeeLoginYesterday;
+                        ?>
+                        <tr class="even-dash">
+                            <td>Unique employee logins(As of today)</td>
+                            <td><?php echo $unique_login_count;?></td>
+                            <td><?php echo round(($unique_login_count/$total_employee_count)*100,2).'%';?></td>
+                            <td><?php echo $uniqueEmployeeLoginYesterday;?></td>
+                            <td><?php echo $uniqueEmployeeLoginDelta;?></td>
                         </tr>
 
                         <?php
-                            $i=0;
-                            foreach ($product_category as $row) {
-                                $i++;
+                        $uniqueEmployeeLoginTodayDelta = $today_unique_login_count - 0;
+                        ?>
+                        <tr class="odd-dash">
+                            <td>Unique employee logins(Today)</td>
+                            <td><?php echo $today_unique_login_count;?></td>
+                            <td><?php echo round(($today_unique_login_count/$total_employee_count)*100,2).'%';?></td>
+                            <td>-</td>
+                            <td><?php echo $uniqueEmployeeLoginTodayDelta;?></td>
+                        </tr>
 
-                                if(isset($leads[$key]['generated'][$row['id']]) && !empty($leads[$key]['generated'][$row['id']])){
-                                    $total_generated += $leads[$key]['generated'][$row['id']];
-                                }
-                                if(isset($leads[$key]['converted'][$row['id']]) && !empty($leads[$key]['converted'][$row['id']])){
-                                    $total_converted += $leads[$key]['converted'][$row['id']];
-                                }
-                                if(isset($leads[$key]['estimated_business'][$row['id']]) && !empty($leads[$key]['estimated_business'][$row['id']])){
-                                    $total_estimated_business += convertCurrencyCr($leads[$key]['estimated_business'][$row['id']]);
-                                }
-                                if(isset($leads[$key]['actual_business'][$row['id']]) && !empty($leads[$key]['actual_business'][$row['id']])){
-                                    $total_actual_business += convertCurrencyCr($leads[$key]['actual_business'][$row['id']]);
-                                }
-                                ?>
-                                <tr <?php if($i%2 == 0){echo 'class="odd-dash"';}else{ echo 'class="even-dash"';};?>>
-                                    <td><?php echo $row['title'];?></td>
-                                    <td><?php echo (isset($leads[$key]['generated'][$row['id']]) && $leads[$key]['generated'][$row['id']])?$leads[$key]['generated'][$row['id']]:0;?></td>
-                                    <td><?php echo (isset($leads[$key]['converted'][$row['id']]) && $leads[$key]['converted'][$row['id']])?$leads[$key]['converted'][$row['id']]:0;?></td>
-                                    <td><?php echo (isset($leads[$key]['generated'][$row['id']]) && $leads[$key]['generated'][$row['id']] && isset($leads[$key]['converted'][$row['id']]) && $leads[$key]['converted'][$row['id']])?round(($leads[$key]['converted'][$row['id']]/$leads[$key]['generated'][$row['id']])*100,2).'%':'0.00%';?></td>
-                                    <td><?php echo (isset($leads[$key]['estimated_business'][$row['id']]) && $leads[$key]['estimated_business'][$row['id']])?convertCurrencyCr($leads[$key]['estimated_business'][$row['id']]):0;?></td>
-                                    <td><?php echo (isset($leads[$key]['actual_business'][$row['id']]) && $leads[$key]['actual_business'][$row['id']])?convertCurrencyCr($leads[$key]['actual_business'][$row['id']]):0;?></td>
-                                    <td><?php echo (isset($leads[$key]['estimated_business'][$row['id']]) && $leads[$key]['estimated_business'][$row['id']] && isset($leads[$key]['actual_business'][$row['id']]) && $leads[$key]['actual_business'][$row['id']])?round(($leads[$key]['actual_business'][$row['id']]/$leads[$key]['estimated_business'][$row['id']])*100,2).'%':'0.00%';?></td>
-                                </tr>
-                            <?php } ?>
+                        <?php
+                        $uniqueEmployeeGeneratingDelta = $unique_leadcreator_employee_count - 0;
+                        ?>
+
+                        <tr class="even-dash">
+                            <td>Unique employees generating leads</td>
+                            <td><?php echo $unique_leadcreator_employee_count;?></td>
+                            <td><?php echo round(($unique_leadcreator_employee_count/$total_employee_count)*100,2).'%';?></td>
+                            <td>TBD</td>
+                            <td><?php echo $uniqueEmployeeGeneratingDelta;?></td>
+                        </tr>
+
+                        <?php
+                           $uniqueBusinessInCroreDelta = $total_estimated_business_in_cr - 0;
+                        ?>
+                        <tr class="odd-dash">
+                            <td>Business in Cr(input)</td>
+                            <td><?php echo $total_estimated_business_in_cr;?></td>
+                            <td>-</td>
+                            <td>TBD</td>
+                            <td><?php echo $uniqueBusinessInCroreDelta;?></td>
+                        </tr>
+
+
+                        <?php
+                        $uniqueBusinessConvertedDelta = $total_actual_business_in_cr - 0;
+                        ?>
+
+                        <tr class="even-dash">
+                            <td>Business Converted(in Cr)</td>
+                            <td><?php echo $total_actual_business_in_cr;?></td>
+                            <td><?php echo $total_conversion_in_cr;?></td>
+                            <td>TBD</td>
+                            <td><?php echo $uniqueBusinessConvertedDelta;?></td>
+                        </tr>
+
                         </tbody>
-                            <tfoot>
-                            <tr>
-                                <td>Total</td>
-                                <td><?php echo $total_generated;?></td>
-                                <td><?php echo $total_converted;?></td>
-                                <td><?php echo ($total_converted)?round(($total_converted/$total_generated)*100,2).'%':'0.00%';?></td>
-                                <td><?php echo $total_estimated_business;?></td>
-                                <td><?php echo $total_actual_business;?></td>
-                                <td><?php echo ($total_actual_business)?round(($total_actual_business/$total_estimated_business)*100,2).'%':'0.00%';?></td>
-                            </tr>
-                            </tfoot>
-                        </table>
-                        <?php } ?>
-                    <?php }?>
+                    </table>
                 </div>
             </div>
         </div>

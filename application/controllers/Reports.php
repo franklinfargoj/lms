@@ -45,6 +45,7 @@ class Reports extends CI_Controller
      */
     public function index($action,$view = null,$zone_id = null,$branch_id = null,$export = 'no')
     {
+
         $this->make_bread->add('Reports', '', 0);
         $arrData['view'] = $view;
         $arrData['zone_id'] = decode_id($zone_id);
@@ -78,6 +79,7 @@ class Reports extends CI_Controller
                 $product_list = $this->Lead->get_all_products(array('category_id' => $arrData['product_category_id'],'is_deleted' => 0,'status' => 'active'));
                 $arrData['product_list'] = dropdown($product_list,'All');
             }
+
             if($export == 'yes'){
                 if(!empty($arrData['lead_source'])){
                     //pe($arrData);die;
@@ -88,6 +90,7 @@ class Reports extends CI_Controller
                 $this->export_to_excel($action,$arrData);
             }
         }else{
+
             $d = new DateTime('first day of this month');
             $arrData['start_date'] = str_replace('-', '-', $d->format('d-m-Y'));
             $arrData['end_date']   = str_replace('-', '-',date('d-m-Y'));
@@ -2532,7 +2535,9 @@ class Reports extends CI_Controller
         return $arrData;
     }
 
-    private function dashboard($arrData){
+    private function dashboard1($arrData){
+
+
         $login_user = get_session();
         //Build Input Parameter
         $action = 'list';
@@ -2621,9 +2626,12 @@ class Reports extends CI_Controller
         $arrData['product_category'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
 
         $source = $this->config->item('lead_source');
+
+
         foreach ($source as $key=>$val) {
             $action = 'list';
-            $select = array('count( l.id ) as total,SUM(l.lead_ticket_range) as total_estimated_business, c.id as category_id,c.title as product_category');
+            $select = array('count( l.id ) as total,SUM(l.lead_ticket_range) as total_estimated_business,
+             c.id as category_id,c.title as product_category');
             $table = Tbl_Leads . ' as l';
             $where = array('l.lead_source'=>$key);
             $join = array();
@@ -2639,7 +2647,8 @@ class Reports extends CI_Controller
                 $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d', strtotime($arrData['end_date']));
             }
 
-            $arrData['leads'][$key]['generated'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+//            $arrData['leads'][$key]['generated'] = $this->Lead->get_leads($action, $table, $select, $where, $join, $group_by, $order_by = array());
+            $arrData['leads'][$key]['generated'] = $this->Lead->getDataTable($table, $select, $where, $join, $group_by, $order_by = array());
 
             $action = 'list';
             $select = array('count( l.id ) as total ,c.id as category_id,c.title as product_category');
@@ -2699,6 +2708,8 @@ class Reports extends CI_Controller
 
             $arrData['leads'][$key]['actual_business'] = $this->Lead->actual_amt($table, $select, $where, $join, $group_by, $order_by = array());
         }
+
+
         foreach ($arrData['leads'] as $key=>$val){
             if(!empty($val)) {
                 foreach ($val as $key2=>$val2) {
@@ -2712,7 +2723,249 @@ class Reports extends CI_Controller
         }
         $arrData['leads'] = $record;
 
-        //pe($arrData);die;
         return $arrData;
     }
+
+
+
+
+        private function dashboard($arrData){
+
+
+            $login_user = get_session();
+            //Build Input Parameter
+            $action = 'list';
+            $select = array('DISTINCT(hrms_id)');
+            $table = Tbl_emp_dump;
+            $where  = array();
+            $join = array();
+            $group_by = array();
+
+            $arrData['total_employee_count'] = count($this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array()));
+
+            $action = 'list';
+            $select = array('DISTINCT(id)');
+            $table = Tbl_branch;
+            $where  = array('code !='=>'');
+            $join = array();
+            $group_by = array();
+
+            $arrData['total_branch_count'] = count($this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array()));
+
+            $action = 'list';
+            $select = array('DISTINCT(employee_id)');
+            $table = Tbl_LoginLog;
+            $where  = array('branch_id !='=>0);
+            $join = array();
+            $group_by = array();
+
+            //If Start date selected
+            if(!empty($arrData['start_date'])){
+                $where['DATE_FORMAT(date_time,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            }
+            //If End date selected
+            if(!empty($arrData['end_date'])){
+                $where['DATE_FORMAT(date_time,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            }
+
+            $arrData['unique_login_count'] = count($this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array()));
+
+            $where=array('branch_id !='=>0);
+            $where['DATE_FORMAT(date_time,"%Y-%m-%d") >='] = date('Y-m-d');
+            $arrData['today_unique_login_count'] = count($this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array()));
+
+            $action = 'list';
+            $select = array('DISTINCT(created_by)');
+            $table = Tbl_Leads;
+            $where  = array();
+            $join = array();
+            $group_by = array();
+
+            //If Start date selected
+            if(!empty($arrData['start_date'])){
+                $where['DATE_FORMAT(created_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            }
+            //If End date selected
+            if(!empty($arrData['end_date'])){
+                $where['DATE_FORMAT(created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            }
+
+            $arrData['unique_leadcreator_employee_count'] = count($this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array()));
+
+            $action = 'list';
+            $select = array('DISTINCT(created_by_branch_id)');
+            $table = Tbl_Leads;
+            $where  = array();
+            $join = array();
+            $group_by = array();
+
+            //If Start date selected
+            if(!empty($arrData['start_date'])){
+                $where['DATE_FORMAT(created_on,"%Y-%m-%d") >='] = date('Y-m-d',strtotime($arrData['start_date']));
+            }
+            //If End date selected
+            if(!empty($arrData['end_date'])){
+                $where['DATE_FORMAT(created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
+            }
+
+            $arrData['unique_leadcreator_branch_count'] = count($this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array()));
+
+            $action = 'list';
+            $select = array('id','title');
+            $table = Tbl_Category;
+            $where  = array('status'=>'active','is_deleted'=>0);
+            $join = array();
+            $group_by = array();
+
+            $arrData['product_category'] = $this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array());
+            $source = $this->config->item('lead_source');
+
+
+            foreach ($source as $key=>$val) {
+                $action = 'list';
+                $select = array('count(l.id) as total,SUM(l.lead_ticket_range) as total_estimated_business, p.category_id as category_id','l.product_id','p.title as product');
+                $table = Tbl_Leads . ' as l';
+                $where = array('l.lead_source'=>$key);
+                $join = array();
+                $join[] = array('table' => Tbl_Products.' as p',
+                    'on_condition' => 'l.product_id = p.id','type' => '');
+                $group_by = array('l.product_category_id');
+
+                //If Start date selected
+                if (!empty($arrData['start_date'])) {
+                    $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") >='] = date('Y-m-d', strtotime($arrData['start_date']));
+                }
+                //If End date selected
+                if (!empty($arrData['end_date'])) {
+                    $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d', strtotime($arrData['end_date']));
+                }
+
+                $arrData['leads'][$key]['generated'] = $this->Lead->getDataTable($table, $select, $where, $join, $group_by, $order_by = array());
+
+                $action = 'list';
+                $select = array('count( l.id ) as total ,p.category_id as category_id,p.id as product_id,p.title as product');
+                $table = Tbl_Leads . ' as l';
+                $where = array('l.lead_source'=>$key,'la.status'=>'Converted');
+                $join = array();
+                $join[] = array('table' => Tbl_LeadAssign.' as la','on_condition' => 'la.lead_id = l.id','type' => '');
+                $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id','type' => '');
+
+
+                //If Start date selected
+                if (!empty($arrData['start_date'])) {
+                    $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") >='] = date('Y-m-d', strtotime($arrData['start_date']));
+                }
+                //If End date selected
+                if (!empty($arrData['end_date'])) {
+                    $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d', strtotime($arrData['end_date']));
+                }
+
+                $arrData['leads'][$key]['converted'] = $this->Lead->getDataTable($table, $select, $where, $join, $group_by, $order_by = array());
+
+
+                $action = 'list';
+                $select = array('SUM(l.lead_ticket_range) as total,p.id as product_id,p.category_id as category_id,
+                p.title as product');
+                $table = Tbl_Leads . ' as l';
+                $where = array('l.lead_source'=>$key);
+                $join = array();
+                $join[] = array('table' => Tbl_Products.' as p',
+                    'on_condition' => 'l.product_id = p.id','type' => '');
+
+
+                //If Start date selected
+                if (!empty($arrData['start_date'])) {
+                    $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") >='] = date('Y-m-d', strtotime($arrData['start_date']));
+                }
+                //If End date selected
+                if (!empty($arrData['end_date'])) {
+                    $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d', strtotime($arrData['end_date']));
+                }
+
+                $arrData['leads'][$key]['estimated_business'] = $this->Lead->getDataTable($table, $select, $where, $join, $group_by, $order_by = array());
+
+
+
+                $select = array('SUM( t.amount ) as total,p.id as product_id,p.category_id as category_id, p.title as product FROM (SELECT DISTINCT (lead_id), amount FROM db_response_from_cbs)t');
+                $table = Tbl_cbs . ' as t';
+                $where = array('l.lead_source'=>$key);
+                $join = array();
+                $join[] = array('table' => Tbl_Leads.' as l','on_condition' => 't.lead_id = l.id','type' => '');
+                $join[] = array('table' => Tbl_Products.' as p','on_condition' => 'l.product_id = p.id','type' => '');
+                $group_by = array('l.product_category_id');
+
+                //If Start date selected
+                if (!empty($arrData['start_date'])) {
+                    $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") >='] = date('Y-m-d', strtotime($arrData['start_date']));
+                }
+                //If End date selected
+                if (!empty($arrData['end_date'])) {
+                    $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d', strtotime($arrData['end_date']));
+                }
+
+                $arrData['leads'][$key]['actual_business'] = $this->Lead->actual_amt($table, $select, $where, $join, $group_by, $order_by = array());
+            }
+
+
+            foreach ($arrData['leads'] as $key=>$val){
+                if(!empty($val)) {
+                    foreach ($val as $key2=>$val2) {
+                        if(!empty($val2)) {
+                            foreach ($val2 as $rec) {
+                                $record[$key][$key2][$rec['category_id']] = $rec['total'];
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            foreach ($arrData['leads'] as $key1=>$val1){
+                if(!empty($val1)) {
+                    foreach ($val1 as $key21=>$val21) {
+                        if(!empty($val21)) {
+                            foreach ($val21 as $rec1) {
+                                $record1[$key1][$key21][$rec1['product_id']] = $rec1['total'];
+                            }
+                        }
+                    }
+                }
+            }
+
+            $action = 'list';
+            $select = array('id','title');
+            $table = Tbl_Products;
+            $whereIn = array(SAVING,CURRENT,TERM,RECURRING);
+            $join = array();
+            $group_by = array();
+
+            $fetchProducts = $this->Lead->fetchProductData($table,$select,$whereIn,$join,$group_by,$order_by = array(),$limit="",$whereIn);
+
+            $lstData = array();
+            foreach($fetchProducts as $data){
+                $lstData[$data['id']] = $data['title'];
+            }
+            $arrData['product'] = $lstData;
+            if(isset($record1)) {
+                $arrData['leadData'] = $record1;
+            }else{
+                $arrData['leadData'] = null;
+            }
+
+            if(isset($record)) {
+                $arrData['leads'] = $record;
+            }else{
+                $arrData['leads'] = null;
+            }
+
+
+
+            return $arrData;
+        }
+
+
+
+
+
+
 }

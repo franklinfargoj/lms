@@ -273,11 +273,59 @@ class Lead  extends CI_Model
         }
         /*pe($this->db);die;*/
         $query = $this->db->get();
-       /* pe($query->result_array());die;*/
+       //pe($this->db->last_query());die;
         if($query !== FALSE && $query->num_rows() > 0) {
             return $query->result_array();
         }
     }
+
+
+
+    public function getDataTable($table,$select,$where,$join,$group_by,$order_by,$limit=''){
+
+        $this->db->select($select,TRUE);
+        $this->db->from($table);
+        if(!empty($join)){
+            foreach ($join as $key => $value) {
+                $this->db->join($value['table'],$value['on_condition'],$value['type']);
+            }
+        }
+        if(!empty($where)){
+            $this->db->where($where);
+        }
+        if(!empty($group_by)){
+            $this->db->group_by($group_by);
+        }
+        if(!empty($order_by)){
+            $this->db->order_by($order_by);
+        }
+        if(!empty($limit)){
+            $this->db->limit($limit);
+        }
+//        /*pe($this->db);die;*/
+        $query = $this->db->get();
+
+        if($query !== FALSE && $query->num_rows() > 0) {
+            return $query->result_array();
+        }
+    }
+
+
+
+    public function fetchProductData($table,$select,$whereIn,$join,$group_by,$order_by,$limit=''){
+
+        $this->db->select($select,TRUE);
+        $this->db->from($table);
+        if(!empty($whereIn)){
+            $this->db->where_in('id',$whereIn);
+        }
+
+        $query = $this->db->get();
+        if($query !== FALSE && $query->num_rows() > 0) {
+            return $query->result_array();
+        }
+    }
+
 
     public function update($where,$table,$data){
         $this->db->where($where);
