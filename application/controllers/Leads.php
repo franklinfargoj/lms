@@ -20,6 +20,7 @@ class Leads extends CI_Controller
         is_logged_in();
         $this->load->model('Lead');
         $this->load->model('Master_model','master');
+        $this->load->model('Othersource_model');
         /*
         echo $this->encrypt->encode('denabank1234');
         exit;*/
@@ -50,7 +51,9 @@ class Leads extends CI_Controller
         /*Create Breadcumb*/
         $arrData['category_selected'] = '';
         $arrData['product_selected'] = '';
+        $arrData['other_source'] = $this->Othersource_model->getActiveSource();
         $arrData['products'] = '';
+
 
         $action = 'list';$table=Tbl_state;
         $select = array('TRIM(code) as code','TRIM(name) as name');

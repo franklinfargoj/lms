@@ -56,6 +56,14 @@ class Othersource_model extends CI_Model{
         return $query->result_array();
     }
 
+    public function getActiveSource(){
+        $this->db->select('*');
+        $this->db->where('status', 'active');
+        $this->db->order_by("id", "DESC");
+        $query =  $this->db->get('other_sources');
+        return $query->result_array();
+    }
+
 
     /**
      * view_other_source
