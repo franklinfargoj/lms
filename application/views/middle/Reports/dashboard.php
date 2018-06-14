@@ -85,11 +85,39 @@ echo form_hidden($data);
                     </div>
 
                     <div class="form-control form-submit clearfix">
+
+
                         <button type="submit" name="Submit" value="Submit" id="su" class="full-btn float-right">
                             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
                             <span class="btn-txt">Submit</span>
                             <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
-                        </button>    			    </div>
+                        </button>
+
+                        <?php if(isset($leads) && !empty($leads)){ ?>
+                            <button type="button" onclick="tablesToExcel(['emp_adopt', 'branch_generated', 'other_agent', 'key_metrics'], ['Adaption and Usage', 'Branch Generated', 'Other Agent', 'Key Metrics'], 'Masters.xls', 'Excel')" class="full-btn float-right">
+                                <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+                                <span class="btn-txt">Download</span>
+                                <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+                            </button>
+                        <?php }else{ ?>
+                            <button type="button" onclick="tablesToExcel(['emp_adopt'], ['Adaption and Usage'], 'Masters.xls', 'Excel')" class="full-btn float-right">
+                                <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
+                                <span class="btn-txt">Download</span>
+                                <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
+                            </button>
+                        <?php } ?>
+
+
+
+<!--                        <button type="button" onclick="exportTableToExcel('emp_adopt', 'members-data')" id="Download" name="Download" value="Download" class="full-btn float-right">-->
+<!--                            <img src="--><?php //echo base_url().ASSETS;?><!--images/left-nav.png" alt="left-nav" class="left-btn-img">-->
+<!--                            <span class="btn-txt">Download</span>-->
+<!--                            <input type="hidden" value="0" id="download_flag" name="download_flag">-->
+<!--                            <img src="--><?php //echo base_url().ASSETS;?><!--images/right-nav.png" alt="left-nav" class="right-btn-img">-->
+<!--                        </button>-->
+
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,7 +131,7 @@ echo form_hidden($data);
         <div class="result result-dash" style="display:none;">
             <div class="page-content">
                 <div class="container">
-                    <table border="1">
+                    <table id="emp_adopt" border="1">
                         <thead>
                         <tr>
                             <th></th>
@@ -136,15 +164,15 @@ echo form_hidden($data);
                             <td><?php echo $total_branch_count;?></td>
                         </tr>
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <td>%</td>
-                            <td><?php echo round(($unique_login_count/$total_employee_count)*100,2).'%';?></td>
-                            <td><?php echo round(($today_unique_login_count/$total_employee_count)*100,2).'%';?></td>
-                            <td><?php echo round(($unique_leadcreator_employee_count/$total_employee_count)*100,2).'%';?></td>
-                            <td><?php echo round(($unique_leadcreator_branch_count/$total_branch_count)*100,2).'%';?></td>
+<!--                        <tfoot>-->
+                        <tr style="background-color: #5E6469;">
+                            <td style="color:#F9F5D0">%</td>
+                            <td style="color:#F9F5D0"><?php echo round(($unique_login_count/$total_employee_count)*100,2).'%';?></td>
+                            <td style="color:#F9F5D0"><?php echo round(($today_unique_login_count/$total_employee_count)*100,2).'%';?></td>
+                            <td style="color:#F9F5D0"><?php echo round(($unique_leadcreator_employee_count/$total_employee_count)*100,2).'%';?></td>
+                            <td style="color:#F9F5D0"><?php echo round(($unique_leadcreator_branch_count/$total_branch_count)*100,2).'%';?></td>
                         </tr>
-                        </tfoot>
+<!--                        </tfoot>-->
                     </table>
 
                     <div class="page-title">
@@ -175,7 +203,21 @@ echo form_hidden($data);
                                     <h3 class="text-center"><?php echo $val;?></h3>
                                 </div>
                             </div>
-                            <table>
+
+                            <?php
+                                if($val == "Other Agent"){
+                                    $id = 'other_agent';
+                                }
+                                elseif($val == "Branch Generated"){
+                                    $id = 'branch_generated';
+                                }
+                                else{
+                                    $id = '';
+                                }
+
+                            ?>
+
+                            <table id="<?php echo $id; ?>">
                                 <tbody>
                                 <tr class="odd-dash">
                                     <td>Category</td>
@@ -372,7 +414,7 @@ echo form_hidden($data);
 
 
 
-                    <table>
+                    <table id="key_metrics">
                         <tbody>
                         <tr class="odd-dash">
                             <td>Key metrics</td>
@@ -460,8 +502,67 @@ echo form_hidden($data);
     jQuery(document).ready(function() {
         $('#su').click(function(){
             $('#su').hide();
-        })
+        });
     });
+
+    var tablesToExcel = (function() {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+            , tmplWorkbookXML = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'
+            + '<DocumentProperties xmlns="urn:schemas-microsoft-com:office:office"><Author>Axel Richter</Author><Created>{created}</Created></DocumentProperties>'
+            + '<Styles>'
+            + '<Style ss:ID="Currency"><NumberFormat ss:Format="Currency"></NumberFormat></Style>'
+            + '<Style ss:ID="Date"><NumberFormat ss:Format="Medium Date"></NumberFormat></Style>'
+            + '</Styles>'
+            + '{worksheets}</Workbook>'
+            , tmplWorksheetXML = '<Worksheet ss:Name="{nameWS}"><Table>{rows}</Table></Worksheet>'
+            , tmplCellXML = '<Cell{attributeStyleID}{attributeFormula}><Data ss:Type="{nameType}">{data}</Data></Cell>'
+            , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+            , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+        return function(tables, wsnames, wbname, appname) {
+            var ctx = "";
+            var workbookXML = "";
+            var worksheetsXML = "";
+            var rowsXML = "";
+
+            for (var i = 0; i < tables.length; i++) {
+                if (!tables[i].nodeType) tables[i] = document.getElementById(tables[i]);
+                for (var j = 0; j < tables[i].rows.length; j++) {
+                    rowsXML += '<Row>'
+                    for (var k = 0; k < tables[i].rows[j].cells.length; k++) {
+                        var dataType = tables[i].rows[j].cells[k].getAttribute("data-type");
+                        var dataStyle = tables[i].rows[j].cells[k].getAttribute("data-style");
+                        var dataValue = tables[i].rows[j].cells[k].getAttribute("data-value");
+                        dataValue = (dataValue)?dataValue:tables[i].rows[j].cells[k].innerHTML;
+                        var dataFormula = tables[i].rows[j].cells[k].getAttribute("data-formula");
+                        dataFormula = (dataFormula)?dataFormula:(appname=='Calc' && dataType=='DateTime')?dataValue:null;
+                        ctx = {  attributeStyleID: (dataStyle=='Currency' || dataStyle=='Date')?' ss:StyleID="'+dataStyle+'"':''
+                            , nameType: (dataType=='Number' || dataType=='DateTime' || dataType=='Boolean' || dataType=='Error')?dataType:'String'
+                            , data: (dataFormula)?'':dataValue
+                            , attributeFormula: (dataFormula)?' ss:Formula="'+dataFormula+'"':''
+                        };
+                        rowsXML += format(tmplCellXML, ctx);
+                    }
+                    rowsXML += '</Row>'
+                }
+                ctx = {rows: rowsXML, nameWS: wsnames[i] || 'Sheet' + i};
+                worksheetsXML += format(tmplWorksheetXML, ctx);
+                rowsXML = "";
+            }
+
+            ctx = {created: (new Date()).getTime(), worksheets: worksheetsXML};
+            workbookXML = format(tmplWorkbookXML, ctx);
+
+
+
+            var link = document.createElement("A");
+            link.href = uri + base64(workbookXML);
+            link.download = wbname || 'Workbook.xls';
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    })();
 </script>
 <script src="<?php echo base_url().ASSETS;?>js/reports.js"></script>
 
