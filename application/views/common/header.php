@@ -175,6 +175,7 @@
 					</a>
 				</li>
 				<?php }?>
+
 				<?php if(in_array($this->session->userdata('admin_type'),array('BM','ZM','GM','Super admin'))) {?>
 				<li class="<?php echo ($controller == 'reports') ? 'active' : ''?>" id="cal-droped1">
 					<a href="#">
@@ -291,20 +292,41 @@
                     </li>
 				<?php }?>
 
-                <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-                <li>
-                    <a href="<?php echo site_url('ccemail')?>">
-                        CC Email
-                    </a>
-                </li>
-                <?php }?>
+<!--                --><?php //if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+<!--                    <li>-->
+<!--                        <a href="--><?php //echo site_url('ccemail')?><!--">-->
+<!--                            CC Email-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                --><?php //}?>
+<!---->
+<!--                --><?php //if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
+<!--                    <li>-->
+<!--                        <a href="--><?php //echo site_url('othersource')?><!--">-->
+<!--                            Other Source-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                --><?php //}?>
 
                 <?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-                    <li>
-                        <a href="<?php echo site_url('othersource')?>">
-                            Other Source
+                    <li class="<?php echo ($controller == 'ccemail' || $controller == 'othersource') ? 'active' : ''?>" id="cal-droped">
+                        <a href="#">
+                            Master &#9662;
                         </a>
+                        <ul class="cal-drop">
+                            <li>
+                                <a href="<?php echo site_url('ccemail')?>">
+                                    CC Email
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo site_url('othersource')?>">
+                                    Other Source
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+
                 <?php }?>
 
 			</ul>
@@ -357,6 +379,7 @@
 	    	// event.preventDefault();
 	        $(".cal-drop5").toggle();
 	    });
+
 		$("#per-droped ").hover(function(){
 
 			$(".per-drop").toggle();
