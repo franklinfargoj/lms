@@ -175,19 +175,18 @@ echo form_hidden($data);
 <!--                        </tfoot>-->
                     </table>
 
-                    <div class="page-title">
-                        <div class="container clearfix">
-                            <h3 class="text-center">Metrics</h3>
-                        </div>
-                    </div>
+
 
 
                     <?php
                     if(isset($leads) && !empty($leads)){
 
                     $total_estimated_business_in_cr=0;
+                    $total_estimated_business_in_cr_prev=0;
                     $total_actual_business_in_cr = 0;
+                    $total_actual_business_in_cr_prev=0;
                     $total_conversion_in_cr = '0.00%';
+                    $total_generated_for_launch=0;
                     //                    pe($product_category);
                     foreach ($lead_source as $key=>$val) {
                         $total_generated=0;
@@ -343,15 +342,31 @@ echo form_hidden($data);
 
 
                                     if($key == 'walkin') {
+                                        if(isset($leads[$key]['generated'][$row['id']]) && !empty($leads[$key]['generated'][$row['id']])){
+                                            $total_generated_for_launch += $leads[$key]['generated'][$row['id']];
+                                        }
+
                                         if (isset($leads[$key]['estimated_business'][$row['id']]) && !empty($leads[$key]['generated'][$row['id']])) {
                                             $total_estimated_business_in_cr += convertCurrencyCr($leads[$key]['estimated_business'][$row['id']]);
                                         }
+
+                                        if (isset($leads[$key]['estimated_business_prev'][$row['id']]) && !empty($leads[$key]['generated'][$row['id']])) {
+                                            $total_estimated_business_in_cr_prev += convertCurrencyCr($leads[$key]['estimated_business'][$row['id']]);
+                                        }
+
                                         if(isset($leads[$key]['actual_business'][$row['id']]) && !empty($leads[$key]['actual_business'][$row['id']])){
                                             $total_actual_business_in_cr += convertCurrencyCr($leads[$key]['actual_business'][$row['id']]);
                                         }
 
+                                        if(isset($leads[$key]['actual_business_prev'][$row['id']]) && !empty($leads[$key]['actual_business'][$row['id']])){
+                                            $total_actual_business_in_cr_prev += convertCurrencyCr($leads[$key]['actual_business'][$row['id']]);
+                                        }
+
                                         if($total_actual_business_in_cr != 0 || $total_estimated_business_in_cr != 0) {
                                             $total_conversion_in_cr = round(($total_actual_business_in_cr / $total_estimated_business_in_cr) * 100, 2) . '%';
+                                            if($total_conversion_in_cr == 0){
+                                                $total_conversion_in_cr = '0.00%';
+                                            }
                                         }else{
                                             $total_conversion_in_cr = '0.00%';
                                         }
@@ -410,9 +425,11 @@ echo form_hidden($data);
 
 
 
-
-
-
+                    <div class="page-title">
+                        <div class="container clearfix">
+                            <h3 class="text-center">Metrics</h3>
+                        </div>
+                    </div>
 
                     <table id="key_metrics">
                         <tbody>
@@ -447,43 +464,85 @@ echo form_hidden($data);
                         </tr>
 
                         <?php
-                        $uniqueEmployeeGeneratingDelta = $unique_leadcreator_employee_count - 0;
+                        $uniqueEmployeeGeneratingDelta = $unique_leadcreator_employee_count - $unique_leadcreator_employee_count_prev;
                         ?>
 
                         <tr class="even-dash">
                             <td>Unique employees generating leads</td>
                             <td><?php echo $unique_leadcreator_employee_count;?></td>
                             <td><?php echo round(($unique_leadcreator_employee_count/$total_employee_count)*100,2).'%';?></td>
-                            <td>TBD</td>
+                            <td><?php echo $unique_leadcreator_employee_count_prev;?></td>
                             <td><?php echo $uniqueEmployeeGeneratingDelta;?></td>
                         </tr>
 
                         <?php
-                           $uniqueBusinessInCroreDelta = $total_estimated_business_in_cr - 0;
+                           $uniqueBusinessInCroreDelta = $total_estimated_business_in_cr - $total_estimated_business_in_cr_prev;
                         ?>
                         <tr class="odd-dash">
                             <td>Business in Cr(input)</td>
                             <td><?php echo $total_estimated_business_in_cr;?></td>
                             <td>-</td>
-                            <td>TBD</td>
+                            <td><?php echo $total_estimated_business_in_cr_prev;?></td>
                             <td><?php echo $uniqueBusinessInCroreDelta;?></td>
                         </tr>
 
 
                         <?php
-                        $uniqueBusinessConvertedDelta = $total_actual_business_in_cr - 0;
+                        $uniqueBusinessConvertedDelta = $total_actual_business_in_cr - $total_actual_business_in_cr_prev;
                         ?>
 
                         <tr class="even-dash">
                             <td>Business Converted(in Cr)</td>
                             <td><?php echo $total_actual_business_in_cr;?></td>
                             <td><?php echo $total_conversion_in_cr;?></td>
-                            <td>TBD</td>
+                            <td><?php echo $total_actual_business_in_cr_prev?></td>
                             <td><?php echo $uniqueBusinessConvertedDelta;?></td>
                         </tr>
 
                         </tbody>
                     </table>
+
+
+                    <div class="page-title">
+                        <div class="container clearfix">
+                            <h3 class="text-center">Launch</h3>
+                        </div>
+                    </div>
+
+                    <table id="key_metrics">
+                        <tbody>
+                        <tr class="odd-dash">
+                            <td>Lead per active employee(from launch)</td>
+                            <td>Lead per active employee per week</td>
+                        </tr>
+
+                        <?php
+                        if($unique_leadcreator_employee_count == 0 || $total_generated_for_launch == 0){
+                            $activeEmployeeForLaunch = 0;
+                        }else{
+                            $activeEmployeeForLaunch = round($total_generated_for_launch/$unique_leadcreator_employee_count,2);
+                        }
+
+                        $today = date('Y-m-d');
+                        $startDate = new DateTime("2018-01-04");
+                        $endDate = new DateTime($today);
+                        $interval = $startDate->diff($endDate);
+                        $dateDiffWeek = (int)(($interval->days) / 7);
+
+
+                        $leadPerActiveEmployeePerWeek = round(($activeEmployeeForLaunch/$dateDiffWeek),2);
+
+                        ?>
+                        <tr class="even-dash">
+
+                            <td><?php echo $activeEmployeeForLaunch;?></td>
+                            <td><?php echo $leadPerActiveEmployeePerWeek;?></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+
                 </div>
             </div>
         </div>

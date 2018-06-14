@@ -2789,8 +2789,15 @@ class Reports extends CI_Controller
             if(!empty($arrData['end_date'])){
                 $where['DATE_FORMAT(created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime($arrData['end_date']));
             }
-
             $arrData['unique_leadcreator_employee_count'] = count($this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array()));
+
+            //If previous End date selected
+            if(!empty($arrData['end_date'])){
+                $where['DATE_FORMAT(created_on,"%Y-%m-%d") <='] = date('Y-m-d',strtotime('-1 day',strtotime($arrData['end_date'])));
+            }
+
+            $arrData['unique_leadcreator_employee_count_prev'] = count($this->Lead->get_leads($action,$table,$select,$where,$join,$group_by,$order_by = array()));
+
 
             $action = 'list';
             $select = array('DISTINCT(created_by_branch_id)');
@@ -2877,12 +2884,19 @@ class Reports extends CI_Controller
                 if (!empty($arrData['start_date'])) {
                     $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") >='] = date('Y-m-d', strtotime($arrData['start_date']));
                 }
+
                 //If End date selected
                 if (!empty($arrData['end_date'])) {
                     $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d', strtotime($arrData['end_date']));
                 }
-
                 $arrData['leads'][$key]['estimated_business'] = $this->Lead->getDataTable($table, $select, $where, $join, $group_by, $order_by = array());
+
+
+                //If prev End date selected
+                if (!empty($arrData['end_date'])) {
+                    $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d', strtotime('-1 day',strtotime($arrData['end_date'])));
+                }
+                $arrData['leads'][$key]['estimated_business_prev'] = $this->Lead->getDataTable($table, $select, $where, $join, $group_by, $order_by = array());
 
 
 
@@ -2902,8 +2916,13 @@ class Reports extends CI_Controller
                 if (!empty($arrData['end_date'])) {
                     $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d', strtotime($arrData['end_date']));
                 }
-
                 $arrData['leads'][$key]['actual_business'] = $this->Lead->actual_amt($table, $select, $where, $join, $group_by, $order_by = array());
+
+                //If prev End date selected
+                if (!empty($arrData['end_date'])) {
+                    $where['DATE_FORMAT(l.created_on,"%Y-%m-%d") <='] = date('Y-m-d', strtotime('-1 day',strtotime($arrData['end_date'])));
+                }
+                $arrData['leads'][$key]['actual_business_prev'] = $this->Lead->actual_amt($table, $select, $where, $join, $group_by, $order_by = array());
             }
 
 
