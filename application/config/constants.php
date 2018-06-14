@@ -140,6 +140,13 @@ define('FINACLE_ACCOUNT_RECORD', 'https://172.25.2.134/Cbs/verify_account');
 define('FCMKEY','AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP
 ');
 
+
+define('SAVING','44');
+define('CURRENT','45');
+define('TERM','46');
+define('RECURRING','47');
+define('DEPOSIT','13');
+
 define('EXCEL_ALPHA', serialize(array(
     '0'=>'A',
     '1'=>'B',
