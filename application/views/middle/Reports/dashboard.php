@@ -98,19 +98,21 @@ echo form_hidden($data);
 
                                 foreach($lead_source as $key=>$val)
                                 {
-                                    if($val == "Other Agent"){
-                                        array_push($id, "'other_agent'");
-                                        array_push($table, "'Other Agent'");
-                                    }
+                                    if (!empty($leads[$key])) {
+                                        if ($val == "Other Agent") {
+                                            array_push($id, "'other_agent'");
+                                            array_push($table, "'Other Agent'");
+                                        }
 
-                                    if($val == "Website,IVR"){
-                                        array_push($id, "'website_ivr'");
-                                        array_push($table, "'Website,IVR'");
-                                    }
+                                        if ($val == "Website,IVR") {
+                                            array_push($id, "'website_ivr'");
+                                            array_push($table, "'Website,IVR'");
+                                        }
 
-                                    if($val == "Analytics"){
-                                        array_push($id, "'analytics'");
-                                        array_push($table, "'Analytics'");
+                                        if ($val == "Analytics") {
+                                            array_push($id, "'analytics'");
+                                            array_push($table, "'Analytics'");
+                                        }
                                     }
                                 }
 
