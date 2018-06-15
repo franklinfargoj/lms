@@ -147,6 +147,12 @@ define('TERM','46');
 define('RECURRING','47');
 define('DEPOSIT','13');
 
+
+define('Other_Agent','Other Agent');
+define('Website_IVR','Website,IVR');
+define('Branch_Generated','Branch Generated');
+define('Analytics','Analytics');
+
 define('EXCEL_ALPHA', serialize(array(
     '0'=>'A',
     '1'=>'B',

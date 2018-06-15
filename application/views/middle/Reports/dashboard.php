@@ -93,28 +93,33 @@ echo form_hidden($data);
 
                         <?php if(isset($leads) && !empty($leads)){ ?>
                             <?php
-                                $id = ["'emp_adopt'", "'branch_generated'", "'key_metrics'", "'launch'"];
-                                $table = ["'Adaption and Usage'", "'Branch Generated'", "'Key Metrics'", "'Launch'"];
+                                $id = ["'emp_adopt'", "'branch_generated'"];
+                                $table = ["'Adaption and Usage'", "'Branch Generated'"];
 
                                 foreach($lead_source as $key=>$val)
                                 {
                                     if (!empty($leads[$key])) {
-                                        if ($val == "Other Agent") {
+                                        if ($val == Other_Agent) {
                                             array_push($id, "'other_agent'");
                                             array_push($table, "'Other Agent'");
                                         }
 
-                                        if ($val == "Website,IVR") {
+                                        if ($val == Website_IVR) {
                                             array_push($id, "'website_ivr'");
                                             array_push($table, "'Website,IVR'");
                                         }
 
-                                        if ($val == "Analytics") {
+                                        if ($val == Analytics) {
                                             array_push($id, "'analytics'");
                                             array_push($table, "'Analytics'");
                                         }
                                     }
                                 }
+
+                                array_push($id,"'key_metrics'");
+                                array_push($id,"'launch'");
+                                array_push($table,"'Key Metrics'");
+                                array_push($table,"'Launch'");
 
                                 $id = implode(',', $id);
                                 $table = implode(',', $table);
@@ -156,7 +161,7 @@ echo form_hidden($data);
         <?php echo form_close();?>
         <div class="result result-dash" style="display:none;">
             <div class="page-content">
-                <div class="container">
+                <div class="container table-container">
                     <table id="emp_adopt" border="1">
                         <thead>
                         <tr>
@@ -230,16 +235,16 @@ echo form_hidden($data);
                             </div>
 
                             <?php
-                                if($val == "Other Agent"){
+                                if($val == Other_Agent){
                                     $id = 'other_agent';
                                 }
-                                elseif($val == "Branch Generated"){
+                                elseif($val == Branch_Generated){
                                     $id = 'branch_generated';
                                 }
-                                elseif($val == "Website,IVR"){
+                                elseif($val == Website_IVR){
                                     $id = 'website_ivr';
                                 }
-                                elseif($val == "Analytics"){
+                                elseif($val == Analytics){
                                     $id = 'analytics';
                                 }
                                 else{
@@ -249,16 +254,17 @@ echo form_hidden($data);
                             ?>
 
                             <table id="<?php echo $id; ?>">
-                                <tbody>
-                                <tr class="odd-dash">
-                                    <td>Category</td>
-                                    <td># of input leads</td>
-                                    <td># of leads converted</td>
-                                    <td>% Conversion (#)</td>
-                                    <td>Business in Cr. (Input)</td>
-                                    <td>Business Converted (in Cr)</td>
-                                    <td> % Conversion (Amt)</td>
-                                </tr>
+                                <thead>
+                                    <tr class="odd-dash">
+                                        <th>Category</th>
+                                        <th># of input leads</th>
+                                        <th># of leads converted</th>
+                                        <th>% Conversion (#)</th>
+                                        <th>Business in Cr. (Input)</th>
+                                        <th>Business Converted (in Cr)</th>
+                                        <th> % Conversion (Amt)</th>
+                                    </tr>
+                                </thead>
 
 
 
@@ -347,6 +353,7 @@ echo form_hidden($data);
                                     }
                                 ?>
 
+                                <tbody>
                                 <tr class="even-dash">
                                     <td>CASA</td>
                                     <td><?php echo $sumGenCurrentSaving;?></td>
@@ -467,18 +474,20 @@ echo form_hidden($data);
                     </div>
 
                     <table id="key_metrics">
-                        <tbody>
+                        <thead>
                         <tr class="odd-dash">
-                            <td>Key metrics</td>
-                            <td>Actuals(today)</td>
-                            <td>Percentage</td>
-                            <td>Actuals (yesterday)</td>
-                            <td>Delta</td>
+                            <th>Key metrics</th>
+                            <th>Actuals(today)</th>
+                            <th>Percentage</th>
+                            <th>Actuals (yesterday)</th>
+                            <th>Delta</th>
                         </tr>
+                        </thead>
                         <?php
                         $uniqueEmployeeLoginYesterday = $unique_login_count - $today_unique_login_count;
                         $uniqueEmployeeLoginDelta = $unique_login_count - $uniqueEmployeeLoginYesterday;
                         ?>
+                        <tbody>
                         <tr class="even-dash">
                             <td>Unique employee logins(As of today)</td>
                             <td><?php echo $unique_login_count;?></td>
@@ -545,11 +554,12 @@ echo form_hidden($data);
                     </div>
 
                     <table id="launch">
-                        <tbody>
+                        <thead>
                         <tr class="odd-dash">
-                            <td>Lead per active employee(from launch)</td>
-                            <td>Lead per active employee per week</td>
+                            <th>Lead per active employee(from launch)</th>
+                            <th>Lead per active employee per week</th>
                         </tr>
+                        </thead>
 
                         <?php
                         if($unique_leadcreator_employee_count == 0 || $total_generated_for_launch == 0){
@@ -568,6 +578,7 @@ echo form_hidden($data);
                         $leadPerActiveEmployeePerWeek = round(($activeEmployeeForLaunch/$dateDiffWeek),2);
 
                         ?>
+                        <tbody>
                         <tr class="even-dash">
 
                             <td><?php echo $activeEmployeeForLaunch;?></td>
@@ -624,6 +635,7 @@ echo form_hidden($data);
                         var dataStyle = tables[i].rows[j].cells[k].getAttribute("data-style");
                         var dataValue = tables[i].rows[j].cells[k].getAttribute("data-value");
                         dataValue = (dataValue)?dataValue:tables[i].rows[j].cells[k].innerHTML;
+
                         var dataFormula = tables[i].rows[j].cells[k].getAttribute("data-formula");
                         dataFormula = (dataFormula)?dataFormula:(appname=='Calc' && dataType=='DateTime')?dataValue:null;
                         ctx = {  attributeStyleID: (dataStyle=='Currency' || dataStyle=='Date')?' ss:StyleID="'+dataStyle+'"':''
