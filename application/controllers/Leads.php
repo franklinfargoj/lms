@@ -157,9 +157,9 @@ class Leads extends CI_Controller
                 $lead_data['lead_name'] = $this->input->post('customer_name');
                 //chk lead source other
                 $other_source = $this->input->post('other_source');
-                if($other_source != 'BR'){
-                    $lead_data['lead_source'] = 'tie_ups';
-                }
+//                if($other_source != 'BR'){
+//                    $lead_data['lead_source'] = 'tie_ups';
+//                }
                 $lead_data['other_source'] = $other_source;
                 //
                 $lead_id = $this->Lead->add_leads($lead_data);
