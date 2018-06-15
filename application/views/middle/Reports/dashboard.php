@@ -94,7 +94,7 @@ echo form_hidden($data);
                         </button>
 
                         <?php if(isset($leads) && !empty($leads)){ ?>
-                            <button type="button" onclick="tablesToExcel(['emp_adopt', 'branch_generated', 'other_agent', 'key_metrics'], ['Adaption and Usage', 'Branch Generated', 'Other Agent', 'Key Metrics'], 'Masters.xls', 'Excel')" class="full-btn float-right">
+                            <button type="button" onclick="tablesToExcel(['emp_adopt', 'branch_generated', 'other_agent', 'key_metrics', 'launch'], ['Adaption and Usage', 'Branch Generated', 'Other Agent', 'Key Metrics', 'Launch'], 'Masters.xls', 'Excel')" class="full-btn float-right">
                                 <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
                                 <span class="btn-txt">Download</span>
                                 <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
@@ -509,7 +509,7 @@ echo form_hidden($data);
                         </div>
                     </div>
 
-                    <table id="key_metrics">
+                    <table id="launch">
                         <tbody>
                         <tr class="odd-dash">
                             <td>Lead per active employee(from launch)</td>
