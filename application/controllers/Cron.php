@@ -152,12 +152,12 @@ class Cron extends CI_Controller
           // pe($final['zonal_manager']);die;
             //FOR ZONAL MANAGER
             $subject = 'Pending Leads under Dena Sampark for follow up';
-            //$first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
+            $first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
             $second_attachment_file = $this->zm_consolidated_mail_for_advances($v->zone_id);
             $attachment_file = array($second_attachment_file);
             $to = array('email' => $v->email_id,'name' => $v->name);
             $message = $this->zm_msg();
-            //sendMail($to,$subject,$message,$attachment_file,$cc);
+            sendMail($to,$subject,$message,$attachment_file,$cc);
 //die;
         }
     }       
@@ -862,9 +862,9 @@ $pending_days = 2;
             }
             $i++;$j++;
         }
-        $objWriter->save('/var/www/html/lms/uploads/excel_list/'.$file_name);
+        $objWriter->save('./uploads/excel_list/'.$file_name);
 
-        pe($file_name);
+//        pe($file_name);
 //        exit;
         return $file_name;
     }
@@ -1101,6 +1101,11 @@ $pending_days = 2;
                 $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
                 $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
             }
+
+        usort($final['zonal_manager'], function($a, $b){
+            return $a['unassigned'] - $b['unassigned'];
+        });
+
         $attachment_file = $this->export_to_excel('zm_consolidated_mail_advances',$final['zonal_manager']);
 
         return $attachment_file;

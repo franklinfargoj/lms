@@ -1924,3 +1924,5 @@ tr.even-dash {
 .table-container table thead th:first-child {
 	border-left: 0;
 }
+
+.table-container tfoot tr {background-color: #a7a4a4;}
