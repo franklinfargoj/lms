@@ -715,16 +715,16 @@ $pending_days = 2;
         $export_data = array();
         switch ($action) {
             case 'gm_consolidated_mail':
-                $header_value = array('Zone Id','Zone Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
+                $header_value = array('Zone Id','Zone Name','Lead Generated (In this month)','Lead Converted (In this month)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
             case 'zm_consolidated_mail':
-            $header_value = array('Branch Id','Branch Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
+            $header_value = array('Branch Id','Branch Name','Lead Generated (In this month)','Lead Converted (In this month)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
             case 'zm_consolidated_mail_advances':
-                $header_value = array('Branch Id','Branch Name','Total Lead Generated (MTD)','Total Lead Assigned (MTD)','Total Lead Converted (MTD)','No.of Unassigned Leads');
+                $header_value = array('Branch Id','Branch Name','Total Lead Generated (In this month)','Total Lead Assigned (In this month)','Total Lead Converted (In this month)','No.of Unassigned Leads');
                 break;
             case 'bm_consolidated_mail':
-            $header_value = array('HRMS Id','Employee Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of pending Leads before Documentation','No. of pending leads post Documentation');
+            $header_value = array('HRMS Id','Employee Name','Lead Generated (In this month)','Lead Converted (In this month)','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
             case 'bm_inactive_leads':
             $header_value = array('HRMS Id','Employee Name','Total Inactive Leads');
@@ -1150,8 +1150,8 @@ $pending_days = 2;
                 }
             }
             //send sms
-            $sms =  'Lead Generated (MTD) = '.ucwords($sum_generated).
-                    ' ,Lead Converted (MTD) = '.ucwords($sum_converted).
+            $sms =  'Lead Generated (In this month) = '.ucwords($sum_generated).
+                    ' ,Lead Converted (In this month) = '.ucwords($sum_converted).
                     ' ,No.of Unassigned Leads = '.ucwords($sum_unassigned).
                     ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
                     ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
@@ -1214,8 +1214,8 @@ $pending_days = 2;
             }
 
             //FOR EMPLOYEE SMS
-            $sms =  'Lead Generated (MTD) = '.ucwords($sum_generated).
-                ' ,Lead Converted (MTD) = '.ucwords($sum_converted).
+            $sms =  'Lead Generated (In this month) = '.ucwords($sum_generated).
+                ' ,Lead Converted (In this month) = '.ucwords($sum_converted).
                 ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
                 ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
 
