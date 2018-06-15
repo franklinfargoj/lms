@@ -196,7 +196,7 @@ echo form_hidden($data);
                         </tr>
                         </tbody>
 <!--                        <tfoot>-->
-                        <tr style="background-color: #5E6469;">
+                        <tr style="background-color: #a7a4a4;">
                             <td style="color:#F9F5D0">%</td>
                             <td style="color:#F9F5D0"><?php echo round(($unique_login_count/$total_employee_count)*100,2).'%';?></td>
                             <td style="color:#F9F5D0"><?php echo round(($today_unique_login_count/$total_employee_count)*100,2).'%';?></td>

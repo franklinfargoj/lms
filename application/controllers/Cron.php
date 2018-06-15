@@ -152,12 +152,12 @@ class Cron extends CI_Controller
           // pe($final['zonal_manager']);die;
             //FOR ZONAL MANAGER
             $subject = 'Pending Leads under Dena Sampark for follow up';
-            //$first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
+            $first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
             $second_attachment_file = $this->zm_consolidated_mail_for_advances($v->zone_id);
             $attachment_file = array($second_attachment_file);
             $to = array('email' => $v->email_id,'name' => $v->name);
             $message = $this->zm_msg();
-            //sendMail($to,$subject,$message,$attachment_file,$cc);
+            sendMail($to,$subject,$message,$attachment_file,$cc);
 //die;
         }
     }       
@@ -720,7 +720,7 @@ $pending_days = 2;
             $header_value = array('Branch Id','Branch Name','Lead Generated (In this month)','Lead Converted (In this month)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
             case 'zm_consolidated_mail_advances':
-                $header_value = array('Branch Id','Branch Name','Total Lead Generated (In this month)','Total Lead Assigned (In this month)','No.of Unassigned Leads','Total Lead Converted (In this month)','No.of pending Leads before Documentation','No. of pending leads post Documentation');
+                $header_value = array('Branch Id','Branch Name','Total Lead Generated (In this month)','Total Lead Assigned (In this month)','No.of Unassigned Leads','Total Lead Converted (In this month)','No.of pending Leads before Documentation','No. of pending leads post Documentation', '% of Conversion');
                 break;
             case 'bm_consolidated_mail':
             $header_value = array('HRMS Id','Employee Name','Lead Generated (In this month)','Lead Converted (In this month)','No.of pending Leads before Documentation','No. of pending leads post Documentation');
@@ -841,6 +841,7 @@ $pending_days = 2;
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['converted']));
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['pending_before']));
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['pending']));
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['percentage']));
 
                 }else {
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['generated']));
@@ -862,9 +863,9 @@ $pending_days = 2;
             }
             $i++;$j++;
         }
-        $objWriter->save('/var/www/html/lms/uploads/excel_list/'.$file_name);
+        $objWriter->save('./uploads/excel_list/'.$file_name);
 
-        pe($file_name);
+//        pe($file_name);
 //        exit;
         return $file_name;
     }
@@ -1098,9 +1099,24 @@ $pending_days = 2;
                 $final['zonal_manager'][$value->branch_id]['pending_before'] = isset($total['pending_before'][$value->branch_id]) ? $total['pending_before'][$value->branch_id] : 0;
                 $final['zonal_manager'][$value->branch_id]['pending'] = isset($total['pending'][$value->branch_id]) ? $total['pending'][$value->branch_id] : 0;
 
+                if($final['zonal_manager'][$value->branch_id]['converted'] == 0 || $final['zonal_manager'][$value->branch_id]['assigned'] == 0)
+                {
+                    $final['zonal_manager'][$value->branch_id]['percentage'] = 0;
+                }
+                else
+                {
+                    $final['zonal_manager'][$value->branch_id]['percentage'] = ($final['zonal_manager'][$value->branch_id]['converted']/$final['zonal_manager'][$value->branch_id]['assigned']) * 100;
+                }
+
                 $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
                 $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
             }
+
+        usort($final['zonal_manager'], function($a, $b){
+            return $a['unassigned'] - $b['unassigned'];
+        });
+
+//            pe($final);die;
         $attachment_file = $this->export_to_excel('zm_consolidated_mail_advances',$final['zonal_manager']);
 
         return $attachment_file;

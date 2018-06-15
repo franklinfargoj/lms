@@ -191,9 +191,9 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                     <div class="form-control">
                         <label>If Through Any Agent:<span style="color:red;">*</span></label>
                         <select name="other_source" id="other_source">
-                            <option value="">Select</option>
+                            <option value="" selected>Select</option>
                             <?php foreach ($other_source as $data){?>
-                                <option value="<?php echo $data['id'];?>"><?php echo $data['title'];?></option>
+                                <option value="<?php echo $data['title'];?>"><?php echo $data['title'];?></option>
                             <?php }?>
                             <option value="NULL">None</option>
                         </select>
