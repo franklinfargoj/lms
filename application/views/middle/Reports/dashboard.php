@@ -85,8 +85,6 @@ echo form_hidden($data);
                     </div>
 
                     <div class="form-control form-submit clearfix">
-
-
                         <button type="submit" name="Submit" value="Submit" id="su" class="full-btn float-right">
                             <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
                             <span class="btn-txt">Submit</span>
@@ -94,13 +92,39 @@ echo form_hidden($data);
                         </button>
 
                         <?php if(isset($leads) && !empty($leads)){ ?>
-                            <button type="button" onclick="tablesToExcel(['emp_adopt', 'branch_generated', 'other_agent', 'key_metrics', 'launch'], ['Adaption and Usage', 'Branch Generated', 'Other Agent', 'Key Metrics', 'Launch'], 'Masters.xls', 'Excel')" class="full-btn float-right">
+                            <?php
+                                $id = ["'emp_adopt'", "'branch_generated'", "'key_metrics'", "'launch'"];
+                                $table = ["'Adaption and Usage'", "'Branch Generated'", "'Key Metrics'", "'Launch'"];
+
+                                foreach($lead_source as $key=>$val)
+                                {
+                                    if($val == "Other Agent"){
+                                        array_push($id, "'other_agent'");
+                                        array_push($table, "'Other Agent'");
+                                    }
+
+                                    if($val == "Website,IVR"){
+                                        array_push($id, "'website_ivr'");
+                                        array_push($table, "'Website,IVR'");
+                                    }
+
+                                    if($val == "Analytics"){
+                                        array_push($id, "'analytics'");
+                                        array_push($table, "'Analytics'");
+                                    }
+                                }
+
+                                $id = implode(',', $id);
+                                $table = implode(',', $table);
+                            ?>
+
+                            <button type="button" onclick="tablesToExcel([<?php echo $id; ?>], [<?php echo $table; ?>], 'Dashboard.xls', 'Excel')" class="full-btn float-right">
                                 <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
                                 <span class="btn-txt">Download</span>
                                 <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
                             </button>
                         <?php }else{ ?>
-                            <button type="button" onclick="tablesToExcel(['emp_adopt'], ['Adaption and Usage'], 'Masters.xls', 'Excel')" class="full-btn float-right">
+                            <button type="button" onclick="tablesToExcel(['emp_adopt', 'key_metrics', 'launch'], ['Adaption and Usage', 'Key Metrics', 'Launch'], 'Dashboard.xls', 'Excel')" class="full-btn float-right">
                                 <img src="<?php echo base_url().ASSETS;?>images/left-nav.png" alt="left-nav" class="left-btn-img">
                                 <span class="btn-txt">Download</span>
                                 <img src="<?php echo base_url().ASSETS;?>images/right-nav.png" alt="left-nav" class="right-btn-img">
@@ -209,6 +233,12 @@ echo form_hidden($data);
                                 }
                                 elseif($val == "Branch Generated"){
                                     $id = 'branch_generated';
+                                }
+                                elseif($val == "Website,IVR"){
+                                    $id = 'website_ivr';
+                                }
+                                elseif($val == "Analytics"){
+                                    $id = 'analytics';
                                 }
                                 else{
                                     $id = '';
@@ -422,7 +452,10 @@ echo form_hidden($data);
                         <?php } ?>
                     <?php }?>
 
-
+                    <?php
+                    }else{?>
+                        <span class="no_result"></span>
+                    <?php }?>
 
 
                     <div class="page-title">
@@ -550,10 +583,7 @@ echo form_hidden($data);
     </div>
 
 </div>
-<?php
-}else{?>
-    <span class="no_result">No records found</span>
-<?php }?>
+
 
 <span class="bg-bottom"></span>
 <!-- END LEADS-->
