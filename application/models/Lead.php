@@ -252,6 +252,7 @@ class Lead  extends CI_Model
      */
     public function lists($table,$select,$where,$join,$group_by,$order_by,$limit=''){
 
+
         $this->db->select($select,TRUE);
         $this->db->from($table);
         if(!empty($join)){
@@ -271,9 +272,9 @@ class Lead  extends CI_Model
         if(!empty($limit)){
             $this->db->limit($limit);
         }
-        /*pe($this->db);die;*/
+//        pe($this->db);die;
         $query = $this->db->get();
-       //pe($this->db->last_query());die;
+//       pe($this->db->last_query());die;
         if($query !== FALSE && $query->num_rows() > 0) {
             return $query->result_array();
         }
