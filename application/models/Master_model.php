@@ -319,7 +319,9 @@ class Master_model extends CI_Model{
 
 		$this->db->select($select,TRUE);
 		$this->db->from('db_branch');
-		$this->db->where($where);
+        if($where != null){
+            $this->db->where($where);
+        }
 		$query = $this->db->get();
 //		pe($this->db->last_query());die;
 		return $query->result_array();
@@ -365,7 +367,9 @@ class Master_model extends CI_Model{
 
         $this->db->select($select,TRUE);
         $this->db->from('db_zone');
-        $this->db->where($where);
+        if($where != null){
+            $this->db->where($where);
+        }
         $query = $this->db->get();
 //		pe($this->db->last_query());die;
         return $query->result_array();
@@ -375,7 +379,9 @@ class Master_model extends CI_Model{
 
         $this->db->select($select,TRUE);
         $this->db->from('employee_dump');
-        $this->db->where($where);
+       if($where != null){
+           $this->db->where($where);
+       }
         $query = $this->db->get();
 //		pe($this->db->last_query());die;
         return $query->result_array();

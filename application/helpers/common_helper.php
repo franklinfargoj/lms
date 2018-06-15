@@ -1068,6 +1068,22 @@ if(!function_exists('branchname')){
     }
 }
 
+if(!function_exists('branchNameKeyValue')){
+    function branchNameKeyValue(){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $select=array('name','code');
+        $where=null;
+        $data = $CI->master->get_branchname($select,$where);
+        $lstArray = array();
+        foreach($data as $value){
+            $lstArray[$value['code']] = $value['name'];
+        }
+
+        return $lstArray;
+    }
+}
+
 function convertCurrency($number)
 {
     // Convert Price to Crores or Lakhs or Thousands
@@ -1146,6 +1162,28 @@ if(!function_exists('zonename')){
     }
 }
 
+
+if(!function_exists('zonenameKeyValue')){
+    function zonenameKeyValue($id=null){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $select=array('name','code');
+        if($id == null){
+            $where = null;
+        }else {
+            $where['code'] = $id;
+        }
+        $data = $CI->master->get_zonename($select,$where);
+
+        $lstArray = array();
+        foreach($data as $value){
+            $lstArray[$value['code']] = $value['name'];
+        }
+
+        return $lstArray;
+    }
+}
+
 if(!function_exists('designation_by_hrms_id')){
     function designation_by_hrms_id($id){
         $CI = & get_instance();
@@ -1154,6 +1192,27 @@ if(!function_exists('designation_by_hrms_id')){
         $where['hrms_id'] = $id;
         $data = $CI->master->designation_by_hrms_id($select,$where);
         return $data;
+    }
+}
+
+
+if(!function_exists('designation_by_hrms_id_key_value')){
+    function designation_by_hrms_id_key_value($id = null){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $select=array('designation','hrms_id');
+        if($id == null){
+            $where = null;
+        }else {
+            $where['hrms_id'] = $id;
+        }
+        $data = $CI->master->designation_by_hrms_id($select,$where);
+        $lstArray = array();
+        foreach($data as $value){
+            $lstArray[$value['hrms_id']] = $value['designation'];
+        }
+
+        return $lstArray;
     }
 }
 
@@ -1179,6 +1238,29 @@ if(!function_exists('zoneid')){
         return $data[0]['zone_id'];
     }
 }
+
+
+if(!function_exists('zoneIdKeyValue')){
+    function zoneIdKeyValue($id=null){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $select=array('zone_id','branch_id');
+        $table = Tbl_emp_dump;
+        if($id == null){
+            $where = null;
+        }else {
+            $where['branch_id'] = $id;
+        }
+        $data = $CI->master->get_zoneid($select,$join=array(),$where,$table);
+        $lstArray = array();
+        foreach($data as $value){
+            $lstArray[$value['branch_id']] = $value['zone_id'];
+        }
+
+        return $lstArray;
+    }
+}
+
 
 
 function sksort(&$array, $subkey="id", $sort_ascending=false) {

@@ -328,6 +328,40 @@ class Lead  extends CI_Model
     }
 
 
+    public function listMasters($action,$table,$select,$where,$join,$group_by,$order_by,$limit=''){
+
+        $this->db->select($select,TRUE);
+        $this->db->from($table);
+        if(!empty($join)){
+            foreach ($join as $key => $value) {
+                $this->db->join($value['table'],$value['on_condition'],$value['type']);
+            }
+        }
+        if(!empty($where)){
+            $this->db->where($where);
+        }
+        if(!empty($group_by)){
+            $this->db->group_by($group_by);
+        }
+        if(!empty($order_by)){
+            $this->db->order_by($order_by);
+        }
+        if(!empty($limit)){
+            $this->db->limit($limit);
+        }
+        //pe($this->db);die;
+        $query = $this->db->get();
+//       pe($this->db->last_query());die;
+        if($query !== FALSE && $query->num_rows() > 0) {
+            return $query->result_array();
+            //echo 'm in if';
+
+        }
+        //pe($query->result_array());exit;
+
+    }
+
+
     public function update($where,$table,$data){
         $this->db->where($where);
         $this->db->update($table,$data);
