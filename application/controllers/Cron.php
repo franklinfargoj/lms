@@ -107,8 +107,7 @@ class Cron extends CI_Controller
     public function zm_consolidated_mail(){
         $cc =0;
         $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
-//        echo "<pre>";
-//        print_r($zone_list);die;
+
         foreach ($zone_list as $k => $v) {
             $final = array();
             $zonal_manager=array();
@@ -118,9 +117,8 @@ class Cron extends CI_Controller
             $zonal_manager = array('generated' => array(),'converted' => array(),'unassigned' => array(),'pending_before' => array(),'pending' => array());
             $gm = $zonal_manager;
             $branch_list = $this->Lead->get_employee_dump(array('DISTINCT(branch_id) as branch_id','branch_name'),array('zone_id' => $v->zone_id),array(),'employee_dump');
-//            echo "<pre>";
-////            echo $v->zone_id;
-//           print_r($branch_list);die;
+
+
             $zonal_manager['generated']  = $this->get_leads(array('type'=>'generated','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
             $zonal_manager['converted']  = $this->get_leads(array('type'=>'converted','till'=>'mtd','user_type'=>'BM','zone_id' => $v->zone_id));
             $zonal_manager['unassigned'] = $this->get_leads(array('type'=>'unassigned','till'=>'','user_type'=>'BM','zone_id' => $v->zone_id));
@@ -154,12 +152,12 @@ class Cron extends CI_Controller
           // pe($final['zonal_manager']);die;
             //FOR ZONAL MANAGER
             $subject = 'Pending Leads under Dena Sampark for follow up';
-            $first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
+            //$first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
             $second_attachment_file = $this->zm_consolidated_mail_for_advances($v->zone_id);
-            $attachment_file = array($first_attachment_file,$second_attachment_file);
+            $attachment_file = array($second_attachment_file);
             $to = array('email' => $v->email_id,'name' => $v->name);
             $message = $this->zm_msg();
-            sendMail($to,$subject,$message,$attachment_file,$cc);
+            //sendMail($to,$subject,$message,$attachment_file,$cc);
 //die;
         }
     }       
@@ -479,7 +477,7 @@ class Cron extends CI_Controller
         $join = array();
         if($type == 'generated'){
             //Generated Leads
-            $select = array('COUNT(l.id) as generated');
+            $select = array("COUNT(l.id) as 'generated'");
             if($till == 'mtd'){
                 $where = array('MONTH(l.created_on)' => date('m'),'YEAR(l.created_on)' => date('Y')); //Month till date filter
 
@@ -542,7 +540,7 @@ class Cron extends CI_Controller
             }
         }elseif($type == 'adv_total'){
             //Generated Leads
-            $select = array('COUNT(l.id) as generated');
+            $select = array("COUNT(l.id) as 'generated'");
             if($till == 'mtd'){
                 $where = array('MONTH(l.created_on)' => date('m'),'YEAR(l.created_on)' => date('Y')); //Month till date filter
 
@@ -712,19 +710,20 @@ $pending_days = 2;
      * 
      */
     private function export_to_excel($action,$arrData){
+
         $export_data = array();
         switch ($action) {
             case 'gm_consolidated_mail':
-                $header_value = array('Zone Id','Zone Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
+                $header_value = array('Zone Id','Zone Name','Lead Generated (In this month)','Lead Converted (In this month)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
             case 'zm_consolidated_mail':
-            $header_value = array('Branch Id','Branch Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
+            $header_value = array('Branch Id','Branch Name','Lead Generated (In this month)','Lead Converted (In this month)','No.of Unassigned Leads','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
             case 'zm_consolidated_mail_advances':
-                $header_value = array('Branch Id','Branch Name','Total Lead Generated (MTD)','Total Lead Assigned (MTD)','Total Lead Converted (MTD)','No.of Unassigned Leads');
+                $header_value = array('Branch Id','Branch Name','Total Lead Generated (In this month)','Total Lead Assigned (In this month)','No.of Unassigned Leads','Total Lead Converted (In this month)','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
             case 'bm_consolidated_mail':
-            $header_value = array('HRMS Id','Employee Name','Lead Generated (MTD)','Lead Converted (MTD)','No.of pending Leads before Documentation','No. of pending leads post Documentation');
+            $header_value = array('HRMS Id','Employee Name','Lead Generated (In this month)','Lead Converted (In this month)','No.of pending Leads before Documentation','No. of pending leads post Documentation');
                 break;
             case 'bm_inactive_leads':
             $header_value = array('HRMS Id','Employee Name','Total Inactive Leads');
@@ -752,7 +751,8 @@ $pending_days = 2;
      * 
      */
     private function create_excel($action,$header_value,$data){
-       // pe($data);die;
+//        pe($data);
+//        exit;
         $this->load->library('excel');
         $file_name = 'leads_under_Denasampark_for_follow_up-'.date('d-m-Y').'-'.time().'data.xls';
         if($action == 'zm_consolidated_mail_advances' ){
@@ -837,8 +837,10 @@ $pending_days = 2;
                 if($action == 'zm_consolidated_mail_advances' ){
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['generated']));
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['assigned']));
-                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['converted']));
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['unassigned']));
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['converted']));
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['pending_before']));
+                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['pending']));
 
                 }else {
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['generated']));
@@ -860,7 +862,10 @@ $pending_days = 2;
             }
             $i++;$j++;
         }
-        $objWriter->save('uploads/excel_list/'.$file_name);
+        $objWriter->save('/var/www/html/lms/uploads/excel_list/'.$file_name);
+
+        pe($file_name);
+//        exit;
         return $file_name;
     }
 
@@ -1065,13 +1070,15 @@ $pending_days = 2;
             $branch_list = $this->Lead->get_employee_dump(array('DISTINCT(branch_id) as branch_id','branch_name'),array('zone_id' => $zone_id),array(),'employee_dump');
 //            echo "<pre>";
 ////            echo $v->zone_id;
-//           print_r($branch_list);die;
+//           pe($branch_list);die;
             $zonal_manager['generated']  = $this->get_leads(array('type'=>'adv_total','till'=>'mtd','user_type'=>'BM','zone_id' => $zone_id));
             $zonal_manager['converted']  = $this->get_leads(array('type'=>'adv_converted','till'=>'mtd','user_type'=>'BM','zone_id' => $zone_id));
             $zonal_manager['assigned']   = $this->get_leads(array('type'=>'adv_assigned','till'=>'mtd','user_type'=>'BM','zone_id' => $zone_id));
             $zonal_manager['unassigned'] = $this->get_leads(array('type'=>'adv_unassigned','till'=>'','user_type'=>'BM','zone_id' => $zone_id));
+            $zonal_manager['pending_before']   = $this->get_leads(array('type'=>'pending_before','till'=>'','user_type'=>'BM','zone_id' => $zone_id));
+            $zonal_manager['pending']    = $this->get_leads(array('type'=>'pending','till'=>'TAT','user_type'=>'BM','zone_id' => $zone_id));
 
-            //$zonal_manager = call_user_func_array('array_merge', $zonal_manager);
+        //$zonal_manager = call_user_func_array('array_merge', $zonal_manager);
             $zonal_manager = array_merge($zonal_manager);
             //pe($zonal_manager);
             $total = array();
@@ -1088,6 +1095,8 @@ $pending_days = 2;
                 $final['zonal_manager'][$value->branch_id]['converted'] = isset($total['converted'][$value->branch_id]) ? $total['converted'][$value->branch_id] : 0;
                 $final['zonal_manager'][$value->branch_id]['unassigned'] = isset($total['unassigned'][$value->branch_id]) ? $total['unassigned'][$value->branch_id] : 0;
                 $final['zonal_manager'][$value->branch_id]['assigned'] = isset($total['assigned'][$value->branch_id]) ? $total['assigned'][$value->branch_id] : 0;
+                $final['zonal_manager'][$value->branch_id]['pending_before'] = isset($total['pending_before'][$value->branch_id]) ? $total['pending_before'][$value->branch_id] : 0;
+                $final['zonal_manager'][$value->branch_id]['pending'] = isset($total['pending'][$value->branch_id]) ? $total['pending'][$value->branch_id] : 0;
 
                 $final['zonal_manager'][$value->branch_id]['branch_id'] = $value->branch_id;
                 $final['zonal_manager'][$value->branch_id]['branch_name'] = $value->branch_name;
@@ -1150,8 +1159,8 @@ $pending_days = 2;
                 }
             }
             //send sms
-            $sms =  'Lead Generated (MTD) = '.ucwords($sum_generated).
-                    ' ,Lead Converted (MTD) = '.ucwords($sum_converted).
+            $sms =  'Lead Generated (In this month) = '.ucwords($sum_generated).
+                    ' ,Lead Converted (In this month) = '.ucwords($sum_converted).
                     ' ,No.of Unassigned Leads = '.ucwords($sum_unassigned).
                     ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
                     ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
@@ -1214,8 +1223,8 @@ $pending_days = 2;
             }
 
             //FOR EMPLOYEE SMS
-            $sms =  'Lead Generated (MTD) = '.ucwords($sum_generated).
-                ' ,Lead Converted (MTD) = '.ucwords($sum_converted).
+            $sms =  'Lead Generated (In this month) = '.ucwords($sum_generated).
+                ' ,Lead Converted (In this month) = '.ucwords($sum_converted).
                 ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
                 ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
 
