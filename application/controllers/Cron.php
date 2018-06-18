@@ -781,16 +781,25 @@ $pending_days = 2;
                 'bold'  => true,
                 'size'  => 22
             ));
+
         $textfontArray = array(
-            'font'  => array(
-                'bold'  => true,
-                'size'  => 11
-            ));
-        $text_bold_false = array(
             'font'  => array(
                 'bold'  => false,
                 'size'  => 11
             ));
+
+        $text_bold_false = array(
+            'font'  => array(
+                'bold'  => false,
+                'size'  => 11
+            ),
+
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => 'FF0000')
+            )
+        );
+
         $fileType = 'Excel5';
         $time = time();
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel5");
@@ -809,14 +818,15 @@ $pending_days = 2;
 
             $objSheet->getCell($excel_alpha[$key].'1')->setValue($value);
         }
-        
+
         $i=2;$j=1;
         foreach ($data as $key => $value) {
             foreach ($header_value as $k => $v) {
                 $objSheet->getStyle($excel_alpha[$k] . $i)
                     ->getAlignment()
                     ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                $objSheet->getStyle($excel_alpha[$k].($i))->applyFromArray($text_bold_false);
+
+                $objSheet->getStyle($excel_alpha[$k].($i))->applyFromArray($textfontArray);
             }
 
             //$objSheet->getCell($excel_alpha[0].$i)->setValue($j);
@@ -827,8 +837,13 @@ $pending_days = 2;
             }
             if(in_array($action,array('zm_consolidated_mail','zm_consolidated_mail_advances','zm_inactive_leads','zm_unassigned_leads'))){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_id']));
-                $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']));
+
+                if($value['unassigned'] == 0)
+                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']))->getStyle($excel_alpha[++$col] . $i)->applyFromArray($text_bold_false);
+                else
+                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']))->getStyle($excel_alpha[++$col] . $i)->applyFromArray($textfontArray);
             }
+
             if(in_array($action,array('bm_consolidated_mail','bm_inactive_leads'))){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['hrms_id']));
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['employee_name']));
@@ -837,7 +852,12 @@ $pending_days = 2;
                 if($action == 'zm_consolidated_mail_advances' ){
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['generated']));
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['assigned']));
-                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['unassigned']));
+
+                    if($value['unassigned'] == 0)
+                        $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['unassigned']))->getStyle($excel_alpha[++$col] . $i)->applyFromArray($text_bold_false);
+                    else
+                        $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['unassigned']))->getStyle($excel_alpha[++$col] . $i)->applyFromArray($textfontArray);
+
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['converted']));
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['pending_before']));
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['pending']));
