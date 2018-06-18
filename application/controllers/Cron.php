@@ -152,12 +152,12 @@ class Cron extends CI_Controller
           // pe($final['zonal_manager']);die;
             //FOR ZONAL MANAGER
             $subject = 'Pending Leads under Dena Sampark for follow up';
-//            $first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
+            $first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
             $second_attachment_file = $this->zm_consolidated_mail_for_advances($v->zone_id);
             $attachment_file = array($second_attachment_file);
             $to = array('email' => $v->email_id,'name' => $v->name);
             $message = $this->zm_msg();
-//            sendMail($to,$subject,$message,$attachment_file,$cc);
+            sendMail($to,$subject,$message,$attachment_file,$cc);
 //die;
         }
     }       
