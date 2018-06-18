@@ -99,6 +99,18 @@ class Reports extends CI_Controller
             $d = new DateTime('first day of this month');
             $arrData['start_date'] = str_replace('-', '-', $d->format('d-m-Y'));
             $arrData['end_date']   = str_replace('-', '-',date('d-m-Y'));
+            if($action == 'leads_generated_vs_converted'){
+                $arrData = $this->$action('generated',$arrData);
+                $arrData = $this->$action('assigned',$arrData);
+                $arrData = $this->$action('converted',$arrData);
+                $arrData = $this->$action('actual_business',$arrData);
+//pe($arrData);die;
+                $arrData = $this->combine($arrData);
+                //pe($arrData);die;
+            }else{
+                $arrData = $this->$action($arrData);
+
+            }
 
         }
 
