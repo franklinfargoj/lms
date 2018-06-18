@@ -45,11 +45,14 @@ $lead_sources = $this->config->item('lead_source');
             <div class="form-control">
                 <label>Start Date:<span style="color:red;">*</span></label>
                 <?php
-                if(isset($start_date)){
+                /*if(isset($start_date)){
                     $start_date = date('d-m-Y',strtotime($start_date));
                 }else{
                     $start_date = '';
-                }
+                }*/
+                $d = new DateTime('first day of this month');
+                
+                $start_date = date('d-m-Y',strtotime($d->format('d-m-Y')));
                 $data = array(
                     'type'  => 'text',
                     'name'  => 'start_date',
@@ -112,11 +115,12 @@ $lead_sources = $this->config->item('lead_source');
             <div class="form-control endDate">
                 <label>End Date:<span style="color:red;">*</span></label>
                 <?php
-                if(isset($end_date)){
+                /*if(isset($end_date)){
                     $end_date = date('d-m-Y',strtotime($end_date));
                 }else{
                     $end_date = '';
-                }
+                }*/
+                $end_date = date('d-m-Y',strtotime(date('d-m-Y')));
                 $data = array(
                     'type'  => 'text',
                     'name'  => 'end_date',
