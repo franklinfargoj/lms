@@ -152,12 +152,12 @@ class Cron extends CI_Controller
           // pe($final['zonal_manager']);die;
             //FOR ZONAL MANAGER
             $subject = 'Pending Leads under Dena Sampark for follow up';
-            $first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
+//            $first_attachment_file = $this->export_to_excel('zm_consolidated_mail',$final['zonal_manager']);
             $second_attachment_file = $this->zm_consolidated_mail_for_advances($v->zone_id);
             $attachment_file = array($second_attachment_file);
             $to = array('email' => $v->email_id,'name' => $v->name);
             $message = $this->zm_msg();
-            sendMail($to,$subject,$message,$attachment_file,$cc);
+//            sendMail($to,$subject,$message,$attachment_file,$cc);
 //die;
         }
     }       
@@ -838,10 +838,17 @@ $pending_days = 2;
             if(in_array($action,array('zm_consolidated_mail','zm_consolidated_mail_advances','zm_inactive_leads','zm_unassigned_leads'))){
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_id']));
 
+
                 if($value['unassigned'] == 0)
-                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']))->getStyle($excel_alpha[++$col] . $i)->applyFromArray($text_bold_false);
+                {
+                    $color_branch_name = $excel_alpha[++$col].$i;
+                    $objSheet->getCell($color_branch_name)->setValue(ucwords($value['branch_name']))->getStyle($color_branch_name)->applyFromArray($text_bold_false);
+                }
                 else
-                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_name']))->getStyle($excel_alpha[++$col] . $i)->applyFromArray($textfontArray);
+                {
+                    $color_branch_name = $excel_alpha[++$col].$i;
+                    $objSheet->getCell($color_branch_name)->setValue(ucwords($value['branch_name']))->getStyle($color_branch_name)->applyFromArray($textfontArray);
+                }
             }
 
             if(in_array($action,array('bm_consolidated_mail','bm_inactive_leads'))){
@@ -850,13 +857,19 @@ $pending_days = 2;
             }
             if(in_array($action,array('gm_consolidated_mail','zm_consolidated_mail','zm_consolidated_mail_advances','bm_consolidated_mail'))){
                 if($action == 'zm_consolidated_mail_advances' ){
-                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['generated']));
-                    $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['assigned']));
+                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['generated']));
+                    $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['assigned']));
 
                     if($value['unassigned'] == 0)
-                        $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['unassigned']))->getStyle($excel_alpha[++$col] . $i)->applyFromArray($text_bold_false);
+                    {
+                        $color_branch_name = $excel_alpha[++$col].$i;
+                        $objSheet->getCell($color_branch_name)->setValue(ucwords($value['unassigned']))->getStyle($color_branch_name)->applyFromArray($text_bold_false);
+                    }
                     else
-                        $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['unassigned']))->getStyle($excel_alpha[++$col] . $i)->applyFromArray($textfontArray);
+                    {
+                        $color_branch_name = $excel_alpha[++$col].$i;
+                        $objSheet->getCell($color_branch_name)->setValue(ucwords($value['unassigned']))->getStyle($color_branch_name)->applyFromArray($textfontArray);
+                    }
 
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['converted']));
                     $objSheet->getCell($excel_alpha[++$col] . $i)->setValue(ucwords($value['pending_before']));
