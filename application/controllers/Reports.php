@@ -87,7 +87,7 @@ class Reports extends CI_Controller
                     $lead_sources = $this->config->item('lead_source');
                     $arrData['lead_source'] = $lead_sources[$arrData['lead_source']];
                 }
-                
+
                 if($action != 'status_flow') {
                     $this->export_to_excel($action, $arrData);
                 }else{
