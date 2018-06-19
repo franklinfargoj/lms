@@ -319,6 +319,13 @@
                                     CC Email
                                 </a>
                             </li>
+
+                            <li>
+                                <a href="<?php echo site_url('toemail')?>">
+                                    To Email
+                                </a>
+                            </li>
+
                             <li>
                                 <a href="<?php echo site_url('othersource')?>">
                                     Other Source

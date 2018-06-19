@@ -106,7 +106,7 @@ class Cron extends CI_Controller
      */
     public function zm_consolidated_mail(){
         $cc =0;
-        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%'),array(),'employee_dump');
+        $zone_list = $this->Lead->get_employee_dump(array('hrms_id','name','designation','email_id','zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%', 'email_status' => 'active'),array(),'employee_dump');
 
         foreach ($zone_list as $k => $v) {
             $final = array();
