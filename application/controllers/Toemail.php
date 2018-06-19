@@ -40,7 +40,7 @@ class Toemail extends CI_Controller {
 
         $arrData['userData'] = $this->Lead->get_employee_dump(array('id', 'hrms_id','name','designation','email_id','email_status', 'zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%', 'email_status' => 'active'),array(),'employee_dump');
 
-        return load_view("list_toemail",$arrData);
+        return load_view("list_to_email",$arrData);
     }
 
     /*
