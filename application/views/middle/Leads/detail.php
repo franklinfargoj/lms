@@ -560,6 +560,21 @@
             }
         }
 
+        $('#detail_form').on('submit', function(){
+            if($('#is_other_branch').is(':checked'))
+            {
+                $('#state_id').rules('add', {required: true, messages: { required: "Please select state"}});
+                $('#district_id').rules('add', {required: true, messages: { required: "Please select district"}});
+                $('#branch_id').rules('add', {required: true, messages: { required: "Please select branch"}});
+            }
+            else
+            {
+                $('#state_id').rules('remove');
+                $('#district_id').rules('remove');
+                $('#branch_id').rules('remove');
+            }
+        })
+        
         //Validation
         $.validator.addMethod("regx", function(value, element, regexpr) {
             return regexpr.test(value);
@@ -594,15 +609,15 @@
                         }
                     }
                 },
-                state_id: {
-                    required: true
-                },
-                district_id: {
-                    required: true
-                },
-                branch_id: {
-                    required: true
-                },
+//                state_id: {
+//                    required: true
+//                },
+//                district_id: {
+//                    required: true
+//                },
+//                branch_id: {
+//                    required: true
+//                },
                 reason:{
                     required:true
                 },
@@ -629,15 +644,15 @@
                 lead_identification : {
                     required: "Please select lead identification"
                 },
-                district_id: {
-                    required: "Please select district"
-                },
-                state_id: {
-                    required: "Please select state"
-                },
-                branch_id: {
-                    required: "Please select branch"
-                },
+//                district_id: {
+//                    required: "Please select district"
+//                },
+//                state_id: {
+//                    required: "Please select state"
+//                },
+//                branch_id: {
+//                    required: "Please select branch"
+//                },
                 reason:{
                     required:"Please enter reason for drop"
                 },
