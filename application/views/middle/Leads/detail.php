@@ -574,7 +574,7 @@
                 $('#branch_id').rules('remove');
             }
         })
-        
+
         //Validation
         $.validator.addMethod("regx", function(value, element, regexpr) {
             return regexpr.test(value);
