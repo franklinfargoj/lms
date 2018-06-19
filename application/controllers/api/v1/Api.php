@@ -32,6 +32,7 @@ class Api extends REST_Controller
         $this->load->model('Login_model');
         $this->load->model('Ticker_model', 'ticker');
         $this->load->model('Master_model');
+        $this->load->model('Othersource_model');
         $this->load->model('Faq_model', 'faq');
         $this->load->model('Notification_model', 'notification');
         $method = $this->router->method;
@@ -688,16 +689,25 @@ class Api extends REST_Controller
                 $status['title'] = $value;
                 $final_reason[] = $status;
             }
-
-            foreach ($this->config->item('other_sources') as $key => $value){
-                $status['id'] = $key;
-                $status['title'] = $value;
+            $otherSources = $this->Othersource_model->getActiveSource();
+            foreach ($otherSources as $value){
+                $status['id'] = $value['id'];
+                $status['title'] = $value['title'];
                 $final_other_source[] = $status;
             }
+            $default['id'] = 'NULL';
+            $default['title'] = 'None';
+            array_push($final_other_source,$default);
+
+//            foreach ($this->config->item('other_sources') as $key => $value){
+//                $status['id'] = $key;
+//                $status['title'] = $value;
+//                $final_other_source[] = $status;
+//            }
 
             $lead_status['status'] = $final_status;
             $lead_status['lead_source'] = $final_source;
-            $lead_status['lead_identification'] = $final_type;
+            $lead_status['lead_identification']  = $final_type;
             $lead_status['drop_reason'] = $final_reason;
             $lead_status['other_source'] = $final_other_source;
         }
