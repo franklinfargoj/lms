@@ -38,7 +38,7 @@ class Toemail extends CI_Controller {
         $this->make_bread->add('To Email', '', 0);
         $arrData['breadcrumb'] = $this->make_bread->output();
 
-        $arrData['userData'] = $this->Lead->get_employee_dump(array('id', 'hrms_id','name','designation','email_id','email_status', 'zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%', 'email_status' => 'active'),array(),'employee_dump');
+//        $arrData['userData'] = $this->Lead->get_employee_dump(array('id', 'hrms_id','name','designation','email_id','email_status', 'zone_id','zone_name'),array('designation like' => '%ZONAL MANAGER%', 'email_status' => 'active'),array(),'employee_dump');
 
         return load_view("list_to_email",$arrData);
     }
@@ -82,6 +82,88 @@ class Toemail extends CI_Controller {
         }else{
             return load_view("edit_to_email",$arrData);
         }
+    }
+
+    public function listToEmail()
+    {
+        $columns = array(
+            1 =>'name',
+            2=> 'email_id',
+            3=> 'email_status',
+        );
+
+        $limit = $this->input->post('length');
+        $start = $this->input->post('start');
+        $order = $columns[$this->input->post('order')[0]['column']];
+        $dir = $this->input->post('order')[0]['dir'];
+
+        $totalData = $this->Lead->all_employee_dump_count();
+
+        $totalFiltered = $totalData;
+
+//        $posts = $this->Lead->all_employee_dump($limit,$start,$order,$dir);
+
+        if(!empty($this->input->post('columns')[1]['search']['value']) && !empty($this->input->post('columns')[2]['search']['value'])){
+            $search['name'] = $this->input->post('columns')[1]['search']['value'];
+            $search['email_id'] = $this->input->post('columns')[2]['search']['value'];
+
+            $posts =  $this->Lead->employee_dump_search_for_all($limit,$start,$search,$order,$dir);
+
+            $totalFiltered = $this->Lead->employee_dump_search_count_for_all($search);
+        }
+        elseif(!empty($this->input->post('columns')[1]['search']['value'])) {
+            $search = $this->input->post('columns')[1]['search']['value'];
+
+            $key = $this->input->post('columns')[1]['data'];
+
+            $posts =  $this->Lead->employee_dump_search($limit,$start,$search,$order,$dir,$key);
+
+            $totalFiltered = $this->Lead->employee_dump_search_count($search,$key);
+        }
+
+        elseif(!empty($this->input->post('columns')[2]['search']['value'])){
+            $search = $this->input->post('columns')[2]['search']['value'];
+
+            $key = $this->input->post('columns')[2]['data'];
+
+            $posts =  $this->Lead->employee_dump_search($limit,$start,$search,$order,$dir,$key);
+
+            $totalFiltered = $this->Lead->employee_dump_search_count($search,$key);
+        }
+
+        else
+        {
+            $posts = $this->Lead->all_employee_dump($limit,$start,$order,$dir);
+        }
+
+        $data = array();
+        $i = 1;
+        if(!empty($posts))
+        {
+            foreach ($posts as $post)
+            {
+
+                $nestedData['id'] = $i;
+                $nestedData['name'] = $post->name;
+                $nestedData['email_id'] = $post->email_id;
+                $nestedData['email_status'] = $post->email_status;
+//                $nestedData['action'] = "<a class='' href=".site_url('toemail/edit/'. encode_id($post->id));">";
+                $nestedData['action'] = "<a class='' href='".site_url('toemail/edit/'.encode_id($post->id))."'>Edit</a>";
+
+                $data[] = $nestedData;
+
+                $i++;
+            }
+        }
+
+        $json_data = array(
+            "draw"            => intval($this->input->post('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data
+        );
+
+        echo json_encode($json_data);
     }
 
 }

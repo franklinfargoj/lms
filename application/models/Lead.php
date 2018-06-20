@@ -731,5 +731,103 @@ class Lead  extends CI_Model
         return false;
     }
 
+    public function all_employee_dump($limit,$start,$col,$dir)
+    {
+        $query = $this->db
+            ->like('designation', 'ZONAL MANAGER')
+//            ->where('email_status', 'active')
+            ->limit($limit,$start)
+            ->order_by($col,$dir)
+            ->get('employee_dump');
+
+        if($query->num_rows()>0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function all_employee_dump_count()
+    {
+        $query = $this->db
+            ->like('designation', 'ZONAL MANAGER')
+//            ->where('email_status', 'active')
+            ->get('employee_dump');
+
+        return $query->num_rows();
+    }
+
+    public function employee_dump_search($limit,$start,$search,$col,$dir,$key)
+    {
+        $query = $this
+            ->db
+            ->like($key,$search)
+            ->like('designation', 'ZONAL MANAGER')
+//            ->where('email_status', 'active')
+            ->limit($limit,$start)
+            ->order_by($col,$dir)
+            ->get('employee_dump');
+
+
+        if($query->num_rows()>0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    function employee_dump_search_count($search,$key)
+    {
+        $query = $this
+            ->db
+            ->like($key,$search)
+            ->like('designation', 'ZONAL MANAGER')
+//            ->where('email_status', 'active')
+            ->get('employee_dump');
+
+        return $query->num_rows();
+    }
+
+    public function employee_dump_search_for_all($limit,$start,$search,$col,$dir)
+    {
+        $query = $this
+            ->db
+            ->like('name',$search['name'])
+            ->like('email_id',$search['email_id'])
+            ->like('designation', 'ZONAL MANAGER')
+//            ->where('email_status', 'active')
+            ->limit($limit,$start)
+            ->order_by($col,$dir)
+            ->get('employee_dump');
+
+
+        if($query->num_rows()>0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    function employee_dump_search_count_for_all($search)
+    {
+        $query = $this
+            ->db
+            ->like('name',$search['name'])
+            ->like('email_id',$search['email_id'])
+            ->like('designation', 'ZONAL MANAGER')
+//            ->where('email_status', 'active')
+            ->get('employee_dump');
+
+        return $query->num_rows();
+    }
 
 }
