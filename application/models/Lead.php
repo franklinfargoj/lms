@@ -830,4 +830,11 @@ class Lead  extends CI_Model
         return $query->num_rows();
     }
 
+    public function get_product_cat_name($product_category_id){
+        $this->db->select('title');
+        $this->db->from('db_master_product_category');
+        $this->db->where('id',$product_category_id);
+        $result = $this->db->get()->result();
+        return $result;
+    }
 }

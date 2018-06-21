@@ -2007,4 +2007,19 @@ private function verify_accountcbs($acc_no)
         $this->Lead->insert_lead_data($lead_status_data1, Tbl_LeadAssign);
     }
 
+    /*
+    * product_category_name
+    * Fetches product_category_name
+    * @author Franklin Fargoj
+    * @access public
+    * @param none
+    * @return json
+    */
+    public function product_category_name(){
+        if($this->input->post('product_category_id') != ''){
+            $product_category_id = $this->input->post('product_category_id');
+            $response = $this->Lead->get_product_cat_name($product_category_id);
+            echo json_encode($response);
+        }
+    }
 }
