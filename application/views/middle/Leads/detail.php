@@ -1,4 +1,5 @@
 <?php
+//    pe($this->session->userdata());die;
 //    $lead_status = $this->config->item('lead_status');
     $all_lead_status = $this->config->item('lead_status');
     $lead_type = $this->config->item('lead_type');
@@ -734,35 +735,120 @@
         });
     });
 
+//    $('#lead_status').change(function () {
+//
+//        var current_status = "<?php //echo $leads[0]['status']; ?>//";
+//        var selected_status = $(this).val();
+//
+//        if(current_status == 'NC'){
+//            if(selected_status==='DC'||selected_status==='AO'||
+//               selected_status==='Converted'||selected_status==='Sanction'||
+//               selected_status==='Closed') {
+//                alert('Please select  Interested or Drop/Not interested.');
+//                $(this).val('NC');
+//            }
+//        }else if(current_status == 'FU'){
+//            if(selected_status==='Sanction'|| selected_status==='Converted') {
+//                alert('Please select  Documents Collected or Drop/Not interested.');
+//                //$(this).val('FU');
+//            }
+//        }else if(current_status == 'DC'){
+//            if(selected_status==='Closed') {
+//                alert('Please select Converted or Drop/Not interested.');
+//                //$(this).val('DC');
+//            }
+//        }else if(current_status == 'AO'){
+//            if(selected_status==='Closed') {
+//                alert('Please select Converted.');
+//                //$(this).val('DC');
+//            }
+//        }
+//
+//    })
+
+    // franklin fargoj
     $('#lead_status').change(function () {
 
         var current_status = "<?php echo $leads[0]['status']; ?>";
         var selected_status = $(this).val();
+        var product_category_id ="<?php echo $leads[0]['product_category_id']; ?>";
+        var product_category;
+        var admin_type= "<?php echo $this->session->userdata('admin_type'); ?>";
 
         if(current_status == 'NC'){
-            if(selected_status==='DC'||selected_status==='AO'||
-               selected_status==='Converted'||selected_status==='Sanction'||
-               selected_status==='Closed') {
+            if(selected_status==='DC'||selected_status==='AO'|| selected_status==='Converted'||
+                selected_status==='Sanction'||selected_status==='Closed') {
                 alert('Please select  Interested or Drop/Not interested.');
                 $(this).val('NC');
             }
         }else if(current_status == 'FU'){
-            if(selected_status==='Sanction'|| selected_status==='Converted') {
+            if(selected_status==='Sanction'|| selected_status==='Converted' ||selected_status==='AO'||
+                selected_status==='Closed') {
                 alert('Please select  Documents Collected or Drop/Not interested.');
-                //$(this).val('FU');
+                $(this).val('FU');
             }
         }else if(current_status == 'DC'){
-            if(selected_status==='Closed') {
-                alert('Please select Converted or Drop/Not interested.');
-                //$(this).val('DC');
+            $.ajax({
+                method: "POST",
+                url: base_url + 'leads/product_category_name',
+                async : false,
+                data: {
+                    '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                    product_category_id: product_category_id },
+                success: function(result){
+                    result = JSON.parse(result);
+                    product_category = result[0].title;
+                }
+            });
+
+            if(admin_type =='BM'){
+                if(product_category == 'Advances'){
+                    if( selected_status==='AO'||selected_status==='Converted'||selected_status==='Closed') {
+                        alert('Please select  Sanction or Drop/Not interested.');
+                        $(this).val('DC');
+                    }
+                }else if(product_category == 'Fee Income'){
+                    if( selected_status==='Closed') {
+                        alert('Please select  Converted or Drop/Not interested.');
+                        $(this).val('DC');
+                    }
+                }else {
+                    if(selected_status==='Converted'||selected_status==='Closed'){
+                        alert('Please select  Account opened or Drop/Not interested.');
+                        $(this).val('DC');
+                    }
+                }
+            }else if(admin_type =='EM'){
+                if(product_category == 'Advances'){
+                    if( selected_status==='AO') {
+                        alert('Please select Sanction or Drop/Not interested.');
+                        $(this).val('DC');
+                    }
+                }else if(product_category == 'Fee Income'){
+                    if( selected_status==='NI') {
+                        alert('Drop/Not interested not allowed');
+                        $(this).val('DC');
+                    }
+                }else{
+                    if(selected_status==='NI'){
+                        alert('Drop/Not interested not allowed');
+                        $(this).val('DC');
+                    }
+                }
             }
         }else if(current_status == 'AO'){
             if(selected_status==='Closed') {
                 alert('Please select Converted.');
-                //$(this).val('DC');
+                $(this).val('AO');
+            }
+        }else if(current_status == 'Sanction'){
+            if(admin_type =='BM'){
+                if(selected_status==='Converted'||selected_status=== 'Closed') {
+                    alert('Please select Account opened or Drop/Not interested.');
+                    $(this).val('Sanction');
+                }
             }
         }
-
     })
 
 
