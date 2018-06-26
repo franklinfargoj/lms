@@ -6,7 +6,7 @@
 <!-- BEGIN PRODUCT CATEGORY -->
 <div class="page-title">
     <div class="container clearfix">
-        <h3 class="text-center">Other Source</h3>
+        <h3 class="text-center">Other Agent</h3>
     </div>
 </div>
 

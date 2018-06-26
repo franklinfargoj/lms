@@ -328,7 +328,7 @@
 
                             <li>
                                 <a href="<?php echo site_url('othersource')?>">
-                                    Other Source
+                                    Other Agent
                                 </a>
                             </li>
                         </ul>
