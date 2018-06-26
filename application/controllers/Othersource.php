@@ -35,9 +35,8 @@ class Othersource extends CI_Controller {
     public function index()
     {
         /*Create Breadcumb*/
-        $this->make_bread->add('Other Source', '', 0);
+        $this->make_bread->add('Other Agent', '', 0);
         $arrData['breadcrumb'] = $this->make_bread->output();
-
         $arrData['other_source_list'] = $this->Othersource_model->list_other_source();
         return load_view("other_source",$arrData);
     }

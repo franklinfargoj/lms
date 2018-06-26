@@ -67,8 +67,13 @@
                             <td>
                                 <a class="" href="<?php echo site_url('ticker/edit/'. encode_id($value['id']));?>">
                                     Edit
-                                </a> 
-                                                            </td>
+                                </a>
+                                <b style="word-space:2em">&nbsp;&nbsp;</b>
+                                <a class="" href="<?php echo site_url('ticker/delete/'. encode_id($value['id']));?>">
+                                    Delete
+                                </a>
+
+                            </td>
                         </tr>   
                         <?php   
                             }
