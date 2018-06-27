@@ -130,8 +130,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                         <?php echo form_error('product_id'); ?>
                     </div>
                     <div class="form-control range-slider">
-                        <label style="vertical-align: top;">Ticket Size:<span style="color:red;">*</span> </label>
-                        <?php echo form_input($data_ticket_range)?><img src="../assets2/images/rupees.png" alt="rupees" id="rs">
+                        <label style="vertical-align: top;">Ticket Size:<span style="color:red;">*</span></label>
+                        <?php echo form_input($data_ticket_range) ?><img src="../assets2/images/rupees.png" alt="rupees" id="rs">
                         <div id="master">
                             <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"></div>
                         </div>
@@ -295,6 +295,20 @@ $remark_extra = 'style="rows:4 ; cols:80"';
         };
         $('#is_own_branch').click(function () {
             is_own_branch();
+        });
+
+        $("#ticket_range").click(function(){
+            var x =  $("#ticket_range").val();
+            if(x == 0){
+                $("#ticket_range").val('');
+            }
+        });
+
+        $("#ticket_range").blur(function(){
+            var x =  $("#ticket_range").val();
+            if(x == ''){
+                $("#ticket_range").val(0);
+            }
         });
 
         $('#product_category').change(function () {
