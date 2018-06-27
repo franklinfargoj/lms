@@ -64,15 +64,17 @@
 					</a>
 				</li>
 				<?php }?>
+
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-					<li class="<?php echo ($controller == 'rapc' || ($controller == 'rapc' && $method == 'upload')) ? 'active' : ''?>">
+					<li class="<?php echo ($controller == 'rapc' && $method == 'index' ||($controller == 'rapc' && $method == 'upload') ) ? 'active' : ''?>">
 						<a href="<?php echo site_url('rapc')?>">
 							RAPC
 						</a>
 					</li>
 				<?php }?>
+
 				<?php if(in_array($this->session->userdata('admin_type'),array('Super admin'))) {?>
-					<li class="<?php echo ($controller == 'rapc' && $method == 'route') ? 'active' : ''?>">
+					<li class="<?php echo ($controller == 'rapc' && $method == 'mapping_list') ? 'active' : ''?>">
 						<a href="<?php echo site_url('rapc/mapping_list')?>">
 							Lead Routing
 						</a>
