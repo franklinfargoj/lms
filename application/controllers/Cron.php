@@ -839,7 +839,7 @@ $pending_days = 2;
                 $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['branch_id']));
 
 
-                if($value['unassigned'] == 0)
+                if($value['unassigned'] > 0 || $value['generated'] == 0)
                 {
                     $color_branch_name = $excel_alpha[++$col].$i;
                     $objSheet->getCell($color_branch_name)->setValue(ucwords($value['branch_name']))->getStyle($color_branch_name)->applyFromArray($text_bold_false);
@@ -860,7 +860,7 @@ $pending_days = 2;
                     $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['generated']));
                     $objSheet->getCell($excel_alpha[++$col].$i)->setValue(ucwords($value['assigned']));
 
-                    if($value['unassigned'] == 0)
+                    if($value['unassigned'] > 0)
                     {
                         $color_branch_name = $excel_alpha[++$col].$i;
                         $objSheet->getCell($color_branch_name)->setValue(ucwords($value['unassigned']))->getStyle($color_branch_name)->applyFromArray($text_bold_false);
@@ -1149,6 +1149,7 @@ $pending_days = 2;
             return $a['unassigned'] - $b['unassigned'];
         });
 
+        $final['zonal_manager'] = array_reverse($final['zonal_manager']);
 //            pe($final);die;
         $attachment_file = $this->export_to_excel('zm_consolidated_mail_advances',$final['zonal_manager']);
 
