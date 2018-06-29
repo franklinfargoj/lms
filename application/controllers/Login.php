@@ -41,7 +41,7 @@ class Login extends CI_Controller {
             $select = array('id','title');
             $where['is_deleted'] = 0;
             $where['status'] = 'active';
-            $arrData['tickers'] = $this->ticker->view($select,$where,Tbl_Ticker,array(),array($id ="asc"),$limit = 5);
+            $arrData['tickers'] = $this->ticker->view($select,$where,Tbl_Ticker,array(),$id = "id",$limit = 5);
             //Get tickers title
         if($this->input->post()){
             $this->form_validation->set_rules('username','Username', 'trim|required');

@@ -417,7 +417,8 @@ body{
 	margin: 10px 0;
 }
 .header .top-navigation{
-	width: 60%;
+	/* width: 60%; */
+	width: 63%;
 	display: inline-block;
 	vertical-align: middle;
 }
@@ -430,9 +431,10 @@ body{
 	margin-top: 25px;
 }
 .top-navigation a{
-       outline : none;
+  outline : none;
 	display: table;
-	color: #b1bac4;
+	/* color: #b1bac4; */
+	color: #d4dfeb;
 	font-family: "Montserrat-Regular";
 	font-size: 12px;
 	padding: 45px 7px;
@@ -1926,3 +1928,9 @@ tr.even-dash {
 }
 
 .table-container tfoot tr {background-color: #a7a4a4;}
+
+
+/* 28 June 2018 */
+table.dataTable thead th {
+    white-space: nowrap;
+}
