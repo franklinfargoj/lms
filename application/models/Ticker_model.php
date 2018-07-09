@@ -95,8 +95,8 @@ class Ticker_model extends CI_Model{
 		return $this->db->affected_rows();
 	}
 
-	public function view($select,$where,$table,$join = array(),$order_by = array(),$limit=''){
-
+	public function view($select,$where,$table,$join = array(),$order_by = '',$limit=''){
+        $dir = 'asc';
 		$this->db->select($select,TRUE);
 		$this->db->from($table);
 		if(!empty($join)){
@@ -106,17 +106,14 @@ class Ticker_model extends CI_Model{
 			$this->db->where($where);
 		}
 		if(!empty($order_by)){
-			$this->db->order_by($order_by);
-			/*pe($order_by);
-			exit;*/
-		}else{
-			$this->db->order_by($table.'.id','DESC');
+			$this->db->order_by($order_by,$dir);
+
 		}
 		if(!empty($limit)){
 			$this->db->limit($limit);
 		}
 		$query = $this->db->get();
-		//pe($this->db->last_query())
+
 		return $query->result_array();
 	}
 
@@ -125,10 +122,5 @@ class Ticker_model extends CI_Model{
 		$this->db->update($table,$data);
 		return $this->db->affected_rows();
 	}
-	
 
-	
-
-
-	
 }
