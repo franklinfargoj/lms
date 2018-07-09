@@ -203,6 +203,7 @@ $source = $this->config->item('lead_source');
                                 </td>
                                 <td>
                                     <?php
+                                 //   echo"test";die;
                                     if($value['lead_source'] == 'walkin' && ($value['mapping'] != 'BRANCH' && $value['mapping'] == $branch_map) && ($value['reroute_from_branch_id'] == '' || $value['reroute_from_branch_id'] == NULL)){?>
 
                                     <a href="javascript:void(0);" class="send_rapc"  style="color: red" data="<?php echo encode_id($value['id']);?>">Send To <?php echo $branch_map;?></a>
