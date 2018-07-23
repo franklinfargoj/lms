@@ -1343,13 +1343,14 @@ $pending_days = 2;
     public function current_day_schedules(){
         $today_schedule = $this->Reminder_model->get_current_schedule();
 
-        //pe($today_schedule);die;
+       // pe($today_schedule);die;
         //$today_schedule[0]['remind_to']; //pe($today_schedule);die;
         if (count($today_schedule) > 0) {
             foreach ($today_schedule as $key => $value) {
                 $contact_no= $this->Lead->get_employee_dump(array('contact_no'),array('hrms_id' => $value['remind_to']),array(),'employee_dump');
                 $contact=$contact_no[0]->contact_no;
-                send_sms($contact,$value['reminder_text']);
+		$title = "Reminder Text";	
+                sendPushNotification($value['remind_to'],$value['reminder_text'],$title);
             }
         }
     }
