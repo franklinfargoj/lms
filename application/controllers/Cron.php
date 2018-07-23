@@ -1214,8 +1214,9 @@ $pending_days = 2;
                     ' ,No.of Unassigned Leads = '.ucwords($sum_unassigned).
                     ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
                     ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
-
-            send_sms($v->contact_no,$sms);
+            $title = "summary message for ZM";
+//            send_sms($v->contact_no,$sms);
+            sendPushNotification($v->hrms_id,$sms,$title);
         }
     }
 
@@ -1277,8 +1278,9 @@ $pending_days = 2;
                 ' ,Lead Converted (In this month) = '.ucwords($sum_converted).
                 ' ,No.of pending Leads before Documentation = '.ucwords($sum_pending_before).
                 ' ,No. of pending leads post Documentation = '.ucwords($sum_pending);
-
-            send_sms($v->contact_no,$sms);
+            $title = "summary message for BM";
+//            send_sms($v->contact_no,$sms);
+            sendPushNotification($v->hrms_id,$sms,$title);
         }
     }
 
@@ -1341,6 +1343,7 @@ $pending_days = 2;
      * @return void
      */
     public function current_day_schedules(){
+
         $today_schedule = $this->Reminder_model->get_current_schedule();
 
         //pe($today_schedule);die;
@@ -1348,8 +1351,10 @@ $pending_days = 2;
         if (count($today_schedule) > 0) {
             foreach ($today_schedule as $key => $value) {
                 $contact_no= $this->Lead->get_employee_dump(array('contact_no'),array('hrms_id' => $value['remind_to']),array(),'employee_dump');
+
                 $contact=$contact_no[0]->contact_no;
-                send_sms($contact,$value['reminder_text']);
+                $title = "Reminder Text";
+                sendPushNotification($value['remind_to'],$value['reminder_text'],$title);
             }
         }
     }

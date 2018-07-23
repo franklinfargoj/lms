@@ -409,6 +409,7 @@ if(!function_exists('send_sms')){
 
 function sendPushNotification($emp_id,$message,$title)
 {
+
     $CI =& get_instance();
     $CI->load->model('Lead');
     $select = array('device_token','device_type');
@@ -417,7 +418,7 @@ function sendPushNotification($emp_id,$message,$title)
     $limit = '1';
     $table = Tbl_LoginLog;
     $device_values = $CI->Lead->lists($table,$select,$where,'','',$order_by,$limit);
-//pe($device_values);die;
+    pe($device_values);die;
     if(!empty($device_values)){
         $device_id = $device_values[0]['device_token'];
         $device_type = $device_values[0]['device_type'];
@@ -449,7 +450,7 @@ function sendPushNotification($emp_id,$message,$title)
             $rest = curl_exec($crl);
 //pe(curl_error($crl));die;
 //   echo $fields;
-    //echo $rest;die;
+
             if ($rest === false) {
                 return curl_error($crl);
             }

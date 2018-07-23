@@ -134,9 +134,12 @@ $source = $this->config->item('lead_source');
                     </thead>
                     <tbody>
                     <?php
+//                    pe($unassigned_leads);
+//                    exit;
                         if ($unassigned_leads) {
                             $i = 0;
                             foreach ($unassigned_leads as $key => $value) {
+
                                 $branch_mapp = get_branch_map($value['mapping'],$this->session->userdata('branch_id'));
                                 $branch_map = $branch_mapp[0]['processing_center'];
                     ?>

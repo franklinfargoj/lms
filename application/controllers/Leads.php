@@ -620,6 +620,7 @@ class Leads extends CI_Controller
         //Get session data
         $login_user = get_session();
         $arrData = $this->view($login_user,$arrData,$param);
+
         return load_view('Leads/view',$arrData);
     }
 
