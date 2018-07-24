@@ -173,8 +173,8 @@ $source = $this->config->item('lead_source');
 
                                 <td>
                                     <?php echo ucwords($value['product_title']); ?>
-                                    <?php if(!empty($value['other_source'])) {?>
-                                    (<?php echo ucwords($value['other_source']); ?>)
+                                    <?php if($value['other_source'] != 'NULL') {?>
+                                    (<?php echo ucwords($value['other_source']); ?>-Lead)
                                     <?php }?>
                                 </td>
 

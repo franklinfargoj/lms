@@ -293,7 +293,7 @@
                                     <?php }?>
 
 
-                                    <label>Verify Account</label>
+                                    <label>Enter Account No:</label>
                                     <?php
                                     $data = array(
                                         'type'  => 'text',
