@@ -418,7 +418,6 @@ function sendPushNotification($emp_id,$message,$title)
     $limit = '1';
     $table = Tbl_LoginLog;
     $device_values = $CI->Lead->lists($table,$select,$where,'','',$order_by,$limit);
-    pe($device_values);die;
     if(!empty($device_values)){
         $device_id = $device_values[0]['device_token'];
         $device_type = $device_values[0]['device_type'];
