@@ -293,7 +293,7 @@
                                     <?php }?>
 
 
-                                    <label>Verify Account</label>
+                                    <label>Enter Account No:</label>
                                     <?php
                                     $data = array(
                                         'type'  => 'text',
@@ -324,13 +324,13 @@
                                     if($this->session->userdata('admin_type')=='EM' || $this->session->userdata('admin_type')=='BM'){
                                         if($leads[0]['lead_identification'] == '') {
                                             if (isset($lead_identification)) {
-                                                $status_array = array('AO', 'Closed', 'Converted', 'NI','FU','DC');
+                                                $status_array = array('AO', 'Closed', 'Converted', 'NI','FU','DC','Sanction');
                                                 $admin = array('EM','BM');
                                                 if (isset($leads[0]['status']) && in_array($leads[0]['status'], $status_array)
                                                     && in_array($this->session->userdata('admin_type'), $admin)
                                                 ) {}
                                                 else {
-                                                    echo "<label>Lead Identified as :</label>";
+                                                    echo "<label>Lead Identified as :<span style='color:red;'>*</span></label>";
                                                     echo "<span class='detail-label'>";
                                                     $options2[''] = 'Select';
                                                     foreach ($lead_type as $key => $value) {
