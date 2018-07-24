@@ -1643,8 +1643,11 @@ class Leads extends CI_Controller
            if($this->input->post('acc_no') != ''){
             $acc_no = base64_decode(base64_decode($this->input->post('acc_no')));
             //$response = verify_account($acc_no);
-            $response = $this->verify_accountcbs($acc_no);
-            echo $response;
+            //$response = $this->verify_accountcbs($acc_no);
+//               echo $response;
+               $response['data'] = $acc_no;
+               $response['status'] = 'True';
+               echo json_encode($response);
         }
     }
 
