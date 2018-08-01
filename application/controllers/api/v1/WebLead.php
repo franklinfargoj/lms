@@ -36,6 +36,7 @@ class WebLead extends REST_Controller
         $params = $this->input->post();
 
         $lead_data['customer_name'] =  ucwords(strtolower($params['customer_name']));
+        $lead_data['lead_name'] =  ucwords(strtolower($params['customer_name']));
         $lead_data['contact_no'] = $params['contact_no'];
         $lead_data['branch_id'] = $params['branch_id'];
         $lead_data['zone_id'] = zoneid($params['branch_id']);
