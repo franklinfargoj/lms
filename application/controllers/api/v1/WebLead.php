@@ -42,8 +42,8 @@ class WebLead extends REST_Controller
         $lead_data['district_id'] = $params['district_id'];
         $lead_data['state_id'] = $params['state_id'];
         $lead_data['product_id'] = $params['product_id'];
-        $lead_data['product_category'] = $params['product_category'];
-        $lead_data['product_category_id'] = productMap($params['product_category']);
+        $product_category = $params['product_category'];
+        $lead_data['product_category_id'] = productMap($product_category);
         if($lead_data['product_category_id'] == ADVANCES){
             $lead_data['lead_ticket_range'] = $params['lead_ticket_range'];
         }else{
@@ -68,6 +68,7 @@ class WebLead extends REST_Controller
                     $validation_error = '|numeric';
                 }
                 $this->form_validation->set_rules($k,ucwords(str_replace('_',' ',$k)), 'required' . $validation_error);
+
                 if ($this->form_validation->run() == FALSE) {
                     $error[] = form_error($k);
                     $result = array('result' => FALSE,'msg'=>$error);
@@ -85,6 +86,7 @@ class WebLead extends REST_Controller
                             );
 
                 $is_exsits = $this->Lead->is_exsits($whereEx);
+
                 if($is_exsits){
                     $result = array('result' => FALSE,
                                     'msg' => array('Record Already Added'));
@@ -92,11 +94,12 @@ class WebLead extends REST_Controller
                 }
 
                 $lead_id = $this->Lead->add_leads($lead_data);
+
                 if ($lead_id != FALSE) {
                     $branch_manager_id = $this->Lead->branch_manager_id($params['branch_id']);
                     $push_message = "New Lead is been Assigned to your branch through website.";
                     $title = 'New Lead Assigned to your branch';
-                    // sendPushNotification($branch_manager_id,$push_message,$title);
+                    sendPushNotification($branch_manager_id,$push_message,$title);
                     $result = array('result' => TRUE,'msg'=>'Lead added through website.');
                     returnJson($result);
                 } else {
@@ -105,7 +108,6 @@ class WebLead extends REST_Controller
                 }
             }
         }
-
     }
 
     public function alpha_dash_space($str,$name='')
