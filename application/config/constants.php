@@ -146,6 +146,7 @@ define('CURRENT','45');
 define('TERM','46');
 define('RECURRING','47');
 define('DEPOSIT','13');
+define('ADVANCES','12');
 
 
 define('Other_Agent','Other Agent');
