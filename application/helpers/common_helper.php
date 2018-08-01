@@ -1319,6 +1319,25 @@ function convertCurrencyCr($number)
 
 
 
+function productCategoryMap($string)
+{
+    if($string != ""){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $data = $CI->master->getProductCategoryId($string);
+        if(!empty($data)){
+            $id = $data[0]['id'];
+            return $id;
+        }else{
+            return FALSE;
+        }
+    }else{
+        return FALSE;
+    }
+
+}
+
+
 function productMap($string)
 {
     if($string != ""){
@@ -1336,6 +1355,7 @@ function productMap($string)
     }
 
 }
+
 
 
 
