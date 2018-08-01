@@ -39,13 +39,18 @@ class WebLead extends REST_Controller
         $lead_data['lead_name'] =  ucwords(strtolower($params['customer_name']));
         $lead_data['contact_no'] = $params['contact_no'];
         $lead_data['branch_id'] = $params['branch_id'];
-        $lead_data['zone_id'] = zoneid($params['branch_id']);
         $lead_data['district_id'] = $params['district_id'];
         $lead_data['state_id'] = $params['state_id'];
         $lead_data['product_id'] = $params['product_id'];
-        $lead_data['product_category_id'] = $params['product_category_id'];
-        $lead_data['lead_ticket_range'] = $params['lead_ticket_range'];
+        $lead_data['product_category'] = $params['product_category'];
+        $lead_data['product_category_id'] = productMap($params['product_category']);
+        if($lead_data['product_category_id'] == ADVANCES){
+            $lead_data['lead_ticket_range'] = $params['lead_ticket_range'];
+        }else{
+            $lead_data['lead_ticket_range'] = 0;
+        }
 
+        $lead_data['zone_id'] = zoneid($params['branch_id']);
         $lead_data['lead_source'] = 'enquiry';
         $lead_data['other_source'] = 'website';
         $lead_data['created_by_name'] = 'website';
