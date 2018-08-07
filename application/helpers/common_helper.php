@@ -418,7 +418,6 @@ function sendPushNotification($emp_id,$message,$title)
     $limit = '1';
     $table = Tbl_LoginLog;
     $device_values = $CI->Lead->lists($table,$select,$where,'','',$order_by,$limit);
-    pe($device_values);die;
     if(!empty($device_values)){
         $device_id = $device_values[0]['device_token'];
         $device_type = $device_values[0]['device_type'];
@@ -1317,6 +1316,46 @@ function convertCurrencyCr($number)
 
     return $currency;
 }
+
+
+
+function productCategoryMap($string)
+{
+    if($string != ""){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $data = $CI->master->getProductCategoryId($string);
+        if(!empty($data)){
+            $id = $data[0]['id'];
+            return $id;
+        }else{
+            return FALSE;
+        }
+    }else{
+        return FALSE;
+    }
+
+}
+
+
+function productMap($string)
+{
+    if($string != ""){
+        $CI = & get_instance();
+        $CI->load->model('Master_model','master');
+        $data = $CI->master->getProductId($string);
+        if(!empty($data)){
+            $id = $data[0]['id'];
+            return $id;
+        }else{
+            return FALSE;
+        }
+    }else{
+        return FALSE;
+    }
+
+}
+
 
 
 

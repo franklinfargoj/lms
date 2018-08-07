@@ -438,4 +438,28 @@ class Master_model extends CI_Model{
         $order_by = array();
         return $this->view($select,$where,$table,$join,$order_by);
     }
+
+
+    public function getProductCategoryId($string){
+
+        $where = array('status'=>'active','is_deleted'=>0);
+        $this->db->select('id');
+        $this->db->from('db_master_product_category');
+        $this->db->where($where);
+        $this->db->like('title',$string);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+
+    public function getProductId($string){
+
+        $where = array('status'=>'active','is_deleted'=>0);
+        $this->db->select('id');
+        $this->db->from('db_master_products');
+        $this->db->where($where);
+        $this->db->like('title',$string);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
