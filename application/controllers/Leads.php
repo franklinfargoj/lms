@@ -1969,6 +1969,8 @@ private function verify_accountcbs($acc_no)
      *
      */
     function drop_lead(){
+
+
         $lead_id = decode_id($this->input->post('id'));
         $login_user = get_session();
         $lead_status_data = array(
@@ -1998,8 +2000,8 @@ private function verify_accountcbs($acc_no)
             'state_id' => $login_user['state_id'],
             'zone_id' => $login_user['zone_id'],
             'status' => 'NI',
-            'reason_for_drop' => 'Not verified',
-            'desc_for_drop' => 'Not verified and drop from unassign list',
+            'reason_for_drop' => $this->input->post('reason'),
+            'desc_for_drop' => $this->input->post('reason'),
             'is_updated' => 1,
             'created_on' => date('Y-m-d H:i:s', time() + 7),
             'created_by' => $login_user['hrms_id'],
@@ -2008,8 +2010,10 @@ private function verify_accountcbs($acc_no)
             'modified_by' => $login_user['hrms_id'],
             'modified_by_name' => $login_user['full_name']
         );
-        $this->Lead->insert_lead_data($lead_status_data1, Tbl_LeadAssign);
+         $this->Lead->insert_lead_data($lead_status_data1, Tbl_LeadAssign);
     }
+
+
 
     /*
     * product_category_name

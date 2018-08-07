@@ -134,13 +134,13 @@ $source = $this->config->item('lead_source');
                     </thead>
                     <tbody>
                     <?php
-//                    pe($unassigned_leads);
-//                    exit;
+
                         if ($unassigned_leads) {
                             $i = 0;
                             foreach ($unassigned_leads as $key => $value) {
 
                                 $branch_mapp = get_branch_map($value['mapping'],$this->session->userdata('branch_id'));
+
                                 $branch_map = $branch_mapp[0]['processing_center'];
                     ?>
                             <tr>
@@ -238,6 +238,9 @@ $source = $this->config->item('lead_source');
         </div>
     </div>
 </div>
+
+
+
 <script src="<?php echo base_url() . ASSETS; ?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url() . ASSETS; ?>js/config.datatable.js"></script>
 
@@ -291,21 +294,26 @@ $source = $this->config->item('lead_source');
             }
         });
 
-         $(document).on('click', '.drop_lead', function(){
-            if (window.confirm('Are you sure want to drop this lead?'))
-            {
+         $('.drop_lead').on('click',function(){
+             var reason = prompt("Reason for drop of lead.");
+             if (reason) {
                 $.ajax({
                     method:'POST',
                     url: baseUrl + 'leads/drop_lead',
                     data:{
                         '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
-                        id:$(this).attr('data')
+                        id:$(this).attr('data'),
+                        reason:reason
                     }
                 }).success(function (resp) {
                     location.reload();
                 });
-            }
-        });
+            }else{
+                 alert('Please provide reason for deleting lead.');
+               return false;
+             }
+         })
 
-    });
+
+        });
 </script>
