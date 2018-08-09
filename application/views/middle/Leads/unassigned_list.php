@@ -239,12 +239,28 @@ $source = $this->config->item('lead_source');
     </div>
 </div>
 
+<div id="element_to_pop_up" style="display: none">
+    <a class="b-close">x<a/>
+    <textarea></textarea>
+</div>
+
 
 
 <script src="<?php echo base_url() . ASSETS; ?>js/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url() . ASSETS; ?>js/config.datatable.js"></script>
+<script src="<?php echo base_url() . ASSETS; ?>js/popup.js"></script>
 
 <script type="text/javascript">
+    $('.drop_lead').bind('click', function(e) {
+
+        // Prevents the default action to be triggered.
+        e.preventDefault();
+
+        // Triggering bPopup when click event is fired
+        $('#element_to_pop_up').bPopup();
+
+    });
+
     jQuery(document).ready(function() {
         $("#assign_multiple").validate({
             rules: {
@@ -294,25 +310,7 @@ $source = $this->config->item('lead_source');
             }
         });
 
-         $('.drop_lead').on('click',function(){
-             var reason = prompt("Reason for drop of lead.");
-             if (reason) {
-                $.ajax({
-                    method:'POST',
-                    url: baseUrl + 'leads/drop_lead',
-                    data:{
-                        '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
-                        id:$(this).attr('data'),
-                        reason:reason
-                    }
-                }).success(function (resp) {
-                    location.reload();
-                });
-            }else{
-                 alert('Please provide reason for deleting lead.');
-               return false;
-             }
-         })
+
 
 
         });
