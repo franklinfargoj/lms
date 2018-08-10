@@ -827,9 +827,10 @@ input#ticket_range {
 	margin-top: 0;
 }
 label#ticket_range-error {
-	width: auto;
+/*	width: auto;
 	float: right;
-	width: 245px;
+	width: 245px;*/
+	line-height: 20px;
 	display: inline-block;
 	margin-right: 70px;
 	vertical-align: top;
