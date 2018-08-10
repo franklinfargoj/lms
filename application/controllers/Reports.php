@@ -45,7 +45,6 @@ class Reports extends CI_Controller
      */
     public function index($action,$view = null,$zone_id = null,$branch_id = null,$export = 'no')
     {
-
         $this->make_bread->add('Reports', '', 0);
         $arrData['view'] = $view;
         $arrData['zone_id'] = decode_id($zone_id);
@@ -1718,9 +1717,9 @@ class Reports extends CI_Controller
     public function export_to_excel($action,$arrData){
         set_time_limit(0);
         ini_set('memory_limit', '-1');
-//        echo $action;
-//       pe($arrData);die;
-//        exit;
+    //    echo $action;
+    //   pe($arrData);die;
+     //   exit;
         if($arrData['viewName'] == 'EM'){
             $header_value = array('Sr.No','Zone','Branch','HRMS ID','Employee Name','Designation','Source Type','Category Name','Product Name');
         }else if($arrData['viewName'] == 'BM'){
@@ -1756,7 +1755,7 @@ class Reports extends CI_Controller
                 $header_value = array_merge($header_value,$leads_type_col);
                 break;
             case 'leads_generated':
-                $leads_generated_col = array('Total Generated Leads','Not Connected','Interested','Documents Collected','Account Opened','Converted','Drop/Not Inserted','Closed');
+                $leads_generated_col = array('Total Generated Leads','Not Connected','Interested','Documents Collected','Sanctioned','Account Opened','Converted','Drop/Not Inserted','Closed');
                 $header_value = array_merge($header_value,$leads_generated_col);
                 break;
             case 'leads_assigned':
