@@ -361,8 +361,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 contact_no: {
                     required: true,
                     number: true,
-                    maxlength: 10,
-                    minlength: 10,
+//                    maxlength: 10,
+//                    minlength: 10,
                     numbersonly: true,
                     regx: /^[1-9][0-9]*$/
                 },
@@ -408,8 +408,8 @@ $remark_extra = 'style="rows:4 ; cols:80"';
                 },
                 contact_no: {
                     required: "Please enter phone number",
-                    maxlength: 'Phone number is not 10 digits',
-                    minlength: 'Phone number is not 10 digits',
+//                    maxlength: 'Phone number is not 10 digits',
+//                    minlength: 'Phone number is not 10 digits',
                     regx: "Contact number should not begin with zero"
                 },
                 product_category_id: {

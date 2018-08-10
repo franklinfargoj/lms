@@ -827,9 +827,10 @@ input#ticket_range {
 	margin-top: 0;
 }
 label#ticket_range-error {
-	width: auto;
+/*	width: auto;
 	float: right;
-	width: 245px;
+	width: 245px;*/
+	line-height: 20px;
 	display: inline-block;
 	margin-right: 70px;
 	vertical-align: top;
@@ -1933,4 +1934,126 @@ tr.even-dash {
 /* 28 June 2018 */
 table.dataTable thead th {
     white-space: nowrap;
+}
+
+/* #element_to_pop_up {
+	background-color:#fff;
+	border-radius:15px;
+	color:#000;
+	display:none;
+	padding:20px;
+	min-width:400px;
+	min-height: 180px;
+}
+.b-close{
+	cursor:pointer;
+	position:absolute;
+	right:10px;
+	top:5px;
+} */
+
+/* Added code for Drop Modal on 10-08-2018 by Designer Team (PM) */
+.modal {
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0,0,0,.2);
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+}
+
+.drop-modal {
+	max-width: 300px;
+	width: 100%;
+}
+
+.drop-modal * {
+    box-sizing: border-box;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+	padding: 15px;
+	position: relative;
+}
+
+.modal-header {
+	border-bottom: 1px solid #e5e5e5;
+	background-color: #00559d;
+    color: #fff;
+}
+
+.b-close {
+	position: absolute;
+    right: 5px;
+    top: 10px;
+    font-size: 30px;
+    display: block;
+    padding: 5px;
+    line-height: 0.5;
+	cursor: pointer;
+}
+
+.modal-title {
+    font-size: 20px;
+    padding-right: 22px;
+}
+
+.modal-footer {
+	border-top: 1px solid #e5e5e5;
+}
+
+.modal-footer--text-right {
+	text-align: right;
+}
+
+.modal-footer__btn {
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.modal-footer__btn--default {
+	color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+.modal-footer__btn--default:hover,
+.modal-footer__btn--default:focus {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+
+.modal-footer__btn--primary {
+    color: #fff;
+    background-color: #00559d;
+    border-color: #00559d;
+}
+
+.modal-footer__btn--primary:hover,
+.modal-footer__btn--primary:focus {
+    color: #fff;
+    background-color: #00559d;
+    border-color: #00559d;
 }
