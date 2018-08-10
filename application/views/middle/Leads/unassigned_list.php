@@ -1,3 +1,8 @@
+<style>
+    .error{
+        color: #FF0F17 !important;
+    }
+</style>
 <?php
 $param1 = isset($type) ? $type.'/' : '';
 $param2 = isset($lead_source) ? encode_id($lead_source).'/' : '';
@@ -239,9 +244,22 @@ $source = $this->config->item('lead_source');
     </div>
 </div>
 
-<div id="element_to_pop_up" style="display: none">
-    <a class="b-close">x<a/>
-    <textarea></textarea>
+<div id="element_to_pop_up" class="modal drop-modal" style="display: none">
+    <div class="modal-header">
+        <a class="b-close">&times;</a>
+        <h4 class="modal-title">Reason for Drop</h4>
+    </div>
+    <form id="drop-reason">
+        <div class="modal-body">
+            <input type="hidden" name="dropId" id="dropId">
+            <textarea name="reason" id="reason" cols="" rows="5" class="form-control" placeholder="Reason for Drop"></textarea>
+        </div>
+
+        <div class="modal-footer modal-footer--text-right">
+            <button type="button" class="modal-footer__btn modal-footer__btn--default close-pop-up">Cancel</button>
+            <button type="button" class="modal-footer__btn modal-footer__btn--primary send-reason">Ok</button>
+        </div>
+    </form>
 </div>
 
 
@@ -256,12 +274,83 @@ $source = $this->config->item('lead_source');
         // Prevents the default action to be triggered.
         e.preventDefault();
 
+        $("#dropId").val($(this).attr('data'));
         // Triggering bPopup when click event is fired
         $('#element_to_pop_up').bPopup();
 
     });
 
+    $('.b-close').click(function() { //if your close button code is alwready written
+        $('#element_to_pop_up').hide();
+    });
+
+    $('.close-pop-up').click(function(){
+        $('.b-close').click(); // trigger close button clik event
+    });
+
+    $(".b-close, .close-pop-up").on("click", function(){
+        if($("#reason").hasClass('error'))
+        {
+            $("#reason").removeClass('error');
+            $("#reason").next('label').remove();
+        }
+    })
+
+    $(".send-reason").on("click", function () {
+        $("#drop-reason").validate({
+            rules: {
+                reason: {
+                    required: true
+                }
+            },
+            messages: {
+                reason: {
+                    required: "Please enter reason for drop"
+                }
+            }
+        });
+
+        if($("#drop-reason").valid())
+        {
+            var reason = $("#reason").val();
+            var id = $("#reason").prev().val(); 
+            $.ajax({
+                method:'POST',
+                url: baseUrl + 'leads/drop_lead',
+                data:{
+                    '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>',
+                    id:id,
+                    reason:reason
+                }
+            }).success(function (resp) {
+                location.reload();
+            });
+        }
+    })
+
+//    $('.drop_lead').on('click',function(){
+//        var reason = prompt("Reason for drop of lead.");
+//        if (reason) {
+//            $.ajax({
+//                method:'POST',
+//                url: baseUrl + 'leads/drop_lead',
+//                data:{
+//                    '<?php //echo $this->security->get_csrf_token_name(); ?>//': '<?php //echo $this->security->get_csrf_hash(); ?>//',
+//                    id:$(this).attr('data'),
+//                    reason:reason
+//                }
+//            }).success(function (resp) {
+//                location.reload();
+//            });
+//        }else{
+//            alert('Please provide reason for deleting lead.');
+//            return false;
+//        }
+//    })
+
     jQuery(document).ready(function() {
+
+
         $("#assign_multiple").validate({
             rules: {
                 assign_to: {

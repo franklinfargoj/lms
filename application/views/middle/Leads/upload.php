@@ -8,9 +8,9 @@
 $form_attributes = array('id' => 'upload_lead', 'method' => 'POST','class' =>'form');
 $data_input = array('id' => 'file', 'name'=>'filename','type' => 'file');
 $lead_source[''] = 'Select Lead Source';
-$lead_source['Tie Ups'] = 'Tie Ups';
-$lead_source['Enquiry'] = 'Enquiry';
-$lead_source['Analytics'] = 'Analytics';
+$lead_source['tie_ups'] = 'Others';
+$lead_source['enquiry'] = 'Website,IVR';
+$lead_source['analytics'] = 'Analytics';
 
 //$source_options['Tie Ups'] = 'Tie Ups';
 //$source_options['Enquiry'] = 'Enquiry';
@@ -18,7 +18,7 @@ $lead_source['Analytics'] = 'Analytics';
 $source_options[''] = 'Select Lead Source';
 $source_options['enquiry'] = 'Website,IVR';
 $source_options['analytics'] = 'Analytics';
-$source_options['Tie Ups'] = 'Others';
+$source_options['tie_ups'] = 'Others';
 //$source_options['walkin'] = 'Branch Generated';
 $data_submit = array(
     'name' => 'Submit',
