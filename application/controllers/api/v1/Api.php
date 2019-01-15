@@ -1655,7 +1655,7 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             !isset($params['device_type']) || ($params['device_type'] == NULL) ||
             ($params['user_id'] == NULL) || ($params['password'] == NULL || ($params['device_token'] == NULL))) {
             $err['result'] = false;
-            $err['data'] = "Invalid Request";
+            $err['data'] = "Invalid Requests";
             returnJson($err);
         }
         
