@@ -176,6 +176,10 @@ die;
                             'authorisation_key' => $authorisation_key,
                             'list'=>$records->dbk_lms_emp_record1->DBK_LMS_COLL
                         );
+
+                        echo '<pre>';
+                        print_r($result);
+                        exit;
                         $this->set_session($result);
                         if(!empty($this->input->post('remember_me'))) {
                             setcookie ("member_login",$this->input->post('username'),time()+ (10 * 365 * 24 * 60 * 60));
