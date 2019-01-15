@@ -314,7 +314,7 @@ class Api extends REST_Controller
         // if($other_source != 'BR'){
         //     $lead_data['lead_source'] = 'tie_ups';
         // }
-        $lead_data['lead_source'] = 'walkin';
+        //$lead_data['lead_source'] = 'walkin';
         $lead_data['other_source'] = $other_source;
         $lead_id = $this->Lead->add_leads($lead_data);
 
