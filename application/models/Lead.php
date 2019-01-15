@@ -22,7 +22,9 @@ class Lead  extends CI_Model
 
 	public function add_leads($lead_data = array())
 	{
+
 		if (!empty($lead_data)) {
+            pe($lead_data);exit;
             $this->db->db_debug = FALSE;
             $this->db->insert($this->_tbl_db_leads, $lead_data);
             $errors = $this->db->error();
