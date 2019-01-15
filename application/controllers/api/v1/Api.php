@@ -223,7 +223,7 @@ class Api extends REST_Controller
          $params = $this->input->post();
 
 
-         pe($params);exit;
+         //pe($params);exit;
          // check for duplicate entry
          $whereEx = array(
             'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
