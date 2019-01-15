@@ -308,9 +308,9 @@ class Api extends REST_Controller
 
         //chk lead source other
         $other_source = $this->input->post('other_source');
-        if($other_source != 'BR'){
-            $lead_data['lead_source'] = 'tie_ups';
-        }
+        // if($other_source != 'BR'){
+        //     $lead_data['lead_source'] = 'tie_ups';
+        // }
         $lead_data['other_source'] = $other_source;
         //
         $lead_id = $this->Lead->add_leads($lead_data);
@@ -1655,14 +1655,19 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             $err['data'] = "Invalid Request";
             returnJson($err);
         }
-
+        
         $user_id = $params['user_id'];
         //$password = $params['password'];
          //$password = base64_decode($params['password']);
-         $password = aes_decode($params['password']);
+        // $password = aes_encode($params['password']);
+
+        // print_r($user_id.'----'.$password);
+        // exit;
+        $password = aes_decode($params['password']);
         $device_token = $params['device_token'];
         $device_type = $params['device_type'];
 
+        
         //$auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$user_id.'?password='.$password);
         $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$user_id.'&password='.$password);
         $auth = json_decode($auth_response);
@@ -2195,8 +2200,8 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
         if (!empty($params) && isset($params['hrms_id']) && !empty($params['hrms_id'])) {
 
             // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-            //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$params['hrms_id']);
-            $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$params['hrms_id']);
+            $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$params['hrms_id']);
+            //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$params['hrms_id']);
             $records = json_decode($records_response);
             $fullname = array_map('trim', explode('.', $records->dbk_lms_emp_record1->name));
             if($fullname[0] == ''){
