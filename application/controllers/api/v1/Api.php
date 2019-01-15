@@ -221,6 +221,9 @@ class Api extends REST_Controller
     public function add_lead_post()
     {
          $params = $this->input->post();
+
+
+         pe($params);exit;
          // check for duplicate entry
          $whereEx = array(
             'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
