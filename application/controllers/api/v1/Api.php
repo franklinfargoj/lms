@@ -1660,13 +1660,13 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
         }
         
         $user_id = $params['user_id'];
-        //$password = $params['password'];
+        $password = $params['password'];
          //$password = base64_decode($params['password']);
         // $password = aes_encode($params['password']);
 
         // print_r($user_id.'----'.$password);
         // exit;
-        $password = aes_decode($params['password']);
+        //$password = aes_decode($params['password']);
         $device_token = $params['device_token'];
         $device_type = $params['device_type'];
 
