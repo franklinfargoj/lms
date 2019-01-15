@@ -2200,12 +2200,15 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
     public function refresh_dashboardnew_post()
     {
         $params = $this->input->post();
+
         if (!empty($params) && isset($params['hrms_id']) && !empty($params['hrms_id'])) {
 
             // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
-            $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$params['hrms_id']);
-            //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$params['hrms_id']);
+            //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$params['hrms_id']);
+            $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$params['hrms_id']);
             $records = json_decode($records_response);
+            pe($records);
+            exit;
             $fullname = array_map('trim', explode('.', $records->dbk_lms_emp_record1->name));
             if($fullname[0] == ''){
                 $fullname1 = ucwords(strtolower(trim($fullname[1])));
