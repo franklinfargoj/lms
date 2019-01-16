@@ -564,6 +564,10 @@ class Lead  extends CI_Model
             $this->db->where('db_leads.branch_id',$branch_id);
         }
         $result = $this->db->get();
+        pe($this->db->last_query());
+        exit;
+        
+
         return $result->result_array();
 
     }
