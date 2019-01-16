@@ -543,8 +543,9 @@ class Lead  extends CI_Model
 
     public function unassigned_leads_api($lead_status = '',$branch_id = ''){
         if($lead_status == 'walkin'){
-            $this->db->select('db_leads.*,DATEDIFF(CURDATE( ),db_leads.created_on) as elapsed_day,db_master_products.title as product_title,db_master_products.map_with');
+            $this->db->select('db_leads.*,db_branch.name as generated_by,DATEDIFF(CURDATE( ),db_leads.created_on) as elapsed_day,db_master_products.title as product_title,db_master_products.map_with');
             $this->db->from('db_leads');
+            $this->db->join('db_branch','db_branch.code = db_leads.created_by_branch_id ','');
         }else{
             $this->db->select('db_leads.*,DATEDIFF(CURDATE( ),db_leads.created_on) as elapsed_day,db_master_products.title as product_title,db_master_products.map_with');
             $this->db->from('db_leads');
