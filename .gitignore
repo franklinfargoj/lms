@@ -5,9 +5,9 @@ application/cache/*
 !application/cache/.htaccess
 
 application/logs/*
-#application/config/database.php
-#application/config/routes.php
-#upload/*
+application/config/database.php
+application/config/routes.php
+uploads/*
 !application/logs/index.html
 !application/logs/.htaccess
 
