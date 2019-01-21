@@ -221,6 +221,9 @@ class Api extends REST_Controller
     public function add_lead_post()
     {
          $params = $this->input->post();
+
+
+         //pe($params);exit;
          // check for duplicate entry
          $whereEx = array(
             'customer_name'=>ucwords(strtolower($this->input->post('customer_name'))),
@@ -308,11 +311,11 @@ class Api extends REST_Controller
 
         //chk lead source other
         $other_source = $this->input->post('other_source');
-        if($other_source != 'BR'){
-            $lead_data['lead_source'] = 'tie_ups';
-        }
+        // if($other_source != 'BR'){
+        //     $lead_data['lead_source'] = 'tie_ups';
+        // }
+        //$lead_data['lead_source'] = 'walkin';
         $lead_data['other_source'] = $other_source;
-        //
         $lead_id = $this->Lead->add_leads($lead_data);
 
         if (is_array($lead_id)) {
@@ -1652,17 +1655,22 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             !isset($params['device_type']) || ($params['device_type'] == NULL) ||
             ($params['user_id'] == NULL) || ($params['password'] == NULL || ($params['device_token'] == NULL))) {
             $err['result'] = false;
-            $err['data'] = "Invalid Request";
+            $err['data'] = "Invalid Requests";
             returnJson($err);
         }
-
+        
         $user_id = $params['user_id'];
         //$password = $params['password'];
          //$password = base64_decode($params['password']);
-         $password = aes_decode($params['password']);
+        // $password = aes_encode($params['password']);
+
+        // print_r($user_id.'----'.$password);
+        // exit;
+        $password = aes_decode($params['password']);
         $device_token = $params['device_token'];
         $device_type = $params['device_type'];
 
+        
         //$auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$user_id.'?password='.$password);
         $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$user_id.'&password='.$password);
         $auth = json_decode($auth_response);
@@ -2192,12 +2200,14 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
     public function refresh_dashboardnew_post()
     {
         $params = $this->input->post();
+
         if (!empty($params) && isset($params['hrms_id']) && !empty($params['hrms_id'])) {
 
             // $records_response = call_external_url(HRMS_API_URL_GET_RECORD.$result->DBK_LMS_AUTH->username);
             //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$params['hrms_id']);
             $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$params['hrms_id']);
             $records = json_decode($records_response);
+            
             $fullname = array_map('trim', explode('.', $records->dbk_lms_emp_record1->name));
             if($fullname[0] == ''){
                 $fullname1 = ucwords(strtolower(trim($fullname[1])));
@@ -3239,6 +3249,17 @@ private function verify_cbs_account($acc_no)
             "data" => array("Missing Parameters.")
         );
         returnJson($error);
+    }
+
+
+
+    public function version_check_get(){
+
+        $checkVersion = $this->Lead->getVersion();
+        $res = array('result' => True,
+                'data' => $checkVersion);
+        returnJson($res);
+        
     }
 
     /* drop lead by BM

@@ -22,7 +22,10 @@ class Lead  extends CI_Model
 
 	public function add_leads($lead_data = array())
 	{
+
 		if (!empty($lead_data)) {
+            //pe($lead_data);exit;
+
             $this->db->db_debug = FALSE;
             $this->db->insert($this->_tbl_db_leads, $lead_data);
             $errors = $this->db->error();
@@ -836,5 +839,15 @@ class Lead  extends CI_Model
         $this->db->where('id',$product_category_id);
         $result = $this->db->get()->result();
         return $result;
+    }
+
+
+    public function getVersion(){
+
+        $this->db->select('version_no');
+        $this->db->from('db_version_settings');
+        $this->db->order_by('id',"desc")->limit(1);
+        $result = $this->db->get();
+        return $result->result_array();
     }
 }
