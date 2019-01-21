@@ -3251,6 +3251,17 @@ private function verify_cbs_account($acc_no)
         returnJson($error);
     }
 
+
+
+    public function version_check_get(){
+
+        $checkVersion = $this->Lead->getVersion();
+        $res = array('result' => True,
+                'data' => $checkVersion);
+        returnJson($res);
+        
+    }
+
     /* drop lead by BM
    *
    *
