@@ -1359,4 +1359,48 @@ $pending_days = 2;
         }
     }
 
+    /*
+     * Export database to have a back up
+     * Schedule every week
+     * @author Franklin Fargoj
+     * @access private
+     * @param none
+     * @return void
+     */
+    public function Export_database(){
+
+        $filename = date("H-i-s").'lms'.date("Y-m-d").'.sql' ;
+        exec('mysqldump --user=root --password=root --host=localhost denabank_lms_03_10 > /var/www/html/lms/assets2/database_backup/'.$filename.'');
+        echo "File created successfully";
+        echo "<br>";
+
+        $datestring= date("Y-m-d").'first day of last month';
+        $dt=date_create($datestring);
+        $lastymd = $dt->format('Y-m-d');
+
+        $path = FCPATH.'assets2/database_backup';
+        $files = glob($path . "/*");
+
+        if(!empty($files)){
+            foreach ($files as $filePath){
+                $filedate= substr($filePath,strrpos($filePath,'lms')+3);
+                $file_created_date = substr($filedate,0,10);
+
+                $date1 = date_create("$lastymd");
+                $date2 = date_create("$file_created_date");
+                $diff = date_diff($date1,$date2);
+                $days = $diff->format("%a");
+
+                if($days>48){
+                    $this->load->helper("file");
+                    $path = FCPATH.'assets2/database_backup/';
+                    $my_sql_file = substr($filePath,strrpos($filePath,'backup')+7);
+                    unlink($path."$my_sql_file");
+                    echo "File deleted";
+                }
+            }
+        }
+
+    }
+
 }
