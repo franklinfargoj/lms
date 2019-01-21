@@ -1346,17 +1346,61 @@ $pending_days = 2;
 
         $today_schedule = $this->Reminder_model->get_current_schedule();
 
-       // pe($today_schedule);die;
+        //pe($today_schedule);die;
         //$today_schedule[0]['remind_to']; //pe($today_schedule);die;
         if (count($today_schedule) > 0) {
             foreach ($today_schedule as $key => $value) {
                 $contact_no= $this->Lead->get_employee_dump(array('contact_no'),array('hrms_id' => $value['remind_to']),array(),'employee_dump');
 
                 $contact=$contact_no[0]->contact_no;
-		$title = "Reminder Text";	
+                $title = "Reminder Text";
                 sendPushNotification($value['remind_to'],$value['reminder_text'],$title);
             }
         }
+    }
+
+    /*
+     * Export database to have a back up
+     * Schedule every week
+     * @author Franklin Fargoj
+     * @access private
+     * @param none
+     * @return void
+     */
+    public function Export_database(){
+
+        $filename = date("H-i-s").'lms'.date("Y-m-d").'.sql' ;
+        exec('mysqldump --user=root --password=root --host=localhost denabank_lms_03_10 > /var/www/html/lms/assets2/database_backup/'.$filename.'');
+        echo "File created successfully";
+        echo "<br>";
+
+        $datestring= date("Y-m-d").'first day of last month';
+        $dt=date_create($datestring);
+        $lastymd = $dt->format('Y-m-d');
+
+        $path = FCPATH.'assets2/database_backup';
+        $files = glob($path . "/*");
+
+        if(!empty($files)){
+            foreach ($files as $filePath){
+                $filedate= substr($filePath,strrpos($filePath,'lms')+3);
+                $file_created_date = substr($filedate,0,10);
+
+                $date1 = date_create("$lastymd");
+                $date2 = date_create("$file_created_date");
+                $diff = date_diff($date1,$date2);
+                $days = $diff->format("%a");
+
+                if($days>48){
+                    $this->load->helper("file");
+                    $path = FCPATH.'assets2/database_backup/';
+                    $my_sql_file = substr($filePath,strrpos($filePath,'backup')+7);
+                    unlink($path."$my_sql_file");
+                    echo "File deleted";
+                }
+            }
+        }
+
     }
 
 }
