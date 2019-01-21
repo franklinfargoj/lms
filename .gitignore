@@ -8,6 +8,8 @@ application/logs/*
 application/config/database.php
 application/config/routes.php
 uploads/*
+captcha/*
+index.php
 !application/logs/index.html
 !application/logs/.htaccess
 
