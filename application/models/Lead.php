@@ -840,4 +840,14 @@ class Lead  extends CI_Model
         $result = $this->db->get()->result();
         return $result;
     }
+
+
+    public function getVersion(){
+
+        $this->db->select('version_no');
+        $this->db->from('db_version_settings');
+        $this->db->order_by('id',"desc")->limit(1);
+        $result = $this->db->get();
+        return $result->result_array();
+    }
 }

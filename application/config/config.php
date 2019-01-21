@@ -23,7 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your
 |
 */
-$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].':8844/DENABANK/lms';
+// $config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].':8844/DENABANK/lms';
+$config['base_url'] = 'http://'. $_SERVER['SERVER_NAME'].'/lms';
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -463,8 +464,9 @@ $config['csrf_exclude_uris'] = array('api/v1/api/authentication','api/v1/api/add
     'api/v1/authenticate/check_authentication','api/v1/api/notification_list',
     'api/v1/api/assigned_leads_status','api/v1/api/update_notification_count',
     'api/v1/api/check_account_no','api/v1/api/update_lead_status_by_em',
-    'api/v1/api/verify_account','api/v1/api/leads_count_by_leads_status','api/v1/api/generated_conversion','api/v1/api/route_to_rapc',
-    'api/v1/other_api/rapc_leads_list','api/v1/api/drop_lead','api/v1/api/confirm_cbs_response','api/v1/WebLead/add_lead');
+    'api/v1/api/verify_account','api/v1/api/leads_count_by_leads_status','api/v1/api/generated_conversion','api/v1/api/route_to_rapc','api/v1/api/version_check',
+    'api/v1/other_api/rapc_leads_list','api/v1/api/drop_lead','api/v1/api/confirm_cbs_response','api/v1/WebLead/add_lead'
+    );
 
 /*
 |--------------------------------------------------------------------------
