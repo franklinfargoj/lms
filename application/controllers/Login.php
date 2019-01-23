@@ -158,6 +158,13 @@ die;
                         );
                         $this->master->insert_login_log($data); // login log
 
+                        $branch_or_rapc = $this->master->check_branch_or_rapc($records->dbk_lms_emp_record1->deptid);
+                        if(!empty($branch_or_rapc)){
+                            $is_rapc ='Y';
+                        }else{
+                            $is_rapc ='N';
+                        }
+
                         $result = array(
                             'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
                             'dept_id' => $records->dbk_lms_emp_record1->deptid,
@@ -174,12 +181,11 @@ die;
                             'mobile' => $records->dbk_lms_emp_record1->phone,
                             'email_id' => $records->dbk_lms_emp_record1->email,
                             'authorisation_key' => $authorisation_key,
-                            'list'=>$records->dbk_lms_emp_record1->DBK_LMS_COLL
+                            'list'=>$records->dbk_lms_emp_record1->DBK_LMS_COLL,
+                            'is_rapc'=>$is_rapc
                         );
 
-                        // echo '<pre>';
-                        // print_r($result);
-                        // exit;
+
                         $this->set_session($result);
                         if(!empty($this->input->post('remember_me'))) {
                             setcookie ("member_login",$this->input->post('username'),time()+ (10 * 365 * 24 * 60 * 60));
@@ -238,7 +244,7 @@ die;
 
 
      private function set_session($data){
-            //echo "<pre>";print_r($data);die;
+           // echo "<pre>";print_r($data);die;
              $login_user = array(
                  'admin_id' => $data['hrms_id'],
                  'dept_type_id' => $data['dept_type_id'],
@@ -255,7 +261,8 @@ die;
                  'email_id' => $data['email_id'],
                  'isLoggedIn' => TRUE,
                  'authorisation_key' => $data['authorisation_key'],
-                 'list'=>$data['list']
+                 'list'=>$data['list'],
+                 'is_rapc'=>$data['is_rapc']
              );
 
           $this->session->set_userdata($login_user);
