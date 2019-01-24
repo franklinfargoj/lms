@@ -1679,6 +1679,9 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             //$records_response = call_external_url(HRMS_API_URL_GET_RECORD.'emplid='.$auth->DBK_LMS_AUTH->username);
             $records_response = call_external_url(HRMS_API_URL_GET_RECORD.'hrms_id='.$auth->DBK_LMS_AUTH->username);
             $records = json_decode($records_response);
+
+            
+
             $authorisation_key = random_number();
             $data = array('device_token' => $device_token,
                 'employee_id' => $records->dbk_lms_emp_record1->EMPLID,
@@ -1695,6 +1698,14 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
             }else{
                 $fullname1 = ucwords(strtolower(trim($fullname[0])));
             }
+
+            $branch_or_rapc = $this->master->check_branch_or_rapc($records->dbk_lms_emp_record1->deptid);
+            if(!empty($branch_or_rapc)){
+                $is_rapc ='Y';
+            }else{
+                $is_rapc ='N';
+            }
+
             $result['basic_info'] = array(
                 'hrms_id' => $records->dbk_lms_emp_record1->EMPLID,
                 'dept_id' => $records->dbk_lms_emp_record1->deptid,
@@ -1710,7 +1721,8 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
                 'designation_name' => $records->dbk_lms_emp_record1->designation_descr,
                 'mobile' => $records->dbk_lms_emp_record1->phone,
                 'email_id' => $records->dbk_lms_emp_record1->email,
-                'designation' => get_designation($records->dbk_lms_emp_record1->designation_id)
+                'designation' => get_designation($records->dbk_lms_emp_record1->designation_id),
+                'is_rapc'=>$is_rapc
             );
 
             $hrms_id = $records->dbk_lms_emp_record1->EMPLID;
