@@ -108,5 +108,15 @@ class Login_model extends CI_Model{
         return false;
     }
 
+    //author Franklin
+    public function check_branch_or_rapc($branch_id)
+    {
+        return $this->db->select('*')
+            ->from(Tbl_processing_center)
+            ->where('other_processing_center_id',$branch_id)
+            ->get()
+            ->result_array();
+    }
+
 
 }

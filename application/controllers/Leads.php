@@ -793,7 +793,7 @@ class Leads extends CI_Controller
      * @return array
      */
     public function update_lead_status(){
-        //pe($this->input->post());die;
+        //  pe($this->input->post());die;
         if($this->input->post()){
             $login_user = get_session();
             $lead_id = decode_id($this->input->post('lead_id'));
@@ -923,7 +923,6 @@ class Leads extends CI_Controller
                             if ($lead_status == 'Converted' || $lead_status == 'Closed') {
                                 $lead_status_data['view_status'] = 1;
                             }
-//pe($lead_status_data);die;
                             if(!empty($drop_reason)){
                                 $lead_status_data['reason_for_drop'] = $drop_reason;
                                 $lead_status_data['desc_for_drop'] = $drop_reason_desc;
@@ -956,6 +955,13 @@ class Leads extends CI_Controller
                             /*****************************************************************/
                             $this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
                             $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+
+                            if ($lead_status == 'Sanction') {
+                                $wherefollowupdc = array(Tbl_LeadAssign.'.lead_id' => $lead_id,Tbl_LeadAssign.'.is_updated' => 0,Tbl_LeadAssign.'.status' => 'DC');
+                                $table = Tbl_LeadAssign;
+                                $update_data['status'] = 'Sanction';
+                                $this->Lead->update($wherefollowupdc,$table,$update_data);
+                            }
 
                             if ($lead_status == 'FU') {
                                 $action = 'list';
@@ -1006,7 +1012,7 @@ class Leads extends CI_Controller
                                 }
                                 }
                             }
-                        }
+                            }
                     }
                         /*****************************************************************
                         Update Lead Identification
@@ -1114,7 +1120,6 @@ class Leads extends CI_Controller
                             if($lead_status == 'Converted'){
                                 $this->points_distrubution($lead_id);
                             }
-
 
                             $cat_name = $this->input->post('cat_name');
                             $customer_name = $this->input->post('customer_name');

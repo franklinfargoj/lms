@@ -1371,7 +1371,7 @@ $pending_days = 2;
 
         $filename = date("H-i-s").'lms'.date("Y-m-d").'.sql' ;
         exec('mysqldump --user=root --password=root --host=localhost denabank_lms_03_10 > /var/www/html/lms/assets2/database_backup/'.$filename.'');
-        echo "File created successfully";
+        echo $filename.' '."file created successfully";
         echo "<br>";
 
         $datestring= date("Y-m-d").'first day of last month';
@@ -1391,12 +1391,13 @@ $pending_days = 2;
                 $diff = date_diff($date1,$date2);
                 $days = $diff->format("%a");
 
-                if($days>48){
+                if($days>60){
                     $this->load->helper("file");
                     $path = FCPATH.'assets2/database_backup/';
                     $my_sql_file = substr($filePath,strrpos($filePath,'backup')+7);
                     unlink($path."$my_sql_file");
-                    echo "File deleted";
+                    echo $my_sql_file.' '."file deleted";
+                    echo "<br>";
                 }
             }
         }
