@@ -150,7 +150,7 @@ $source = $this->config->item('lead_source');
                     ?>
                             <tr>
                                 <td  style="text-align:center">
-                                    <?php if($_SESSION['is_rapc']=='Y' || $value['lead_source'] != 'walkin' || ($value['lead_source'] == 'walkin' && $value['mapping'] == 'BRANCH' || ($value['reroute_from_branch_id'] != '' || $value['reroute_from_branch_id'] != NULL))) {
+                                    <?php pe($_SESSION['is_rapc']); if($_SESSION['is_rapc']=='Y' || $value['lead_source'] != 'walkin' || ($value['lead_source'] == 'walkin' && $value['mapping'] == 'BRANCH' || ($value['reroute_from_branch_id'] != '' || $value['reroute_from_branch_id'] != NULL))) {
 
                                     $data = array(
                                         'name' => 'lead_ids[]',
