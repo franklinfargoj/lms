@@ -1704,7 +1704,7 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
                 $fullname1 = ucwords(strtolower(trim($fullname[0])));
             }
 
-            $branch_or_rapc = $this->Master_model->check_branch_or_rapc($records->dbk_lms_emp_record1->deptid);
+            $branch_or_rapc = $this->Login_model->check_branch_or_rapc($records->dbk_lms_emp_record1->deptid);
             if(!empty($branch_or_rapc)){
                 $is_rapc ='Y';
             }else{
