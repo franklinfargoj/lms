@@ -1672,6 +1672,11 @@ $arrData['unassigned_leads_count'] = $this->Lead->unassigned_status_count($selec
 
         
         //$auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$user_id.'?password='.$password);
+
+        $test = HRMS_API_URL_AUTH.'username='.$user_id.'&password='.$password;
+        print_r($test);
+        exit;
+
         $auth_response = call_external_url(HRMS_API_URL_AUTH.'username='.$user_id.'&password='.$password);
         $auth = json_decode($auth_response);
         if ($auth->DBK_LMS_AUTH->password == 'True') {
