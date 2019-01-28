@@ -108,7 +108,14 @@ class Login_model extends CI_Model{
         return false;
     }
 
-    //author Franklin
+    /**
+     * check_branch_or_rapc
+     * Checks if the branch id exist in table
+     * @author Franklin Fargoj
+     * @access public
+     * @param $branch_id
+     * @return array
+     */
     public function check_branch_or_rapc($branch_id)
     {
         return $this->db->select('*')
