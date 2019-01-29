@@ -883,7 +883,7 @@ class Leads extends CI_Controller
 
                     /*****************************************************************/
 
-                    //Building input parameters for function to get_leads
+                        //Building input parameters for function to get_leads
                     $action = 'list';
                     $table = Tbl_LeadAssign;
                     $select = array(Tbl_LeadAssign.'.*');
@@ -955,6 +955,25 @@ class Leads extends CI_Controller
                             /*****************************************************************/
                             $this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
                             $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
+
+                            if($_POST['lead_status'] == 'DC'){
+                                $whereEx = array('lead_id'=>$lead_id);
+                                $is_exsits = $this->Lead->is_cbs_exsits($whereEx);
+                                if(!$is_exsits) {
+                                    $lead_data_dc = $this->Lead->lead_details($lead_id);
+                                    $responseData = array(
+                                        'amount' => $lead_data_dc[0]['lead_ticket_range'],
+                                        'customer_name' =>  $lead_data_dc[0]['customer_name'],
+                                        'customer_contact_no' => $lead_data_dc[0]['contact_no'],
+                                        'lead_id' =>$lead_id,
+                                        'email_id' => '',
+                                        'account_no' =>'',
+                                        'response_data' =>''
+                                    );
+                                    //This will add entry into cbs response for status (DC)
+                                    $this->Lead->insert_lead_data($responseData, Tbl_cbs);
+                                }
+                            }
 
                             if ($lead_status == 'Sanction') {
                                 $wherefollowupdc = array(Tbl_LeadAssign.'.lead_id' => $lead_id,Tbl_LeadAssign.'.is_updated' => 0,Tbl_LeadAssign.'.status' => 'DC');
