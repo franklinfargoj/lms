@@ -1143,6 +1143,7 @@ function get_salt()
 }
 
 function aes_decode($encrypted_str){
+    
     $key = 'RwcmlVpg';
     $method = 'aes-256-cbc';
     $key = substr(hash('sha256', $key, true), 0, 32);
