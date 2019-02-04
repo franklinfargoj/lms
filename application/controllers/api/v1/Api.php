@@ -2728,6 +2728,27 @@ $join[] = array('table' => Tbl_LeadAssign, 'on_condition' => Tbl_LeadAssign . '.
                      *****************************************************************/
                     if($params['status'] == 'Converted'){
                         $this->points_distrubution($params['lead_id']);
+
+
+                        if($params['category_title'] == 'Fee Income'){
+                            $whereEx = array('lead_id'=>$params['lead_id']);
+                            $is_exsits = $this->Lead->is_cbs_exsits($whereEx);
+                            if(!$is_exsits) {
+                                $lead_data_dc_feeincome = $this->Lead->lead_details($params['lead_id']);
+                                $responseData = array(
+                                    'amount' => $lead_data_dc_feeincome[0]['lead_ticket_range'],
+                                    'customer_name' =>  $lead_data_dc_feeincome[0]['customer_name'],
+                                    'customer_contact_no' => $lead_data_dc_feeincome[0]['contact_no'],
+                                    'lead_id' =>$params['lead_id'],
+                                    'email_id' => '',
+                                    'account_no' =>'',
+                                    'response_data' =>''
+                                );
+                                //This will add entry into cbs response for status (DC)
+                                $this->Lead->insert_lead_data($responseData, Tbl_cbs);
+                            }
+                        }
+
                     }
 
                     $cat_name = $params['category_title'];
