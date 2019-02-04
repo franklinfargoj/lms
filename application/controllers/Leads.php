@@ -832,7 +832,7 @@ class Leads extends CI_Controller
                             }
                         }
                     }
-		}
+		    }
                        if($lead_status == 'AO'){
                         $accountNo = $this->input->post('accountNo');
                         if(empty($accountNo) || $accountNo == NULL){
@@ -955,7 +955,6 @@ class Leads extends CI_Controller
                             /*****************************************************************/
                             $this->Lead->update_lead_data($where, $lead_old_data, Tbl_LeadAssign);
                             $this->Lead->insert_lead_data($lead_status_data, Tbl_LeadAssign);
-                            
 
                             if ($lead_status == 'Sanction') {
                                 $wherefollowupdc = array(Tbl_LeadAssign.'.lead_id' => $lead_id,Tbl_LeadAssign.'.is_updated' => 0,Tbl_LeadAssign.'.status' => 'DC');
@@ -1120,6 +1119,26 @@ class Leads extends CI_Controller
                             }
                             if($lead_status == 'Converted'){
                                 $this->points_distrubution($lead_id);
+                                
+                                if($_POST['cat_name'] == 'Fee Income'){
+                                    $whereEx = array('lead_id'=>$lead_id);
+                                    $is_exsits = $this->Lead->is_cbs_exsits($whereEx);
+                                    if(!$is_exsits) {
+                                        $lead_data_dc_feeincome = $this->Lead->lead_details($lead_id);
+                                        $responseData = array(
+                                            'amount' => $lead_data_dc_feeincome[0]['lead_ticket_range'],
+                                            'customer_name' =>  $lead_data_dc_feeincome[0]['customer_name'],
+                                            'customer_contact_no' => $lead_data_dc_feeincome[0]['contact_no'],
+                                            'lead_id' =>$lead_id,
+                                            'email_id' => '',
+                                            'account_no' =>'',
+                                            'response_data' =>''
+                                        );
+                                        //This will add entry into cbs response for status (DC)
+                                        $this->Lead->insert_lead_data($responseData, Tbl_cbs);
+                                    }
+                                }
+
                             }
 
                             $cat_name = $this->input->post('cat_name');
