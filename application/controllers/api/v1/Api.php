@@ -3370,7 +3370,9 @@ private function verify_cbs_account($acc_no)
     public function testNotification_post(){
         $params = $this->input->post();
 
-        sendPushNotification($params['emp_id'],$params['message'],$params['title']);
+        $resp = sendPushNotification($params['emp_id'],$params['message'],$params['title']);
+        print_r($resp);
+        exit;
         // print_r($emp_id.'----------'.$message.'========'.$title);
         // exit;
 

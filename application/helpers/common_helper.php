@@ -452,8 +452,8 @@ function sendPushNotification($emp_id,$message,$title)
                         ),
                          'data' => $data));
 
-            print_r($fields);
-            exit;
+            // print_r($fields);
+            // exit;
 
             $proxy = '172.25.129.11:8080';
             $crl = curl_init();
