@@ -184,8 +184,11 @@ class Leads extends CI_Controller
                     }else{
                         $branch_manager_id = $this->Lead->branch_manager_id($branch_id);
                     }
+                    print_r($branch_manager_id);
+                    exit;
                     $push_message = "New Lead Assigned to your branch";
                     $title = 'New Lead Assigned to your branch';
+
                     sendPushNotification($branch_manager_id,$push_message,$title);
                 }
                 $assign_to = $this->Lead->get_product_assign_to($lead_data['product_id']);
