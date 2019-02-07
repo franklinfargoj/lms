@@ -3368,7 +3368,10 @@ private function verify_cbs_account($acc_no)
 
 
     public function testNotification_post(){
-        die('m called');
+        $params = $this->input->post();
+
+        print_r($params);
+        exit;
         // print_r($emp_id.'----------'.$message.'========'.$title);
         // exit;
 
