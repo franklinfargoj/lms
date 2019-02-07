@@ -428,15 +428,33 @@ function sendPushNotification($emp_id,$message,$title)
             //$header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
             $header[] = 'Authorization: key=AAAAHCXdOfI:APA91bGifgYNyjOp3ARdnX8kleyUW1vvkhnfZ8IWDqEAvXi0IprulOlmL9m_v-qzNktXut1sq2OhD_XRyHtyuYHe6Q2AZBnVYWPbvk3sbdORhAJjmSqv8cwia9U2jbcJfTMb6TaSC-Di';
 
-            $data = array(
+            /*$data = array(
                 'body'=>$message,
                 'title' => $title,
                 "notification_type" => "message",
                 'notificationId' => time(),
                 "message"=>$message
+            );*/
+
+            $data = array(
+                'body'=>$message,
+                'title' => $title,
+                "key_1" => "message",
+                'key_2' => time(),
             );
 
-            $fields = json_encode(array('to' => $device_id, 'data' => array('notificationData'=>$data)));
+            $fields = json_encode(array(
+                        'to' => $device_id,
+                        'collapse_key'=>"type_a",
+                        'notification'=>array(
+                            'body' => $message,
+                            'title' => $title
+                        ),
+                         'data' => $data));
+
+            print_r($fields);
+            exit;
+
             $proxy = '172.25.129.11:8080';
             $crl = curl_init();
             curl_setopt($crl, CURLOPT_HTTPHEADER, $header);

@@ -3364,4 +3364,12 @@ private function verify_cbs_account($acc_no)
         );
         returnJson($error);
     }
+
+
+
+    public function testNotification_post($emp_id,$message,$title){
+        print_r($emp_id.'----------'.$message.'========'.$title);
+        exit;
+
+    }
 }
