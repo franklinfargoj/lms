@@ -425,8 +425,8 @@ function sendPushNotification($emp_id,$message,$title)
             ($device_id != NULL || !empty($device_id))){
             $header = array();
             $header[] = 'Content-type: application/json';
-            //$header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
-            $header[] = 'Authorization: key=AAAAHCXdOfI:APA91bGifgYNyjOp3ARdnX8kleyUW1vvkhnfZ8IWDqEAvXi0IprulOlmL9m_v-qzNktXut1sq2OhD_XRyHtyuYHe6Q2AZBnVYWPbvk3sbdORhAJjmSqv8cwia9U2jbcJfTMb6TaSC-Di';
+            $header[] = 'Authorization: key=AAAA-QhpGTY:APA91bE-AL5cp0mPgmxhm4M1pTPqzNVTl1a0PxS3ZSBmO4eA5crSstcDRsXOUR1JYp5mQsBUN7kgtPxCrsN0rx7BZ8aHDJzW5iJIcP6GU2hvCs_mu13rRfFHijeEoSwulG3A6OzrhNgP';
+            //$header[] = 'Authorization: key=AAAAHCXdOfI:APA91bGifgYNyjOp3ARdnX8kleyUW1vvkhnfZ8IWDqEAvXi0IprulOlmL9m_v-qzNktXut1sq2OhD_XRyHtyuYHe6Q2AZBnVYWPbvk3sbdORhAJjmSqv8cwia9U2jbcJfTMb6TaSC-Di';
 
             /*$data = array(
                 'body'=>$message,
