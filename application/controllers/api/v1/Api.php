@@ -3367,9 +3367,10 @@ private function verify_cbs_account($acc_no)
 
 
 
-    public function testNotification_post($emp_id,$message,$title){
-        print_r($emp_id.'----------'.$message.'========'.$title);
-        exit;
+    public function testNotification_post(){
+        die('m called');
+        // print_r($emp_id.'----------'.$message.'========'.$title);
+        // exit;
 
     }
 }
