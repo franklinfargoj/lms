@@ -184,8 +184,6 @@ class Leads extends CI_Controller
                     }else{
                         $branch_manager_id = $this->Lead->branch_manager_id($branch_id);
                     }
-                    print_r($branch_manager_id);
-                    exit;
                     $push_message = "New Lead Assigned to your branch";
                     $title = 'New Lead Assigned to your branch';
 
